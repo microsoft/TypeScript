@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commaOperatorLeftSideUnused.ts] ////
+
 commaOperatorLeftSideUnused.ts(8,10): error TS2695: Left side of comma operator is unused and has no side effects.
 commaOperatorLeftSideUnused.ts(16,19): error TS2695: Left side of comma operator is unused and has no side effects.
 commaOperatorLeftSideUnused.ts(19,21): error TS2695: Left side of comma operator is unused and has no side effects.

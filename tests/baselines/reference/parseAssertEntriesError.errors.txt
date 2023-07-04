@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseAssertEntriesError.ts] ////
+
 error TS2468: Cannot find global value 'Promise'.
 /index.ts(2,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /index.ts(2,32): error TS1478: Identifier or string literal expected.

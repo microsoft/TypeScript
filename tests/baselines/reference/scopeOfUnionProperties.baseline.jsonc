@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/scopeOfUnionProperties.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/scopeOfUnionProperties.ts ===
 // function f(s: string | number) {

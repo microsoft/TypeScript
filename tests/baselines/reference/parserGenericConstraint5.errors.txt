@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint5.ts] ////
+
 parserGenericConstraint5.ts(1,19): error TS2304: Cannot find name 'List'.
 parserGenericConstraint5.ts(1,24): error TS2304: Cannot find name 'List'.
 

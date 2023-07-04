@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionJsModuleExports.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/foo.js ===
 // x.[|{| contextId: 0 |}test|] = <|() => { }|>

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsNoImplicitAnyNoCascadingReferenceErrors.ts] ////
+
 index.js(3,21): error TS8026: Expected Foo<T> type arguments; provide these with an '@extends' tag.
 
 

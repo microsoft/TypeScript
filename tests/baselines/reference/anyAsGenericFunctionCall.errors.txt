@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/any/anyAsGenericFunctionCall.ts] ////
+
 anyAsGenericFunctionCall.ts(5,9): error TS2347: Untyped function calls may not accept type arguments.
 anyAsGenericFunctionCall.ts(6,9): error TS2347: Untyped function calls may not accept type arguments.
 anyAsGenericFunctionCall.ts(9,9): error TS2347: Untyped function calls may not accept type arguments.

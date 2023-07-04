@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursivelyExpandingUnionNoStackoverflow.ts] ////
+
 recursivelyExpandingUnionNoStackoverflow.ts(3,10): error TS2589: Type instantiation is excessively deep and possibly infinite.
 recursivelyExpandingUnionNoStackoverflow.ts(3,10): error TS2615: Type of property 'M' circularly references itself in mapped type '{ [P in "M"]: any; }'.
 

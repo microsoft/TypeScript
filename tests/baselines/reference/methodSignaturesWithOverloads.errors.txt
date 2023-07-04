@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/methodSignatures/methodSignaturesWithOverloads.ts] ////
+
 methodSignaturesWithOverloads.ts(5,5): error TS2386: Overload signatures must all be optional or required.
 methodSignaturesWithOverloads.ts(14,5): error TS2386: Overload signatures must all be optional or required.
 

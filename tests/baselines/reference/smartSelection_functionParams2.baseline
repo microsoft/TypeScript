@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_functionParams2.ts] ////
+
 function f(
   a,
   /**/b

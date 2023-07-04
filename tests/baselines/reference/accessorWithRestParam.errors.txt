@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorWithRestParam.ts] ////
+
 accessorWithRestParam.ts(2,11): error TS1053: A 'set' accessor cannot have rest parameter.
 accessorWithRestParam.ts(3,18): error TS1053: A 'set' accessor cannot have rest parameter.
 

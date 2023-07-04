@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts] ////
+
 contextualTypeWithUnionTypeObjectLiteral.ts(14,5): error TS2322: Type '{ prop: string | number; }' is not assignable to type '{ prop: string; } | { prop: number; }'.
   Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
     Types of property 'prop' are incompatible.

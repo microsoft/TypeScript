@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitToDeclarationDirWithoutCompositeAndDeclarationOptions.ts] ////
+
 /foo/tsconfig.json(2,26): error TS5069: Option 'declarationDir' cannot be specified without specifying option 'declaration' or option 'composite'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts] ////
+
 parserRealSource14.ts(4,21): error TS6053: File 'typescript.ts' not found.
 parserRealSource14.ts(24,33): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
 parserRealSource14.ts(38,34): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.

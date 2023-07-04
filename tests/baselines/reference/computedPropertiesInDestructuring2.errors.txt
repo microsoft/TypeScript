@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/computedPropertiesInDestructuring2.ts] ////
+
 computedPropertiesInDestructuring2.ts(2,7): error TS2537: Type '{}' has no matching index signature for type 'string'.
 
 

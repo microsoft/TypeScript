@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts ===
 // class C {

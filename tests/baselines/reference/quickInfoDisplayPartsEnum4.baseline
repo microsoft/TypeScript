@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoDisplayPartsEnum4.ts] ////
+
 === /tests/cases/fourslash/quickInfoDisplayPartsEnum4.ts ===
 // const enum Foo {
 // 	"\t" = 9,

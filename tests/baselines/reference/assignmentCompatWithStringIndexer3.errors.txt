@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts] ////
+
 assignmentCompatWithStringIndexer3.ts(7,8): error TS2304: Cannot find name 'A'.
 assignmentCompatWithStringIndexer3.ts(20,9): error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
   'string' index signatures are incompatible.

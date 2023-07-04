@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/TemplateExpression1.ts] ////
+
 TemplateExpression1.ts(1,17): error TS2304: Cannot find name 'a'.
 TemplateExpression1.ts(1,19): error TS1005: '}' expected.
 

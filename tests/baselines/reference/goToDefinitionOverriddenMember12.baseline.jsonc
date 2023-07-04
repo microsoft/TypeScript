@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionOverriddenMember12.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionOverriddenMember12.ts ===
 // class Foo {

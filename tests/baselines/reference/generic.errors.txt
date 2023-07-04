@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/generic.ts] ////
+
 /b.ts(5,5): error TS2741: Property 'a' is missing in type '{}' but required in type 'A<boolean>'.
 /b.ts(6,8): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 

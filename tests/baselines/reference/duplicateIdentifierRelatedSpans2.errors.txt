@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans2.ts] ////
+
 [96mfile1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
 
 [7m1[0m class A { }

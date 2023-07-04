@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationMethodOverloadSyntax.ts] ////
+
 a.js(2,3): error TS8017: Signature declarations can only be used in TypeScript files.
 
 

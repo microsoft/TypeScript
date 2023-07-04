@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts] ////
+
 === /tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts ===
 // class C {
 //     public 1() { }

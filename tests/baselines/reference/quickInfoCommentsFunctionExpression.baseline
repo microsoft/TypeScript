@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoCommentsFunctionExpression.ts] ////
+
 === /tests/cases/fourslash/quickInfoCommentsFunctionExpression.ts ===
 // /** lambdaFoo var comment*/
 // var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;

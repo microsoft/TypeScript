@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToImplementationLocal_01.ts] ////
+
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationLocal_01.ts ===
 // <|const [|hello|] = function() {};|>

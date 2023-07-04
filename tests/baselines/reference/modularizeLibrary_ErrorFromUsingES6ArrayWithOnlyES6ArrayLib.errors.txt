@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts] ////
+
 error TS2318: Cannot find global type 'Boolean'.
 error TS2318: Cannot find global type 'IArguments'.
 error TS2318: Cannot find global type 'Number'.

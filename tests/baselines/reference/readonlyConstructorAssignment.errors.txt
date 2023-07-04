@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts] ////
+
 readonlyConstructorAssignment.ts(13,14): error TS2540: Cannot assign to 'x' because it is a read-only property.
 readonlyConstructorAssignment.ts(33,7): error TS2415: Class 'E' incorrectly extends base class 'D'.
   Property 'x' is private in type 'D' but not in type 'E'.

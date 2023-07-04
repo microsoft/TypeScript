@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts] ////
+
 arityAndOrderCompatibility01.ts(15,12): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
 arityAndOrderCompatibility01.ts(17,5): error TS2461: Type '{ 0: string; 1: number; length: 2; }' is not an array type.
 arityAndOrderCompatibility01.ts(18,5): error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.

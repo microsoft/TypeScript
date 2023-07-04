@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts] ////
+
 renamingDestructuredPropertyInFunctionType.ts(5,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
 renamingDestructuredPropertyInFunctionType.ts(6,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
 renamingDestructuredPropertyInFunctionType.ts(7,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?

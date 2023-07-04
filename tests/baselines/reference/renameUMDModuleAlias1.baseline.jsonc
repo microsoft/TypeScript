@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameUMDModuleAlias1.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/0.d.ts ===
 // export function doThing(): string;

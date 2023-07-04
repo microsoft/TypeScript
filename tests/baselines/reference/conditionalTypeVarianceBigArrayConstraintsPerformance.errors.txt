@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.ts] ////
+
 conditionalTypeVarianceBigArrayConstraintsPerformance.ts(9,5): error TS2322: Type 'Stuff<U>' is not assignable to type 'Stuff<T>'.
   Type 'U' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.

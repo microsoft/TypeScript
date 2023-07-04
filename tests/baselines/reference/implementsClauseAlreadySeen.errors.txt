@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implementsClauseAlreadySeen.ts] ////
+
 implementsClauseAlreadySeen.ts(4,22): error TS1175: 'implements' clause already seen.
 
 

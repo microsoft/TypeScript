@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx] ////
+
 jsxEsprimaFbTestSuite.tsx(40,41): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 
 

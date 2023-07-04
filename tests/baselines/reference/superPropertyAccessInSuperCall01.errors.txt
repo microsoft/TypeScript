@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superPropertyAccessInSuperCall01.ts] ////
+
 superPropertyAccessInSuperCall01.ts(9,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 
 

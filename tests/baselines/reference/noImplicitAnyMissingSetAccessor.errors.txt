@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyMissingSetAccessor.ts] ////
+
 noImplicitAnyMissingSetAccessor.ts(3,25): error TS7033: Property 'message' implicitly has type 'any', because its get accessor lacks a return type annotation.
 
 

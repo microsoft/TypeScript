@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyForMethodParameters.ts] ////
+
 noImplicitAnyForMethodParameters.ts(6,12): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 noImplicitAnyForMethodParameters.ts(6,16): error TS7006: Parameter 'a' implicitly has an 'any' type.
 noImplicitAnyForMethodParameters.ts(10,17): error TS7006: Parameter 'a' implicitly has an 'any' type.

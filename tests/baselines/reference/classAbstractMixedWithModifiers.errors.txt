@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMixedWithModifiers.ts] ////
+
 classAbstractMixedWithModifiers.ts(6,13): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
 classAbstractMixedWithModifiers.ts(8,14): error TS1029: 'public' modifier must precede 'abstract' modifier.
 classAbstractMixedWithModifiers.ts(9,14): error TS1029: 'protected' modifier must precede 'abstract' modifier.

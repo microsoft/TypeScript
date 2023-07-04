@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForVariableInExtendsClause01.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForVariableInExtendsClause01.ts ===
 // /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}Base|] = class { };|>

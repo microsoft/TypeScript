@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameTemplateLiteralsComputedProperties.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/a.ts ===
 // interface Obj {

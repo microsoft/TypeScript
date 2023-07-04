@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateVisibility.ts] ////
+
 privateVisibility.ts(9,3): error TS2341: Property 'privMeth' is private and only accessible within class 'Foo'.
 privateVisibility.ts(10,3): error TS2341: Property 'privProp' is private and only accessible within class 'Foo'.
 privateVisibility.ts(24,3): error TS2341: Property 'priv' is private and only accessible within class 'C'.

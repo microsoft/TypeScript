@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeUsedAsValueError.ts] ////
+
 typeUsedAsValueError.ts(16,11): error TS2693: 'Interface' only refers to a type, but is being used as a value here.
 typeUsedAsValueError.ts(17,11): error TS2304: Cannot find name 'InterfaceNotFound'.
 typeUsedAsValueError.ts(18,13): error TS2693: 'TypeAliasForSomeClass' only refers to a type, but is being used as a value here.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts] ////
+
 exhaustiveSwitchImplicitReturn.ts(35,32): error TS7030: Not all code paths return a value.
 
 

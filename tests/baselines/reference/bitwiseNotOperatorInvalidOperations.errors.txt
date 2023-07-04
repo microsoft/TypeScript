@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts] ////
+
 bitwiseNotOperatorInvalidOperations.ts(5,10): error TS1005: ',' expected.
 bitwiseNotOperatorInvalidOperations.ts(5,11): error TS1109: Expression expected.
 bitwiseNotOperatorInvalidOperations.ts(8,27): error TS1134: Variable declaration expected.

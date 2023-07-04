@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts] ////
+
 destructuringArrayBindingPatternAndAssignment2.ts(3,6): error TS2461: Type 'undefined' is not an array type.
 destructuringArrayBindingPatternAndAssignment2.ts(3,6): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 destructuringArrayBindingPatternAndAssignment2.ts(3,12): error TS2461: Type 'undefined' is not an array type.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inexistentPropertyInsideToStringType.ts] ////
+
 index.js(2,10): error TS2339: Property 'yadda' does not exist on type 'toString'.
 
 

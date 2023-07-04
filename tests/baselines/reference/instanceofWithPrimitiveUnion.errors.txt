@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofWithPrimitiveUnion.ts] ////
+
 instanceofWithPrimitiveUnion.ts(2,9): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 instanceofWithPrimitiveUnion.ts(8,9): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 

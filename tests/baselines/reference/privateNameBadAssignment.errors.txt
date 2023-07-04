@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts] ////
+
 privateNameBadAssignment.ts(1,1): error TS2304: Cannot find name 'exports'.
 privateNameBadAssignment.ts(1,9): error TS18016: Private identifiers are not allowed outside class bodies.
 privateNameBadAssignment.ts(3,13): error TS18016: Private identifiers are not allowed outside class bodies.

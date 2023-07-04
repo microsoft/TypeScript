@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes1.ts] ////
+
 discriminatedUnionTypes1.ts(89,9): error TS2367: This comparison appears to be unintentional because the types '"A" | "B" | "C" | "D"' and '"X"' have no overlap.
 
 

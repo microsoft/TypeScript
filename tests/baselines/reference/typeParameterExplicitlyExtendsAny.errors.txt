@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts] ////
+
 typeParameterExplicitlyExtendsAny.ts(3,7): error TS2339: Property 'blah' does not exist on type 'T'.
 typeParameterExplicitlyExtendsAny.ts(9,7): error TS2339: Property 'blah' does not exist on type 'T'.
 typeParameterExplicitlyExtendsAny.ts(14,7): error TS2339: Property 'children' does not exist on type 'T'.

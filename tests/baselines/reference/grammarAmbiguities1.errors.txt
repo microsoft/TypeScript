@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/grammarAmbiguities1.ts] ////
+
 grammarAmbiguities1.ts(8,3): error TS2365: Operator '<' cannot be applied to types '<T, U>(x: any) => any' and 'typeof A'.
 grammarAmbiguities1.ts(8,10): error TS2365: Operator '>' cannot be applied to types 'typeof B' and 'number'.
 grammarAmbiguities1.ts(8,10): error TS2554: Expected 1 arguments, but got 2.

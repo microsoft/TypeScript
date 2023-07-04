@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx] ////
+
 jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx(19,12): error TS6229: Tag 'MyComp4' expects at least '4' arguments, but the JSX factory 'React.createElement' provides at most '2'.
 jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx(20,12): error TS6229: Tag 'MyComp3' expects at least '3' arguments, but the JSX factory 'React.createElement' provides at most '2'.
 

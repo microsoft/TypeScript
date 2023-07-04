@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts] ////
+
 implementingAnInterfaceExtendingClassWithPrivates2.ts(13,7): error TS2415: Class 'Bar2' incorrectly extends base class 'Foo'.
   Property 'x' is private in type 'Foo' but not in type 'Bar2'.
 implementingAnInterfaceExtendingClassWithPrivates2.ts(13,7): error TS2420: Class 'Bar2' incorrectly implements interface 'I'.

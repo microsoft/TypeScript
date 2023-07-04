@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesStringLiteralTypes.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesStringLiteralTypes.ts ===
 // function foo(a: "/*HIGHLIGHTS*/[|{| kind: "reference", isInString: true |}option 1|]") { }

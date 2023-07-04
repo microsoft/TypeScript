@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleInTypePosition1.ts] ////
+
 moduleInTypePosition1_1.ts(3,14): error TS2709: Cannot use namespace 'WinJS' as a type.
 
 

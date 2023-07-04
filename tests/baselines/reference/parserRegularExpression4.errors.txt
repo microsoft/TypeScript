@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression4.ts] ////
+
 parserRegularExpression4.ts(1,5): error TS2304: Cannot find name 'Ca'.
 parserRegularExpression4.ts(1,13): error TS2304: Cannot find name 'c'.
 parserRegularExpression4.ts(1,24): error TS2304: Cannot find name 'Ba'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxReactEmit7.tsx] ////
+
 file.tsx(8,10): error TS2304: Cannot find name 'React'.
 file.tsx(9,10): error TS2304: Cannot find name 'React'.
 file.tsx(10,10): error TS2304: Cannot find name 'React'.

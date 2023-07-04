@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLambdaWithMissingTypeParameterNoCrash.ts] ////
+
 declarationEmitLambdaWithMissingTypeParameterNoCrash.ts(2,27): error TS2304: Cannot find name 'T2'.
 declarationEmitLambdaWithMissingTypeParameterNoCrash.ts(2,27): error TS4016: Type parameter 'T1' of exported function has or is using private name 'T2'.
 declarationEmitLambdaWithMissingTypeParameterNoCrash.ts(3,33): error TS2304: Cannot find name 'T2'.

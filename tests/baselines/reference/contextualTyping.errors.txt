@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTyping.ts] ////
+
 contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' but required in type 'B'.
 

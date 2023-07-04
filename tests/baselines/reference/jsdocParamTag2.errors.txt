@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocParamTag2.ts] ////
+
 0.js(68,19): error TS2339: Property 'a' does not exist on type 'String'.
 0.js(68,22): error TS2339: Property 'b' does not exist on type 'String'.
 0.js(70,20): error TS8024: JSDoc '@param' tag has name 'y', but there is no parameter with that name.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionPrivateName.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionPrivateName.ts ===
 // class A {

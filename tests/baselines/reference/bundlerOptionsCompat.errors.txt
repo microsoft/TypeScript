@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerOptionsCompat.ts] ////
+
 /tsconfig.json(4,25): error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
 
 

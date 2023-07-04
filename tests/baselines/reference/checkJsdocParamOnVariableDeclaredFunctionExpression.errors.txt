@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocParamOnVariableDeclaredFunctionExpression.ts] ////
+
 0.js(14,20): error TS8024: JSDoc '@param' tag has name 's', but there is no parameter with that name.
 
 

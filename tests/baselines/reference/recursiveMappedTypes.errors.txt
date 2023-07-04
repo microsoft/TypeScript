@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/recursiveMappedTypes.ts] ////
+
 recursiveMappedTypes.ts(3,6): error TS2456: Type alias 'Recurse' circularly references itself.
 recursiveMappedTypes.ts(4,11): error TS2313: Type parameter 'K' has a circular constraint.
 recursiveMappedTypes.ts(7,6): error TS2456: Type alias 'Recurse1' circularly references itself.

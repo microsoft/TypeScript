@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyAmbients.ts] ////
+
 implicitAnyAmbients.ts(2,9): error TS7005: Variable 'x' implicitly has an 'any' type.
 implicitAnyAmbients.ts(5,14): error TS7010: 'f', which lacks return-type annotation, implicitly has an 'any' return type.
 implicitAnyAmbients.ts(5,16): error TS7006: Parameter 'x' implicitly has an 'any' type.

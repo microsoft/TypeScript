@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveLetConst.ts] ////
+
 recursiveLetConst.ts(2,9): error TS2448: Block-scoped variable 'x' used before its declaration.
 recursiveLetConst.ts(3,12): error TS2448: Block-scoped variable 'x1' used before its declaration.
 recursiveLetConst.ts(4,11): error TS2448: Block-scoped variable 'y' used before its declaration.

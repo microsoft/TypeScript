@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts] ////
+
 privateNamesAndIndexedAccess.ts(7,28): error TS1005: ']' expected.
 privateNamesAndIndexedAccess.ts(7,28): error TS7005: Variable '#bar' implicitly has an 'any' type.
 privateNamesAndIndexedAccess.ts(7,32): error TS1005: ',' expected.

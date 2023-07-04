@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts] ////
+
 typeArgumentInferenceErrors.ts(3,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 typeArgumentInferenceErrors.ts(7,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.

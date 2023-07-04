@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveConditionalTypes.ts] ////
+
 recursiveConditionalTypes.ts(16,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
 recursiveConditionalTypes.ts(20,5): error TS2322: Type '__Awaited<T>' is not assignable to type '__Awaited<U>'.
   Type 'T' is not assignable to type 'U'.

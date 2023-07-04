@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts] ////
+
 parserAssignmentExpression1.ts(1,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 parserAssignmentExpression1.ts(1,2): error TS2304: Cannot find name 'foo'.
 parserAssignmentExpression1.ts(1,11): error TS2304: Cannot find name 'bar'.

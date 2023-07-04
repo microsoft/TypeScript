@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx] ////
+
 error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid identifier or qualified-name.
 
 

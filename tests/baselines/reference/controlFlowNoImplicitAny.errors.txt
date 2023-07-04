@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowNoImplicitAny.ts] ////
+
 controlFlowNoImplicitAny.ts(101,9): error TS7034: Variable 'x' implicitly has type 'any' in some locations where its type cannot be determined.
 controlFlowNoImplicitAny.ts(110,19): error TS7005: Variable 'x' implicitly has an 'any' type.
 controlFlowNoImplicitAny.ts(116,9): error TS7034: Variable 'x' implicitly has type 'any' in some locations where its type cannot be determined.

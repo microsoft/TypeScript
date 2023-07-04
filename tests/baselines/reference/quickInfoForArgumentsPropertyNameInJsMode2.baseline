@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoForArgumentsPropertyNameInJsMode2.ts] ////
+
 === /tests/cases/fourslash/a.js ===
 // function f(x) {
 //          ^

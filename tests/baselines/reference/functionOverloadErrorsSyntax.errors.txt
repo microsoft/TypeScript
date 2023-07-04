@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts] ////
+
 functionOverloadErrorsSyntax.ts(2,27): error TS1016: A required parameter cannot follow an optional parameter.
 functionOverloadErrorsSyntax.ts(5,38): error TS1016: A required parameter cannot follow an optional parameter.
 functionOverloadErrorsSyntax.ts(9,25): error TS1014: A rest parameter must be last in a parameter list.

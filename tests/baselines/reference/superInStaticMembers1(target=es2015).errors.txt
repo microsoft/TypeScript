@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/superInStaticMembers1.ts] ////
+
 classDeclInContainingScopeStaticBlock.ts(3,7): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
 classDeclInContainingScopeStaticField.ts(3,7): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
 constEnumInContainingScopeStaticBlock.ts(3,12): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports7.ts] ////
+
 file2.ts(1,1): error TS6133: 'n' is declared but its value is never read.
 
 

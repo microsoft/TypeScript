@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts] ////
+
 parser0_004152.ts(2,28): error TS2304: Cannot find name 'DisplayPosition'.
 parser0_004152.ts(2,45): error TS1137: Expression or comma expected.
 parser0_004152.ts(2,46): error TS1005: ';' expected.

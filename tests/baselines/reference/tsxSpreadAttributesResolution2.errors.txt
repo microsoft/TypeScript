@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution2.tsx] ////
+
 file.tsx(20,10): error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
 file.tsx(21,10): error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
 file.tsx(22,19): error TS2322: Type 'boolean' is not assignable to type 'string'.

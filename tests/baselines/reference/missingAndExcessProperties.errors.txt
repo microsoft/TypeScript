@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts] ////
+
 missingAndExcessProperties.ts(3,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 missingAndExcessProperties.ts(3,14): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 missingAndExcessProperties.ts(4,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.

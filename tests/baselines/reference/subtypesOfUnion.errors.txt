@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts] ////
+
 subtypesOfUnion.ts(16,5): error TS2411: Property 'foo4' of type 'boolean' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(18,5): error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(19,5): error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'string | number'.

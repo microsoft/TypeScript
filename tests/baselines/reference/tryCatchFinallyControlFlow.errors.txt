@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tryCatchFinallyControlFlow.ts] ////
+
 tryCatchFinallyControlFlow.ts(105,5): error TS7027: Unreachable code detected.
 tryCatchFinallyControlFlow.ts(118,9): error TS7027: Unreachable code detected.
 tryCatchFinallyControlFlow.ts(218,13): error TS7027: Unreachable code detected.

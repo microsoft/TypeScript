@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationBindMultipleDefaultExports.ts] ////
+
 a.js(1,22): error TS2528: A module cannot have multiple default exports.
 a.js(1,22): error TS2652: Merged declaration 'a' cannot include a default export declaration. Consider adding a separate 'export default a' declaration instead.
 a.js(3,15): error TS2528: A module cannot have multiple default exports.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts] ////
+
 parserS7.6_A4.2_T1.ts(14,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 parserS7.6_A4.2_T1.ts(18,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 parserS7.6_A4.2_T1.ts(22,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?

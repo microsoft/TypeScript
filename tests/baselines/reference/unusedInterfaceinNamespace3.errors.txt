@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedInterfaceinNamespace3.ts] ////
+
 unusedInterfaceinNamespace3.ts(10,15): error TS6196: 'i3' is declared but never used.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts] ////
+
 typeofTypeParameter.ts(3,19): error TS2693: 'T' only refers to a type, but is being used as a value here.
 
 

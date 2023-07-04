@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerImportTsExtensions.ts] ////
+
 error TS6054: File '/project/e.txt' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
   The file is in the program because:
     Root file specified for compilation

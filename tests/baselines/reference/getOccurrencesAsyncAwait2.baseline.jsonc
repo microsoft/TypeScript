@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesAsyncAwait2.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesAsyncAwait2.ts ===
 // /*HIGHLIGHTS*/[|{| kind: "none" |}async|] function f() {

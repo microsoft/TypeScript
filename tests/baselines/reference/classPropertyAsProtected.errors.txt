@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts] ////
+
 classPropertyAsProtected.ts(15,3): error TS2445: Property 'x' is protected and only accessible within class 'C' and its subclasses.
 classPropertyAsProtected.ts(16,3): error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
 classPropertyAsProtected.ts(17,3): error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.

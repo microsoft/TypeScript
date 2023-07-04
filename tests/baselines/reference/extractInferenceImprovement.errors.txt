@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extractInferenceImprovement.ts] ////
+
 extractInferenceImprovement.ts(26,26): error TS2345: Argument of type 'typeof s' is not assignable to parameter of type 'never'.
 extractInferenceImprovement.ts(28,1): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumUsedBeforeDeclaration.ts] ////
+
 enumUsedBeforeDeclaration.ts(1,18): error TS2450: Enum 'Color' used before its declaration.
 
 

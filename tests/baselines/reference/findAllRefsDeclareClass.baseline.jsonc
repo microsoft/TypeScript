@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsDeclareClass.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsDeclareClass.ts ===
 // /*FIND ALL REFS*/<|declare class [|{| isWriteAccess: true, isDefinition: true |}C|] {

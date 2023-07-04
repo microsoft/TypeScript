@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeNoTypeNoCrash.ts] ////
+
 mappedTypeNoTypeNoCrash.ts(1,51): error TS2304: Cannot find name 'K'.
 mappedTypeNoTypeNoCrash.ts(1,51): error TS4081: Exported type alias 'T0' has or is using private name 'K'.
 mappedTypeNoTypeNoCrash.ts(1,57): error TS2304: Cannot find name 'K'.

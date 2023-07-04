@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/signatureHelpConstructorCallParamProperties.ts] ////
+
 === /tests/cases/fourslash/signatureHelpConstructorCallParamProperties.ts ===
 // class Circle {
 //     /**

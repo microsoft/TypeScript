@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts] ////
+
 directDependenceBetweenTypeAliases.ts(4,6): error TS2456: Type alias 'T0' circularly references itself.
 directDependenceBetweenTypeAliases.ts(5,6): error TS2456: Type alias 'T0_1' circularly references itself.
 directDependenceBetweenTypeAliases.ts(6,6): error TS2456: Type alias 'T0_2' circularly references itself.

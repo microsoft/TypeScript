@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts] ////
+
 stringIndexerConstrainsPropertyDeclarations2.ts(15,5): error TS2411: Property 'c' of type 'number' is not assignable to 'string' index type 'A'.
 stringIndexerConstrainsPropertyDeclarations2.ts(16,5): error TS2411: Property 'd' of type 'string' is not assignable to 'string' index type 'A'.
 stringIndexerConstrainsPropertyDeclarations2.ts(23,5): error TS2411: Property 'c' of type 'number' is not assignable to 'string' index type 'A'.

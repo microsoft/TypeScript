@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForDeclarationKeywords.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForDeclarationKeywords.ts ===
 // class Base {}

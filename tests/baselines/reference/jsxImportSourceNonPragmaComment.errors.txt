@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxImportSourceNonPragmaComment.tsx] ////
+
 jsxImportSourceNonPragmaComment.tsx(3,21): error TS2307: Cannot find module '@emotion/react' or its corresponding type declarations.
 jsxImportSourceNonPragmaComment.tsx(7,5): error TS2307: Cannot find module '@emotion/react/jsx-runtime' or its corresponding type declarations.
 

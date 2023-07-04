@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts] ////
+
 genericCallWithTupleType.ts(12,1): error TS2322: Type '[string, number, boolean, boolean]' is not assignable to type '[string, number]'.
   Source has 4 element(s) but target allows only 2.
 genericCallWithTupleType.ts(13,20): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.

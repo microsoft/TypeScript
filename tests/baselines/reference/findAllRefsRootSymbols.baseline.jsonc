@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsRootSymbols.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsRootSymbols.ts ===
 // interface I { /*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}x|]: {};|> }

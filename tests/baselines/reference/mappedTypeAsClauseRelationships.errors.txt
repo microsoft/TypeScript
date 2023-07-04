@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts] ////
+
 mappedTypeAsClauseRelationships.ts(12,9): error TS2322: Type 'T' is not assignable to type 'Modify<T>'.
 mappedTypeAsClauseRelationships.ts(22,9): error TS2322: Type 'T' is not assignable to type 'ModifyInclOpt<T>'.
 mappedTypeAsClauseRelationships.ts(23,9): error TS2322: Type 'T' is not assignable to type 'FilterExclOpt<T>'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInIfStatement.ts] ////
+
 typeGuardsInIfStatement.ts(139,17): error TS2339: Property 'toString' does not exist on type 'never'.
 
 

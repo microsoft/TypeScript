@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.decmialNegative.ts] ////
+
 1.ts(1,1): error TS2304: Cannot find name '_10'.
 10.ts(1,4): error TS6188: Numeric separators are not allowed here.
 11.ts(1,5): error TS6189: Multiple consecutive numeric separators are not permitted.

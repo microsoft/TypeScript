@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsInMethod2.ts] ////
+
 unusedLocalsInMethod2.ts(3,9): error TS6199: All variables are unused.
 
 

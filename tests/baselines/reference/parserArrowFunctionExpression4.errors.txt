@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression4.ts] ////
+
 parserArrowFunctionExpression4.ts(1,1): error TS2304: Cannot find name 'a'.
 parserArrowFunctionExpression4.ts(1,6): error TS2695: Left side of comma operator is unused and has no side effects.
 parserArrowFunctionExpression4.ts(1,17): error TS2304: Cannot find name 'a'.

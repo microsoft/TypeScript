@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsFiles_skipDiagnostics.ts] ////
+
 a.js(29,1): error TS2349: This expression is not callable.
   Type 'Number' has no call signatures.
 a.js(35,1): error TS2349: This expression is not callable.

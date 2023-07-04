@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoDisplayPartsClassMethod.ts] ////
+
 === /tests/cases/fourslash/quickInfoDisplayPartsClassMethod.ts ===
 // class c {
 //     public publicMethod() { }

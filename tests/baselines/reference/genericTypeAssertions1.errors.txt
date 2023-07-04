@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeAssertions1.ts] ////
+
 genericTypeAssertions1.ts(3,5): error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
   Type 'number' is not assignable to type 'string'.
 genericTypeAssertions1.ts(4,5): error TS2322: Type 'A<A<number>>' is not assignable to type 'A<number>'.

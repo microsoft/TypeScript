@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum5.ts] ////
+
 parserEnum5.ts(2,12): error TS1357: An enum member name must be followed by a ',', '=', or '}'.
 parserEnum5.ts(2,14): error TS2452: An enum member cannot have a numeric name.
 parserEnum5.ts(3,15): error TS1357: An enum member name must be followed by a ',', '=', or '}'.

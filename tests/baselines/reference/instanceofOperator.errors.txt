@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofOperator.ts] ////
+
 instanceofOperator.ts(7,11): error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
 instanceofOperator.ts(12,5): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 instanceofOperator.ts(15,20): error TS2359: The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.

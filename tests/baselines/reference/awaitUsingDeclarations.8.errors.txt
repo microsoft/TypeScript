@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarations.8.ts] ////
+
 awaitUsingDeclarations.8.ts(2,17): error TS1155: 'await using' declarations must be initialized.
 
 

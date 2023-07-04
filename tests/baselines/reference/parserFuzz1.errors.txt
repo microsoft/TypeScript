@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts] ////
+
 parserFuzz1.ts(1,1): error TS2304: Cannot find name 'cla'.
 parserFuzz1.ts(1,6): error TS2304: Cannot find name 'ss'.
 parserFuzz1.ts(1,9): error TS1005: ';' expected.

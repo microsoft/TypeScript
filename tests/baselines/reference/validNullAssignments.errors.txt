@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/null/validNullAssignments.ts] ////
+
 validNullAssignments.ts(10,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
 validNullAssignments.ts(15,1): error TS2629: Cannot assign to 'C' because it is a class.
 validNullAssignments.ts(20,1): error TS2693: 'I' only refers to a type, but is being used as a value here.

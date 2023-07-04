@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoForObjectBindingElementName04.ts] ////
+
 === /tests/cases/fourslash/quickInfoForObjectBindingElementName04.ts ===
 // interface Options {
 //    /**

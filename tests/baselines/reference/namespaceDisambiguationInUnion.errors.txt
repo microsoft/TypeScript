@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namespaceDisambiguationInUnion.ts] ////
+
 namespaceDisambiguationInUnion.ts(10,7): error TS2322: Type '{ type: string; }' is not assignable to type 'Foo.Yep | Bar.Yep'.
   Type '{ type: string; }' is not assignable to type 'Yep'.
     Types of property 'type' are incompatible.

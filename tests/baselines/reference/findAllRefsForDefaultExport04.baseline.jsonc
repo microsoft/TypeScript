@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForDefaultExport04.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // <|const /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|] = 0;|>

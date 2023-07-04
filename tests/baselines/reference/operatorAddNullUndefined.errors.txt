@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/operatorAddNullUndefined.ts] ////
+
 operatorAddNullUndefined.ts(2,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
 operatorAddNullUndefined.ts(3,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
 operatorAddNullUndefined.ts(4,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'null'.

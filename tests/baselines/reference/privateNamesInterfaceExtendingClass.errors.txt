@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInterfaceExtendingClass.ts] ////
+
 privateNamesInterfaceExtendingClass.ts(10,7): error TS18013: Property '#prop' is not accessible outside class 'C' because it has a private identifier.
 
 

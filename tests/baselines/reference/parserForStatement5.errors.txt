@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement5.ts] ////
+
 parserForStatement5.ts(1,6): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
 parserForStatement5.ts(1,12): error TS2304: Cannot find name 'b'.
 

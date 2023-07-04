@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoInheritDoc6.ts] ////
+
 === /tests/cases/fourslash/quickInfoInheritDoc6.js ===
 // class B extends UNRESOLVED_VALUE_DEFINITELY_DOES_NOT_EXIST {
 //     /**

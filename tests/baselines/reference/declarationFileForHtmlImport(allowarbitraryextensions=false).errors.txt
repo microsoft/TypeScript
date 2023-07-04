@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForHtmlImport.ts] ////
+
 file.ts(1,22): error TS6263: Module './component.html' was resolved to 'component.d.html.ts', but '--allowArbitraryExtensions' is not set.
 
 

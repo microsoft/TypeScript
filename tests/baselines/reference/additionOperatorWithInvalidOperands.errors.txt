@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts] ////
+
 additionOperatorWithInvalidOperands.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
 additionOperatorWithInvalidOperands.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'number'.
 additionOperatorWithInvalidOperands.ts(17,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'Object'.

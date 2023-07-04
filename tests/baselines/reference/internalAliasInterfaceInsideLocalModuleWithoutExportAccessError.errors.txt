@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts] ////
+
 internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(11,10): error TS2694: Namespace '"internalAliasInterfaceInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts] ////
+
 noUnusedLocals_typeParameterMergedWithParameter.ts(1,17): error TS6133: 'T' is declared but its value is never read.
 noUnusedLocals_typeParameterMergedWithParameter.ts(1,21): error TS6133: 'T' is declared but its value is never read.
 noUnusedLocals_typeParameterMergedWithParameter.ts(3,18): error TS6133: 'T' is declared but its value is never read.

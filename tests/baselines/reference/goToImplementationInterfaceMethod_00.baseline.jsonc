@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToImplementationInterfaceMethod_00.ts] ////
+
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterfaceMethod_00.ts ===
 // interface Foo {

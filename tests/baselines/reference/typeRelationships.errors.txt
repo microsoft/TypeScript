@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/typeRelationships.ts] ////
+
 typeRelationships.ts(9,9): error TS2322: Type 'C' is not assignable to type 'this'.
   'C' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'C'.
 typeRelationships.ts(35,9): error TS2739: Type 'C' is missing the following properties from type 'D': self1, self2, self3, d, bar

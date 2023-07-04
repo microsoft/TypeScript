@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/documentHighlightAtInheritedProperties5.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/file1.ts ===
 // interface C extends D {

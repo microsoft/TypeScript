@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexTypeCheck.ts] ////
+
 indexTypeCheck.ts(2,2): error TS1021: An index signature must have a type annotation.
 indexTypeCheck.ts(3,2): error TS1021: An index signature must have a type annotation.
 indexTypeCheck.ts(17,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.

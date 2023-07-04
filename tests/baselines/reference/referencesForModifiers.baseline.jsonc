@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForModifiers.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForModifiers.ts ===
 // /*FIND ALL REFS*/<|declare abstract class [|{| isWriteAccess: true, isDefinition: true |}C1|] {

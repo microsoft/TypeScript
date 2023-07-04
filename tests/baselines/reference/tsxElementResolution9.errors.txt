@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution9.tsx] ////
+
 file.tsx(11,2): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: string): { x: number; }', gave the following error.
     Type '{}' is not assignable to type 'string'.

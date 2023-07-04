@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findReferencesJSXTagName.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/index.tsx ===
 // <|import { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}SubmissionComp|] } from "./RedditSubmission"|>

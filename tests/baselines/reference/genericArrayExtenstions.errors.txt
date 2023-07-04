@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericArrayExtenstions.ts] ////
+
 genericArrayExtenstions.ts(1,22): error TS2420: Class 'ObservableArray<T>' incorrectly implements interface 'T[]'.
   Type 'ObservableArray<T>' is missing the following properties from type 'T[]': length, pop, push, join, and 15 more.
 

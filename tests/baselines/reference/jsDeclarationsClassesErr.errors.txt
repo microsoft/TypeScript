@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassesErr.ts] ////
+
 index.js(4,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
 index.js(5,12): error TS8010: Type annotations can only be used in TypeScript files.
 index.js(8,16): error TS8004: Type parameter declarations can only be used in TypeScript files.

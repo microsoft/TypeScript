@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/simpleRecursionWithBaseCase.ts] ////
+
 simpleRecursionWithBaseCase.ts(8,21): error TS2554: Expected 1 arguments, but got 0.
 simpleRecursionWithBaseCase.ts(13,20): error TS2554: Expected 1 arguments, but got 0.
 simpleRecursionWithBaseCase.ts(19,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.

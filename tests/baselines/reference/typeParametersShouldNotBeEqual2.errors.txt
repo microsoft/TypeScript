@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParametersShouldNotBeEqual2.ts] ////
+
 typeParametersShouldNotBeEqual2.ts(4,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 typeParametersShouldNotBeEqual2.ts(5,5): error TS2322: Type 'V' is not assignable to type 'T'.

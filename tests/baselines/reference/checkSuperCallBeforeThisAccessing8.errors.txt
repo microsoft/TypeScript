@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts] ////
+
 checkSuperCallBeforeThisAccessing8.ts(7,20): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 

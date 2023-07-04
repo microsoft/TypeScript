@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTypeComparison2.ts] ////
+
 recursiveTypeComparison2.ts(13,80): error TS2304: Cannot find name 'StateValue'.
 
 

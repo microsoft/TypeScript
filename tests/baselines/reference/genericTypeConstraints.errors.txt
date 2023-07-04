@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeConstraints.ts] ////
+
 genericTypeConstraints.ts(9,31): error TS2344: Type 'FooExtended' does not satisfy the constraint 'Foo'.
   Property 'fooMethod' is missing in type 'FooExtended' but required in type 'Foo'.
 

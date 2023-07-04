@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterConstraints1.ts] ////
+
 typeParameterConstraints1.ts(6,25): error TS2304: Cannot find name 'hm'.
 
 

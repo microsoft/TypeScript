@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of20.ts] ////
+
 ES5For-of20.ts(3,20): error TS2448: Block-scoped variable 'v' used before its declaration.
 ES5For-of20.ts(4,15): error TS1155: 'const' declarations must be initialized.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofExternalModules.ts] ////
+
 typeofExternalModules_core.ts(5,1): error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("typeofExternalModules_external")'.
 typeofExternalModules_core.ts(7,1): error TS2741: Property 'prototype' is missing in type 'typeof import("typeofExternalModules_external")' but required in type 'typeof D'.
 

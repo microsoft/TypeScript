@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesIfElse.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesIfElse.ts ===
 // /*HIGHLIGHTS*/[|{| kind: "none" |}if|] (true) {

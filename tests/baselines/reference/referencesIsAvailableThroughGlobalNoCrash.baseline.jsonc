@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesIsAvailableThroughGlobalNoCrash.ts] ////
+
 // === findAllReferences ===
 // === /packages/playwright-core/bundles/utils/node_modules/@types/debug/index.d.ts ===
 // <|declare var [|{| defId: 1, isWriteAccess: true |}debug|]: [|{| defId: 1 |}debug|].Debug & { debug: [|{| defId: 1 |}debug|].Debug; default: [|{| defId: 1 |}debug|].Debug };|>

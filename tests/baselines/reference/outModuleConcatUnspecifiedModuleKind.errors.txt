@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/outModuleConcatUnspecifiedModuleKind.ts] ////
+
 a.ts(1,14): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
 
 

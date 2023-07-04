@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty2.ts] ////
+
 accessorsOverrideProperty2.ts(6,7): error TS2611: 'x' is defined as a property in class 'Base', but is overridden here in 'Derived' as an accessor.
 
 

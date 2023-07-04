@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renamePrivateFields1.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renamePrivateFields1.ts ===
 // class Foo {

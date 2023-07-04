@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts] ////
+
 privateNameAndAny.ts(9,15): error TS2339: Property '#bar' does not exist on type 'any'.
 privateNameAndAny.ts(13,9): error TS18046: 'thing' is of type 'unknown'.
 privateNameAndAny.ts(14,9): error TS18046: 'thing' is of type 'unknown'.

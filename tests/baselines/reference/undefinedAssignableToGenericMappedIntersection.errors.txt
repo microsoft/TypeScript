@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts] ////
+
 undefinedAssignableToGenericMappedIntersection.ts(5,5): error TS2322: Type 'undefined' is not assignable to type 'Errors<T>[keyof T]'.
 
 

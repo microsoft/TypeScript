@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterNamesInTypeParameterList.ts] ////
+
 parameterNamesInTypeParameterList.ts(1,30): error TS2552: Cannot find name 'a'. Did you mean 'A'?
 parameterNamesInTypeParameterList.ts(5,30): error TS2552: Cannot find name 'a'. Did you mean 'A'?
 parameterNamesInTypeParameterList.ts(9,30): error TS2552: Cannot find name 'a'. Did you mean 'A'?

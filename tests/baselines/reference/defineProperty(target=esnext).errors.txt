@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts] ////
+
 defineProperty.ts(3,14): error TS2729: Property 'y' is used before its initialization.
 defineProperty.ts(10,14): error TS2729: Property 'y' is used before its initialization.
 defineProperty.ts(18,14): error TS2729: Property 'ka' is used before its initialization.

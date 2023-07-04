@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameImportNamespaceAndShorthand.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameImportNamespaceAndShorthand.ts ===
 // <|import * as /*RENAME*/[|fooRENAME|] from 'bar';|>

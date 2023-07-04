@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/declarationMapsOutOfDateMapping.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /node_modules/a/src/index.ts ===
 // export class [|Foo|] {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameterInLambda1.ts] ////
+
 unusedTypeParameterInLambda1.ts(3,16): error TS6133: 'T' is declared but its value is never read.
 
 

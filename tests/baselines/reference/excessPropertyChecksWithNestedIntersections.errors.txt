@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts] ////
+
 excessPropertyChecksWithNestedIntersections.ts(18,19): error TS2322: Type 'number' is not assignable to type 'string'.
 excessPropertyChecksWithNestedIntersections.ts(19,31): error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'A'.
   Object literal may only specify known properties, and 'y' does not exist in type 'A'.

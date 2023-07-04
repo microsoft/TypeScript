@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedWords3.ts] ////
+
 reservedWords3.ts(1,13): error TS1390: 'enum' is not allowed as a parameter name.
 reservedWords3.ts(1,17): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 reservedWords3.ts(1,17): error TS1003: Identifier expected.

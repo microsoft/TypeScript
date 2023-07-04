@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity1.ts] ////
+
 parserRegularExpressionDivideAmbiguity1.ts(2,2): error TS2552: Cannot find name 'notregexp'. Did you mean 'RegExp'?
 parserRegularExpressionDivideAmbiguity1.ts(2,12): error TS2304: Cannot find name 'a'.
 

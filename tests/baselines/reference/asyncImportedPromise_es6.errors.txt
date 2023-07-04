@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncImportedPromise_es6.ts] ////
+
 test.ts(3,25): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<T>'?
 
 

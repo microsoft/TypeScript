@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts] ////
+
 types.asyncGenerators.es2018.2.ts(2,12): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
 types.asyncGenerators.es2018.2.ts(8,12): error TS2504: Type 'Promise<number[]>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
 types.asyncGenerators.es2018.2.ts(10,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterableIterator<number>'.

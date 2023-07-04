@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-scopes-duplicates4.ts] ////
+
 file1.ts(1,7): error TS2451: Cannot redeclare block-scoped variable 'var1'.
 file2.ts(1,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
 

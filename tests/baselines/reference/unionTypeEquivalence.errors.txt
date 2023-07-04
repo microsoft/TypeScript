@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeEquivalence.ts] ////
+
 unionTypeEquivalence.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'C', but here has type 'C | D'.
 
 

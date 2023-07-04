@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts] ////
+
 destructuringInFunctionType.ts(12,18): error TS2842: 'b' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
 destructuringInFunctionType.ts(12,28): error TS2842: 'a' is an unused renaming of 'b'. Did you intend to use it as a type annotation?
 

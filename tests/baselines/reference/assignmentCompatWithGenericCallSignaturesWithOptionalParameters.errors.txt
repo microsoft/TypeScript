@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts] ////
+
 assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(14,13): error TS2322: Type '(x: T) => any' is not assignable to type '() => T'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
 assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(23,13): error TS2322: Type '(x: T, y: T) => any' is not assignable to type '(x: T) => T'.

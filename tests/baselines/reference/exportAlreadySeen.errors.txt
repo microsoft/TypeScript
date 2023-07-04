@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAlreadySeen.ts] ////
+
 exportAlreadySeen.ts(2,12): error TS1030: 'export' modifier already seen.
 exportAlreadySeen.ts(3,12): error TS1030: 'export' modifier already seen.
 exportAlreadySeen.ts(5,12): error TS1030: 'export' modifier already seen.

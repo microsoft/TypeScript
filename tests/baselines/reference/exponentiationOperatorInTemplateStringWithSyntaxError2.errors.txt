@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts] ////
+
 exponentiationOperatorInTemplateStringWithSyntaxError2.ts(7,10): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 exponentiationOperatorInTemplateStringWithSyntaxError2.ts(8,10): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 exponentiationOperatorInTemplateStringWithSyntaxError2.ts(9,10): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.

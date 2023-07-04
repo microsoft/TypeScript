@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseInvalidNames.ts] ////
+
 parseInvalidNames.ts(1,1): error TS2304: Cannot find name 'namespace'.
 parseInvalidNames.ts(1,11): error TS2819: Namespace name cannot be '100'.
 parseInvalidNames.ts(1,15): error TS1005: ';' expected.

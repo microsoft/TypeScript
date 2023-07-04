@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExpressionAssignment.ts] ////
+
 classExpressionAssignment.ts(6,7): error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
   Property 'prop' is missing in type 'A' but required in type 'A'.
 

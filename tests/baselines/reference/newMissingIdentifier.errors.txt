@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newMissingIdentifier.ts] ////
+
 newMissingIdentifier.ts(1,14): error TS1109: Expression expected.
 
 

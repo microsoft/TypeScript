@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forwardDeclaredCommonTypes01.ts] ////
+
 forwardDeclaredCommonTypes01.ts(9,9): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
 forwardDeclaredCommonTypes01.ts(10,9): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
 forwardDeclaredCommonTypes01.ts(10,17): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.

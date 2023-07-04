@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/variableDeclarations/VariableDeclaration1_es6.ts] ////
+
 VariableDeclaration1_es6.ts(1,6): error TS1123: Variable declaration list cannot be empty.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts] ////
+
 parserharness.ts(16,21): error TS6053: File '../compiler/io.ts' not found.
 parserharness.ts(17,21): error TS6053: File '../compiler/typescript.ts' not found.
 parserharness.ts(18,21): error TS6053: File '../services/typescriptServices.ts' not found.

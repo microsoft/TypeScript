@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileWithoutResolveJsonModule.ts] ////
+
 file1.ts(1,21): error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 file1.ts(3,21): error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 

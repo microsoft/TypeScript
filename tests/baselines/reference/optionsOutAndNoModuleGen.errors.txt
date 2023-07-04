@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionsOutAndNoModuleGen.ts] ////
+
 error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'outFile' instead.
 optionsOutAndNoModuleGen.ts(1,1): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.

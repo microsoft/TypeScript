@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames5.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsWithLeadingUnderscoreNames5.ts ===
 // class Foo {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat3.ts] ////
+
 enumAssignmentCompat3.ts(68,1): error TS2322: Type 'Abcd.E' is not assignable to type 'First.E'.
   Property 'd' is missing in type 'First.E'.
 enumAssignmentCompat3.ts(70,1): error TS2322: Type 'Cd.E' is not assignable to type 'First.E'.

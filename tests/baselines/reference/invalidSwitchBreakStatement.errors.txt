@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/breakStatements/invalidSwitchBreakStatement.ts] ////
+
 invalidSwitchBreakStatement.ts(4,10): error TS2678: Type '5' is not comparable to type '12'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypeDoesntSpinForever.ts] ////
+
 conditionalTypeDoesntSpinForever.ts(23,15): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
 conditionalTypeDoesntSpinForever.ts(36,19): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.
 conditionalTypeDoesntSpinForever.ts(53,21): error TS2322: Type 'SO_FAR' is not assignable to type 'object'.

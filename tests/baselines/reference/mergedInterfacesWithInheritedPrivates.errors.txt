@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts] ////
+
 mergedInterfacesWithInheritedPrivates.ts(13,7): error TS2420: Class 'D' incorrectly implements interface 'A'.
   Types have separate declarations of a private property 'x'.
 mergedInterfacesWithInheritedPrivates.ts(19,7): error TS2420: Class 'E' incorrectly implements interface 'A'.

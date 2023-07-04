@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameAmbientNoImplicitAny.ts] ////
+
 privateNameAmbientNoImplicitAny.ts(5,5): error TS7008: Member '#prop' implicitly has an 'any' type.
 
 

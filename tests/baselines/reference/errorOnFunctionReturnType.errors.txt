@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/errorOnFunctionReturnType.ts] ////
+
 foo.js(7,10): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 foo.js(13,5): error TS2322: Type 'string' is not assignable to type 'number'.
 foo.js(16,60): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.

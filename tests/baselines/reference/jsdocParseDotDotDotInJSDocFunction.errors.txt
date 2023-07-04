@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocParseDotDotDotInJSDocFunction.ts] ////
+
 a.js(2,13): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 
 

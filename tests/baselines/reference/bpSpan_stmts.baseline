@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationStatements.ts] ////
+
 
 1  >function f() {
 

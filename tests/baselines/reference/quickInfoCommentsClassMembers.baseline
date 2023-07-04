@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoCommentsClassMembers.ts] ////
+
 === /tests/cases/fourslash/quickInfoCommentsClassMembers.ts ===
 // /** This is comment for c1*/
 // class c1 {

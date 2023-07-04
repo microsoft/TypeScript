@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction3_es5.ts] ////
+
 asyncArrowFunction3_es5.ts(1,20): error TS2372: Parameter 'await' cannot reference itself.
 
 

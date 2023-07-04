@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralMemberWithModifiers1.ts] ////
+
 objectLiteralMemberWithModifiers1.ts(1,11): error TS1042: 'public' modifier cannot be used here.
 objectLiteralMemberWithModifiers1.ts(1,11): error TS1184: Modifiers cannot appear here.
 

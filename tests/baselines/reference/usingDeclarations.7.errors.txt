@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarations.7.ts] ////
+
 usingDeclarations.7.ts(3,11): error TS1492: 'using' declarations may not have binding patterns.
 usingDeclarations.7.ts(3,12): error TS2339: Property 'b' does not exist on type 'null'.
 

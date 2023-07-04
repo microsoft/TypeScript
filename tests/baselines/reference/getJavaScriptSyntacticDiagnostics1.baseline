@@ -1,4 +1,5 @@
-Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics1.ts':
+//// [/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics1.ts] ////
+
 /tests/cases/fourslash/a.js(1,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 
 

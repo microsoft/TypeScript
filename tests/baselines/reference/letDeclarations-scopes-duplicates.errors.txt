@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-scopes-duplicates.ts] ////
+
 letDeclarations-scopes-duplicates.ts(2,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
 letDeclarations-scopes-duplicates.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'var1'.
 letDeclarations-scopes-duplicates.ts(5,5): error TS2451: Cannot redeclare block-scoped variable 'var2'.

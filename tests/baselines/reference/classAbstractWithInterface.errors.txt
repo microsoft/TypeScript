@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractWithInterface.ts] ////
+
 classAbstractWithInterface.ts(1,1): error TS1242: 'abstract' modifier can only appear on a class, method, or property declaration.
 
 

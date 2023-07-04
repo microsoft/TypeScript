@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/globalThisUnknownNoImplicitAny.ts] ////
+
 globalThisUnknownNoImplicitAny.ts(4,5): error TS2339: Property 'hi' does not exist on type 'Window & typeof globalThis'.
 globalThisUnknownNoImplicitAny.ts(5,6): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
 globalThisUnknownNoImplicitAny.ts(6,12): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.

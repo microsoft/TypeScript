@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates.ts] ////
+
 interfaceExtendingClassWithPrivates.ts(5,11): error TS2430: Interface 'I' incorrectly extends interface 'Foo'.
   Property 'x' is private in type 'Foo' but not in type 'I'.
 interfaceExtendingClassWithPrivates.ts(15,12): error TS2341: Property 'x' is private and only accessible within class 'Foo'.

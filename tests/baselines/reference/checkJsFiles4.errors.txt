@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsFiles4.ts] ////
+
 a.js(3,1): error TS2322: Type 'number' is not assignable to type 'string'.
 
 

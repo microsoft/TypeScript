@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForLabel6.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForLabel6.ts ===
 // /*FIND ALL REFS*/<|[|labela|]: while (true) {

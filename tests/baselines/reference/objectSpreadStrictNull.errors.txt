@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/objectSpreadStrictNull.ts] ////
+
 objectSpreadStrictNull.ts(14,9): error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
   Types of property 'sn' are incompatible.
     Type 'number | undefined' is not assignable to type 'string | number'.

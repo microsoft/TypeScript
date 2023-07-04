@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/returnTypeTypeArguments.ts] ////
+
 returnTypeTypeArguments.ts(14,16): error TS2314: Generic type 'One<T>' requires 1 type argument(s).
 returnTypeTypeArguments.ts(15,16): error TS2314: Generic type 'Two<T, U>' requires 2 type argument(s).
 returnTypeTypeArguments.ts(16,16): error TS2314: Generic type 'Three<T, U, V>' requires 3 type argument(s).

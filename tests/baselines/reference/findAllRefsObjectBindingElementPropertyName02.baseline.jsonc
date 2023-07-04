@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsObjectBindingElementPropertyName02.ts ===
 // interface I {

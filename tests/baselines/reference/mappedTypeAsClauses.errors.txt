@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts] ////
+
 mappedTypeAsClauses.ts(130,3): error TS2345: Argument of type '"a"' is not assignable to parameter of type '"b"'.
 
 

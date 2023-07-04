@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsExportAssignment.ts] ////
+
 file.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 index.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fieldAndGetterWithSameName.ts] ////
+
 fieldAndGetterWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
 fieldAndGetterWithSameName.ts(3,7): error TS2300: Duplicate identifier 'x'.
 

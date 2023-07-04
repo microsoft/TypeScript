@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/enums.ts] ////
+
 /b.ts(3,1): error TS1361: 'SyntaxKind' cannot be used as a value because it was imported using 'import type'.
 /b.ts(4,1): error TS1361: 'SymbolFlags' cannot be used as a value because it was imported using 'import type'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumBadPropertyNames.ts] ////
+
 constEnumBadPropertyNames.ts(2,11): error TS2339: Property 'B' does not exist on type 'typeof E'.
 
 

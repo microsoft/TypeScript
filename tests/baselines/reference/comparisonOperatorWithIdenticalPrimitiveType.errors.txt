@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts] ////
+
 comparisonOperatorWithIdenticalPrimitiveType.ts(15,11): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithIdenticalPrimitiveType.ts(15,18): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithIdenticalPrimitiveType.ts(16,11): error TS18050: The value 'undefined' cannot be used here.

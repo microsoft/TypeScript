@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsModuleAugmentation.ts] ////
+
 // === findAllReferences ===
 // === /node_modules/foo/index.d.ts ===
 // /*FIND ALL REFS*/<|export type [|{| isWriteAccess: true, isDefinition: true |}T|] = number;|>

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts] ////
+
 augmentedTypeAssignmentCompatIndexSignature.ts(19,5): error TS2322: Type '() => void' is not assignable to type '{ [n: number]: Bar; }'.
   Index signature for type 'number' is missing in type '() => void'.
 

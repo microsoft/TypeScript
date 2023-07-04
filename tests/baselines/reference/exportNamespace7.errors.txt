@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace7.ts] ////
+
 /c.ts(2,16): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
 /c.ts(3,17): error TS1362: 'B' cannot be used as a value because it was exported using 'export type'.
 /e.ts(2,16): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.

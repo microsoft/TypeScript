@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/literalTypeNameAssertionNotTriggered.ts] ////
+
 /a.ts(1,20): error TS2307: Cannot find module 'something' or its corresponding type declarations.
 /b.ts(3,6): error TS2345: Argument of type '""' is not assignable to parameter of type '"x"'.
 

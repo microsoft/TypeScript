@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataWithImportDeclarationNameCollision7.ts] ////
+
 service.ts(7,9): error TS2702: 'db' only refers to a type, but is being used as a namespace here.
 service.ts(9,21): error TS2702: 'db' only refers to a type, but is being used as a namespace here.
 

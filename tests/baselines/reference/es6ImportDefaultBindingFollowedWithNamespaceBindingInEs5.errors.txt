@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5.ts] ////
+
 es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts(1,8): error TS1192: Module '"es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0"' has no default export.
 
 

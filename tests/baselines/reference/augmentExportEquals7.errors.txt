@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentExportEquals7.ts] ////
+
 /node_modules/@types/lib-extender/index.d.ts(2,16): error TS2649: Cannot augment module 'lib' with value exports because it resolves to a non-module entity.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts] ////
+
 parserUnterminatedGeneric2.ts(2,5): error TS1435: Unknown keyword or identifier. Did you mean 'interface ICompiledExpression'?
 parserUnterminatedGeneric2.ts(2,5): error TS2304: Cannot find name 'interfaceICompiledExpression'.
 parserUnterminatedGeneric2.ts(3,42): error TS1005: '=>' expected.

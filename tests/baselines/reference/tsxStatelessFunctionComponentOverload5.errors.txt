@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload5.tsx] ////
+
 file.tsx(48,12): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.

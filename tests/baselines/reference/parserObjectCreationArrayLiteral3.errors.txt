@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral3.ts] ////
+
 parserObjectCreationArrayLiteral3.ts(1,5): error TS2304: Cannot find name 'Foo'.
 parserObjectCreationArrayLiteral3.ts(1,9): error TS1011: An element access expression should take an argument.
 

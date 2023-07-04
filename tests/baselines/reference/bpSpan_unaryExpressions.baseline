@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationUnaryExpressions.ts] ////
+
 
 1  >var x = 10;
 

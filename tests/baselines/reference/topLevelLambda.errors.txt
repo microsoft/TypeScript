@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/topLevelLambda.ts] ////
+
 topLevelLambda.ts(2,17): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 

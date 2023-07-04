@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution12.tsx] ////
+
 file.tsx(25,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
 file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classDeclarationShouldBeOutOfScopeInComputedNames.ts] ////
+
 classDeclarationShouldBeOutOfScopeInComputedNames.ts(5,22): error TS2449: Class 'A' used before its declaration.
 classDeclarationShouldBeOutOfScopeInComputedNames.ts(6,13): error TS2449: Class 'A' used before its declaration.
 classDeclarationShouldBeOutOfScopeInComputedNames.ts(7,6): error TS2449: Class 'A' used before its declaration.

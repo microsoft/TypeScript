@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts] ////
+
 generatorReturnTypeInferenceNonStrict.ts(9,11): error TS7055: 'g001', which lacks return-type annotation, implicitly has an 'any' yield type.
 generatorReturnTypeInferenceNonStrict.ts(17,11): error TS7055: 'g003', which lacks return-type annotation, implicitly has an 'any' yield type.
 generatorReturnTypeInferenceNonStrict.ts(74,15): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.

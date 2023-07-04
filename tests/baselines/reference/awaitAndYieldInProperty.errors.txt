@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/awaitAndYieldInProperty.ts] ////
+
 awaitAndYieldInProperty.ts(3,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 awaitAndYieldInProperty.ts(3,21): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 awaitAndYieldInProperty.ts(4,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

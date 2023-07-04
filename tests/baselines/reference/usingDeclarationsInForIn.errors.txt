@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsInForIn.ts] ////
+
 usingDeclarationsInForIn.ts(1,6): error TS1493: The left-hand side of a 'for...in' statement cannot be a 'using' declaration.
 
 

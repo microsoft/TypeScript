@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/gotoDefinitionThrowsTag.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/gotoDefinitionThrowsTag.ts ===
 // <|class [|E|] extends Error {}|>

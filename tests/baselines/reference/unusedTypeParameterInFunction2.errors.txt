@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameterInFunction2.ts] ////
+
 unusedTypeParameterInFunction2.ts(1,16): error TS6133: 'Y' is declared but its value is never read.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt5.ts] ////
+
 moduleSharesNameWithImportDeclarationInsideIt5.ts(10,12): error TS2300: Duplicate identifier 'M'.
 moduleSharesNameWithImportDeclarationInsideIt5.ts(11,12): error TS2300: Duplicate identifier 'M'.
 

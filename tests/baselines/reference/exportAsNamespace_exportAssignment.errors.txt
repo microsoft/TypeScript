@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace_exportAssignment.ts] ////
+
 b.ts(1,21): error TS2498: Module '"a"' uses 'export =' and cannot be used with 'export *'.
 
 

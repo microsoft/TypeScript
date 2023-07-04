@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParamExtendsOtherTypeParam.ts] ////
+
 typeParamExtendsOtherTypeParam.ts(12,26): error TS2344: Type '{ b: string; }' does not satisfy the constraint '{ a: string; }'.
   Property 'a' is missing in type '{ b: string; }' but required in type '{ a: string; }'.
 typeParamExtendsOtherTypeParam.ts(13,26): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.

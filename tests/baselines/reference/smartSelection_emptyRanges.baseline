@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_emptyRanges.ts] ////
+
 class HomePage {
   componentDidMount(/**/) {
     if (this.props.username) {

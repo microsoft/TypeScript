@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/compileOnSaveWorksWhenEmitBlockingErrorOnOtherFile.ts] ////
+
 EmitSkipped: true
 Diagnostics:
  Cannot write file '/tests/cases/fourslash/b.js' because it would overwrite input file.

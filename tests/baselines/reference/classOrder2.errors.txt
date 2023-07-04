@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classOrder2.ts] ////
+
 classOrder2.ts(1,17): error TS2449: Class 'B' used before its declaration.
 
 

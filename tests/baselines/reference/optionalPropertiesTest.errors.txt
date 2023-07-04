@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalPropertiesTest.ts] ////
+
 optionalPropertiesTest.ts(14,1): error TS2741: Property 'id' is missing in type '{ name: string; }' but required in type 'IFoo'.
 optionalPropertiesTest.ts(25,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i1'.
 optionalPropertiesTest.ts(26,5): error TS2741: Property 'M' is missing in type '{}' but required in type 'i3'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocInTypeScript.ts] ////
+
 jsdocInTypeScript.ts(16,23): error TS2304: Cannot find name 'MyType'.
 jsdocInTypeScript.ts(23,33): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 jsdocInTypeScript.ts(25,3): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.

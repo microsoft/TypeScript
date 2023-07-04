@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/numericLiteralTypes3.ts] ////
+
 numericLiteralTypes3.ts(8,5): error TS2322: Type 'B' is not assignable to type '1'.
   Type '2' is not assignable to type '1'.
 numericLiteralTypes3.ts(9,5): error TS2322: Type 'C' is not assignable to type '1'.

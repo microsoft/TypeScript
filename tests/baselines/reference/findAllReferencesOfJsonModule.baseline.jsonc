@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllReferencesOfJsonModule.ts] ////
+
 // === findAllReferences ===
 // === /foo.ts ===
 // /*FIND ALL REFS*/<|import [|{| isWriteAccess: true, isDefinition: true |}settings|] from "./settings.json";|>

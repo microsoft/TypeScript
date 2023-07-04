@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.ts] ////
+
 classAndVariableWithSameName.ts(1,7): error TS2300: Duplicate identifier 'C'.
 classAndVariableWithSameName.ts(2,5): error TS2300: Duplicate identifier 'C'.
 classAndVariableWithSameName.ts(5,11): error TS2300: Duplicate identifier 'D'.

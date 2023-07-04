@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInTypeAlias.ts] ////
+
 === /tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInTypeAlias.ts ===
 // type List<T> = T[]
 //      ^^^^

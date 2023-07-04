@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modifierOnParameter1.ts] ////
+
 modifierOnParameter1.ts(2,16): error TS1090: 'declare' modifier cannot appear on a parameter.
 
 

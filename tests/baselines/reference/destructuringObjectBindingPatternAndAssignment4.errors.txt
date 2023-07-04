@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment4.ts] ////
+
 destructuringObjectBindingPatternAndAssignment4.ts(6,9): error TS2448: Block-scoped variable 'f' used before its declaration.
 destructuringObjectBindingPatternAndAssignment4.ts(7,9): error TS2448: Block-scoped variable 'f' used before its declaration.
 

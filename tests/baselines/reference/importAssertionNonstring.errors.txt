@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importAssertionNonstring.ts] ////
+
 mod.mts(1,52): error TS2837: Import assertion values must be string literal expressions.
 mod.mts(3,52): error TS2837: Import assertion values must be string literal expressions.
 mod.mts(5,52): error TS2837: Import assertion values must be string literal expressions.

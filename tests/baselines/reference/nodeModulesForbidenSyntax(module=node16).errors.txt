@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesForbidenSyntax.ts] ////
+
 index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
 index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
 index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.

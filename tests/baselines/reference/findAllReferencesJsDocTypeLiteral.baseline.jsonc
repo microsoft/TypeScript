@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllReferencesJsDocTypeLiteral.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/foo.js ===
 // /**

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports_entireImportDeclaration.ts] ////
+
 /b.ts(1,1): error TS6192: All imports in import declaration are unused.
 /b.ts(2,1): error TS6192: All imports in import declaration are unused.
 /b.ts(4,19): error TS6133: 'a2' is declared but its value is never read.

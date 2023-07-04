@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/intrinsicTypes.ts] ////
+
 intrinsicTypes.ts(6,22): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 intrinsicTypes.ts(13,22): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 intrinsicTypes.ts(20,23): error TS2344: Type 'number' does not satisfy the constraint 'string'.

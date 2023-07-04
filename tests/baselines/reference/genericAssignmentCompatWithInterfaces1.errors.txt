@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts] ////
+
 genericAssignmentCompatWithInterfaces1.ts(12,23): error TS2322: Type 'A<number>' is not assignable to type 'Comparable<string>'.
   Types of property 'compareTo' are incompatible.
     Type '(other: number) => number' is not assignable to type '(other: string) => number'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts] ////
+
 exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(2,10): error TS18050: The value 'null' cannot be used here.
 exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(2,18): error TS18050: The value 'null' cannot be used here.
 exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(3,10): error TS18050: The value 'null' cannot be used here.

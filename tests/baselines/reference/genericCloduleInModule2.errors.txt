@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCloduleInModule2.ts] ////
+
 genericCloduleInModule2.ts(14,8): error TS2314: Generic type 'B<T>' requires 1 type argument(s).
 
 

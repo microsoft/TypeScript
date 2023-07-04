@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noParameterReassignmentIIFEAnnotated.ts] ////
+
 index.js(3,28): error TS8029: JSDoc '@param' tag has name 'rest', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 
 

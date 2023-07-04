@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics2.ts] ////
+
 generics2.ts(17,14): error TS2344: Type 'A' does not satisfy the constraint 'B'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 generics2.ts(20,9): error TS2314: Generic type 'G<T, U>' requires 2 type argument(s).

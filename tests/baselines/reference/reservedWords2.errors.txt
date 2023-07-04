@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedWords2.ts] ////
+
 reservedWords2.ts(1,8): error TS1109: Expression expected.
 reservedWords2.ts(1,14): error TS1005: '(' expected.
 reservedWords2.ts(1,16): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

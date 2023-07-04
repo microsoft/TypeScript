@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop7.ts] ////
+
 capturedLetConstInLoop7.ts(230,9): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
 capturedLetConstInLoop7.ts(233,9): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
 capturedLetConstInLoop7.ts(236,9): error TS2367: This comparison appears to be unintentional because the types '0' and '2' have no overlap.

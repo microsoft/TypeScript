@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForContextuallyTypedObjectLiteralProperties.ts ===
 // interface IFoo { /*FIND ALL REFS*/<|[|{| isDefinition: true |}xy|]: number;|> }

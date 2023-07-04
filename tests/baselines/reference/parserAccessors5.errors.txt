@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors5.ts] ////
+
 parserAccessors5.ts(2,13): error TS1183: An implementation cannot be declared in ambient contexts.
 
 

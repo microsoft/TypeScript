@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedMultipleParameters2InMethodDeclaration.ts] ////
+
 unusedMultipleParameters2InMethodDeclaration.ts(2,20): error TS6133: 'person' is declared but its value is never read.
 unusedMultipleParameters2InMethodDeclaration.ts(2,36): error TS6133: 'person2' is declared but its value is never read.
 unusedMultipleParameters2InMethodDeclaration.ts(2,53): error TS6133: 'person3' is declared but its value is never read.

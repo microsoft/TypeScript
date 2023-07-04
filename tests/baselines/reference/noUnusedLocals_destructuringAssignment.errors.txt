@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_destructuringAssignment.ts] ////
+
 noUnusedLocals_destructuringAssignment.ts(10,13): error TS6133: 'f' is declared but its value is never read.
 
 

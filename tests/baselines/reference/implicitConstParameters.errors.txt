@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitConstParameters.ts] ////
+
 implicitConstParameters.ts(38,27): error TS18048: 'x' is possibly 'undefined'.
 implicitConstParameters.ts(44,27): error TS18048: 'x' is possibly 'undefined'.
 

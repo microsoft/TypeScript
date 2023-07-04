@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/documentHighlightsInvalidGlobalThis.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/documentHighlightsInvalidGlobalThis.ts ===
 // declare global {

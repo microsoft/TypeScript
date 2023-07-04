@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers4.ts] ////
+
 typeOfThisInStaticMembers4.ts(9,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers04.ts] ////
+
 objectBindingPatternKeywordIdentifiers04.ts(1,16): error TS1359: Identifier expected. 'while' is a reserved word that cannot be used here.
 objectBindingPatternKeywordIdentifiers04.ts(1,22): error TS1005: ':' expected.
 

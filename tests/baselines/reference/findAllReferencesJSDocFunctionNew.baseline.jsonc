@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllReferencesJSDocFunctionNew.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/Foo.js ===
 // /** @type {function (/*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}new|]: string|>, string): string} */

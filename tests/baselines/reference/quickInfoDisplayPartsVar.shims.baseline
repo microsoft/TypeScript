@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts] ////
+
 === /tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts ===
 // var a = 10;
 //     ^

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts] ////
+
 interfacesWithPredefinedTypesAsNames.ts(1,11): error TS2427: Interface name cannot be 'any'.
 interfacesWithPredefinedTypesAsNames.ts(2,11): error TS2427: Interface name cannot be 'number'.
 interfacesWithPredefinedTypesAsNames.ts(3,11): error TS2427: Interface name cannot be 'string'.

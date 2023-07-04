@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/callHierarchyClassStaticBlock.ts] ////
+
 ╭ name: bar
 ├ kind: function
 ├ file: /tests/cases/fourslash/callHierarchyClassStaticBlock.ts

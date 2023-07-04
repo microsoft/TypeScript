@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts] ////
+
 typeParameterAssignability3.ts(14,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
 typeParameterAssignability3.ts(15,5): error TS2322: Type 'T' is not assignable to type 'U'.

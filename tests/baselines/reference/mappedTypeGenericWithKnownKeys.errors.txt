@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeGenericWithKnownKeys.ts] ////
+
 mappedTypeGenericWithKnownKeys.ts(9,9): error TS2551: Property 'unknownLiteralKey' does not exist on type 'Record<keyof Shape | "knownLiteralKey", number>'. Did you mean 'knownLiteralKey'?
 mappedTypeGenericWithKnownKeys.ts(10,5): error TS2536: Type 'string' cannot be used to index type 'Record<keyof Shape | "knownLiteralKey", number>'.
 

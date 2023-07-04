@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyTypeArgumentList.ts] ////
+
 emptyTypeArgumentList.ts(2,4): error TS1099: Type argument list cannot be empty.
 emptyTypeArgumentList.ts(6,9): error TS1099: Type argument list cannot be empty.
 

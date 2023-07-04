@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsDestructureGeneric.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsDestructureGeneric.ts ===
 // interface I<T> {

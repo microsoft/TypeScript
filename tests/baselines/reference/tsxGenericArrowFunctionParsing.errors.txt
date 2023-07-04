@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxGenericArrowFunctionParsing.tsx] ////
+
 file.tsx(8,17): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 file.tsx(20,32): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 file.tsx(24,25): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameReadonly.ts] ////
+
 privateNameReadonly.ts(4,9): error TS2322: Type 'void' is not assignable to type '() => void'.
 privateNameReadonly.ts(4,14): error TS2803: Cannot assign to private method '#bar'. Private methods are not writable.
 

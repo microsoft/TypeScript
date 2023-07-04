@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnImportStatement3.ts] ////
+
 commentOnImportStatement3.ts(4,22): error TS2307: Cannot find module './foo' or its corresponding type declarations.
 
 

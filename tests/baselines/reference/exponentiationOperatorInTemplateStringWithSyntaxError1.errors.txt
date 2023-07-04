@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError1.ts] ////
+
 exponentiationOperatorInTemplateStringWithSyntaxError1.ts(7,8): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorInTemplateStringWithSyntaxError1.ts(7,8): error TS17006: An unary expression with the 'typeof' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 exponentiationOperatorInTemplateStringWithSyntaxError1.ts(8,4): error TS17006: An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/documentHighlightTemplateStrings.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/documentHighlightTemplateStrings.ts ===
 // type Foo = "[|{| kind: "reference", isInString: true |}a|]" | "b";

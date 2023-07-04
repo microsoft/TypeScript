@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInvalidExport.ts] ////
+
 declarationEmitInvalidExport.ts(4,30): error TS4081: Exported type alias 'MyClass' has or is using private name 'myClass'.
 declarationEmitInvalidExport.ts(5,1): error TS1128: Declaration or statement expected.
 

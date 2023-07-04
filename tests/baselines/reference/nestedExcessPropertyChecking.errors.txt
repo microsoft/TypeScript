@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedExcessPropertyChecking.ts] ////
+
 nestedExcessPropertyChecking.ts(6,7): error TS2322: Type 'C1' is not assignable to type 'A1 & B1'.
   Types of property 'x' are incompatible.
     Type '{ c: string; }' has no properties in common with type '{ a?: string | undefined; } & { b?: string | undefined; }'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classWithPredefinedTypesAsNames.ts] ////
+
 classWithPredefinedTypesAsNames.ts(3,7): error TS2414: Class name cannot be 'any'.
 classWithPredefinedTypesAsNames.ts(4,7): error TS2414: Class name cannot be 'number'.
 classWithPredefinedTypesAsNames.ts(5,7): error TS2414: Class name cannot be 'boolean'.

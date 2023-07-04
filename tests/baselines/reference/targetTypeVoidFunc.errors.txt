@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeVoidFunc.ts] ////
+
 targetTypeVoidFunc.ts(2,5): error TS2322: Type '() => void' is not assignable to type 'new () => number'.
   Type '() => void' provides no match for the signature 'new (): number'.
 

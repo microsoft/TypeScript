@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportTypeModeDeclarationEmitErrors1.ts] ////
+
 error TS2468: Cannot find global value 'Promise'.
 /index.ts(2,51): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(5,78): error TS1453: `resolution-mode` should be either `require` or `import`.

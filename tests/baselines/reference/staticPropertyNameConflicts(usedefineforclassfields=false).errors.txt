@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts] ////
+
 staticPropertyNameConflicts.ts(3,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'.
 staticPropertyNameConflicts.ts(8,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
 staticPropertyNameConflicts.ts(14,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.

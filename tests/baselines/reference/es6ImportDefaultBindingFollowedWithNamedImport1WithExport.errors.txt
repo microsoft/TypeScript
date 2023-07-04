@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1WithExport.ts] ////
+
 client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
 client.ts(2,12): error TS2323: Cannot redeclare exported variable 'x1'.
 client.ts(3,1): error TS1191: An import declaration cannot have modifiers.

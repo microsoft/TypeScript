@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/outModuleConcatES6.ts] ////
+
 error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 

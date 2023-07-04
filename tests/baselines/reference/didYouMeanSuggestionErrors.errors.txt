@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/didYouMeanSuggestionErrors.ts] ////
+
 didYouMeanSuggestionErrors.ts(1,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
 didYouMeanSuggestionErrors.ts(2,5): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
 didYouMeanSuggestionErrors.ts(3,19): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.

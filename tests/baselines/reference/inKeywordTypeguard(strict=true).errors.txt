@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inKeywordTypeguard.ts] ////
+
 inKeywordTypeguard.ts(1,11): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 inKeywordTypeguard.ts(2,11): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
 inKeywordTypeguard.ts(6,11): error TS2339: Property 'b' does not exist on type 'A'.

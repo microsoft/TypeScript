@@ -1,4 +1,5 @@
-Syntactic Diagnostics for file '/tests/cases/fourslash/server/getJavaScriptSyntacticDiagnostics01.ts':
+//// [/tests/cases/fourslash/server/getJavaScriptSyntacticDiagnostics01.ts] ////
+
 /tests/cases/fourslash/server/a.js(1,5): error TS1134: Variable declaration expected.
 /tests/cases/fourslash/server/a.js(1,8): error TS1109: Expression expected.
 
@@ -10,7 +11,6 @@ Syntactic Diagnostics for file '/tests/cases/fourslash/server/getJavaScriptSynta
            ~
 !!! error TS1109: Expression expected.
 
-Semantic Diagnostics for file '/tests/cases/fourslash/server/getJavaScriptSyntacticDiagnostics01.ts':
 
 
 ==== /tests/cases/fourslash/server/a.js (0 errors) ====

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeReduction2.ts] ////
+
 unionTypeReduction2.ts(33,5): error TS2554: Expected 1 arguments, but got 0.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts] ////
+
 privateFieldAssignabilityFromUnknown.ts(2,3): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
 privateFieldAssignabilityFromUnknown.ts(5,7): error TS2741: Property '#field' is missing in type '{}' but required in type 'Class'.
 

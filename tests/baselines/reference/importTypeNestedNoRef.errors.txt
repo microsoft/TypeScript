@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/import/importTypeNestedNoRef.ts] ////
+
 chainer.ts(1,24): error TS1141: String literal expected.
 
 

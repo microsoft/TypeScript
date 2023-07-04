@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFilesForNodeNativeModules.ts] ////
+
 main.ts(1,22): error TS6263: Module './dir/native.node' was resolved to 'dir/native.d.node.ts', but '--allowArbitraryExtensions' is not set.
 
 

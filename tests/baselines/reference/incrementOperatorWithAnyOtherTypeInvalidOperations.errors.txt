@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithAnyOtherTypeInvalidOperations.ts] ////
+
 incrementOperatorWithAnyOtherTypeInvalidOperations.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 incrementOperatorWithAnyOtherTypeInvalidOperations.ts(25,25): error TS2629: Cannot assign to 'A' because it is a class.
 incrementOperatorWithAnyOtherTypeInvalidOperations.ts(26,25): error TS2631: Cannot assign to 'M' because it is a namespace.

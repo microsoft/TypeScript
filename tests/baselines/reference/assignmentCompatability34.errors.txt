@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability34.ts] ////
+
 assignmentCompatability34.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '<Tnumber>(a: Tnumber) => Tnumber'.
   Type 'interfaceWithPublicAndOptional<number, string>' provides no match for the signature '<Tnumber>(a: Tnumber): Tnumber'.
 

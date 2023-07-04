@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/breakTarget6.ts] ////
+
 breakTarget6.ts(2,3): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 
 

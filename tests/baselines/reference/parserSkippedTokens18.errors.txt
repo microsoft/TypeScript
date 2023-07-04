@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens18.ts] ////
+
 parserSkippedTokens18.ts(1,1): error TS2304: Cannot find name 'foo'.
 parserSkippedTokens18.ts(1,5): error TS2304: Cannot find name 'a'.
 parserSkippedTokens18.ts(1,7): error TS1127: Invalid character.

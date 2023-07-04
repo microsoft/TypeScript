@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts] ////
+
 inheritanceGrandParentPrivateMemberCollision.ts(7,7): error TS2415: Class 'C' incorrectly extends base class 'B'.
   Types have separate declarations of a private property 'myMethod'.
 

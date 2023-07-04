@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypePropertyAccessibility.ts] ////
+
 unionTypePropertyAccessibility.ts(35,4): error TS2445: Property 'member' is protected and only accessible within class 'Protected' and its subclasses.
 unionTypePropertyAccessibility.ts(36,4): error TS2341: Property 'member' is private and only accessible within class 'Private'.
 unionTypePropertyAccessibility.ts(38,4): error TS2339: Property 'member' does not exist on type 'Default | Protected'.

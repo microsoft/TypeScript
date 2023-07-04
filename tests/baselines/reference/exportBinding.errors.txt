@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/exportBinding.ts] ////
+
 exportConsts.ts(3,16): error TS2448: Block-scoped variable 'x' used before its declaration.
 exportConsts.ts(3,16): error TS2454: Variable 'x' is used before being assigned.
 exportVars.ts(3,16): error TS2454: Variable 'y' is used before being assigned.

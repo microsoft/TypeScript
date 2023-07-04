@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts] ////
+
 restTuplesFromContextualTypes.ts(56,7): error TS2345: Argument of type '(a: number, b: T[0], ...x: T[number][]) => void' is not assignable to parameter of type '(x: number, ...args: T) => void'.
   Types of parameters 'b' and 'args' are incompatible.
     Type 'T' is not assignable to type '[b: T[0], ...x: T[number][]]'.

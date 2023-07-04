@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesClass2a.ts] ////
+
 augmentedTypesClass2a.ts(2,7): error TS2300: Duplicate identifier 'c2'.
 augmentedTypesClass2a.ts(2,7): error TS2813: Class declaration cannot implement overload list for 'c2'.
 augmentedTypesClass2a.ts(3,10): error TS2300: Duplicate identifier 'c2'.

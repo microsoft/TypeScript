@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/standaloneBreak.ts] ////
+
 standaloneBreak.ts(1,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
 
 

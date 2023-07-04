@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowSelfReferentialLoop.ts] ////
+
 controlFlowSelfReferentialLoop.ts(5,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
 controlFlowSelfReferentialLoop.ts(5,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
 controlFlowSelfReferentialLoop.ts(5,21): error TS7006: Parameter 'c' implicitly has an 'any' type.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stringIndexerAssignments2.ts] ////
+
 stringIndexerAssignments2.ts(19,1): error TS2322: Type 'C2' is not assignable to type 'C1'.
   Index signature for type 'string' is missing in type 'C2'.
 stringIndexerAssignments2.ts(20,1): error TS2322: Type 'C3' is not assignable to type 'C1'.

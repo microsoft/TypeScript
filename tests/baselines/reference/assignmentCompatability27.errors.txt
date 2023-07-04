@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability27.ts] ////
+
 assignmentCompatability27.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: string; }'.
   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type '{ two: string; }'.
 

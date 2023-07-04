@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameDestructuringAssignmentNestedInArrayLiteral.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringAssignmentNestedInArrayLiteral.ts ===
 // interface I {

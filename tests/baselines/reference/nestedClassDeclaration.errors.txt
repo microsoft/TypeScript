@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/nestedClassDeclaration.ts] ////
+
 nestedClassDeclaration.ts(5,5): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 nestedClassDeclaration.ts(7,1): error TS1128: Declaration or statement expected.
 nestedClassDeclaration.ts(15,11): error TS1005: ':' expected.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/derivedTypeIncompatibleSignatures.ts] ////
+
 derivedTypeIncompatibleSignatures.ts(21,11): error TS2430: Interface 'F' incorrectly extends interface 'E'.
   'string' index signatures are incompatible.
     Type 'number' is not assignable to type 'string'.

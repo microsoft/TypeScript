@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel.ts] ////
+
 labeledStatementWithLabel.ts(11,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 labeledStatementWithLabel.ts(12,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 

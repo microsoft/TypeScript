@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameRestBindingElement.ts] ////
+
 // === findRenameLocations ===
 // @providePrefixAndSuffixTextForRename: true
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/ambientShorthandFindAllRefs.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/user.ts ===
 // <|import {/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|]} from "jquery";|>

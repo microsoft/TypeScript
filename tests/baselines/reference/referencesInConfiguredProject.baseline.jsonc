@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/referencesInConfiguredProject.ts] ////
+
 // === findAllReferences ===
 // === /referencesForGlobals_1.ts ===
 // <|class [|{| isWriteAccess: true |}globalClass|] {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts] ////
+
 taggedTemplateStringsWithOverloadResolution3_ES6.ts(9,9): error TS2769: No overload matches this call.
   Overload 1 of 2, '(strs: TemplateStringsArray, s: string): string', gave the following error.
     Argument of type '{}' is not assignable to parameter of type 'string'.

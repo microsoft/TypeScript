@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationDecorators.ts] ////
+
 
 1  >declare function ClassDecorator1(target: Function): void;
 

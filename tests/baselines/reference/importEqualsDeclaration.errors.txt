@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importEqualsDeclaration.ts] ////
+
 /c.ts(4,1): error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
 
 

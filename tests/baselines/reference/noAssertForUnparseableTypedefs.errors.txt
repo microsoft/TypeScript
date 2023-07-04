@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/noAssertForUnparseableTypedefs.ts] ////
+
 bug26693.js(2,22): error TS2307: Cannot find module 'nope' or its corresponding type declarations.
 
 

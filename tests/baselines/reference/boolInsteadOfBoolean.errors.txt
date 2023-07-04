@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/boolean/boolInsteadOfBoolean.ts] ////
+
 boolInsteadOfBoolean.ts(1,8): error TS2304: Cannot find name 'bool'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts] ////
+
 destructuringParameterDeclaration5.ts(47,6): error TS2741: Property 'foo' is missing in type 'Class' but required in type 'D'.
 destructuringParameterDeclaration5.ts(48,4): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ y: D; }'.
   Property 'y' is missing in type '{}' but required in type '{ y: D; }'.

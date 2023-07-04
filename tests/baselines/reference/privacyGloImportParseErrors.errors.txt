@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyGloImportParseErrors.ts] ////
+
 privacyGloImportParseErrors.ts(22,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.

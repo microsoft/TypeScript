@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts] ////
+
 privateNameInInExpressionUnused.ts(2,5): error TS6133: '#unused' is declared but its value is never read.
 
 

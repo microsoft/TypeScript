@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportAssertions.ts] ////
+
 error TS2468: Cannot find global value 'Promise'.
 index.ts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
 otherc.cts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.

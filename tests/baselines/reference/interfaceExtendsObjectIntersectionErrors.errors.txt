@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts] ////
+
 interfaceExtendsObjectIntersectionErrors.ts(7,11): error TS2430: Interface 'I1' incorrectly extends interface 'T1'.
   Types of property 'a' are incompatible.
     Type 'string' is not assignable to type 'number'.

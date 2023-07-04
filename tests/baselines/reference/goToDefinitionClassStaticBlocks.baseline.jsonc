@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionClassStaticBlocks.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionClassStaticBlocks.ts ===
 // class ClassStaticBocks {

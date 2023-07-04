@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/importsImplicitlyReadonly.ts] ////
+
 b.ts(6,1): error TS2632: Cannot assign to 'x' because it is an import.
 b.ts(7,1): error TS2632: Cannot assign to 'y' because it is an import.
 b.ts(8,4): error TS2540: Cannot assign to 'x' because it is a read-only property.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importTypeWithUnparenthesizedGenericFunctionParsed.ts] ////
+
 importTypeWithUnparenthesizedGenericFunctionParsed.ts(1,36): error TS2307: Cannot find module 'module' or its corresponding type declarations.
 
 

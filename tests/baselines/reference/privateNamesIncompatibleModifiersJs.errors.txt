@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.ts] ////
+
 privateNamesIncompatibleModifiersJs.js(3,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
 privateNamesIncompatibleModifiersJs.js(8,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
 privateNamesIncompatibleModifiersJs.js(13,8): error TS18010: An accessibility modifier cannot be used with a private identifier.

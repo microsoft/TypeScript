@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/identityForSignaturesWithTypeParametersAndAny.ts] ////
+
 identityForSignaturesWithTypeParametersAndAny.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T, U>(x: any, y: any) => any'.
 identityForSignaturesWithTypeParametersAndAny.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'g' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T>(x: any, y: any) => any'.
 identityForSignaturesWithTypeParametersAndAny.ts(8,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'h' must be of type '<T, U>(x: T, y: U) => T', but here has type '(x: any, y: any) => any'.

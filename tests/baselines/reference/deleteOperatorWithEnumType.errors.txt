@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithEnumType.ts] ////
+
 deleteOperatorWithEnumType.ts(7,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithEnumType.ts(8,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithEnumType.ts(11,31): error TS2704: The operand of a 'delete' operator cannot be a read-only property.

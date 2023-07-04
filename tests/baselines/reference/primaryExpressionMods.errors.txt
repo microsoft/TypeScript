@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/primaryExpressionMods.ts] ////
+
 primaryExpressionMods.ts(7,8): error TS2709: Cannot use namespace 'M' as a type.
 primaryExpressionMods.ts(11,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
 

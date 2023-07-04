@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeAssertions5.ts] ////
+
 genericTypeAssertions5.ts(19,5): error TS2322: Type 'A' is not assignable to type 'T'.
   'A' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
 genericTypeAssertions5.ts(20,5): error TS2322: Type 'B' is not assignable to type 'T'.

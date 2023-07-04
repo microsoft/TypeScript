@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames30_ES6.ts] ////
+
 computedPropertyNames30_ES6.ts(11,19): error TS2466: 'super' cannot be referenced in a computed property name.
 
 

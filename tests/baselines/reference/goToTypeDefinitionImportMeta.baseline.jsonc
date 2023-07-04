@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToTypeDefinitionImportMeta.ts] ////
+
 // === goToType ===
 // === /tests/cases/fourslash/bar.d.ts ===
 // <|interface [|ImportMeta|] {

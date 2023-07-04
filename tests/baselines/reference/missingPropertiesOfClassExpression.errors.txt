@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingPropertiesOfClassExpression.ts] ////
+
 missingPropertiesOfClassExpression.ts(1,52): error TS2339: Property 'y' does not exist on type '(Anonymous class)'.
 
 

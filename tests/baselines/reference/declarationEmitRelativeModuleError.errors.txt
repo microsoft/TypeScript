@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitRelativeModuleError.ts] ////
+
 declarationEmitRelativeModuleError.ts(5,16): error TS2436: Ambient module declaration cannot specify relative module name.
 
 

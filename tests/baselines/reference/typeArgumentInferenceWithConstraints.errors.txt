@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts] ////
+
 typeArgumentInferenceWithConstraints.ts(11,17): error TS2344: Type '{}' does not satisfy the constraint 'number'.
 typeArgumentInferenceWithConstraints.ts(16,23): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 typeArgumentInferenceWithConstraints.ts(17,23): error TS2344: Type '{}' does not satisfy the constraint 'number'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicPrivateOverloads.ts] ////
+
 memberFunctionsWithPublicPrivateOverloads.ts(3,12): error TS2385: Overload signatures must all be public, private or protected.
 memberFunctionsWithPublicPrivateOverloads.ts(7,12): error TS2385: Overload signatures must all be public, private or protected.
 memberFunctionsWithPublicPrivateOverloads.ts(12,19): error TS2385: Overload signatures must all be public, private or protected.

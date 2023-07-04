@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsUnresolvedSymbols2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols2.ts ===
 // <|import { /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Bar|] } from "does-not-exist";|>

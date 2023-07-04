@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty13.tsx] ////
+
 file.tsx(12,30): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
 
 

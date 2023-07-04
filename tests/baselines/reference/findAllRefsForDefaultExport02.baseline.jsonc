@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForDefaultExport02.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultExport02.ts ===
 // /*FIND ALL REFS*/<|export default function [|{| isWriteAccess: true, isDefinition: true |}DefaultExportedFunction|]() {

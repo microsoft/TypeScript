@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericClassWithFunctionTypedMemberArguments.ts] ////
+
 genericClassWithFunctionTypedMemberArguments.ts(57,29): error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
   Types of parameters 'x' and 'a' are incompatible.
     Type 'number' is not assignable to type 'T'.

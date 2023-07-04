@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externalModuleExportingGenericClass.ts] ////
+
 externalModuleExportingGenericClass_file1.ts(2,8): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 
 

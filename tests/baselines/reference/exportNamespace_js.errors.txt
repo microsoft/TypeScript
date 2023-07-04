@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace_js.ts] ////
+
 b.js(1,1): error TS8006: 'export type' declarations can only be used in TypeScript files.
 c.js(2,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
 

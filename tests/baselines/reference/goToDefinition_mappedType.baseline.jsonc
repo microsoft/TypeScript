@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinition_mappedType.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinition_mappedType.ts ===
 // interface I { <|[|m|](): void;|> };

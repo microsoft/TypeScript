@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag6.ts] ////
+
 test.js(1,12): error TS8030: The type of a function declaration must match the function's signature.
 test.js(7,5): error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
 test.js(10,12): error TS8030: The type of a function declaration must match the function's signature.

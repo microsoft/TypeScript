@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsInsideTemplates2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInsideTemplates2.ts ===
 // /*FIND ALL REFS*/<|function [|{| isWriteAccess: true, isDefinition: true |}f|](...rest: any[]) { }|>

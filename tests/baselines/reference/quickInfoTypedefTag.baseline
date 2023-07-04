@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoTypedefTag.ts] ////
+
 === /tests/cases/fourslash/a.js ===
 // /**
 //  * The typedef tag should not appear in the quickinfo.

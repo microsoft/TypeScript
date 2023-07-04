@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incorrectRecursiveMappedTypeConstraint.ts] ////
+
 incorrectRecursiveMappedTypeConstraint.ts(2,24): error TS2313: Type parameter 'T' has a circular constraint.
 incorrectRecursiveMappedTypeConstraint.ts(2,32): error TS2313: Type parameter 'P' has a circular constraint.
 incorrectRecursiveMappedTypeConstraint.ts(3,5): error TS2365: Operator '+=' cannot be applied to types 'number' and 'T[K]'.

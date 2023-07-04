@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParamArgsTest.ts] ////
+
 optionalParamArgsTest.ts(31,12): error TS2393: Duplicate function implementation.
 optionalParamArgsTest.ts(34,12): error TS2393: Duplicate function implementation.
 optionalParamArgsTest.ts(98,11): error TS2554: Expected 0 arguments, but got 1.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts] ////
+
 nonPrimitiveInGeneric.ts(2,9): error TS2322: Type 'T' is not assignable to type 'object'.
 nonPrimitiveInGeneric.ts(9,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
 nonPrimitiveInGeneric.ts(10,17): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.

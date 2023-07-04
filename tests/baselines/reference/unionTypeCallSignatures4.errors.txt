@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures4.ts] ////
+
 unionTypeCallSignatures4.ts(23,1): error TS2554: Expected 2 arguments, but got 1.
 unionTypeCallSignatures4.ts(25,18): error TS2554: Expected 2 arguments, but got 3.
 

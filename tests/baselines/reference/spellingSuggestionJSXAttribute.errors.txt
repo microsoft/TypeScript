@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
+
 spellingSuggestionJSXAttribute.tsx(8,4): error TS2322: Type '{ class: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
   Property 'class' does not exist on type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'. Did you mean 'className'?
 spellingSuggestionJSXAttribute.tsx(9,4): error TS2322: Type '{ for: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.

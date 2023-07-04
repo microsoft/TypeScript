@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/moduleResolutionWithoutExtension7.ts] ////
+
 /src/bar.cts(2,22): error TS2307: Cannot find module './foo' or its corresponding type declarations.
 
 

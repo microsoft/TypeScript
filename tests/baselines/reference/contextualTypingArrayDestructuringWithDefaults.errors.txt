@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingArrayDestructuringWithDefaults.ts] ////
+
 contextualTypingArrayDestructuringWithDefaults.ts(8,10): error TS2322: Type '{ a: number; }' is not assignable to type '1'.
 
 

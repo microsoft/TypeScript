@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationDestructuringVariableStatementArrayBindingPattern2.ts] ////
+
 
 1  >declare var console: {
 

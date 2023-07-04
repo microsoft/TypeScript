@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importHelpersWithImportOrExportDefaultNoTslib.3.ts] ////
+
 b.ts(1,10): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
 
 

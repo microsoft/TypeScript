@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/constructorFunctionsStrict.ts] ////
+
 a.js(9,1): error TS2322: Type 'undefined' is not assignable to type 'number'.
 
 

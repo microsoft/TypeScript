@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeMatch2.ts] ////
+
 typeMatch2.ts(3,2): error TS2739: Type '{}' is missing the following properties from type '{ x: number; y: number; }': x, y
 typeMatch2.ts(4,5): error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
 typeMatch2.ts(5,20): error TS2322: Type '{ x: number; y: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.

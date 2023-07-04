@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclTypes.ts] ////
+
 /a.ts(1,21): error TS6137: Cannot import type declaration files. Consider importing 'foo-bar' instead of '@types/foo-bar'.
 
 

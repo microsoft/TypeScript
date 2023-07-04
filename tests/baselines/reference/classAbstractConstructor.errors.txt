@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractConstructor.ts] ////
+
 classAbstractConstructor.ts(2,5): error TS1242: 'abstract' modifier can only appear on a class, method, or property declaration.
 
 

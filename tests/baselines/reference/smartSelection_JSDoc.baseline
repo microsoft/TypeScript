@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_JSDoc.ts] ////
+
 // Not a JSDoc comment
 /**
  * @param {number} x The number to square

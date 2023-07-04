@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameDestructuringDeclarationInFor.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringDeclarationInFor.ts ===
 // interface I {

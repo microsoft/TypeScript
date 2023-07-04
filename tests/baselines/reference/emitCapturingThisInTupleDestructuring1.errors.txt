@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts] ////
+
 emitCapturingThisInTupleDestructuring1.ts(3,17): error TS2493: Tuple type '[any]' of length '1' has no element at index '1'.
 emitCapturingThisInTupleDestructuring1.ts(3,29): error TS2493: Tuple type '[any]' of length '1' has no element at index '2'.
 

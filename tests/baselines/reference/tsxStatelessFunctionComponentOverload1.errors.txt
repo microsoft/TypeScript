@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload1.tsx] ////
+
 file.tsx(17,39): error TS2842: 'string' is an unused renaming of 'y1'. Did you intend to use it as a type annotation?
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts] ////
+
 exponentiationOperatorSyntaxError2.ts(4,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorSyntaxError2.ts(4,1): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 exponentiationOperatorSyntaxError2.ts(4,8): error TS2703: The operand of a 'delete' operator must be a property reference.

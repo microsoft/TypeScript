@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/callHierarchyContainerName.ts] ////
+
 ╭ name: f
 ├ kind: function
 ├ file: /tests/cases/fourslash/callHierarchyContainerName.ts

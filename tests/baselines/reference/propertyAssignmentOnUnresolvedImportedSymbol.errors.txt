@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentOnUnresolvedImportedSymbol.ts] ////
+
 bug28576.js(1,15): error TS2307: Cannot find module 'arglebaz' or its corresponding type declarations.
 
 

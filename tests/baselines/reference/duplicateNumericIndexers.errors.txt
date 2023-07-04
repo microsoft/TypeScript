@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/duplicateNumericIndexers.ts] ////
+
 duplicateNumericIndexers.ts(4,5): error TS2374: Duplicate index signature for type 'number'.
 duplicateNumericIndexers.ts(5,5): error TS2374: Duplicate index signature for type 'number'.
 duplicateNumericIndexers.ts(9,5): error TS2374: Duplicate index signature for type 'number'.

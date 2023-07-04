@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/disallowLineTerminatorBeforeArrow.ts] ////
+
 disallowLineTerminatorBeforeArrow.ts(2,5): error TS1200: Line terminator not permitted before arrow.
 disallowLineTerminatorBeforeArrow.ts(4,7): error TS1200: Line terminator not permitted before arrow.
 disallowLineTerminatorBeforeArrow.ts(6,5): error TS1200: Line terminator not permitted before arrow.

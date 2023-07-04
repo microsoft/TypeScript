@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralIndexerErrors.ts] ////
+
 objectLiteralIndexerErrors.ts(13,54): error TS2741: Property 'y' is missing in type 'A' but required in type 'B'.
 objectLiteralIndexerErrors.ts(14,14): error TS2322: Type 'A' is not assignable to type 'B'.
 

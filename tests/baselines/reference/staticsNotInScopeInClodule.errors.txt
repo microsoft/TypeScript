@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticsNotInScopeInClodule.ts] ////
+
 staticsNotInScopeInClodule.ts(6,13): error TS2304: Cannot find name 'x'.
 
 

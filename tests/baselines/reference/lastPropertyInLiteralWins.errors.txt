@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lastPropertyInLiteralWins.ts] ////
+
 lastPropertyInLiteralWins.ts(8,5): error TS2322: Type '(num: number) => void' is not assignable to type '(str: string) => void'.
   Types of parameters 'num' and 'str' are incompatible.
     Type 'string' is not assignable to type 'number'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexSignatureInOtherFile.ts] ////
+
 index.ts(2,3): error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any>' is not assignable to 'symbol' index type 'string'.
 index.ts(2,3): error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
 

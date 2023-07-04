@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadInvalidType.tsx] ////
+
 a.tsx(9,21): error TS2698: Spread types may only be created from object types.
 a.tsx(10,21): error TS2698: Spread types may only be created from object types.
 a.tsx(11,21): error TS2698: Spread types may only be created from object types.

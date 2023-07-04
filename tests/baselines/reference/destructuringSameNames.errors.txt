@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringSameNames.ts] ////
+
 destructuringSameNames.ts(21,7): error TS2451: Cannot redeclare block-scoped variable 'foo1'.
 destructuringSameNames.ts(21,13): error TS2451: Cannot redeclare block-scoped variable 'foo1'.
 destructuringSameNames.ts(22,7): error TS2451: Cannot redeclare block-scoped variable 'foo2'.

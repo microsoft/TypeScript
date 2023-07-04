@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namespaceMergedWithImportAliasNoCrash.ts] ////
+
 file1.ts(5,1): error TS2708: Cannot use namespace 'Library' as a value.
 file2.ts(1,13): error TS2440: Import declaration conflicts with local declaration of 'Lib'.
 file2.ts(6,12): error TS2694: Namespace 'Lib' has no exported member 'Bar'.

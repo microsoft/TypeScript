@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForDefaultKeyword.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForDefaultKeyword.ts ===
 // function f(value: string, /*FIND ALL REFS*/default: string) {}

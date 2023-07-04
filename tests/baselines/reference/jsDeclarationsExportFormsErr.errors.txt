@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportFormsErr.ts] ////
+
 bar.js(1,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 bar.js(2,1): error TS8003: 'export =' can only be used in TypeScript files.
 bin.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

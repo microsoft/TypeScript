@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/importAssertion/importAssertion4.ts] ////
+
 importAssertion4.ts(1,20): error TS2307: Cannot find module './first' or its corresponding type declarations.
 importAssertion4.ts(2,1): error TS1005: '{' expected.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser642331.ts] ////
+
 parser642331.ts(2,18): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 
 

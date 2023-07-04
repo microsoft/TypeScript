@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts] ////
+
 destructuringArrayBindingPatternAndAssignment3.ts(2,22): error TS2448: Block-scoped variable 'e' used before its declaration.
 destructuringArrayBindingPatternAndAssignment3.ts(3,22): error TS2448: Block-scoped variable 'i' used before its declaration.
 destructuringArrayBindingPatternAndAssignment3.ts(7,27): error TS2372: Parameter 'e' cannot reference itself.

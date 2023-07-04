@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
+
 variadicTuples1.ts(52,5): error TS2555: Expected at least 3 arguments, but got 2.
 variadicTuples1.ts(53,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 variadicTuples1.ts(62,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], number]'.

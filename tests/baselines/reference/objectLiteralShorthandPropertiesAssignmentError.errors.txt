@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts] ////
+
 objectLiteralShorthandPropertiesAssignmentError.ts(4,43): error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
   Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
 objectLiteralShorthandPropertiesAssignmentError.ts(6,81): error TS2322: Type 'string' is not assignable to type 'number'.

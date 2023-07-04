@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllReferencesDynamicImport2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/foo.ts ===
 // <|export function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}bar|]() { return "bar"; }|>

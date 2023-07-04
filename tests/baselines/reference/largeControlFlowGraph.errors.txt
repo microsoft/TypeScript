@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/largeControlFlowGraph.ts] ////
+
 largeControlFlowGraph.ts(3,1): error TS2563: The containing function or module body is too large for control flow analysis.
 
 

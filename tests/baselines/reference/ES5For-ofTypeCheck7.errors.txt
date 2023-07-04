@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck7.ts] ////
+
 ES5For-ofTypeCheck7.ts(2,15): error TS2461: Type 'number' is not an array type.
 
 

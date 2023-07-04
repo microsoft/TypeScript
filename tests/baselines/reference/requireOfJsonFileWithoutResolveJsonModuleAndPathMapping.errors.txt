@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileWithoutResolveJsonModuleAndPathMapping.ts] ////
+
 /a.ts(1,20): error TS2732: Cannot find module 'foo/bar/foobar.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 
 

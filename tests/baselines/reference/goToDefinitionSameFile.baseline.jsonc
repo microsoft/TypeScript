@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionSameFile.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/goToDefinitionSameFile.ts ===
 // <|var [|localVariable|];|>

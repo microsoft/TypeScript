@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParametersWithUnderscore.ts] ////
+
 unusedTypeParametersWithUnderscore.ts(1,16): error TS6133: 'U' is declared but its value is never read.
 unusedTypeParametersWithUnderscore.ts(3,12): error TS6133: 'U' is declared but its value is never read.
 unusedTypeParametersWithUnderscore.ts(5,17): error TS6133: 'U' is declared but its value is never read.

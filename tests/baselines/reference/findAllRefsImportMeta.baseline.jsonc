@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsImportMeta.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/foo.ts ===
 // /// <reference no-default-lib="true"/>

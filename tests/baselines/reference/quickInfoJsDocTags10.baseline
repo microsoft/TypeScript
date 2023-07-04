@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoJsDocTags10.ts] ////
+
 === /tests/cases/fourslash/quickInfoJsDocTags10.js ===
 // /**
 //  * @param {T1} a

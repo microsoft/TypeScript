@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierDifferentSpelling.ts] ////
+
 duplicateIdentifierDifferentSpelling.ts(3,3): error TS2300: Duplicate identifier '3'.
 duplicateIdentifierDifferentSpelling.ts(6,21): error TS1117: An object literal cannot have multiple properties with the same name.
 

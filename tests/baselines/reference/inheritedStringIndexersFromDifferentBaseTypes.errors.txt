@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts] ////
+
 inheritedStringIndexersFromDifferentBaseTypes.ts(13,11): error TS2430: Interface 'E' incorrectly extends interface 'D'.
   'string' index signatures are incompatible.
     Type 'number' is not assignable to type 'string'.

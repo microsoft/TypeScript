@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral6.ts] ////
+
 scannerNumericLiteral6.ts(1,4): error TS1124: Digit expected.
 
 

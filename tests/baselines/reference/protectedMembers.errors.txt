@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/protectedMembers.ts] ////
+
 protectedMembers.ts(40,4): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
 protectedMembers.ts(41,4): error TS2445: Property 'f' is protected and only accessible within class 'C1' and its subclasses.
 protectedMembers.ts(42,4): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.

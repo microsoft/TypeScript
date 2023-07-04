@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit6_ES6.ts] ////
+
 computedPropertyNamesDeclarationEmit6_ES6.ts(5,3): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 

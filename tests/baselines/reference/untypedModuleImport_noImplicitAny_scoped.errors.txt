@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_noImplicitAny_scoped.ts] ////
+
 /a.ts(1,22): error TS7016: Could not find a declaration file for module '@foo/bar'. '/node_modules/@foo/bar/index.js' implicitly has an 'any' type.
   Try `npm i --save-dev @types/foo__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@foo/bar';`
 

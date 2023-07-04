@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/objectRestNegative.ts] ////
+
 objectRestNegative.ts(2,10): error TS2462: A rest element must be last in a destructuring pattern.
 objectRestNegative.ts(6,10): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: string; }'.
   Types of property 'a' are incompatible.

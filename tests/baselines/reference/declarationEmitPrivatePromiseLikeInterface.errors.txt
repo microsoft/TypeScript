@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPrivatePromiseLikeInterface.ts] ////
+
 Api.ts(6,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 Api.ts(7,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 Api.ts(8,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.

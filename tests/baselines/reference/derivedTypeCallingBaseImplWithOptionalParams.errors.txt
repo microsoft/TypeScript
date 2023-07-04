@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts] ////
+
 derivedTypeCallingBaseImplWithOptionalParams.ts(13,3): error TS2554: Expected 1 arguments, but got 0.
 
 

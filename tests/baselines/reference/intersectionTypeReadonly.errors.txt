@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts] ////
+
 intersectionTypeReadonly.ts(17,6): error TS2540: Cannot assign to 'value' because it is a read-only property.
 intersectionTypeReadonly.ts(19,11): error TS2540: Cannot assign to 'value' because it is a read-only property.
 intersectionTypeReadonly.ts(23,15): error TS2540: Cannot assign to 'value' because it is a read-only property.

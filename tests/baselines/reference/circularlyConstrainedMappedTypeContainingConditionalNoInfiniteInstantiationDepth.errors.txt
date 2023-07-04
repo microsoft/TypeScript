@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts] ////
+
 circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(63,84): error TS2344: Type 'GetProps<C>' does not satisfy the constraint 'Shared<TInjectedProps, GetProps<C>>'.
   Type 'unknown' is not assignable to type 'Shared<TInjectedProps, GetProps<C>>'.
     Type 'Matching<TInjectedProps, GetProps<C>>' is not assignable to type 'Shared<TInjectedProps, GetProps<C>>'.

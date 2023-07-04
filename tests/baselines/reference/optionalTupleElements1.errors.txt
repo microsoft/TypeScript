@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/optionalTupleElements1.ts] ////
+
 optionalTupleElements1.ts(11,29): error TS1257: A required element cannot follow an optional element.
 optionalTupleElements1.ts(15,5): error TS2322: Type 'T2' is not assignable to type 'T1'.
   Source provides no match for required element at position 2 in target.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superCallAssignResult.ts] ////
+
 superCallAssignResult.ts(8,9): error TS2322: Type 'number' is not assignable to type 'void'.
 
 

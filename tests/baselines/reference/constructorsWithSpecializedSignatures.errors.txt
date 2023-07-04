@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorsWithSpecializedSignatures.ts] ////
+
 constructorsWithSpecializedSignatures.ts(18,5): error TS2394: This overload signature is not compatible with its implementation signature.
 constructorsWithSpecializedSignatures.ts(26,5): error TS2394: This overload signature is not compatible with its implementation signature.
 

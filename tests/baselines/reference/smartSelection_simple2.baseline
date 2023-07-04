@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_simple2.ts] ////
+
 export interface IService {
   _serviceBrand: any;
 

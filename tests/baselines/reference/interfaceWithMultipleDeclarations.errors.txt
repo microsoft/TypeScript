@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceWithMultipleDeclarations.ts] ////
+
 interfaceWithMultipleDeclarations.ts(1,11): error TS2428: All declarations of 'I1' must have identical type parameters.
 interfaceWithMultipleDeclarations.ts(3,11): error TS2428: All declarations of 'I1' must have identical type parameters.
 interfaceWithMultipleDeclarations.ts(5,11): error TS2428: All declarations of 'I1' must have identical type parameters.

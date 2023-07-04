@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/badArraySyntax.ts] ////
+
 badArraySyntax.ts(6,16): error TS1011: An element access expression should take an argument.
 badArraySyntax.ts(7,16): error TS1011: An element access expression should take an argument.
 badArraySyntax.ts(8,21): error TS1011: An element access expression should take an argument.

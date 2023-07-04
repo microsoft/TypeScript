@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesClassExpressionStatic.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesClassExpressionStatic.ts ===
 // let A = class Foo {

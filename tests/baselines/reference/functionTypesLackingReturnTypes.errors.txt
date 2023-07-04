@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionTypesLackingReturnTypes.ts] ////
+
 functionTypesLackingReturnTypes.ts(2,17): error TS1005: '=>' expected.
 functionTypesLackingReturnTypes.ts(6,9): error TS2304: Cannot find name 'param'.
 

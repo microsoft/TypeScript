@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveClassReferenceTest.ts] ////
+
 recursiveClassReferenceTest.ts(16,19): error TS2304: Cannot find name 'Element'.
 recursiveClassReferenceTest.ts(56,11): error TS2663: Cannot find name 'domNode'. Did you mean the instance member 'this.domNode'?
 recursiveClassReferenceTest.ts(88,36): error TS2663: Cannot find name 'mode'. Did you mean the instance member 'this.mode'?

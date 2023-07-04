@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList6.ts] ////
+
 parserErrorRecovery_ParameterList6.ts(2,23): error TS2304: Cannot find name 'break'.
 
 

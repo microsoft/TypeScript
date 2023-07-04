@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseBigInt.ts] ////
+
 parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.
 parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type 'bigint'.
 parseBigInt.ts(56,21): error TS1121: Octal literals are not allowed. Use the syntax '0o123'.

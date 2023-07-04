@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/shims-pp/getDefinitionAtPosition-pp.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/shims-pp/goToDefinitionDifferentFile_Definition.ts ===
 // <|var [|remoteVariable|];|>

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings14_ES6.ts] ////
+
 unicodeExtendedEscapesInStrings14_ES6.ts(2,13): error TS1125: Hexadecimal digit expected.
 
 

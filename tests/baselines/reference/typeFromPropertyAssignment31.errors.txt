@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts] ////
+
 typeFromPropertyAssignment31.ts(13,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 typeFromPropertyAssignment31.ts(25,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 

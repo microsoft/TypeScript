@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts] ////
+
 scannerS7.6_A4.2_T1.ts(14,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 scannerS7.6_A4.2_T1.ts(18,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 scannerS7.6_A4.2_T1.ts(22,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?

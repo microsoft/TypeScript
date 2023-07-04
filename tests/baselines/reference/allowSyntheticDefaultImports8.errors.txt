@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/allowSyntheticDefaultImports8.ts] ////
+
 a.ts(1,10): error TS2305: Module '"./b"' has no exported member 'default'.
 
 

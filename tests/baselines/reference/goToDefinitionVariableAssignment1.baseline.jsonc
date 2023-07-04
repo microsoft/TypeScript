@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionVariableAssignment1.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/foo.js ===
 // const Foo = module.[|{| contextId: 0 |}exports|] = <|function () {}|>

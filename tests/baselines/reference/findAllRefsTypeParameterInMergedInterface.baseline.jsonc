@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsTypeParameterInMergedInterface.ts ===
 // interface I</*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|]> { a: [|T|] }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noTypeArgumentOnReturnType1.ts] ////
+
 noTypeArgumentOnReturnType1.ts(3,9): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 
 

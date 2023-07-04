@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedPrivateMethodInClass1.ts] ////
+
 unusedPrivateMethodInClass1.ts(2,13): error TS6133: 'function1' is declared but its value is never read.
 unusedPrivateMethodInClass1.ts(3,13): error TS6133: 'y' is declared but its value is never read.
 

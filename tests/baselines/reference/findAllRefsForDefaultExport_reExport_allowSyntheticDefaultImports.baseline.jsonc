@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForDefaultExport_reExport_allowSyntheticDefaultImports.ts] ////
+
 // === findAllReferences ===
 // === /export.ts ===
 // <|const /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|] = 1;|>

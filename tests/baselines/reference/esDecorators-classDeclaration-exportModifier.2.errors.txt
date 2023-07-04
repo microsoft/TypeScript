@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-exportModifier.2.ts] ////
+
 file13.ts(2,1): error TS1434: Unexpected keyword or identifier.
 file13.ts(2,1): error TS2304: Cannot find name 'abstract'.
 file14.ts(2,1): error TS1128: Declaration or statement expected.

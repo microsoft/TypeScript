@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts] ////
+
 duplicateIdentifiersAcrossContainerBoundaries.ts(9,21): error TS2814: Function with bodies can only merge with classes that are ambient.
 duplicateIdentifiersAcrossContainerBoundaries.ts(12,18): error TS2813: Class declaration cannot implement overload list for 'f'.
 duplicateIdentifiersAcrossContainerBoundaries.ts(37,12): error TS2300: Duplicate identifier 'x'.

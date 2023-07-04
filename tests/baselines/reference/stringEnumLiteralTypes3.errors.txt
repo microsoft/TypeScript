@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts] ////
+
 stringEnumLiteralTypes3.ts(10,5): error TS2322: Type 'YesNo' is not assignable to type 'Choice.Yes'.
   Type 'Choice.No' is not assignable to type 'Choice.Yes'.
 stringEnumLiteralTypes3.ts(11,5): error TS2322: Type 'UnknownYesNo' is not assignable to type 'Choice.Yes'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyParametersInInterface.ts] ////
+
 noImplicitAnyParametersInInterface.ts(3,5): error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
 noImplicitAnyParametersInInterface.ts(4,5): error TS7020: Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
 noImplicitAnyParametersInInterface.ts(4,6): error TS7006: Parameter 'x1' implicitly has an 'any' type.

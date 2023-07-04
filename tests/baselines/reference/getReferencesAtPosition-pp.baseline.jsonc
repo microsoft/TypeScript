@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/shims-pp/getReferencesAtPosition.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/shims-pp/findAllRefsOnDefinition-import.ts ===
 // --- (line: 3) skipped ---

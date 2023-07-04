@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseIdentityWithAny2.ts] ////
+
 promiseIdentityWithAny2.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'IPromise<string, number>', but here has type 'Promise<string, boolean>'.
 promiseIdentityWithAny2.ts(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'IPromise2<string, number>', but here has type 'Promise2<string, boolean>'.
 

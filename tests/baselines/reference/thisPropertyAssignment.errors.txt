@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/thisPropertyAssignment.ts] ////
+
 a.js(9,8): error TS2339: Property 'y' does not exist on type '{}'.
 a.js(11,1): error TS7053: Element implicitly has an 'any' type because expression of type '"z"' can't be used to index type '{}'.
   Property 'z' does not exist on type '{}'.

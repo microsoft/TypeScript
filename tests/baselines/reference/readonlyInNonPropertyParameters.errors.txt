@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyInNonPropertyParameters.ts] ////
+
 readonlyInNonPropertyParameters.ts(3,9): error TS2369: A parameter property is only allowed in a constructor implementation.
 readonlyInNonPropertyParameters.ts(4,8): error TS2369: A parameter property is only allowed in a constructor implementation.
 readonlyInNonPropertyParameters.ts(6,2): error TS2369: A parameter property is only allowed in a constructor implementation.

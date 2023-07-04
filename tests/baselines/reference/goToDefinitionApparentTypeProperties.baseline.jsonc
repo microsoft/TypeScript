@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionApparentTypeProperties.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionApparentTypeProperties.ts ===
 // interface Number {

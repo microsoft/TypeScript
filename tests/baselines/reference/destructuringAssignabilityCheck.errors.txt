@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringAssignabilityCheck.ts] ////
+
 destructuringAssignabilityCheck.ts(1,7): error TS2461: Type '{}' is not an array type.
 destructuringAssignabilityCheck.ts(2,7): error TS2532: Object is possibly 'undefined'.
 destructuringAssignabilityCheck.ts(3,3): error TS2461: Type '{}' is not an array type.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/objectRest.ts] ////
+
 objectRest.ts(43,8): error TS2537: Type '{ a: number; b: string; }' has no matching index signature for type 'string'.
 objectRest.ts(43,35): error TS2537: Type '{ a: number; b: string; }' has no matching index signature for type 'string'.
 objectRest.ts(43,57): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o' must be of type '{ a: number; b: string; }', but here has type '{}'.

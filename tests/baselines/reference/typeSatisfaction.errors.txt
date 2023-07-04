@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts] ////
+
 typeSatisfaction.ts(12,20): error TS1360: Type '{ a: number; b: number; }' does not satisfy the expected type 'I1'.
   Object literal may only specify known properties, and 'b' does not exist in type 'I1'.
 typeSatisfaction.ts(13,16): error TS1360: Type '{}' does not satisfy the expected type 'I1'.

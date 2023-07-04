@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varBlock.ts] ////
+
 varBlock.ts(8,18): error TS1039: Initializers are not allowed in ambient contexts.
 varBlock.ts(11,22): error TS2369: A parameter property is only allowed in a constructor implementation.
 varBlock.ts(11,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.

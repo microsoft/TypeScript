@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumErrors.ts] ////
+
 enumErrors.ts(2,6): error TS2431: Enum name cannot be 'any'.
 enumErrors.ts(3,6): error TS2431: Enum name cannot be 'number'.
 enumErrors.ts(4,6): error TS2431: Enum name cannot be 'string'.

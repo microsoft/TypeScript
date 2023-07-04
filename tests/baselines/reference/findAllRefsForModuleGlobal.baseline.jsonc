@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForModuleGlobal.ts] ////
+
 // === findAllReferences ===
 // === /b.ts ===
 // /// <reference types="[|foo|]" />

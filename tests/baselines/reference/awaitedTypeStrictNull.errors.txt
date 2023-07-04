@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitedTypeStrictNull.ts] ////
+
 awaitedTypeStrictNull.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 awaitedTypeStrictNull.ts(26,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 

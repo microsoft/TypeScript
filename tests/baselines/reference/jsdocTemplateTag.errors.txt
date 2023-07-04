@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag.ts] ////
+
 forgot.js(23,1): error TS2322: Type '(keyframes: any[]) => void' is not assignable to type '(keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation'.
   Type 'void' is not assignable to type 'Animation'.
 

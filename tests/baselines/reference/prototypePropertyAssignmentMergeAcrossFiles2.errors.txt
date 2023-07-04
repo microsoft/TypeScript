@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.ts] ////
+
 other.js(5,5): error TS2339: Property 'wat' does not exist on type 'One'.
 other.js(10,5): error TS2339: Property 'wat' does not exist on type 'Two'.
 

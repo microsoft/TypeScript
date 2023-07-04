@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesIfElse2.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesIfElse2.ts ===
 // if (true) {

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToImplementationTypeAlias_00.ts] ////
+
 // === goToImplementation ===
 // === /tests/cases/fourslash/ref.ts ===
 // import { TypeAlias } from "./def";

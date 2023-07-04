@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nodeNextImportModeImplicitIndexResolution.ts] ////
+
 index.ts(2,31): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 index.ts(3,31): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 

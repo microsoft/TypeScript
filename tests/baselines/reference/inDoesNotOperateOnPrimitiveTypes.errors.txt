@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts] ////
+
 inDoesNotOperateOnPrimitiveTypes.ts(12,17): error TS2322: Type 'T' is not assignable to type 'object'.
 inDoesNotOperateOnPrimitiveTypes.ts(19,17): error TS2322: Type 'T' is not assignable to type 'object'.
   Type 'string | number' is not assignable to type 'object'.

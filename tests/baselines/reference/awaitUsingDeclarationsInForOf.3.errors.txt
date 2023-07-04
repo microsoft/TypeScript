@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsInForOf.3.ts] ////
+
 awaitUsingDeclarationsInForOf.3.ts(2,22): error TS1492: 'await using' declarations may not have binding patterns.
 
 

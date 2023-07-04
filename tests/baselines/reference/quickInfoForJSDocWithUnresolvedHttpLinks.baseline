@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoForJSDocWithUnresolvedHttpLinks.ts] ////
+
 === /tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js ===
 // /** @see {@link https://hva} */
 // var see2 = true

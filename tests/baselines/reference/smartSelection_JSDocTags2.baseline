@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_JSDocTags2.ts] ////
+
 /**
  * @type {/**/string}
  */

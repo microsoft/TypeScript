@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts] ////
+
 privateNamesAndkeyof.ts(14,1): error TS2322: Type '"#fooField"' is not assignable to type 'keyof A'.
 privateNamesAndkeyof.ts(15,1): error TS2322: Type '"#fooMethod"' is not assignable to type 'keyof A'.
 privateNamesAndkeyof.ts(16,1): error TS2322: Type '"#fooProp"' is not assignable to type 'keyof A'.

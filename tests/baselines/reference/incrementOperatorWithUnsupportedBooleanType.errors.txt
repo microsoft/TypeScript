@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithUnsupportedBooleanType.ts] ////
+
 incrementOperatorWithUnsupportedBooleanType.ts(17,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 incrementOperatorWithUnsupportedBooleanType.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 incrementOperatorWithUnsupportedBooleanType.ts(22,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.

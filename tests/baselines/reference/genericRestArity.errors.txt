@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/genericRestArity.ts] ////
+
 genericRestArity.ts(7,1): error TS2554: Expected 3 arguments, but got 1.
 genericRestArity.ts(8,45): error TS2554: Expected 3 arguments, but got 8.
 

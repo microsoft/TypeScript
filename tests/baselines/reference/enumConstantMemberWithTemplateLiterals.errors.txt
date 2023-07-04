@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts] ////
+
 enumConstantMemberWithTemplateLiterals.ts(28,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 enumConstantMemberWithTemplateLiterals.ts(28,15): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 

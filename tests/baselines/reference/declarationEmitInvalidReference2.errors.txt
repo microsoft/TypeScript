@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInvalidReference2.ts] ////
+
 declarationEmitInvalidReference2.ts(1,22): error TS6053: File 'invalid.ts' not found.
 
 

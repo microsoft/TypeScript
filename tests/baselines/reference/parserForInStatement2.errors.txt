@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement2.ts] ////
+
 parserForInStatement2.ts(1,9): error TS1123: Variable declaration list cannot be empty.
 parserForInStatement2.ts(1,13): error TS2304: Cannot find name 'X'.
 

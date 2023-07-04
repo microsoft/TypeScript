@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts] ////
+
 genericTypeWithNonGenericBaseMisMatch.ts(5,2): error TS2416: Property 'f' in type 'X<T>' is not assignable to the same property in base type 'I'.
   Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void'.
     Types of parameters 'a' and 'a' are incompatible.

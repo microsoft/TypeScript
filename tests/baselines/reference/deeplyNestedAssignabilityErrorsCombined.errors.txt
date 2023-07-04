@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deeplyNestedAssignabilityErrorsCombined.ts] ////
+
 deeplyNestedAssignabilityErrorsCombined.ts(3,1): error TS2322: Type '{ a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }; }'.
   The types of 'a.b.c.d.e.f().g' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.

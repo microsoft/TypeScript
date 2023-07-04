@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionPropertyExistence.ts] ////
+
 unionPropertyExistence.ts(27,3): error TS2339: Property 'nope' does not exist on type '"foo" | "bar"'.
   Property 'nope' does not exist on type '"foo"'.
 unionPropertyExistence.ts(28,6): error TS2339: Property 'onlyInB' does not exist on type 'B | "foo"'.

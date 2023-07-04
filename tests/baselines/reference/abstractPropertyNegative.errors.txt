@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/abstractPropertyNegative.ts] ////
+
 abstractPropertyNegative.ts(13,7): error TS18052: Non-abstract class 'C' does not implement all abstract members of 'B'
 abstractPropertyNegative.ts(15,5): error TS1253: Abstract properties can only appear within an abstract class.
 abstractPropertyNegative.ts(16,37): error TS1005: '{' expected.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/allowSyntheticDefaultImports10.ts] ////
+
 a.ts(2,5): error TS2339: Property 'default' does not exist on type 'typeof import("b")'.
 a.ts(3,5): error TS2339: Property 'default' does not exist on type 'typeof import("b")'.
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationWith.ts] ////
+
 
 1  >var obj: string;
 

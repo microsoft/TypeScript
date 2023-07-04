@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyDeclareFunctionExprWithoutFormalType.ts] ////
+
 implicitAnyDeclareFunctionExprWithoutFormalType.ts(2,15): error TS7006: Parameter 'l1' implicitly has an 'any' type.
 implicitAnyDeclareFunctionExprWithoutFormalType.ts(3,15): error TS7006: Parameter 'll1' implicitly has an 'any' type.
 implicitAnyDeclareFunctionExprWithoutFormalType.ts(4,33): error TS7006: Parameter 'myParam' implicitly has an 'any' type.

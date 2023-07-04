@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts] ////
+
 === /tests/cases/fourslash/signatureHelpCommentsClassMembers.ts ===
 // /** This is comment for c1*/
 // class c1 {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts] ////
+
 objectLiteralContextualTyping.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'unknown', but here has type '{}'.
 
 

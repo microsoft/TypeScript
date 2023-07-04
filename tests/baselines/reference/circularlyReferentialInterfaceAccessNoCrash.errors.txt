@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularlyReferentialInterfaceAccessNoCrash.ts] ////
+
 circularlyReferentialInterfaceAccessNoCrash.ts(1,12): error TS4109: Type arguments for 'Mx' circularly reference themselves.
 circularlyReferentialInterfaceAccessNoCrash.ts(8,16): error TS4110: Tuple type arguments circularly reference themselves.
 circularlyReferentialInterfaceAccessNoCrash.ts(10,19): error TS4110: Tuple type arguments circularly reference themselves.

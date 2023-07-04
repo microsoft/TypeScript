@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameThis.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameThis.ts ===
 // function f(/*RENAME*/[|thisRENAME|]) {

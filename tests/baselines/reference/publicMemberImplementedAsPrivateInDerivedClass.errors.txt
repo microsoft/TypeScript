@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts] ////
+
 publicMemberImplementedAsPrivateInDerivedClass.ts(4,7): error TS2420: Class 'Foo' incorrectly implements interface 'Qux'.
   Property 'Bar' is private in type 'Foo' but not in type 'Qux'.
 

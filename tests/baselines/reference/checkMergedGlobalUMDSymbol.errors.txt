@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkMergedGlobalUMDSymbol.ts] ////
+
 global.d.ts(6,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'THREE' must be of type 'typeof import("global")', but here has type 'typeof import("three")'.
 
 

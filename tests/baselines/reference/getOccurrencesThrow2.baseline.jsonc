@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesThrow2.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow2.ts ===
 // function f(a: number) {

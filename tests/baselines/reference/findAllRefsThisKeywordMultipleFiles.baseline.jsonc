@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsThisKeywordMultipleFiles.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/file1.ts ===
 // /*FIND ALL REFS*/[|this|]; [|this|];

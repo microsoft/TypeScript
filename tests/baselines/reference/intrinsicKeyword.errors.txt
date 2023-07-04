@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts] ////
+
 intrinsicKeyword.ts(1,9): error TS2304: Cannot find name 'intrinsic'.
 intrinsicKeyword.ts(2,22): error TS2304: Cannot find name 'intrinsic'.
 intrinsicKeyword.ts(3,13): error TS2304: Cannot find name 'intrinsic'.

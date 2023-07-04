@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regexpExecAndMatchTypeUsages.ts] ////
+
 error TS5052: Option 'exactOptionalPropertyTypes' cannot be specified without specifying option 'strictNullChecks'.
 regexpExecAndMatchTypeUsages.ts(20,9): error TS2322: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray'.
   Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts] ////
+
 instantiationExpressions.ts(6,16): error TS1099: Type argument list cannot be empty.
 instantiationExpressions.ts(9,17): error TS2635: Type '{ <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }' has no signatures for which the type argument list is applicable.
 instantiationExpressions.ts(12,21): error TS1099: Type argument list cannot be empty.

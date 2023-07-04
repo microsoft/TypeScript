@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts] ////
+
 callWithWrongNumberOfTypeArguments.ts(3,3): error TS2558: Expected 2 type arguments, but got 1.
 callWithWrongNumberOfTypeArguments.ts(5,3): error TS2558: Expected 2 type arguments, but got 3.
 

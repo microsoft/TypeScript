@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule3.ts] ////
+
 mod2.js(1,23): error TS2300: Duplicate identifier 'Foo'.
 mod2.js(3,4): error TS2300: Duplicate identifier 'Foo'.
 

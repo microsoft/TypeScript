@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts] ////
+
 covariantCallbacks.ts(12,5): error TS2322: Type 'P<A>' is not assignable to type 'P<B>'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 covariantCallbacks.ts(17,5): error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.

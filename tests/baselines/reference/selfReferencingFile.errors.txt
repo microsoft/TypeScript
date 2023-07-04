@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/selfReferencingFile.ts] ////
+
 selfReferencingFile.ts(1,21): error TS1006: A file cannot have a reference to itself.
 
 

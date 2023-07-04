@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts] ////
+
 argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(3,10): error TS2815: 'arguments' cannot be referenced in property initializers.
 argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(9,10): error TS2815: 'arguments' cannot be referenced in property initializers.
 argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(15,15): error TS2815: 'arguments' cannot be referenced in property initializers.

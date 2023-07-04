@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesThis6.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThis6.ts ===
 // [|{| kind: "reference" |}this|]/*HIGHLIGHTS*/;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts] ////
+
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(26,12): error TS2365: Operator '<' cannot be applied to types '{ [a: string]: string; }' and '{ [b: string]: number; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(27,12): error TS2365: Operator '<' cannot be applied to types '{ [index: string]: Base; }' and '{ [index: string]: C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.ts(28,12): error TS2365: Operator '<' cannot be applied to types '{ [index: number]: Base; }' and '{ [index: number]: C; }'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionNarrowing.ts] ////
+
 intersectionNarrowing.ts(36,16): error TS2367: This comparison appears to be unintentional because the types 'T & number' and 'string' have no overlap.
 
 

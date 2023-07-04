@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts] ////
+
 conditionalOperatorWithoutIdenticalBCT.ts(15,5): error TS2322: Type 'A | B' is not assignable to type 'A'.
   Property 'propertyA' is missing in type 'B' but required in type 'A'.
 conditionalOperatorWithoutIdenticalBCT.ts(16,5): error TS2322: Type 'A | B' is not assignable to type 'B'.

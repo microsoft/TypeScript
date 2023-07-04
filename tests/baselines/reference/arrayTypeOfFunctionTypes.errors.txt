@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes.ts] ////
+
 arrayTypeOfFunctionTypes.ts(11,11): error TS2350: Only a void function can be called with the 'new' keyword.
 arrayTypeOfFunctionTypes.ts(16,11): error TS2350: Only a void function can be called with the 'new' keyword.
 

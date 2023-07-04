@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration4.ts] ////
+
 parserClassDeclaration4.ts(1,17): error TS2304: Cannot find name 'A'.
 parserClassDeclaration4.ts(1,30): error TS2304: Cannot find name 'B'.
 parserClassDeclaration4.ts(1,32): error TS1172: 'extends' clause already seen.

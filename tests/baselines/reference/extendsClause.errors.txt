@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/extendsClause.ts] ////
+
 index.ts(9,17): error TS1361: 'C' cannot be used as a value because it was imported using 'import type'.
 index.ts(10,17): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
 

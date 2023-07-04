@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/occurrences02.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/server/occurrences02.ts ===
 // function /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}f|](x: typeof [|{| kind: "reference" |}f|]) {

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/tsxFindAllReferences7.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
 // --- (line: 4) skipped ---

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conflictMarkerTrivia1.ts] ////
+
 conflictMarkerTrivia1.ts(2,1): error TS1185: Merge conflict marker encountered.
 conflictMarkerTrivia1.ts(4,1): error TS1185: Merge conflict marker encountered.
 conflictMarkerTrivia1.ts(6,1): error TS1185: Merge conflict marker encountered.

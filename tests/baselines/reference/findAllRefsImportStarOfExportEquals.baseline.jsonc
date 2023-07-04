@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsImportStarOfExportEquals.ts] ////
+
 // === findAllReferences ===
 // === /node_modules/a/index.d.ts ===
 // <|declare function /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|](): void;|>

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendBaseClassBeforeItsDeclared.ts] ////
+
 extendBaseClassBeforeItsDeclared.ts(1,23): error TS2449: Class 'base' used before its declaration.
 
 

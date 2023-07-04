@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importClause_namespaceImport.ts] ////
+
 /b.ts(2,1): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
 /b.ts(3,1): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
 /b.ts(4,8): error TS2749: 'types.Value' refers to a value, but is being used as a type here. Did you mean 'typeof types.Value'?

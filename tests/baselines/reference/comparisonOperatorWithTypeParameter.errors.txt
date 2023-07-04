@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTypeParameter.ts] ////
+
 comparisonOperatorWithTypeParameter.ts(6,15): error TS2365: Operator '<' cannot be applied to types 'T' and 'U'.
 comparisonOperatorWithTypeParameter.ts(7,15): error TS2365: Operator '>' cannot be applied to types 'T' and 'U'.
 comparisonOperatorWithTypeParameter.ts(8,15): error TS2365: Operator '<=' cannot be applied to types 'T' and 'U'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer.ts] ////
+
 interfaceWithStringIndexerHidingBaseTypeIndexer.ts(13,5): error TS2411: Property 'y' of type '{ a: number; }' is not assignable to 'string' index type '{ a: number; b: number; }'.
 
 

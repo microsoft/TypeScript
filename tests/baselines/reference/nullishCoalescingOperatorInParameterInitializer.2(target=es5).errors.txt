@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperatorInParameterInitializer.2.ts] ////
+
 nullishCoalescingOperatorInParameterInitializer.2.ts(3,7): error TS2373: Parameter 'b' cannot reference identifier 'a' declared after it.
 nullishCoalescingOperatorInParameterInitializer.2.ts(6,23): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
 

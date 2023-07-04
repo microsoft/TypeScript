@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/redefineArray.ts] ////
+
 redefineArray.ts(1,1): error TS2741: Property 'isArray' is missing in type '<T>(n: number, s: string) => number' but required in type 'ArrayConstructor'.
 
 

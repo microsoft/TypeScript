@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameters8.ts] ////
+
 b.ts(1,12): error TS6133: 'T' is declared but its value is never read.
 
 

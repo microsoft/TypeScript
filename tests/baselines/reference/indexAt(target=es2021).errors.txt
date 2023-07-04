@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexAt.ts] ////
+
 indexAt.ts(1,5): error TS2550: Property 'at' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
 indexAt.ts(2,7): error TS2550: Property 'at' does not exist on type '"foo"'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
 indexAt.ts(3,17): error TS2550: Property 'at' does not exist on type 'Int8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts] ////
+
 FunctionDeclaration5_es6.ts(1,14): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
 
 

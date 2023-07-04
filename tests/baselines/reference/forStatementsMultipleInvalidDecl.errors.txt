@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts] ////
+
 forStatementsMultipleInvalidDecl.ts(32,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
 forStatementsMultipleInvalidDecl.ts(33,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
 forStatementsMultipleInvalidDecl.ts(34,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.

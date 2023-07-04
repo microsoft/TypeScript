@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofInObjectLiteralType.ts] ////
+
 typeofInObjectLiteralType.ts(1,31): error TS2304: Cannot find name 'b'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyParametersInAmbientModule.ts] ////
+
 noImplicitAnyParametersInAmbientModule.ts(6,20): error TS7006: Parameter 'x' implicitly has an 'any' type.
 noImplicitAnyParametersInAmbientModule.ts(12,20): error TS7006: Parameter 'x' implicitly has an 'any' type.
 noImplicitAnyParametersInAmbientModule.ts(12,23): error TS7006: Parameter 'y' implicitly has an 'any' type.

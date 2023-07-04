@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportEqualsExportModuleEs2015Error.ts] ////
+
 a.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 main.ts(1,20): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
 

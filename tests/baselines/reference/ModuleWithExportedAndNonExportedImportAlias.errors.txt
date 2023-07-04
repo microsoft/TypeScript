@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedImportAlias.ts] ////
+
 ModuleWithExportedAndNonExportedImportAlias.ts(37,21): error TS2339: Property 'Lines' does not exist on type 'typeof Geometry'.
 
 

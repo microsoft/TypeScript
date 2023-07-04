@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseInvalidNullableTypes.ts] ////
+
 parseInvalidNullableTypes.ts(1,30): error TS2677: A type predicate's type must be assignable to its parameter's type.
   Type 'string | null' is not assignable to type 'string'.
     Type 'null' is not assignable to type 'string'.

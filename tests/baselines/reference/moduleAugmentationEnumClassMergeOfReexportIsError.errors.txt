@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAugmentationEnumClassMergeOfReexportIsError.ts] ////
+
 augment.ts(4,17): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 file.ts(1,14): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 

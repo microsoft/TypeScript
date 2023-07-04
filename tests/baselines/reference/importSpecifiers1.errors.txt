@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importSpecifiers1.ts] ////
+
 /a.ts(4,1): error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
 /b.ts(2,1): error TS2304: Cannot find name 'type'.
 /c.ts(2,1): error TS2304: Cannot find name 'type'.

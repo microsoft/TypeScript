@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/getFileReferences_server1.ts] ////
+
 // === getFileReferences ===
 // fileName: /project/a.ts
 

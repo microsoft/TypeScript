@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importUsedAsTypeWithErrors.ts] ////
+
 main.ts(1,17): error TS1340: Module './test' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./test')'?
 
 

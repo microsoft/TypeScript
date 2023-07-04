@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameContextuallyTypedProperties2.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameContextuallyTypedProperties2.ts ===
 // interface I {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/exportStar.ts] ////
+
 main.ts(1,8): error TS1192: Module '"t4"' has no default export.
 t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'x'. Consider explicitly re-exporting to resolve the ambiguity.
 t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'y'. Consider explicitly re-exporting to resolve the ambiguity.

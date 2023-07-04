@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameterInMethod3.ts] ////
+
 unusedTypeParameterInMethod3.ts(2,21): error TS6133: 'Z' is declared but its value is never read.
 
 

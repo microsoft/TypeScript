@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxElementType.tsx] ////
+
 jsxElementType.tsx(34,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
 jsxElementType.tsx(36,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.

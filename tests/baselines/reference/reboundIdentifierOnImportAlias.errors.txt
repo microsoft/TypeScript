@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reboundIdentifierOnImportAlias.ts] ////
+
 reboundIdentifierOnImportAlias.ts(6,16): error TS2437: Module 'Foo' is hidden by a local declaration with the same name.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild2.tsx] ////
+
 jsxEmptyExpressionNotCountedAsChild2.tsx(28,2): error TS2322: Type '{ __children__: never[]; }' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
   Type '{ __children__: never[]; }' is not assignable to type '{ __children__: () => number; }'.
     Types of property '__children__' are incompatible.

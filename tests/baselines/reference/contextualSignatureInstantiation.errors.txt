@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/contextualSignatureInstantiation.ts] ////
+
 contextualSignatureInstantiation.ts(19,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'string | number', but here has type 'unknown'.
 contextualSignatureInstantiation.ts(19,13): error TS2345: Argument of type '<T>(x: T, y: T) => T' is not assignable to parameter of type '(x: number, y: string) => number'.
   Types of parameters 'y' and 'y' are incompatible.

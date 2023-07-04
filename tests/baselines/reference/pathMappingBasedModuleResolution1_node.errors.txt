@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution1_node.ts] ////
+
 c:/root/tsconfig.json(5,17): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 c:/root/tsconfig.json(6,17): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 

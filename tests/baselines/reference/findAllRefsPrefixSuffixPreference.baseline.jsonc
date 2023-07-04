@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsPrefixSuffixPreference.ts] ////
+
 // === findAllReferences ===
 // === /file1.ts ===
 // declare function log(s: string | number): void;

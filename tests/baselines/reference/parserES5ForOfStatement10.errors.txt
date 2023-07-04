@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement10.ts] ////
+
 parserES5ForOfStatement10.ts(1,17): error TS2304: Cannot find name 'X'.
 
 

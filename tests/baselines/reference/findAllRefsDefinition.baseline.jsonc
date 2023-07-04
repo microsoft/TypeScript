@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsDefinition.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsDefinition.ts ===
 // <|const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] = 0;|>

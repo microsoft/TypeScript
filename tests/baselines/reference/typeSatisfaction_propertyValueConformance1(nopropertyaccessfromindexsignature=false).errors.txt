@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance1.ts] ////
+
 typeSatisfaction_propertyValueConformance1.ts(13,15): error TS2339: Property 'z' does not exist on type '{ m: boolean; }'.
 typeSatisfaction_propertyValueConformance1.ts(22,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
 

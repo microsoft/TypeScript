@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerImportTsExtensions.ts] ////
+
 error TS5056: Cannot write file 'out/b.js' because it would be overwritten by multiple input files.
 error TS5056: Cannot write file 'out/c.js' because it would be overwritten by multiple input files.
 error TS5096: Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.

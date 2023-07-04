@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverrideWithAbstract.ts] ////
+
 classAbstractOverrideWithAbstract.ts(19,7): error TS18052: Non-abstract class 'CC' does not implement all abstract members of 'BB'
 
 

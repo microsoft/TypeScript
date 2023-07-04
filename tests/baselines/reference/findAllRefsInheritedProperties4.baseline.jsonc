@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsInheritedProperties4.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInheritedProperties4.ts ===
 // interface C extends D {

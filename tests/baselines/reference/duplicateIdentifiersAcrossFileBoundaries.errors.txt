@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifiersAcrossFileBoundaries.ts] ////
+
 file1.ts(3,7): error TS2813: Class declaration cannot implement overload list for 'C2'.
 file1.ts(4,10): error TS2814: Function with bodies can only merge with classes that are ambient.
 file1.ts(8,12): error TS2300: Duplicate identifier 'x'.

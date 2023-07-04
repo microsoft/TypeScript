@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/tsxFindAllReferences2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
 // declare module JSX {

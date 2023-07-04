@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceImplementation4.ts] ////
+
 interfaceImplementation4.ts(8,7): error TS2420: Class 'C5' incorrectly implements interface 'I1'.
   Property 'iObj' is missing in type 'C5' but required in type 'I1'.
 

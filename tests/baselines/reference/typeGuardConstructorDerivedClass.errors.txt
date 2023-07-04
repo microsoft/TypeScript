@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardConstructorDerivedClass.ts] ////
+
 typeGuardConstructorDerivedClass.ts(13,10): error TS2339: Property 'property1' does not exist on type 'never'.
 
 

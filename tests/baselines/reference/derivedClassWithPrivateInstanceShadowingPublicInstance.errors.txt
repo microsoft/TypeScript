@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts] ////
+
 derivedClassWithPrivateInstanceShadowingPublicInstance.ts(12,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
   Property 'x' is private in type 'Derived' but not in type 'Base'.
 derivedClassWithPrivateInstanceShadowingPublicInstance.ts(22,14): error TS2339: Property 'x' does not exist on type 'typeof Base'.

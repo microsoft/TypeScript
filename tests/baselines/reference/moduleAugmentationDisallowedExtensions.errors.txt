@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAugmentationDisallowedExtensions.ts] ////
+
 x.ts(17,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 x.ts(17,26): error TS2307: Cannot find module './x0' or its corresponding type declarations.
 x.ts(18,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompat1.ts] ////
+
 assignmentCompat1.ts(4,1): error TS2741: Property 'one' is missing in type '{ [index: string]: any; }' but required in type '{ one: number; }'.
 assignmentCompat1.ts(6,1): error TS2741: Property 'one' is missing in type '{ [index: number]: any; }' but required in type '{ one: number; }'.
 assignmentCompat1.ts(8,1): error TS2322: Type 'string' is not assignable to type '{ [index: string]: any; }'.

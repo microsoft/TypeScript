@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unknownSymbols2.ts] ////
+
 unknownSymbols2.ts(2,12): error TS2304: Cannot find name 'asdf'.
 unknownSymbols2.ts(3,17): error TS2304: Cannot find name 'asdf'.
 unknownSymbols2.ts(4,14): error TS2304: Cannot find name 'asdf'.

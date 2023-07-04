@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPrototypeAssignment.ts] ////
+
 a.js(27,20): error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
 
 

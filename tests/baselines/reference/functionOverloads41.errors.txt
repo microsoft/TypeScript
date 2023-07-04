@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads41.ts] ////
+
 functionOverloads41.ts(4,14): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
     Property 'a' is missing in type '{}' but required in type '{ a: number; }'.

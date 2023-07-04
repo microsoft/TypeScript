@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToTypeDefinition_typeReference.ts] ////
+
 // === goToType ===
 // === /tests/cases/fourslash/goToTypeDefinition_typeReference.ts ===
 // type User = { name: string };

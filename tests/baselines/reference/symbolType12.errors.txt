@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType12.ts] ////
+
 symbolType12.ts(3,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 symbolType12.ts(3,6): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 symbolType12.ts(4,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/wideningTuples5.ts] ////
+
 wideningTuples5.ts(1,6): error TS7031: Binding element 'a' implicitly has an 'any' type.
 wideningTuples5.ts(1,9): error TS7031: Binding element 'b' implicitly has an 'any' type.
 

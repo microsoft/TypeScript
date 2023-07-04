@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tupleTypes.ts] ////
+
 tupleTypes.ts(11,12): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
 tupleTypes.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type 'undefined', but here has type 'string | number'.
 tupleTypes.ts(14,1): error TS2322: Type '[]' is not assignable to type '[number, string]'.

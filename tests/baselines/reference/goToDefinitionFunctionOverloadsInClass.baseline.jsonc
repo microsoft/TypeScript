@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionFunctionOverloadsInClass.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionFunctionOverloadsInClass.ts ===
 // class clsInOverload {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportNamedImportNoExportMember.ts] ////
+
 es6ImportNamedImport_1.ts(1,10): error TS2305: Module '"./es6ImportNamedImportNoExportMember_0"' has no exported member 'a1'.
 es6ImportNamedImport_1.ts(2,10): error TS2305: Module '"./es6ImportNamedImportNoExportMember_0"' has no exported member 'x1'.
 

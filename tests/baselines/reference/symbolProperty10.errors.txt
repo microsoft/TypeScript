@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty10.ts] ////
+
 symbolProperty10.ts(10,5): error TS2322: Type 'I' is not assignable to type 'C'.
   Types of property '[Symbol.iterator]' are incompatible.
     Property 'y' is missing in type '{ x: any; }' but required in type '{ x: any; y: any; }'.

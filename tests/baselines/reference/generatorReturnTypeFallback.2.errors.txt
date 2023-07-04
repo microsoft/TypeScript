@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorReturnTypeFallback.2.ts] ////
+
 error TS2318: Cannot find global type 'IterableIterator'.
 
 

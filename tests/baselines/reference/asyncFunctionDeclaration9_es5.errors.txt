@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration9_es5.ts] ////
+
 asyncFunctionDeclaration9_es5.ts(2,19): error TS1109: Expression expected.
 
 

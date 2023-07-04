@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckWithSpread.ts] ////
+
 excessPropertyCheckWithSpread.ts(1,25): error TS2842: 'number' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
 
 

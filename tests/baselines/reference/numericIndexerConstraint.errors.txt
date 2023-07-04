@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericIndexerConstraint.ts] ////
+
 numericIndexerConstraint.ts(2,5): error TS2411: Property '0' of type 'number' is not assignable to 'number' index type 'RegExp'.
 
 

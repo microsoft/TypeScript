@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicNamesErrors.ts] ////
+
 dynamicNamesErrors.ts(5,5): error TS2718: Duplicate property '1'.
 dynamicNamesErrors.ts(6,5): error TS2733: Property '1' was also declared here.
 dynamicNamesErrors.ts(19,5): error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.

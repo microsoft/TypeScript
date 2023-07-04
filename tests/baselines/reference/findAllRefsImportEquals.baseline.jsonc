@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsImportEquals.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsImportEquals.ts ===
 // import j = N./*FIND ALL REFS*/[|q|];

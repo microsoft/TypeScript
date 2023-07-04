@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateConstructorFunction2.ts] ////
+
 templateTagWithNestedTypeLiteral.js(21,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 templateTagWithNestedTypeLiteral.js(28,15): error TS2304: Cannot find name 'T'.
 

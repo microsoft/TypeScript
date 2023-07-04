@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts] ////
+
 subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2411: Property 'foo' of type 'U' is not assignable to 'string' index type 'T'.
 subtypesOfTypeParameterWithRecursiveConstraints.ts(68,9): error TS2416: Property 'foo' in type 'D2<T, U, V>' is not assignable to the same property in base type 'Base<T>'.
   Type 'U' is not assignable to type 'T'.

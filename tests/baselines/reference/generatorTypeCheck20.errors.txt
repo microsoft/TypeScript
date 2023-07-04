@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts] ////
+
 generatorTypeCheck20.ts(5,13): error TS2741: Property 'x' is missing in type 'Baz' but required in type 'Foo'.
 
 

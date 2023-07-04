@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts] ////
+
 typeGuardsWithInstanceOfByConstructorSignature.ts(12,10): error TS2339: Property 'bar' does not exist on type 'A'.
 typeGuardsWithInstanceOfByConstructorSignature.ts(18,10): error TS2339: Property 'bar' does not exist on type 'A'.
 typeGuardsWithInstanceOfByConstructorSignature.ts(33,5): error TS2322: Type 'string' is not assignable to type 'number'.

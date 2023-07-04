@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/witness/witness.ts] ////
+
 witness.ts(4,21): error TS2372: Parameter 'pInit' cannot reference itself.
 witness.ts(8,14): error TS2729: Property 'x' is used before its initialization.
 witness.ts(20,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'never'.

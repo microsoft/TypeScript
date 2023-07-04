@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/scopeTests.ts] ////
+
 scopeTests.ts(2,7): error TS2415: Class 'D' incorrectly extends base class 'C'.
   Property 'v' is private in type 'C' but not in type 'D'.
 

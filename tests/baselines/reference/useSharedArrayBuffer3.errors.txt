@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2017/useSharedArrayBuffer3.ts] ////
+
 useSharedArrayBuffer3.ts(1,16): error TS2583: Cannot find name 'SharedArrayBuffer'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
 
 

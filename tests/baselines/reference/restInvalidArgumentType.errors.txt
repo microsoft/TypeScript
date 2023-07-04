@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restInvalidArgumentType.ts] ////
+
 restInvalidArgumentType.ts(30,13): error TS2700: Rest types may only be created from object types.
 restInvalidArgumentType.ts(31,13): error TS2700: Rest types may only be created from object types.
 restInvalidArgumentType.ts(37,13): error TS2700: Rest types may only be created from object types.

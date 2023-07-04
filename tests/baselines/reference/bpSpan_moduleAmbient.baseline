@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationModuleAmbient.ts] ////
+
 
 1  >declare module Bar {
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts] ////
+
 parserRealSource11.ts(4,21): error TS6053: File 'typescript.ts' not found.
 parserRealSource11.ts(13,22): error TS2304: Cannot find name 'Type'.
 parserRealSource11.ts(14,24): error TS2304: Cannot find name 'ASTFlags'.

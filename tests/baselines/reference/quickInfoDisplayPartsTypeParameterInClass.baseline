@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts] ////
+
 === /tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInClass.ts ===
 // class c<T> {
 //       ^

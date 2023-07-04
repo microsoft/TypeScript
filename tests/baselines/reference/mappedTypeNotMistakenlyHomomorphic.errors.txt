@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic.ts] ////
+
 mappedTypeNotMistakenlyHomomorphic.ts(33,1): error TS2741: Property 'a' is missing in type 'Gen2<ABC.B>' but required in type 'Gen2<ABC.A>'.
 mappedTypeNotMistakenlyHomomorphic.ts(34,1): error TS2741: Property 'b' is missing in type 'Gen2<ABC.A>' but required in type 'Gen2<ABC.B>'.
 

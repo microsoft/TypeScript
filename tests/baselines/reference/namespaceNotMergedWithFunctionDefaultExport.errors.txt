@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namespaceNotMergedWithFunctionDefaultExport.ts] ////
+
 replace-in-file/types/index.d.ts(4,19): error TS2395: Individual declarations in merged declaration 'replaceInFile' must be all exported or all local.
 replace-in-file/types/index.d.ts(7,13): error TS2395: Individual declarations in merged declaration 'replaceInFile' must be all exported or all local.
 

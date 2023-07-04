@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentToObjectAndFunction.ts] ////
+
 assignmentToObjectAndFunction.ts(1,24): error TS2322: Type 'number' is not assignable to type '() => string'.
 assignmentToObjectAndFunction.ts(8,5): error TS2740: Type '{}' is missing the following properties from type 'Function': apply, call, bind, prototype, and 3 more.
 assignmentToObjectAndFunction.ts(29,5): error TS2322: Type 'typeof bad' is not assignable to type 'Function'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts] ////
+
 mappedTypeConstraints2.ts(10,11): error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
   Type '{ a: `get${K}`; }' is not assignable to type '{ a: K; }'.
     Types of property 'a' are incompatible.

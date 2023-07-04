@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts] ////
+
 for-inStatementsInvalid.ts(2,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
 for-inStatementsInvalid.ts(5,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
 for-inStatementsInvalid.ts(8,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.

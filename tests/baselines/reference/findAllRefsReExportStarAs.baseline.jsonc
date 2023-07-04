@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsReExportStarAs.ts] ////
+
 // === findAllReferences ===
 // === /leafModule.ts ===
 // <|export const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}hello|] = () => 'Hello';|>

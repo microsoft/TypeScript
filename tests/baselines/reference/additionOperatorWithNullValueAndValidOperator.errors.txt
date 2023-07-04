@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts] ////
+
 additionOperatorWithNullValueAndValidOperator.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'number'.
 additionOperatorWithNullValueAndValidOperator.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'null' and '1'.
 additionOperatorWithNullValueAndValidOperator.ts(17,10): error TS2365: Operator '+' cannot be applied to types 'null' and 'E'.

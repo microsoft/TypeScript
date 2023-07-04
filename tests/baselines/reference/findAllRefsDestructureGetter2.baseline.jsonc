@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsDestructureGetter2.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // class C {

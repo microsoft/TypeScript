@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts] ////
+
 classAbstractInheritance.ts(13,7): error TS18052: Non-abstract class 'CC' does not implement all abstract members of 'AA'
 classAbstractInheritance.ts(15,7): error TS18052: Non-abstract class 'DD' does not implement all abstract members of 'BB'
 classAbstractInheritance.ts(19,7): error TS18052: Non-abstract class 'FF' does not implement all abstract members of 'CC'

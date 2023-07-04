@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/findLast.ts] ////
+
 findLast.ts(1,44): error TS2550: Property 'findLast' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
 findLast.ts(2,51): error TS2550: Property 'findLast' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
 findLast.ts(3,17): error TS2550: Property 'findLast' does not exist on type 'Int8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.

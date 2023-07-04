@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsInForOf.2.ts] ////
+
 awaitUsingDeclarationsInForOf.2.ts(2,10): error TS2487: The left-hand side of a 'for...of' statement must be a variable or a property access.
 awaitUsingDeclarationsInForOf.2.ts(2,16): error TS2304: Cannot find name 'using'.
 awaitUsingDeclarationsInForOf.2.ts(2,25): error TS2304: Cannot find name 'of'.

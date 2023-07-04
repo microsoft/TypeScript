@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noRepeatedPropertyNames.ts] ////
+
 noRepeatedPropertyNames.ts(2,23): error TS1117: An object literal cannot have multiple properties with the same name.
 noRepeatedPropertyNames.ts(5,32): error TS1117: An object literal cannot have multiple properties with the same name.
 

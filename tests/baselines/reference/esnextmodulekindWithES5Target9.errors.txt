@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts] ////
+
 esnextmodulekindWithES5Target9.ts(1,15): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 esnextmodulekindWithES5Target9.ts(3,17): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 esnextmodulekindWithES5Target9.ts(5,20): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?

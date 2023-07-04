@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclarationInModuleDeclaration2.ts] ////
+
 check.js(2,5): error TS1473: An import declaration can only be used at the top level of a module.
 
 

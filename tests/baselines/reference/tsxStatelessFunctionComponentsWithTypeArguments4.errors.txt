@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments4.tsx] ////
+
 file.tsx(9,14): error TS2769: No overload matches this call.
   Overload 1 of 3, '(): Element', gave the following error.
     Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes'.

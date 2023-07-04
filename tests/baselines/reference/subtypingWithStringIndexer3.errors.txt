@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer3.ts] ////
+
 subtypingWithStringIndexer3.ts(11,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
   'string' index signatures are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.

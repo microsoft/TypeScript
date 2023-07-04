@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessCallExpressionCoercion1.ts] ////
+
 truthinessCallExpressionCoercion1.ts(3,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion1.ts(19,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 truthinessCallExpressionCoercion1.ts(33,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?

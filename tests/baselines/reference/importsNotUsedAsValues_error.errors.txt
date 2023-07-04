@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importsNotUsedAsValues_error.ts] ////
+
 error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
 /b.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.

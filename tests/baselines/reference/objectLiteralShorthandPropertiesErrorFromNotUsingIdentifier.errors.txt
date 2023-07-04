@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts] ////
+
 objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(3,20): error TS1005: ':' expected.
 objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(4,7): error TS1005: ':' expected.
 objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(5,10): error TS1005: '(' expected.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorInJsFile1.ts] ////
+
 a.js(3,12): error TS8010: Type annotations can only be used in TypeScript files.
 
 

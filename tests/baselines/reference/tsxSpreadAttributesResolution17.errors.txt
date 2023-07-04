@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution17.tsx] ////
+
 file.tsx(18,21): error TS2607: JSX element class does not support attributes because it does not have a 'props' property.
 
 

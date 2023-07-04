@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParametersInStaticAccessors.ts] ////
+
 typeParametersInStaticAccessors.ts(2,29): error TS2302: Static members cannot reference class type parameters.
 typeParametersInStaticAccessors.ts(3,28): error TS2302: Static members cannot reference class type parameters.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties3.ts] ////
+
 destructuringParameterProperties3.ts(2,31): error TS1187: A parameter property may not be declared using a binding pattern.
 destructuringParameterProperties3.ts(3,59): error TS2339: Property 'b' does not exist on type 'C1<T, U, V>'.
 destructuringParameterProperties3.ts(3,83): error TS2339: Property 'c' does not exist on type 'C1<T, U, V>'.

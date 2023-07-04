@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expr.ts] ////
+
 expr.ts(87,5): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string' have no overlap.
 expr.ts(88,5): error TS2367: This comparison appears to be unintentional because the types 'number' and 'boolean' have no overlap.
 expr.ts(94,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.

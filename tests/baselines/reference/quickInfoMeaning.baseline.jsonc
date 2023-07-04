@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoMeaning.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/foo.d.ts ===
 // <|declare const [|foo|]: number;|>

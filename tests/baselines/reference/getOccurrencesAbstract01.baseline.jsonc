@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesAbstract01.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesAbstract01.ts ===
 // /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] class Animal {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts] ////
+
 typeofOperatorWithAnyOtherType.ts(46,32): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
 typeofOperatorWithAnyOtherType.ts(47,32): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
 typeofOperatorWithAnyOtherType.ts(48,32): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionOverriddenMember3.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionOverriddenMember3.ts ===
 // abstract class Foo {

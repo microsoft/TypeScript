@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseUnaryExpressionNoTypeAssertionInJsx3.ts] ////
+
 index.js(2,13): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
 index.js(2,14): error TS1003: Identifier expected.
 index.js(2,14): error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.

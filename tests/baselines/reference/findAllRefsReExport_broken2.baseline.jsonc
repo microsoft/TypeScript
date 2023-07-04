@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsReExport_broken2.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // /*FIND ALL REFS*/<|export { [|{| isWriteAccess: true, isDefinition: true |}x|] } from "nonsense";|>

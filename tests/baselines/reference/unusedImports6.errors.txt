@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports6.ts] ////
+
 file2.ts(1,1): error TS6133: 'd' is declared but its value is never read.
 
 

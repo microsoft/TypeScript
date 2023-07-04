@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override7.ts] ////
+
 override7.ts(11,14): error TS1040: 'override' modifier cannot be used in an ambient context.
 override7.ts(13,14): error TS1029: 'override' modifier must precede 'readonly' modifier.
 override7.ts(17,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.

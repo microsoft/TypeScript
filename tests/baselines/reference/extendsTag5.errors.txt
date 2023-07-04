@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/extendsTag5.ts] ////
+
 /a.js(29,16): error TS2344: Type '{ a: string; b: string; }' does not satisfy the constraint 'Foo'.
   Types of property 'b' are incompatible.
     Type 'string' is not assignable to type 'boolean | string[]'.

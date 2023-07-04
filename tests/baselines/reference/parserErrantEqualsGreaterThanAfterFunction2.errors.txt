@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction2.ts] ////
+
 parserErrantEqualsGreaterThanAfterFunction2.ts(1,15): error TS2304: Cannot find name 'A'.
 parserErrantEqualsGreaterThanAfterFunction2.ts(1,18): error TS1144: '{' or ';' expected.
 parserErrantEqualsGreaterThanAfterFunction2.ts(1,21): error TS2304: Cannot find name 'p'.

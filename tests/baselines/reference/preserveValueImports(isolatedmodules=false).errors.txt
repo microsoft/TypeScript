@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports.ts] ////
+
 error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
 d.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

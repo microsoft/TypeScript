@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/shims-pp/getImplementationAtPosition-pp.ts] ////
+
 // === goToImplementation ===
 // === /tests/cases/fourslash/shims-pp/goToImplementationDifferentFile_Implementation.ts ===
 // <|class [|FooImpl|] implements Foo {}|>

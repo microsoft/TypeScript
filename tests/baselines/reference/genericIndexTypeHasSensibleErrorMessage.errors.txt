@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericIndexTypeHasSensibleErrorMessage.ts] ////
+
 genericIndexTypeHasSensibleErrorMessage.ts(1,33): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
 
 

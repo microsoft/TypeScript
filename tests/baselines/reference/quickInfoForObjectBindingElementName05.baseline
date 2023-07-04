@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoForObjectBindingElementName05.ts] ////
+
 === /tests/cases/fourslash/quickInfoForObjectBindingElementName05.ts ===
 // interface A {
 //     /**

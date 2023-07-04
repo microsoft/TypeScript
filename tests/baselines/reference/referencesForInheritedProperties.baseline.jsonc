@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForInheritedProperties.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties.ts ===
 // interface interface1 {

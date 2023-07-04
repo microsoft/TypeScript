@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleImport.ts] ////
+
 moduleImport.ts(2,17): error TS2339: Property 'Y' does not exist on type 'typeof X'.
 moduleImport.ts(2,17): error TS2694: Namespace 'X' has no exported member 'Y'.
 

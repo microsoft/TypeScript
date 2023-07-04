@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts] ////
+
 subtypingWithNumericIndexer5.ts(11,7): error TS2420: Class 'B' incorrectly implements interface 'A'.
   'string' and 'number' index signatures are incompatible.
     Type 'Base' is not assignable to type 'Derived'.

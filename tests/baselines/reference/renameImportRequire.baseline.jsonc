@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameImportRequire.ts] ////
+
 // === findRenameLocations ===
 // === /a.ts ===
 // <|import /*RENAME*/[|eRENAME|] = require("mod4");|>

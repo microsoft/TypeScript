@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsThisKeyword.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
 // /*FIND ALL REFS*/[|this|];

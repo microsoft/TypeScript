@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer.ts] ////
+
 subtypingWithNumericIndexer.ts(32,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
   'number' index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.

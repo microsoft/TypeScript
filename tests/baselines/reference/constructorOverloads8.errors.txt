@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorOverloads8.ts] ////
+
 constructorOverloads8.ts(2,5): error TS2392: Multiple constructor implementations are not allowed.
 constructorOverloads8.ts(3,5): error TS2392: Multiple constructor implementations are not allowed.
 

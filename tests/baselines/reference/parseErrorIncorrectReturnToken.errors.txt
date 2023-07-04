@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseErrorIncorrectReturnToken.ts] ////
+
 parseErrorIncorrectReturnToken.ts(2,17): error TS1005: ':' expected.
 parseErrorIncorrectReturnToken.ts(4,22): error TS1005: '=>' expected.
 parseErrorIncorrectReturnToken.ts(4,24): error TS2693: 'string' only refers to a type, but is being used as a value here.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameModuleExportsProperties2.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameModuleExportsProperties2.ts ===
 // <|class /*RENAME*/[|ARENAME|] {}|>

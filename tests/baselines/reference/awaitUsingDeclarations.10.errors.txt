@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarations.10.ts] ////
+
 awaitUsingDeclarations.10.ts(5,12): error TS1156: 'await using' declarations can only be declared inside a block.
 
 

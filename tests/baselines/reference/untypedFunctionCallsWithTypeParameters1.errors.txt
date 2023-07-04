@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts] ////
+
 untypedFunctionCallsWithTypeParameters1.ts(3,12): error TS2558: Expected 0 type arguments, but got 1.
 untypedFunctionCallsWithTypeParameters1.ts(5,10): error TS2347: Untyped function calls may not accept type arguments.
 untypedFunctionCallsWithTypeParameters1.ts(8,10): error TS2347: Untyped function calls may not accept type arguments.

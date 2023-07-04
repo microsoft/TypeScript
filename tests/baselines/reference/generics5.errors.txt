@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics5.ts] ////
+
 generics5.ts(10,14): error TS2344: Type 'A' does not satisfy the constraint 'B'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 

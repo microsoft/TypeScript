@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionMissingCurlyWithSemicolon.ts] ////
+
 arrowFunctionMissingCurlyWithSemicolon.ts(2,15): error TS1109: Expression expected.
 
 

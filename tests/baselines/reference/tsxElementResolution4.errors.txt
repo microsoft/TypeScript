@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution4.tsx] ////
+
 file.tsx(16,7): error TS2322: Type '{ q: string; }' is not assignable to type '{ m: string; }'.
   Property 'q' does not exist on type '{ m: string; }'.
 

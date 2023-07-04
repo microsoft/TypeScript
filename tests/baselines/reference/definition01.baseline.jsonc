@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/definition01.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/server/a.ts ===
 // [||]export class Foo {}

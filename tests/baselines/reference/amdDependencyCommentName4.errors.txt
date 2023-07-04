@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdDependencyCommentName4.ts] ////
+
 amdDependencyCommentName4.ts(8,21): error TS2792: Cannot find module 'aliasedModule1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 amdDependencyCommentName4.ts(11,26): error TS2792: Cannot find module 'aliasedModule2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 amdDependencyCommentName4.ts(14,15): error TS2792: Cannot find module 'aliasedModule3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/namespaceImportTypeQuery.ts] ////
+
 /b.ts(8,3): error TS2322: Type '{ A: any; B: any; }' is not assignable to type 'typeof import("/a")'.
   Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
 

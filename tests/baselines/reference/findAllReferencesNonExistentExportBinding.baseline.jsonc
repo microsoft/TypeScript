@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllReferencesNonExistentExportBinding.ts] ////
+
 // === findAllReferences ===
 // === /bar.ts ===
 // <|import { [|{| defId: 0, isWriteAccess: true, isDefinition: true |}Foo|]/*FIND ALL REFS*/ } from "./foo";|>

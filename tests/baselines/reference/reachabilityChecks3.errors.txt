@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks3.ts] ////
+
 reachabilityChecks3.ts(2,1): error TS7028: Unused label.
 reachabilityChecks3.ts(11,5): error TS7028: Unused label.
 reachabilityChecks3.ts(14,17): error TS7028: Unused label.

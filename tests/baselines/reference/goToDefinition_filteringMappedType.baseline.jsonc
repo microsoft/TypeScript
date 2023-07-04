@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinition_filteringMappedType.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinition_filteringMappedType.ts ===
 // const obj = { <|[|a|]: 1|>, b: 2 };

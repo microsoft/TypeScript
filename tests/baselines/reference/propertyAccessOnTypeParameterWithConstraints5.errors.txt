@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts] ////
+
 propertyAccessOnTypeParameterWithConstraints5.ts(15,32): error TS2339: Property 'notHere' does not exist on type 'U'.
 propertyAccessOnTypeParameterWithConstraints5.ts(25,16): error TS2339: Property 'notHere' does not exist on type 'B'.
 propertyAccessOnTypeParameterWithConstraints5.ts(32,22): error TS2339: Property 'notHere' does not exist on type 'A'.

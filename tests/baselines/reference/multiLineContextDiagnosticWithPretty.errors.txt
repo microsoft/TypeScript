@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts] ////
+
 [96mmultiLineContextDiagnosticWithPretty.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType '{ a: { b: string; }; }' is not assignable to type '{ c: string; }'.
   Object literal may only specify known properties, and 'a' does not exist in type '{ c: string; }'.
 

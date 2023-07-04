@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/jsdocTypedefTagRename03.ts] ////
+
 // === findRenameLocations ===
 // @findInComments: true
 

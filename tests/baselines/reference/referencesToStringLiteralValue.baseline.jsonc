@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/referencesToStringLiteralValue.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/server/referencesToStringLiteralValue.ts ===
 // const s: string = "some /*FIND ALL REFS*/ string";

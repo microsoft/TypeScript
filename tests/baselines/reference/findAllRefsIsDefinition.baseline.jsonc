@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsIsDefinition.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
 // <|declare function [|{| isWriteAccess: true, isDefinition: true |}foo|](a: number): number;|>

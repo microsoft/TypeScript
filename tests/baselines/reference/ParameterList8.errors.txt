@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ParameterList8.ts] ////
+
 ParameterList8.ts(2,14): error TS2369: A parameter property is only allowed in a constructor implementation.
 ParameterList8.ts(3,14): error TS2369: A parameter property is only allowed in a constructor implementation.
 ParameterList8.ts(4,14): error TS2369: A parameter property is only allowed in a constructor implementation.

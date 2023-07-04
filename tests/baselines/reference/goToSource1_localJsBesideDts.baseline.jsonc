@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/goToSource1_localJsBesideDts.ts] ////
+
 // === goToSourceDefinition ===
 // === /a.js ===
 // export const [|a|] = "a";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ParameterList7.ts] ////
+
 ParameterList7.ts(2,14): error TS2369: A parameter property is only allowed in a constructor implementation.
 ParameterList7.ts(3,14): error TS2369: A parameter property is only allowed in a constructor implementation.
 

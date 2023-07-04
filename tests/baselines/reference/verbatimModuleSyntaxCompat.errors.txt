@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxCompat.ts] ////
+
 error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
 error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.

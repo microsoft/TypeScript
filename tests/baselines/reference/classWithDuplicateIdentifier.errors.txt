@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classWithDuplicateIdentifier.ts] ////
+
 classWithDuplicateIdentifier.ts(3,5): error TS2300: Duplicate identifier 'a'.
 classWithDuplicateIdentifier.ts(3,5): error TS2717: Subsequent property declarations must have the same type.  Property 'a' must be of type '() => number', but here has type 'number'.
 classWithDuplicateIdentifier.ts(6,5): error TS2300: Duplicate identifier 'b'.

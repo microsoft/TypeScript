@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/completionsCommentsFunctionDeclaration.ts] ////
+
 === /tests/cases/fourslash/completionsCommentsFunctionDeclaration.ts ===
 // /** This comment should appear for foo*/
 // function foo() {

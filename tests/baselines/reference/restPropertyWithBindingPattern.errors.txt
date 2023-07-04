@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts] ////
+
 restPropertyWithBindingPattern.ts(1,6): error TS2501: A rest element cannot contain a binding pattern.
 restPropertyWithBindingPattern.ts(2,6): error TS2501: A rest element cannot contain a binding pattern.
 restPropertyWithBindingPattern.ts(2,6): error TS2701: The target of an object rest assignment must be a variable or a property access.

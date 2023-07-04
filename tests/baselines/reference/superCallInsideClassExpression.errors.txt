@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superCallInsideClassExpression.ts] ////
+
 superCallInsideClassExpression.ts(8,5): error TS2377: Constructors for derived classes must contain a 'super' call.
 
 
