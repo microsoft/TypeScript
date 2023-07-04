@@ -1,4 +1,5 @@
-// @strict:false,true
+// @strict:true,false
+// @target: es2015
 export let normalizedObjectArray = [
     { foo: "" },
     { bar: "" },
@@ -29,14 +30,41 @@ export let numbers = [1, 2, 3];
 export let numbersNeg = [1, 2, 3, -1, -2, -3, -1, -2];
 export let strings = ["1", "2", "3"];
 
+let value = 1;
+export let values = [value, "A", 1]
+
 export let arrNestedObjects = [
     { bar: { baz: 1} },
     { bar: { bat: 1} },
 ];
 
-export let arrObjects = [
-    { foo: "A", m(): void {} },
-    { bar: "B" },
+export let arrNestedObjectsWithReadonly = [
     { bar: { baz: 1} },
     { bar: { bat: 1} },
+    { bar: { roProp: 1} } as const,
 ];
+
+
+// TODO Uncomment when methods appear in merged union types
+// export let arrObjects = [
+//     { foo: "A", m(): void {} },
+//     { bar: "B" },
+//     { bar: { baz: 1} },
+//     { bar: { bat: 1} },
+// ];
+
+
+export const nestedArray = [[[1, 2]], [[3, 4]]];
+export const nestedMixedArray = [[[1, 2]], [[3, 4]], [["3", "4"]]];
+
+
+export const functionArrayMixed = [
+    (o: number) => 2,
+    (n: number): number => 2,
+    (n: string): number => 2,
+    (n: string): number => 2,
+]
+
+let nrs = [1, 2, 3]
+let strs = ["1", "2", "3"]
+export const composedArray = [false, ...nrs, ...strs]

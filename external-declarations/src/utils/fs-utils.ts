@@ -1,10 +1,11 @@
-import * as fs from 'fs'
-import * as fsp from 'fs/promises'
-import { flatten, stableSort, compareStringsCaseSensitive } from '../compiler/lang-utils';
-import { normalizePath, createGetCanonicalFileName, combinePaths } from '../compiler/path-utils';
-import { FileSystemEntries } from '../test-runner/tsc-infrastructure/vfs';
+import * as fs from "fs";
+import * as fsp from "fs/promises";
 
-const cache: Record<string, true> = {}
+import { compareStringsCaseSensitive,flatten, stableSort } from "../compiler/lang-utils";
+import { combinePaths,createGetCanonicalFileName, normalizePath } from "../compiler/path-utils";
+import { FileSystemEntries } from "../test-runner/tsc-infrastructure/vfs";
+
+const cache: Record<string, true> = {};
 export async function ensureDir(dirName: string) {
 
     const exists = cache[dirName] ??
@@ -15,7 +16,7 @@ export async function ensureDir(dirName: string) {
         cache[dirName] = true;
     }
 }
-let writeQueue = [0, 0, 0, 0, 0].map(() => Promise.resolve());
+const writeQueue = [0, 0, 0, 0, 0].map(() => Promise.resolve());
 let writeQueueIndex = 0;
 
 export function addToQueue(fn: () => Promise<void>) {
@@ -42,7 +43,7 @@ export function readAllFiles(path: string, regex: RegExp): string[] {
     // If there are no "includes", then just put everything in results[0].
     const results: string[] = [];
     const visited = new Map<string, true>();
-    const toCanonical = createGetCanonicalFileName(false);
+    const toCanonical = createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false);
 
     visitDirectory(path, path);
 

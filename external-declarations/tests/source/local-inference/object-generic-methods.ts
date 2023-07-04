@@ -40,7 +40,7 @@ import type {
     UsedAsVariableTypeConst,
 } from './test-types'
 
-export let g = {
+export let g2 = {
     method<T extends UsedAsConstraintConst = UsedAsDefaultConst>(p: T, p2: UsedAsParameterConst): UsedAsReturnTypeConst {
         let o: UsedAsVariableTypeConst;
         return o;

@@ -1376,6 +1376,20 @@ export type HasIllegalModifiers =
     | NamespaceExportDeclaration
     ;
 
+
+export type HasInferredType =
+    | FunctionDeclaration
+    | MethodDeclaration
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | BindingElement
+    | ConstructSignatureDeclaration
+    | VariableDeclaration
+    | MethodSignature
+    | CallSignatureDeclaration
+    | ParameterDeclaration
+    | PropertyDeclaration
+    | PropertySignature;
 /**
  * Declarations that can contain other declarations. Corresponds with `ContainerFlags.IsContainer` in binder.ts.
  *
@@ -5710,6 +5724,7 @@ export interface EmitResolver {
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
+    isSyntheticTypeEquivalent(actualNode: Node, syntheticNodeType: TypeNode, headMessage: DiagnosticMessage): true | Diagnostic[];
 }
 
 export const enum SymbolFlags {

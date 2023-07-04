@@ -1,9 +1,9 @@
-import assert = require('assert');
-import * as ts from 'typescript'
-import { find, forEach, orderedRemoveItemAt } from '../../compiler/lang-utils';
-import { getBaseFileName, getDirectoryPath, getNormalizedAbsolutePath, normalizePath } from '../../compiler/path-utils';
-import { _Path } from '../../compiler/types';
-import * as vfs from  './vfs'
+import * as ts from "typescript";
+import { Path } from "typescript";
+
+import { find, forEach, orderedRemoveItemAt } from "../../compiler/lang-utils";
+import { getBaseFileName, getDirectoryPath, getNormalizedAbsolutePath, normalizePath } from "../../compiler/path-utils";
+import * as vfs from "./vfs";
 
 /** all the necessary information to set the right compiler settings */
 export interface CompilerSettings {
@@ -103,8 +103,8 @@ export function makeUnitsFromTest(code: string, fileName: string, rootDir?: stri
     let currentFileContent: string | undefined;
     let currentFileOptions: any = {};
     let currentFileName: any;
-    let currentFileStartLine: number = 0;
-    let currentFileEndLine: number = 0;
+    let currentFileStartLine = 0;
+    let currentFileEndLine = 0;
     let refs: string[] = [];
     let symlinks: vfs.FileSet | undefined;
     let lineIndex = -1;
@@ -203,7 +203,7 @@ export function makeUnitsFromTest(code: string, fileName: string, rootDir?: stri
                 baseDir = getNormalizedAbsolutePath(baseDir, rootDir);
             }
             tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir);
-            tsConfig.options.configFilePath = data.name as _Path;
+            tsConfig.options.configFilePath = data.name as Path;
             tsConfigFileUnitData = data;
 
             // delete entry from the list

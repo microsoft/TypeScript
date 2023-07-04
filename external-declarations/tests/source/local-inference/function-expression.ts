@@ -1,3 +1,6 @@
+// @strict:true,false
+// @target: es2015
+
 //@fileName: module-for-arrow.ts
 export type Used = { foo: string };
 export type UsedAsReturn = { foo: string };

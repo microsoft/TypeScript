@@ -1,8 +1,8 @@
 import { sys } from "typescript";
+
+import { compareStringsCaseInsensitive,compareStringsCaseSensitive } from "../../compiler/lang-utils";
 import { FileSystemEntries } from "./vfs";
-import * as vpath from './vpath';
-import { compareStringsCaseSensitive, compareStringsCaseInsensitive } from "../../compiler/lang-utils";
-type RunnerBase = unknown;
+import * as vpath from "./vpath";
 
 export interface IO {
     newLine(): string;
@@ -32,20 +32,12 @@ export interface IO {
     joinPath(...components: string[]): string
 }
 
-export let IO: IO;
-export function setHarnessIO(io: IO) {
-    IO = io;
-}
-
 // harness always uses one kind of new line
 // But note that `parseTestData` in `fourslash.ts` uses "\n"
-export const harnessNewLine = "\r\n";
-
-// Root for file paths that are stored in a virtual file system
-export const virtualFileSystemRoot = "/";
+const harnessNewLine = "\r\n";
 
 function createNodeIO(): IO {
-    let workspaceRoot = "../";
+    let workspaceRoot = "./node_modules/typescript/";
     let fs: any, pathModule: any;
     if (require) {
         fs = require("fs");
@@ -71,11 +63,6 @@ function createNodeIO(): IO {
 
     function joinPath(...components: string[]) {
         return pathModule.join(...components);
-    }
-
-    function enumerateTestFiles(runner: RunnerBase):any[] {
-        throw new Error("Not implemented");
-        // return runner.getTestFiles();
     }
 
     function listFiles(path: string, spec: RegExp, options: { recursive?: boolean } = {}) {
@@ -164,7 +151,7 @@ function createNodeIO(): IO {
         exit: exitCode => sys.exit(exitCode),
         readDirectory: (path, extension, exclude, include, depth) => sys.readDirectory(path, extension, exclude, include, depth),
         getAccessibleFileSystemEntries,
-        tryEnableSourceMapsForHost: () => { throw new Error("Not supported")},
+        tryEnableSourceMapsForHost: () => { throw new Error("Not supported");},
         getMemoryUsage: () => sys.getMemoryUsage && sys.getMemoryUsage(),
         getEnvironmentVariable(name: string) {
             return process.env[name] || "";
@@ -174,4 +161,4 @@ function createNodeIO(): IO {
 }
 
 
-IO = createNodeIO();
+export const IO = createNodeIO();

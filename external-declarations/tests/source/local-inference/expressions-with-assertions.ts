@@ -1,3 +1,6 @@
+// @strict:true,false
+// @target: es2015
+
 //@fileName: types.ts
 export type Type<T = null> = { foo: T };
 export type UsedAsTypeParameter = { foo: string };

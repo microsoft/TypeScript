@@ -1,17 +1,20 @@
-export class WithMethods {
+// @strict: true
+// @target: es2015
+
+export const o = {
     returnsStringParenthesized() {
         return ((("A")))
-    }
+    },
 
     returnsNumber() {
         return 1
-    }
+    },
 
     returnsObject() {
         return {
             foo: ""
         };
-    }
+    },
 
     returnsObjectUnion() {
         if(Math.random() > 0) {
@@ -23,33 +26,12 @@ export class WithMethods {
         return {
             foo: ""
         };
-    }
+    },
 
     returnsUnionPrimitive() {
         if(Math.random() > 0) {
             return "A";
         }
         return "B";
-    }
-
-    returnsUnionStringParenthesized() {
-        if(Math.random() > 0) {
-            return ((("A")));
-        }
-        return ((("B")));
-    }
-
-    
-    returnsUnionNumericParenthesized() {
-        if(Math.random() > 0) {
-            return -(((1)));
-        }
-        return -(((2)));
-    }
-    returnsUnionNumeric() {
-        if(Math.random() > 0) {
-            return -1;
-        }
-        return -2;
-    }
+    },
 }

@@ -21,6 +21,7 @@
 
         "alwaysStrict": true,
         "preserveConstEnums": true,
-        "outDir": "../build"
+        "outDir": "../build",
+        "noUnusedLocals": true
     }
 }

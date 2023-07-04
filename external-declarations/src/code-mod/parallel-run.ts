@@ -4,7 +4,7 @@ import * as path from "path";
 import { ArgType, parseArgs } from "../utils/cli-parser";
 
 interface ExecuteResult {
-    error: childProcess.ExecException | null
+    error: childProcess.ExecException | undefined
     stdout: string,
     stderr: string,
 }
@@ -40,7 +40,7 @@ function exec(cmd: string, dir: string, onStdOut: (s: string) => void) {
         ls.on("exit", (code) => {
             console.log("exited:" + code?.toString());
             resolve({
-                error: !code ? null : Object.assign(new Error(""), {
+                error: !code ? undefined : Object.assign(new Error(""), {
                     code,
                     cmd,
                 }),

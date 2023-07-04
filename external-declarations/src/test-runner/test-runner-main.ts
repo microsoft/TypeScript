@@ -1,19 +1,20 @@
-import 'source-map-support/register';
-import * as path from 'path'
-import * as fs from 'fs/promises'
-import { loadTestCase, runTypeScript, runIsolated, FileContent } from "./utils";
-import { IO } from './tsc-infrastructure/io';
-import { changeExtension } from './tsc-infrastructure/vpath';
-import { CompilerSettings, TestCaseContent } from './tsc-infrastructure/test-file-parser';
+import "source-map-support/register";
 
-import * as ts from 'typescript'
-import { normalizePath, removeExtension } from '../compiler/path-utils';
-import { excludedTsTests } from './excluded-ts-tests';
-import { getFileBasedTestConfigurationDescription, getFileBasedTestConfigurations } from './tsc-infrastructure/vary-by';
-import { setCompilerOptionsFromHarnessSetting } from './tsc-infrastructure/compiler-run';
-import { parseArgs } from '../utils/cli-parser';
-import { testRunnerCLIConfiguration } from './cli-arg-config';
-import { addToQueue, ensureDir, flushQueue, readAllFiles } from '../utils/fs-utils';
+import * as fs from "fs/promises";
+import * as path from "path";
+import * as ts from "typescript";
+
+import { normalizePath, removeExtension } from "../compiler/path-utils";
+import { parseArgs } from "../utils/cli-parser";
+import { addToQueue, ensureDir, flushQueue, readAllFiles } from "../utils/fs-utils";
+import { testRunnerCLIConfiguration } from "./cli-arg-config";
+import { excludedTsTests } from "./excluded-ts-tests";
+import { setCompilerOptionsFromHarnessSetting } from "./tsc-infrastructure/compiler-run";
+import { IO } from "./tsc-infrastructure/io";
+import { CompilerSettings, TestCaseContent } from "./tsc-infrastructure/test-file-parser";
+import { getFileBasedTestConfigurationDescription, getFileBasedTestConfigurations } from "./tsc-infrastructure/vary-by";
+import { changeExtension } from "./tsc-infrastructure/vpath";
+import { FileContent,loadTestCase, runIsolated, runTypeScript } from "./utils";
 
 
 const excludeFilter =/\/fourslash\//;
@@ -22,21 +23,21 @@ const { value: parsedArgs, printUsageOnErrors } = parseArgs(process.argv.slice(2
 
 printUsageOnErrors();
 
-const shard = parsedArgs.shard
-const shardCount = parsedArgs.shardCount
-let prefix: string | undefined = undefined;
+const shard = parsedArgs.shard;
+const shardCount = parsedArgs.shardCount;
+let prefix: string | undefined;
 const prefixed = parsedArgs.default && /(?<index>[0-9]{5})-(((?<name>.*)\.(?<options>(.*=.*)+)(\.d\.ts))|(?<nameSimple>.*))/.exec(parsedArgs.default);
-let testVersionFilter: string | undefined = undefined;
+let testVersionFilter: string | undefined;
 if(prefixed) {
     prefix = prefixed.groups?.index;
     parsedArgs.default = prefixed.groups?.name ?? prefixed.groups?.nameSimple;
     testVersionFilter = prefixed.groups?.options;
 }
 
-const rootCasePaths = parsedArgs.rootPaths ?? [ './tests/source' ]
-const libFolder = parsedArgs.libPath ?? path.join(rootCasePaths[0], "../lib")
+const rootCasePaths = parsedArgs.rootPaths ?? [ "./tests/source" ];
+const libFolder = parsedArgs.libPath ?? path.join(rootCasePaths[0], "../lib");
 
-const filter = parsedArgs.default ? new RegExp(parsedArgs.default) : /.*\.ts/
+const filter = parsedArgs.default ? new RegExp(parsedArgs.default) : /.*\.ts/;
 const runType =
     parsedArgs.type === "all" ? { tsc: true, isolated: true } :
     parsedArgs.type === "tsc" ? { tsc: true, isolated: false } :
@@ -52,16 +53,18 @@ const allTests = rootCasePaths
 const date = new Date();
 const historical = (parsedArgs.histFolder && `/${parsedArgs.histFolder}/`) ?? `/${date.toISOString().replace(/:/g, "-")}-${parsedArgs.type}/`;
 
-function pad(num: number, size: number) { return ('000000000' + num).substr(-size); }
+function pad(num: number, size: number) {
+    return ("000000000" + num).substr(-size);
+}
 
 async function main() {
 
     const libFiles = (await fs.readdir(libFolder)).map(n => normalizePath(path.join("/.lib", n)));
 
     const testsPerShared = shardCount && Math.round(allTests.length / shardCount);
-    const [start, end] = shard == undefined || shardCount == undefined || testsPerShared == undefined ?
+    const [start, end] = shard === undefined || shardCount === undefined || testsPerShared === undefined ?
         [0, allTests.length] :
-        [shard * testsPerShared, (shard == shardCount - 1) ? allTests.length : (shard + 1) * testsPerShared];
+        [shard * testsPerShared, (shard === shardCount - 1) ? allTests.length : (shard + 1) * testsPerShared];
 
     for (let count = start; count < end; count++) {
         const testFile = normalizePath(allTests[count]);
@@ -75,20 +78,20 @@ async function main() {
             const varConfigDescription = getFileBasedTestConfigurationDescription(varConfig);
             if (testVersionFilter && varConfigDescription !== testVersionFilter) continue;
             const file = (prefix ?? pad(count, 5)) + "-" + changeExtension(path.basename(testFile), varConfigDescription + ".d.ts");
-            
+
             if (runType.tsc) runAndWrite(path.join("./tsc-tests/$now/tsc", file), varConfig, runTypeScript);
 
             if (runType.isolated) runAndWrite(path.join("./tsc-tests/$now/isolated", file), varConfig, (t, s) => runIsolated(t, libFiles, s));
 
         }
-        console.log(`    Ran: ${pad(count, 5)}/${allTests.length}`)
+        console.log(`    Ran: ${pad(count, 5)}/${allTests.length}`);
 
         function runAndWrite(file: string, varySettings: CompilerSettings, fn: (data: TestCaseContent, opts: ts.CompilerOptions) => FileContent[]) {
             const settings: ts.CompilerOptions = {};
             setCompilerOptionsFromHarnessSetting(data.settings, settings);
             setCompilerOptionsFromHarnessSetting(varySettings, settings);
 
-            
+
             // Not supported
             delete settings.outFile;
             delete settings.out;
@@ -115,8 +118,9 @@ async function main() {
 
         function safeRun(fn: (data: TestCaseContent) => FileContent[]): FileContent[] {
             try {
-                return fn(data)
-            } catch (e) {
+                return fn(data);
+            }
+            catch (e) {
                 return [{
                     fileName: path.basename(testFile),
                     content: `
@@ -124,7 +128,7 @@ async function main() {
 message: ${e.message},
 ${e.stack},
                     `,
-                }]
+                }];
             }
         }
 
@@ -133,7 +137,7 @@ ${e.stack},
                 const dirName = path.dirname(fileName);
                 await ensureDir(dirName);
                 await fs.writeFile(fileName, results);
-                console.log(`Written: ${pad(count, 5)}/${allTests.length}`)
+                console.log(`Written: ${pad(count, 5)}/${allTests.length}`);
             });
         }
     }

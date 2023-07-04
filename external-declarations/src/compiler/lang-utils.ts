@@ -112,10 +112,10 @@ export function stringContains(str: string, substring: string): boolean {
  }
 
  /**
- * @return Whether the value was added.
- *
- * @internal
- */
+  * @return Whether the value was added.
+  *
+  * @internal
+  */
 export function pushIfUnique<T>(array: T[], toAdd: T, equalityComparer?: EqualityComparer<T>): boolean {
     if (contains(array, toAdd, equalityComparer)) {
         return false;
@@ -154,7 +154,7 @@ export function length(array: readonly any[] | undefined): number {
     return array ? array.length : 0;
 }
 
-    
+
 /**
  * Flattens an array containing a mix of array or non-array elements.
  *
@@ -219,7 +219,7 @@ export function length(array: readonly any[] | undefined): number {
      }
      return to;
  }
- 
+
 /**
  * Gets the actual offset into an array for a relative offset. Negative offsets indicate a
  * position offset from the end of the array.
@@ -245,7 +245,7 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
     return result;
 }
 
- 
+
 
 /**
  * Compacts an array, removing any falsey elements.
@@ -278,33 +278,7 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
      }
      return result || array;
  }
- 
 
-/**
- * Maps an array. If the mapped value is an array, it is spread into the result.
- *
- * @param array The array to map.
- * @param mapfn The callback used to map the result into one or more values.
- *
- * @internal
- */
- export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): readonly U[] {
-    let result: U[] | undefined;
-    if (array) {
-        for (let i = 0; i < array.length; i++) {
-            const v = mapfn(array[i], i);
-            if (v) {
-                if (isArray(v)) {
-                    result = addRange(result, v);
-                }
-                else {
-                    result = append(result, v);
-                }
-            }
-        }
-    }
-    return result || emptyArray;
-}
 
 /** @internal */
 export const emptyArray: never[] = [] as never[];
@@ -337,7 +311,7 @@ export const emptyArray: never[] = [] as never[];
      to.push(value);
      return to;
  }
- 
+
 /** Array that is only intended to be pushed to, never read. */
 export interface Push<T> {
     push(...values: T[]): void;
@@ -383,7 +357,7 @@ function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: 
      }
      return undefined;
  }
- 
+
 
 /**
  * Returns the last element of an array if non-empty, `undefined` otherwise.
@@ -561,7 +535,7 @@ export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, 
      }
      return result;
  }
- 
+
  /** @internal */
 export function startsWith(str: string, prefix: string): boolean {
     return str.lastIndexOf(prefix, 0) === 0;
@@ -648,6 +622,21 @@ const _entries = Object.entries || (<T>(obj: MapLike<T>) => {
 });
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
+
+/**
+ * Indicates whether a map-like contains an own property with the specified key.
+ *
+ * @param map A map-like.
+ * @param key A property key.
+ *
+ * @internal
+ */
+export function hasProperty<T extends object, K extends T extends T ? keyof T: never>(map: T, key: K): map is Extract<T, Partial<Record<K, any>>>;
+export function hasProperty(map: MapLike<any>, key: string): boolean;
+export function hasProperty(map: MapLike<any>, key: string): boolean {
+    return hasOwnProperty.call(map, key);
+}
+
 
 /**
  * Gets the owned, enumerable property keys of a map-like.
@@ -943,3 +932,5 @@ export function clone<T>(object: T): T {
     }
     return result;
 }
+
+

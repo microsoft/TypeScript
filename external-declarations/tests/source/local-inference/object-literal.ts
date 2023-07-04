@@ -2,6 +2,7 @@ let value: string = "0";
 export let o = {
     n: 1,
     s: "s",
+    value,
     nested: {
         nn: 2
     },
@@ -13,6 +14,7 @@ export let o = {
 export let oRo = {
     n: 1,
     s: "s",
+    value,
     nested: {
         nn: 2
     },
@@ -23,3 +25,60 @@ export let oRo = {
         return value;
     }
 } as const
+
+
+// With comments
+export const State = {
+    /**
+     * Session orders or tickets have been processed in total and created without error
+     */
+    Committed: 'Committed',
+
+    /**
+     * Attempting to commit orders or tickets
+     */
+    Committing: 'Committing',
+} as const;
+
+
+export let a0 = {
+    get x() {
+        return 1;
+    }
+}
+
+export let a1 = {
+    get x(): number {
+        return 1;
+    }
+}
+
+export let a2 = {
+    get x() {
+        return 1;
+    },
+    set x(v) {
+    }
+}
+
+export let a3 = {
+    get x() {
+        return 1;
+    },
+    set x(v: number) {
+    }
+}
+
+export let a4 = {
+    get x(): number {
+        return 1;
+    },
+    set x(v: string) {
+    }
+}
+
+
+export const satisfied = {
+    save: () => {},
+    close: () => {},
+} as const satisfies Record<string, () => void>

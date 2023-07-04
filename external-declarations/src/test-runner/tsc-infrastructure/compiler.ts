@@ -1,12 +1,13 @@
 import * as ts from "typescript";
+
 import * as lang from "../../compiler/lang-utils";
-import * as vpath from "./vpath";
+import { fileExtensionIs } from "../../compiler/path-utils";
+import { getDeclarationEmitExtensionForPath, getOutputExtension } from "../../compiler/utils";
+import * as collections from "./collections";
+import * as fakes from "./fakesHosts";
 import * as documents from "./test-document";
 import * as vfs from "./vfs";
-import * as collections from "./collections";
-import * as fakes from  './fakesHosts';
-import { getDeclarationEmitExtensionForPath, getOutputExtension } from "../../compiler/utils";
-import { fileExtensionIs } from "../../compiler/path-utils";
+import * as vpath from "./vpath";
 
 /**
  * Test harness compiler functionality.
@@ -253,14 +254,21 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
     const program = ts.createProgram(rootFiles || [], compilerOptions, host);
-    const emitResult = program.emit(undefined, (fileName, text, writeByteOrderMark) => {
-        // If there are errors TS will ot emit declaration files. We want then regardless of errors.
-        if(!vpath.isAbsolute(fileName)) {
-            fileName = vpath.resolve(host.vfs.cwd(), fileName);
-        }
-        if(host.outputs.some(d => d.file === fileName)) return;
-        host.writeFile(fileName, text, writeByteOrderMark);
-    }, undefined, undefined,undefined);
+    const emitResult = program.emit(
+        /*targetSourceFile*/ undefined,
+        (fileName, text, writeByteOrderMark) => {
+            // If there are errors TS will ot emit declaration files. We want then regardless of errors.
+            if(!vpath.isAbsolute(fileName)) {
+                fileName = vpath.resolve(host.vfs.cwd(), fileName);
+            }
+            if(host.outputs.some(d => d.file === fileName)) return;
+            host.writeFile(fileName, text, writeByteOrderMark);
+        },
+        /*cancellationToken*/ undefined,
+        /*emitOnlyDtsFiles*/ undefined,
+        /*customTransformers*/ undefined,
+        // @ts-expect-error We use forceDts emit documented flag
+        /*forceEmit*/ true);
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = lang.length(preErrors) > postErrors.length ? preErrors : postErrors;
     const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;

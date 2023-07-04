@@ -1,3 +1,42 @@
+// @strict: true, false
+// @target: es2022
+export async function returnsAsyncFunction() {
+    return { foo: "" }
+}
+
+export function *returnsIterableFunction(){
+    yield { yield: "" }
+
+    return { return: "" }
+}
+
+export function *returnsIterableFunction2() {
+    yield { yield: "" }
+}
+
+
+export function *returnsEmptyYield() {
+    yield;
+}
+
+export async function *returnsEmptyAsyncIterableFunction() {
+    
+}
+
+export function *returnsIterableFunction4() {
+    
+}
+
+export async function *returnsAsyncIterableFunction() {
+    yield { yield: "" }
+
+    return { return: "" }
+}
+
+export async function *returnsAsyncIterableFunction2() {
+    yield { yield: "" }
+}
+
 export function returnsStringParenthesized() {
     return ((("A")))
 }
@@ -80,4 +119,15 @@ export function returnsUnionPrimitive() {
         return "A";
     }
     return "B";
+}
+
+
+export function ternaryReturn() {
+    return Math.random() ? 1 : "";
+}
+
+
+let contextInfoCache ="";
+export function getCachedClientContextInfo() {
+    return contextInfoCache;
 }

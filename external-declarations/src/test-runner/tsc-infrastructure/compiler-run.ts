@@ -1,19 +1,18 @@
 import { CompilerOptions, Diagnostic } from "typescript";
-import ts = require("typescript");
-import { hasProperty } from "../../compiler/debug";
-import { trimString, startsWith, mapDefined, map, compareStringsCaseSensitive } from "../../compiler/lang-utils";
+import * as ts from "typescript";
+
+import { compareStringsCaseSensitive, hasProperty,map, startsWith } from "../../compiler/lang-utils";
+import { createGetCanonicalFileName, fileExtensionIs, getNormalizedAbsolutePath, normalizeSlashes, toPath } from "../../compiler/path-utils";
+import { cloneCompilerOptions, getEmitScriptTarget } from "../../compiler/utils";
+import * as compiler from "./compiler";
+import * as fakes from "./fakesHosts";
+import { IO } from "./io";
 import * as opts from "./options";
+import { parseCustomTypeOption, parseListTypeOption } from "./options";
+import * as documents from "./test-document";
 import * as TestCaseParser from "./test-file-parser";
 import * as vfs from "./vfs";
 import * as vpath from "./vpath";
-import { parseCustomTypeOption, parseListTypeOption } from "./options";
-import { fileExtensionIs, getNormalizedAbsolutePath, normalizeSlashes, toPath } from "../../compiler/path-utils";
-import { cloneCompilerOptions, getEmitScriptTarget } from "../../compiler/utils";
-import * as documents from './test-document';
-import { createGetCanonicalFileName } from "../../compiler/path-utils";
-import * as compiler from './compiler';
-import * as fakes from './fakesHosts';
-import { IO } from "./io";
 
 interface HarnessOptions {
     useCaseSensitiveFileNames?: boolean;
@@ -104,9 +103,9 @@ export function compileFiles(
     inputFiles: TestFile[],
     otherFiles: TestFile[],
     harnessSettings: TestCaseParser.CompilerSettings | undefined,
-    compilerOptions: ts.CompilerOptions | undefined,
+    compilerOptions?: ts.CompilerOptions | undefined,
     // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-    currentDirectory: string | undefined,
+    currentDirectory?: string | undefined,
     symlinks?: vfs.FileSet
 ): compiler.CompilationResult {
     const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? cloneCompilerOptions(compilerOptions) : { noResolve: false };
@@ -200,7 +199,7 @@ export namespace Utils {
         const length = getByteOrderMarkLength(text);
         return length ? text.slice(length) : text;
     }
-    
+
     export function getByteOrderMarkLength(text: string): number {
         if (text.length >= 1) {
             const ch0 = text.charCodeAt(0);
@@ -211,20 +210,7 @@ export namespace Utils {
         }
         return 0;
     }
-    
-    function checkDuplicatedFileName(resultName: string, dupeCase: Map<string, number>): string {
-        resultName = sanitizeTestFilePath(resultName);
-        if (dupeCase.has(resultName)) {
-            // A different baseline filename should be manufactured if the names differ only in case, for windows compat
-            const count = 1 + dupeCase.get(resultName)!;
-            dupeCase.set(resultName, count);
-            resultName = `${resultName}.dupe${count}`;
-        }
-        else {
-            dupeCase.set(resultName, 0);
-        }
-        return resultName;
-    }
+
     export function addUTF8ByteOrderMark(text: string) {
         return getByteOrderMarkLength(text) === 0 ? "\u00EF\u00BB\u00BF" + text : text;
     }

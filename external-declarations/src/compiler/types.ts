@@ -1,9 +1,10 @@
-import { Symbol, ClassDeclaration, CompilerOptions, DeclarationName, DiagnosticWithLocation, EnumDeclaration, FunctionDeclaration, InterfaceDeclaration, ModuleDeclaration, ModuleKind, Node, PackageJsonInfoCache, Path, QualifiedName, SourceFile, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, VariableStatement, NodeBuilderFlags, Statement, AccessorDeclaration, BindingElement, Declaration, ElementAccessExpression, EntityName, EntityNameOrEntityNameExpression, EnumMember, ExportDeclaration, Expression, Identifier, ImportCall, ImportDeclaration, ImportEqualsDeclaration, ImportTypeNode, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, SignatureDeclaration, StringLiteralLike, TypeNode, VariableDeclaration, VariableLikeDeclaration, ModuleBlock, LiteralTypeNode, BinaryExpression, ComputedPropertyName, NamedDeclaration, StringLiteral, ParenthesizedExpression, AsExpression, NonNullExpression, PartiallyEmittedExpression, SatisfiesExpression, TypeAssertion, EntityNameExpression, HasModifiers, Modifier, ModifierFlags, Program, UnparsedSource, FileReference, EmitFlags, EmitHelper, SourceMapRange, SynthesizedComment, TextRange, NoSubstitutionTemplateLiteral, MapLike } from "typescript";
-import { AllAccessorDeclarations, AnyImportSyntax, DiagnosticMessage } from "./utils";
+import { AsExpression, BinaryExpression, ClassDeclaration, CompilerOptions, ComputedPropertyName, Declaration, Diagnostic, DiagnosticMessage, DiagnosticWithLocation, ElementAccessExpression, EntityNameExpression, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, FileReference, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedDeclaration, Node, NonNullExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SatisfiesExpression, SignatureDeclaration, SourceFile, StringLiteralLike, Symbol, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, TypeAssertion, TypeNode, UnparsedSource, VariableDeclaration, VariableStatement } from "typescript";
+
+import { AnyImportSyntax } from "./utils";
 
 
 /** @internal */
-export interface ResolveModuleNameResolutionHost {
+interface ResolveModuleNameResolutionHost {
     getCanonicalFileName(p: string): string;
     getCommonSourceDirectory(): string;
     getCurrentDirectory(): string;
@@ -12,81 +13,36 @@ export interface ResolveModuleNameResolutionHost {
 
 export interface TransformationContext extends _TransformationContext {
     addDiagnostic(diag: DiagnosticWithLocation): void;
-    /** @internal */ getEmitResolver(): EmitResolver;
-    /** @internal */ getEmitHost(): EmitHost;
-    /** @internal */ getEmitHelperFactory(): EmitHelperFactory;
-    factory: _TransformationContext['factory'] & {
-        updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
-    }
+    /** @internal */ getEmitResolver(): IsolatedEmitResolver;
+    /** @internal */ getEmitHost(): IsolatedEmitHost;
 }
 
-export interface EmitHost extends ModuleSpecifierResolutionHost, ResolveModuleNameResolutionHost {
-    getCommonSourceDirectory(): string 
+export interface IsolatedEmitHost extends ModuleSpecifierResolutionHost, ResolveModuleNameResolutionHost {
+    getCommonSourceDirectory(): string
     getCompilerOptions(): CompilerOptions
     getSourceFiles(): SourceFile[]
     /** @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
     /** @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 }
 
-export interface EmitResolver {
-    hasGlobalName(name: string): boolean;
-    getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration | undefined;
-    getReferencedImportDeclaration(node: Identifier): Declaration | undefined;
-    getReferencedDeclarationWithCollidingName(node: Identifier): Declaration | undefined;
-    isDeclarationWithCollidingName(node: Declaration): boolean;
-    isValueAliasDeclaration(node: Node): boolean;
-    isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
-    isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
-    // getNodeCheckFlags(node: Node): NodeCheckFlags;
+export interface IsolatedEmitResolver {
+    isSyntheticTypeEquivalent(actualTypeNode: Node, typeNode: TypeNode, message: DiagnosticMessage): Diagnostic[] | true;
     isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
     isLateBound(node: Declaration): node is LateBoundDeclaration;
-    collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
-    isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
-    isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
-    createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
-    createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
-    isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags | undefined, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
-    // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
-    getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
-    getReferencedValueDeclaration(reference: Identifier): Declaration | undefined;
-    // getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
     isOptionalParameter(node: ParameterDeclaration): boolean;
-    moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
-    isArgumentsLocalBinding(node: Identifier): boolean;
-    getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
     getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode | undefined][] | undefined;
-    getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode | undefined][] | undefined;
     isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
-    getJsxFactoryEntity(location?: Node): EntityName | undefined;
-    getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
-    getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
-    isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
-    getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
 }
 /** @internal */
 export interface AmbientModuleDeclaration extends ModuleDeclaration {
     readonly body?: ModuleBlock;
-}
-
-export interface EmitHelperFactory {
-
-}
-
-export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => (SymbolAccessibilityDiagnostic | undefined);
-
-/** @internal */
-export interface SymbolAccessibilityDiagnostic {
-    errorNode: Node;
-    diagnosticMessage: DiagnosticMessage;
-    typeName?: DeclarationName | QualifiedName;
 }
 
 export interface SymbolTracker {
@@ -100,7 +56,7 @@ export interface SymbolTracker {
     reportCyclicStructureError?(): void;
     reportLikelyUnsafeImportRequiredError?(specifier: string): void;
     reportTruncationError?(): void;
-    moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string };
+    moduleResolverHost?: ModuleSpecifierResolutionHost;
     trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
     trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
@@ -109,78 +65,10 @@ export interface SymbolTracker {
 }
 
 /** @internal */
-export interface ModuleSpecifierResolutionHost {
-    useCaseSensitiveFileNames?(): boolean;
-    fileExists(path: string): boolean;
-    getCurrentDirectory(): string;
-    directoryExists?(path: string): boolean;
-    readFile?(path: string): string | undefined;
-    realpath?(path: string): string;
-    getPackageJsonInfoCache?(): PackageJsonInfoCache & {
-        /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
-    } | undefined;
-    getGlobalTypingsCacheLocation?(): string | undefined;
-    getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
+interface ModuleSpecifierResolutionHost {
 
-    getProjectReferenceRedirect(fileName: string): string | undefined;
-    isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-    
-    getSymlinkCache?(): {
-        getSymlinkedDirectoriesByRealpath(): MultiMap<Path, string> | undefined;
-    };
-    readonly redirectTargetsMap: RedirectTargetsMap;
 }
 
-export interface PackageJsonInfo {
-    packageDirectory: string;
-    contents: PackageJsonInfoContents;
-}
-/** @internal */
-export interface PackageJsonInfoContents {
-    packageJsonContent: PackageJsonPathFields;
-    versionPaths: VersionPaths | undefined;
-    /** false: resolved to nothing. undefined: not yet resolved */
-    resolvedEntrypoints: string[] | false | undefined;
-}
-/** @internal */
-export interface VersionPaths {
-    version: string;
-    paths: MapLike<string[]>;
-}
-export interface PackageJsonPathFields {
-    typings?: string;
-    types?: string;
-    typesVersions?: MapLike<MapLike<string[]>>;
-    main?: string;
-    tsconfig?: string;
-    type?: string;
-    imports?: object;
-    exports?: object;
-    name?: string;
-}
-
-
-export type RedirectTargetsMap = ReadonlyMap<Path, readonly string[]>;
-
-export interface MultiMap<K, V> extends Map<K, V[]> {
-    /**
-     * Adds the value to an array of values associated with the key, and returns the array.
-     * Creates the array if it does not already exist.
-     */
-    add(key: K, value: V): V[];
-    /**
-     * Removes a value from an array of values associated with the key.
-     * Does not preserve the order of those values.
-     * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
-     */
-    remove(key: K, value: V): void;
-}
-
-
-/** @internal */
-export interface SymbolAccessibilityResult extends SymbolVisibilityResult {
-    errorModuleName?: string; // If the symbol is not visible from module, module's name
-}
 /** @internal */
 export interface SymbolVisibilityResult {
     accessibility: SymbolAccessibility;
@@ -207,12 +95,6 @@ export type LateVisibilityPaintedStatement =
     | TypeAliasDeclaration
     | InterfaceDeclaration
     | EnumDeclaration;
-
-
-/** @internal */
-export type NodeId = number;
-
-export type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
 
 
 /** @internal */
@@ -359,10 +241,6 @@ export const enum CharacterCodes {
 
 
 /** @internal */
-export type LiteralImportTypeNode = ImportTypeNode & { readonly argument: LiteralTypeNode & { readonly literal: StringLiteral } };
-
-
-/** @internal */
 export interface DynamicNamedDeclaration extends NamedDeclaration {
     readonly name: ComputedPropertyName;
 }
@@ -381,10 +259,6 @@ export interface JSDocTypeAssertion extends ParenthesizedExpression {
 export type OuterExpression = ParenthesizedExpression | TypeAssertion | SatisfiesExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression;
 
 /** @internal */
-export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
-
-
-/** @internal */
 // A declaration that supports late-binding (used in checker)
 export interface LateBoundDeclaration extends DynamicNamedDeclaration {
     readonly name: LateBoundName;
@@ -392,111 +266,23 @@ export interface LateBoundDeclaration extends DynamicNamedDeclaration {
 
 /** @internal */
 // A name that supports late-binding (used in checker)
-export interface LateBoundName extends ComputedPropertyName {
+interface LateBoundName extends ComputedPropertyName {
     readonly expression: EntityNameExpression;
 }
 
 
-/** @internal */
-export interface EmitFileNames {
-    jsFilePath?: string | undefined;
-    sourceMapFilePath?: string | undefined;
-    declarationFilePath?: string | undefined;
-    declarationMapPath?: string | undefined;
-    buildInfoPath?: string | undefined;
-}
-
-export type _FileReference = FileReference
-
-
-/** @internal */
-export type ExportedModulesFromDeclarationEmit = readonly Symbol[];
-export type _StringLiteralLike = StringLiteralLike
-
-
-export type _Symbol = Symbol
-export type _Path = Path
-export type _ModifierFlags = ModifierFlags
-declare module 'typescript' {
+export type InternalSymbol = Symbol;
+type InternalModifierFlags = ModifierFlags;
+declare module "typescript" {
     interface Node {
-        symbol: _Symbol;
-        emitNode?: EmitNode;
+        symbol: InternalSymbol;
         original: this;
-        modifierFlagsCache: _ModifierFlags
+        modifierFlagsCache: InternalModifierFlags
     }
     interface Symbol {
         isReferenced: boolean;
-        parent: _Symbol;
+        parent: InternalSymbol;
     }
-    interface Bundle {
-        /** @internal */ syntheticFileReferences?: readonly _FileReference[];
-        /** @internal */ syntheticTypeReferences?: readonly _FileReference[];
-        /** @internal */ syntheticLibReferences?: readonly _FileReference[];
-        /** @internal */ hasNoDefaultLib?: boolean;
-    }
-    interface SourceFile {
-        exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
-        imports: readonly _StringLiteralLike[];
-        path: _Path;
-    }
-    interface CompilerOptions {
-        /**
-         * The directory of the config file that specified 'paths'. Used to resolve relative paths when 'baseUrl' is absent.
-         *
-         * @internal
-         */
-        pathsBasePath?: string;
-        configFilePath?: _Path;
-    }
+
 }
 
-
-/** @internal */
-export interface EmitNode {
-    annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
-    flags: EmitFlags;                        // Flags that customize emit
-    leadingComments?: SynthesizedComment[];  // Synthesized leading comments
-    trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
-    commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
-    sourceMapRange?: SourceMapRange;         // The text range to use when emitting leading or trailing source mappings
-    tokenSourceMapRanges?: (SourceMapRange | undefined)[]; // The text range to use when emitting source mappings for tokens
-    constantValue?: string | number;         // The constant value of an expression
-    externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
-    externalHelpers?: boolean;
-    helpers?: EmitHelper[];                  // Emit helpers for the node
-    startsOnNewLine?: boolean;               // If the node should begin on a new line
-    snippetElement?: SnippetElement;         // Snippet element of the node
-    typeNode?: TypeNode;                         // VariableDeclaration type
-}
-
-/** @internal */
-export type SnippetElement = TabStop | Placeholder;
-
-/** @internal */
-export interface TabStop {
-    kind: SnippetKind.TabStop;
-    order: number;
-}
-
-/** @internal */
-export interface Placeholder {
-    kind: SnippetKind.Placeholder;
-    order: number;
-}
-// Reference: https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
-/** @internal */
-export const enum SnippetKind {
-    TabStop,                                // `$1`, `$2`
-    Placeholder,                            // `${1:foo}`
-    Choice,                                 // `${1|one,two,three|}`
-    Variable,                               // `$name`, `${name:default}`
-}
-
-
-
-/** @internal */
-export interface ModulePath {
-    path: string;
-    isInNodeModules: boolean;
-    isRedirect: boolean;
-}

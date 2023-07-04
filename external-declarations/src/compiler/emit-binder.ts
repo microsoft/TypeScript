@@ -1,11 +1,11 @@
-import { Symbol, Node, VariableDeclaration, ParameterDeclaration, ModifierFlags, isLiteralExpression, ClassElement, isIdentifier, BindingPattern, SyntaxKind, findAncestor, SourceFile, isVariableStatement, SymbolFlags, isImportDeclaration, __String, isFunctionDeclaration, isClassDeclaration, isTypeAliasDeclaration, isExportDeclaration, isExportAssignment, isModuleDeclaration, NodeArray, isConstructSignatureDeclaration, isConstructorDeclaration, isImportEqualsDeclaration, isEnumDeclaration, isInterfaceDeclaration, isNamedExports, isModuleBlock, ModuleDeclaration, ArrayBindingElement, isExternalModuleReference, forEachChild, isMetaProperty, isComputedPropertyName, isPropertyAccessExpression, isPrivateIdentifier, Extension, isConditionalTypeNode, TypeElement, CompilerOptions, ModuleKind, ModuleDetectionKind, isMappedTypeNode, TypeParameterDeclaration, isInferTypeNode, isBlock, InterfaceDeclaration, ClassDeclaration, FunctionDeclaration, JsxEmit, isJsxFragment, isJsxOpeningLikeElement, ModuleResolutionKind, ResolutionMode, isEnumMember, getNameOfDeclaration, ExportDeclaration, Identifier, isSourceFile, ExportSpecifier, EnumDeclaration, isVariableDeclaration } from "typescript";
+import { __String, ArrayBindingElement, BindingPattern, ClassDeclaration, ClassElement, CompilerOptions, EnumDeclaration, ExportDeclaration, ExportSpecifier, Extension, findAncestor, forEachChild, FunctionDeclaration, Identifier, InterfaceDeclaration, isBlock, isClassDeclaration, isComputedPropertyName, isConditionalTypeNode, isConstructorDeclaration, isConstructSignatureDeclaration, isEnumDeclaration, isExportAssignment, isExportDeclaration, isExternalModuleReference, isFunctionDeclaration, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isInferTypeNode, isInterfaceDeclaration, isJsxFragment, isJsxOpeningLikeElement, isLiteralExpression, isMappedTypeNode, isMetaProperty, isModuleBlock, isModuleDeclaration, isNamedExports, isPrivateIdentifier, isPropertyAccessExpression, isSourceFile, isTypeAliasDeclaration, isVariableDeclaration,isVariableStatement, JsxEmit, ModifierFlags, ModuleDeclaration, ModuleDetectionKind, ModuleKind, ModuleResolutionKind, Node, NodeArray, ParameterDeclaration, ResolutionMode, SourceFile, Symbol, SymbolFlags, SyntaxKind, TypeElement, TypeParameterDeclaration, VariableDeclaration } from "typescript";
+
 import { Debug } from "./debug";
 import { forEach } from "./lang-utils";
-import { _Symbol } from "./types";
-import { isBindingPattern, getNodeId, hasSyntacticModifier, getEmitModuleKind, getEmitModuleResolutionKind, isEnumConst, nodeHasName } from "./utils";
+import { getEmitModuleKind, getEmitModuleResolutionKind, getNodeId, hasSyntacticModifier, isBindingPattern, isEnumConst, nodeHasName } from "./utils";
 
 
-export interface NodeLinks {
+interface NodeLinks {
     isVisible?: boolean;
     symbol?: BasicSymbol;
     localSymbol?: BasicSymbol;
@@ -25,16 +25,20 @@ export interface BasicSymbol {
 }
 
 function assertNever(o: never): never {
-    throw new Error("Should never happen")
+    throw new Error("Should never happen");
 }
 
-type _Node = Node;
-declare module 'typescript' {
+type InternalNode = Node;
+type InternalNodeArray<T extends Node>  = NodeArray<T>;
+type InternalSourceFile = SourceFile;
+declare module "typescript" {
     interface SourceFile {
-        externalModuleIndicator?: _Node | true;
+        externalModuleIndicator?: InternalNode | true;
     }
+    export function forEachChildRecursively<T>(rootNode: InternalNode, cbNode: (node: InternalNode, parent: InternalNode) => T | "skip" | undefined, cbNodes?: (nodes: InternalNodeArray<InternalNode>, parent: InternalNode) => T | "skip" | undefined): T | undefined;
+    export function getTokenPosOfNode(node: InternalNode, sourceFile?: InternalSourceFile, includeJsDoc?: boolean): number;
 }
-export function getEmitModuleDetectionKind(options: CompilerOptions) {
+function getEmitModuleDetectionKind(options: CompilerOptions) {
     return options.moduleDetection ||
         (getEmitModuleKind(options) === ModuleKind.Node16 || getEmitModuleKind(options) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
 }
@@ -59,8 +63,8 @@ const syntaxKindToSymbolMap = {
     [SyntaxKind.Constructor]: [SymbolFlags.Constructor, SymbolFlags.None],
     [SyntaxKind.GetAccessor]: [SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes],
     [SyntaxKind.SetAccessor]: [SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes],
-    [SyntaxKind.ClassExpression]:  [SymbolFlags.Class, SymbolFlags.ClassExcludes],
-    [SyntaxKind.ClassDeclaration]:  [SymbolFlags.Class, SymbolFlags.ClassExcludes],
+    [SyntaxKind.ClassExpression]: [SymbolFlags.Class, SymbolFlags.ClassExcludes],
+    [SyntaxKind.ClassDeclaration]: [SymbolFlags.Class, SymbolFlags.ClassExcludes],
     [SyntaxKind.InterfaceDeclaration]: [SymbolFlags.Interface, SymbolFlags.InterfaceExcludes],
     [SyntaxKind.TypeAliasDeclaration]: [SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes],
     [SyntaxKind.EnumDeclaration]: {
@@ -77,10 +81,10 @@ const syntaxKindToSymbolMap = {
     [SyntaxKind.ExportSpecifier]: [SymbolFlags.Alias | SymbolFlags.ExportValue, SymbolFlags.AliasExcludes],
     [SyntaxKind.NamespaceExportDeclaration]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
     [SyntaxKind.ImportClause]: [SymbolFlags.Alias, SymbolFlags.AliasExcludes],
-} as const; //satisfies Partial<Record<SyntaxKind, SymbolRegistrationFlags | Record<string, SymbolRegistrationFlags>>>;
+} as const satisfies Partial<Record<SyntaxKind, SymbolRegistrationFlags | Record<string, SymbolRegistrationFlags>>>;
 
 export function bindSourceFile(file: SourceFile, options: CompilerOptions, packageModuleType: ResolutionMode) {
-    const nodeLinks: NodeLinks[] = []
+    const nodeLinks: NodeLinks[] = [];
     function tryGetNodeLinks(node: Node): NodeLinks | undefined {
         const id = (node as any).id;
         if(!id) return undefined;
@@ -92,33 +96,33 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
     }
 
     const [isFileAModule, isNodeAModuleIndicator] = getSetExternalModuleIndicator(options);
-    file.externalModuleIndicator = 
+    file.externalModuleIndicator =
         isFileAModule(file) || isExternalModuleWorker(file, isNodeAModuleIndicator);
-    file.impliedNodeFormat = getImpliedNodeFormat(file.fileName, options, packageModuleType)
-    
+    file.impliedNodeFormat = getImpliedNodeFormat(file.fileName, options, packageModuleType);
+
     bind();
 
-    return { 
-        tryGetNodeLinks, 
+    return {
+        tryGetNodeLinks,
         getNodeLinks,
         resolveName,
-    }
+    };
 
-        
+
     function resolveName(enclosingDeclaration: Node, escapedText: __String, meaning: SymbolFlags) {
         function getSymbolFromScope(table: SymbolTable | undefined) {
-            let symbol = table?.get(escapedText);
+            const symbol = table?.get(escapedText);
             if(symbol && ((symbol.flags & meaning) || (symbol.flags & SymbolFlags.Alias))) {
-                return symbol
+                return symbol;
             }
         }
 
         let currentScope = enclosingDeclaration;
         while(currentScope) {
-            const links = tryGetNodeLinks(currentScope); 
+            const links = tryGetNodeLinks(currentScope);
             let symbol = getSymbolFromScope(links?.locals);
             if(!symbol && (isModuleDeclaration(currentScope) || isSourceFile(currentScope))) {
-                symbol = getSymbolFromScope(links?.symbol?.exports)
+                symbol = getSymbolFromScope(links?.symbol?.exports);
             }
             if(symbol) return symbol;
             currentScope = currentScope.parent;
@@ -151,9 +155,9 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
         let currentScope: Node = undefined!;
         let currentSymbol: BasicSymbol = undefined!;
         let currentLocalSymbolTable: SymbolTable = undefined!;
-        let currentExportsSymbolTable: SymbolTable | null = null;
-        let postBindingAction: Array<() => void> = [];
-        
+        let currentExportsSymbolTable: SymbolTable | undefined;
+        const postBindingAction: (() => void)[] = [];
+
         const fileLinks = getNodeLinks(file).symbol = newSymbol();
         fileLinks.exports = new Map();
         withScope(file, fileLinks.exports, ()=> bindEachFunctionsFirst(file.statements));
@@ -163,14 +167,14 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
             return {
                 declarations: [],
                 flags: 0,
-            }
+            };
         }
         function getSymbol(table: SymbolTable, name: __String) {
             let symbol = table.get(name);
             if(!symbol) {
                 symbol = newSymbol();
                 symbol.name = name;
-                table.set(name, symbol)
+                table.set(name, symbol);
             }
             return symbol;
         }
@@ -179,9 +183,10 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                 const exportKind = flags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
                 const localSymbol = addLocalOnlyDeclaration(name, node, [exportKind, forbiddenFlags]);
                 const exportSymbol = addExportOnlyDeclaration(name, node, [flags, forbiddenFlags]);
-                localSymbol.exportSymbol = exportSymbol
+                localSymbol.exportSymbol = exportSymbol;
                 return exportSymbol;
-            }else {
+            }
+            else {
                 return addLocalOnlyDeclaration(name, node, [flags, forbiddenFlags]);
             }
         }
@@ -196,7 +201,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
         }
 
         function addDeclaration(table: SymbolTable, name: __String | undefined, node: Node, [flags, forbiddenFlags]: SymbolRegistrationFlags) {
-            let symbol = name != null ? getSymbol(table, name) : newSymbol();
+            let symbol = name !== undefined ? getSymbol(table, name) : newSymbol();
             // Symbols don't merge, create new one
             if(forbiddenFlags & symbol.flags) {
                 symbol = newSymbol();
@@ -207,8 +212,8 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
             node.symbol = symbol as unknown as Symbol;
             return symbol;
         }
-        function withScope(scope: Node, exports: SymbolTable | null, fn: () => void) {
-            const old = [currentScope, currentLocalSymbolTable, currentExportsSymbolTable] as const
+        function withScope(scope: Node, exports: SymbolTable | undefined, fn: () => void) {
+            const old = [currentScope, currentLocalSymbolTable, currentExportsSymbolTable] as const;
             currentScope = scope;
             const links = getNodeLinks(scope);
             currentLocalSymbolTable = (links.locals ??= new Map());
@@ -216,14 +221,14 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
             fn();
             [currentScope, currentLocalSymbolTable, currentExportsSymbolTable] = old;
         }
-        function withMembers(symbol: BasicSymbol, fn:()=> void, table: "members" | "exports" = "members") {
-            const old = [currentLocalSymbolTable, currentSymbol] as const
+        function withMembers(symbol: BasicSymbol, fn: () => void, table: "members" | "exports" = "members") {
+            const old = [currentLocalSymbolTable, currentSymbol] as const;
             currentSymbol = symbol;
             currentLocalSymbolTable = (symbol[table] ??= new Map());
             fn();
             [currentLocalSymbolTable, currentSymbol] = old;
         }
-        
+
         /**
          * Gets the symbolic name for a member from its type.
          */
@@ -241,24 +246,26 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
             }
             else if(isComputedPropertyName(name)) {
                 let expr = name.expression;
-                
+
                 if(isLiteralExpression(expr)) {
                     return `${expr.text}` as __String;
                 }
 
-                let fullName = ""
+                let fullName = "";
                 while(isPropertyAccessExpression(expr)) {
-                    fullName = "." + expr.name.escapedText + name
+                    fullName = "." + expr.name.escapedText + name;
                     expr = expr.expression;
                 }
                 if(!isIdentifier(expr)) {
                     return undefined;
                 }
                 return `[${expr.escapedText}${fullName}]` as __String;
-            } else if(isPrivateIdentifier(name)) {
+            }
+            else if(isPrivateIdentifier(name)) {
                 return name.escapedText;
-            } else {
-                assertNever(name)
+            }
+            else {
+                assertNever(name);
             }
         }
 
@@ -279,23 +286,24 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                 if(!node) return;
                 if(isMappedTypeNode(node)) {
                     const mappedType = node;
-                    withScope(node, null, () => {
+                    withScope(node, /*exports*/ undefined, () => {
                         bindTypeParameters([mappedType.typeParameter]);
                         bindWorker(mappedType.nameType);
                         bindWorker(mappedType.type);
                     });
                 }
                 else if(isConditionalTypeNode(node)) {
-                    withScope(node.checkType, null, () => {
+                    withScope(node.checkType, /*exports*/ undefined, () => {
                         bindWorker(node.extendsType);
-                    })
-                    getNodeLinks(node.trueType).locals = getNodeLinks(node.checkType).locals
-                } if(isInferTypeNode(node)) {
+                    });
+                    getNodeLinks(node.trueType).locals = getNodeLinks(node.checkType).locals;
+                }
+                else if(isInferTypeNode(node)) {
                     const conditionalTypeOwner = findAncestor(node, isConditionalTypeNode);
                     // Probably an error, infer not in a conditional type context
                     // Try to bind the rest of it
                     if(conditionalTypeOwner) {
-                        withScope(conditionalTypeOwner, null, () => {
+                        withScope(conditionalTypeOwner, /*exports*/ undefined, () => {
                             bindTypeParameters([node.typeParameter]);
                         });
                     }
@@ -309,7 +317,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                     bindChildren(node);
                 }
             }
-            bindWorker(node)
+            bindWorker(node);
         }
         function bindTypeParameters(typeParameters: TypeParameterDeclaration[] | NodeArray<TypeParameterDeclaration> | undefined) {
             typeParameters?.forEach(t => addLocalOnlyDeclaration(t.name.escapedText, t, getSymbolFlagsForNode(t)));
@@ -326,17 +334,19 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                     (pattern.elements as NodeArray<ArrayBindingElement>).forEach(b => {
                         if(b.kind === SyntaxKind.OmittedExpression) return;
                         if(!b.name) return;
-                        
+
                         if(isIdentifier(b.name)) {
                             addLocalAndExportDeclaration(b.name.escapedText, b, getSymbolFlagsForNode(b), isExported);
-                        } else {
+                        }
+                        else {
                             bindBindingPattern(b.name);
                         }
-                    })
+                    });
                 }
                 bindBindingPattern(d.name);
-            } else {
-                assertNever(d.name)
+            }
+            else {
+                assertNever(d.name);
             }
         }
         function bindEachFunctionsFirst(nodes: NodeArray<Node> | undefined): void {
@@ -344,7 +354,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
             bindContainer(nodes.filter(n => n.kind === SyntaxKind.FunctionDeclaration));
             bindContainer(nodes.filter(n => n.kind !== SyntaxKind.FunctionDeclaration));
         }
-    
+
         function bindContainer(statements: NodeArray<Node> | Node[]) {
             statements.forEach(statement => {
                 const isExported = hasSyntacticModifier(statement, ModifierFlags.Export);
@@ -363,11 +373,12 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                         if(namedBindings.kind === SyntaxKind.NamedImports) {
                             namedBindings.elements.forEach(v => {
                                 addLocalOnlyDeclaration(v.name.escapedText, v, getSymbolFlagsForNode(v));
-                            })
+                            });
                         }
                         else if(namedBindings.kind === SyntaxKind.NamespaceImport) {
                             addLocalOnlyDeclaration(namedBindings.name.escapedText, namedBindings, getSymbolFlagsForNode(namedBindings));
-                        } else {
+                        }
+                        else {
                             debugger;
                             throw new Error("Not supported");
                         }
@@ -379,16 +390,16 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                 if(isFunctionDeclaration(statement)) {
                     bindTypeParameters(statement.typeParameters);
                     bindTypeExpressions(statement.type);
-                    withScope(statement, null, () => {
+                    withScope(statement, /*exports*/ undefined, () => {
                         bindTypeExpressions(statement);
                         statement.parameters.forEach(bindVariable);
                     });
-                    
+
                     addLocalAndExportDeclaration(getStatementName(statement), statement, getSymbolFlagsForNode(statement), isExported);
                 }
                 if(isTypeAliasDeclaration(statement)) {
                     addLocalAndExportDeclaration(statement.name.escapedText, statement, getSymbolFlagsForNode(statement), isExported);
-                    withScope(statement, null, () => {
+                    withScope(statement, /*exports*/ undefined, () => {
                         bindTypeParameters(statement.typeParameters);
                     });
                     bindTypeExpressions(statement.type);
@@ -410,13 +421,13 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                     if(statement.exportClause && isNamedExports(statement.exportClause)) {
                         const elements = statement.exportClause.elements;
                         if (statement.moduleSpecifier) {
-                            // TODO is  currentExportsSymbolTable ok here? 
-                            withScope(statement, null, () => {
+                            // TODO is currentExportsSymbolTable ok here?
+                            withScope(statement, /*exports*/ undefined, () => {
                                 elements.forEach(e => {
-                                    const [flags, forbiddenFlags] = getSymbolFlagsForNode(e)
+                                    const [flags, forbiddenFlags] = getSymbolFlagsForNode(e);
                                     addLocalOnlyDeclaration((e.propertyName ?? e.name).escapedText, e, [flags | SymbolFlags.ExportValue , forbiddenFlags]);
-                                });    
-                            })
+                                });
+                            });
                         }
                         elements.forEach(e => {
                             postBindingAction.push(() => {
@@ -426,7 +437,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                                     resolvedSymbol.declarations.forEach(d => getNodeLinks(d).isVisible = true);
                                 }
                             });
-                        })
+                        });
                     }
                 }
                 // if(isEnumMember(statement)) {
@@ -444,13 +455,14 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                         withScope(moduleDeclaration, moduleSymbol.exports, () => {
                             if(moduleDeclaration.body) {
                                 if(isModuleBlock(moduleDeclaration.body)) {
-                                    const moduleBlock = moduleDeclaration.body
-                                    bindEachFunctionsFirst(moduleBlock.statements)
+                                    const moduleBlock = moduleDeclaration.body;
+                                    bindEachFunctionsFirst(moduleBlock.statements);
                                 }
                                 else if(isModuleDeclaration(moduleDeclaration.body)) {
                                     const subModule = moduleDeclaration.body;
                                     bindModuleDeclaration(subModule);
-                                } else {
+                                }
+                                else {
                                     throw new Error("Unsupported body type");
                                 }
                             }
@@ -461,31 +473,31 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                 if(isInterfaceDeclaration(statement)) {
                     const interfaceDeclaration = statement;
                     const interfaceSymbol = addLocalAndExportDeclaration(interfaceDeclaration.name.escapedText, interfaceDeclaration, getSymbolFlagsForNode(interfaceDeclaration), isExported);
-                    withScope(interfaceDeclaration, null, () =>{
+                    withScope(interfaceDeclaration, /*exports*/ undefined, () =>{
                         bindTypeParameters(interfaceDeclaration.typeParameters);
                     });
                     withMembers(interfaceSymbol, () => {
                         interfaceDeclaration.members.forEach(m => {
                             addLocalOnlyDeclaration(getMemberName(m), m, getElementFlagsOrThrow(m));
-                            bindTypeExpressions(m)
-                        })
+                            bindTypeExpressions(m);
+                        });
                     });
                 }
-                
+
                 if(isClassDeclaration(statement)) {
                     const classDeclaration = statement;
                     const classSymbol = addLocalAndExportDeclaration(classDeclaration.name?.escapedText, classDeclaration, getSymbolFlagsForNode(classDeclaration), isExported);
-                    withScope(classDeclaration, null, () =>{
+                    withScope(classDeclaration, /*exports*/ undefined, () =>{
                         bindTypeParameters(classDeclaration.typeParameters);
                     });
                     withMembers(classSymbol, () => {
                         classDeclaration.members.forEach(m => {
                             if(hasSyntacticModifier(m, ModifierFlags.Static)) return;
                             if(m.kind === SyntaxKind.SemicolonClassElement || m.kind === SyntaxKind.ClassStaticBlockDeclaration) return;
-                            
+
                             addLocalOnlyDeclaration(getMemberName(m), m, getElementFlagsOrThrow(m));
-                            bindTypeExpressions(m)
-                        })
+                            bindTypeExpressions(m);
+                        });
                     });
                     withMembers(classSymbol, () => {
                         classDeclaration.members.forEach(m => {
@@ -494,11 +506,11 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                                 || m.kind === SyntaxKind.ClassStaticBlockDeclaration) return;
 
                             addLocalOnlyDeclaration(getMemberName(m), m, getElementFlagsOrThrow(m));
-                            bindTypeExpressions(m)
-                        })
+                            bindTypeExpressions(m);
+                        });
                     }, "exports");
                 }
-            })
+            });
         }
     }
 }
@@ -507,7 +519,7 @@ function isExternalModuleWorker(file: SourceFile, isModuleIndicatorNode: (node: 
     return (
         forEach(file.statements, isAnExternalModuleIndicatorNode) || walkTreeForModuleIndicator(file, isModuleIndicatorNode)
         // TODO: isolatedDeclarations: find a away to detect commonJS modules
-    )
+    );
 }
 
 function isAnExternalModuleIndicatorNode(node: Node) {
@@ -531,8 +543,8 @@ function isImportMeta(node: Node): boolean {
 
 
 /** @internal */
-export function getSetExternalModuleIndicator(options: CompilerOptions): [(node: SourceFile) => true | undefined, (node: Node) => boolean] {
-    
+function getSetExternalModuleIndicator(options: CompilerOptions): [(node: SourceFile) => true | undefined, (node: Node) => boolean] {
+
     function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
         // Excludes declaration files - they still require an explicit `export {}` or the like
         // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
@@ -549,15 +561,15 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): [(node:
         case ModuleDetectionKind.Legacy:
             // Files are modules if they have imports, exports, or import.meta
             return [isFileForcedToBeModuleByFormat, isImportMeta];
-        
+
         case ModuleDetectionKind.Auto:
 
             return [
-                isFileForcedToBeModuleByFormat, 
+                isFileForcedToBeModuleByFormat,
                 options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev?
                     n => isImportMeta(n) || isJsxOpeningLikeElement(n) || isJsxFragment(n):
                     isImportMeta
-            ]
+            ];
     }
 }
 
@@ -574,13 +586,13 @@ function getImpliedNodeFormat(fileName: string, options: CompilerOptions, packag
     }
 }
 
-export const enum ModuleInstanceState {
+const enum ModuleInstanceState {
     NonInstantiated = 0,
     Instantiated = 1,
     ConstEnumOnly = 2
 }
 
-export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
+function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
     return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
 }
 
