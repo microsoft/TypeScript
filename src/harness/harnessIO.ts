@@ -52,6 +52,10 @@ export const harnessNewLine = "\r\n";
 // Root for file paths that are stored in a virtual file system
 export const virtualFileSystemRoot = "/";
 
+function printHeader(header: string) {
+    return `//// [${header}] ////\r\n\r\n`;
+}
+
 function createNodeIO(): IO {
     const workspaceRoot = Utils.findUpRoot();
     let fs: any, pathModule: any;
@@ -729,9 +733,9 @@ export namespace Compiler {
         assert.equal(totalErrorsReportedInNonLibraryNonTsconfigFiles + numLibraryDiagnostics + numTsconfigDiagnostics, diagnostics.length, "total number of errors");
     }
 
-    export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
+    export function doErrorBaseline(baselinePath: string, header: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
         Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"),
-            !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
+            !errors || (errors.length === 0) ? null : `${printHeader(header)}${getErrorBaseline(inputFiles, errors, pretty)}`); // eslint-disable-line no-null/no-null
     }
 
     export function doTypeAndSymbolBaseline(baselinePath: string, header: string, program: ts.Program, allFiles: {unitName: string, content: string}[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
@@ -809,7 +813,7 @@ export namespace Compiler {
                 const [, content] = value;
                 result += content;
             }
-            return result ? (`//// [${header}] ////\r\n\r\n` + result) : null; // eslint-disable-line no-null/no-null
+            return result ? `${printHeader(header)}${result}` : null; // eslint-disable-line no-null/no-null
         }
 
         function *iterateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): IterableIterator<[string, string]> {
@@ -856,7 +860,7 @@ export namespace Compiler {
         }
     }
 
-    export function doSourcemapBaseline(baselinePath: string, options: ts.CompilerOptions, result: compiler.CompilationResult, harnessSettings: TestCaseParser.CompilerSettings) {
+    export function doSourcemapBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, harnessSettings: TestCaseParser.CompilerSettings) {
         const declMaps = ts.getAreDeclarationMapsEnabled(options);
         if (options.inlineSourceMap) {
             if (result.maps.size > 0 && !declMaps) {
@@ -876,7 +880,7 @@ export namespace Compiler {
                 sourceMapCode = null; // eslint-disable-line no-null/no-null
             }
             else {
-                sourceMapCode = "";
+                sourceMapCode = printHeader(header);
                 result.maps.forEach(sourceMap => {
                     if (sourceMapCode) sourceMapCode += "\r\n";
                     sourceMapCode += fileOutput(sourceMap, harnessSettings);
@@ -908,9 +912,8 @@ export namespace Compiler {
         }
 
         // check js output
-        let tsCode = "";
+        let tsCode = printHeader(header);
         const tsSources = otherFiles.concat(toBeCompiled);
-        tsCode += "//// [" + header + "] ////\r\n\r\n";
 
         for (let i = 0; i < tsSources.length; i++) {
             tsCode += "//// [" + ts.getBaseFileName(tsSources[i].unitName) + "]\r\n";
