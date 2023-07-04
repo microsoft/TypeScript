@@ -1,4 +1,4 @@
-//// [/tests/cases/fourslash/shims/getBreakpointStatementAtPosition.ts] ////
+//// [/tests/cases/fourslash/shims-pp/getBreakpointStatementAtPosition.ts] ////
 
 
 1  >while (true) {
