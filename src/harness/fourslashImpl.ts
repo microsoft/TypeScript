@@ -1445,6 +1445,7 @@ export class TestState {
         }: BaselineDocumentSpansWithFileContentsOptions<T>,
         spanToContextId: Map<T, number>,
     ) {
+        const isLibFile = /lib(?:.*)\.d\.ts$/.test(fileName);
         let readableContents = `// === ${fileName} ===`;
         let newContent = "";
         interface Detail {
@@ -1619,12 +1620,12 @@ export class TestState {
                 if (locationLine - posLine > nLines) {
                     if (newContent) {
                         readableContents = readableContents + "\n" + readableJsoncBaseline(newContent + content.slice(pos, lineStarts[posLine + TestState.nLinesContext]) +
-                            `--- (line: ${posLine + TestState.nLinesContext + 1}) skipped ---`);
+                            `--- (line: ${isLibFile ? "--" : posLine + TestState.nLinesContext + 1}) skipped ---`);
                         if (location !== undefined) readableContents += "\n";
                         newContent = "";
                     }
                     if (location !== undefined) {
-                        newContent += `--- (line: ${locationLine - TestState.nLinesContext + 1}) skipped ---\n` +
+                        newContent += `--- (line: ${isLibFile ? "--" : locationLine - TestState.nLinesContext + 1}) skipped ---\n` +
                             content.slice(lineStarts[locationLine - TestState.nLinesContext + 1], location);
                     }
                     return;
