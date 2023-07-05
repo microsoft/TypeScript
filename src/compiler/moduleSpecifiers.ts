@@ -775,7 +775,9 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                         validateEnding({ ending, value })
                     ) {
                         const matchedStar = value.substring(prefix.length, value.length - suffix.length);
-                        return pathIsRelative(matchedStar) ? undefined : key.replace("*", matchedStar);
+                        if (!pathIsRelative(matchedStar)) {
+                            return key.replace("*", matchedStar);
+                        }
                     }
                 }
             }
