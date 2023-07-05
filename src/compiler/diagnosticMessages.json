@@ -1621,6 +1621,10 @@
         "category": "Error",
         "code": 1495
     },
+    "Unexpected token. Did you mean '!=='?": {
+        "category": "Error",
+        "code": 1496
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

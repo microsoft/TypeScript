@@ -1,11 +1,11 @@
-parseNotEqualsEqualsEquals.ts(1,10): error TS1109: Expression expected.
-parseNotEqualsEqualsEquals.ts(1,13): error TS1005: ';' expected.
+parseNotEqualsEqualsEquals.ts(1,5): error TS2367: This comparison appears to be unintentional because the types '1' and '2' have no overlap.
+parseNotEqualsEqualsEquals.ts(1,7): error TS1496: Unexpected token. Did you mean '!=='?
 
 
 ==== parseNotEqualsEqualsEquals.ts (2 errors) ====
     if (1 !=== 2) {}
-             ~
-!!! error TS1109: Expression expected.
-                ~
-!!! error TS1005: ';' expected.
+        ~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '1' and '2' have no overlap.
+          ~~~~
+!!! error TS1496: Unexpected token. Did you mean '!=='?
     

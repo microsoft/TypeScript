@@ -1861,6 +1861,10 @@ export function createScanner(languageVersion: ScriptTarget,
                 case CharacterCodes.exclamation:
                     if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                         if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
+                            if (text.charCodeAt(pos + 3) === CharacterCodes.equals) {
+                                error(Diagnostics.Unexpected_token_Did_you_mean, pos, 4);
+                                return pos += 4, token = SyntaxKind.ExclamationEqualsEqualsToken;
+                            }
                             return pos += 3, token = SyntaxKind.ExclamationEqualsEqualsToken;
                         }
                         return pos += 2, token = SyntaxKind.ExclamationEqualsToken;
