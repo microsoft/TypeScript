@@ -1,0 +1,11 @@
+parseNotEqualsEqualsEquals.ts(1,10): error TS1109: Expression expected.
+parseNotEqualsEqualsEquals.ts(1,13): error TS1005: ';' expected.
+
+
+==== parseNotEqualsEqualsEquals.ts (2 errors) ====
+    if (1 !=== 2) {}
+             ~
+!!! error TS1109: Expression expected.
+                ~
+!!! error TS1005: ';' expected.
+    

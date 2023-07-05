@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/parseNotEqualsEqualsEquals.ts] ////
+
+=== parseNotEqualsEqualsEquals.ts ===
+if (1 !=== 2) {}
+>1 !== : boolean
+>1 : 1
+> : any
+>= 2 : 2
+> : any
+>2 : 2
+
