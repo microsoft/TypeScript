@@ -822,21 +822,29 @@ export class TestState {
         });
     }
 
-    public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.UserPreferences) {
-        const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
-        assert.equal(hints.length, expected.length, "Number of hints");
-
+    public baselineInlayHints(span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preferences?: ts.UserPreferences): void{
         interface HasPosition { position: number; }
         const sortHints = (a: HasPosition, b: HasPosition) => {
             return a.position - b.position;
         };
-        ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
-            assert.equal(actual.text, expected.text, "Text");
-            assert.equal(actual.position, expected.position, "Position");
-            assert.equal(actual.kind, expected.kind, "Kind");
-            assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
-            assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
+
+        const baselineFile = this.getBaselineFileNameForContainingTestFile();
+        const fileName = this.activeFile.fileName;
+        const hints = this.languageService.provideInlayHints(fileName, span, preferences);
+        const annotations = ts.map(hints.sort(sortHints), hint => {
+            const span = { start: hint.position, length: hint.text.length };
+            const { character, line } = this.languageServiceAdapterHost.positionToLineAndCharacter(fileName, span.start);
+            const underline = " ".repeat(character) + "^";
+            let annotation = this.getFileContent(fileName).split(/\r?\n/)[line];
+            annotation += "\n" + underline + "\n" + JSON.stringify(hint, undefined, "  ");
+            return annotation;
         });
+
+        if (annotations.length === 0) {
+            annotations.push("=== No inlay hints ===");
+        }
+
+        Harness.Baseline.runBaseline(baselineFile, annotations.join("\n\n"));
     }
 
     public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
