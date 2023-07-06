@@ -1142,7 +1142,7 @@ export function createScanner(languageVersion: ScriptTarget,
     //     | NonOctalDecimalIntegerLiteral
     // LegacyOctalIntegerLiteral ::= '0' [0-7]+
     // NonOctalDecimalIntegerLiteral ::= '0' [0-7]* [89] [0-9]*
-    function scanNumber(): { type: SyntaxKind, value: string } {
+    function scanNumber(): SyntaxKind {
         let start = pos;
         let mainFragment: string;
         if (text.charCodeAt(pos) === CharacterCodes._0) {
@@ -1173,7 +1173,7 @@ export function createScanner(languageVersion: ScriptTarget,
                 const literal = (withMinus ? "-" : "") + "0o" + (+tokenValue).toString(8);
                 if (withMinus) start--;
                 error(Diagnostics.Octal_literals_are_not_allowed_Use_the_syntax_0, start, pos - start, literal);
-                return { type: SyntaxKind.NumericLiteral, value: tokenValue };
+                return SyntaxKind.NumericLiteral;
             }
         }
         else {
@@ -1217,21 +1217,21 @@ export function createScanner(languageVersion: ScriptTarget,
         if (tokenFlags & TokenFlags.ContainsLeadingZero) {
             error(Diagnostics.Decimals_with_leading_zeros_are_not_allowed, start, end - start);
             // if a literal has a leading zero, it must not be bigint
-            return { type: SyntaxKind.NumericLiteral, value: "" + +result };
+            tokenValue = "" + +result;
+            return SyntaxKind.NumericLiteral;
         }
 
         if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
             checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
-            return {
-                type: SyntaxKind.NumericLiteral,
-                value: "" + +result // if value is not an integer, it can be safely coerced to a number
-            };
+            // if value is not an integer, it can be safely coerced to a number
+            tokenValue = "" + +result;
+            return SyntaxKind.NumericLiteral;
         }
         else {
             tokenValue = result;
             const type = checkBigIntSuffix(); // if value is an integer, check whether it is a bigint
             checkForIdentifierStartAfterNumericLiteral(start);
-            return { type, value: tokenValue };
+            return type;
         }
     }
 
@@ -1937,7 +1937,7 @@ export function createScanner(languageVersion: ScriptTarget,
                     return token = SyntaxKind.MinusToken;
                 case CharacterCodes.dot:
                     if (isDigit(text.charCodeAt(pos + 1))) {
-                        tokenValue = scanNumber().value;
+                        scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     }
                     if (text.charCodeAt(pos + 1) === CharacterCodes.dot && text.charCodeAt(pos + 2) === CharacterCodes.dot) {
@@ -2065,8 +2065,7 @@ export function createScanner(languageVersion: ScriptTarget,
                 case CharacterCodes._7:
                 case CharacterCodes._8:
                 case CharacterCodes._9:
-                    ({ type: token, value: tokenValue } = scanNumber());
-                    return token;
+                    return token = scanNumber();
                 case CharacterCodes.colon:
                     pos++;
                     return token = SyntaxKind.ColonToken;
