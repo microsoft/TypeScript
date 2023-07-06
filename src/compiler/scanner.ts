@@ -1223,6 +1223,7 @@ export function createScanner(languageVersion: ScriptTarget,
 
         if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
             checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
+            // if value is not an integer, it can be safely coerced to a number
             tokenValue = "" + +result;
             return SyntaxKind.NumericLiteral;
         }
