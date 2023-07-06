@@ -17335,8 +17335,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
+    function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, originalIndexType: Type, fullIndexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
         const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
+        const indexType = originalIndexType.flags & TypeFlags.Substitution ?
+            getIntersectionType([(originalIndexType as SubstitutionType).baseType, (originalIndexType as SubstitutionType).constraint]) :
+            originalIndexType;
         const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);
 
         if (propName !== undefined) {
