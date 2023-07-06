@@ -1,0 +1,17 @@
+foo(a, 2);
+    ^
+{
+  "text": "a:",
+  "position": 63,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(a, 2);
+       ^
+{
+  "text": "b:",
+  "position": 66,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

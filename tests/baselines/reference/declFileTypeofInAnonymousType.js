@@ -54,7 +54,7 @@ var d = {
 
 
 //// [declFileTypeofInAnonymousType.d.ts]
-declare module m1 {
+declare namespace m1 {
     class c {
     }
     enum e {

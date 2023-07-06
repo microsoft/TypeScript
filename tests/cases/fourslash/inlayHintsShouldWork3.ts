@@ -1,22 +1,8 @@
 /// <reference path="fourslash.ts" />
 
 //// function foo (a: number, ...b: number[]) {}
-//// foo(/*a*/1, /*b*/1, 1, 1);
+//// foo(1, 1, 1, 1);
 
-const markers = test.markers();
-verify.getInlayHints([
-    {
-        text: 'a:',
-        position: markers[0].position,
-        kind: ts.InlayHintKind.Parameter,
-        whitespaceAfter: true
-    },
-    {
-        text: '...b:',
-        position: markers[1].position,
-        kind: ts.InlayHintKind.Parameter,
-        whitespaceAfter: true
-    }
-], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayParameterNameHints: "literals"
 });

@@ -44,7 +44,7 @@ var M;
 
 
 //// [declInput4.d.ts]
-declare module M {
+declare namespace M {
     class E {
     }
     interface I1 {

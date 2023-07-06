@@ -35,6 +35,7 @@ import {
     forEach,
     forEachAncestorDirectory,
     formatMessage,
+    getAllowJSCompilerOption,
     getBaseFileName,
     GetCanonicalFileName,
     getCommonSourceDirectory,
@@ -2420,7 +2421,16 @@ function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: str
     // in order to be consistent with (non-self) library-name loading in
     // `loadModuleFromNearestNodeModulesDirectoryWorker`, which uses two passes in order
     // to prioritize `@types` packages higher up the directory tree over untyped
-    // implementation packages.
+    // implementation packages. See the selfNameModuleAugmentation.ts test for why this
+    // matters.
+    //
+    // However, there's an exception. If the user has `allowJs` and `declaration`, we need
+    // to ensure that self-name imports of their own package can resolve back to their
+    // input JS files via `tryLoadInputFileForPath` at a higher priority than their output
+    // declaration files, so we need to do a single pass with all extensions for that case.
+    if (getAllowJSCompilerOption(state.compilerOptions) && !pathContainsNodeModules(directory)) {
+        return loadModuleFromExports(scope, extensions, subpath, state, cache, redirectedReference);
+    }
     const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
     const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
     return loadModuleFromExports(scope, priorityExtensions, subpath, state, cache, redirectedReference)
