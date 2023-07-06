@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotElaborateAssignabilityToTypeParameters.ts] ////
+
 //// [doNotElaborateAssignabilityToTypeParameters.ts]
 async function foo<T>(x: T): Promise<T> {
   let yaddable = await getXOrYadda(x);

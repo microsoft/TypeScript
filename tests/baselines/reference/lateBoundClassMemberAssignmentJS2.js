@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/lateBoundClassMemberAssignmentJS2.ts] ////
+
 //// [lateBoundClassMemberAssignmentJS2.js]
 const _sym = "my-fake-sym";
 export class MyClass {

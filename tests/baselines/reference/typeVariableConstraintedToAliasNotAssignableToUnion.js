@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts] ////
+
 //// [typeVariableConstraintedToAliasNotAssignableToUnion.ts]
 declare class TableClass<S = any> {
     _field: S;

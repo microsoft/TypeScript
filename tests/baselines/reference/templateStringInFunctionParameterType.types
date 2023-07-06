@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts] ////
+
+=== templateStringInFunctionParameterType.ts ===
 function f(`hello`);
 >f : { (: any): any; (x: string): any; }
 > : any

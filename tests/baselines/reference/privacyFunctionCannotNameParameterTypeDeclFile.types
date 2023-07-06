@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts ===
+//// [tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile.ts] ////
+
+=== privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts ===
 import exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
 >exporter : typeof exporter
 
@@ -6,53 +8,53 @@ export class publicClassWithWithPrivateParmeterTypes {
 >publicClassWithWithPrivateParmeterTypes : publicClassWithWithPrivateParmeterTypes
 
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
->myPublicStaticMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
->myPrivateStaticMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>myPrivateStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
     myPublicMethod(param  = exporter.createExportedWidget1()) { // Error
->myPublicMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>myPublicMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
     private myPrivateMethod(param = exporter.createExportedWidget1()) {
->myPrivateMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>myPrivateMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
     constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) { // Error
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->param1 : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>param1 : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->param2 : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>param2 : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
 }
 export class publicClassWithWithPrivateParmeterTypes1 {
@@ -113,53 +115,53 @@ class privateClassWithWithPrivateParmeterTypes {
 >privateClassWithWithPrivateParmeterTypes : privateClassWithWithPrivateParmeterTypes
 
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) {
->myPublicStaticMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
->myPrivateStaticMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>myPrivateStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
     myPublicMethod(param  = exporter.createExportedWidget1()) {
->myPublicMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>myPublicMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
     private myPrivateMethod(param = exporter.createExportedWidget1()) {
->myPrivateMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>myPrivateMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
     constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) {
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->param1 : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>param1 : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->param2 : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>param2 : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
     }
 }
 class privateClassWithWithPrivateParmeterTypes2 {
@@ -217,20 +219,20 @@ class privateClassWithWithPrivateParmeterTypes2 {
 }
 
 export function publicFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) { // Error
->publicFunctionWithPrivateParmeterTypes : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>publicFunctionWithPrivateParmeterTypes : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 }
 function privateFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) {
->privateFunctionWithPrivateParmeterTypes : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
->exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>privateFunctionWithPrivateParmeterTypes : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
+>createExportedWidget1 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 }
 export function publicFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) { // Error
 >publicFunctionWithPrivateParmeterTypes1 : (param?: import("GlobalWidgets").Widget3) => void
@@ -254,37 +256,37 @@ export class publicClassWithPrivateModuleParameterTypes {
 >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
 
     static myPublicStaticMethod(param= exporter.createExportedWidget2()) { // Error
->myPublicStaticMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     myPublicMethod(param= exporter.createExportedWidget2()) { // Error
->myPublicMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>myPublicMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     constructor(param= exporter.createExportedWidget2(), private param1= exporter.createExportedWidget2(), public param2= exporter.createExportedWidget2()) { // Error
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->param1 : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>param1 : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->param2 : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>param2 : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
 }
 export class publicClassWithPrivateModuleParameterTypes2 {
@@ -325,12 +327,12 @@ export class publicClassWithPrivateModuleParameterTypes2 {
     }
 }
 export function publicFunctionWithPrivateModuleParameterTypes(param= exporter.createExportedWidget2()) { // Error
->publicFunctionWithPrivateModuleParameterTypes : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>publicFunctionWithPrivateModuleParameterTypes : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 }
 export function publicFunctionWithPrivateModuleParameterTypes1(param= exporter.createExportedWidget4()) { // Error
 >publicFunctionWithPrivateModuleParameterTypes1 : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
@@ -346,37 +348,37 @@ class privateClassWithPrivateModuleParameterTypes {
 >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
 
     static myPublicStaticMethod(param= exporter.createExportedWidget2()) {
->myPublicStaticMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     myPublicMethod(param= exporter.createExportedWidget2()) {
->myPublicMethod : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>myPublicMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     constructor(param= exporter.createExportedWidget2(), private param1= exporter.createExportedWidget2(), public param2= exporter.createExportedWidget2()) {
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->param1 : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>param1 : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->param2 : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>param2 : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
 }
 class privateClassWithPrivateModuleParameterTypes1 {
@@ -417,12 +419,12 @@ class privateClassWithPrivateModuleParameterTypes1 {
     }
 }
 function privateFunctionWithPrivateModuleParameterTypes(param= exporter.createExportedWidget2()) {
->privateFunctionWithPrivateModuleParameterTypes : (param?: import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->param : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>privateFunctionWithPrivateModuleParameterTypes : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
+>param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 }
 function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createExportedWidget4()) {
 >privateFunctionWithPrivateModuleParameterTypes1 : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
@@ -432,7 +434,7 @@ function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createE
 >exporter : typeof exporter
 >createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 }
-=== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts ===
+=== privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
 >"GlobalWidgets" : typeof import("GlobalWidgets")
 
@@ -459,7 +461,7 @@ declare module "GlobalWidgets" {
     }
 }
 
-=== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts ===
+=== privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts ===
 export class Widget1 {
 >Widget1 : Widget1
 
@@ -494,7 +496,7 @@ export module SpecializedWidget {
     }
 }
 
-=== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts ===
+=== privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts ===
 ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
 import Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 >Widgets : typeof Widgets

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/conditional/inferTypes1.ts ===
+//// [tests/cases/conformance/types/conditional/inferTypes1.ts] ////
+
+=== inferTypes1.ts ===
 type Unpacked<T> =
 >Unpacked : Symbol(Unpacked, Decl(inferTypes1.ts, 0, 0))
 >T : Symbol(T, Decl(inferTypes1.ts, 0, 14))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/importAssertion/0.ts ===
+//// [tests/cases/conformance/importAssertion/importAssertion2.ts] ////
+
+=== 0.ts ===
 export const a = 1;
 >a : 1
 >1 : 1
@@ -7,7 +9,7 @@ export const b = 2;
 >b : 2
 >2 : 2
 
-=== tests/cases/conformance/importAssertion/1.ts ===
+=== 1.ts ===
 export {} from './0' assert { type: "json" }
 >type : any
 
@@ -20,10 +22,10 @@ export * from './0' assert { type: "json" }
 >type : any
 
 export * as ns from './0' assert { type: "json" }
->ns : typeof import("tests/cases/conformance/importAssertion/0")
+>ns : typeof import("0")
 >type : any
 
-=== tests/cases/conformance/importAssertion/2.ts ===
+=== 2.ts ===
 export { a, b } from './0' assert {}
 >a : 1
 >b : 2

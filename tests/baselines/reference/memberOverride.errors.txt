@@ -1,7 +1,7 @@
-tests/cases/compiler/memberOverride.ts(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
+memberOverride.ts(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
-==== tests/cases/compiler/memberOverride.ts (1 errors) ====
+==== memberOverride.ts (1 errors) ====
     // An object initialiser accepts the first definition for the same property with a different type signature
     // Should compile, since the second declaration of a overrides the first
     var x = {

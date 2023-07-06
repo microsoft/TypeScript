@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxSpreadTag.ts] ////
+
 === /a.tsx ===
 declare const React: any;
 >React : Symbol(React, Decl(a.tsx, 0, 13))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/emitter/es5/asyncGenerators/C1.ts ===
+//// [tests/cases/conformance/emitter/es5/asyncGenerators/emitter.asyncGenerators.classMethods.es5.ts] ////
+
+=== C1.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(C1.ts, 0, 0))
 
@@ -6,7 +8,7 @@ class C1 {
 >f : Symbol(C1.f, Decl(C1.ts, 0, 10))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/C2.ts ===
+=== C2.ts ===
 class C2 {
 >C2 : Symbol(C2, Decl(C2.ts, 0, 0))
 
@@ -17,7 +19,7 @@ class C2 {
 >x : Symbol(x, Decl(C2.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/C3.ts ===
+=== C3.ts ===
 class C3 {
 >C3 : Symbol(C3, Decl(C3.ts, 0, 0))
 
@@ -28,7 +30,7 @@ class C3 {
 >x : Symbol(x, Decl(C3.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/C4.ts ===
+=== C4.ts ===
 class C4 {
 >C4 : Symbol(C4, Decl(C4.ts, 0, 0))
 
@@ -39,7 +41,7 @@ class C4 {
 >x : Symbol(x, Decl(C4.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/C5.ts ===
+=== C5.ts ===
 class C5 {
 >C5 : Symbol(C5, Decl(C5.ts, 0, 0))
 
@@ -50,7 +52,7 @@ class C5 {
 >x : Symbol(x, Decl(C5.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/C6.ts ===
+=== C6.ts ===
 class C6 {
 >C6 : Symbol(C6, Decl(C6.ts, 0, 0))
 
@@ -61,7 +63,7 @@ class C6 {
 >x : Symbol(x, Decl(C6.ts, 2, 13))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/C7.ts ===
+=== C7.ts ===
 class C7 {
 >C7 : Symbol(C7, Decl(C7.ts, 0, 0))
 
@@ -71,7 +73,7 @@ class C7 {
         return 1;
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/C8.ts ===
+=== C8.ts ===
 class C8 {
 >C8 : Symbol(C8, Decl(C8.ts, 0, 0))
 
@@ -87,7 +89,7 @@ class C8 {
 >g : Symbol(C8.g, Decl(C8.ts, 0, 10))
     }
 }
-=== tests/cases/conformance/emitter/es5/asyncGenerators/C9.ts ===
+=== C9.ts ===
 class B9 {
 >B9 : Symbol(B9, Decl(C9.ts, 0, 0))
 

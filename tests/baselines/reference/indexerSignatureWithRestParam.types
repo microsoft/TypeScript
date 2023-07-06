@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexerSignatureWithRestParam.ts ===
+//// [tests/cases/compiler/indexerSignatureWithRestParam.ts] ////
+
+=== indexerSignatureWithRestParam.ts ===
 interface I {
     [...x]: string;
 >x : any[]

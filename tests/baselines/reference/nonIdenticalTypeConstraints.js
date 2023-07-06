@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonIdenticalTypeConstraints.ts] ////
+
 //// [nonIdenticalTypeConstraints.ts]
 class Different {
     a: number;

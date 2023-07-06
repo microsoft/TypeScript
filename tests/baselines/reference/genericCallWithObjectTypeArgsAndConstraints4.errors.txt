@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(19,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
+genericCallWithObjectTypeArgsAndConstraints4.ts(19,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
   Property 'y' is missing in type 'C' but required in type 'D'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(30,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
+genericCallWithObjectTypeArgsAndConstraints4.ts(30,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'C'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts (2 errors) ====
+==== genericCallWithObjectTypeArgsAndConstraints4.ts (2 errors) ====
     // Generic call with constraints infering type parameter from object member properties
     
     class C {
@@ -27,7 +27,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
                     ~
 !!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
 !!! error TS2345:   Property 'y' is missing in type 'C' but required in type 'D'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts:9:5: 'y' is declared here.
+!!! related TS2728 genericCallWithObjectTypeArgsAndConstraints4.ts:9:5: 'y' is declared here.
     var r3 = foo(c, { x: '', foo: c });
     var r4 = foo(null, null);
     var r5 = foo({}, null);

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericNewInterface.ts ===
+//// [tests/cases/compiler/genericNewInterface.ts] ////
+
+=== genericNewInterface.ts ===
 function createInstance<T>(ctor: new (s: string) => T): T {
 >createInstance : Symbol(createInstance, Decl(genericNewInterface.ts, 0, 0))
 >T : Symbol(T, Decl(genericNewInterface.ts, 0, 24))

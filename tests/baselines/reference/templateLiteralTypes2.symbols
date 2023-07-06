@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypes2.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypes2.ts] ////
+
+=== templateLiteralTypes2.ts ===
 function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
 >ft1 : Symbol(ft1, Decl(templateLiteralTypes2.ts, 0, 0))
 >T : Symbol(T, Decl(templateLiteralTypes2.ts, 0, 13))

@@ -1,9 +1,9 @@
-tests/cases/compiler/moduleProperty1.ts(9,5): error TS1128: Declaration or statement expected.
-tests/cases/compiler/moduleProperty1.ts(9,13): error TS2304: Cannot find name 'y'.
-tests/cases/compiler/moduleProperty1.ts(10,20): error TS2304: Cannot find name 'y'.
+moduleProperty1.ts(9,5): error TS1128: Declaration or statement expected.
+moduleProperty1.ts(9,13): error TS2304: Cannot find name 'y'.
+moduleProperty1.ts(10,20): error TS2304: Cannot find name 'y'.
 
 
-==== tests/cases/compiler/moduleProperty1.ts (3 errors) ====
+==== moduleProperty1.ts (3 errors) ====
     module M {
         var x=10;  // variable local to this module body
         var y=x;  // property visible only in module

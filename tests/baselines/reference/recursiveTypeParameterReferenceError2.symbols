@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveTypeParameterReferenceError2.ts ===
+//// [tests/cases/compiler/recursiveTypeParameterReferenceError2.ts] ////
+
+=== recursiveTypeParameterReferenceError2.ts ===
 interface List<T> {
 >List : Symbol(List, Decl(recursiveTypeParameterReferenceError2.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveTypeParameterReferenceError2.ts, 0, 15))

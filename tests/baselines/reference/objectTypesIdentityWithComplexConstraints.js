@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithComplexConstraints.ts] ////
+
 //// [objectTypesIdentityWithComplexConstraints.ts]
 interface A {
       <T extends {

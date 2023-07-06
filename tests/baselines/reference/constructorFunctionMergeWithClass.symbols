@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/file1.js ===
+//// [tests/cases/conformance/salsa/constructorFunctionMergeWithClass.ts] ////
+
+=== file1.js ===
 var SomeClass = function () {
 >SomeClass : Symbol(SomeClass, Decl(file1.js, 0, 3), Decl(file2.js, 0, 0), Decl(file2.js, 0, 19))
 
@@ -12,7 +14,7 @@ var SomeClass = function () {
 new SomeClass();
 >SomeClass : Symbol(SomeClass, Decl(file1.js, 0, 3), Decl(file2.js, 0, 0), Decl(file2.js, 0, 19))
 
-=== tests/cases/conformance/salsa/file2.js ===
+=== file2.js ===
 class SomeClass { }
 >SomeClass : Symbol(SomeClass, Decl(file1.js, 0, 3), Decl(file2.js, 0, 0), Decl(file2.js, 0, 19))
 

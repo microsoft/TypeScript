@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+//// [tests/cases/conformance/es6/modules/multipleDefaultExports01.ts] ////
+
+=== m1.ts ===
 export default class foo {
 >foo : Symbol(bar, Decl(m1.ts, 2, 1), Decl(m1.ts, 0, 0))
 
@@ -15,7 +17,7 @@ var x = 10;
 export default x;
 >x : Symbol(x, Decl(m1.ts, 8, 3))
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import Entity from "./m1"
 >Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
 

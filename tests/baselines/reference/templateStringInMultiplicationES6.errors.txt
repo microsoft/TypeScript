@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/templates/templateStringInMultiplicationES6.ts(1,13): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+templateStringInMultiplicationES6.ts(1,13): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInMultiplicationES6.ts (1 errors) ====
+==== templateStringInMultiplicationES6.ts (1 errors) ====
     var x = 1 * `abc${ 1 }def`;
                 ~~~~~~~~~~~~~~
 !!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

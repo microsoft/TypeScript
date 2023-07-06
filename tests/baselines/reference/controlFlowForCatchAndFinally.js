@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowForCatchAndFinally.ts] ////
+
 //// [controlFlowForCatchAndFinally.ts]
 type Page = {close(): Promise<void>; content(): Promise<string>};
 type Browser = {close(): Promise<void>};

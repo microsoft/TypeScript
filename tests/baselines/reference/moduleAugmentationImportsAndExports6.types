@@ -1,8 +1,10 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/moduleAugmentationImportsAndExports6.ts] ////
+
+=== f1.ts ===
 export class A {}
 >A : A
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 export class B {
 >B : B
 
@@ -10,7 +12,7 @@ export class B {
 >n : number
 }
 
-=== tests/cases/compiler/f3.ts ===
+=== f3.ts ===
 import {A} from "./f1";
 >A : typeof A
 
@@ -45,7 +47,7 @@ import C = N.Cls;
 >Cls : C
 
 declare module "./f1" {
->"./f1" : typeof import("tests/cases/compiler/f1")
+>"./f1" : typeof import("f1")
 
     interface A {
         foo(): B;
@@ -59,7 +61,7 @@ declare module "./f1" {
     }
 }
 
-=== tests/cases/compiler/f4.ts ===
+=== f4.ts ===
 import {A} from "./f1";
 >A : typeof A
 
@@ -71,27 +73,27 @@ let a: A;
 let b = a.foo().n;
 >b : number
 >a.foo().n : number
->a.foo() : import("tests/cases/compiler/f2").B
->a.foo : () => import("tests/cases/compiler/f2").B
+>a.foo() : import("f2").B
+>a.foo : () => import("f2").B
 >a : A
->foo : () => import("tests/cases/compiler/f2").B
+>foo : () => import("f2").B
 >n : number
 
 let c = a.bar().a;
 >c : number
 >a.bar().a : number
->a.bar() : import("tests/cases/compiler/f3").N.Ifc
->a.bar : () => import("tests/cases/compiler/f3").N.Ifc
+>a.bar() : import("f3").N.Ifc
+>a.bar : () => import("f3").N.Ifc
 >a : A
->bar : () => import("tests/cases/compiler/f3").N.Ifc
+>bar : () => import("f3").N.Ifc
 >a : number
 
 let d = a.baz().b;
 >d : number
 >a.baz().b : number
->a.baz() : import("tests/cases/compiler/f3").N.Cls
->a.baz : () => import("tests/cases/compiler/f3").N.Cls
+>a.baz() : import("f3").N.Cls
+>a.baz : () => import("f3").N.Cls
 >a : A
->baz : () => import("tests/cases/compiler/f3").N.Cls
+>baz : () => import("f3").N.Cls
 >b : number
 

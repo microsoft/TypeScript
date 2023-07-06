@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es3-sourcemap-amd.ts] ////
+
 //// [es3-sourcemap-amd.ts]
 class A
 {

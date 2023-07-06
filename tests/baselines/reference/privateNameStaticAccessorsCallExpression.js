@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsCallExpression.ts] ////
+
 //// [privateNameStaticAccessorsCallExpression.ts]
 class A {
     static get #fieldFunc() {  return function() { A.#x = 10; } }

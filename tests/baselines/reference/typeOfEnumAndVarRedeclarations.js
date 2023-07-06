@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts] ////
+
 //// [typeOfEnumAndVarRedeclarations.ts]
 enum E {
     a

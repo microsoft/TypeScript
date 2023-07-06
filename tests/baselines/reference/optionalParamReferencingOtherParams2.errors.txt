@@ -1,7 +1,7 @@
-tests/cases/compiler/optionalParamReferencingOtherParams2.ts(2,29): error TS2373: Parameter 'y' cannot reference identifier 'b' declared after it.
+optionalParamReferencingOtherParams2.ts(2,29): error TS2373: Parameter 'y' cannot reference identifier 'b' declared after it.
 
 
-==== tests/cases/compiler/optionalParamReferencingOtherParams2.ts (1 errors) ====
+==== optionalParamReferencingOtherParams2.ts (1 errors) ====
     var a = 1;
     function strange(x = a, y = b) { 
                                 ~

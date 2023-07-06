@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx ===
+//// [tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx] ////
+
+=== jsxAttributeWithoutExpressionReact.tsx ===
 declare var React: any;
 >React : Symbol(React, Decl(jsxAttributeWithoutExpressionReact.tsx, 0, 11))
 

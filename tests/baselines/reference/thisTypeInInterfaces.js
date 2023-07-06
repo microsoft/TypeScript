@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInInterfaces.ts] ////
+
 //// [thisTypeInInterfaces.ts]
 interface I1 {
     x: this;
