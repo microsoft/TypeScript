@@ -7440,6 +7440,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (typeArguments) {
                 node.typeArguments = factory.createNodeArray(typeArguments);
             }
+            if (signature.declaration?.kind === SyntaxKind.JSDocSignature && signature.declaration.parent.kind === SyntaxKind.JSDocOverloadTag) {
+                const comment = getTextOfNode(signature.declaration.parent.parent, /*includeTrivia*/ true).slice(2, -2).split(/\r\n|\n|\r/).map(line => line.replace(/^\s+/, " ")).join("\n");
+                addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, comment, /*hasTrailingNewLine*/ true);
+            }
 
             cleanup?.();
             return node;
