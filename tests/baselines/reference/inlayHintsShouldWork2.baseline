@@ -1,0 +1,8 @@
+foo(1, { c: 1});
+    ^
+{
+  "text": "a:",
+  "position": 44,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

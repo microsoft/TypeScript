@@ -30,18 +30,18 @@ function foo() {
         }()),
         _a.foo = 1,
         (function () {
-            var _a;
-            var c = (_a = /** @class */ (function () {
+            var _b;
+            var c = (_b = /** @class */ (function () {
                     function class_2() {
                     }
                     return class_2;
                 }()),
-                __setFunctionName(_a, "c"),
-                _a.bar = 2,
+                __setFunctionName(_b, "c"),
+                _b.bar = 2,
                 (function () {
                     // do
                 })(),
-                _a);
+                _b);
         })(),
         _a;
 }

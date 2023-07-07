@@ -7,21 +7,18 @@ export var x = "x";
 === t2.ts ===
 export { x, from "./t1"
 >x : Symbol(x, Decl(t2.ts, 0, 8))
->from : Symbol(from, Decl(t2.ts, 0, 11))
 
 === t3.ts ===
+
 export { from "./t1"
->from : Symbol(from, Decl(t3.ts, 0, 8))
 
 === t4.ts ===
 export { x as a from "./t1"
 >x : Symbol(x, Decl(t1.ts, 0, 10))
 >a : Symbol(a, Decl(t4.ts, 0, 8))
->from : Symbol(from, Decl(t4.ts, 0, 15))
 
 === t5.ts ===
 export { x as a, from "./t1"
 >x : Symbol(x, Decl(t1.ts, 0, 10))
 >a : Symbol(a, Decl(t5.ts, 0, 8))
->from : Symbol(from, Decl(t5.ts, 0, 16))
 

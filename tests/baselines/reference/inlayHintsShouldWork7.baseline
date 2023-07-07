@@ -1,0 +1,26 @@
+call(1);
+     ^
+{
+  "text": "a:",
+  "position": 105,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+call(1, 2);
+     ^
+{
+  "text": "b:",
+  "position": 114,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+call(1, 2);
+        ^
+{
+  "text": "c:",
+  "position": 117,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

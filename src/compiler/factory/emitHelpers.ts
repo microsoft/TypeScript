@@ -59,6 +59,8 @@ export interface ESDecorateClassContext {
      * The name of the decorated element.
      */
     name: Expression;
+
+    metadata: Expression;
 }
 
 /**
@@ -75,6 +77,7 @@ export interface ESDecorateClassElementContext {
     static: boolean;
     private: boolean;
     access: ESDecorateClassElementAccess;
+    metadata: Expression;
 }
 
 /** @internal */
@@ -136,6 +139,9 @@ export interface EmitHelperFactory {
     createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
     createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
     createClassPrivateFieldInHelper(state: Identifier, receiver: Expression): Expression;
+    // 'using' helpers
+    createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression;
+    createDisposeResourcesHelper(envBinding: Expression): Expression;
 }
 
 /** @internal */
@@ -183,7 +189,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         // Class Fields Helpers
         createClassPrivateFieldGetHelper,
         createClassPrivateFieldSetHelper,
-        createClassPrivateFieldInHelper
+        createClassPrivateFieldInHelper,
+        // 'using' helpers
+        createAddDisposableResourceHelper,
+        createDisposeResourcesHelper,
     };
 
     /**
@@ -245,12 +254,14 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     // ES Decorators Helpers
 
     function createESDecorateClassContextObject(contextIn: ESDecorateClassContext) {
-        return factory.createObjectLiteralExpression([
+        const properties = [
             factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral("class")),
-            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name)
-        ]);
-    }
+            factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name),
+            factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata),
+        ];
 
+        return factory.createObjectLiteralExpression(properties);
+    }
 
     function createESDecorateClassElementAccessGetMethod(elementName: ESDecorateName) {
         const accessor = elementName.computed ?
@@ -344,13 +355,15 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 
     function createESDecorateClassElementContextObject(contextIn: ESDecorateClassElementContext) {
-        return factory.createObjectLiteralExpression([
+        const properties = [
             factory.createPropertyAssignment(factory.createIdentifier("kind"), factory.createStringLiteral(contextIn.kind)),
             factory.createPropertyAssignment(factory.createIdentifier("name"), contextIn.name.computed ? contextIn.name.name : factory.createStringLiteralFromNode(contextIn.name.name)),
             factory.createPropertyAssignment(factory.createIdentifier("static"), contextIn.static ? factory.createTrue() : factory.createFalse()),
             factory.createPropertyAssignment(factory.createIdentifier("private"), contextIn.private ? factory.createTrue() : factory.createFalse()),
-            factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access))
-        ]);
+            factory.createPropertyAssignment(factory.createIdentifier("access"), createESDecorateClassElementAccessObject(contextIn.name, contextIn.access)),
+            factory.createPropertyAssignment(factory.createIdentifier("metadata"), contextIn.metadata),
+        ];
+        return factory.createObjectLiteralExpression(properties);
     }
 
     function createESDecorateContextObject(contextIn: ESDecorateContext) {
@@ -381,7 +394,6 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             value ? [thisArg, initializers, value] : [thisArg, initializers]
         );
     }
-
     // ES2018 Helpers
 
     function createAssignHelper(attributesSegments: Expression[]) {
@@ -665,6 +677,20 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     function createClassPrivateFieldInHelper(state: Identifier, receiver: Expression) {
         context.requestEmitHelper(classPrivateFieldInHelper);
         return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /*typeArguments*/ undefined, [state, receiver]);
+    }
+
+    function createAddDisposableResourceHelper(envBinding: Expression, value: Expression, async: boolean): Expression {
+        context.requestEmitHelper(addDisposableResourceHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__addDisposableResource"),
+            /*typeArguments*/ undefined,
+            [envBinding, value, async ? factory.createTrue() : factory.createFalse()]
+        );
+    }
+
+    function createDisposeResourcesHelper(envBinding: Expression) {
+        context.requestEmitHelper(disposeResourcesHelper);
+        return factory.createCallExpression(getUnscopedHelperName("__disposeResources"), /*typeArguments*/ undefined, [envBinding]);
     }
 }
 
@@ -1367,6 +1393,71 @@ export const classPrivateFieldInHelper: UnscopedEmitHelper = {
             };`
 };
 
+/**
+ * @internal
+ */
+export const addDisposableResourceHelper: UnscopedEmitHelper = {
+    name: "typescript:addDisposableResource",
+    importName: "__addDisposableResource",
+    scoped: false,
+    text: `
+        var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
+            if (value !== null && value !== void 0) {
+                if (typeof value !== "object") throw new TypeError("Object expected.");
+                var dispose;
+                if (async) {
+                    if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+                    dispose = value[Symbol.asyncDispose];
+                }
+                if (dispose === void 0) {
+                    if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+                    dispose = value[Symbol.dispose];
+                }
+                if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+                env.stack.push({ value: value, dispose: dispose, async: async });
+            }
+            else if (async) {
+                env.stack.push({ async: true });
+            }
+            return value;
+        };`
+};
+
+/**
+ * @internal
+ */
+export const disposeResourcesHelper: UnscopedEmitHelper = {
+    name: "typescript:disposeResources",
+    importName: "__disposeResources",
+    scoped: false,
+    text: `
+        var __disposeResources = (this && this.__disposeResources) || (function (SuppressedError) {
+            return function (env) {
+                function fail(e) {
+                    env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
+                    env.hasError = true;
+                }
+                function next() {
+                    while (env.stack.length) {
+                        var rec = env.stack.pop();
+                        try {
+                            var result = rec.dispose && rec.dispose.call(rec.value);
+                            if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                        }
+                        catch (e) {
+                            fail(e);
+                        }
+                    }
+                    if (env.hasError) throw env.error;
+                }
+                return next();
+            };
+        })(typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+            var e = new Error(message);
+            return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+        });`
+};
+
 let allUnscopedEmitHelpers: ReadonlyMap<string, UnscopedEmitHelper> | undefined;
 
 /** @internal */
@@ -1399,7 +1490,9 @@ export function getAllUnscopedEmitHelpers() {
         classPrivateFieldSetHelper,
         classPrivateFieldInHelper,
         createBindingHelper,
-        setModuleDefaultHelper
+        setModuleDefaultHelper,
+        addDisposableResourceHelper,
+        disposeResourcesHelper,
     ], helper => helper.name));
 }
 

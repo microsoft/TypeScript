@@ -1,0 +1,53 @@
+foo(1, '', false, 1, 2)
+    ^
+{
+  "text": "f:",
+  "position": 161,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, '', false, 1, 2)
+       ^
+{
+  "text": "a:",
+  "position": 164,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, '', false, 1, 2)
+           ^
+{
+  "text": "b:",
+  "position": 168,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, '', false, 1, 2)
+                  ^
+{
+  "text": "...c:",
+  "position": 175,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo1(1, "", "")
+     ^
+{
+  "text": "f1:",
+  "position": 186,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo1(1, "", "")
+        ^
+{
+  "text": "...args:",
+  "position": 189,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

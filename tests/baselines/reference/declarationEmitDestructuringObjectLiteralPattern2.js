@@ -39,6 +39,6 @@ declare function f15(): {
     c4: boolean;
 };
 declare var a4: string, b4: number, c4: boolean;
-declare module m {
+declare namespace m {
     var a4: string, b4: number, c4: boolean;
 }
