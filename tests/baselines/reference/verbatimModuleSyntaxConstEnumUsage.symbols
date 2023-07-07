@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxConstEnumUsage.ts] ////
+
+=== foo.ts ===
+export enum Foo {
+>Foo : Symbol(Foo, Decl(foo.ts, 0, 0))
+
+    a = 1,
+>a : Symbol(Foo.a, Decl(foo.ts, 0, 17))
+
+    b,
+>b : Symbol(Foo.b, Decl(foo.ts, 1, 10))
+
+    c,
+>c : Symbol(Foo.c, Decl(foo.ts, 2, 6))
+}
+
+=== bar.ts ===
+import {Foo} from './foo.js';
+>Foo : Symbol(Foo, Decl(bar.ts, 0, 8))
+
+export enum Bar {
+>Bar : Symbol(Bar, Decl(bar.ts, 0, 29))
+
+    a = Foo.a,
+>a : Symbol(Bar.a, Decl(bar.ts, 2, 17))
+>Foo.a : Symbol(Foo.a, Decl(foo.ts, 0, 17))
+>Foo : Symbol(Foo, Decl(bar.ts, 0, 8))
+>a : Symbol(Foo.a, Decl(foo.ts, 0, 17))
+
+    c = Foo.c,
+>c : Symbol(Bar.c, Decl(bar.ts, 3, 14))
+>Foo.c : Symbol(Foo.c, Decl(foo.ts, 2, 6))
+>Foo : Symbol(Foo, Decl(bar.ts, 0, 8))
+>c : Symbol(Foo.c, Decl(foo.ts, 2, 6))
+
+    e = 5,
+>e : Symbol(Bar.e, Decl(bar.ts, 4, 14))
+}
