@@ -3400,7 +3400,7 @@ declare namespace ts {
             markAsDirty(): void;
             getScriptFileNames(): string[];
             getLanguageService(): never;
-            getModuleResolutionHostForAutoImportProvider(): never;
+            getHostForAutoImportProvider(): never;
             getProjectReferences(): readonly ts.ProjectReference[] | undefined;
             getTypeAcquisition(): TypeAcquisition;
         }
