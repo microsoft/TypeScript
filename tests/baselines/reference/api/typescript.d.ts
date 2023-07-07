@@ -7009,6 +7009,10 @@ declare namespace ts {
         variableElement = "var",
         /** Inside function */
         localVariableElement = "local var",
+        /** using foo = ... */
+        variableUsingElement = "using",
+        /** await using foo = ... */
+        variableAwaitUsingElement = "await using",
         /**
          * Inside module and script only
          * function f() { }
