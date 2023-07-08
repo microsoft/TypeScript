@@ -7163,10 +7163,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            if (propertySymbol.flags & (SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) {
+            if (propertySymbol.flags & SymbolFlags.Accessor) {
+                const modifierFlags = getDeclarationModifierFlagsFromSymbol(propertySymbol);
+                const flag = modifierFlags & ~ModifierFlags.Async;
                 if (propertySymbol.flags & SymbolFlags.GetAccessor) {
                     const getAccessorSignature = factory.createGetAccessorDeclaration(
-                        undefined,
+                        factory.createModifiersFromModifierFlags(flag),
                         propertyName,
                         [],
                         propertyTypeNode,
@@ -7175,9 +7177,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (propertySymbol.flags & SymbolFlags.SetAccessor) {
                     const setAccessorSignature = factory.createSetAccessorDeclaration(
-                        undefined,
+                        factory.createModifiersFromModifierFlags(flag),
                         propertyName,
-                        [],
+                        [factory.createParameterDeclaration(
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
+                            "arg",
+                            /*questionToken*/ undefined,
+                            propertyTypeNode
+                        )],
                         undefined);
                     typeElements.push(preserveCommentsOn(setAccessorSignature));
                 }
