@@ -7163,17 +7163,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
-            if (modifiers) {
-                context.approximateLength += 9;
-            }
-            const propertySignature = factory.createPropertySignature(
-                modifiers,
-                propertyName,
-                optionalToken,
-                propertyTypeNode);
+            if (propertySymbol.flags & (SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) {
+                if (propertySymbol.flags & SymbolFlags.GetAccessor) {
+                    const getAccessorSignature = factory.createGetAccessorDeclaration(
+                        undefined,
+                        propertyName,
+                        [],
+                        propertyTypeNode,
+                        undefined);
+                    typeElements.push(preserveCommentsOn(getAccessorSignature));
+                }
+                if (propertySymbol.flags & SymbolFlags.SetAccessor) {
+                    const setAccessorSignature = factory.createSetAccessorDeclaration(
+                        undefined,
+                        propertyName,
+                        [],
+                        undefined);
+                    typeElements.push(preserveCommentsOn(setAccessorSignature));
+                }
+            } else {
+                const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
+                if (modifiers) {
+                    context.approximateLength += 9;
+                }
+                const propertySignature = factory.createPropertySignature(
+                    modifiers,
+                    propertyName,
+                    optionalToken,
+                    propertyTypeNode);
 
-            typeElements.push(preserveCommentsOn(propertySignature));
+                typeElements.push(preserveCommentsOn(propertySignature));
+            }
 
             function preserveCommentsOn<T extends Node>(node: T) {
                 if (some(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)) {
