@@ -1,4 +1,4 @@
-parser_continueTarget5.ts(5,7): error TS1107: Jump target cannot cross function boundary.
+parser_continueTarget5.ts(5,7): error TS18055: Cannot find label 'target'.
 
 
 ==== parser_continueTarget5.ts (1 errors) ====
@@ -8,7 +8,7 @@ parser_continueTarget5.ts(5,7): error TS1107: Jump target cannot cross function 
         while (true) {
           continue target;
           ~~~~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS18055: Cannot find label 'target'.
         }
       }
     }

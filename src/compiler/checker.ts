@@ -48423,6 +48423,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let current: Node = node;
         while (current) {
             if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
+                if (node.label) {
+                    return grammarErrorOnNode(node, Diagnostics.Cannot_find_label_0, node.label.escapedText.toString())
+                }
                 return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
             }
 

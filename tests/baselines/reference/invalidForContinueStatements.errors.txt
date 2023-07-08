@@ -1,7 +1,7 @@
 invalidForContinueStatements.ts(4,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
 invalidForContinueStatements.ts(8,9): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
-invalidForContinueStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
-invalidForContinueStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
+invalidForContinueStatements.ts(14,9): error TS18055: Cannot find label 'TWO'.
+invalidForContinueStatements.ts(21,9): error TS18055: Cannot find label 'THREE'.
 invalidForContinueStatements.ts(27,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
 invalidForContinueStatements.ts(36,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
 
@@ -26,7 +26,7 @@ invalidForContinueStatements.ts(36,5): error TS1115: A 'continue' statement can 
         var x = () => {
             continue TWO;
             ~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS18055: Cannot find label 'TWO'.
         }
     }
     
@@ -35,7 +35,7 @@ invalidForContinueStatements.ts(36,5): error TS1115: A 'continue' statement can 
         var fn = function () {
             continue THREE;
             ~~~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS18055: Cannot find label 'THREE'.
         }
     }
     

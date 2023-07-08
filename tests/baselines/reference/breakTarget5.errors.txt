@@ -1,4 +1,4 @@
-breakTarget5.ts(5,7): error TS1107: Jump target cannot cross function boundary.
+breakTarget5.ts(5,7): error TS18055: Cannot find label 'target'.
 
 
 ==== breakTarget5.ts (1 errors) ====
@@ -8,7 +8,7 @@ breakTarget5.ts(5,7): error TS1107: Jump target cannot cross function boundary.
         while (true) {
           break target;
           ~~~~~~~~~~~~~
-!!! error TS1107: Jump target cannot cross function boundary.
+!!! error TS18055: Cannot find label 'target'.
         }
       }
     }
