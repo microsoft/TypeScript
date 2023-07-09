@@ -7176,14 +7176,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     typeElements.push(preserveCommentsOn(getAccessorSignature));
                 }
                 if (propertySymbol.flags & SymbolFlags.SetAccessor) {
+                    const setAccessorDecl = find(propertySymbol.declarations, decl => decl.kind === SyntaxKind.SetAccessor) as SetAccessorDeclaration;
+                    const parameterName = setAccessorDecl?.parameters?.length > 0 ? setAccessorDecl.parameters[0].name : "arg";
                     const setAccessorSignature = factory.createSetAccessorDeclaration(
                         factory.createModifiersFromModifierFlags(flag),
                         propertyName,
                         [factory.createParameterDeclaration(
-                            /*modifiers*/ undefined,
-                            /*dotDotDotToken*/ undefined,
-                            "arg",
-                            /*questionToken*/ undefined,
+                            undefined,
+                            undefined,
+                            parameterName,
+                            undefined,
                             propertyTypeNode
                         )],
                         undefined);
