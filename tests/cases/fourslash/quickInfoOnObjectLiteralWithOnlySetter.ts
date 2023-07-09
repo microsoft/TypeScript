@@ -18,7 +18,7 @@ verify.completions({
 });
 
 verify.quickInfos({
-    1: "function makePoint(x: number): {\n    b: number;\n    x: number;\n}",
+    1: "function makePoint(x: number): {\n    b: number;\n    set x(a: number);\n}",
     2: "(property) x: number",
-    3: "var point: {\n    b: number;\n    x: number;\n}",
+    3: "var point: {\n    b: number;\n    set x(a: number);\n}",
 });
