@@ -35,7 +35,6 @@ import {
     find,
     FindAllReferences,
     findIndex,
-    findLastIndex,
     firstDefined,
     flatMap,
     forEachKey,
@@ -75,7 +74,6 @@ import {
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
-    isNamedDeclaration,
     isObjectLiteralExpression,
     isOmittedExpression,
     isPrologueDirective,
@@ -109,7 +107,6 @@ import {
     PropertyAccessExpression,
     PropertyAssignment,
     QuotePreference,
-    rangeContainsRange,
     RefactorContext,
     RefactorEditInfo,
     RequireOrImportCall,
@@ -167,28 +164,20 @@ registerRefactor(refactorNameForMoveToFile, {
     getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, interactiveRefactorArguments): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
-        const { host, program } = context;
         Debug.assert(interactiveRefactorArguments, "No interactive refactor arguments available");
         const targetFile = interactiveRefactorArguments.targetFile;
         if (hasJSFileExtension(targetFile) || hasTSFileExtension(targetFile)) {
-            if (host.fileExists(targetFile) && program.getSourceFile(targetFile) === undefined) {
-                return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_statements_to_the_selected_file));
-            }
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, program, statements, t, context.host, context.preferences));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
-        return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid));
+        return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid) };
     }
 });
-
-function error(notApplicableReason: string) {
-    return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason };
-}
 
 function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
-    // For a new file
+    //For a new file
     if (!host.fileExists(targetFile)) {
         changes.createNewFile(oldFile, targetFile, getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, usage, changes, toMove, program, host, preferences));
         addNewFileToTsconfig(program, changes, oldFile.fileName, targetFile, hostGetCanonicalFileName(host));
@@ -909,24 +898,83 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     if (startNodeIndex === -1) return undefined;
 
     const startStatement = statements[startNodeIndex];
-    if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
-        return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
-    }
+    // if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
+    //     return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
+    // }
 
     const overloadRangeToMove = getOverloadRangeToMove(file, startStatement);
-    if (overloadRangeToMove) {
-        return overloadRangeToMove;
+    /**function [|add(x: number, y: number): number;
+       function add(x: string, y: string): string;|] or
+
+       function [|add(x: number, y: number): number;
+       function add(x: string, y: string): string;
+       |] or
+
+       function [|add(x: number, y: number): number;
+       function add(x: string, y: string): string;
+       |]const a = 1;
+     */
+    if (overloadRangeToMove && (statements[overloadRangeToMove.end].end >= range.end || range.end === statements[overloadRangeToMove.end].end + 1)) {
+        return { toMove: overloadRangeToMove.toMove, afterLast: statements[overloadRangeToMove.end + 1] };
+    }
+    let afterEndNodeIndex = findIndex(statements, s => s.end >= range.end, startNodeIndex);
+    /**[|const a = 1;
+       |]const b = 2;
+     */
+    if (afterEndNodeIndex !== -1 && range.end === statements[afterEndNodeIndex].pos + 1) {
+        afterEndNodeIndex = afterEndNodeIndex - 1;
     }
 
-    // Can't only partially include the start node or be partially into the next node
-    if (range.pos > startStatement.getStart(file)) return undefined;
-    const afterEndNodeIndex = findIndex(statements, s => s.end > range.end, startNodeIndex);
-    // Can't be partially into the next node
-    if (afterEndNodeIndex !== -1 && (afterEndNodeIndex === 0 || statements[afterEndNodeIndex].getStart(file) < range.end)) return undefined;
+    const endingOverloadRangeToMove = getOverloadRangeToMove(file, statements[afterEndNodeIndex]);
+    if (endingOverloadRangeToMove && overloadRangeToMove) {
+        return {
+            toMove: statements.slice(findIndex(statements, s => s.pos === overloadRangeToMove.toMove[0].pos), endingOverloadRangeToMove.end + 1),
+            afterLast: endingOverloadRangeToMove.end === statements.length - 1 ? undefined : statements[endingOverloadRangeToMove.end + 1]
+        };
+    }
+    /**function [|add(x: number, y: number): number;
+       function add(x: string, y: string): string;
+       function foo() { }|] or
 
+       function [|add(x: number, y: number): number;
+       function add(x: string, y: string): string;
+       function foo() { }
+       |] or
+
+       function add(x: number, y: number): number;
+       function add(x: string, y: string): string;
+       function foo() { }
+       |]const a = 1; or
+     */
+    if (overloadRangeToMove) {
+        return {
+            toMove: statements.slice(findIndex(statements, s => s.end === overloadRangeToMove.toMove[0].end), afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex + 1),
+            afterLast: afterEndNodeIndex === -1 || afterEndNodeIndex === statements.length - 1 ? undefined : statements[afterEndNodeIndex + 1],
+        };
+    }
+
+    /**[|const a = 1;
+     * function add(x: number, y: number): number;
+       function add(x: string, y: string): string;|] or
+
+       [|
+       function add(x: number, y: number): number;
+       function add(x: string, y: string): string;
+       |] or
+
+       const a = 1;[|
+       function add(x: number, y: number): number;
+       function add(x: string, y: string): string;|]
+     */
+    if (endingOverloadRangeToMove) {
+        return {
+            toMove: statements.slice(startNodeIndex, endingOverloadRangeToMove.end === statements.length - 1 ? statements.length : endingOverloadRangeToMove.end + 1),  //endingOverloadRangeToMove.end === -1 ? statements.length : endingOverloadRangeToMove.end + 1),
+            afterLast: endingOverloadRangeToMove.end === statements.length - 1 ? undefined : statements[endingOverloadRangeToMove.end + 1],//endingOverloadRangeToMove.end === -1 ? undefined : statements[endingOverloadRangeToMove.end + 1],
+        };
+    }
     return {
-        toMove: statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex),
-        afterLast: afterEndNodeIndex === -1 ? undefined : statements[afterEndNodeIndex],
+        toMove: statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex + 1),
+        afterLast: afterEndNodeIndex === -1 ? undefined : statements[afterEndNodeIndex + 1],
     };
 }
 
@@ -1145,8 +1193,8 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
         }
         const lastDecl = declarations[length(declarations) - 1];
         const statementsToMove = mapDefined(declarations, d => getSourceFileOfNode(d) === sourceFile && isStatement(d) ? d : undefined);
-        const end = findLastIndex(sourceFile.statements, s => s.end > lastDecl.end);
-        return { toMove: statementsToMove, afterLast: end >= 0 ? sourceFile.statements[end] : undefined };
+        const end = findIndex(sourceFile.statements, s => s.end >= lastDecl.end);
+        return { toMove: statementsToMove, end };
     }
     return undefined;
 }
