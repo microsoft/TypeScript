@@ -37,8 +37,8 @@ var x = {
 
 
 var y = {
->y : { readonly a: number; }
->{    get a() { return 0; },    set a(v: number) { },    get a() { return 0; }} : { readonly a: number; }
+>y : { get a(): number; }
+>{    get a() { return 0; },    set a(v: number) { },    get a() { return 0; }} : { get a(): number; }
 
     get a() { return 0; },
 >a : number

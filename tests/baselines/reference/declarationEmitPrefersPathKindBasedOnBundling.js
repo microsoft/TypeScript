@@ -46,6 +46,6 @@ export interface Scalar {
 export declare function scalar(value: string): Scalar;
 //// [spacing.d.ts]
 declare const _default: {
-    readonly xs: import("../lib/operators/scalar").Scalar;
+    get xs(): import("../lib/operators/scalar").Scalar;
 };
 export default _default;

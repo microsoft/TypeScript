@@ -676,8 +676,8 @@ class DerivedWithObjectAccessors extends Base {
 
     constructor() {
         const obj = {
->obj : { prop: boolean; }
->{            get prop() {                return true;            },            set prop(param) {                this._prop = param;            }        } : { prop: boolean; }
+>obj : { get prop(): boolean; set prop(param: boolean); }
+>{            get prop() {                return true;            },            set prop(param) {                this._prop = param;            }        } : { get prop(): boolean; set prop(param: boolean); }
 
             get prop() {
 >prop : boolean
@@ -762,8 +762,8 @@ class DerivedWithObjectAccessorsUsingThisInBodies extends Base {
 
     constructor() {
         const obj = {
->obj : { _prop: string; prop: any; }
->{            _prop: "prop",            get prop() {                return this._prop;            },            set prop(param) {                this._prop = param;            }        } : { _prop: string; prop: any; }
+>obj : { _prop: string; get prop(): any; set prop(param: any); }
+>{            _prop: "prop",            get prop() {                return this._prop;            },            set prop(param) {                this._prop = param;            }        } : { _prop: string; get prop(): any; set prop(param: any); }
 
             _prop: "prop",
 >_prop : string

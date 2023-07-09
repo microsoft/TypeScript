@@ -414,8 +414,9 @@ declare let obj1: {
     c: {
         g(): void;
     };
-    readonly d: number;
-    e: string;
+    get d(): number;
+    get e(): string;
+    set e(value: string);
 };
 type Point = {
     x: number;

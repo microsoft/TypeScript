@@ -142,8 +142,8 @@ export type ObjectTypeVisibility = {
 };
 
 export const ObjectLiteralVisibility = {
->ObjectLiteralVisibility : { [x]: number; [y](): number; readonly [z]: number; [w]: number; }
->{    [x]: 0,    [y](): number { return 0; },    get [z](): number { return 0; },    set [w](value: number) { },} : { [x]: number; [y](): number; readonly [z]: number; [w]: number; }
+>ObjectLiteralVisibility : { [x]: number; [y](): number; get [z](): number; set [w](value: number); }
+>{    [x]: 0,    [y](): number { return 0; },    get [z](): number { return 0; },    set [w](value: number) { },} : { [x]: number; [y](): number; get [z](): number; set [w](value: number); }
 
     [x]: 0,
 >[x] : number

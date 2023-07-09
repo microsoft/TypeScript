@@ -76,7 +76,7 @@ ssk.g; // error
 
 let i: I = { p: 12, m() { }, get g() { return 0; } };
 >i : I
->{ p: 12, m() { }, get g() { return 0; } } : { p: number; m(): void; readonly g: number; }
+>{ p: 12, m() { }, get g() { return 0; } } : { p: number; m(): void; get g(): number; }
 >p : number
 >12 : 12
 >m : () => void
@@ -127,8 +127,8 @@ ssi.g; // ok
 >g : number
 
 let o = { p: 12, m() { }, get g() { return 0; } };
->o : { p: number; m(): void; readonly g: number; }
->{ p: 12, m() { }, get g() { return 0; } } : { p: number; m(): void; readonly g: number; }
+>o : { p: number; m(): void; get g(): number; }
+>{ p: 12, m() { }, get g() { return 0; } } : { p: number; m(): void; get g(): number; }
 >p : number
 >12 : 12
 >m : () => void
@@ -138,13 +138,13 @@ let o = { p: 12, m() { }, get g() { return 0; } };
 let so = { ...o };
 >so : { p: number; m(): void; g: number; }
 >{ ...o } : { p: number; m(): void; g: number; }
->o : { p: number; m(): void; readonly g: number; }
+>o : { p: number; m(): void; get g(): number; }
 
 let sso = { ...o, ...o };
 >sso : { p: number; m(): void; g: number; }
 >{ ...o, ...o } : { p: number; m(): void; g: number; }
->o : { p: number; m(): void; readonly g: number; }
->o : { p: number; m(): void; readonly g: number; }
+>o : { p: number; m(): void; get g(): number; }
+>o : { p: number; m(): void; get g(): number; }
 
 so.p;
 >so.p : number

@@ -117,10 +117,10 @@ var z: {
 }
 
 function f() {
->f : () => { readonly x: number; y: number; }
+>f : () => { get x(): number; get y(): number; set y(value: number); }
 
     return {
->{        get x() { return 1; },        get y() { return 1; },        set y(value) { }    } : { readonly x: number; y: number; }
+>{        get x() { return 1; },        get y() { return 1; },        set y(value) { }    } : { get x(): number; get y(): number; set y(value: number); }
 
         get x() { return 1; },
 >x : number

@@ -23,9 +23,9 @@ var /*2*/ x = point. /*3*/x;
 
 //// [declFileObjectLiteralWithOnlyGetter.d.ts]
 declare function makePoint(x: number): {
-    readonly x: number;
+    get x(): number;
 };
 declare var /*4*/ point: {
-    readonly x: number;
+    get x(): number;
 };
 declare var /*2*/ x: number;

@@ -25,9 +25,9 @@ point. /*2*/x = 30;
 //// [declFileObjectLiteralWithOnlySetter.d.ts]
 declare function makePoint(x: number): {
     b: number;
-    x: number;
+    set x(a: number);
 };
 declare var /*3*/ point: {
     b: number;
-    x: number;
+    set x(a: number);
 };

@@ -118,7 +118,7 @@ export type ObjectTypeVisibility = {
 export declare const ObjectLiteralVisibility: {
     [x]: number;
     [y](): number;
-    readonly [z]: number;
-    [w]: number;
+    get [z](): number;
+    set [w](value: number);
 };
 export {};

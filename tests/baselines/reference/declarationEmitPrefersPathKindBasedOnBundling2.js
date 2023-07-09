@@ -50,7 +50,7 @@ declare module "lib/operators/scalar" {
 }
 declare module "settings/spacing" {
     const _default: {
-        readonly xs: import("lib/operators/scalar").Scalar;
+        get xs(): import("lib/operators/scalar").Scalar;
     };
     export default _default;
 }

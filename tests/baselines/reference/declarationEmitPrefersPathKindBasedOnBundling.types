@@ -19,7 +19,7 @@ import { scalar } from '../lib/operators/scalar';
 >scalar : (value: string) => import("src/lib/operators/scalar").Scalar
 
 export default {
->{	get xs() {		return scalar("14px");	}} : { readonly xs: import("src/lib/operators/scalar").Scalar; }
+>{	get xs() {		return scalar("14px");	}} : { get xs(): import("src/lib/operators/scalar").Scalar; }
 
 	get xs() {
 >xs : import("src/lib/operators/scalar").Scalar

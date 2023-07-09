@@ -2,8 +2,8 @@
 
 === /a.js ===
 export const t1 = {
->t1 : { p: string; readonly getter: string; }
->{    p: 'value',    get getter() {        return 'value';    },} : { p: string; readonly getter: string; }
+>t1 : { p: string; get getter(): string; }
+>{    p: 'value',    get getter() {        return 'value';    },} : { p: string; get getter(): string; }
 
     p: 'value',
 >p : string
@@ -19,8 +19,8 @@ export const t1 = {
 }
 
 export const t2 = {
->t2 : { v: string; setter: any; }
->{    v: 'value',    set setter(v) {},} : { v: string; setter: any; }
+>t2 : { v: string; set setter(v: any); }
+>{    v: 'value',    set setter(v) {},} : { v: string; set setter(v: any); }
 
     v: 'value',
 >v : string
@@ -32,8 +32,8 @@ export const t2 = {
 }
 
 export const t3 = {
->t3 : { p: string; value: string; }
->{    p: 'value',    get value() {        return 'value';    },    set value(v) {},} : { p: string; value: string; }
+>t3 : { p: string; get value(): string; set value(v: string); }
+>{    p: 'value',    get value() {        return 'value';    },    set value(v) {},} : { p: string; get value(): string; set value(v: string); }
 
     p: 'value',
 >p : string

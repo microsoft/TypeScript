@@ -178,8 +178,9 @@ declare var z: {
     readonly [x: string]: Object;
 };
 declare function f(): {
-    readonly x: number;
-    y: number;
+    get x(): number;
+    get y(): number;
+    set y(value: number);
 };
 declare function g(): {
     readonly [x: string]: Object;

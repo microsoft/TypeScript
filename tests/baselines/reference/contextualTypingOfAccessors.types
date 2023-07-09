@@ -12,9 +12,9 @@ var x: {
 }
  
 x = {
->x = {   get foo() {      return (n)=>n   },   set foo(x) {}} : { foo: (n: any) => any; }
+>x = {   get foo() {      return (n)=>n   },   set foo(x) {}} : { get foo(): (n: any) => any; set foo(x: (n: any) => any); }
 >x : { foo: (x: number) => number; }
->{   get foo() {      return (n)=>n   },   set foo(x) {}} : { foo: (n: any) => any; }
+>{   get foo() {      return (n)=>n   },   set foo(x) {}} : { get foo(): (n: any) => any; set foo(x: (n: any) => any); }
 
    get foo() {
 >foo : (n: any) => any

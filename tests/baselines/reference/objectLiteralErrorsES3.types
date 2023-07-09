@@ -2,20 +2,20 @@
 
 === objectLiteralErrorsES3.ts ===
 var e1 = { get a() { return 4; } };
->e1 : { readonly a: number; }
->{ get a() { return 4; } } : { readonly a: number; }
+>e1 : { get a(): number; }
+>{ get a() { return 4; } } : { get a(): number; }
 >a : number
 >4 : 4
 
 var e2 = { set a(n) { } };
->e2 : { a: any; }
->{ set a(n) { } } : { a: any; }
+>e2 : { set a(n: any); }
+>{ set a(n) { } } : { set a(n: any); }
 >a : any
 >n : any
 
 var e3 = { get a() { return ''; }, set a(n) { } };
->e3 : { a: string; }
->{ get a() { return ''; }, set a(n) { } } : { a: string; }
+>e3 : { get a(): string; set a(n: string); }
+>{ get a() { return ''; }, set a(n) { } } : { get a(): string; set a(n: string); }
 >a : string
 >'' : ""
 >a : string

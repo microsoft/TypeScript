@@ -139,8 +139,8 @@ let propertyNested: { a: { a: number, b: string } } =
 // accessors don't copy the descriptor
 // (which means that readonly getters become read/write properties)
 let op = { get a () { return 6 } };
->op : { readonly a: number; }
->{ get a () { return 6 } } : { readonly a: number; }
+>op : { get a(): number; }
+>{ get a () { return 6 } } : { get a(): number; }
 >a : number
 >6 : 6
 
@@ -151,7 +151,7 @@ let getter: { a: number, c: number } =
 
     { ...op, c: 7 }
 >{ ...op, c: 7 } : { c: number; a: number; }
->op : { readonly a: number; }
+>op : { get a(): number; }
 >c : number
 >7 : 7
 

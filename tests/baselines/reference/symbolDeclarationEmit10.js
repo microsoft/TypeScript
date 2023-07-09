@@ -15,5 +15,6 @@ var obj = {
 
 //// [symbolDeclarationEmit10.d.ts]
 declare var obj: {
-    [Symbol.isConcatSpreadable]: string;
+    get [Symbol.isConcatSpreadable](): string;
+    set [Symbol.isConcatSpreadable](x: string);
 };

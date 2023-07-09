@@ -2,8 +2,8 @@
 
 === symbolProperty18.ts ===
 var i = {
->i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
->{    [Symbol.iterator]: 0,    [Symbol.toStringTag]() { return "" },    set [Symbol.toPrimitive](p: boolean) { }} : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; set [Symbol.toPrimitive](p: boolean); }
+>{    [Symbol.iterator]: 0,    [Symbol.toStringTag]() { return "" },    set [Symbol.toPrimitive](p: boolean) { }} : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; set [Symbol.toPrimitive](p: boolean); }
 
     [Symbol.iterator]: 0,
 >[Symbol.iterator] : number
@@ -30,7 +30,7 @@ var i = {
 var it = i[Symbol.iterator];
 >it : number
 >i[Symbol.iterator] : number
->i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; set [Symbol.toPrimitive](p: boolean); }
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol
@@ -39,7 +39,7 @@ var str = i[Symbol.toStringTag]();
 >str : string
 >i[Symbol.toStringTag]() : string
 >i[Symbol.toStringTag] : () => string
->i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; set [Symbol.toPrimitive](p: boolean); }
 >Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
 >toStringTag : unique symbol
@@ -47,7 +47,7 @@ var str = i[Symbol.toStringTag]();
 i[Symbol.toPrimitive] = false;
 >i[Symbol.toPrimitive] = false : false
 >i[Symbol.toPrimitive] : boolean
->i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
+>i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; set [Symbol.toPrimitive](p: boolean); }
 >Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
 >toPrimitive : unique symbol

@@ -10,8 +10,8 @@ interface Foo {
 }
 
 const explicit = {
->explicit : { n: number; x: number; }
->{    n: 12,    get x(this: Foo): number { return this.n; },    set x(this: Foo, n: number) { this.n = n; }} : { n: number; x: number; }
+>explicit : { n: number; get x(): number; set x(this: number); }
+>{    n: 12,    get x(this: Foo): number { return this.n; },    set x(this: Foo, n: number) { this.n = n; }} : { n: number; get x(): number; set x(this: number); }
 
     n: 12,
 >n : number
@@ -35,8 +35,8 @@ const explicit = {
 >n : number
 }
 const copiedFromGetter = {
->copiedFromGetter : { n: number; x: number; }
->{    n: 14,    get x(this: Foo): number { return this.n; },    set x(n) { this.n = n; }} : { n: number; x: number; }
+>copiedFromGetter : { n: number; get x(): number; set x(n: number); }
+>{    n: 14,    get x(this: Foo): number { return this.n; },    set x(n) { this.n = n; }} : { n: number; get x(): number; set x(n: number); }
 
     n: 14,
 >n : number
@@ -59,8 +59,8 @@ const copiedFromGetter = {
 >n : number
 }
 const copiedFromSetter = {
->copiedFromSetter : { n: number; x: number; }
->{    n: 15,    get x() { return this.n },    set x(this: Foo, n: number) { this.n = n; }} : { n: number; x: number; }
+>copiedFromSetter : { n: number; get x(): number; set x(this: number); }
+>{    n: 15,    get x() { return this.n },    set x(this: Foo, n: number) { this.n = n; }} : { n: number; get x(): number; set x(this: number); }
 
     n: 15,
 >n : number
@@ -83,8 +83,8 @@ const copiedFromSetter = {
 >n : number
 }
 const copiedFromGetterUnannotated = {
->copiedFromGetterUnannotated : { n: number; x: number; }
->{    n: 16,    get x(this: Foo) { return this.n },    set x(this, n) { this.n = n; }} : { n: number; x: number; }
+>copiedFromGetterUnannotated : { n: number; get x(): number; set x(this: number); }
+>{    n: 16,    get x(this: Foo) { return this.n },    set x(this, n) { this.n = n; }} : { n: number; get x(): number; set x(this: number); }
 
     n: 16,
 >n : number

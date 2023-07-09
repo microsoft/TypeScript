@@ -2,8 +2,8 @@
 
 === superInObjectLiterals_ES5.ts ===
 var obj = {
->obj : { __proto__: { method(): void; }; method(): void; prop: number; p1: () => void; p2: () => void; p3: () => void; }
->{    __proto__: {        method() {        }    },    method() {        super.method();    },    get prop() {        super.method();        return 10;    },    set prop(value) {        super.method();    },    p1: function () {        super.method();    },    p2: function f() {        super.method();    },    p3: () => {        super.method();    }} : { __proto__: { method(): void; }; method(): void; prop: number; p1: () => void; p2: () => void; p3: () => void; }
+>obj : { __proto__: { method(): void; }; method(): void; get prop(): number; set prop(value: number); p1: () => void; p2: () => void; p3: () => void; }
+>{    __proto__: {        method() {        }    },    method() {        super.method();    },    get prop() {        super.method();        return 10;    },    set prop(value) {        super.method();    },    p1: function () {        super.method();    },    p2: function f() {        super.method();    },    p3: () => {        super.method();    }} : { __proto__: { method(): void; }; method(): void; get prop(): number; set prop(value: number); p1: () => void; p2: () => void; p3: () => void; }
 
     __proto__: {
 >__proto__ : { method(): void; }
@@ -97,8 +97,8 @@ class B extends A {
 >f : () => void
 
         var obj = {
->obj : { __proto__: { method(): void; }; method(): void; prop: number; p1: () => void; p2: () => void; p3: () => void; }
->{            __proto__: {                method() {                }            },            method() {                super.method();            },            get prop() {                super.method();                return 10;            },            set prop(value) {                super.method();            },            p1: function () {                super.method();            },            p2: function f() {                super.method();            },            p3: () => {                super.method();            }        } : { __proto__: { method(): void; }; method(): void; prop: number; p1: () => void; p2: () => void; p3: () => void; }
+>obj : { __proto__: { method(): void; }; method(): void; get prop(): number; set prop(value: number); p1: () => void; p2: () => void; p3: () => void; }
+>{            __proto__: {                method() {                }            },            method() {                super.method();            },            get prop() {                super.method();                return 10;            },            set prop(value) {                super.method();            },            p1: function () {                super.method();            },            p2: function f() {                super.method();            },            p3: () => {                super.method();            }        } : { __proto__: { method(): void; }; method(): void; get prop(): number; set prop(value: number); p1: () => void; p2: () => void; p3: () => void; }
 
             __proto__: {
 >__proto__ : { method(): void; }

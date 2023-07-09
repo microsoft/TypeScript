@@ -97,8 +97,8 @@ class C3 {
 
 });
 ({
->({    get await() { return 1 },    set await(value) { }}) : { await: number; }
->{    get await() { return 1 },    set await(value) { }} : { await: number; }
+>({    get await() { return 1 },    set await(value) { }}) : { get await(): number; set await(value: number); }
+>{    get await() { return 1 },    set await(value) { }} : { get await(): number; set await(value: number); }
 
     get await() { return 1 },
 >await : number

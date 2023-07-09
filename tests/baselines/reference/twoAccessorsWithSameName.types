@@ -40,8 +40,8 @@ class E {
 }
 
 var x = {
->x : { readonly x: number; }
->{    get x() {        return 1;    },    // error    get x() {        return 1;    }} : { readonly x: number; }
+>x : { get x(): number; }
+>{    get x() {        return 1;    },    // error    get x() {        return 1;    }} : { get x(): number; }
 
     get x() {
 >x : number
@@ -61,8 +61,8 @@ var x = {
 }
 
 var y = {
->y : { x: number; }
->{    get x() {        return 1;    },    set x(v) { }} : { x: number; }
+>y : { get x(): number; set x(v: number); }
+>{    get x() {        return 1;    },    set x(v) { }} : { get x(): number; set x(v: number); }
 
     get x() {
 >x : number

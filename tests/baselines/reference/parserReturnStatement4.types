@@ -2,7 +2,7 @@
 
 === parserReturnStatement4.ts ===
 var v = { get foo() { return } };
->v : { readonly foo: void; }
->{ get foo() { return } } : { readonly foo: void; }
+>v : { get foo(): void; }
+>{ get foo() { return } } : { get foo(): void; }
 >foo : void
 

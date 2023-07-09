@@ -57,8 +57,8 @@ class D<T> {
 }
 
 var x = {
->x : { readonly a: number; }
->{    get a() {        var r3 = this; // any        return 1;    }} : { readonly a: number; }
+>x : { get a(): number; }
+>{    get a() {        var r3 = this; // any        return 1;    }} : { get a(): number; }
 
     get a() {
 >a : number

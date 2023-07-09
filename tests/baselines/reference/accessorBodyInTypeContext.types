@@ -2,7 +2,7 @@
 
 === accessorBodyInTypeContext.ts ===
 type A = {
->A : { readonly foo: number; }
+>A : { get foo(): number; }
 
     get foo() { return 0 }
 >foo : number
@@ -11,7 +11,7 @@ type A = {
 };
 
 type B = {
->B : { foo: any; }
+>B : { set foo(v: any); }
 
     set foo(v: any) { }
 >foo : any

@@ -5,8 +5,8 @@
 // of the object literal.
 
 let obj1 = {
->obj1 : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
->{    a: 1,    f() {        return this.a;    },    b: "hello",    c: {        g() {            this.g();        }    },    get d() {        return this.a;    },    get e() {        return this.b;    },    set e(value) {        this.b = value;    }} : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>obj1 : { a: number; f(): number; b: string; c: { g(): void; }; get d(): number; get e(): string; set e(value: string); }
+>{    a: 1,    f() {        return this.a;    },    b: "hello",    c: {        g() {            this.g();        }    },    get d() {        return this.a;    },    get e() {        return this.b;    },    set e(value) {        this.b = value;    }} : { a: number; f(): number; b: string; c: { g(): void; }; get d(): number; get e(): string; set e(value: string); }
 
     a: 1,
 >a : number
@@ -17,7 +17,7 @@ let obj1 = {
 
         return this.a;
 >this.a : number
->this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>this : { a: number; f(): number; b: string; c: { g(): void; }; get d(): number; get e(): string; set e(value: string); }
 >a : number
 
     },
@@ -44,7 +44,7 @@ let obj1 = {
 
         return this.a;
 >this.a : number
->this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>this : { a: number; f(): number; b: string; c: { g(): void; }; get d(): number; get e(): string; set e(value: string); }
 >a : number
 
     },
@@ -53,7 +53,7 @@ let obj1 = {
 
         return this.b;
 >this.b : string
->this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>this : { a: number; f(): number; b: string; c: { g(): void; }; get d(): number; get e(): string; set e(value: string); }
 >b : string
 
     },
@@ -64,7 +64,7 @@ let obj1 = {
         this.b = value;
 >this.b = value : string
 >this.b : string
->this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>this : { a: number; f(): number; b: string; c: { g(): void; }; get d(): number; get e(): string; set e(value: string); }
 >b : string
 >value : string
     }

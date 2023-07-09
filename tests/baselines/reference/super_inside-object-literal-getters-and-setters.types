@@ -5,8 +5,8 @@ module ObjectLiteral {
 >ObjectLiteral : typeof ObjectLiteral
 
     var ThisInObjectLiteral = {
->ThisInObjectLiteral : { _foo: string; foo: string; test: () => any; }
->{        _foo: '1',        get foo(): string {            return super._foo;        },        set foo(value: string) {            super._foo = value;        },        test: function () {            return super._foo;        }    } : { _foo: string; foo: string; test: () => any; }
+>ThisInObjectLiteral : { _foo: string; get foo(): string; set foo(value: string); test: () => any; }
+>{        _foo: '1',        get foo(): string {            return super._foo;        },        set foo(value: string) {            super._foo = value;        },        test: function () {            return super._foo;        }    } : { _foo: string; get foo(): string; set foo(value: string); test: () => any; }
 
         _foo: '1',
 >_foo : string
@@ -58,8 +58,8 @@ class SuperObjectTest extends F {
 >testing : () => void
 
         var test = {
->test : { readonly F: any; }
->{            get F() {                return super.test();            }        } : { readonly F: any; }
+>test : { get F(): any; }
+>{            get F() {                return super.test();            }        } : { get F(): any; }
 
             get F() {
 >F : any

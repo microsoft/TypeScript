@@ -223,15 +223,15 @@ unbox(b4);  // { value: { value: typeof b4 }}
 >b4 : { value: { value: { value: any; }; }; }
 
 unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
->unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
+>unbox({ value: { value: { get value() { return this; } }}}) : { get value(): { get value(): any; }; }
 >unbox : <T>(box: RecBox<T>) => T
->{ value: { value: { get value() { return this; } }}} : { value: { value: { readonly value: { readonly value: any; }; }; }; }
->value : { value: { readonly value: { readonly value: any; }; }; }
->{ value: { get value() { return this; } }} : { value: { readonly value: { readonly value: any; }; }; }
->value : { readonly value: { readonly value: any; }; }
->{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
->value : { readonly value: any; }
->this : { readonly value: any; } | RecBox<{ readonly value: { readonly value: any; }; }>
+>{ value: { value: { get value() { return this; } }}} : { value: { value: { get value(): { get value(): any; }; }; }; }
+>value : { value: { get value(): { get value(): any; }; }; }
+>{ value: { get value() { return this; } }} : { value: { get value(): { get value(): any; }; }; }
+>value : { get value(): { get value(): any; }; }
+>{ get value() { return this; } } : { get value(): { get value(): any; }; }
+>value : { get value(): any; }
+>this : { get value(): any; } | RecBox<{ get value(): { get value(): any; }; }>
 
 // Inference from nested instantiations of same generic types
 
