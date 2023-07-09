@@ -7172,7 +7172,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         propertyName,
                         [],
                         propertyTypeNode,
-                        undefined);
+                        /*body*/ undefined);
                     typeElements.push(preserveCommentsOn(getAccessorSignature));
                 }
                 if (propertySymbol.flags & SymbolFlags.SetAccessor) {
@@ -7182,16 +7182,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         factory.createModifiersFromModifierFlags(flags),
                         propertyName,
                         [factory.createParameterDeclaration(
-                            undefined,
-                            undefined,
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
                             parameterName,
-                            undefined,
+                            /*questionToken*/ undefined,
                             propertyTypeNode
                         )],
-                        undefined);
+                        /*body*/ undefined);
                     typeElements.push(preserveCommentsOn(setAccessorSignature));
                 }
-            } else {
+            }
+            else {
                 const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
                 if (modifiers) {
                     context.approximateLength += 9;
