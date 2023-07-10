@@ -362,14 +362,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     private lastReportedVersion = 0;
     /**
-     * Current project's program version. (incremented everytime new program is created that is not complete reuse from the old one)
+     * Current project's program version. (incremented every time new program is created that is not complete reuse from the old one)
      * This property is changed in 'updateGraph' based on the set of files in program
      */
     private projectProgramVersion = 0;
     /**
      * Current version of the project state. It is changed when:
      * - new root file was added/removed
-     * - edit happen in some file that is currently included in the project.
+     * - edit happens in some file that is currently included in the project.
      * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
      */
     private projectStateVersion = 0;
@@ -862,7 +862,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /**
-     * Get the errors that dont have any file name associated
+     * Get the errors that don't have any file name associated
      */
     getGlobalProjectErrors(): readonly Diagnostic[] {
         return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
@@ -2270,7 +2270,7 @@ export class InferredProject extends Project {
     readonly projectRootPath: string | undefined;
 
     /**
-     * stored only if their is no projectRootPath and this isnt single inferred project
+     * stored only if there is no projectRootPath and this isn't single inferred project
      *
      * @internal
      */
@@ -2851,7 +2851,7 @@ export class ConfiguredProject extends Project {
     }
 
     /**
-     * Get the errors that dont have any file name associated
+     * Get the errors that don't have any file name associated
      */
     override getGlobalProjectErrors(): readonly Diagnostic[] {
         return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
