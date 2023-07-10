@@ -33488,7 +33488,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             parameters.push(createCombinedSymbolFromTypes(symbols, mapDefined(candidates, candidate => tryGetTypeAtPosition(candidate, i))));
         }
         const restParameterSymbols = mapDefined(candidates, c => signatureHasRestParameter(c) ? last(c.parameters) : undefined);
-        let flags = SignatureFlags.None;
+        let flags = SignatureFlags.IsSignatureCandidateForOverloadFailure;
         if (restParameterSymbols.length !== 0) {
             const type = createArrayType(getUnionType(mapDefined(candidates, tryGetRestTypeOfSignature), UnionReduction.Subtype));
             parameters.push(createCombinedSymbolForOverloadFailure(restParameterSymbols, type));
@@ -34386,6 +34386,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkDeprecatedSignature(signature: Signature, node: CallLikeExpression) {
+        if (signature.flags & SignatureFlags.IsSignatureCandidateForOverloadFailure) return;
         if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
             const suggestionNode = getDeprecatedSuggestionNode(node);
             const name = tryGetPropertyAccessOrIdentifierToString(getInvokedExpression(node));

@@ -6724,11 +6724,12 @@ export const enum SignatureFlags {
     IsOuterCallChain = 1 << 4,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
     IsUntypedSignatureInJSFile = 1 << 5, // Indicates signature is from a js file and has no types
     IsNonInferrable = 1 << 6,           // Indicates signature comes from a non-inferrable type
+    IsSignatureCandidateForOverloadFailure = 1 << 7,
 
     // We do not propagate `IsInnerCallChain` or `IsOuterCallChain` to instantiated signatures, as that would result in us
     // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
     // instantiating the return type.
-    PropagatingFlags = HasRestParameter | HasLiteralTypes | Abstract | IsUntypedSignatureInJSFile,
+    PropagatingFlags = HasRestParameter | HasLiteralTypes | Abstract | IsUntypedSignatureInJSFile | IsSignatureCandidateForOverloadFailure,
 
     CallChainFlags = IsInnerCallChain | IsOuterCallChain,
 }
