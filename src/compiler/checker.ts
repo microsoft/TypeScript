@@ -1273,6 +1273,12 @@ export const enum SignatureCheckMode {
     Callback = BivariantCallback | StrictCallback,
 }
 
+const enum TupleStructureComparisonKind {
+    None = 0,
+    MatchFixed = 1 << 0,
+    MatchVariable = 1 << 1,
+}
+
 const enum IntersectionState {
     None = 0,
     Source = 1 << 0,  // Source type is a constituent of an outer intersection
@@ -20001,7 +20007,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         //
                         // Since we want to allow contextual types to flow into paremeters, we don't need to differentiate between rest and variadic elements
                         // as that doesn't affect the contextual type of the parameter
-                        isTupleTypeStructureMatching(sourceType, t, /*strictVariableElementsComparison*/ false)
+                        isTupleTypeStructureMatching(sourceType, t, TupleStructureComparisonKind.MatchVariable)
                     ) {
                         return t;
                     }
@@ -23521,14 +23527,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function isTupleTypeStructureMatching(t1: TupleTypeReference, t2: TupleTypeReference, strictVariableElementsComparison: boolean) {
+    function isTupleTypeStructureMatching(t1: TupleTypeReference, t2: TupleTypeReference, tupleStructureComparisonKind: TupleStructureComparisonKind) {
         return getTypeReferenceArity(t1) === getTypeReferenceArity(t2) &&
-            every(t1.target.elementFlags, (f, i) => {
-                const variableFlag1 = f & ElementFlags.Variable;
-                const variableFlag2 = t2.target.elementFlags[i] & ElementFlags.Variable;
-                return strictVariableElementsComparison ?
-                    variableFlag1 === variableFlag2 :
-                    variableFlag1 === variableFlag2 || !!variableFlag1 && !!variableFlag2;
+            every(t1.target.elementFlags, (f1, i) => {
+                const f2 = t2.target.elementFlags[i];
+                return f1 === f2 ||
+                    !!(tupleStructureComparisonKind & TupleStructureComparisonKind.MatchFixed && f1 & ElementFlags.Fixed && f2 & ElementFlags.Fixed) ||
+                    !!(tupleStructureComparisonKind & TupleStructureComparisonKind.MatchVariable && f1 & ElementFlags.Variable && f2 & ElementFlags.Variable);
             });
     }
 
@@ -25059,7 +25064,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const elementFlags = target.target.elementFlags;
                         // When source and target are tuple types with the same structure (fixed, variadic, and rest are matched
                         // to the same kind in each position), simply infer between the element types.
-                        if (isTupleType(source) && isTupleTypeStructureMatching(source, target, /*strictVariableElementsComparison*/ true)) {
+                        if (isTupleType(source) && isTupleTypeStructureMatching(source, target, TupleStructureComparisonKind.MatchFixed)) {
                             for (let i = 0; i < targetArity; i++) {
                                 inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
                             }
