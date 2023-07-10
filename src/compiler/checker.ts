@@ -34818,7 +34818,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const type = getTypeOfSymbol(symbol);
         if (strictNullChecks) {
             const declaration = symbol.valueDeclaration;
-            if (declaration && hasInitializer(declaration)) {
+            if (declaration && (hasInitializer(declaration) || hasQuestionToken(declaration))) {
                 return getOptionalType(type);
             }
         }

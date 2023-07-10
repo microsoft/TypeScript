@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/contextuallyTypedParametersWithQuestionToken.ts] ////
+
+=== contextuallyTypedParametersWithQuestionToken.ts ===
+// https://github.com/microsoft/TypeScript/issues/54948
+
+const f1: (a: string, b: number) => void = function self(a, b?) {
+>f1 : Symbol(f1, Decl(contextuallyTypedParametersWithQuestionToken.ts, 2, 5))
+>a : Symbol(a, Decl(contextuallyTypedParametersWithQuestionToken.ts, 2, 11))
+>b : Symbol(b, Decl(contextuallyTypedParametersWithQuestionToken.ts, 2, 21))
+>self : Symbol(self, Decl(contextuallyTypedParametersWithQuestionToken.ts, 2, 42))
+>a : Symbol(a, Decl(contextuallyTypedParametersWithQuestionToken.ts, 2, 57))
+>b : Symbol(b, Decl(contextuallyTypedParametersWithQuestionToken.ts, 2, 59))
+
+  b;
+>b : Symbol(b, Decl(contextuallyTypedParametersWithQuestionToken.ts, 2, 59))
+
+  self("");
+>self : Symbol(self, Decl(contextuallyTypedParametersWithQuestionToken.ts, 2, 42))
+
+  self("", undefined);
+>self : Symbol(self, Decl(contextuallyTypedParametersWithQuestionToken.ts, 2, 42))
+>undefined : Symbol(undefined)
+
+};
+
+const f2: (a: string, b: number) => void = function self(a, b?: number) {
+>f2 : Symbol(f2, Decl(contextuallyTypedParametersWithQuestionToken.ts, 8, 5))
+>a : Symbol(a, Decl(contextuallyTypedParametersWithQuestionToken.ts, 8, 11))
+>b : Symbol(b, Decl(contextuallyTypedParametersWithQuestionToken.ts, 8, 21))
+>self : Symbol(self, Decl(contextuallyTypedParametersWithQuestionToken.ts, 8, 42))
+>a : Symbol(a, Decl(contextuallyTypedParametersWithQuestionToken.ts, 8, 57))
+>b : Symbol(b, Decl(contextuallyTypedParametersWithQuestionToken.ts, 8, 59))
+
+  b;
+>b : Symbol(b, Decl(contextuallyTypedParametersWithQuestionToken.ts, 8, 59))
+
+  self("");
+>self : Symbol(self, Decl(contextuallyTypedParametersWithQuestionToken.ts, 8, 42))
+
+  self("", undefined);
+>self : Symbol(self, Decl(contextuallyTypedParametersWithQuestionToken.ts, 8, 42))
+>undefined : Symbol(undefined)
+
+};
+
