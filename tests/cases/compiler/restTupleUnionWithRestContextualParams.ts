@@ -29,4 +29,9 @@ const f13: <T extends string[]>(...rest: [number, ...T, boolean] ) => void = (a:
 const f14: <T extends boolean>(...rest: [number, ...string[], T] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
 const f15: <T extends string>(...rest: [number, ...T[], boolean] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
 
-let fn: (...rest: [...string[], number]) => void = (...rest: [...string[], number]) => {};
+const f16: (...rest: [...string[], number]) => void = (...rest: [...string[], number]) => {};
+
+const f17: (...rest: [...string[], number]) => void = (a, b, c?) => {};
+const f18: (...rest: [...string[], number]) => void = (a, b, c?: string | number) => {};
+
+const f19: (...rest: [string, ...boolean[], string] | [number]) => void = (a, ...rest) => {};

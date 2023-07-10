@@ -107,9 +107,32 @@ const f15: <T extends string>(...rest: [number, ...T[], boolean] ) => void = (a:
 >a : number
 >arg : [...string[], boolean]
 
-let fn: (...rest: [...string[], number]) => void = (...rest: [...string[], number]) => {};
->fn : (...rest: [...string[], number]) => void
+const f16: (...rest: [...string[], number]) => void = (...rest: [...string[], number]) => {};
+>f16 : (...rest: [...string[], number]) => void
 >rest : [...string[], number]
 >(...rest: [...string[], number]) => {} : (...rest: [...string[], number]) => void
 >rest : [...string[], number]
+
+const f17: (...rest: [...string[], number]) => void = (a, b, c?) => {};
+>f17 : (...rest: [...string[], number]) => void
+>rest : [...string[], number]
+>(a, b, c?) => {} : (a: string | number, b: string | number, c?: string | number) => void
+>a : string | number
+>b : string | number
+>c : string | number
+
+const f18: (...rest: [...string[], number]) => void = (a, b, c?: string | number) => {};
+>f18 : (...rest: [...string[], number]) => void
+>rest : [...string[], number]
+>(a, b, c?: string | number) => {} : (a: string | number, b: string | number, c?: string | number) => void
+>a : string | number
+>b : string | number
+>c : string | number | undefined
+
+const f19: (...rest: [string, ...boolean[], string] | [number]) => void = (a, ...rest) => {};
+>f19 : (...rest: [string, ...boolean[], string] | [number]) => void
+>rest : [string, ...boolean[], string] | [number]
+>(a, ...rest) => {} : (a: string | number, ...rest: (string | number | boolean)[]) => void
+>a : string | number
+>rest : (string | number | boolean)[]
 

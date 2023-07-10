@@ -20024,7 +20024,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const elementTypes: Type[] = [];
                     const elementFlags: ElementFlags[] = [];
 
-                    for (let i = 0; i < getTypeReferenceArity(sourceType); i++) {
+                    const sourceArity = getTypeReferenceArity(sourceType);
+                    const targetArity = getTypeReferenceArity(t);
+
+                    for (let i = 0; i < sourceArity; i++) {
+                        if (i >= targetArity) {
+                            elementTypes.push(anyType);
+                            elementFlags.push(sourceType.target.elementFlags[i]);
+                            continue;
+                        }
                         elementTypes.push(getTupleElementType(t, i)!);
                         elementFlags.push(sourceType.target.elementFlags[i]);
                     }
