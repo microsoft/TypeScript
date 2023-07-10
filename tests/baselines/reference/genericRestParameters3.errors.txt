@@ -11,8 +11,8 @@ genericRestParameters3.ts(23,1): error TS2322: Type '(x: string, y: string) => v
         Type 'number' is not assignable to type 'string'.
 genericRestParameters3.ts(24,1): error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
   Types of parameters 'y' and 'args' are incompatible.
-    Type '[number, boolean] | [string, any]' is not assignable to type '[y: number, z: boolean]'.
-      Type '[string, any]' is not assignable to type '[y: number, z: boolean]'.
+    Type '[number, boolean] | [string, undefined]' is not assignable to type '[y: number, z: boolean]'.
+      Type '[string, undefined]' is not assignable to type '[y: number, z: boolean]'.
         Type at position 0 in source is not compatible with type at position 0 in target.
           Type 'string' is not assignable to type 'number'.
 genericRestParameters3.ts(35,1): error TS2554: Expected 1 arguments, but got 0.
@@ -77,8 +77,8 @@ genericRestParameters3.ts(59,5): error TS2345: Argument of type '["what"]' is no
     ~~
 !!! error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
 !!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
-!!! error TS2322:     Type '[number, boolean] | [string, any]' is not assignable to type '[y: number, z: boolean]'.
-!!! error TS2322:       Type '[string, any]' is not assignable to type '[y: number, z: boolean]'.
+!!! error TS2322:     Type '[number, boolean] | [string, undefined]' is not assignable to type '[y: number, z: boolean]'.
+!!! error TS2322:       Type '[string, undefined]' is not assignable to type '[y: number, z: boolean]'.
 !!! error TS2322:         Type at position 0 in source is not compatible with type at position 0 in target.
 !!! error TS2322:           Type 'string' is not assignable to type 'number'.
     f1 = f4;

@@ -20035,8 +20035,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                     for (let i = 0; i < sourceArity; i++) {
                         if (i >= targetArity) {
-                            elementTypes.push(anyType);
-                            elementFlags.push(sourceType.target.elementFlags[i]);
+                            if (sourceType.target.elementFlags[i] & ElementFlags.Fixed) {
+                                elementTypes.push(undefinedType);
+                                elementFlags.push(sourceType.target.elementFlags[i]);
+                            }
                             continue;
                         }
                         elementTypes.push(getTupleElementType(t, i)!);
