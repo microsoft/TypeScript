@@ -1,7 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @noEmit: true
-// @allowImportingTsExtensions: true
+// @allowImportingTsExtensions: false
 // @module: nodenext
 
 // @Filename: /nodes/problems.ts

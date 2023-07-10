@@ -131,6 +131,7 @@ function getPreferences(
     importingSourceFile: SourceFile,
     oldImportSpecifier?: string,
 ): Preferences {
+    const oldImportSpecifierHasTSExtension = oldImportSpecifier !== undefined && hasTSFileExtension(oldImportSpecifier);
     const preferredEnding = getPreferredEnding();
     return {
         relativePreference:
@@ -143,7 +144,7 @@ function getPreferences(
             RelativePreference.Shortest,
         getAllowedEndingsInPreferredOrder: syntaxImpliedNodeFormat => {
             if ((syntaxImpliedNodeFormat ?? importingSourceFile.impliedNodeFormat) === ModuleKind.ESNext) {
-                if (shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName)) {
+                if (oldImportSpecifierHasTSExtension || shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName)) {
                     return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension];
                 }
                 return [ModuleSpecifierEnding.JsExtension];
@@ -153,7 +154,7 @@ function getPreferences(
                     ? [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Index]
                     : [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
             }
-            const allowImportingTsExtension = shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName);
+            const allowImportingTsExtension = oldImportSpecifierHasTSExtension || shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName);
             switch (preferredEnding) {
                 case ModuleSpecifierEnding.JsExtension: return allowImportingTsExtension
                     ? [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index]
@@ -172,7 +173,7 @@ function getPreferences(
 
     function getPreferredEnding(): ModuleSpecifierEnding {
         if (oldImportSpecifier !== undefined) {
-            if (hasTSFileExtension(oldImportSpecifier)) return ModuleSpecifierEnding.TsExtension;
+            if (oldImportSpecifierHasTSExtension) return ModuleSpecifierEnding.TsExtension;
             if (hasJSFileExtension(oldImportSpecifier)) return ModuleSpecifierEnding.JsExtension;
             if (endsWith(oldImportSpecifier, "/index")) return ModuleSpecifierEnding.Index;
         }
