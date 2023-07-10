@@ -9,5 +9,5 @@ edit.applyRefactor({
     refactorName: "Inline variable",
     actionName: "Inline variable",
     actionDescription: "Inline variable",
-    newContent: "export const mdTutorial = `Let's talk about markdown.\\nCode-formatted text looks \\`like this\\` and requires surrounding by backticks (\\\\\`).?`;"
+    newContent: "export const mdTutorial = `Let's talk about markdown.\\nCode-formatted text looks \\`like this\\` and requires surrounding by backticks (\\\\\\\`).?`;"
 });
