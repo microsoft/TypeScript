@@ -248,18 +248,14 @@ export function verifyResolutionCache(
     // Verify ref count
     resolutionToRefs.forEach((info, resolution) => {
         ts.Debug.assert(
-            resolution.refCount === info.length,
-            `${projectName}:: Expected Resolution ref count ${info.length} but got ${resolution.refCount}`,
+            resolution.files?.size === info.length,
+            `${projectName}:: Expected Resolution ref count ${info.length} but got ${resolution.files?.size}`,
             () => `Expected from:: ${JSON.stringify(info, undefined, " ")}` +
-                `Actual from: ${resolution.refCount}`
+                `Actual from: ${resolution.files?.size} used from ${resolution.files ? JSON.stringify(ts.arrayFrom(resolution.files), undefined, " "): "undefined"}`
         );
         ts.Debug.assert(
             !resolution.isInvalidated,
             `${projectName}:: Resolution should not be invalidated`
-        );
-        ts.Debug.assert(
-            resolutionToExpected.get(resolution)!.refCount === resolution.refCount,
-            `${projectName}:: Expected Resolution ref count ${resolutionToExpected.get(resolution)!.refCount} but got ${resolution.refCount}`
         );
         verifySet(resolutionToExpected.get(resolution)!.files, resolution.files, `Resolution files`);
     });
@@ -274,10 +270,7 @@ export function verifyResolutionCache(
     actual.resolvedTypeReferenceDirectives.forEach((_resolutions, path) => expected.removeResolutionsOfFile(path));
     expected.finishCachingPerDirectoryResolution(/*newProgram*/ undefined, actualProgram);
 
-    resolutionToExpected.forEach(expected => {
-        ts.Debug.assert(!expected.refCount, `${projectName}:: All the resolution should be released`);
-        ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`);
-    });
+    resolutionToExpected.forEach(expected => ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`));
     ts.Debug.assert(expected.resolvedFileToResolution.size === 0, `${projectName}:: resolvedFileToResolution should be released`);
     ts.Debug.assert(expected.resolutionsWithFailedLookups.size === 0, `${projectName}:: resolutionsWithFailedLookups should be released`);
     ts.Debug.assert(expected.resolutionsWithOnlyAffectingLocations.size === 0, `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`);
