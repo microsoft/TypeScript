@@ -150,22 +150,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
-          "text": [
-            {
-              "text": "param:",
-              "span": {
-                "start": {
-                  "line": 1,
-                  "offset": 22
-                },
-                "end": {
-                  "line": 1,
-                  "offset": 27
-                },
-                "file": "/a/b/app.ts"
-              }
-            }
-          ],
+          "text": "param:",
           "position": {
             "line": 2,
             "offset": 5
@@ -240,22 +225,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
-          "text": [
-            {
-              "text": "param:",
-              "span": {
-                "start": {
-                  "line": 1,
-                  "offset": 22
-                },
-                "end": {
-                  "line": 1,
-                  "offset": 27
-                },
-                "file": "/a/b/app.ts"
-              }
-            }
-          ],
+          "text": "param:",
           "position": {
             "line": 2,
             "offset": 5
@@ -330,22 +300,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
-          "text": [
-            {
-              "text": "param:",
-              "span": {
-                "start": {
-                  "line": 1,
-                  "offset": 22
-                },
-                "end": {
-                  "line": 1,
-                  "offset": 27
-                },
-                "file": "/a/b/app.ts"
-              }
-            }
-          ],
+          "text": "param:",
           "position": {
             "line": 2,
             "offset": 5

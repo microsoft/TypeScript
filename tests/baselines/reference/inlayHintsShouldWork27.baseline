@@ -1,7 +1,7 @@
 foo(a => {
      ^
 {
-  "text": ": (c: (d: 2 | 3) => void) => ...",
+  "text": ": (c: (d: 2 | 3) => void) => void",
   "position": 87,
   "kind": "Type",
   "whitespaceBefore": true

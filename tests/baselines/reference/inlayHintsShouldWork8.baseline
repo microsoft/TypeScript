@@ -1,7 +1,19 @@
 new Class(1)
           ^
 {
-  "text": "a:",
+  "text": [
+    {
+      "text": "a",
+      "span": {
+        "start": 30,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork8.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 136,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -10,7 +22,19 @@ new Class(1)
 new Class(1, 2)
           ^
 {
-  "text": "b:",
+  "text": [
+    {
+      "text": "b",
+      "span": {
+        "start": 58,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork8.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 149,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -19,7 +43,19 @@ new Class(1, 2)
 new Class(1, 2)
              ^
 {
-  "text": "c:",
+  "text": [
+    {
+      "text": "c",
+      "span": {
+        "start": 69,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork8.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 152,
   "kind": "Parameter",
   "whitespaceAfter": true

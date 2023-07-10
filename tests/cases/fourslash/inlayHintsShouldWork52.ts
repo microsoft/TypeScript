@@ -35,5 +35,6 @@
 
 verify.baselineInlayHints(undefined, {
     includeInlayParameterNameHints: "literals",
-    includeInlayFunctionLikeReturnTypeHints: true
+    includeInlayFunctionLikeReturnTypeHints: true,
+    interactiveInlayHints: true
 });

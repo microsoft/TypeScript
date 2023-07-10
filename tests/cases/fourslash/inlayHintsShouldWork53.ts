@@ -4,5 +4,6 @@
 //// fn(/* nobody knows exactly what this param is */ 42);
 
 verify.baselineInlayHints(undefined, {
-    includeInlayParameterNameHints: "literals"
+    includeInlayParameterNameHints: "literals",
+    interactiveInlayHints: true
 });

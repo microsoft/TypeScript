@@ -157,9 +157,12 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean) {
-        let hintText: string | InlayHintDisplayPart[] = `${isFirstVariadicArgument ? "..." : ""}${text}:`;
+        let hintText: string | InlayHintDisplayPart[] = `${isFirstVariadicArgument ? "..." : ""}${text}`;
         if (shouldUseInteractiveInlayHints(preferences)) {
-            hintText = [getNodeDisplayPart(text, parameter), { text: ":" }];
+            hintText = [getNodeDisplayPart(hintText, parameter), { text: ":" }];
+        }
+        else {
+            hintText += ":";
         }
 
         result.push({
