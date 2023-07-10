@@ -20,6 +20,8 @@ import {
     ClassDeclaration,
     ClassElement,
     ClassExpression,
+    classHasClassThisAssignment,
+    classHasExplicitlyAssignedName,
     ClassLikeDeclaration,
     classOrConstructorParameterIsDecorated,
     ClassStaticBlockDeclaration,
@@ -44,7 +46,7 @@ import {
     filter,
     find,
     findComputedPropertyNameCacheAssignment,
-    findSuperStatementIndex,
+    findSuperStatementIndexPath,
     flattenCommaList,
     ForStatement,
     GeneratedIdentifier,
@@ -80,14 +82,16 @@ import {
     isArrowFunction,
     isAssignmentExpression,
     isAutoAccessorPropertyDeclaration,
-    isBindingName,
+    isBlock,
     isCallChain,
     isCallToHelper,
+    isCatchClause,
     isClassDeclaration,
     isClassElement,
     isClassExpression,
-    isClassLike,
+    isClassNamedEvaluationHelperBlock,
     isClassStaticBlockDeclaration,
+    isClassThisAssignmentBlock,
     isCommaExpression,
     isCompoundAssignment,
     isComputedPropertyName,
@@ -96,7 +100,6 @@ import {
     isElementAccessExpression,
     isExportOrDefaultModifier,
     isExpression,
-    isExpressionStatement,
     isForInitializer,
     isGeneratedIdentifier,
     isGeneratedPrivateIdentifier,
@@ -104,6 +107,7 @@ import {
     isGetAccessorDeclaration,
     isHeritageClause,
     isIdentifier,
+    isIdentifierText,
     isInitializedProperty,
     isLeftHandSideExpression,
     isMethodDeclaration,
@@ -127,7 +131,6 @@ import {
     isPropertyAssignment,
     isPropertyDeclaration,
     isPropertyName,
-    isPropertyNameLiteral,
     isSetAccessor,
     isSetAccessorDeclaration,
     isShorthandPropertyAssignment,
@@ -138,9 +141,11 @@ import {
     isStatement,
     isStatic,
     isStaticModifier,
+    isStringLiteral,
     isSuperProperty,
     isTemplateLiteral,
     isThisProperty,
+    isTryStatement,
     isVoidExpression,
     LeftHandSideExpression,
     LexicalEnvironment,
@@ -153,6 +158,7 @@ import {
     moveRangePos,
     newPrivateEnvironment,
     Node,
+    NodeArray,
     NodeCheckFlags,
     NodeFactory,
     nodeIsSynthesized,
@@ -161,7 +167,6 @@ import {
     OuterExpressionKinds,
     ParameterDeclaration,
     ParenthesizedExpression,
-    PartiallyEmittedExpression,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrivateEnvironment,
@@ -203,6 +208,7 @@ import {
     ThisExpression,
     TransformationContext,
     TransformFlags,
+    transformNamedEvaluation,
     tryCast,
     tryGetTextOfPropertyName,
     unescapeLeadingUnderscores,
@@ -217,7 +223,7 @@ import {
     visitNodes,
     Visitor,
     visitParameterList,
-    VisitResult,
+    VisitResult
 } from "../_namespaces/ts";
 
 const enum ClassPropertySubstitutionFlags {
@@ -462,7 +468,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             case SyntaxKind.ClassDeclaration:
                 return visitClassDeclaration(node as ClassDeclaration);
             case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression, /*referencedName*/ undefined);
+                return visitClassExpression(node as ClassExpression);
             case SyntaxKind.ClassStaticBlockDeclaration:
             case SyntaxKind.PropertyDeclaration:
                 return Debug.fail("Use `classElementVisitor` instead.");
@@ -490,7 +496,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             case SyntaxKind.BinaryExpression:
                 return visitBinaryExpression(node as BinaryExpression, /*discarded*/ false);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ false, /*referencedName*/ undefined);
+                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ false);
             case SyntaxKind.CallExpression:
                 return visitCallExpression(node as CallExpression);
             case SyntaxKind.ExpressionStatement:
@@ -499,6 +505,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
             case SyntaxKind.ForStatement:
                 return visitForStatement(node as ForStatement);
+            case SyntaxKind.ThisKeyword:
+                return visitThisExpression(node as ThisExpression);
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 // If we are descending into a new scope, clear the current class element
@@ -527,19 +535,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
         return visitEachChild(node, visitor, context);
     }
 
-    function namedEvaluationVisitor(node: Node, referencedName: Expression): VisitResult<Node> {
-        switch (node.kind) {
-            case SyntaxKind.PartiallyEmittedExpression:
-                return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, /*discarded*/ false, referencedName);
-            case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ false, referencedName);
-            case SyntaxKind.ClassExpression:
-                return visitClassExpression(node as ClassExpression, referencedName);
-            default:
-                return visitor(node);
-        }
-    }
-
     /**
      * Visits a node in an expression whose result is discarded.
      */
@@ -553,7 +548,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             case SyntaxKind.CommaListExpression:
                 return visitCommaListExpression(node as CommaListExpression, /*discarded*/ true);
             case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ true, /*referencedName*/ undefined);
+                return visitParenthesizedExpression(node as ParenthesizedExpression, /*discarded*/ true);
             default:
                 return visitor(node);
         }
@@ -692,9 +687,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const { referencedName, name } = visitReferencedPropertyName(node.name);
-            const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
-            return factory.updatePropertyAssignment(node, name, initializer);
+            node = transformNamedEvaluation(context, node);
         }
 
         return visitEachChild(node, visitor, context);
@@ -713,13 +706,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
         return statement;
     }
 
-    function getAssignedNameOfIdentifier(name: Identifier, initializer: Expression) {
-        const originalClass = getOriginalNode(initializer, isClassLike);
-        return originalClass && !originalClass.name && hasSyntacticModifier(originalClass, ModifierFlags.Default) ?
-            factory.createStringLiteral("default") :
-            factory.createStringLiteralFromNode(name);
-    }
-
     function visitVariableDeclaration(node: VariableDeclaration) {
         // 14.3.1.2 RS: Evaluation
         //   LexicalBinding : BindingIdentifier Initializer
@@ -736,10 +722,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
-            const name = visitNode(node.name, visitor, isBindingName);
-            const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
-            return factory.updateVariableDeclaration(node, name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
+            node = transformNamedEvaluation(context, node);
         }
 
         return visitEachChild(node, visitor, context);
@@ -763,18 +746,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
-            const name = visitNode(node.name, visitor, isBindingName);
-            const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
-            return factory.updateParameterDeclaration(
-                node,
-                /*modifiers*/ undefined,
-                /*dotDotDotToken*/ undefined,
-                name,
-                /*questionToken*/ undefined,
-                /*type*/ undefined,
-                initializer
-            );
+            node = transformNamedEvaluation(context, node);
         }
 
         return visitEachChild(node, visitor, context);
@@ -798,11 +770,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
-            const propertyName = visitNode(node.propertyName, visitor, isPropertyName);
-            const name = visitNode(node.name, visitor, isBindingName);
-            const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
-            return factory.updateBindingElement(node, /*dotDotDotToken*/ undefined, propertyName, name, initializer);
+            node = transformNamedEvaluation(context, node);
         }
 
         return visitEachChild(node, visitor, context);
@@ -819,10 +787,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // is `""`.
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const assignedName = factory.createStringLiteral(node.isExportEquals ? "" : "default");
-            const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
-            const expression = visitNode(node.expression, node => namedEvaluationVisitor(node, assignedName), isExpression);
-            return factory.updateExportAssignment(node, modifiers, expression);
+            node = transformNamedEvaluation(context, node, /*ignoreEmptyStringLiteral*/ true, node.isExportEquals ? "" : "default");
         }
 
         return visitEachChild(node, visitor, context);
@@ -1023,15 +988,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const { referencedName, name } = visitReferencedPropertyName(node.name);
-            return factory.updatePropertyDeclaration(
-                node,
-                visitNodes(node.modifiers, modifierVisitor, isModifier),
-                name,
-                /*questionOrExclamationToken*/ undefined,
-                /*type*/ undefined,
-                visitNode(node.initializer, child => namedEvaluationVisitor(child, referencedName), isExpression)
-            );
+            node = transformNamedEvaluation(context, node);
         }
 
         return factory.updatePropertyDeclaration(
@@ -1052,8 +1009,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
             const expr = getPropertyNameExpressionIfNeeded(
                 node.name,
-                /*shouldHoist*/ !!node.initializer || useDefineForClassFields,
-                /*captureReferencedName*/ isNamedEvaluation(node, isAnonymousClassNeedingAssignedName));
+                /*shouldHoist*/ !!node.initializer || useDefineForClassFields);
             if (expr) {
                 getPendingExpressions().push(...flattenCommaList(expr));
             }
@@ -1448,6 +1404,21 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
 
         if (shouldTransformPrivateElementsOrClassStaticBlocks) {
+            if (isClassThisAssignmentBlock(node)) {
+                const result = visitNode(node.body.statements[0].expression, visitor, isExpression);
+                // If the generated `_classThis` assignment is a noop (i.e., `_classThis = _classThis`), we can
+                // eliminate the expression
+                if (isAssignmentExpression(result, /*excludeCompoundAssignment*/ true) &&
+                    result.left === result.right) {
+                    return undefined;
+                }
+                return result;
+            }
+
+            if (isClassNamedEvaluationHelperBlock(node)) {
+                return visitNode(node.body.statements[0].expression, visitor, isExpression);
+            }
+
             startLexicalEnvironment();
             let statements = setCurrentClassElementAnd(
                 node,
@@ -1457,9 +1428,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
 
             const iife = factory.createImmediatelyInvokedArrowFunction(statements);
+            setOriginalNode(skipParentheses(iife.expression), node);
+            addEmitFlags(skipParentheses(iife.expression), EmitFlags.AdviseOnEmitNode);
             setOriginalNode(iife, node);
             setTextRange(iife, node);
-            addEmitFlags(iife, EmitFlags.AdviseOnEmitNode);
             return iife;
         }
     }
@@ -1467,14 +1439,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function isAnonymousClassNeedingAssignedName(node: AnonymousFunctionDefinition) {
         if (isClassExpression(node) && !node.name) {
             const staticPropertiesOrClassStaticBlocks = getStaticPropertiesAndClassStaticBlock(node);
-            const classStaticBlock = find(staticPropertiesOrClassStaticBlocks, isClassStaticBlockDeclaration);
-            if (classStaticBlock) {
-                for (const statement of classStaticBlock.body.statements) {
-                    if (isExpressionStatement(statement) &&
-                        isCallToHelper(statement.expression, "___setFunctionName" as __String)) {
-                        return false;
-                    }
-                }
+            if (some(staticPropertiesOrClassStaticBlocks, isClassNamedEvaluationHelperBlock)) {
+                return false;
             }
 
             const hasTransformableStatics =
@@ -1536,10 +1502,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
             //     ...
 
             if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-                const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
-                const left = visitNode(node.left, visitor, isExpression);
-                const right = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
-                return factory.updateBinaryExpression(node, left, node.operatorToken, right);
+                node = transformNamedEvaluation(context, node);
+                Debug.assertNode(node, isAssignmentExpression);
             }
 
             const left = skipOuterExpressions(node.left, OuterExpressionKinds.PartiallyEmittedExpressions | OuterExpressionKinds.Parentheses);
@@ -1645,7 +1609,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         return factory.updateCommaListExpression(node, elements);
     }
 
-    function visitParenthesizedExpression(node: ParenthesizedExpression, discarded: boolean, referencedName: Expression | undefined) {
+    function visitParenthesizedExpression(node: ParenthesizedExpression, discarded: boolean) {
         // 8.4.5 RS: NamedEvaluation
         //   ParenthesizedExpression : `(` Expression `)`
         //     ...
@@ -1653,42 +1617,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
         const visitorFunc: Visitor<Node, Node> =
             discarded ? discardedValueVisitor :
-            referencedName ? node => namedEvaluationVisitor(node, referencedName) :
             visitor;
         const expression = visitNode(node.expression, visitorFunc, isExpression);
         return factory.updateParenthesizedExpression(node, expression);
     }
 
-    function visitPartiallyEmittedExpression(node: PartiallyEmittedExpression, discarded: boolean, referencedName: Expression | undefined) {
-        // Emulates 8.4.5 RS: NamedEvaluation
-
-        const visitorFunc: Visitor<Node, Node> =
-            discarded ? discardedValueVisitor :
-            referencedName ? node => namedEvaluationVisitor(node, referencedName) :
-            visitor;
-        const expression = visitNode(node.expression, visitorFunc, isExpression);
-        return factory.updatePartiallyEmittedExpression(node, expression);
-    }
-
-    function visitReferencedPropertyName(node: PropertyName) {
-        if (isPropertyNameLiteral(node) || isPrivateIdentifier(node)) {
-            const referencedName = factory.createStringLiteralFromNode(node);
-            const name = visitNode(node, visitor, isPropertyName);
-            return { referencedName, name };
-        }
-
-        if (isPropertyNameLiteral(node.expression) && !isIdentifier(node.expression)) {
-            const referencedName = factory.createStringLiteralFromNode(node.expression);
-            const name = visitNode(node, visitor, isPropertyName);
-            return { referencedName, name };
-        }
-
-        const referencedName = factory.createTempVariable(hoistVariableDeclaration);
-        const key = emitHelpers().createPropKeyHelper(visitNode(node.expression, visitor, isExpression));
-        const assignment = factory.createAssignment(referencedName, key);
-        const name = factory.updateComputedPropertyName(node, injectPendingExpressions(assignment));
-        return { referencedName, name };
-    }
 
     function createPrivateIdentifierAssignment(info: PrivateIdentifierInfo, receiver: Expression, right: Expression, operator: AssignmentOperator): Expression {
         receiver = visitNode(receiver, visitor, isExpression);
@@ -1749,6 +1682,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const original = getOriginalNode(node);
         if (isClassDeclaration(original) && classOrConstructorParameterIsDecorated(legacyDecorators, original)) {
             facts |= ClassFacts.ClassWasDecorated;
+        }
+        if (shouldTransformPrivateElementsOrClassStaticBlocks && (classHasClassThisAssignment(node) || classHasExplicitlyAssignedName(node))) {
+            facts |= ClassFacts.NeedsClassConstructorReference;
         }
         let containsPublicInstanceFields = false;
         let containsInitializedPublicInstanceFields = false;
@@ -1820,7 +1756,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         return visitEachChild(node, visitor, context);
     }
 
-    function visitInNewClassLexicalEnvironment<T extends ClassLikeDeclaration, U>(node: T, referencedName: Expression | undefined, visitor: (node: T, facts: ClassFacts, referencedName: Expression | undefined) => U) {
+    function visitInNewClassLexicalEnvironment<T extends ClassLikeDeclaration, U>(node: T, visitor: (node: T, facts: ClassFacts) => U) {
         const savedCurrentClassContainer = currentClassContainer;
         const savedPendingExpressions = pendingExpressions;
         const savedLexicalEnvironment = lexicalEnvironment;
@@ -1833,6 +1769,22 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const name = getNameOfDeclaration(node);
             if (name && isIdentifier(name)) {
                 getPrivateIdentifierEnvironment().data.className = name;
+            }
+            else if (node.emitNode?.assignedName) {
+                if (isStringLiteral(node.emitNode.assignedName)) {
+                    // If the class name was assigned from a string literal based on an Identifier, use the Identifier
+                    // as the prefix.
+                    if (node.emitNode.assignedName.textSourceNode &&
+                        isIdentifier(node.emitNode.assignedName.textSourceNode)) {
+                        getPrivateIdentifierEnvironment().data.className = node.emitNode.assignedName.textSourceNode;
+                    }
+                    // If the class name was assigned from a string literal that is a valid identifier, create an
+                    // identifier from it.
+                    else if (isIdentifierText(node.emitNode.assignedName.text, languageVersion)) {
+                        const prefixName = factory.createIdentifier(node.emitNode.assignedName.text);
+                        getPrivateIdentifierEnvironment().data.className = prefixName;
+                    }
+                }
             }
         }
 
@@ -1855,7 +1807,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             enableSubstitutionForClassStaticThisOrSuperReference();
         }
 
-        const result = visitor(node, facts, referencedName);
+        const result = visitor(node, facts);
         endClassLexicalEnvironment();
         Debug.assert(lexicalEnvironment === savedLexicalEnvironment);
         currentClassContainer = savedCurrentClassContainer;
@@ -1865,7 +1817,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitClassDeclaration(node: ClassDeclaration) {
-        return visitInNewClassLexicalEnvironment(node, /*referencedName*/ undefined, visitClassDeclarationInNewClassLexicalEnvironment);
+        return visitInNewClassLexicalEnvironment(node, visitClassDeclarationInNewClassLexicalEnvironment);
     }
 
     function visitClassDeclarationInNewClassLexicalEnvironment(node: ClassDeclaration, facts: ClassFacts) {
@@ -1952,11 +1904,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
         return statements;
     }
 
-    function visitClassExpression(node: ClassExpression, referencedName: Expression | undefined): Expression {
-        return visitInNewClassLexicalEnvironment(node, referencedName, visitClassExpressionInNewClassLexicalEnvironment);
+    function visitClassExpression(node: ClassExpression): Expression {
+        return visitInNewClassLexicalEnvironment(node, visitClassExpressionInNewClassLexicalEnvironment);
     }
 
-    function visitClassExpressionInNewClassLexicalEnvironment(node: ClassExpression, facts: ClassFacts, referencedName: Expression | undefined): Expression {
+    function visitClassExpressionInNewClassLexicalEnvironment(node: ClassExpression, facts: ClassFacts): Expression {
         // If this class expression is a transformation of a decorated class declaration,
         // then we want to output the pendingExpressions as statements, not as inlined
         // expressions with the class statement.
@@ -1984,9 +1936,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
             }
 
             const classCheckFlags = resolver.getNodeCheckFlags(node);
-            const isClassWithConstructorReference = classCheckFlags & NodeCheckFlags.ClassWithConstructorReference;
             const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
-            const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, !!isClassWithConstructorReference);
+            const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
             getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
             return temp;
         }
@@ -2002,7 +1953,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
         const heritageClauses = visitNodes(node.heritageClauses, heritageClauseVisitor, isHeritageClause);
         const { members, prologue } = transformClassMembers(node);
-        let classExpression = factory.updateClassExpression(
+        const classExpression = factory.updateClassExpression(
             node,
             modifiers,
             node.name,
@@ -2025,37 +1976,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 isPrivateIdentifierClassElementDeclaration(node) ||
                 shouldTransformInitializers && isInitializedProperty(node));
 
-        if (hasTransformableStatics || some(pendingExpressions) || referencedName) {
+        if (hasTransformableStatics || some(pendingExpressions)) {
             if (isDecoratedClassDeclaration) {
                 Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
 
                 // Write any pending expressions from elided or moved computed property names
                 if (some(pendingExpressions)) {
                     addRange(pendingStatements, map(pendingExpressions, factory.createExpressionStatement));
-                }
-
-                if (referencedName) {
-                    if (shouldTransformPrivateElementsOrClassStaticBlocks) {
-                        const setNameExpression = emitHelpers().createSetFunctionNameHelper(temp ?? node.emitNode?.classThis ?? factory.getInternalName(node), referencedName);
-                        pendingStatements.push(factory.createExpressionStatement(setNameExpression));
-                    }
-                    else {
-                        const setNameExpression = emitHelpers().createSetFunctionNameHelper(factory.createThis(), referencedName);
-                        classExpression = factory.updateClassExpression(
-                            classExpression,
-                            classExpression.modifiers,
-                            classExpression.name,
-                            classExpression.typeParameters,
-                            classExpression.heritageClauses, [
-                                factory.createClassStaticBlockDeclaration(
-                                    factory.createBlock([
-                                        factory.createExpressionStatement(setNameExpression)
-                                    ])
-                                ),
-                                ...classExpression.members
-                            ]
-                        );
-                    }
                 }
 
                 if (some(staticPropertiesOrClassStaticBlocks)) {
@@ -2086,9 +2013,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
                 // Add any pending expressions leftover from elided or relocated computed property names
                 addRange(expressions, pendingExpressions);
-                if (referencedName) {
-                    expressions.push(emitHelpers().createSetFunctionNameHelper(temp, referencedName));
-                }
                 addRange(expressions, generateInitializedPropertyExpressionsOrClassStaticBlock(staticPropertiesOrClassStaticBlocks, temp));
                 expressions.push(factory.cloneNode(temp));
             }
@@ -2113,6 +2037,17 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
         // ClassStaticBlockDeclaration for classes are transformed in `visitClassDeclaration` or `visitClassExpression`.
         return undefined;
+    }
+
+    function visitThisExpression(node: ThisExpression) {
+        if (shouldTransformThisInStaticInitializers && currentClassElement &&
+            isClassStaticBlockDeclaration(currentClassElement) &&
+            lexicalEnvironment?.data) {
+            const { classThis, classConstructor } = lexicalEnvironment.data;
+            return classThis ?? classConstructor ?? node;
+        }
+
+        return node;
     }
 
     function transformClassMembers(node: ClassDeclaration | ClassExpression) {
@@ -2197,9 +2132,16 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // and return a new array.
         if (syntheticConstructor || syntheticStaticBlock) {
             let membersArray: ClassElement[] | undefined;
+            const classThisAssignmentBlock = find(members, isClassThisAssignmentBlock);
+            const classNamedEvaluationHelperBlock = find(members, isClassNamedEvaluationHelperBlock);
+            membersArray = append(membersArray, classThisAssignmentBlock);
+            membersArray = append(membersArray, classNamedEvaluationHelperBlock);
             membersArray = append(membersArray, syntheticConstructor);
             membersArray = append(membersArray, syntheticStaticBlock);
-            membersArray = addRange(membersArray, members);
+            const remainingMembers = classThisAssignmentBlock || classNamedEvaluationHelperBlock ?
+                filter(members, member => member !== classThisAssignmentBlock && member !== classNamedEvaluationHelperBlock) :
+                members;
+            membersArray = addRange(membersArray, remainingMembers);
             members = setTextRange(factory.createNodeArray(membersArray), /*location*/ node.members);
         }
 
@@ -2256,6 +2198,66 @@ export function transformClassFields(context: TransformationContext): (x: Source
         );
     }
 
+    function transformConstructorBodyWorker(statementsOut: Statement[], statementsIn: NodeArray<Statement>, statementOffset: number, superPath: readonly number[], superPathDepth: number, initializerStatements: readonly Statement[], constructor: ConstructorDeclaration) {
+        const superStatementIndex = superPath[superPathDepth];
+        const superStatement = statementsIn[superStatementIndex];
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset));
+        statementOffset = superStatementIndex + 1;
+        if (isTryStatement(superStatement)) {
+            const tryBlockStatements: Statement[] = [];
+
+            transformConstructorBodyWorker(
+                tryBlockStatements,
+                superStatement.tryBlock.statements,
+                /*statementOffset*/ 0,
+                superPath,
+                superPathDepth + 1,
+                initializerStatements,
+                constructor);
+
+            const tryBlockStatementsArray = factory.createNodeArray(tryBlockStatements);
+            setTextRange(tryBlockStatementsArray, superStatement.tryBlock.statements);
+
+            statementsOut.push(factory.updateTryStatement(
+                superStatement,
+                factory.updateBlock(superStatement.tryBlock, tryBlockStatements),
+                visitNode(superStatement.catchClause, visitor, isCatchClause),
+                visitNode(superStatement.finallyBlock, visitor, isBlock)));
+        }
+        else {
+            addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex, 1));
+
+            // Add the property initializers. Transforms this:
+            //
+            //  public x = 1;
+            //
+            // Into this:
+            //
+            //  constructor() {
+            //      this.x = 1;
+            //  }
+            //
+            // If we do useDefineForClassFields, they'll be converted elsewhere.
+            // We instead *remove* them from the transformed output at this stage.
+
+            // parameter-property assignments should occur immediately after the prologue and `super()`,
+            // so only count the statements that immediately follow.
+            while (statementOffset < statementsIn.length) {
+                const statement = statementsIn[statementOffset];
+                if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
+                    statementOffset++;
+                }
+                else {
+                    break;
+                }
+            }
+
+            addRange(statementsOut, initializerStatements);
+        }
+
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset));
+    }
+
     function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
         const instanceProperties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ false);
         let properties = instanceProperties;
@@ -2274,44 +2276,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
         resumeLexicalEnvironment();
 
         const needsSyntheticConstructor = !constructor && isDerivedClass;
-        let indexOfFirstStatementAfterSuperAndPrologue = 0;
-        let prologueStatementCount = 0;
-        let superStatementIndex = -1;
+        let statementOffset = 0;
         let statements: Statement[] = [];
-
-        if (constructor?.body?.statements) {
-            prologueStatementCount = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
-            superStatementIndex = findSuperStatementIndex(constructor.body.statements, prologueStatementCount);
-
-            // If there was a super call, visit existing statements up to and including it
-            if (superStatementIndex >= 0) {
-                indexOfFirstStatementAfterSuperAndPrologue = superStatementIndex + 1;
-                statements = [
-                    ...statements.slice(0, prologueStatementCount),
-                    ...visitNodes(constructor.body.statements, visitor, isStatement, prologueStatementCount, indexOfFirstStatementAfterSuperAndPrologue - prologueStatementCount),
-                    ...statements.slice(prologueStatementCount),
-                ];
-            }
-            else if (prologueStatementCount >= 0) {
-                indexOfFirstStatementAfterSuperAndPrologue = prologueStatementCount;
-            }
-        }
-
-        if (needsSyntheticConstructor) {
-            // Add a synthetic `super` call:
-            //
-            //  super(...arguments);
-            //
-            statements.push(
-                factory.createExpressionStatement(
-                    factory.createCallExpression(
-                        factory.createSuper(),
-                        /*typeArguments*/ undefined,
-                        [factory.createSpreadElement(factory.createIdentifier("arguments"))]
-                    )
-                )
-            );
-        }
 
         // Add the property initializers. Transforms this:
         //
@@ -2323,42 +2289,68 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //      this.x = 1;
         //  }
         //
-        // If we do useDefineForClassFields, they'll be converted elsewhere.
-        // We instead *remove* them from the transformed output at this stage.
-        let parameterPropertyDeclarationCount = 0;
-        if (constructor?.body) {
-            // parameter-property assignments should occur immediately after the prologue and `super()`,
-            // so only count the statements that immediately follow.
-            for (let i = indexOfFirstStatementAfterSuperAndPrologue; i < constructor.body.statements.length; i++) {
-                const statement = constructor.body.statements[i];
-                if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
-                    parameterPropertyDeclarationCount++;
-                }
-                else {
-                    break;
-                }
-            }
-            if (parameterPropertyDeclarationCount > 0) {
-                indexOfFirstStatementAfterSuperAndPrologue += parameterPropertyDeclarationCount;
-            }
-        }
-
+        const initializerStatements: Statement[] = [];
         const receiver = factory.createThis();
+
         // private methods can be called in property initializers, they should execute first.
-        addInstanceMethodStatements(statements, privateMethodsAndAccessors, receiver);
+        addInstanceMethodStatements(initializerStatements, privateMethodsAndAccessors, receiver);
         if (constructor) {
             const parameterProperties = filter(instanceProperties, prop => isParameterPropertyDeclaration(getOriginalNode(prop), constructor));
             const nonParameterProperties = filter(properties, prop => !isParameterPropertyDeclaration(getOriginalNode(prop), constructor));
-            addPropertyOrClassStaticBlockStatements(statements, parameterProperties, receiver);
-            addPropertyOrClassStaticBlockStatements(statements, nonParameterProperties, receiver);
+            addPropertyOrClassStaticBlockStatements(initializerStatements, parameterProperties, receiver);
+            addPropertyOrClassStaticBlockStatements(initializerStatements, nonParameterProperties, receiver);
         }
         else {
-            addPropertyOrClassStaticBlockStatements(statements, properties, receiver);
+            addPropertyOrClassStaticBlockStatements(initializerStatements, properties, receiver);
         }
 
-        // Add existing statements after the initial prologues and super call
-        if (constructor) {
-            addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatementAfterSuperAndPrologue));
+        if (constructor?.body) {
+            statementOffset = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
+            const superStatementIndices = findSuperStatementIndexPath(constructor.body.statements, statementOffset);
+            if (superStatementIndices.length) {
+                transformConstructorBodyWorker(
+                    statements,
+                    constructor.body.statements,
+                    statementOffset,
+                    superStatementIndices,
+                    /*superPathDepth*/ 0,
+                    initializerStatements,
+                    constructor
+                );
+            }
+            else {
+                // parameter-property assignments should occur immediately after the prologue and `super()`,
+                // so only count the statements that immediately follow.
+                while (statementOffset < constructor.body.statements.length) {
+                    const statement = constructor.body.statements[statementOffset];
+                    if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
+                        statementOffset++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                addRange(statements, initializerStatements);
+                addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, statementOffset));
+            }
+        }
+        else {
+            if (needsSyntheticConstructor) {
+                // Add a synthetic `super` call:
+                //
+                //  super(...arguments);
+                //
+                statements.push(
+                    factory.createExpressionStatement(
+                        factory.createCallExpression(
+                            factory.createSuper(),
+                            /*typeArguments*/ undefined,
+                            [factory.createSpreadElement(factory.createIdentifier("arguments"))]
+                        )
+                    )
+                );
+            }
+            addRange(statements, initializerStatements);
         }
 
         statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
@@ -2406,7 +2398,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
     function transformPropertyOrClassStaticBlock(property: PropertyDeclaration | ClassStaticBlockDeclaration, receiver: LeftHandSideExpression) {
         const expression = isClassStaticBlockDeclaration(property) ?
-            transformClassStaticBlockDeclaration(property) :
+            setCurrentClassElementAnd(property, transformClassStaticBlockDeclaration, property) :
             transformProperty(property, receiver);
         if (!expression) {
             return undefined;
@@ -2451,7 +2443,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function generateInitializedPropertyExpressionsOrClassStaticBlock(propertiesOrClassStaticBlocks: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
         const expressions: Expression[] = [];
         for (const property of propertiesOrClassStaticBlocks) {
-            const expression = isClassStaticBlockDeclaration(property) ? transformClassStaticBlockDeclaration(property) : transformProperty(property, receiver);
+            const expression = isClassStaticBlockDeclaration(property) ?
+                setCurrentClassElementAnd(property, transformClassStaticBlockDeclaration, property) :
+                setCurrentClassElementAnd(property, () => transformProperty(property, receiver), /*arg*/ undefined);
             if (!expression) {
                 continue;
             }
@@ -2490,17 +2484,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
         const emitAssignment = !useDefineForClassFields;
 
-        let referencedName: Expression | undefined;
         if (isNamedEvaluation(property, isAnonymousClassNeedingAssignedName)) {
-            if (isPropertyNameLiteral(property.name) || isPrivateIdentifier(property.name)) {
-                referencedName = factory.createStringLiteralFromNode(property.name);
-            }
-            else if (isPropertyNameLiteral(property.name.expression) && !isIdentifier(property.name.expression)) {
-                referencedName = factory.createStringLiteralFromNode(property.name.expression);
-            }
-            else {
-                referencedName = factory.getGeneratedNameForNode(property.name);
-            }
+            property = transformNamedEvaluation(context, property);
         }
 
         const propertyName =
@@ -2514,10 +2499,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
             currentClassElement = property;
         }
 
-        const initializerVisitor: Visitor =
-            referencedName ? child => namedEvaluationVisitor(child, referencedName!) :
-            visitor;
-
         if (isPrivateIdentifier(propertyName) && shouldTransformClassElementToWeakMap(property as PrivateIdentifierPropertyDeclaration)) {
             const privateIdentifierInfo = accessPrivateIdentifier(propertyName);
             if (privateIdentifierInfo) {
@@ -2526,7 +2507,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         return createPrivateInstanceFieldInitializer(
                             factory,
                             receiver,
-                            visitNode(property.initializer, initializerVisitor, isExpression),
+                            visitNode(property.initializer, visitor, isExpression),
                             privateIdentifierInfo.brandCheckIdentifier
                         );
                     }
@@ -2534,7 +2515,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         return createPrivateStaticFieldInitializer(
                             factory,
                             privateIdentifierInfo.variableName,
-                            visitNode(property.initializer, initializerVisitor, isExpression)
+                            visitNode(property.initializer, visitor, isExpression)
                         );
                     }
                 }
@@ -2555,7 +2536,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             return undefined;
         }
 
-        let initializer = visitNode(property.initializer, initializerVisitor, isExpression);
+        let initializer = visitNode(property.initializer, visitor, isExpression);
         if (isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName)) {
             // A parameter-property declaration always overrides the initializer. The only time a parameter-property
             // declaration *should* have an initializer is when decorators have added initializers that need to run before
@@ -2666,10 +2647,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
      * value of the result or the expression itself if the value is either unused or safe to inline into multiple locations
      * @param shouldHoist Does the expression need to be reused? (ie, for an initializer or a decorator)
      */
-    function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean, captureReferencedName: boolean): Expression | undefined {
+    function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean): Expression | undefined {
         if (isComputedPropertyName(name)) {
             const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
-            let expression = visitNode(name.expression, visitor, isExpression);
+            const expression = visitNode(name.expression, visitor, isExpression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
             const inlinable = isSimpleInlineableExpression(innerExpression);
             const alreadyTransformed = !!cacheAssignment || isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);
@@ -2680,9 +2661,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 }
                 else {
                     hoistVariableDeclaration(generatedName);
-                }
-                if (captureReferencedName) {
-                    expression = emitHelpers().createPropKeyHelper(expression);
                 }
                 return factory.createAssignment(generatedName, expression);
             }
@@ -3024,10 +3002,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const left = visitDestructuringAssignmentTarget(node.left);
-            const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
-            const right = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
-            return factory.updateBinaryExpression(node, left, node.operatorToken, right) as AssignmentExpression<EqualsToken>;
+            node = transformNamedEvaluation(context, node);
         }
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
             const left = visitDestructuringAssignmentTarget(node.left);
@@ -3092,9 +3067,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //     ...
 
         if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
-            const assignedName = getAssignedNameOfIdentifier(node.name, node.objectAssignmentInitializer);
-            const objectAssignmentInitializer = visitNode(node.objectAssignmentInitializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
-            return factory.updateShorthandPropertyAssignment(node, node.name, objectAssignmentInitializer);
+            node = transformNamedEvaluation(context, node);
         }
 
         return visitEachChild(node, visitor, context);
@@ -3240,9 +3213,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
             lexicalEnvironment?.data &&
             !noSubstitution.has(node)) {
             const { facts, classConstructor, classThis } = lexicalEnvironment.data;
-            if (facts & ClassFacts.ClassWasDecorated && legacyDecorators) {
-                return factory.createParenthesizedExpression(factory.createVoidZero());
-            }
             const substituteThis = shouldSubstituteThisWithClassThis ? classThis ?? classConstructor : classConstructor;
             if (substituteThis) {
                 return setTextRange(
@@ -3252,6 +3222,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     ),
                     node
                 );
+            }
+            if (facts & ClassFacts.ClassWasDecorated && legacyDecorators) {
+                return factory.createParenthesizedExpression(factory.createVoidZero());
             }
         }
         return node;

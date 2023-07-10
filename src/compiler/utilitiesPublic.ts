@@ -68,6 +68,7 @@ import {
     FunctionLikeDeclaration,
     FunctionTypeNode,
     GeneratedIdentifier,
+    GeneratedIdentifierFlags,
     GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
     getAssignmentDeclarationKind,
@@ -604,7 +605,11 @@ export function getCombinedNodeFlagsAlwaysIncludeJSDoc(node: Declaration): Modif
 // list.  By calling this function, all those flags are combined so that the client can treat
 // the node as if it actually had those flags.
 export function getCombinedNodeFlags(node: Node): NodeFlags {
-    return getCombinedFlags(node, n => n.flags);
+    return getCombinedFlags(node, getNodeFlags);
+}
+
+function getNodeFlags(node: Node) {
+    return node.flags;
 }
 
 /** @internal */
@@ -1531,6 +1536,14 @@ export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
 /** @internal */
 export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
     return isPrivateIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
+}
+
+/** @internal */
+export function isFileLevelReservedGeneratedIdentifier(node: GeneratedIdentifier) {
+    const flags = node.emitNode.autoGenerate.flags;
+    return !!(flags & GeneratedIdentifierFlags.FileLevel)
+        && !!(flags & GeneratedIdentifierFlags.Optimistic)
+        && !!(flags & GeneratedIdentifierFlags.ReservedInNestedScopes);
 }
 
 // Private Identifiers

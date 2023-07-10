@@ -803,14 +803,19 @@ function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
         return getEmitModuleKind(compilerOptions) < ModuleKind.ES2015;
     }
 
-    // 4. Match the first other JS file in the program that's unambiguously CJS or ESM
+    // 4. In --module nodenext, assume we're not emitting JS -> JS, so use
+    //    whatever syntax Node expects based on the detected module kind
+    if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) return true;
+    if (sourceFile.impliedNodeFormat === ModuleKind.ESNext) return false;
+
+    // 5. Match the first other JS file in the program that's unambiguously CJS or ESM
     for (const otherFile of program.getSourceFiles()) {
         if (otherFile === sourceFile || !isSourceFileJS(otherFile) || program.isSourceFileFromExternalLibrary(otherFile)) continue;
         if (otherFile.commonJsModuleIndicator && !otherFile.externalModuleIndicator) return true;
         if (otherFile.externalModuleIndicator && !otherFile.commonJsModuleIndicator) return false;
     }
 
-    // 5. Literally nothing to go on
+    // 6. Literally nothing to go on
     return true;
 }
 
