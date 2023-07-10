@@ -1862,7 +1862,7 @@ export function createScanner(languageVersion: ScriptTarget,
                     if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                         if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 3) === CharacterCodes.equals) {
-                                error(Diagnostics.Unexpected_token_Did_you_mean, pos, 4);
+                                error(Diagnostics.Unexpected_token_Did_you_mean_0, pos, 4, "!==");
                                 return pos += 4, token = SyntaxKind.ExclamationEqualsEqualsToken;
                             }
                             return pos += 3, token = SyntaxKind.ExclamationEqualsEqualsToken;

@@ -1621,7 +1621,7 @@
         "category": "Error",
         "code": 1495
     },
-    "Unexpected token. Did you mean '!=='?": {
+    "Unexpected token. Did you mean '{0}'?": {
         "category": "Error",
         "code": 1496
     },
