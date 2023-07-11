@@ -4562,7 +4562,7 @@ export interface ScriptReferenceHost {
     getCurrentDirectory(): string;
 }
 
-export interface ParseConfigHost {
+export interface ParseConfigHost extends ModuleResolutionHost {
     useCaseSensitiveFileNames: boolean;
 
     readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
