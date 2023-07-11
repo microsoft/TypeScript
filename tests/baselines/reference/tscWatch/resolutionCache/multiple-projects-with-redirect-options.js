@@ -667,6 +667,8 @@ File '/home/src/workspaces/project/pkg0.ts' does not exist.
 File '/home/src/workspaces/project/pkg0.tsx' does not exist.
 File '/home/src/workspaces/project/pkg0.d.ts' exists - use it as a name resolution result.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/pkg0.d.ts'. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/bFileWithImports.d.ts 250 undefined Source file
 ======== Resolving module './aFileWithImports' from '/home/src/workspaces/project/bFileWithImports.ts'. ========
 Using compiler options of project reference redirect '/home/src/workspaces/project/tsconfig.b.json'.
@@ -700,8 +702,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/pkg0.d.ts 250 unde
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/cRandomFileForImport.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/cRandomFileForImport2.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots

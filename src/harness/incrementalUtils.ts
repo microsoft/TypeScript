@@ -227,7 +227,6 @@ export function verifyResolutionCache(
             path,
             resolutions,
             getResolvedModuleFileName,
-            /*deferWatchingNonRelativeResolution*/ true,
             expected.resolvedModuleNames,
             (name, mode) => actualProgram.getResolvedModule(actualProgram.getSourceFileByPath(path)!, name, mode),
         )
@@ -238,7 +237,6 @@ export function verifyResolutionCache(
             path,
             resolutions,
             getResolvedTypeRefFileName,
-            /*deferWatchingNonRelativeResolution*/ false,
             expected.resolvedTypeReferenceDirectives,
             (name, mode) =>
                 path !== inferredTypesPath ?
@@ -256,7 +254,6 @@ export function verifyResolutionCache(
             getResolvedModuleFileName(resolved),
             ts.getLibraryNameFromLibFileName(libFileName),
             /*mode*/ undefined,
-            /*deferWatchingNonRelativeResolution*/ false,
         );
         expected.resolvedLibraries.set(libFileName, expectedResolution);
     });
@@ -309,7 +306,20 @@ export function verifyResolutionCache(
             !resolution.isInvalidated,
             `${projectName}:: Resolution should not be invalidated`,
         );
-        verifySet(resolutionToExpected.get(resolution)!.files, resolution.files, `${projectName}:: Resolution files`);
+        const expected = resolutionToExpected.get(resolution)!;
+        verifySet(expected.files, resolution.files, `${projectName}:: Resolution files`);
+        ts.Debug.assert(
+            expected.watchedFailed === resolution.watchedFailed,
+            `${projectName}:: Expected watchedFailed of Resolution ${expected.watchedFailed} but got ${resolution.watchedFailed}`,
+        );
+        ts.Debug.assert(
+            expected.watchedAffected === resolution.watchedAffected,
+            `${projectName}:: Expected watchedAffected of Resolution ${expected.watchedAffected} but got ${resolution.watchedAffected}`,
+        );
+        ts.Debug.assert(
+            expected.setAtRoot === resolution.setAtRoot,
+            `${projectName}:: Expected setAtRoot of Resolution ${expected.setAtRoot} but got ${resolution.setAtRoot}`,
+        );
     });
     verifyMapOfResolutionSet(expected.resolvedFileToResolution, actual.resolvedFileToResolution, `resolvedFileToResolution`);
     verifyResolutionSet(expected.resolutionsWithFailedLookups, actual.resolutionsWithFailedLookups, `resolutionsWithFailedLookups`);
@@ -373,7 +383,6 @@ export function verifyResolutionCache(
         fileName: ts.Path,
         cache: ts.ModeAwareCache<T> | undefined,
         getResolvedFileName: (resolution: T) => string | undefined,
-        deferWatchingNonRelativeResolution: boolean,
         storeExpected: Map<ts.Path, ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations>>,
         getProgramResolutions: (name: string, mode: ts.ResolutionMode) => T | undefined,
     ) {
@@ -384,7 +393,7 @@ export function verifyResolutionCache(
         let expectedCache: ts.ModeAwareCache<ts.ResolutionWithFailedLookupLocations> | undefined;
         cache?.forEach((resolved, name, mode) => {
             const resolvedFileName = getResolvedFileName(resolved);
-            const expected = collectResolution(cacheType, fileName, resolved, resolvedFileName, name, mode, deferWatchingNonRelativeResolution);
+            const expected = collectResolution(cacheType, fileName, resolved, resolvedFileName, name, mode);
             if (!expectedCache) storeExpected.set(fileName, expectedCache = ts.createModeAwareCache());
             expectedCache.set(name, mode, expected);
             // Resolution in cache should be same as that is in program
@@ -402,7 +411,6 @@ export function verifyResolutionCache(
         resolvedFileName: string | undefined,
         name: string,
         mode: ts.ResolutionMode,
-        deferWatchingNonRelativeResolution: boolean,
     ): ExpectedResolution {
         const existing = resolutionToRefs.get(resolved);
         let expectedResolution: ExpectedResolution;
@@ -423,7 +431,7 @@ export function verifyResolutionCache(
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
         }
-        expected.watchFailedLookupLocationsOfExternalModuleResolutions(name, expectedResolution, fileName, () => ({ resolvedFileName }), deferWatchingNonRelativeResolution);
+        expected.watchResolution(expectedResolution, fileName, () => ({ resolvedFileName }));
         return expectedResolution;
     }
 
