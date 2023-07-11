@@ -81,7 +81,6 @@ import {
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
-    isNamedDeclaration,
     isNamedExports,
     isObjectLiteralExpression,
     isOmittedExpression,
