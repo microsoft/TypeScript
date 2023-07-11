@@ -194,7 +194,7 @@ export interface ImportAdder {
     hasFixes(): boolean;
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
     addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) => void;
-    writeFixes: (changeTracker: textChanges.ChangeTracker,oldFileQuotePreference?: QuotePreference) => void;
+    writeFixes: (changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) => void;
 }
 
 /** @internal */
