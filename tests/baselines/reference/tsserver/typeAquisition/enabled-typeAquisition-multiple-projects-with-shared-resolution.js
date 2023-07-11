@@ -165,6 +165,10 @@ Info seq  [hh:mm:ss:mss] ======== Module name 'bar' was successfully resolved to
 Info seq  [hh:mm:ss:mss] Auto discovery for typings is enabled in project '/users/user/projects/project1/jsconfig.json'. Running extra resolution pass for module 'bar' using cache location '/home/src/Library/Caches/typescript'.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/bar.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/bar.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/package.json' does not exist.
@@ -174,10 +178,6 @@ Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/node_modules/bar/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/node_modules/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
@@ -532,6 +532,10 @@ Info seq  [hh:mm:ss:mss] ======== Module name 'bar' was successfully resolved to
 Info seq  [hh:mm:ss:mss] Auto discovery for typings is enabled in project '/users/user/projects/project2/jsconfig.json'. Running extra resolution pass for module 'bar' using cache location '/home/src/Library/Caches/typescript'.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/bar.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/bar.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project2/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project2/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/package.json' does not exist.
@@ -564,16 +568,12 @@ Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/foo/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/foo.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/foo/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/foo/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/Library/Caches/typescript/package.json'.
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project2/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project2/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/node_modules/bar/package.json 2000 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/node_modules/package.json 2000 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/package.json 2000 undefined Project: /users/user/projects/project2/jsconfig.json WatchType: File location affecting resolution
@@ -941,6 +941,10 @@ Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar.jsx' does n
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/index.js' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/users/user/projects/node_modules/bar/index.js', result '/users/user/projects/node_modules/bar/index.js'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar' was successfully resolved to '/users/user/projects/node_modules/bar/index.js'. ========
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project3/node_modules 1 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project3/node_modules 1 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/bar/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/node_modules/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/users/user/projects/package.json' does not exist.
@@ -968,10 +972,6 @@ Info seq  [hh:mm:ss:mss] Directory '/users/user/node_modules' does not exist, sk
 Info seq  [hh:mm:ss:mss] Directory '/users/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'foo' was not resolved. ========
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project3/node_modules 1 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/project3/node_modules 1 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/node_modules 1 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/node_modules/bar/package.json 2000 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/node_modules/package.json 2000 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/package.json 2000 undefined Project: /users/user/projects/project3/jsconfig.json WatchType: File location affecting resolution
@@ -1491,11 +1491,11 @@ Info seq  [hh:mm:ss:mss] Auto discovery for typings is enabled in project '/user
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/bar.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/bar.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/Library/Caches/typescript/package.json'.
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/bar/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/package.json 2000 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: File location affecting resolution

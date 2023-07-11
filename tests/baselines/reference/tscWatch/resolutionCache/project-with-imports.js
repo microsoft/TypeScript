@@ -156,6 +156,13 @@ Resolved under condition 'import'.
 Exiting conditional exports.
 Resolving real path for '/home/src/workspaces/project/node_modules/pkg0/import.d.ts', result '/home/src/workspaces/project/node_modules/pkg0/import.d.ts'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg0/package.json 2000 undefined File location affecting resolution
 ======== Resolving module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
@@ -222,6 +229,9 @@ File '/home/src/workspaces/project/node_modules/pkg1/import.d.ts' exists - use i
 Resolved under condition 'import'.
 Exiting conditional exports.
 ======== Module name 'pkg1' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
+FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg1/package.json 2000 undefined File location affecting resolution
 File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg0/import.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/fileWithTypeRefs.ts 250 undefined Source file
@@ -244,10 +254,6 @@ Resolved under condition 'import'.
 Exiting conditional exports.
 Resolving real path for '/home/src/workspaces/project/node_modules/pkg2/import.d.ts', result '/home/src/workspaces/project/node_modules/pkg2/import.d.ts'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1', primary: false. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg2/package.json 2000 undefined File location affecting resolution
 ======== Resolving type reference directive 'pkg3', containing file '/home/src/workspaces/project/fileWithTypeRefs.ts', root directory '/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
@@ -294,12 +300,6 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 0 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg0/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg1/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/pkg4/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/package.json 2000 undefined File location affecting resolution
