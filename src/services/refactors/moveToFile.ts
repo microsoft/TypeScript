@@ -172,15 +172,23 @@ registerRefactor(refactorNameForMoveToFile, {
     getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, interactiveRefactorArguments): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
+        const { host, program } = context;
         Debug.assert(interactiveRefactorArguments, "No interactive refactor arguments available");
         const targetFile = interactiveRefactorArguments.targetFile;
         if (hasJSFileExtension(targetFile) || hasTSFileExtension(targetFile)) {
+            if (host.fileExists(targetFile) && program.getSourceFile(targetFile) === undefined) {
+                return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_statements_to_the_selected_file));
+            }
             const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
-        return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid) };
+        return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid));
     }
 });
+
+function error(notApplicableReason: string) {
+    return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason };
+}
 
 function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
