@@ -1,0 +1,23 @@
+intersectionSatisfiesConstraint.ts(10,60): error TS2550: Property 'assign' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+
+
+==== intersectionSatisfiesConstraint.ts (1 errors) ====
+    interface FirstInterface {
+        commonProperty: number
+    }
+    
+    interface SecondInterface {
+        commonProperty: number
+    }
+    
+    const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) => {
+        const newParam: T & { otherProperty: number } = Object.assign(param1, { otherProperty: 3 })
+                                                               ~~~~~~
+!!! error TS2550: Property 'assign' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        mySecondFunction(newParam)
+    }
+    
+    const mySecondFunction = <T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {
+        return newParam
+    }
+    

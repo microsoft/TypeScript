@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/intersectionSatisfiesConstraint.ts] ////
+
+=== intersectionSatisfiesConstraint.ts ===
+interface FirstInterface {
+    commonProperty: number
+>commonProperty : number
+}
+
+interface SecondInterface {
+    commonProperty: number
+>commonProperty : number
+}
+
+const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) => {
+>myFirstFunction : <T extends FirstInterface | SecondInterface>(param1: T) => void
+><T extends FirstInterface | SecondInterface>(param1: T) => {    const newParam: T & { otherProperty: number } = Object.assign(param1, { otherProperty: 3 })    mySecondFunction(newParam)} : <T extends FirstInterface | SecondInterface>(param1: T) => void
+>param1 : T
+
+    const newParam: T & { otherProperty: number } = Object.assign(param1, { otherProperty: 3 })
+>newParam : T & { otherProperty: number; }
+>otherProperty : number
+>Object.assign(param1, { otherProperty: 3 }) : any
+>Object.assign : any
+>Object : ObjectConstructor
+>assign : any
+>param1 : FirstInterface | SecondInterface
+>{ otherProperty: 3 } : { otherProperty: number; }
+>otherProperty : number
+>3 : 3
+
+    mySecondFunction(newParam)
+>mySecondFunction(newParam) : { commonProperty: number; otherProperty: number; }
+>mySecondFunction : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
+>newParam : (FirstInterface | SecondInterface) & { otherProperty: number; }
+}
+
+const mySecondFunction = <T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {
+>mySecondFunction : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
+><T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {    return newParam} : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
+>commonProperty : number
+>otherProperty : number
+>newParam : T
+
+    return newParam
+>newParam : T
+}
+
