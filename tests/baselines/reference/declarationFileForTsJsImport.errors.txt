@@ -1,20 +1,20 @@
-tests/cases/conformance/nonjsExtensions/main.ts(1,18): error TS2307: Cannot find module './file.js' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(2,18): error TS2307: Cannot find module './file.jsx' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(3,18): error TS2307: Cannot find module './file.ts' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(4,18): error TS2307: Cannot find module './file.tsx' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(5,18): error TS2307: Cannot find module './file.mjs' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(6,18): error TS2307: Cannot find module './file.cjs' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(7,18): error TS2307: Cannot find module './file.mts' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(8,18): error TS2307: Cannot find module './file.cts' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(9,18): error TS2307: Cannot find module './file.d.ts' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(10,19): error TS2307: Cannot find module './file.d.cts' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(11,19): error TS2307: Cannot find module './file.d.mts' or its corresponding type declarations.
-tests/cases/conformance/nonjsExtensions/main.ts(12,19): error TS2307: Cannot find module './file.d.json.ts' or its corresponding type declarations.
+main.ts(1,18): error TS2307: Cannot find module './file.js' or its corresponding type declarations.
+main.ts(2,18): error TS2307: Cannot find module './file.jsx' or its corresponding type declarations.
+main.ts(3,18): error TS2307: Cannot find module './file.ts' or its corresponding type declarations.
+main.ts(4,18): error TS2307: Cannot find module './file.tsx' or its corresponding type declarations.
+main.ts(5,18): error TS2307: Cannot find module './file.mjs' or its corresponding type declarations.
+main.ts(6,18): error TS2307: Cannot find module './file.cjs' or its corresponding type declarations.
+main.ts(7,18): error TS2307: Cannot find module './file.mts' or its corresponding type declarations.
+main.ts(8,18): error TS2307: Cannot find module './file.cts' or its corresponding type declarations.
+main.ts(9,18): error TS2307: Cannot find module './file.d.ts' or its corresponding type declarations.
+main.ts(10,19): error TS2307: Cannot find module './file.d.cts' or its corresponding type declarations.
+main.ts(11,19): error TS2307: Cannot find module './file.d.mts' or its corresponding type declarations.
+main.ts(12,19): error TS2307: Cannot find module './file.d.json.ts' or its corresponding type declarations.
 
 
-==== tests/cases/conformance/nonjsExtensions/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {"type": "module"}
-==== tests/cases/conformance/nonjsExtensions/main.ts (12 errors) ====
+==== main.ts (12 errors) ====
     import def1 from "./file.js";
                      ~~~~~~~~~~~
 !!! error TS2307: Cannot find module './file.js' or its corresponding type declarations.
@@ -51,39 +51,39 @@ tests/cases/conformance/nonjsExtensions/main.ts(12,19): error TS2307: Cannot fin
     import def12 from "./file.d.json.ts";
                       ~~~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module './file.d.json.ts' or its corresponding type declarations.
-==== tests/cases/conformance/nonjsExtensions/file.d.js.ts (0 errors) ====
+==== file.d.js.ts (0 errors) ====
     declare var bad: "bad1";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.jsx.ts (0 errors) ====
+==== file.d.jsx.ts (0 errors) ====
     declare var bad: "bad2";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.ts.ts (0 errors) ====
+==== file.d.ts.ts (0 errors) ====
     declare var bad: "bad3";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.tsx.ts (0 errors) ====
+==== file.d.tsx.ts (0 errors) ====
     declare var bad: "bad4";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.mjs.ts (0 errors) ====
+==== file.d.mjs.ts (0 errors) ====
     declare var bad: "bad5";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.cjs.ts (0 errors) ====
+==== file.d.cjs.ts (0 errors) ====
     declare var bad: "bad6";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.mts.ts (0 errors) ====
+==== file.d.mts.ts (0 errors) ====
     declare var bad: "bad7";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.cts.ts (0 errors) ====
+==== file.d.cts.ts (0 errors) ====
     declare var bad: "bad8";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.d.ts.ts (0 errors) ====
+==== file.d.d.ts.ts (0 errors) ====
     declare var bad: "bad9";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.d.mts.ts (0 errors) ====
+==== file.d.d.mts.ts (0 errors) ====
     declare var bad: "bad10";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.d.cts.ts (0 errors) ====
+==== file.d.d.cts.ts (0 errors) ====
     declare var bad: "bad11";
     export default bad;
-==== tests/cases/conformance/nonjsExtensions/file.d.d.json.ts (0 errors) ====
+==== file.d.d.json.ts (0 errors) ====
     declare var bad: "bad12";
     export default bad;

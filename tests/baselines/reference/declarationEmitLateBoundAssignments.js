@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLateBoundAssignments.ts] ////
+
 //// [declarationEmitLateBoundAssignments.ts]
 export function foo() {}
 foo.bar = 12;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+//// [tests/cases/conformance/externalModules/amdImportAsPrimaryExpression.ts] ////
+
+=== foo_1.ts ===
 import foo = require("./foo_0");
 >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
 
@@ -12,7 +14,7 @@ if(foo.E1.A === 0){
 	// Should cause runtime import - interesting optimization possibility, as gets inlined to 0.
 }
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 export enum E1 {
 >E1 : Symbol(E1, Decl(foo_0.ts, 0, 0))
 

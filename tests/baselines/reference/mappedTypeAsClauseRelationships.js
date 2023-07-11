@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts] ////
+
 //// [mappedTypeAsClauseRelationships.ts]
 // From original issue #45212:
 type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };

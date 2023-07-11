@@ -1,0 +1,44 @@
+foo(1);
+    ^
+{
+  "text": "v:",
+  "position": 29,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo('');
+    ^
+{
+  "text": "v:",
+  "position": 37,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(true);
+    ^
+{
+  "text": "v:",
+  "position": 46,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo((1));
+    ^
+{
+  "text": "v:",
+  "position": 67,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(foo(1));
+        ^
+{
+  "text": "v:",
+  "position": 81,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

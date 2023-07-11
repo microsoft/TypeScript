@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.ts] ////
+
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.ts]
 export module a {
     export module b {
@@ -32,8 +34,8 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.d.ts]
-export declare module a {
-    module b {
+export declare namespace a {
+    namespace b {
         class c {
         }
     }

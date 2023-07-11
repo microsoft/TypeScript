@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemModule12.ts ===
+//// [tests/cases/compiler/systemModule12.ts] ////
+
+=== systemModule12.ts ===
 ///<amd-module name='NamedModule'/>
 import n from 'file1'
 >n : Symbol(n, Decl(systemModule12.ts, 1, 6))

@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/Symbols/symbolProperty7.ts(2,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/es6/Symbols/symbolProperty7.ts(3,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+symbolProperty7.ts(2,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+symbolProperty7.ts(3,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolProperty7.ts (2 errors) ====
+==== symbolProperty7.ts (2 errors) ====
     class C {
         [Symbol()] = 0;
         ~~~~~~~~~~

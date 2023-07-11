@@ -1,8 +1,8 @@
-tests/cases/conformance/externalModules/verbatimModuleSyntaxInternalImportEquals.ts(2,13): error TS2503: Cannot find namespace 'NonExistent'.
-tests/cases/conformance/externalModules/verbatimModuleSyntaxInternalImportEquals.ts(10,1): error TS1288: An import alias cannot resolve to a type or type-only declaration when 'verbatimModuleSyntax' is enabled.
+verbatimModuleSyntaxInternalImportEquals.ts(2,13): error TS2503: Cannot find namespace 'NonExistent'.
+verbatimModuleSyntaxInternalImportEquals.ts(10,1): error TS1288: An import alias cannot resolve to a type or type-only declaration when 'verbatimModuleSyntax' is enabled.
 
 
-==== tests/cases/conformance/externalModules/verbatimModuleSyntaxInternalImportEquals.ts (2 errors) ====
+==== verbatimModuleSyntaxInternalImportEquals.ts (2 errors) ====
     export {};
     import f1 = NonExistent;
                 ~~~~~~~~~~~

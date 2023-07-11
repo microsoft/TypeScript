@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExport.ts] ////
+
 //// [internalAliasVarInsideLocalModuleWithoutExport.ts]
 export module a {
     export var x = 10;
@@ -27,9 +29,9 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasVarInsideLocalModuleWithoutExport.d.ts]
-export declare module a {
+export declare namespace a {
     var x: number;
 }
-export declare module c {
+export declare namespace c {
     var bVal: number;
 }

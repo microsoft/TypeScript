@@ -1,8 +1,8 @@
-tests/cases/compiler/exportDefaultFunctionInNamespace.ts(2,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/compiler/exportDefaultFunctionInNamespace.ts(6,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+exportDefaultFunctionInNamespace.ts(2,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+exportDefaultFunctionInNamespace.ts(6,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 
 
-==== tests/cases/compiler/exportDefaultFunctionInNamespace.ts (2 errors) ====
+==== exportDefaultFunctionInNamespace.ts (2 errors) ====
     namespace ns_function {
         export default function () {}
                ~~~~~~~

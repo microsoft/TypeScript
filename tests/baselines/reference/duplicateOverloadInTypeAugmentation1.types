@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateOverloadInTypeAugmentation1.ts ===
+//// [tests/cases/compiler/duplicateOverloadInTypeAugmentation1.ts] ////
+
+=== duplicateOverloadInTypeAugmentation1.ts ===
 interface Array<T> {
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
 >reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }

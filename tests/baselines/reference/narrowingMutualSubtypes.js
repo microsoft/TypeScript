@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingMutualSubtypes.ts] ////
+
 //// [narrowingMutualSubtypes.ts]
 // Check that `any` is a strict supertype of `unknown`
 

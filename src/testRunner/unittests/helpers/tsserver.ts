@@ -1,3 +1,4 @@
+import { incrementalVerifier } from "../../../harness/incrementalUtils";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import { ActionWatchTypingLocations } from "../../_namespaces/ts.server";
@@ -553,7 +554,8 @@ export function createSession(host: TestServerHost, opts: Partial<TestSessionOpt
         byteLength: Buffer.byteLength,
         hrtime: process.hrtime,
         logger,
-        canUseEvents: false
+        canUseEvents: false,
+        incrementalVerifier,
     };
 
     return new TestSession({ ...sessionOptions, ...opts });
@@ -606,6 +608,7 @@ export class TestProjectService extends ts.server.ProjectService {
             useInferredProjectPerProjectRoot: false,
             typingsInstaller,
             typesMapLocation: customTypesMap.path,
+            incrementalVerifier,
             ...opts
         });
         ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");

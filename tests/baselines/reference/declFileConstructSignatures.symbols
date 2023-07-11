@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileConstructSignatures_0.ts ===
+//// [tests/cases/compiler/declFileConstructSignatures.ts] ////
+
+=== declFileConstructSignatures_0.ts ===
 export interface IConstructSignature {
 >IConstructSignature : Symbol(IConstructSignature, Decl(declFileConstructSignatures_0.ts, 0, 0))
 
@@ -58,7 +60,7 @@ export interface IConstructSignatureWithOwnTypeParametes {
 >T : Symbol(T, Decl(declFileConstructSignatures_0.ts, 27, 9))
 }
 
-=== tests/cases/compiler/declFileConstructSignatures_1.ts ===
+=== declFileConstructSignatures_1.ts ===
 interface IGlobalConstructSignature {
 >IGlobalConstructSignature : Symbol(IGlobalConstructSignature, Decl(declFileConstructSignatures_1.ts, 0, 0))
 

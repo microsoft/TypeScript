@@ -1,4 +1,6 @@
-=== tests/cases/compiler/setterBeforeGetter.ts ===
+//// [tests/cases/compiler/setterBeforeGetter.ts] ////
+
+=== setterBeforeGetter.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(setterBeforeGetter.ts, 0, 0))
 

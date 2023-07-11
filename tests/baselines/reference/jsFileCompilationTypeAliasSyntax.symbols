@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationTypeAliasSyntax.ts] ////
+
+=== a.js ===
 type a = b;
 >a : Symbol(a, Decl(a.js, 0, 0))
 >b : Symbol(b)

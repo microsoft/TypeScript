@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumLiteralUnionNotWidened.ts] ////
+
 //// [enumLiteralUnionNotWidened.ts]
 // repro from #22093
 enum A { one = "one", two = "two" };

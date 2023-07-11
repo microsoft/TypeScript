@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingTruthyObject.ts ===
+//// [tests/cases/compiler/narrowingTruthyObject.ts] ////
+
+=== narrowingTruthyObject.ts ===
 function foo(x: unknown, b: boolean) {
 >foo : Symbol(foo, Decl(narrowingTruthyObject.ts, 0, 0))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))

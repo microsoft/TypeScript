@@ -1,8 +1,8 @@
-tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,32): error TS2741: Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
-tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(17,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'Derived', but here has type 'Base'.
+fixingTypeParametersRepeatedly2.ts(11,32): error TS2741: Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
+fixingTypeParametersRepeatedly2.ts(17,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'Derived', but here has type 'Base'.
 
 
-==== tests/cases/compiler/fixingTypeParametersRepeatedly2.ts (2 errors) ====
+==== fixingTypeParametersRepeatedly2.ts (2 errors) ====
     interface Base {
         baseProp;
     }
@@ -16,8 +16,8 @@ tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(17,5): error TS2403: Sub
     var result = foo(derived, d => d.toBase());
                                    ~~~~~~~~~~
 !!! error TS2741: Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
-!!! related TS2728 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts:5:5: 'toBase' is declared here.
-!!! related TS6502 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts:10:37: The expected type comes from the return type of this signature.
+!!! related TS2728 fixingTypeParametersRepeatedly2.ts:5:5: 'toBase' is declared here.
+!!! related TS6502 fixingTypeParametersRepeatedly2.ts:10:37: The expected type comes from the return type of this signature.
     
     // bar should type check just like foo.
     // The same error should be observed in both cases.
@@ -26,4 +26,4 @@ tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(17,5): error TS2403: Sub
     var result = bar(derived, d => d.toBase());
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'Derived', but here has type 'Base'.
-!!! related TS6203 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts:11:5: 'result' was also declared here.
+!!! related TS6203 fixingTypeParametersRepeatedly2.ts:11:5: 'result' was also declared here.

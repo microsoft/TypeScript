@@ -1,0 +1,26 @@
+new Class(1)
+          ^
+{
+  "text": "a:",
+  "position": 136,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+new Class(1, 2)
+          ^
+{
+  "text": "b:",
+  "position": 149,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+new Class(1, 2)
+             ^
+{
+  "text": "c:",
+  "position": 152,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementsClass6.ts] ////
+
 //// [classImplementsClass6.ts]
 class A {
     static bar(): string {

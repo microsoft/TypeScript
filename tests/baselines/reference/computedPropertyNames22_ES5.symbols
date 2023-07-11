@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames22_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames22_ES5.ts] ////
+
+=== computedPropertyNames22_ES5.ts ===
 class C {
 >C : Symbol(C, Decl(computedPropertyNames22_ES5.ts, 0, 0))
 

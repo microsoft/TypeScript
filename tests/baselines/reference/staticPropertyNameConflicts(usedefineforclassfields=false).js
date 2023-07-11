@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyNameConflicts.ts] ////
+
 //// [staticPropertyNameConflicts.ts]
 // name
 class StaticName {

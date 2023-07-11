@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationExportAssignmentCommonjs.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationExportAssignmentCommonjs.js
+emittedFile:sourceMapValidationExportAssignmentCommonjs.js
 sourceFile:sourceMapValidationExportAssignmentCommonjs.ts
 -------------------------------------------------------------------
 >>>"use strict";

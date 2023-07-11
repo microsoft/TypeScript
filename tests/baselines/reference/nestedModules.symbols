@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/moduleDeclarations/nestedModules.ts ===
+//// [tests/cases/conformance/internalModules/moduleDeclarations/nestedModules.ts] ////
+
+=== nestedModules.ts ===
 module A.B.C {
 >A : Symbol(A, Decl(nestedModules.ts, 0, 0), Decl(nestedModules.ts, 5, 1))
 >B : Symbol(B, Decl(nestedModules.ts, 0, 9), Decl(nestedModules.ts, 7, 10))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericRestArgs.ts ===
+//// [tests/cases/compiler/genericRestArgs.ts] ////
+
+=== genericRestArgs.ts ===
 function makeArrayG<T>(...items: T[]): T[] { return items; }
 >makeArrayG : Symbol(makeArrayG, Decl(genericRestArgs.ts, 0, 0))
 >T : Symbol(T, Decl(genericRestArgs.ts, 0, 20))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/typeInferenceWithTupleType.ts ===
+//// [tests/cases/conformance/types/tuple/typeInferenceWithTupleType.ts] ////
+
+=== typeInferenceWithTupleType.ts ===
 function combine<T, U>(x: T, y: U): [T, U] {
 >combine : Symbol(combine, Decl(typeInferenceWithTupleType.ts, 0, 0))
 >T : Symbol(T, Decl(typeInferenceWithTupleType.ts, 0, 17))

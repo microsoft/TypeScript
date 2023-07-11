@@ -1,8 +1,8 @@
-tests/cases/compiler/optionalPropertiesInClasses.ts(10,7): error TS2420: Class 'C2' incorrectly implements interface 'ifoo'.
+optionalPropertiesInClasses.ts(10,7): error TS2420: Class 'C2' incorrectly implements interface 'ifoo'.
   Property 'y' is missing in type 'C2' but required in type 'ifoo'.
 
 
-==== tests/cases/compiler/optionalPropertiesInClasses.ts (1 errors) ====
+==== optionalPropertiesInClasses.ts (1 errors) ====
     interface ifoo {
     	x?:number;
     	y:number;
@@ -16,7 +16,7 @@ tests/cases/compiler/optionalPropertiesInClasses.ts(10,7): error TS2420: Class '
           ~~
 !!! error TS2420: Class 'C2' incorrectly implements interface 'ifoo'.
 !!! error TS2420:   Property 'y' is missing in type 'C2' but required in type 'ifoo'.
-!!! related TS2728 tests/cases/compiler/optionalPropertiesInClasses.ts:3:2: 'y' is declared here.
+!!! related TS2728 optionalPropertiesInClasses.ts:3:2: 'y' is declared here.
     	public x:number;
     }
     

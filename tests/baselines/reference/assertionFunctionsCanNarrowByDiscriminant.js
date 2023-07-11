@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assertionFunctionsCanNarrowByDiscriminant.ts] ////
+
 //// [assertionFunctionsCanNarrowByDiscriminant.ts]
 interface Cat {
     type: 'cat';

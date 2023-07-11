@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/0.js ===
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag1.ts] ////
+
+=== 0.js ===
 // @ts-check
 /** @type {String} */
 var S = "hello world";

@@ -60,6 +60,7 @@ import {
     getEntrypointsFromPackageJsonInfo,
     getNormalizedAbsolutePath,
     getOrUpdate,
+    GetPackageJsonEntrypointsHost,
     getStringComparer,
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
@@ -393,7 +394,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     private packageJsonsForAutoImport: Set<string> | undefined;
 
     /** @internal */
-    private noDtsResolutionProject?: AuxiliaryProject | undefined;
+    noDtsResolutionProject?: AuxiliaryProject | undefined;
 
     /** @internal */
     getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -969,6 +970,19 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ true);
     }
 
+    /** @internal */
+    cleanupProgram() {
+        if (this.program) {
+            // Root files are always attached to the project irrespective of program
+            for (const f of this.program.getSourceFiles()) {
+                this.detachScriptInfoIfNotRoot(f.fileName);
+            }
+            this.program.forEachResolvedProjectReference(ref =>
+                this.detachScriptInfoFromProject(ref.sourceFile.fileName));
+            this.program = undefined;
+        }
+    }
+
     disableLanguageService(lastFileExceededProgramSize?: string) {
         if (!this.languageServiceEnabled) {
             return;
@@ -976,6 +990,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         Debug.assert(this.projectService.serverMode !== LanguageServiceMode.Syntactic);
         this.languageService.cleanupSemanticCache();
         this.languageServiceEnabled = false;
+        this.cleanupProgram();
         this.lastFileExceededProgramSize = lastFileExceededProgramSize;
         this.builderState = undefined;
         if (this.autoImportProviderHost) {
@@ -984,6 +999,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.autoImportProviderHost = undefined;
         this.resolutionCache.closeTypeRootsWatch();
         this.clearGeneratedFileWatch();
+        this.projectService.verifyDocumentRegistry();
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
     }
 
@@ -1030,17 +1046,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     close() {
         this.projectService.typingsCache.onProjectClosed(this);
         this.closeWatchingTypingLocations();
-        if (this.program) {
-            // if we have a program - release all files that are enlisted in program but arent root
-            // The releasing of the roots happens later
-            // The project could have pending update remaining and hence the info could be in the files but not in program graph
-            for (const f of this.program.getSourceFiles()) {
-                this.detachScriptInfoIfNotRoot(f.fileName);
-            }
-            this.program.forEachResolvedProjectReference(ref =>
-                this.detachScriptInfoFromProject(ref.sourceFile.fileName));
-        }
-
+        // if we have a program - release all files that are enlisted in program but arent root
+        // The releasing of the roots happens later
+        // The project could have pending update remaining and hence the info could be in the files but not in program graph
+        this.cleanupProgram();
         // Release external files
         forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
         // Always remove root files from the project
@@ -1492,6 +1501,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     private updateGraphWorker() {
         const oldProgram = this.languageService.getCurrentProgram();
+        Debug.assert(oldProgram === this.program);
         Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
         this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
         const start = timestamp();
@@ -1633,6 +1643,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         else if (this.program !== oldProgram) {
             this.writeLog(`Different program with same set of files`);
         }
+        // Verify the document registry count
+        this.projectService.verifyDocumentRegistry();
         return hasNewProgram;
     }
 
@@ -2082,7 +2094,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getModuleResolutionHostForAutoImportProvider(): ModuleResolutionHost {
+    getHostForAutoImportProvider(): GetPackageJsonEntrypointsHost {
         if (this.program) {
             return {
                 fileExists: this.program.fileExists,
@@ -2093,6 +2105,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
                 trace: this.projectService.host.trace?.bind(this.projectService.host),
                 useCaseSensitiveFileNames: this.program.useCaseSensitiveFileNames(),
+                readDirectory: this.projectService.host.readDirectory.bind(this.projectService.host),
             };
         }
         return this.projectService.host;
@@ -2121,7 +2134,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (dependencySelection) {
             tracing?.push(tracing.Phase.Session, "getPackageJsonAutoImportProvider");
             const start = timestamp();
-            this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getModuleResolutionHostForAutoImportProvider(), this.documentRegistry);
+            this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getHostForAutoImportProvider(), this.documentRegistry);
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
                 this.sendPerformanceEvent("CreatePackageJsonAutoImportProvider", timestamp() - start);
@@ -2342,7 +2355,8 @@ export class InferredProject extends Project {
     }
 }
 
-class AuxiliaryProject extends Project {
+/** @internal */
+export class AuxiliaryProject extends Project {
     constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
         super(projectService.newAuxiliaryProjectName(),
             ProjectKind.Auxiliary,
@@ -2361,7 +2375,6 @@ class AuxiliaryProject extends Project {
         return true;
     }
 
-    /** @internal */
     override scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
         // Invalidation will happen on-demand as part of updateGraph
         return;
@@ -2373,7 +2386,7 @@ export class AutoImportProviderProject extends Project {
     private static readonly maxDependencies = 10;
 
     /** @internal */
-    static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, compilerOptions: CompilerOptions): string[] {
+    static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, host: GetPackageJsonEntrypointsHost, compilerOptions: CompilerOptions): string[] {
         if (!dependencySelection) {
             return ts.emptyArray;
         }
@@ -2411,7 +2424,7 @@ export class AutoImportProviderProject extends Project {
                     name,
                     hostProject.currentDirectory,
                     compilerOptions,
-                    moduleResolutionHost,
+                    host,
                     program.getModuleResolutionCache());
                 if (packageJson) {
                     const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache);
@@ -2430,7 +2443,7 @@ export class AutoImportProviderProject extends Project {
                             `@types/${name}`,
                             directory,
                             compilerOptions,
-                            moduleResolutionHost,
+                            host,
                             program.getModuleResolutionCache());
                         if (typesPackageJson) {
                             const entrypoints = getRootNamesFromPackageJson(typesPackageJson, program, symlinkCache);
@@ -2469,11 +2482,11 @@ export class AutoImportProviderProject extends Project {
             const entrypoints = getEntrypointsFromPackageJsonInfo(
                 packageJson,
                 compilerOptions,
-                moduleResolutionHost,
+                host,
                 program.getModuleResolutionCache(),
                 resolveJs);
             if (entrypoints) {
-                const real = moduleResolutionHost.realpath?.(packageJson.packageDirectory);
+                const real = host.realpath?.(packageJson.packageDirectory);
                 const isSymlink = real && real !== packageJson.packageDirectory;
                 if (isSymlink) {
                     symlinkCache.setSymlinkedDirectory(packageJson.packageDirectory, {
@@ -2503,7 +2516,7 @@ export class AutoImportProviderProject extends Project {
     };
 
     /** @internal */
-    static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
+    static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, host: GetPackageJsonEntrypointsHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
         if (dependencySelection === PackageJsonAutoImportPreference.Off) {
             return undefined;
         }
@@ -2513,7 +2526,7 @@ export class AutoImportProviderProject extends Project {
             ...this.compilerOptionsOverrides,
         };
 
-        const rootNames = this.getRootFileNames(dependencySelection, hostProject, moduleResolutionHost, compilerOptions);
+        const rootNames = this.getRootFileNames(dependencySelection, hostProject, host, compilerOptions);
         if (!rootNames.length) {
             return undefined;
         }
@@ -2562,7 +2575,7 @@ export class AutoImportProviderProject extends Project {
             rootFileNames = AutoImportProviderProject.getRootFileNames(
                 this.hostProject.includePackageJsonAutoImports(),
                 this.hostProject,
-                this.hostProject.getModuleResolutionHostForAutoImportProvider(),
+                this.hostProject.getHostForAutoImportProvider(),
                 this.getCompilationSettings());
         }
 
@@ -2609,7 +2622,7 @@ export class AutoImportProviderProject extends Project {
         throw new Error("package.json changes should be notified on an AutoImportProvider's host project");
     }
 
-    override getModuleResolutionHostForAutoImportProvider(): never {
+    override getHostForAutoImportProvider(): never {
         throw new Error("AutoImportProviderProject cannot provide its own host; use `hostProject.getModuleResolutionHostForAutomImportProvider()` instead.");
     }
 

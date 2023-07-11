@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts] ////
+
 //// [uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts]
 // https://github.com/Microsoft/TypeScript/issues/21962
 export const SYM = Symbol('a unique symbol');

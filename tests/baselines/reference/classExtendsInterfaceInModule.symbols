@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsInterfaceInModule.ts ===
+//// [tests/cases/compiler/classExtendsInterfaceInModule.ts] ////
+
+=== classExtendsInterfaceInModule.ts ===
 module M {
 >M : Symbol(M, Decl(classExtendsInterfaceInModule.ts, 0, 0))
 

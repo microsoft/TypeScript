@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitRelativeModuleError.ts ===
+//// [tests/cases/compiler/declarationEmitRelativeModuleError.ts] ////
+
+=== declarationEmitRelativeModuleError.ts ===
 declare module "b:block" { // <-- no error anymore
 >"b:block" : Symbol("b:block", Decl(declarationEmitRelativeModuleError.ts, 0, 0))
     

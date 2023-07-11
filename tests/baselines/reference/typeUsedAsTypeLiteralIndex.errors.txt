@@ -1,14 +1,14 @@
-tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts(3,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts(3,6): error TS2690: 'K' only refers to a type, but is being used as a value here. Did you mean to use 'P in K'?
-tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts(13,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts(13,6): error TS2690: 'K2' only refers to a type, but is being used as a value here. Did you mean to use 'K in K2'?
-tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts(18,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts(18,6): error TS2690: 'K3' only refers to a type, but is being used as a value here. Did you mean to use 'K in K3'?
-tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts(23,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
-tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts(23,6): error TS2693: 'K4' only refers to a type, but is being used as a value here.
+typeUsedAsTypeLiteralIndex.ts(3,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+typeUsedAsTypeLiteralIndex.ts(3,6): error TS2690: 'K' only refers to a type, but is being used as a value here. Did you mean to use 'P in K'?
+typeUsedAsTypeLiteralIndex.ts(13,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+typeUsedAsTypeLiteralIndex.ts(13,6): error TS2690: 'K2' only refers to a type, but is being used as a value here. Did you mean to use 'K in K2'?
+typeUsedAsTypeLiteralIndex.ts(18,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+typeUsedAsTypeLiteralIndex.ts(18,6): error TS2690: 'K3' only refers to a type, but is being used as a value here. Did you mean to use 'K in K3'?
+typeUsedAsTypeLiteralIndex.ts(23,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+typeUsedAsTypeLiteralIndex.ts(23,6): error TS2693: 'K4' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts (8 errors) ====
+==== typeUsedAsTypeLiteralIndex.ts (8 errors) ====
     type K = number | string;
     type T = {
         [K]: number;  // Did you mean to use 'P in K'?

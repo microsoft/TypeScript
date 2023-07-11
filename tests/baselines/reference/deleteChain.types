@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/delete/deleteChain.ts] ////
+
+=== deleteChain.ts ===
 declare const o1: undefined | { b: string };
 >o1 : { b: string; } | undefined
 >b : string

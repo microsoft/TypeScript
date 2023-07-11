@@ -60,7 +60,9 @@ import {
     isThisInTypeQuery,
     isTransientSymbol,
     isTypeAliasDeclaration,
+    isVarAwaitUsing,
     isVarConst,
+    isVarUsing,
     JSDocTagInfo,
     JsxOpeningLikeElement,
     keywordPart,
@@ -160,6 +162,12 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
         }
         else if (symbol.valueDeclaration && isVarConst(symbol.valueDeclaration as VariableDeclaration)) {
             return ScriptElementKind.constElement;
+        }
+        else if (symbol.valueDeclaration && isVarUsing(symbol.valueDeclaration as VariableDeclaration)) {
+            return ScriptElementKind.variableUsingElement;
+        }
+        else if (symbol.valueDeclaration && isVarAwaitUsing(symbol.valueDeclaration as VariableDeclaration)) {
+            return ScriptElementKind.variableAwaitUsingElement;
         }
         else if (forEach(symbol.declarations, isLet)) {
             return ScriptElementKind.letElement;
@@ -630,6 +638,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                     symbolFlags & SymbolFlags.Variable ||
                     symbolKind === ScriptElementKind.localVariableElement ||
                     symbolKind === ScriptElementKind.indexSignatureElement ||
+                    symbolKind === ScriptElementKind.variableUsingElement ||
+                    symbolKind === ScriptElementKind.variableAwaitUsingElement ||
                     isThisExpression) {
                     displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                     displayParts.push(spacePart());
@@ -807,6 +817,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             case ScriptElementKind.letElement:
             case ScriptElementKind.constElement:
             case ScriptElementKind.constructorImplementationElement:
+            case ScriptElementKind.variableUsingElement:
+            case ScriptElementKind.variableAwaitUsingElement:
                 displayParts.push(textOrKeywordPart(symbolKind));
                 return;
             default:

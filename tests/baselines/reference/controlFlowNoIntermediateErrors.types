@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowNoIntermediateErrors.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowNoIntermediateErrors.ts] ////
+
+=== controlFlowNoIntermediateErrors.ts ===
 // Repros from #46475
 
 function f1() {

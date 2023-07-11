@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientModuleWithTemplateLiterals.ts ===
+//// [tests/cases/compiler/ambientModuleWithTemplateLiterals.ts] ////
+
+=== ambientModuleWithTemplateLiterals.ts ===
 declare module Foo {
 >Foo : Symbol(Foo, Decl(ambientModuleWithTemplateLiterals.ts, 0, 0))
 

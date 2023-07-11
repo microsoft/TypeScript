@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration2.ts(2,3): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+parserEnumDeclaration2.ts(2,3): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 
 
-==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration2.ts (1 errors) ====
+==== parserEnumDeclaration2.ts (1 errors) ====
     declare module M {
       declare enum E {
       ~~~~~~~

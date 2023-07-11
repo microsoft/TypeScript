@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorSupression1.ts] ////
+
 //// [errorSupression1.ts]
 class Foo { static bar() { return "x"; } }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts] ////
+
 //// [propertyNamedPrototype.ts]
 class C {
     prototype: number; // ok
