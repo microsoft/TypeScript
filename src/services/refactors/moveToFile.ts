@@ -896,20 +896,16 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
 
     const startNodeIndex = findIndex(statements, s => s.end > range.pos);
     if (startNodeIndex === -1) return undefined;
-
     const startStatement = statements[startNodeIndex];
-    // if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
-    //     return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
-    // }
 
     const overloadRangeToMove = getOverloadRangeToMove(file, startStatement);
     /**function [|add(x: number, y: number): number;
-       function add(x: string, y: string): string;|] or
-
+       function add(x: string, y: string): string;|]
+                        or
        function [|add(x: number, y: number): number;
        function add(x: string, y: string): string;
-       |] or
-
+       |]
+                        or
        function [|add(x: number, y: number): number;
        function add(x: string, y: string): string;
        |]const a = 1;
@@ -917,6 +913,7 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     if (overloadRangeToMove && (statements[overloadRangeToMove.end].end >= range.end || range.end === statements[overloadRangeToMove.end].end + 1)) {
         return { toMove: overloadRangeToMove.toMove, afterLast: statements[overloadRangeToMove.end + 1] };
     }
+
     let afterEndNodeIndex = findIndex(statements, s => s.end >= range.end, startNodeIndex);
     /**[|const a = 1;
        |]const b = 2;
@@ -926,21 +923,30 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     }
 
     const endingOverloadRangeToMove = getOverloadRangeToMove(file, statements[afterEndNodeIndex]);
+
+    /**[|function add1(x: number, y: number): number;
+       function add1(x: string, y: string): string;
+       function foo() { }
+       const a = 1;
+       function add2(x: boolean): string;
+       function add2(x: number): number;|]
+     */
     if (endingOverloadRangeToMove && overloadRangeToMove) {
         return {
             toMove: statements.slice(findIndex(statements, s => s.pos === overloadRangeToMove.toMove[0].pos), endingOverloadRangeToMove.end + 1),
             afterLast: endingOverloadRangeToMove.end === statements.length - 1 ? undefined : statements[endingOverloadRangeToMove.end + 1]
         };
     }
+
     /**function [|add(x: number, y: number): number;
        function add(x: string, y: string): string;
-       function foo() { }|] or
-
+       function foo() { }|]
+                        or
        function [|add(x: number, y: number): number;
        function add(x: string, y: string): string;
        function foo() { }
-       |] or
-
+       |]
+                        or
        function add(x: number, y: number): number;
        function add(x: string, y: string): string;
        function foo() { }
@@ -955,21 +961,21 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
 
     /**[|const a = 1;
      * function add(x: number, y: number): number;
-       function add(x: string, y: string): string;|] or
-
+       function add(x: string, y: string): string;|]
+                        or
        [|
        function add(x: number, y: number): number;
        function add(x: string, y: string): string;
-       |] or
-
+       |]
+                        or
        const a = 1;[|
        function add(x: number, y: number): number;
        function add(x: string, y: string): string;|]
      */
     if (endingOverloadRangeToMove) {
         return {
-            toMove: statements.slice(startNodeIndex, endingOverloadRangeToMove.end === statements.length - 1 ? statements.length : endingOverloadRangeToMove.end + 1),  //endingOverloadRangeToMove.end === -1 ? statements.length : endingOverloadRangeToMove.end + 1),
-            afterLast: endingOverloadRangeToMove.end === statements.length - 1 ? undefined : statements[endingOverloadRangeToMove.end + 1],//endingOverloadRangeToMove.end === -1 ? undefined : statements[endingOverloadRangeToMove.end + 1],
+            toMove: statements.slice(startNodeIndex, endingOverloadRangeToMove.end === statements.length - 1 ? statements.length : endingOverloadRangeToMove.end + 1),
+            afterLast: endingOverloadRangeToMove.end === statements.length - 1 ? undefined : statements[endingOverloadRangeToMove.end + 1],
         };
     }
     return {
