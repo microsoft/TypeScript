@@ -1596,6 +1596,12 @@ export const enum ScriptElementKind {
     /** Inside function */
     localVariableElement = "local var",
 
+    /** using foo = ... */
+    variableUsingElement = "using",
+
+    /** await using foo = ... */
+    variableAwaitUsingElement = "await using",
+
     /**
      * Inside module and script only
      * function f() { }

@@ -2221,7 +2221,7 @@ declare namespace ts {
         getSourceFileByPath(path: Path): SourceFile | undefined;
         getCurrentDirectory(): string;
     }
-    interface ParseConfigHost {
+    interface ParseConfigHost extends ModuleResolutionHost {
         useCaseSensitiveFileNames: boolean;
         readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
         /**
@@ -7009,6 +7009,10 @@ declare namespace ts {
         variableElement = "var",
         /** Inside function */
         localVariableElement = "local var",
+        /** using foo = ... */
+        variableUsingElement = "using",
+        /** await using foo = ... */
+        variableAwaitUsingElement = "await using",
         /**
          * Inside module and script only
          * function f() { }
