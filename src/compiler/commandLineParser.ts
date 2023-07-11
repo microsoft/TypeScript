@@ -657,6 +657,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "checkJs",
         type: "boolean",
+        affectsModuleResolution: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Enable_error_reporting_in_type_checked_JavaScript_files,

@@ -3022,6 +3022,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.TypeAliasDeclaration:
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files));
                         return "skip";
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        if (!(node as FunctionLikeDeclaration).body) {
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.Signature_declarations_can_only_be_used_in_TypeScript_files));
+                            return "skip";
+                        }
+                        return;
                     case SyntaxKind.EnumDeclaration:
                         const enumKeyword = Debug.checkDefined(tokenToString(SyntaxKind.EnumKeyword));
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, enumKeyword));
@@ -5160,18 +5168,10 @@ export function filterSemanticDiagnostics(diagnostic: readonly Diagnostic[], opt
 }
 
 /** @internal */
-export interface CompilerHostLike {
-    useCaseSensitiveFileNames(): boolean;
-    getCurrentDirectory(): string;
-    fileExists(fileName: string): boolean;
-    readFile(fileName: string): string | undefined;
-    readDirectory?(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): string[];
-    trace?(s: string): void;
-    onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter;
-}
-
-/** @internal */
-export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, directoryStructureHost: DirectoryStructureHost = host): ParseConfigFileHost {
+export function parseConfigHostFromCompilerHostLike<T extends BuilderProgram>(
+    host: (CompilerHost | ProgramHost<T>) & { onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter },
+    directoryStructureHost: DirectoryStructureHost = host,
+): ParseConfigFileHost {
     return {
         fileExists: f => directoryStructureHost.fileExists(f),
         readDirectory(root, extensions, excludes, includes, depth) {
@@ -5179,10 +5179,13 @@ export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, dire
             return directoryStructureHost.readDirectory(root, extensions, excludes, includes, depth);
         },
         readFile: f => directoryStructureHost.readFile(f),
+        directoryExists: maybeBind(directoryStructureHost, directoryStructureHost.directoryExists),
+        getDirectories: maybeBind(directoryStructureHost, directoryStructureHost.getDirectories),
+        realpath: maybeBind(directoryStructureHost, directoryStructureHost.realpath),
         useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
         getCurrentDirectory: () => host.getCurrentDirectory(),
         onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic || returnUndefined,
-        trace: host.trace ? (s) => host.trace!(s) : undefined
+        trace: host.trace ? (s) => host.trace!(s) : undefined,
     };
 }
 

@@ -6556,6 +6556,10 @@
         "category": "Error",
         "code": 8016
     },
+    "Signature declarations can only be used in TypeScript files.": {
+        "category": "Error",
+        "code": 8017
+    },
     "Report errors in .js files.": {
         "category": "Message",
         "code": 8019

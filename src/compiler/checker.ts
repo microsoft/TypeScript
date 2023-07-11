@@ -2068,7 +2068,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /** Key is "/path/to/a.ts|/path/to/b.ts". */
     var amalgamatedDuplicates: Map<string, DuplicateInfoForFiles> | undefined;
     var reverseMappedCache = new Map<string, Type | undefined>();
-    var inInferTypeForHomomorphicMappedType = false;
+    var homomorphicMappedTypeInferenceStack: string[] = [];
     var ambientModulesCache: Symbol[] | undefined;
     /**
      * List of every ambient module with a "*" wildcard.
@@ -7439,6 +7439,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (typeArguments) {
                 node.typeArguments = factory.createNodeArray(typeArguments);
+            }
+            if (signature.declaration?.kind === SyntaxKind.JSDocSignature && signature.declaration.parent.kind === SyntaxKind.JSDocOverloadTag) {
+                const comment = getTextOfNode(signature.declaration.parent.parent, /*includeTrivia*/ true).slice(2, -2).split(/\r\n|\n|\r/).map(line => line.replace(/^\s+/, " ")).join("\n");
+                addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, comment, /*hasTrailingNewLine*/ true);
             }
 
             cleanup?.();
@@ -22743,7 +22747,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        const filtered = contains(include, Ternary.False) ? getUnionType(types.filter((_, i) => include[i])) : target;
+        const filtered = contains(include, Ternary.False) ? getUnionType(types.filter((_, i) => include[i]), UnionReduction.None) : target;
         return filtered.flags & TypeFlags.Never ? target : filtered;
     }
 
@@ -23303,7 +23307,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTupleLikeType(type: Type): boolean {
-        return isTupleType(type) || !!getPropertyOfType(type, "0" as __String);
+        let lengthType;
+        return isTupleType(type) ||
+            !!getPropertyOfType(type, "0" as __String) ||
+            isArrayLikeType(type) && !!(lengthType = getTypeOfPropertyOfType(type, "length" as __String)) && everyType(lengthType, t => !!(t.flags & TypeFlags.NumberLiteral));
     }
 
     function isArrayOrTupleLikeType(type: Type): boolean {
@@ -24119,17 +24126,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
      */
     function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
-        if (inInferTypeForHomomorphicMappedType) {
+        const cacheKey = source.id + "," + target.id + "," + constraint.id;
+        if (reverseMappedCache.has(cacheKey)) {
+            return reverseMappedCache.get(cacheKey);
+        }
+        const recursionKey = source.id + "," + (target.target || target).id;
+        if (contains(homomorphicMappedTypeInferenceStack, recursionKey)) {
             return undefined;
         }
-        const key = source.id + "," + target.id + "," + constraint.id;
-        if (reverseMappedCache.has(key)) {
-            return reverseMappedCache.get(key);
-        }
-        inInferTypeForHomomorphicMappedType = true;
+        homomorphicMappedTypeInferenceStack.push(recursionKey);
         const type = createReverseMappedType(source, target, constraint);
-        inInferTypeForHomomorphicMappedType = false;
-        reverseMappedCache.set(key, type);
+        homomorphicMappedTypeInferenceStack.pop();
+        reverseMappedCache.set(cacheKey, type);
         return type;
     }
 
@@ -29965,6 +29973,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken);
     }
 
+    function isSpreadIntoCallOrNew(node: ArrayLiteralExpression) {
+        const parent = walkUpParenthesizedExpressions(node.parent);
+        return isSpreadElement(parent) && isCallOrNewExpression(parent.parent);
+    }
+
     function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean | undefined): Type {
         const elements = node.elements;
         const elementCount = elements.length;
@@ -29972,10 +29985,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const elementFlags: ElementFlags[] = [];
         pushCachedContextualType(node);
         const inDestructuringPattern = isAssignmentTarget(node);
-        const isSpreadIntoCallOrNew = isSpreadElement(node.parent) && isCallOrNewExpression(node.parent.parent);
-        const inConstContext = isSpreadIntoCallOrNew || isConstContext(node);
+        const inConstContext = isConstContext(node);
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
-        const inTupleContext = isSpreadIntoCallOrNew || !!contextualType && someType(contextualType, isTupleLikeType);
+        const inTupleContext = isSpreadIntoCallOrNew(node) || !!contextualType && someType(contextualType, isTupleLikeType);
         let hasOmittedExpression = false;
         for (let i = 0; i < elementCount; i++) {
             const e = elements[i];

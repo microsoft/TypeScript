@@ -23,7 +23,7 @@ f2(...[],);
 >f2(...[],) : void
 >f2 : (...args: any[]) => void
 >...[] : never
->[] : readonly []
+>[] : []
 
 // Not confused by overloads
 declare function f3(x, ): number;

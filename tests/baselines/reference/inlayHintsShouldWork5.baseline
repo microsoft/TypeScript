@@ -1,0 +1,26 @@
+foo(1, 2, 3)
+    ^
+{
+  "text": "c:",
+  "position": 87,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, 2, 3)
+       ^
+{
+  "text": "a:",
+  "position": 90,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, 2, 3)
+          ^
+{
+  "text": "b:",
+  "position": 93,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

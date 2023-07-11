@@ -671,6 +671,10 @@ export class ChangeTracker {
         this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, options), newNode, this.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween));
     }
 
+    public insertNodesBefore(sourceFile: SourceFile, before: Node, newNodes: readonly Node[], blankLineBetween = false, options: ConfigurableStartEnd = {}): void {
+        this.insertNodesAt(sourceFile, getAdjustedStartPosition(sourceFile, before, options), newNodes, this.getOptionsForInsertNodeBefore(before, first(newNodes), blankLineBetween));
+    }
+
     public insertModifierAt(sourceFile: SourceFile, pos: number, modifier: SyntaxKind, options: InsertNodeOptions = {}): void {
         this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), options);
     }
