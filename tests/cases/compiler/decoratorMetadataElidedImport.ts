@@ -1,5 +1,5 @@
 // @target: es2020
-// @module: commonjs
+// @module: commonjs, esnext
 // @strict: true
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
