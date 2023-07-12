@@ -194,7 +194,7 @@ export interface ImportAdder {
     hasFixes(): boolean;
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
     addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) => void;
-    writeFixes: (changeTracker: textChanges.ChangeTracker) => void;
+    writeFixes: (changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) => void;
 }
 
 /** @internal */
@@ -345,8 +345,15 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
         }
     }
 
-    function writeFixes(changeTracker: textChanges.ChangeTracker) {
-        const quotePreference = getQuotePreference(sourceFile, preferences);
+    function writeFixes(changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) {
+        let quotePreference: QuotePreference;
+        if (sourceFile.imports.length === 0 && oldFileQuotePreference !== undefined) {
+            // If the target file has no imports, we must use the same quote preference as the file we are importing from.
+            quotePreference = oldFileQuotePreference;
+        }
+        else {
+            quotePreference = getQuotePreference(sourceFile, preferences);
+        }
         for (const fix of addToNamespace) {
             addNamespaceQualifier(changeTracker, sourceFile, fix);
         }
