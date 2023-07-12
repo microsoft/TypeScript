@@ -31,6 +31,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+import { Observable } from './observable';
 function whatever(a, b, c) { }
 class Test {
     foo(arg1, arg2) {
@@ -44,4 +45,3 @@ __decorate([
     __metadata("design:paramtypes", [String, Number]),
     __metadata("design:returntype", Observable)
 ], Test.prototype, "foo", null);
-export {};

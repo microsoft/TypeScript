@@ -40195,6 +40195,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     for (const parameter of containingSignature.parameters) {
                         markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                     }
+                    markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(containingSignature));
                     break;
             }
         }

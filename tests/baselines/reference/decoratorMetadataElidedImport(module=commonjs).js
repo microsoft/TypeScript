@@ -33,6 +33,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const observable_1 = require("./observable");
 function whatever(a, b, c) { }
 class Test {
     foo(arg1, arg2) {
