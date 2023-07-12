@@ -40,7 +40,7 @@
     ],
     "devDependencies": {
         "@esfx/canceltoken": "^1.0.0",
-        "@octokit/rest": "latest",
+        "@octokit/rest": "^19.0.13",
         "@types/chai": "^4.3.4",
         "@types/fs-extra": "^9.0.13",
         "@types/glob": "^8.1.0",
