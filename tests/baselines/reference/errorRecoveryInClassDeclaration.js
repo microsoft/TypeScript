@@ -14,7 +14,9 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.bar = function () {
-        var v = foo(public, blaz(), {});
+        var v = foo(public, blaz());
+        { }
+        ;
     };
     return C;
 }());

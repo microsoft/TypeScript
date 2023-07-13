@@ -3,9 +3,10 @@ errorRecoveryInClassDeclaration.ts(4,13): error TS2304: Cannot find name 'public
 errorRecoveryInClassDeclaration.ts(4,20): error TS1005: ',' expected.
 errorRecoveryInClassDeclaration.ts(4,20): error TS2304: Cannot find name 'blaz'.
 errorRecoveryInClassDeclaration.ts(4,27): error TS1005: ',' expected.
+errorRecoveryInClassDeclaration.ts(5,13): error TS1128: Declaration or statement expected.
 
 
-==== errorRecoveryInClassDeclaration.ts (5 errors) ====
+==== errorRecoveryInClassDeclaration.ts (6 errors) ====
     class C {
         public bar() {
             var v = foo(
@@ -21,5 +22,7 @@ errorRecoveryInClassDeclaration.ts(4,27): error TS1005: ',' expected.
                               ~
 !!! error TS1005: ',' expected.
                 );
+                ~
+!!! error TS1128: Declaration or statement expected.
         }
     }

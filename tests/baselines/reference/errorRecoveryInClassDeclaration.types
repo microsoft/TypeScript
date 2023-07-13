@@ -9,14 +9,13 @@ class C {
 
         var v = foo(
 >v : any
->foo(            public blaz() {}            ) : any
+>foo(            public blaz() : any
 >foo : any
 
             public blaz() {}
 >public : any
 >blaz() : any
 >blaz : any
->{} : {}
 
             );
     }

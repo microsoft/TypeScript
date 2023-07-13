@@ -1,14 +1,8 @@
-parserErrorRecovery_ParameterList1.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 parserErrorRecovery_ParameterList1.ts(1,14): error TS1005: ',' expected.
-parserErrorRecovery_ParameterList1.ts(2,2): error TS1005: ')' expected.
 
 
-==== parserErrorRecovery_ParameterList1.ts (3 errors) ====
+==== parserErrorRecovery_ParameterList1.ts (1 errors) ====
     function f(a {
-             ~
-!!! error TS2391: Function implementation is missing or not immediately following the declaration.
                  ~
 !!! error TS1005: ',' expected.
     }
-     
-!!! error TS1005: ')' expected.

@@ -10,7 +10,7 @@ var 𐊧: string;
 
 var \u{102A7}: string;
 >u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 5))
->A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 7))
+>string : Symbol(string, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 4, 7))
 
 if (Math.random()) {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
@@ -22,7 +22,6 @@ if (Math.random()) {
 else {
     \u{102A7} = "hallo";
 >u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 5))
->A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 7))
 }
 
 class Foo {
@@ -30,13 +29,11 @@ class Foo {
 
     \u{102A7}: string;
 >u : Symbol(Foo.u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 15, 5))
->A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 7))
 >string : Symbol(string, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 4, 7))
 
     constructor() {
         this.\u{102A7} = " world";
 >u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 5))
->A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 7))
     }
     methodA() {
         return this.𐊧;
@@ -47,13 +44,11 @@ export var _𐊧 = new Foo().\u{102A7} + new Foo().methodA();
 >_ : Symbol(_, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 24, 10))
 >Foo : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 12, 1))
 >u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 5))
->A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 7))
 >Foo : Symbol(Foo, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 12, 1))
 
 _\u{102A7} += "!";
 >_ : Symbol(_, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 24, 10))
 >u : Symbol(u, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 5))
->A7 : Symbol(A7, Decl(extendedEscapesForAstralsInVarsAndClasses.ts, 5, 7))
 
 === astralAsSurrogatePair.ts ===
 import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";

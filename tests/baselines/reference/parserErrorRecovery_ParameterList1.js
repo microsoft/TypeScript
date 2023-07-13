@@ -5,3 +5,5 @@ function f(a {
 }
 
 //// [parserErrorRecovery_ParameterList1.js]
+function f(a) {
+}

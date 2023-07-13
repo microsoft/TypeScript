@@ -38,7 +38,12 @@ import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClass
 // Astral characters should be accepted in ES2015
 // U+102A7 CARIAN LETTER A2
 var string;
-var u, A7 = (void 0)[102];
+var u;
+{
+    102;
+    A7;
+}
+string;
 if (Math.random()) {
     "hello";
 }

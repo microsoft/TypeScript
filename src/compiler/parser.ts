@@ -3445,6 +3445,14 @@ namespace Parser {
                 // out a comma so we give a good error message.
                 parseExpected(SyntaxKind.CommaToken, getExpectedCommaDiagnostic(kind));
 
+                // since we didn't get a comma it might be better finish the list if the next token is {
+                // this allows us to avoid parsing objects as binding patterns
+                // as that might lead to incorectly finishing class declarations when parsing the pattern fails
+                // and leftover } are used for finishing the current method and the class declaration
+                if (!(contextFlags & NodeFlags.JsonFile) && token() === SyntaxKind.OpenBraceToken) {
+                    break;
+                }
+
                 // If the token was a semicolon, and the caller allows that, then skip it and
                 // continue.  This ensures we get back on track and don't result in tons of
                 // parse errors.  For example, this can happen when people do things like use

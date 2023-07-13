@@ -11,7 +11,9 @@ var x7: typeof function f() { };
 var x8: typeof /123/;
 
 //// [invalidTypeOfTarget.js]
-var x1, _a = void 0;
+var x1;
+{ }
+;
 var x2;
 (function () { return ; });
 var x3;

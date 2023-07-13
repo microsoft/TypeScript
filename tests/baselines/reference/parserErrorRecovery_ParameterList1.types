@@ -2,6 +2,6 @@
 
 === parserErrorRecovery_ParameterList1.ts ===
 function f(a {
->f : (a: any, {}: {}) => any
+>f : (a: any) => void
 >a : any
 }

@@ -40,7 +40,6 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 2 >^^^^
 3 >    ^^^^^^
 4 >          ^
-5 >           ^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >var 𐊧: 
@@ -51,39 +50,76 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 3 >Emitted(4, 11) Source(5, 15) + SourceIndex(0)
 4 >Emitted(4, 12) Source(5, 16) + SourceIndex(0)
 ---
->>>var u, A7 = (void 0)[102];
-1->
+>>>var u;
+1 >
 2 >^^^^
 3 >    ^
-4 >     ^^
-5 >       ^^
-6 >         ^^^^^^^^^^^^^^^^
-7 >                         ^
-1->
-  >var \
-2 >
+4 >     ^
+1 >
+  >
+2 >var \
 3 >    u
-4 >     {102
-5 >       A7
-6 >         
-7 >                         }: string;
-1->Emitted(5, 1) Source(6, 6) + SourceIndex(0)
+4 >     
+1 >Emitted(5, 1) Source(6, 1) + SourceIndex(0)
 2 >Emitted(5, 5) Source(6, 6) + SourceIndex(0)
 3 >Emitted(5, 6) Source(6, 7) + SourceIndex(0)
-4 >Emitted(5, 8) Source(6, 11) + SourceIndex(0)
-5 >Emitted(5, 10) Source(6, 13) + SourceIndex(0)
-6 >Emitted(5, 26) Source(6, 13) + SourceIndex(0)
-7 >Emitted(5, 27) Source(6, 23) + SourceIndex(0)
+4 >Emitted(5, 7) Source(6, 7) + SourceIndex(0)
+---
+>>>{
+1 >
+2 >^^^^^^^^^->
+1 >
+1 >Emitted(6, 1) Source(6, 7) + SourceIndex(0)
+---
+>>>    102;
+1->^^^^
+2 >    ^^^
+3 >       ^
+1->{
+2 >    102
+3 >       
+1->Emitted(7, 5) Source(6, 8) + SourceIndex(0)
+2 >Emitted(7, 8) Source(6, 11) + SourceIndex(0)
+3 >Emitted(7, 9) Source(6, 11) + SourceIndex(0)
+---
+>>>    A7;
+1 >^^^^
+2 >    ^^
+3 >      ^
+1 >
+2 >    A7
+3 >      
+1 >Emitted(8, 5) Source(6, 11) + SourceIndex(0)
+2 >Emitted(8, 7) Source(6, 13) + SourceIndex(0)
+3 >Emitted(8, 8) Source(6, 13) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^->
+1 >}
+1 >Emitted(9, 2) Source(6, 14) + SourceIndex(0)
+---
+>>>string;
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^^^^^^->
+1->: 
+2 >string
+3 >      ;
+1->Emitted(10, 1) Source(6, 16) + SourceIndex(0)
+2 >Emitted(10, 7) Source(6, 22) + SourceIndex(0)
+3 >Emitted(10, 8) Source(6, 23) + SourceIndex(0)
 ---
 >>>if (Math.random()) {
-1 >
+1->
 2 >^^^^
 3 >    ^^^^
 4 >        ^
 5 >         ^^^^^^
 6 >               ^^
 7 >                 ^^
-1 >
+1->
   >
   >
 2 >if (
@@ -92,13 +128,13 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 5 >         random
 6 >               ()
 7 >                 ) 
-1 >Emitted(6, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(6, 5) Source(8, 5) + SourceIndex(0)
-3 >Emitted(6, 9) Source(8, 9) + SourceIndex(0)
-4 >Emitted(6, 10) Source(8, 10) + SourceIndex(0)
-5 >Emitted(6, 16) Source(8, 16) + SourceIndex(0)
-6 >Emitted(6, 18) Source(8, 18) + SourceIndex(0)
-7 >Emitted(6, 20) Source(8, 20) + SourceIndex(0)
+1->Emitted(11, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(11, 5) Source(8, 5) + SourceIndex(0)
+3 >Emitted(11, 9) Source(8, 9) + SourceIndex(0)
+4 >Emitted(11, 10) Source(8, 10) + SourceIndex(0)
+5 >Emitted(11, 16) Source(8, 16) + SourceIndex(0)
+6 >Emitted(11, 18) Source(8, 18) + SourceIndex(0)
+7 >Emitted(11, 20) Source(8, 20) + SourceIndex(0)
 ---
 >>>    "hello";
 1 >^^^^
@@ -108,23 +144,23 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
   >    𐊧 = 
 2 >    "hello"
 3 >           ;
-1 >Emitted(7, 5) Source(9, 10) + SourceIndex(0)
-2 >Emitted(7, 12) Source(9, 17) + SourceIndex(0)
-3 >Emitted(7, 13) Source(9, 18) + SourceIndex(0)
+1 >Emitted(12, 5) Source(9, 10) + SourceIndex(0)
+2 >Emitted(12, 12) Source(9, 17) + SourceIndex(0)
+3 >Emitted(12, 13) Source(9, 18) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^->
 1 >
   >}
-1 >Emitted(8, 2) Source(10, 2) + SourceIndex(0)
+1 >Emitted(13, 2) Source(10, 2) + SourceIndex(0)
 ---
 >>>else {
 1->^^^^^
 2 >     ^^->
 1->
   >else 
-1->Emitted(9, 6) Source(11, 6) + SourceIndex(0)
+1->Emitted(14, 6) Source(11, 6) + SourceIndex(0)
 ---
 >>>    u;
 1->^^^^
@@ -134,15 +170,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
   >    \
 2 >    u
 3 >     
-1->Emitted(10, 5) Source(12, 6) + SourceIndex(0)
-2 >Emitted(10, 6) Source(12, 7) + SourceIndex(0)
-3 >Emitted(10, 7) Source(12, 7) + SourceIndex(0)
+1->Emitted(15, 5) Source(12, 6) + SourceIndex(0)
+2 >Emitted(15, 6) Source(12, 7) + SourceIndex(0)
+3 >Emitted(15, 7) Source(12, 7) + SourceIndex(0)
 ---
 >>>    {
 1 >^^^^
 2 >    ^^^^^^^^^->
 1 >
-1 >Emitted(11, 5) Source(12, 7) + SourceIndex(0)
+1 >Emitted(16, 5) Source(12, 7) + SourceIndex(0)
 ---
 >>>        102;
 1->^^^^^^^^
@@ -151,9 +187,9 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1->{
 2 >        102
 3 >           
-1->Emitted(12, 9) Source(12, 8) + SourceIndex(0)
-2 >Emitted(12, 12) Source(12, 11) + SourceIndex(0)
-3 >Emitted(12, 13) Source(12, 11) + SourceIndex(0)
+1->Emitted(17, 9) Source(12, 8) + SourceIndex(0)
+2 >Emitted(17, 12) Source(12, 11) + SourceIndex(0)
+3 >Emitted(17, 13) Source(12, 11) + SourceIndex(0)
 ---
 >>>        A7;
 1 >^^^^^^^^
@@ -162,15 +198,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1 >
 2 >        A7
 3 >          
-1 >Emitted(13, 9) Source(12, 11) + SourceIndex(0)
-2 >Emitted(13, 11) Source(12, 13) + SourceIndex(0)
-3 >Emitted(13, 12) Source(12, 13) + SourceIndex(0)
+1 >Emitted(18, 9) Source(12, 11) + SourceIndex(0)
+2 >Emitted(18, 11) Source(12, 13) + SourceIndex(0)
+3 >Emitted(18, 12) Source(12, 13) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 2 >     ^^^^^^^^->
 1 >}
-1 >Emitted(14, 6) Source(12, 14) + SourceIndex(0)
+1 >Emitted(19, 6) Source(12, 14) + SourceIndex(0)
 ---
 >>>    "hallo";
 1->^^^^
@@ -179,16 +215,16 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1-> = 
 2 >    "hallo"
 3 >           ;
-1->Emitted(15, 5) Source(12, 17) + SourceIndex(0)
-2 >Emitted(15, 12) Source(12, 24) + SourceIndex(0)
-3 >Emitted(15, 13) Source(12, 25) + SourceIndex(0)
+1->Emitted(20, 5) Source(12, 17) + SourceIndex(0)
+2 >Emitted(20, 12) Source(12, 24) + SourceIndex(0)
+3 >Emitted(20, 13) Source(12, 25) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(16, 2) Source(13, 2) + SourceIndex(0)
+1 >Emitted(21, 2) Source(13, 2) + SourceIndex(0)
 ---
 >>>var Foo = /** @class */ (function () {
 1->
@@ -196,13 +232,13 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1->
   >
   >
-1->Emitted(17, 1) Source(15, 1) + SourceIndex(0)
+1->Emitted(22, 1) Source(15, 1) + SourceIndex(0)
 ---
 >>>    function Foo() {
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(18, 5) Source(15, 1) + SourceIndex(0)
+1->Emitted(23, 5) Source(15, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -213,17 +249,17 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
   >    \u
 2 >    {
 3 >     
-1->Emitted(19, 5) Source(16, 7) + SourceIndex(0)
-2 >Emitted(19, 6) Source(16, 8) + SourceIndex(0)
-3 >Emitted(19, 6) Source(16, 7) + SourceIndex(0)
+1->Emitted(24, 5) Source(16, 7) + SourceIndex(0)
+2 >Emitted(24, 6) Source(16, 8) + SourceIndex(0)
+3 >Emitted(24, 6) Source(16, 7) + SourceIndex(0)
 ---
 >>>    return Foo;
 1->^^^^
 2 >    ^^^^^^^^^^
 1->
 2 >    {
-1->Emitted(20, 5) Source(16, 7) + SourceIndex(0)
-2 >Emitted(20, 15) Source(16, 8) + SourceIndex(0)
+1->Emitted(25, 5) Source(16, 7) + SourceIndex(0)
+2 >Emitted(25, 15) Source(16, 8) + SourceIndex(0)
 ---
 >>>}());
 1 >
@@ -237,17 +273,17 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 4 > 
 5 > class Foo {
   >     \u
-1 >Emitted(21, 1) Source(16, 7) + SourceIndex(0)
-2 >Emitted(21, 2) Source(16, 8) + SourceIndex(0)
-3 >Emitted(21, 2) Source(16, 7) + SourceIndex(0)
-4 >Emitted(21, 2) Source(15, 1) + SourceIndex(0)
-5 >Emitted(21, 6) Source(16, 7) + SourceIndex(0)
+1 >Emitted(26, 1) Source(16, 7) + SourceIndex(0)
+2 >Emitted(26, 2) Source(16, 8) + SourceIndex(0)
+3 >Emitted(26, 2) Source(16, 7) + SourceIndex(0)
+4 >Emitted(26, 2) Source(15, 1) + SourceIndex(0)
+5 >Emitted(26, 6) Source(16, 7) + SourceIndex(0)
 ---
 >>>{
 1 >
 2 >^^^^^^^^^->
 1 >
-1 >Emitted(22, 1) Source(16, 7) + SourceIndex(0)
+1 >Emitted(27, 1) Source(16, 7) + SourceIndex(0)
 ---
 >>>    102;
 1->^^^^
@@ -256,9 +292,9 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1->{
 2 >    102
 3 >       
-1->Emitted(23, 5) Source(16, 8) + SourceIndex(0)
-2 >Emitted(23, 8) Source(16, 11) + SourceIndex(0)
-3 >Emitted(23, 9) Source(16, 11) + SourceIndex(0)
+1->Emitted(28, 5) Source(16, 8) + SourceIndex(0)
+2 >Emitted(28, 8) Source(16, 11) + SourceIndex(0)
+3 >Emitted(28, 9) Source(16, 11) + SourceIndex(0)
 ---
 >>>    A7;
 1 >^^^^
@@ -267,15 +303,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1 >
 2 >    A7
 3 >      
-1 >Emitted(24, 5) Source(16, 11) + SourceIndex(0)
-2 >Emitted(24, 7) Source(16, 13) + SourceIndex(0)
-3 >Emitted(24, 8) Source(16, 13) + SourceIndex(0)
+1 >Emitted(29, 5) Source(16, 11) + SourceIndex(0)
+2 >Emitted(29, 7) Source(16, 13) + SourceIndex(0)
+3 >Emitted(29, 8) Source(16, 13) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^->
 1 >}
-1 >Emitted(25, 2) Source(16, 14) + SourceIndex(0)
+1 >Emitted(30, 2) Source(16, 14) + SourceIndex(0)
 ---
 >>>string;
 1->
@@ -285,9 +321,9 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1->: 
 2 >string
 3 >      ;
-1->Emitted(26, 1) Source(16, 16) + SourceIndex(0)
-2 >Emitted(26, 7) Source(16, 22) + SourceIndex(0)
-3 >Emitted(26, 8) Source(16, 23) + SourceIndex(0)
+1->Emitted(31, 1) Source(16, 16) + SourceIndex(0)
+2 >Emitted(31, 7) Source(16, 22) + SourceIndex(0)
+3 >Emitted(31, 8) Source(16, 23) + SourceIndex(0)
 ---
 >>>constructor();
 1->
@@ -299,16 +335,16 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 2 >constructor
 3 >           ()
 4 >             
-1->Emitted(27, 1) Source(17, 5) + SourceIndex(0)
-2 >Emitted(27, 12) Source(17, 16) + SourceIndex(0)
-3 >Emitted(27, 14) Source(17, 18) + SourceIndex(0)
-4 >Emitted(27, 15) Source(17, 18) + SourceIndex(0)
+1->Emitted(32, 1) Source(17, 5) + SourceIndex(0)
+2 >Emitted(32, 12) Source(17, 16) + SourceIndex(0)
+3 >Emitted(32, 14) Source(17, 18) + SourceIndex(0)
+4 >Emitted(32, 15) Source(17, 18) + SourceIndex(0)
 ---
 >>>{
 1 >
 2 >^^^^^^^^^^^->
 1 > 
-1 >Emitted(28, 1) Source(17, 19) + SourceIndex(0)
+1 >Emitted(33, 1) Source(17, 19) + SourceIndex(0)
 ---
 >>>    this.;
 1->^^^^
@@ -320,10 +356,10 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 2 >    this
 3 >        .
 4 >         
-1->Emitted(29, 5) Source(18, 9) + SourceIndex(0)
-2 >Emitted(29, 9) Source(18, 13) + SourceIndex(0)
-3 >Emitted(29, 10) Source(18, 14) + SourceIndex(0)
-4 >Emitted(29, 11) Source(18, 14) + SourceIndex(0)
+1->Emitted(34, 5) Source(18, 9) + SourceIndex(0)
+2 >Emitted(34, 9) Source(18, 13) + SourceIndex(0)
+3 >Emitted(34, 10) Source(18, 14) + SourceIndex(0)
+4 >Emitted(34, 11) Source(18, 14) + SourceIndex(0)
 ---
 >>>    u;
 1 >^^^^
@@ -332,15 +368,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1 >\
 2 >    u
 3 >     
-1 >Emitted(30, 5) Source(18, 15) + SourceIndex(0)
-2 >Emitted(30, 6) Source(18, 16) + SourceIndex(0)
-3 >Emitted(30, 7) Source(18, 16) + SourceIndex(0)
+1 >Emitted(35, 5) Source(18, 15) + SourceIndex(0)
+2 >Emitted(35, 6) Source(18, 16) + SourceIndex(0)
+3 >Emitted(35, 7) Source(18, 16) + SourceIndex(0)
 ---
 >>>    {
 1 >^^^^
 2 >    ^^^^^^^^^->
 1 >
-1 >Emitted(31, 5) Source(18, 16) + SourceIndex(0)
+1 >Emitted(36, 5) Source(18, 16) + SourceIndex(0)
 ---
 >>>        102;
 1->^^^^^^^^
@@ -349,9 +385,9 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1->{
 2 >        102
 3 >           
-1->Emitted(32, 9) Source(18, 17) + SourceIndex(0)
-2 >Emitted(32, 12) Source(18, 20) + SourceIndex(0)
-3 >Emitted(32, 13) Source(18, 20) + SourceIndex(0)
+1->Emitted(37, 9) Source(18, 17) + SourceIndex(0)
+2 >Emitted(37, 12) Source(18, 20) + SourceIndex(0)
+3 >Emitted(37, 13) Source(18, 20) + SourceIndex(0)
 ---
 >>>        A7;
 1 >^^^^^^^^
@@ -360,15 +396,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1 >
 2 >        A7
 3 >          
-1 >Emitted(33, 9) Source(18, 20) + SourceIndex(0)
-2 >Emitted(33, 11) Source(18, 22) + SourceIndex(0)
-3 >Emitted(33, 12) Source(18, 22) + SourceIndex(0)
+1 >Emitted(38, 9) Source(18, 20) + SourceIndex(0)
+2 >Emitted(38, 11) Source(18, 22) + SourceIndex(0)
+3 >Emitted(38, 12) Source(18, 22) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 2 >     ^^^^^^^^^->
 1 >}
-1 >Emitted(34, 6) Source(18, 23) + SourceIndex(0)
+1 >Emitted(39, 6) Source(18, 23) + SourceIndex(0)
 ---
 >>>    " world";
 1->^^^^
@@ -377,16 +413,16 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1-> = 
 2 >    " world"
 3 >            ;
-1->Emitted(35, 5) Source(18, 26) + SourceIndex(0)
-2 >Emitted(35, 13) Source(18, 34) + SourceIndex(0)
-3 >Emitted(35, 14) Source(18, 35) + SourceIndex(0)
+1->Emitted(40, 5) Source(18, 26) + SourceIndex(0)
+2 >Emitted(40, 13) Source(18, 34) + SourceIndex(0)
+3 >Emitted(40, 14) Source(18, 35) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^->
 1 >
   >    }
-1 >Emitted(36, 2) Source(19, 6) + SourceIndex(0)
+1 >Emitted(41, 2) Source(19, 6) + SourceIndex(0)
 ---
 >>>methodA();
 1->
@@ -398,16 +434,16 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 2 >methodA
 3 >       ()
 4 >         
-1->Emitted(37, 1) Source(20, 5) + SourceIndex(0)
-2 >Emitted(37, 8) Source(20, 12) + SourceIndex(0)
-3 >Emitted(37, 10) Source(20, 14) + SourceIndex(0)
-4 >Emitted(37, 11) Source(20, 14) + SourceIndex(0)
+1->Emitted(42, 1) Source(20, 5) + SourceIndex(0)
+2 >Emitted(42, 8) Source(20, 12) + SourceIndex(0)
+3 >Emitted(42, 10) Source(20, 14) + SourceIndex(0)
+4 >Emitted(42, 11) Source(20, 14) + SourceIndex(0)
 ---
 >>>{
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^->
 1 > 
-1 >Emitted(38, 1) Source(20, 15) + SourceIndex(0)
+1 >Emitted(43, 1) Source(20, 15) + SourceIndex(0)
 ---
 >>>    return this.𐊧;
 1->^^^^
@@ -423,19 +459,19 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 4 >               .
 5 >                𐊧
 6 >                  ;
-1->Emitted(39, 5) Source(21, 9) + SourceIndex(0)
-2 >Emitted(39, 12) Source(21, 16) + SourceIndex(0)
-3 >Emitted(39, 16) Source(21, 20) + SourceIndex(0)
-4 >Emitted(39, 17) Source(21, 21) + SourceIndex(0)
-5 >Emitted(39, 19) Source(21, 23) + SourceIndex(0)
-6 >Emitted(39, 20) Source(21, 24) + SourceIndex(0)
+1->Emitted(44, 5) Source(21, 9) + SourceIndex(0)
+2 >Emitted(44, 12) Source(21, 16) + SourceIndex(0)
+3 >Emitted(44, 16) Source(21, 20) + SourceIndex(0)
+4 >Emitted(44, 17) Source(21, 21) + SourceIndex(0)
+5 >Emitted(44, 19) Source(21, 23) + SourceIndex(0)
+6 >Emitted(44, 20) Source(21, 24) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^->
 1 >
   >    }
-1 >Emitted(40, 2) Source(22, 6) + SourceIndex(0)
+1 >Emitted(45, 2) Source(22, 6) + SourceIndex(0)
 ---
 >>>export var _;
 1->
@@ -453,12 +489,12 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 4 >       var 
 5 >           _𐊧 =
 6 >            
-1->Emitted(41, 1) Source(25, 1) + SourceIndex(0)
-2 >Emitted(41, 7) Source(25, 7) + SourceIndex(0)
-3 >Emitted(41, 8) Source(25, 8) + SourceIndex(0)
-4 >Emitted(41, 12) Source(25, 12) + SourceIndex(0)
-5 >Emitted(41, 13) Source(25, 17) + SourceIndex(0)
-6 >Emitted(41, 14) Source(25, 17) + SourceIndex(0)
+1->Emitted(46, 1) Source(25, 1) + SourceIndex(0)
+2 >Emitted(46, 7) Source(25, 7) + SourceIndex(0)
+3 >Emitted(46, 8) Source(25, 8) + SourceIndex(0)
+4 >Emitted(46, 12) Source(25, 12) + SourceIndex(0)
+5 >Emitted(46, 13) Source(25, 17) + SourceIndex(0)
+6 >Emitted(46, 14) Source(25, 17) + SourceIndex(0)
 ---
 >>>new Foo().;
 1 >
@@ -473,12 +509,12 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 4 >       ()
 5 >         .
 6 >          
-1 >Emitted(42, 1) Source(25, 18) + SourceIndex(0)
-2 >Emitted(42, 5) Source(25, 22) + SourceIndex(0)
-3 >Emitted(42, 8) Source(25, 25) + SourceIndex(0)
-4 >Emitted(42, 10) Source(25, 27) + SourceIndex(0)
-5 >Emitted(42, 11) Source(25, 28) + SourceIndex(0)
-6 >Emitted(42, 12) Source(25, 28) + SourceIndex(0)
+1 >Emitted(47, 1) Source(25, 18) + SourceIndex(0)
+2 >Emitted(47, 5) Source(25, 22) + SourceIndex(0)
+3 >Emitted(47, 8) Source(25, 25) + SourceIndex(0)
+4 >Emitted(47, 10) Source(25, 27) + SourceIndex(0)
+5 >Emitted(47, 11) Source(25, 28) + SourceIndex(0)
+6 >Emitted(47, 12) Source(25, 28) + SourceIndex(0)
 ---
 >>>u;
 1 >
@@ -487,15 +523,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1 >\
 2 >u
 3 > 
-1 >Emitted(43, 1) Source(25, 29) + SourceIndex(0)
-2 >Emitted(43, 2) Source(25, 30) + SourceIndex(0)
-3 >Emitted(43, 3) Source(25, 30) + SourceIndex(0)
+1 >Emitted(48, 1) Source(25, 29) + SourceIndex(0)
+2 >Emitted(48, 2) Source(25, 30) + SourceIndex(0)
+3 >Emitted(48, 3) Source(25, 30) + SourceIndex(0)
 ---
 >>>{
 1 >
 2 >^^^^^^^^^->
 1 >
-1 >Emitted(44, 1) Source(25, 30) + SourceIndex(0)
+1 >Emitted(49, 1) Source(25, 30) + SourceIndex(0)
 ---
 >>>    102;
 1->^^^^
@@ -504,9 +540,9 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1->{
 2 >    102
 3 >       
-1->Emitted(45, 5) Source(25, 31) + SourceIndex(0)
-2 >Emitted(45, 8) Source(25, 34) + SourceIndex(0)
-3 >Emitted(45, 9) Source(25, 34) + SourceIndex(0)
+1->Emitted(50, 5) Source(25, 31) + SourceIndex(0)
+2 >Emitted(50, 8) Source(25, 34) + SourceIndex(0)
+3 >Emitted(50, 9) Source(25, 34) + SourceIndex(0)
 ---
 >>>    A7;
 1 >^^^^
@@ -515,15 +551,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1 >
 2 >    A7
 3 >      
-1 >Emitted(46, 5) Source(25, 34) + SourceIndex(0)
-2 >Emitted(46, 7) Source(25, 36) + SourceIndex(0)
-3 >Emitted(46, 8) Source(25, 36) + SourceIndex(0)
+1 >Emitted(51, 5) Source(25, 34) + SourceIndex(0)
+2 >Emitted(51, 7) Source(25, 36) + SourceIndex(0)
+3 >Emitted(51, 8) Source(25, 36) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^->
 1 >}
-1 >Emitted(47, 2) Source(25, 37) + SourceIndex(0)
+1 >Emitted(52, 2) Source(25, 37) + SourceIndex(0)
 ---
 >>>+new Foo().methodA();
 1->
@@ -544,15 +580,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 7 >           methodA
 8 >                  ()
 9 >                    ;
-1->Emitted(48, 1) Source(25, 38) + SourceIndex(0)
-2 >Emitted(48, 2) Source(25, 40) + SourceIndex(0)
-3 >Emitted(48, 6) Source(25, 44) + SourceIndex(0)
-4 >Emitted(48, 9) Source(25, 47) + SourceIndex(0)
-5 >Emitted(48, 11) Source(25, 49) + SourceIndex(0)
-6 >Emitted(48, 12) Source(25, 50) + SourceIndex(0)
-7 >Emitted(48, 19) Source(25, 57) + SourceIndex(0)
-8 >Emitted(48, 21) Source(25, 59) + SourceIndex(0)
-9 >Emitted(48, 22) Source(25, 60) + SourceIndex(0)
+1->Emitted(53, 1) Source(25, 38) + SourceIndex(0)
+2 >Emitted(53, 2) Source(25, 40) + SourceIndex(0)
+3 >Emitted(53, 6) Source(25, 44) + SourceIndex(0)
+4 >Emitted(53, 9) Source(25, 47) + SourceIndex(0)
+5 >Emitted(53, 11) Source(25, 49) + SourceIndex(0)
+6 >Emitted(53, 12) Source(25, 50) + SourceIndex(0)
+7 >Emitted(53, 19) Source(25, 57) + SourceIndex(0)
+8 >Emitted(53, 21) Source(25, 59) + SourceIndex(0)
+9 >Emitted(53, 22) Source(25, 60) + SourceIndex(0)
 ---
 >>>_;
 1 >
@@ -564,9 +600,9 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
   >
 2 >_
 3 > 
-1 >Emitted(49, 1) Source(27, 1) + SourceIndex(0)
-2 >Emitted(49, 2) Source(27, 2) + SourceIndex(0)
-3 >Emitted(49, 3) Source(27, 2) + SourceIndex(0)
+1 >Emitted(54, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(54, 2) Source(27, 2) + SourceIndex(0)
+3 >Emitted(54, 3) Source(27, 2) + SourceIndex(0)
 ---
 >>>u;
 1->
@@ -575,15 +611,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1->\
 2 >u
 3 > 
-1->Emitted(50, 1) Source(27, 3) + SourceIndex(0)
-2 >Emitted(50, 2) Source(27, 4) + SourceIndex(0)
-3 >Emitted(50, 3) Source(27, 4) + SourceIndex(0)
+1->Emitted(55, 1) Source(27, 3) + SourceIndex(0)
+2 >Emitted(55, 2) Source(27, 4) + SourceIndex(0)
+3 >Emitted(55, 3) Source(27, 4) + SourceIndex(0)
 ---
 >>>{
 1 >
 2 >^^^^^^^^^->
 1 >
-1 >Emitted(51, 1) Source(27, 4) + SourceIndex(0)
+1 >Emitted(56, 1) Source(27, 4) + SourceIndex(0)
 ---
 >>>    102;
 1->^^^^
@@ -592,9 +628,9 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1->{
 2 >    102
 3 >       
-1->Emitted(52, 5) Source(27, 5) + SourceIndex(0)
-2 >Emitted(52, 8) Source(27, 8) + SourceIndex(0)
-3 >Emitted(52, 9) Source(27, 8) + SourceIndex(0)
+1->Emitted(57, 5) Source(27, 5) + SourceIndex(0)
+2 >Emitted(57, 8) Source(27, 8) + SourceIndex(0)
+3 >Emitted(57, 9) Source(27, 8) + SourceIndex(0)
 ---
 >>>    A7;
 1 >^^^^
@@ -603,15 +639,15 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1 >
 2 >    A7
 3 >      
-1 >Emitted(53, 5) Source(27, 8) + SourceIndex(0)
-2 >Emitted(53, 7) Source(27, 10) + SourceIndex(0)
-3 >Emitted(53, 8) Source(27, 10) + SourceIndex(0)
+1 >Emitted(58, 5) Source(27, 8) + SourceIndex(0)
+2 >Emitted(58, 7) Source(27, 10) + SourceIndex(0)
+3 >Emitted(58, 8) Source(27, 10) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^->
 1 >}
-1 >Emitted(54, 2) Source(27, 11) + SourceIndex(0)
+1 >Emitted(59, 2) Source(27, 11) + SourceIndex(0)
 ---
 >>>"!";
 1->
@@ -621,9 +657,9 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 1-> += 
 2 >"!"
 3 >   ;
-1->Emitted(55, 1) Source(27, 15) + SourceIndex(0)
-2 >Emitted(55, 4) Source(27, 18) + SourceIndex(0)
-3 >Emitted(55, 5) Source(27, 19) + SourceIndex(0)
+1->Emitted(60, 1) Source(27, 15) + SourceIndex(0)
+2 >Emitted(60, 4) Source(27, 18) + SourceIndex(0)
+3 >Emitted(60, 5) Source(27, 19) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=extendedEscapesForAstralsInVarsAndClasses.js.map===================================================================
 JsFile: astralAsSurrogatePair.js
