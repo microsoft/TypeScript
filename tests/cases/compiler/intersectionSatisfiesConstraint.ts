@@ -1,4 +1,5 @@
 // @strict: true
+// @lib: esnext
 
 interface FirstInterface {
     commonProperty: number

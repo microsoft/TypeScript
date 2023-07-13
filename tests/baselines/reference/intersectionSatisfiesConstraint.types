@@ -19,11 +19,11 @@ const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) 
     const newParam: T & { otherProperty: number } = Object.assign(param1, { otherProperty: 3 })
 >newParam : T & { otherProperty: number; }
 >otherProperty : number
->Object.assign(param1, { otherProperty: 3 }) : any
->Object.assign : any
+>Object.assign(param1, { otherProperty: 3 }) : T & { otherProperty: number; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : any
->param1 : FirstInterface | SecondInterface
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>param1 : T
 >{ otherProperty: 3 } : { otherProperty: number; }
 >otherProperty : number
 >3 : 3
