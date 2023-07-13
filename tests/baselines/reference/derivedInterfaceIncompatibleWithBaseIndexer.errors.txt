@@ -1,13 +1,13 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts(7,5): error TS2411: Property '1' of type '{ y: number; }' is not assignable to 'number' index type '{ x: number; y: number; }'.
-tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts(7,5): error TS2411: Property '1' of type '{ y: number; }' is not assignable to 'string' index type '{ x: number; }'.
-tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts(11,5): error TS2411: Property ''1'' of type '{ y: number; }' is not assignable to 'number' index type '{ x: number; y: number; }'.
-tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts(11,5): error TS2411: Property ''1'' of type '{ y: number; }' is not assignable to 'string' index type '{ x: number; }'.
-tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts(15,5): error TS2411: Property 'foo' of type '{ y: number; }' is not assignable to 'string' index type '{ x: number; }'.
-tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts(19,5): error TS2411: Property 'foo' of type '() => { x: number; }' is not assignable to 'string' index type '{ x: number; }'.
-tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts(24,5): error TS2411: Property '1' of type '{ x: number; }' is not assignable to 'number' index type '{ x: number; y: number; }'.
+derivedInterfaceIncompatibleWithBaseIndexer.ts(7,5): error TS2411: Property '1' of type '{ y: number; }' is not assignable to 'number' index type '{ x: number; y: number; }'.
+derivedInterfaceIncompatibleWithBaseIndexer.ts(7,5): error TS2411: Property '1' of type '{ y: number; }' is not assignable to 'string' index type '{ x: number; }'.
+derivedInterfaceIncompatibleWithBaseIndexer.ts(11,5): error TS2411: Property ''1'' of type '{ y: number; }' is not assignable to 'number' index type '{ x: number; y: number; }'.
+derivedInterfaceIncompatibleWithBaseIndexer.ts(11,5): error TS2411: Property ''1'' of type '{ y: number; }' is not assignable to 'string' index type '{ x: number; }'.
+derivedInterfaceIncompatibleWithBaseIndexer.ts(15,5): error TS2411: Property 'foo' of type '{ y: number; }' is not assignable to 'string' index type '{ x: number; }'.
+derivedInterfaceIncompatibleWithBaseIndexer.ts(19,5): error TS2411: Property 'foo' of type '() => { x: number; }' is not assignable to 'string' index type '{ x: number; }'.
+derivedInterfaceIncompatibleWithBaseIndexer.ts(24,5): error TS2411: Property '1' of type '{ x: number; }' is not assignable to 'number' index type '{ x: number; y: number; }'.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts (7 errors) ====
+==== derivedInterfaceIncompatibleWithBaseIndexer.ts (7 errors) ====
     interface Base {
         [x: number]: { x: number; y: number; };
         [x: string]: { x: number; }

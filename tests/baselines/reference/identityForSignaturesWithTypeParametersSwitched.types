@@ -1,4 +1,6 @@
-=== tests/cases/compiler/identityForSignaturesWithTypeParametersSwitched.ts ===
+//// [tests/cases/compiler/identityForSignaturesWithTypeParametersSwitched.ts] ////
+
+=== identityForSignaturesWithTypeParametersSwitched.ts ===
 var f: <T, U>(x: T, y: U) => T;
 >f : <T, U>(x: T, y: U) => T
 >x : T

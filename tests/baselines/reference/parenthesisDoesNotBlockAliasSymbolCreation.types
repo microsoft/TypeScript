@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parenthesisDoesNotBlockAliasSymbolCreation.ts ===
+//// [tests/cases/compiler/parenthesisDoesNotBlockAliasSymbolCreation.ts] ////
+
+=== parenthesisDoesNotBlockAliasSymbolCreation.ts ===
 export type InvalidKeys<K extends string|number|symbol> = { [P in K]? : never };
 >InvalidKeys : InvalidKeys<K>
 

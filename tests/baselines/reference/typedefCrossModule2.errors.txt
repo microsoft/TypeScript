@@ -1,10 +1,10 @@
-tests/cases/conformance/jsdoc/mod1.js(3,23): error TS2300: Duplicate identifier 'Foo'.
-tests/cases/conformance/jsdoc/mod1.js(4,7): error TS2300: Duplicate identifier 'Foo'.
-tests/cases/conformance/jsdoc/mod1.js(9,23): error TS2300: Duplicate identifier 'Baz'.
-tests/cases/conformance/jsdoc/mod1.js(11,5): error TS2300: Duplicate identifier 'Baz'.
+mod1.js(3,23): error TS2300: Duplicate identifier 'Foo'.
+mod1.js(4,7): error TS2300: Duplicate identifier 'Foo'.
+mod1.js(9,23): error TS2300: Duplicate identifier 'Baz'.
+mod1.js(11,5): error TS2300: Duplicate identifier 'Baz'.
 
 
-==== tests/cases/conformance/jsdoc/use.js (0 errors) ====
+==== use.js (0 errors) ====
     var mod = require('./mod1.js');
     /** @type {import("./mod1.js").Baz} */
     var b;
@@ -12,7 +12,7 @@ tests/cases/conformance/jsdoc/mod1.js(11,5): error TS2300: Duplicate identifier 
     var bb;
     var bbb = new mod.Baz();
     
-==== tests/cases/conformance/jsdoc/mod1.js (4 errors) ====
+==== mod1.js (4 errors) ====
     // error
     
     /** @typedef {number} Foo */
@@ -28,12 +28,12 @@ tests/cases/conformance/jsdoc/mod1.js(11,5): error TS2300: Duplicate identifier 
     /** @typedef {number} Baz */
                           ~~~
 !!! error TS2300: Duplicate identifier 'Baz'.
-!!! related TS6203 /.src/tests/cases/conformance/jsdoc/mod1.js:11:5: 'Baz' was also declared here.
+!!! related TS6203 mod1.js:11:5: 'Baz' was also declared here.
     module.exports = {
         Baz: class { }
         ~~~
 !!! error TS2300: Duplicate identifier 'Baz'.
-!!! related TS6203 /.src/tests/cases/conformance/jsdoc/mod1.js:9:23: 'Baz' was also declared here.
+!!! related TS6203 mod1.js:9:23: 'Baz' was also declared here.
     }
     
     // ok

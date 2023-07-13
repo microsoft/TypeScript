@@ -1,10 +1,10 @@
-tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts(1,17): error TS6133: 'T' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts(1,21): error TS6133: 'T' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts(3,18): error TS6133: 'T' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts(7,26): error TS6133: 'T' is declared but its value is never read.
+noUnusedLocals_typeParameterMergedWithParameter.ts(1,17): error TS6133: 'T' is declared but its value is never read.
+noUnusedLocals_typeParameterMergedWithParameter.ts(1,21): error TS6133: 'T' is declared but its value is never read.
+noUnusedLocals_typeParameterMergedWithParameter.ts(3,18): error TS6133: 'T' is declared but its value is never read.
+noUnusedLocals_typeParameterMergedWithParameter.ts(7,26): error TS6133: 'T' is declared but its value is never read.
 
 
-==== tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts (4 errors) ====
+==== noUnusedLocals_typeParameterMergedWithParameter.ts (4 errors) ====
     function useNone<T>(T: number) {}
                     ~~~
 !!! error TS6133: 'T' is declared but its value is never read.

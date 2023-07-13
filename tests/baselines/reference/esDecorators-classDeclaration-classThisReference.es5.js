@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/classThisReference/esDecorators-classDeclaration-classThisReference.es5.ts] ////
+
 //// [esDecorators-classDeclaration-classThisReference.es5.ts]
 declare let dec: any;
 
@@ -11,7 +13,6 @@ class C {
 
 
 //// [esDecorators-classDeclaration-classThisReference.es5.js]
-var _this = this;
 var C = function () {
     var _classDecorators = [dec];
     var _classDescriptor;
@@ -30,8 +31,10 @@ var C = function () {
     }());
     __setFunctionName(_classThis, "C");
     (function () {
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
         C = _classThis = _classDescriptor.value;
+        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
     })();
     (function () {
         _classThis;

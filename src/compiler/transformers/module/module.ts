@@ -4,22 +4,28 @@ import {
     addInternalEmitFlags,
     addRange,
     append,
+    arrayFrom,
     ArrowFunction,
     BinaryExpression,
     BindingElement,
+    Block,
     Bundle,
     CallExpression,
+    CaseBlock,
+    CaseClause,
+    CatchClause,
     chainBundle,
     ClassDeclaration,
     collectExternalModuleInfo,
     Debug,
     Declaration,
+    DefaultClause,
     DestructuringAssignment,
+    DoStatement,
     EmitFlags,
     EmitHelper,
     EmitHint,
     emptyArray,
-    EndOfDeclarationMarker,
     ExportAssignment,
     ExportDeclaration,
     Expression,
@@ -28,6 +34,8 @@ import {
     firstOrUndefined,
     flattenDestructuringAssignment,
     FlattenLevel,
+    ForInStatement,
+    ForOfStatement,
     ForStatement,
     FunctionDeclaration,
     FunctionExpression,
@@ -51,7 +59,9 @@ import {
     hasJsonModuleEmitEnabled,
     hasSyntacticModifier,
     Identifier,
+    IdentifierNameMap,
     idText,
+    IfStatement,
     ImportCall,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -62,6 +72,9 @@ import {
     isArrowFunction,
     isAssignmentOperator,
     isBindingPattern,
+    isBlock,
+    isCaseBlock,
+    isCaseOrDefaultClause,
     isClassElement,
     isClassExpression,
     isDeclarationNameOfEnumOrNamespace,
@@ -74,6 +87,7 @@ import {
     isExpression,
     isExternalModule,
     isExternalModuleImportEqualsDeclaration,
+    isFileLevelReservedGeneratedIdentifier,
     isForInitializer,
     isFunctionExpression,
     isGeneratedIdentifier,
@@ -99,9 +113,11 @@ import {
     isSpreadElement,
     isStatement,
     isStringLiteral,
+    isVariableDeclaration,
+    isVariableDeclarationList,
+    LabeledStatement,
     length,
     mapDefined,
-    MergeDeclarationMarker,
     Modifier,
     ModifierFlags,
     ModuleKind,
@@ -123,22 +139,28 @@ import {
     setTextRange,
     ShorthandPropertyAssignment,
     singleOrMany,
+    some,
     SourceFile,
     startOnNewLine,
     Statement,
+    SwitchStatement,
     SyntaxKind,
     TaggedTemplateExpression,
     TextRange,
     TransformationContext,
     TransformFlags,
     tryGetModuleNameFromFile,
+    TryStatement,
     VariableDeclaration,
+    VariableDeclarationList,
     VariableStatement,
     visitEachChild,
     visitIterationBody,
     visitNode,
     visitNodes,
     VisitResult,
+    WhileStatement,
+    WithStatement,
 } from "../../_namespaces/ts";
 
 /** @internal */
@@ -182,7 +204,6 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
     const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
-    const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
 
     let currentSourceFile: SourceFile; // The current file.
     let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
@@ -205,7 +226,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         }
 
         currentSourceFile = node;
-        currentModuleInfo = collectExternalModuleInfo(context, node, resolver, compilerOptions);
+        currentModuleInfo = collectExternalModuleInfo(context, node);
         moduleInfoMap[getOriginalNodeId(node)] = currentModuleInfo;
 
         // Perform the transformation.
@@ -649,17 +670,29 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function topLevelVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
-                return visitImportDeclaration(node as ImportDeclaration);
+                return visitTopLevelImportDeclaration(node as ImportDeclaration);
 
             case SyntaxKind.ImportEqualsDeclaration:
-                return visitImportEqualsDeclaration(node as ImportEqualsDeclaration);
+                return visitTopLevelImportEqualsDeclaration(node as ImportEqualsDeclaration);
 
             case SyntaxKind.ExportDeclaration:
-                return visitExportDeclaration(node as ExportDeclaration);
+                return visitTopLevelExportDeclaration(node as ExportDeclaration);
 
             case SyntaxKind.ExportAssignment:
-                return visitExportAssignment(node as ExportAssignment);
+                return visitTopLevelExportAssignment(node as ExportAssignment);
 
+            default:
+                return topLevelNestedVisitor(node);
+        }
+    }
+
+    /**
+     * Visit nested elements at the top-level of a module.
+     *
+     * @param node The node to visit.
+     */
+    function topLevelNestedVisitor(node: Node): VisitResult<Node | undefined> {
+        switch (node.kind) {
             case SyntaxKind.VariableStatement:
                 return visitVariableStatement(node as VariableStatement);
 
@@ -669,11 +702,50 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.ClassDeclaration:
                 return visitClassDeclaration(node as ClassDeclaration);
 
-            case SyntaxKind.MergeDeclarationMarker:
-                return visitMergeDeclarationMarker(node as MergeDeclarationMarker);
+            case SyntaxKind.ForStatement:
+                return visitForStatement(node as ForStatement, /*isTopLevel*/ true);
 
-            case SyntaxKind.EndOfDeclarationMarker:
-                return visitEndOfDeclarationMarker(node as EndOfDeclarationMarker);
+            case SyntaxKind.ForInStatement:
+                return visitForInStatement(node as ForInStatement);
+
+            case SyntaxKind.ForOfStatement:
+                return visitForOfStatement(node as ForOfStatement);
+
+            case SyntaxKind.DoStatement:
+                return visitDoStatement(node as DoStatement);
+
+            case SyntaxKind.WhileStatement:
+                return visitWhileStatement(node as WhileStatement);
+
+            case SyntaxKind.LabeledStatement:
+                return visitLabeledStatement(node as LabeledStatement);
+
+            case SyntaxKind.WithStatement:
+                return visitWithStatement(node as WithStatement);
+
+            case SyntaxKind.IfStatement:
+                return visitIfStatement(node as IfStatement);
+
+            case SyntaxKind.SwitchStatement:
+                return visitSwitchStatement(node as SwitchStatement);
+
+            case SyntaxKind.CaseBlock:
+                return visitCaseBlock(node as CaseBlock);
+
+            case SyntaxKind.CaseClause:
+                return visitCaseClause(node as CaseClause);
+
+            case SyntaxKind.DefaultClause:
+                return visitDefaultClause(node as DefaultClause);
+
+            case SyntaxKind.TryStatement:
+                return visitTryStatement(node as TryStatement);
+
+            case SyntaxKind.CatchClause:
+                return visitCatchClause(node as CatchClause);
+
+            case SyntaxKind.Block:
+                return visitBlock(node as Block);
 
             default:
                 return visitor(node);
@@ -689,7 +761,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
         switch (node.kind) {
             case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement);
+                return visitForStatement(node as ForStatement, /*isTopLevel*/ false);
             case SyntaxKind.ExpressionStatement:
                 return visitExpressionStatement(node as ExpressionStatement);
             case SyntaxKind.ParenthesizedExpression:
@@ -774,14 +846,230 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return visitEachChild(node, visitor, context);
     }
 
-    function visitForStatement(node: ForStatement) {
+    function visitForStatement(node: ForStatement, isTopLevel: boolean) {
+        if (isTopLevel && node.initializer &&
+            isVariableDeclarationList(node.initializer) &&
+            !(node.initializer.flags & NodeFlags.BlockScoped)) {
+            const exportStatements = appendExportsOfVariableDeclarationList(/*statements*/ undefined, node.initializer, /*isForInOrOfInitializer*/ false);
+            if (exportStatements) {
+                const statements: Statement[] = [];
+                const varDeclList = visitNode(node.initializer, discardedValueVisitor, isVariableDeclarationList);
+                const varStatement = factory.createVariableStatement(/*modifiers*/ undefined, varDeclList);
+                statements.push(varStatement);
+                addRange(statements, exportStatements);
+
+                const condition = visitNode(node.condition, visitor, isExpression);
+                const incrementor = visitNode(node.incrementor, discardedValueVisitor, isExpression);
+                const body = visitIterationBody(node.statement, isTopLevel ? topLevelNestedVisitor : visitor, context);
+                statements.push(factory.updateForStatement(node, /*initializer*/ undefined, condition, incrementor, body));
+                return statements;
+            }
+        }
         return factory.updateForStatement(
             node,
             visitNode(node.initializer, discardedValueVisitor, isForInitializer),
             visitNode(node.condition, visitor, isExpression),
             visitNode(node.incrementor, discardedValueVisitor, isExpression),
-            visitIterationBody(node.statement, visitor, context)
+            visitIterationBody(node.statement, isTopLevel ? topLevelNestedVisitor : visitor, context)
         );
+    }
+
+    /**
+     * Visits the body of a ForInStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitForInStatement(node: ForInStatement): VisitResult<Statement> {
+        if (isVariableDeclarationList(node.initializer) && !(node.initializer.flags & NodeFlags.BlockScoped)) {
+            const exportStatements = appendExportsOfVariableDeclarationList(/*statements*/ undefined, node.initializer, /*isForInOrOfInitializer*/ true);
+            if (some(exportStatements)) {
+                const initializer = visitNode(node.initializer, discardedValueVisitor, isForInitializer);
+                const expression = visitNode(node.expression, visitor, isExpression);
+                const body = visitIterationBody(node.statement, topLevelNestedVisitor, context);
+                const mergedBody = isBlock(body) ?
+                    factory.updateBlock(body, [...exportStatements, ...body.statements]) :
+                    factory.createBlock([...exportStatements, body], /*multiLine*/ true);
+                return factory.updateForInStatement(node, initializer, expression, mergedBody);
+            }
+        }
+        return factory.updateForInStatement(
+            node,
+            visitNode(node.initializer, discardedValueVisitor, isForInitializer),
+            visitNode(node.expression, visitor, isExpression),
+            visitIterationBody(node.statement, topLevelNestedVisitor, context)
+        );
+    }
+
+    /**
+     * Visits the body of a ForOfStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitForOfStatement(node: ForOfStatement): VisitResult<Statement> {
+        if (isVariableDeclarationList(node.initializer) && !(node.initializer.flags & NodeFlags.BlockScoped)) {
+            const exportStatements = appendExportsOfVariableDeclarationList(/*statements*/ undefined, node.initializer, /*isForInOrOfInitializer*/ true);
+            const initializer = visitNode(node.initializer, discardedValueVisitor, isForInitializer);
+            const expression = visitNode(node.expression, visitor, isExpression);
+            let body = visitIterationBody(node.statement, topLevelNestedVisitor, context);
+            if (some(exportStatements)) {
+                body = isBlock(body) ?
+                    factory.updateBlock(body, [...exportStatements, ...body.statements]) :
+                    factory.createBlock([...exportStatements, body], /*multiLine*/ true);
+            }
+            return factory.updateForOfStatement(node, node.awaitModifier, initializer, expression, body);
+        }
+        return factory.updateForOfStatement(
+            node,
+            node.awaitModifier,
+            visitNode(node.initializer, discardedValueVisitor, isForInitializer),
+            visitNode(node.expression, visitor, isExpression),
+            visitIterationBody(node.statement, topLevelNestedVisitor, context)
+        );
+    }
+
+    /**
+     * Visits the body of a DoStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitDoStatement(node: DoStatement): DoStatement {
+        return factory.updateDoStatement(
+            node,
+            visitIterationBody(node.statement, topLevelNestedVisitor, context),
+            visitNode(node.expression, visitor, isExpression)
+        );
+    }
+
+    /**
+     * Visits the body of a WhileStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitWhileStatement(node: WhileStatement): WhileStatement {
+        return factory.updateWhileStatement(
+            node,
+            visitNode(node.expression, visitor, isExpression),
+            visitIterationBody(node.statement, topLevelNestedVisitor, context)
+        );
+    }
+
+    /**
+     * Visits the body of a LabeledStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitLabeledStatement(node: LabeledStatement): LabeledStatement {
+        return factory.updateLabeledStatement(
+            node,
+            node.label,
+            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
+        );
+    }
+
+    /**
+     * Visits the body of a WithStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitWithStatement(node: WithStatement): WithStatement {
+        return factory.updateWithStatement(
+            node,
+            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
+        );
+    }
+
+    /**
+     * Visits the body of a IfStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitIfStatement(node: IfStatement): IfStatement {
+        return factory.updateIfStatement(
+            node,
+            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
+            visitNode(node.elseStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)
+        );
+    }
+
+    /**
+     * Visits the body of a SwitchStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitSwitchStatement(node: SwitchStatement): SwitchStatement {
+        return factory.updateSwitchStatement(
+            node,
+            visitNode(node.expression, visitor, isExpression),
+            Debug.checkDefined(visitNode(node.caseBlock, topLevelNestedVisitor, isCaseBlock))
+        );
+    }
+
+    /**
+     * Visits the body of a CaseBlock to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitCaseBlock(node: CaseBlock): CaseBlock {
+        return factory.updateCaseBlock(
+            node,
+            visitNodes(node.clauses, topLevelNestedVisitor, isCaseOrDefaultClause)
+        );
+    }
+
+    /**
+     * Visits the body of a CaseClause to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitCaseClause(node: CaseClause): CaseClause {
+        return factory.updateCaseClause(
+            node,
+            visitNode(node.expression, visitor, isExpression),
+            visitNodes(node.statements, topLevelNestedVisitor, isStatement)
+        );
+    }
+
+    /**
+     * Visits the body of a DefaultClause to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitDefaultClause(node: DefaultClause): DefaultClause {
+        return visitEachChild(node, topLevelNestedVisitor, context);
+    }
+
+    /**
+     * Visits the body of a TryStatement to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitTryStatement(node: TryStatement): TryStatement {
+        return visitEachChild(node, topLevelNestedVisitor, context);
+    }
+
+    /**
+     * Visits the body of a CatchClause to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitCatchClause(node: CatchClause): CatchClause {
+        return factory.updateCatchClause(
+            node,
+            node.variableDeclaration,
+            Debug.checkDefined(visitNode(node.block, topLevelNestedVisitor, isBlock))
+        );
+    }
+
+    /**
+     * Visits the body of a Block to hoist declarations.
+     *
+     * @param node The node to visit.
+     */
+    function visitBlock(node: Block): Block {
+        node = visitEachChild(node, topLevelNestedVisitor, context);
+        return node;
     }
 
     function visitExpressionStatement(node: ExpressionStatement) {
@@ -899,7 +1187,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return factory.createComma(factory.createAssignment(temp, arg), factory.createConditionalExpression(
                 /*condition*/ factory.createIdentifier("__syncRequire"),
                 /*questionToken*/ undefined,
-                /*whenTrue*/ createImportCallExpressionCommonJS(temp, /* isInlineable */ true),
+                /*whenTrue*/ createImportCallExpressionCommonJS(temp, /*isInlineable*/ true),
                 /*colonToken*/ undefined,
                 /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
             ));
@@ -1066,7 +1354,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
+    function visitTopLevelImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
         if (moduleKind !== ModuleKind.AMD) {
@@ -1154,15 +1442,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             );
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfImportDeclaration(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfImportDeclaration(statements, node);
-        }
-
+        statements = appendExportsOfImportDeclaration(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1186,7 +1466,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
+    function visitTopLevelImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
         Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
         let statements: Statement[] | undefined;
@@ -1245,15 +1525,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             }
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfImportEqualsDeclaration(statements, node);
-        }
-
+        statements = appendExportsOfImportEqualsDeclaration(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1262,7 +1534,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param The node to visit.
      */
-    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
+    function visitTopLevelExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
         if (!node.moduleSpecifier) {
             // Elide export declarations with no module specifier as they are handled
             // elsewhere.
@@ -1319,7 +1591,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                         setOriginalNode(
                             setTextRange(
                                 factory.createExpressionStatement(
-                                    createExportExpression(factory.getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
+                                    createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true)
                                 ),
                                 specifier),
                             specifier
@@ -1372,23 +1644,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
+    function visitTopLevelExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
         if (node.isExportEquals) {
             return undefined;
         }
 
-        let statements: Statement[] | undefined;
-        const original = node.original;
-        if (original && hasAssociatedEndOfDeclarationMarker(original)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
-        }
-        else {
-            statements = appendExportStatement(statements, factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
-        }
-
-        return singleOrMany(statements);
+        return createExportStatement(factory.createIdentifier("default"), visitNode(node.expression, visitor, isExpression), /*location*/ node, /*allowComments*/ true);
     }
 
     /**
@@ -1421,15 +1682,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             statements = append(statements, visitEachChild(node, visitor, context));
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfHoistedDeclaration(statements, node);
-        }
-
+        statements = appendExportsOfHoistedDeclaration(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1461,15 +1714,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             statements = append(statements, visitEachChild(node, visitor, context));
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfHoistedDeclaration(statements, node);
-        }
-
+        statements = appendExportsOfHoistedDeclaration(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1560,15 +1805,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             statements = append(statements, visitEachChild(node, visitor, context));
         }
 
-        if (hasAssociatedEndOfDeclarationMarker(node)) {
-            // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node);
-        }
-        else {
-            statements = appendExportsOfVariableStatement(statements, node);
-        }
-
+        statements = appendExportsOfVariableStatement(statements, node);
         return singleOrMany(statements);
     }
 
@@ -1619,57 +1856,6 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     /**
-     * Visits a MergeDeclarationMarker used as a placeholder for the beginning of a merged
-     * and transformed declaration.
-     *
-     * @param node The node to visit.
-     */
-    function visitMergeDeclarationMarker(node: MergeDeclarationMarker): VisitResult<Statement> {
-        // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
-        // declaration we do not emit a leading variable declaration. To preserve the
-        // begin/end semantics of the declararation and to properly handle exports
-        // we wrapped the leading variable declaration in a `MergeDeclarationMarker`.
-        //
-        // To balance the declaration, add the exports of the elided variable
-        // statement.
-        if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node.original as VariableStatement);
-        }
-
-        return node;
-    }
-
-    /**
-     * Determines whether a node has an associated EndOfDeclarationMarker.
-     *
-     * @param node The node to test.
-     */
-    function hasAssociatedEndOfDeclarationMarker(node: Node) {
-        return (getEmitFlags(node) & EmitFlags.HasEndOfDeclarationMarker) !== 0;
-    }
-
-    /**
-     * Visits a DeclarationMarker used as a placeholder for the end of a transformed
-     * declaration.
-     *
-     * @param node The node to visit.
-     */
-    function visitEndOfDeclarationMarker(node: EndOfDeclarationMarker): VisitResult<Statement> {
-        // For some transformations we emit an `EndOfDeclarationMarker` to mark the actual
-        // end of the transformed declaration. We use this marker to emit any deferred exports
-        // of the declaration.
-        const id = getOriginalNodeId(node);
-        const statements = deferredExports[id];
-        if (statements) {
-            delete deferredExports[id];
-            return append(statements, node);
-        }
-
-        return node;
-    }
-
-    /**
      * Appends the exports of an ImportDeclaration to a statement list, returning the
      * statement list.
      *
@@ -1688,20 +1874,21 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return statements;
         }
 
+        const seen = new IdentifierNameMap<boolean>();
         if (importClause.name) {
-            statements = appendExportsOfDeclaration(statements, importClause);
+            statements = appendExportsOfDeclaration(statements, seen, importClause);
         }
 
         const namedBindings = importClause.namedBindings;
         if (namedBindings) {
             switch (namedBindings.kind) {
                 case SyntaxKind.NamespaceImport:
-                    statements = appendExportsOfDeclaration(statements, namedBindings);
+                    statements = appendExportsOfDeclaration(statements, seen, namedBindings);
                     break;
 
                 case SyntaxKind.NamedImports:
                     for (const importBinding of namedBindings.elements) {
-                        statements = appendExportsOfDeclaration(statements, importBinding, /* liveBinding */ true);
+                        statements = appendExportsOfDeclaration(statements, seen, importBinding, /*liveBinding*/ true);
                     }
 
                     break;
@@ -1725,7 +1912,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return statements;
         }
 
-        return appendExportsOfDeclaration(statements, decl);
+        return appendExportsOfDeclaration(statements, new IdentifierNameMap(), decl);
     }
 
     /**
@@ -1738,12 +1925,25 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param node The VariableStatement whose exports are to be recorded.
      */
     function appendExportsOfVariableStatement(statements: Statement[] | undefined, node: VariableStatement): Statement[] | undefined {
+        return appendExportsOfVariableDeclarationList(statements, node.declarationList, /*isForInOrOfInitializer*/ false);
+    }
+
+    /**
+     * Appends the exports of a VariableDeclarationList to a statement list, returning the statement
+     * list.
+     *
+     * @param statements A statement list to which the down-level export statements are to be
+     * appended. If `statements` is `undefined`, a new array is allocated if statements are
+     * appended.
+     * @param node The VariableDeclarationList whose exports are to be recorded.
+     */
+    function appendExportsOfVariableDeclarationList(statements: Statement[] | undefined, node: VariableDeclarationList, isForInOrOfInitializer: boolean): Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
 
-        for (const decl of node.declarationList.declarations) {
-            statements = appendExportsOfBindingElement(statements, decl);
+        for (const decl of node.declarations) {
+            statements = appendExportsOfBindingElement(statements, decl, isForInOrOfInitializer);
         }
 
         return statements;
@@ -1758,7 +1958,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfBindingElement(statements: Statement[] | undefined, decl: VariableDeclaration | BindingElement): Statement[] | undefined {
+    function appendExportsOfBindingElement(statements: Statement[] | undefined, decl: VariableDeclaration | BindingElement, isForInOrOfInitializer: boolean): Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
@@ -1766,12 +1966,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {
-                    statements = appendExportsOfBindingElement(statements, element);
+                    statements = appendExportsOfBindingElement(statements, element, isForInOrOfInitializer);
                 }
             }
         }
-        else if (!isGeneratedIdentifier(decl.name)) {
-            statements = appendExportsOfDeclaration(statements, decl);
+        else if (!isGeneratedIdentifier(decl.name) && (!isVariableDeclaration(decl) || decl.initializer || isForInOrOfInitializer)) {
+            statements = appendExportsOfDeclaration(statements, new IdentifierNameMap(), decl);
         }
 
         return statements;
@@ -1791,13 +1991,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return statements;
         }
 
+        const seen = new IdentifierNameMap<boolean>();
         if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
             const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? factory.createIdentifier("default") : factory.getDeclarationName(decl);
-            statements = appendExportStatement(statements, exportName, factory.getLocalName(decl), /*location*/ decl);
+            statements = appendExportStatement(statements, seen, exportName, factory.getLocalName(decl), /*location*/ decl);
         }
 
         if (decl.name) {
-            statements = appendExportsOfDeclaration(statements, decl);
+            statements = appendExportsOfDeclaration(statements, seen, decl);
         }
 
         return statements;
@@ -1811,12 +2012,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * appended.
      * @param decl The declaration to export.
      */
-    function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
+    function appendExportsOfDeclaration(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
         const name = factory.getDeclarationName(decl);
-        const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
+        const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(name);
         if (exportSpecifiers) {
             for (const exportSpecifier of exportSpecifiers) {
-                statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /* allowComments */ undefined, liveBinding);
+                statements = appendExportStatement(statements, seen, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /*allowComments*/ undefined, liveBinding);
             }
         }
         return statements;
@@ -1834,8 +2035,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments Whether to allow comments on the export.
      */
-    function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
-        statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
+    function appendExportStatement(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
+        if (!seen.has(exportName)) {
+            seen.set(exportName, true);
+            statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
+        }
         return statements;
     }
 
@@ -1877,7 +2081,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param allowComments An optional value indicating whether to emit comments for the statement.
      */
     function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
-        const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /* location */ undefined, liveBinding)), location);
+        const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /*location*/ undefined, liveBinding)), location);
         startOnNewLine(statement);
         if (!allowComments) {
             setEmitFlags(statement, EmitFlags.NoComments);
@@ -2138,16 +2342,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         // When we see an assignment expression whose left-hand side is an exported symbol,
         // we should ensure all exports of that symbol are updated with the correct value.
         //
-        // - We do not substitute generated identifiers for any reason.
+        // - We do not substitute generated identifiers unless they are file-level reserved names.
         // - We do not substitute identifiers tagged with the LocalName flag.
-        // - We do not substitute identifiers that were originally the name of an enum or
-        //   namespace due to how they are transformed in TypeScript.
         // - We only substitute identifiers that are exported at the top level.
         if (isAssignmentOperator(node.operatorToken.kind)
             && isIdentifier(node.left)
-            && !isGeneratedIdentifier(node.left)
-            && !isLocalName(node.left)
-            && !isDeclarationNameOfEnumOrNamespace(node.left)) {
+            && (!isGeneratedIdentifier(node.left) || isFileLevelReservedGeneratedIdentifier(node.left))
+            && !isLocalName(node.left)) {
             const exportedNames = getExports(node.left);
             if (exportedNames) {
                 // For each additional export of the declaration, apply an export assignment.
@@ -2172,11 +2373,37 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      */
     function getExports(name: Identifier): Identifier[] | undefined {
         if (!isGeneratedIdentifier(name)) {
-            const valueDeclaration = resolver.getReferencedImportDeclaration(name)
-                || resolver.getReferencedValueDeclaration(name);
-            if (valueDeclaration) {
-                return currentModuleInfo
-                    && currentModuleInfo.exportedBindings[getOriginalNodeId(valueDeclaration)];
+            const importDeclaration = resolver.getReferencedImportDeclaration(name);
+            if (importDeclaration) {
+                return currentModuleInfo?.exportedBindings[getOriginalNodeId(importDeclaration)];
+            }
+
+            // An exported namespace or enum may merge with an ambient declaration, which won't show up in .js emit, so
+            // we analyze all value exports of a symbol.
+            const bindingsSet = new Set<Identifier>();
+            const declarations = resolver.getReferencedValueDeclarations(name);
+            if (declarations) {
+                for (const declaration of declarations) {
+                    const bindings = currentModuleInfo?.exportedBindings[getOriginalNodeId(declaration)];
+                    if (bindings) {
+                        for (const binding of bindings) {
+                            bindingsSet.add(binding);
+                        }
+                    }
+                }
+                if (bindingsSet.size) {
+                    return arrayFrom(bindingsSet);
+                }
+            }
+        }
+        else if (isFileLevelReservedGeneratedIdentifier(name)) {
+            const exportSpecifiers = currentModuleInfo?.exportSpecifiers.get(name);
+            if (exportSpecifiers) {
+                const exportedNames: Identifier[] = [];
+                for (const exportSpecifier of exportSpecifiers) {
+                    exportedNames.push(exportSpecifier.name);
+                }
+                return exportedNames;
             }
         }
     }

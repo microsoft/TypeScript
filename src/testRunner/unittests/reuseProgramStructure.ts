@@ -16,7 +16,7 @@ import {
     createWatchedSystem,
     File,
     libFile,
-} from "./virtualFileSystemWithWatch";
+} from "./helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: Reuse program structure:: General", () => {
     function baselineCache<T>(baselines: string[], cacheType: string, cache: ts.ModeAwareCache<T> | undefined) {
@@ -549,6 +549,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
             program, newRootFileNames, newOptions,
             path => program.getSourceFileByPath(path)!.version, /*fileExists*/ ts.returnFalse,
             /*hasInvalidatedResolutions*/ ts.returnFalse,
+            /*hasInvalidatedLibResolutions*/ ts.returnFalse,
             /*hasChangedAutomaticTypeDirectiveNames*/ undefined,
             /*getParsedCommandLine*/ ts.returnUndefined,
             /*projectReferences*/ undefined

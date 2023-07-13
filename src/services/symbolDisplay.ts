@@ -60,7 +60,9 @@ import {
     isThisInTypeQuery,
     isTransientSymbol,
     isTypeAliasDeclaration,
+    isVarAwaitUsing,
     isVarConst,
+    isVarUsing,
     JSDocTagInfo,
     JsxOpeningLikeElement,
     keywordPart,
@@ -160,6 +162,12 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
         }
         else if (symbol.valueDeclaration && isVarConst(symbol.valueDeclaration as VariableDeclaration)) {
             return ScriptElementKind.constElement;
+        }
+        else if (symbol.valueDeclaration && isVarUsing(symbol.valueDeclaration as VariableDeclaration)) {
+            return ScriptElementKind.variableUsingElement;
+        }
+        else if (symbol.valueDeclaration && isVarAwaitUsing(symbol.valueDeclaration as VariableDeclaration)) {
+            return ScriptElementKind.variableAwaitUsingElement;
         }
         else if (forEach(symbol.declarations, isLet)) {
             return ScriptElementKind.letElement;
@@ -452,7 +460,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
-        addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+        addRange(displayParts, typeToDisplayParts(typeChecker, location.parent && isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();
@@ -535,12 +543,12 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     // don't use symbolFlags since getAliasedSymbol requires the flag on the symbol itself
     if (symbol.flags & SymbolFlags.Alias) {
         prefixNextMeaning();
-        if (!hasAddedSymbolInfo) {
+        if (!hasAddedSymbolInfo || documentation.length === 0 && tags.length === 0) {
             const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
             if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
                 const resolvedNode = resolvedSymbol.declarations[0];
                 const declarationName = getNameOfDeclaration(resolvedNode);
-                if (declarationName) {
+                if (declarationName && !hasAddedSymbolInfo) {
                     const isExternalModuleDeclaration =
                         isModuleWithStringLiteralName(resolvedNode) &&
                         hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
@@ -630,6 +638,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                     symbolFlags & SymbolFlags.Variable ||
                     symbolKind === ScriptElementKind.localVariableElement ||
                     symbolKind === ScriptElementKind.indexSignatureElement ||
+                    symbolKind === ScriptElementKind.variableUsingElement ||
+                    symbolKind === ScriptElementKind.variableAwaitUsingElement ||
                     isThisExpression) {
                     displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                     displayParts.push(spacePart());
@@ -807,6 +817,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             case ScriptElementKind.letElement:
             case ScriptElementKind.constElement:
             case ScriptElementKind.constructorImplementationElement:
+            case ScriptElementKind.variableUsingElement:
+            case ScriptElementKind.variableAwaitUsingElement:
                 displayParts.push(textOrKeywordPart(symbolKind));
                 return;
             default:
@@ -835,7 +847,6 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             documentation = allSignatures[0].getDocumentationComment(typeChecker);
             tags = allSignatures[0].getJsDocTags().filter(tag => tag.name !== "deprecated"); // should only include @deprecated JSDoc tag on the first overload (#49368)
         }
-
     }
 
     function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined) {

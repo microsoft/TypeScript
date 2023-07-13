@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression1.ts] ////
+
+=== parserErrorRecoveryArrayLiteralExpression1.ts ===
 var v = [1, 2, 3
 >v : Symbol(v, Decl(parserErrorRecoveryArrayLiteralExpression1.ts, 0, 3))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeAnnotationBestCommonTypeInArrayLiteral.ts ===
+//// [tests/cases/compiler/typeAnnotationBestCommonTypeInArrayLiteral.ts] ////
+
+=== typeAnnotationBestCommonTypeInArrayLiteral.ts ===
 interface IMenuItem {
     id: string;
 >id : string

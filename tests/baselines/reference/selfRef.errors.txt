@@ -1,8 +1,8 @@
-tests/cases/compiler/selfRef.ts(8,8): error TS2304: Cannot find name 'name'.
-tests/cases/compiler/selfRef.ts(12,18): error TS2304: Cannot find name 'name'.
+selfRef.ts(8,8): error TS2304: Cannot find name 'name'.
+selfRef.ts(12,18): error TS2304: Cannot find name 'name'.
 
 
-==== tests/cases/compiler/selfRef.ts (2 errors) ====
+==== selfRef.ts (2 errors) ====
     module M
     {
         export class Test

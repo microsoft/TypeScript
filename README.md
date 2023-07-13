@@ -17,13 +17,13 @@ Find others who are using TypeScript at [our community page](https://www.typescr
 For the latest stable version:
 
 ```bash
-npm install -g typescript
+npm install -D typescript
 ```
 
 For our nightly builds:
 
 ```bash
-npm install -g typescript@next
+npm install -D typescript@next
 ```
 
 ## Contribute

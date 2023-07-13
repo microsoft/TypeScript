@@ -13,16 +13,19 @@ import {
     closeFileWatcher,
     closeFileWatcherOf,
     combinePaths,
+    comparePaths,
     CompilerHost,
     CompilerOptions,
     concatenate,
     ConfigFileProgramReloadLevel,
+    containsPath,
     createCacheableExportInfoMap,
     createLanguageService,
     createResolutionCache,
     createSymlinkCache,
     Debug,
     Diagnostic,
+    directorySeparator,
     DirectoryStructureHost,
     DirectoryWatcherCallback,
     DocumentPositionMapper,
@@ -38,7 +41,6 @@ import {
     FileWatcherCallback,
     FileWatcherEventKind,
     filter,
-    firstDefined,
     flatMap,
     forEach,
     forEachEntry,
@@ -46,6 +48,7 @@ import {
     generateDjb2Hash,
     getAllowJSCompilerOption,
     getAutomaticTypeDirectiveNames,
+    getBaseFileName,
     GetCanonicalFileName,
     getDeclarationEmitOutputFilePathWorker,
     getDefaultCompilerOptions,
@@ -57,7 +60,9 @@ import {
     getEntrypointsFromPackageJsonInfo,
     getNormalizedAbsolutePath,
     getOrUpdate,
+    GetPackageJsonEntrypointsHost,
     getStringComparer,
+    HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
     HostCancellationToken,
     inferredTypesContainingFile,
@@ -126,6 +131,7 @@ import {
     WatchType,
 } from "./_namespaces/ts";
 import {
+    ActionInvalidate,
     asNormalizedPath,
     createModuleSpecifierCache,
     emptyArray,
@@ -252,12 +258,14 @@ export interface PluginModuleWithName {
 export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
 
 /** @internal */
-export interface BeginEnablePluginResult {
+export interface PluginImportResult<T> {
     pluginConfigEntry: PluginImport;
-    pluginConfigOverrides: Map<string, any> | undefined;
-    resolvedModule: PluginModuleFactory | undefined;
+    resolvedModule: T | undefined;
     errorLogs: string[] | undefined;
 }
+
+/** @internal */
+export type BeginEnablePluginResult = PluginImportResult<PluginModuleFactory>;
 
 /**
  * The project root can be script info - if root is present,
@@ -284,6 +292,14 @@ export interface EmitResult {
     emitSkipped: boolean;
     diagnostics: readonly Diagnostic[];
 }
+
+const enum TypingWatcherType {
+    FileWatcher = "FileWatcher",
+    DirectoryWatcher = "DirectoryWatcher"
+}
+
+type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
+
 
 export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
     private rootFiles: ScriptInfo[] = [];
@@ -327,6 +343,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     hasInvalidatedResolutions: HasInvalidatedResolutions | undefined;
 
     /** @internal */
+    hasInvalidatedLibResolutions: HasInvalidatedLibResolutions | undefined;
+
+    /** @internal */
     resolutionCache: ResolutionCache;
 
     private builderState: BuilderState | undefined;
@@ -366,13 +385,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     typingFiles: SortedReadonlyArray<string> = emptyArray;
 
     /** @internal */
+    private typingWatchers: TypingWatchers | undefined;
+
+    /** @internal */
     originalConfiguredProjects: Set<NormalizedPath> | undefined;
 
     /** @internal */
     private packageJsonsForAutoImport: Set<string> | undefined;
 
     /** @internal */
-    private noDtsResolutionProject?: AuxiliaryProject | undefined;
+    noDtsResolutionProject?: AuxiliaryProject | undefined;
 
     /** @internal */
     getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -394,36 +416,62 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return hasOneOrMoreJsAndNoTsFiles(this);
     }
 
-    public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): {} | undefined {
-        const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
-        log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
-        const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
-        if (result.error) {
-            const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-            (logErrors || log)(`Failed to load module '${moduleName}' from ${resolvedPath}: ${err}`);
-            return undefined;
-        }
-        return result.module;
+    public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined {
+        return Project.importServicePluginSync({ name: moduleName }, [initialDir], host, log).resolvedModule;
     }
 
     /** @internal */
-    public static async importServicePluginAsync(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): Promise<{} | undefined> {
-        Debug.assertIsDefined(host.importPlugin);
-        const resolvedPath = combinePaths(initialDir, "node_modules");
-        log(`Dynamically importing ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
-        let result: ModuleImportResult;
-        try {
-            result = await host.importPlugin(resolvedPath, moduleName);
-        }
-        catch (e) {
-            result = { module: undefined, error: e };
-        }
-        if (result.error) {
+    public static importServicePluginSync<T = {}>(
+        pluginConfigEntry: PluginImport,
+        searchPaths: string[],
+        host: ServerHost,
+        log: (message: string) => void,
+    ): PluginImportResult<T> {
+        Debug.assertIsDefined(host.require);
+        let errorLogs: string[] | undefined;
+        let resolvedModule: T | undefined;
+        for (const initialDir of searchPaths) {
+            const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
+            log(`Loading ${pluginConfigEntry.name} from ${initialDir} (resolved to ${resolvedPath})`);
+            const result = host.require(resolvedPath, pluginConfigEntry.name); // TODO: GH#18217
+            if (!result.error) {
+                resolvedModule = result.module as T;
+                break;
+            }
             const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-            (logErrors || log)(`Failed to dynamically import module '${moduleName}' from ${resolvedPath}: ${err}`);
-            return undefined;
+            (errorLogs ??= []).push(`Failed to load module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
         }
-        return result.module;
+        return { pluginConfigEntry, resolvedModule, errorLogs };
+    }
+
+    /** @internal */
+    public static async importServicePluginAsync<T = {}>(
+        pluginConfigEntry: PluginImport,
+        searchPaths: string[],
+        host: ServerHost,
+        log: (message: string) => void,
+    ): Promise<PluginImportResult<T>> {
+        Debug.assertIsDefined(host.importPlugin);
+        let errorLogs: string[] | undefined;
+        let resolvedModule: T | undefined;
+        for (const initialDir of searchPaths) {
+            const resolvedPath = combinePaths(initialDir, "node_modules");
+            log(`Dynamically importing ${pluginConfigEntry.name} from ${initialDir} (resolved to ${resolvedPath})`);
+            let result: ModuleImportResult;
+            try {
+                result = await host.importPlugin(resolvedPath, pluginConfigEntry.name);
+            }
+            catch (e) {
+                result = { module: undefined, error: e };
+            }
+            if (!result.error) {
+                resolvedModule = result.module as T;
+                break;
+            }
+            const err = result.error.stack || result.error.message || JSON.stringify(result.error);
+            (errorLogs ??= []).push(`Failed to dynamically import module '${pluginConfigEntry.name}' from ${resolvedPath}: ${err}`);
+        }
+        return { pluginConfigEntry, resolvedModule, errorLogs };
     }
 
     /** @internal */
@@ -465,11 +513,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         public compileOnSaveEnabled: boolean,
         protected watchOptions: WatchOptions | undefined,
         directoryStructureHost: DirectoryStructureHost,
-        currentDirectory: string | undefined,
+        currentDirectory: string,
     ) {
         this.projectName = projectName;
         this.directoryStructureHost = directoryStructureHost;
-        this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
+        this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory);
         this.getCanonicalFileName = this.projectService.toCanonicalFileName;
 
         this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
@@ -514,7 +562,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         // Use the current directory as resolution root only if the project created using current directory string
         this.resolutionCache = createResolutionCache(
             this,
-            currentDirectory && this.currentDirectory,
+            this.currentDirectory,
             /*logChangesWhenResolvingModule*/ true
         );
         this.languageService = createLanguageService(this, this.documentRegistry, this.projectService.serverMode);
@@ -682,6 +730,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             containingSourceFile,
             reusedNames,
         );
+    }
+
+    /** @internal */
+    resolveLibrary(libraryName: string, resolveFrom: string, options: CompilerOptions, libFileName: string): ResolvedModuleWithFailedLookupLocations {
+        return this.resolutionCache.resolveLibrary(libraryName, resolveFrom, options, libFileName);
     }
 
     directoryExists(path: string): boolean {
@@ -917,6 +970,19 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ true);
     }
 
+    /** @internal */
+    cleanupProgram() {
+        if (this.program) {
+            // Root files are always attached to the project irrespective of program
+            for (const f of this.program.getSourceFiles()) {
+                this.detachScriptInfoIfNotRoot(f.fileName);
+            }
+            this.program.forEachResolvedProjectReference(ref =>
+                this.detachScriptInfoFromProject(ref.sourceFile.fileName));
+            this.program = undefined;
+        }
+    }
+
     disableLanguageService(lastFileExceededProgramSize?: string) {
         if (!this.languageServiceEnabled) {
             return;
@@ -924,6 +990,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         Debug.assert(this.projectService.serverMode !== LanguageServiceMode.Syntactic);
         this.languageService.cleanupSemanticCache();
         this.languageServiceEnabled = false;
+        this.cleanupProgram();
         this.lastFileExceededProgramSize = lastFileExceededProgramSize;
         this.builderState = undefined;
         if (this.autoImportProviderHost) {
@@ -932,6 +999,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.autoImportProviderHost = undefined;
         this.resolutionCache.closeTypeRootsWatch();
         this.clearGeneratedFileWatch();
+        this.projectService.verifyDocumentRegistry();
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
     }
 
@@ -976,17 +1044,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     close() {
-        if (this.program) {
-            // if we have a program - release all files that are enlisted in program but arent root
-            // The releasing of the roots happens later
-            // The project could have pending update remaining and hence the info could be in the files but not in program graph
-            for (const f of this.program.getSourceFiles()) {
-                this.detachScriptInfoIfNotRoot(f.fileName);
-            }
-            this.program.forEachResolvedProjectReference(ref =>
-                this.detachScriptInfoFromProject(ref.sourceFile.fileName));
-        }
-
+        this.projectService.typingsCache.onProjectClosed(this);
+        this.closeWatchingTypingLocations();
+        // if we have a program - release all files that are enlisted in program but arent root
+        // The releasing of the roots happens later
+        // The project could have pending update remaining and hence the info could be in the files but not in program graph
+        this.cleanupProgram();
         // Release external files
         forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
         // Always remove root files from the project
@@ -1259,7 +1322,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     updateGraph(): boolean {
         tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
-        perfLogger.logStartUpdateGraph();
+        perfLogger?.logStartUpdateGraph();
         this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
         const hasNewProgram = this.updateGraphWorker();
@@ -1305,7 +1368,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // Preload auto import provider so it's not created during completions request
             this.getPackageJsonAutoImportProvider();
         }
-        perfLogger.logStopUpdateGraph();
+        perfLogger?.logStopUpdateGraph();
         tracing?.pop();
         return !hasNewProgram;
     }
@@ -1325,6 +1388,108 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
+    private closeWatchingTypingLocations() {
+        if (this.typingWatchers) clearMap(this.typingWatchers, closeFileWatcher);
+        this.typingWatchers = undefined;
+    }
+
+    /** @internal */
+    private onTypingInstallerWatchInvoke() {
+        this.typingWatchers!.isInvoked = true;
+        this.projectService.updateTypingsForProject({ projectName: this.getProjectName(), kind: ActionInvalidate });
+    }
+
+    /** @internal */
+    watchTypingLocations(files: readonly string[] | undefined) {
+        if (!files) {
+            this.typingWatchers!.isInvoked = false;
+            return;
+        }
+
+        if (!files.length) {
+            // shut down existing watchers
+            this.closeWatchingTypingLocations();
+            return;
+        }
+
+        const toRemove = new Map(this.typingWatchers);
+        if (!this.typingWatchers) this.typingWatchers = new Map();
+
+        // handler should be invoked once for the entire set of files since it will trigger full rediscovery of typings
+        this.typingWatchers.isInvoked = false;
+        const createProjectWatcher = (path: string, typingsWatcherType: TypingWatcherType) => {
+            const canonicalPath = this.toPath(path);
+            toRemove.delete(canonicalPath);
+            if (!this.typingWatchers!.has(canonicalPath)) {
+                this.typingWatchers!.set(canonicalPath, typingsWatcherType === TypingWatcherType.FileWatcher ?
+                    this.projectService.watchFactory.watchFile(
+                        path,
+                        () => !this.typingWatchers!.isInvoked ?
+                            this.onTypingInstallerWatchInvoke() :
+                            this.writeLog(`TypingWatchers already invoked`),
+                        PollingInterval.High,
+                        this.projectService.getWatchOptions(this),
+                        WatchType.TypingInstallerLocationFile,
+                        this,
+                    ) :
+                    this.projectService.watchFactory.watchDirectory(
+                        path,
+                        f => {
+                            if (this.typingWatchers!.isInvoked) return this.writeLog(`TypingWatchers already invoked`);
+                            if (!fileExtensionIs(f, Extension.Json)) return this.writeLog(`Ignoring files that are not *.json`);
+                            if (comparePaths(f, combinePaths(this.projectService.typingsInstaller.globalTypingsCacheLocation!, "package.json"), !this.useCaseSensitiveFileNames())) return this.writeLog(`Ignoring package.json change at global typings location`);
+                            this.onTypingInstallerWatchInvoke();
+                        },
+                        WatchDirectoryFlags.Recursive,
+                        this.projectService.getWatchOptions(this),
+                        WatchType.TypingInstallerLocationDirectory,
+                        this,
+                    )
+                );
+            }
+        };
+
+        // Create watches from list of files
+        for (const file of files) {
+            const basename = getBaseFileName(file);
+            if (basename === "package.json" || basename === "bower.json") {
+                // package.json or bower.json exists, watch the file to detect changes and update typings
+                createProjectWatcher(file, TypingWatcherType.FileWatcher);
+                continue;
+            }
+
+            // path in projectRoot, watch project root
+            if (containsPath(this.currentDirectory, file, this.currentDirectory, !this.useCaseSensitiveFileNames())) {
+                const subDirectory = file.indexOf(directorySeparator, this.currentDirectory.length + 1);
+                if (subDirectory !== -1) {
+                    // Watch subDirectory
+                    createProjectWatcher(file.substr(0, subDirectory), TypingWatcherType.DirectoryWatcher);
+                }
+                else {
+                    // Watch the directory itself
+                    createProjectWatcher(file, TypingWatcherType.DirectoryWatcher);
+                }
+                continue;
+            }
+
+            // path in global cache, watch global cache
+            if (containsPath(this.projectService.typingsInstaller.globalTypingsCacheLocation!, file, this.currentDirectory, !this.useCaseSensitiveFileNames())) {
+                createProjectWatcher(this.projectService.typingsInstaller.globalTypingsCacheLocation!, TypingWatcherType.DirectoryWatcher);
+                continue;
+            }
+
+            // watch node_modules or bower_components
+            createProjectWatcher(file, TypingWatcherType.DirectoryWatcher);
+        }
+
+        // Remove unused watches
+        toRemove.forEach((watch, path) => {
+            watch.close();
+            this.typingWatchers!.delete(path);
+        });
+    }
+
+    /** @internal */
     getCurrentProgram(): Program | undefined {
         return this.program;
     }
@@ -1336,10 +1501,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     private updateGraphWorker() {
         const oldProgram = this.languageService.getCurrentProgram();
+        Debug.assert(oldProgram === this.program);
         Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
         this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
         const start = timestamp();
-        this.hasInvalidatedResolutions = this.resolutionCache.createHasInvalidatedResolutions(returnFalse);
+        const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = this.resolutionCache.createHasInvalidatedResolutions(returnFalse, returnFalse);
+        this.hasInvalidatedResolutions = hasInvalidatedResolutions;
+        this.hasInvalidatedLibResolutions = hasInvalidatedLibResolutions;
         this.resolutionCache.startCachingPerDirectoryResolution();
         this.program = this.languageService.getProgram(); // TODO: GH#18217
         this.dirty = false;
@@ -1475,6 +1643,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         else if (this.program !== oldProgram) {
             this.writeLog(`Different program with same set of files`);
         }
+        // Verify the document registry count
+        this.projectService.verifyDocumentRegistry();
         return hasNewProgram;
     }
 
@@ -1643,7 +1813,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 // reset cached unresolved imports if changes in compiler options affected module resolution
                 this.cachedUnresolvedImportsPerFile.clear();
                 this.lastCachedUnresolvedImportsList = undefined;
-                this.resolutionCache.clear();
+                this.resolutionCache.onChangesAffectModuleResolution();
                 this.moduleSpecifierCache.clear();
             }
             this.markAsDirty();
@@ -1796,7 +1966,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         ];
     }
 
-    protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<string, any> | undefined): void {
+    protected enableGlobalPlugins(options: CompilerOptions): void {
         if (!this.projectService.globalPlugins.length) return;
         const host = this.projectService.host;
 
@@ -1817,80 +1987,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // Provide global: true so plugins can detect why they can't find their config
             this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
 
-            this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
+            this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
         }
     }
 
-    /**
-     * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin synchronously using 'require'.
-     *
-     * @internal
-     */
-    beginEnablePluginSync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): BeginEnablePluginResult {
-        Debug.assertIsDefined(this.projectService.host.require);
-
-        let errorLogs: string[] | undefined;
-        const log = (message: string) => this.projectService.logger.info(message);
-        const logError = (message: string) => {
-            (errorLogs ??= []).push(message);
-        };
-        const resolvedModule = firstDefined(searchPaths, searchPath =>
-            Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
-        return { pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs };
+    protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void {
+        this.projectService.requestEnablePlugin(this, pluginConfigEntry, searchPaths);
     }
 
-    /**
-     * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin asynchronously using dynamic `import`.
-     *
-     * @internal
-     */
-    async beginEnablePluginAsync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): Promise<BeginEnablePluginResult> {
-        Debug.assertIsDefined(this.projectService.host.importPlugin);
-
-        let errorLogs: string[] | undefined;
-        const log = (message: string) => this.projectService.logger.info(message);
-        const logError = (message: string) => {
-            (errorLogs ??= []).push(message);
-        };
-
-        let resolvedModule: PluginModuleFactory | undefined;
-        for (const searchPath of searchPaths) {
-            resolvedModule = await Project.importServicePluginAsync(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined;
-            if (resolvedModule !== undefined) {
-                break;
-            }
-        }
-        return { pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs };
-    }
-
-    /**
-     * Performs the remaining steps of enabling a plugin after its module has been instantiated.
-     *
-     * @internal
-     */
-    endEnablePlugin({ pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs }: BeginEnablePluginResult) {
-        if (resolvedModule) {
-            const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
-            if (configurationOverride) {
-                // Preserve the name property since it's immutable
-                const pluginName = pluginConfigEntry.name;
-                pluginConfigEntry = configurationOverride;
-                pluginConfigEntry.name = pluginName;
-            }
-
-            this.enableProxy(resolvedModule, pluginConfigEntry);
-        }
-        else {
-            forEach(errorLogs, message => this.projectService.logger.info(message));
-            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
-        }
-    }
-
-    protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): void {
-        this.projectService.requestEnablePlugin(this, pluginConfigEntry, searchPaths, pluginConfigOverrides);
-    }
-
-    private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
+    /** @internal */
+    enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
         try {
             if (typeof pluginModuleFactory !== "function") {
                 this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did not expose a proper factory function`);
@@ -1988,7 +2094,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getModuleResolutionHostForAutoImportProvider(): ModuleResolutionHost {
+    getHostForAutoImportProvider(): GetPackageJsonEntrypointsHost {
         if (this.program) {
             return {
                 fileExists: this.program.fileExists,
@@ -1999,6 +2105,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
                 trace: this.projectService.host.trace?.bind(this.projectService.host),
                 useCaseSensitiveFileNames: this.program.useCaseSensitiveFileNames(),
+                readDirectory: this.projectService.host.readDirectory.bind(this.projectService.host),
             };
         }
         return this.projectService.host;
@@ -2027,7 +2134,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (dependencySelection) {
             tracing?.push(tracing.Phase.Session, "getPackageJsonAutoImportProvider");
             const start = timestamp();
-            this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getModuleResolutionHostForAutoImportProvider(), this.documentRegistry);
+            this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getHostForAutoImportProvider(), this.documentRegistry);
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
                 this.sendPerformanceEvent("CreatePackageJsonAutoImportProvider", timestamp() - start);
@@ -2059,7 +2166,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getNoDtsResolutionProject(rootFileNames: readonly string[]): Project {
         Debug.assert(this.projectService.serverMode === LanguageServiceMode.Semantic);
         if (!this.noDtsResolutionProject) {
-            this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject());
+            this.noDtsResolutionProject = new AuxiliaryProject(this.projectService, this.documentRegistry, this.getCompilerOptionsForNoDtsResolutionProject(), this.currentDirectory);
         }
 
         enumerateInsertsAndDeletes<NormalizedPath, NormalizedPath>(
@@ -2176,8 +2283,7 @@ export class InferredProject extends Project {
         compilerOptions: CompilerOptions,
         watchOptions: WatchOptions | undefined,
         projectRootPath: NormalizedPath | undefined,
-        currentDirectory: string | undefined,
-        pluginConfigOverrides: Map<string, any> | undefined,
+        currentDirectory: string,
         typeAcquisition: TypeAcquisition | undefined) {
         super(projectService.newInferredProjectName(),
             ProjectKind.Inferred,
@@ -2196,7 +2302,7 @@ export class InferredProject extends Project {
         if (!projectRootPath && !projectService.useSingleInferredProject) {
             this.canonicalCurrentDirectory = projectService.toCanonicalFileName(this.currentDirectory);
         }
-        this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
+        this.enableGlobalPlugins(this.getCompilerOptions());
     }
 
     override addRoot(info: ScriptInfo) {
@@ -2205,13 +2311,17 @@ export class InferredProject extends Project {
         if (!this._isJsInferredProject && info.isJavaScript()) {
             this.toggleJsInferredProject(/*isJsInferredProject*/ true);
         }
+        else if (this.isOrphan() && this._isJsInferredProject && !info.isJavaScript()) {
+            this.toggleJsInferredProject(/*isJsInferredProject*/ false);
+        }
         super.addRoot(info);
     }
 
     override removeRoot(info: ScriptInfo) {
         this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info);
         super.removeRoot(info);
-        if (this._isJsInferredProject && info.isJavaScript()) {
+        // Delay toggling to isJsInferredProject = false till we actually need it again
+        if (!this.isOrphan() && this._isJsInferredProject && info.isJavaScript()) {
             if (every(this.getRootScriptInfos(), rootInfo => !rootInfo.isJavaScript())) {
                 this.toggleJsInferredProject(/*isJsInferredProject*/ false);
             }
@@ -2245,8 +2355,9 @@ export class InferredProject extends Project {
     }
 }
 
-class AuxiliaryProject extends Project {
-    constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions) {
+/** @internal */
+export class AuxiliaryProject extends Project {
+    constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, compilerOptions: CompilerOptions, currentDirectory: string) {
         super(projectService.newAuxiliaryProjectName(),
             ProjectKind.Auxiliary,
             projectService,
@@ -2257,14 +2368,13 @@ class AuxiliaryProject extends Project {
             /*compileOnSaveEnabled*/ false,
             /*watchOptions*/ undefined,
             projectService.host,
-            /*currentDirectory*/ undefined);
+            currentDirectory);
     }
 
     override isOrphan(): boolean {
         return true;
     }
 
-    /** @internal */
     override scheduleInvalidateResolutionsOfFailedLookupLocations(): void {
         // Invalidation will happen on-demand as part of updateGraph
         return;
@@ -2276,7 +2386,7 @@ export class AutoImportProviderProject extends Project {
     private static readonly maxDependencies = 10;
 
     /** @internal */
-    static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, compilerOptions: CompilerOptions): string[] {
+    static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, host: GetPackageJsonEntrypointsHost, compilerOptions: CompilerOptions): string[] {
         if (!dependencySelection) {
             return ts.emptyArray;
         }
@@ -2314,7 +2424,7 @@ export class AutoImportProviderProject extends Project {
                     name,
                     hostProject.currentDirectory,
                     compilerOptions,
-                    moduleResolutionHost,
+                    host,
                     program.getModuleResolutionCache());
                 if (packageJson) {
                     const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache);
@@ -2333,7 +2443,7 @@ export class AutoImportProviderProject extends Project {
                             `@types/${name}`,
                             directory,
                             compilerOptions,
-                            moduleResolutionHost,
+                            host,
                             program.getModuleResolutionCache());
                         if (typesPackageJson) {
                             const entrypoints = getRootNamesFromPackageJson(typesPackageJson, program, symlinkCache);
@@ -2350,7 +2460,7 @@ export class AutoImportProviderProject extends Project {
                 //    allow processing JS from node_modules, go back to the implementation
                 //    package and load the JS.
                 if (packageJson && compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
-                    const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*allowJs*/ true);
+                    const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*resolveJs*/ true);
                     rootNames = concatenate(rootNames, entrypoints);
                     dependenciesAdded += entrypoints?.length ? 1 : 0;
                 }
@@ -2372,11 +2482,11 @@ export class AutoImportProviderProject extends Project {
             const entrypoints = getEntrypointsFromPackageJsonInfo(
                 packageJson,
                 compilerOptions,
-                moduleResolutionHost,
+                host,
                 program.getModuleResolutionCache(),
                 resolveJs);
             if (entrypoints) {
-                const real = moduleResolutionHost.realpath?.(packageJson.packageDirectory);
+                const real = host.realpath?.(packageJson.packageDirectory);
                 const isSymlink = real && real !== packageJson.packageDirectory;
                 if (isSymlink) {
                     symlinkCache.setSymlinkedDirectory(packageJson.packageDirectory, {
@@ -2406,7 +2516,7 @@ export class AutoImportProviderProject extends Project {
     };
 
     /** @internal */
-    static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
+    static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, host: GetPackageJsonEntrypointsHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
         if (dependencySelection === PackageJsonAutoImportPreference.Off) {
             return undefined;
         }
@@ -2416,7 +2526,7 @@ export class AutoImportProviderProject extends Project {
             ...this.compilerOptionsOverrides,
         };
 
-        const rootNames = this.getRootFileNames(dependencySelection, hostProject, moduleResolutionHost, compilerOptions);
+        const rootNames = this.getRootFileNames(dependencySelection, hostProject, host, compilerOptions);
         if (!rootNames.length) {
             return undefined;
         }
@@ -2465,7 +2575,7 @@ export class AutoImportProviderProject extends Project {
             rootFileNames = AutoImportProviderProject.getRootFileNames(
                 this.hostProject.includePackageJsonAutoImports(),
                 this.hostProject,
-                this.hostProject.getModuleResolutionHostForAutoImportProvider(),
+                this.hostProject.getHostForAutoImportProvider(),
                 this.getCompilationSettings());
         }
 
@@ -2512,7 +2622,7 @@ export class AutoImportProviderProject extends Project {
         throw new Error("package.json changes should be notified on an AutoImportProvider's host project");
     }
 
-    override getModuleResolutionHostForAutoImportProvider(): never {
+    override getHostForAutoImportProvider(): never {
         throw new Error("AutoImportProviderProject cannot provide its own host; use `hostProject.getModuleResolutionHostForAutomImportProvider()` instead.");
     }
 
@@ -2714,7 +2824,7 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: Map<string, any> | undefined): void {
+    enablePluginsWithOptions(options: CompilerOptions): void {
         this.plugins.length = 0;
         if (!options.plugins?.length && !this.projectService.globalPlugins.length) return;
         const host = this.projectService.host;
@@ -2733,11 +2843,11 @@ export class ConfiguredProject extends Project {
         // Enable tsconfig-specified plugins
         if (options.plugins) {
             for (const pluginConfigEntry of options.plugins) {
-                this.enablePlugin(pluginConfigEntry, searchPaths, pluginConfigOverrides);
+                this.enablePlugin(pluginConfigEntry, searchPaths);
             }
         }
 
-        return this.enableGlobalPlugins(options, pluginConfigOverrides);
+        return this.enableGlobalPlugins(options);
     }
 
     /**
@@ -2869,7 +2979,6 @@ export class ExternalProject extends Project {
         lastFileExceededProgramSize: string | undefined,
         public override compileOnSaveEnabled: boolean,
         projectFilePath?: string,
-        pluginConfigOverrides?: Map<string, any>,
         watchOptions?: WatchOptions) {
         super(externalProjectName,
             ProjectKind.External,
@@ -2882,7 +2991,7 @@ export class ExternalProject extends Project {
             watchOptions,
             projectService.host,
             getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
-        this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
+        this.enableGlobalPlugins(this.getCompilerOptions());
     }
 
     override updateGraph() {

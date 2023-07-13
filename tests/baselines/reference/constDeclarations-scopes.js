@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-scopes.ts] ////
+
 //// [constDeclarations-scopes.ts]
 // global
 const c = "string";

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>
@@ -86,6 +87,9 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
@@ -114,9 +118,9 @@ Shape signatures in builder refreshed for::
 FsWatches::
 /a/b/commonfile1.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /a/b/commonfile2.ts: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 exitCode:: ExitStatus.undefined

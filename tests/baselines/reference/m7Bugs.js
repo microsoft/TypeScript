@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/m7Bugs.ts] ////
+
 //// [m7Bugs.ts]
 // scenario 1
 interface ISomething {

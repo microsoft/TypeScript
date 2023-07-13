@@ -1,0 +1,69 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
+// function f() {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] class A {
+//         [|{| kind: "none" |}abstract|] m(): void;
+//     }
+//     abstract class B {}
+// }
+// --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
+// function f() {
+//     [|{| kind: "none" |}abstract|] class A {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] m(): void;
+//     }
+//     abstract class B {}
+// }
+// --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
+// --- (line: 5) skipped ---
+// }
+// switch (0) {
+//     case 0:
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] class A { [|{| kind: "none" |}abstract|] m(): void; }
+//     default:
+//         abstract class B { abstract m(): void; }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
+// --- (line: 5) skipped ---
+// }
+// switch (0) {
+//     case 0:
+//         [|{| kind: "none" |}abstract|] class A { /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] m(): void; }
+//     default:
+//         abstract class B { abstract m(): void; }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
+// --- (line: 7) skipped ---
+//     case 0:
+//         abstract class A { abstract m(): void; }
+//     default:
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] class B { [|{| kind: "none" |}abstract|] m(): void; }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAbstract03.ts ===
+// --- (line: 7) skipped ---
+//     case 0:
+//         abstract class A { abstract m(): void; }
+//     default:
+//         [|{| kind: "none" |}abstract|] class B { /*HIGHLIGHTS*/[|{| kind: "none" |}abstract|] m(): void; }
+// }

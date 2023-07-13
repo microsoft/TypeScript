@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess5.ts ===
+//// [tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess5.ts] ////
+
+=== superSymbolIndexedAccess5.ts ===
 var symbol: any;
 >symbol : Symbol(symbol, Decl(superSymbolIndexedAccess5.ts, 0, 3))
 

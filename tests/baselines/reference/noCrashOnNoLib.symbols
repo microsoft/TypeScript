@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCrashOnNoLib.ts ===
+//// [tests/cases/compiler/noCrashOnNoLib.ts] ////
+
+=== noCrashOnNoLib.ts ===
 export function f() {
 >f : Symbol(f, Decl(noCrashOnNoLib.ts, 0, 0))
 

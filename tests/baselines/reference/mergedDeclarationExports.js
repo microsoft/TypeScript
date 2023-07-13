@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedDeclarationExports.ts] ////
+
 //// [mergedDeclarationExports.ts]
 // OK -- one is type, one is value
 interface b {}

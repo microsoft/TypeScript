@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-ambient-errors.ts] ////
+
 //// [constDeclarations-ambient-errors.ts]
 // error: no intialization expected in ambient declarations
 declare const c1: boolean = true;

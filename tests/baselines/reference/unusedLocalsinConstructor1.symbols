@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalsinConstructor1.ts ===
+//// [tests/cases/compiler/unusedLocalsinConstructor1.ts] ////
+
+=== unusedLocalsinConstructor1.ts ===
 class greeter {
 >greeter : Symbol(greeter, Decl(unusedLocalsinConstructor1.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/missingCloseParenStatements.ts ===
+//// [tests/cases/compiler/missingCloseParenStatements.ts] ////
+
+=== missingCloseParenStatements.ts ===
 var a1, a2, a3 = 0;
 >a1 : Symbol(a1, Decl(missingCloseParenStatements.ts, 0, 3))
 >a2 : Symbol(a2, Decl(missingCloseParenStatements.ts, 0, 7))

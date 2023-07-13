@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/literalTypes2.ts ===
+//// [tests/cases/conformance/types/literal/literalTypes2.ts] ////
+
+=== literalTypes2.ts ===
 enum E {
 >E : Symbol(E, Decl(literalTypes2.ts, 0, 0))
 

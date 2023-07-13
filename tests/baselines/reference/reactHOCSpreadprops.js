@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactHOCSpreadprops.tsx] ////
+
 //// [reactHOCSpreadprops.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import React = require("react");

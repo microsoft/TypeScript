@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseEmptyTupleNoException.ts ===
+//// [tests/cases/compiler/promiseEmptyTupleNoException.ts] ////
+
+=== promiseEmptyTupleNoException.ts ===
 export async function get(): Promise<[]> {
 >get : Symbol(get, Decl(promiseEmptyTupleNoException.ts, 0, 0))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

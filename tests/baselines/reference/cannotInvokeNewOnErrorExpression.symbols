@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts ===
+//// [tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts] ////
+
+=== cannotInvokeNewOnErrorExpression.ts ===
 module M
 >M : Symbol(M, Decl(cannotInvokeNewOnErrorExpression.ts, 0, 0))
 {

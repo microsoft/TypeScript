@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithUnicodeNames.ts ===
+//// [tests/cases/compiler/collisionCodeGenModuleWithUnicodeNames.ts] ////
+
+=== collisionCodeGenModuleWithUnicodeNames.ts ===
 module 才能ソЫⅨ蒤郳र्क्ड्राüışğİliيونيكودöÄüß才能ソЫⅨ蒤郳र्क्ड्राüışğİliيونيكودöÄüßAbcd123 {
 >才能ソЫⅨ蒤郳र्क्ड्राüışğİliيونيكودöÄüß才能ソЫⅨ蒤郳र्क्ड्राüışğİliيونيكودöÄüßAbcd123 : Symbol(才能ソЫⅨ蒤郳र्क्ड्राüışğİliيونيكودöÄüß才能ソЫⅨ蒤郳र्क्ड्राüışğİliيونيكودöÄüßAbcd123, Decl(collisionCodeGenModuleWithUnicodeNames.ts, 0, 0))
 

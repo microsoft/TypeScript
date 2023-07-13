@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts] ////
+
 //// [thisTypeInFunctionsNegative.ts]
 class C {
     n: number;

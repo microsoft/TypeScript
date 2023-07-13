@@ -1,0 +1,29 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSetAndGet3.ts ===
+// --- (line: 12) skipped ---
+//         return undefined;
+//     }
+// 
+//     public /*HIGHLIGHTS*/[|{| kind: "none" |}set|] get(g: any) {
+//     }
+// 
+//     public [|{| kind: "none" |}get|] get(): any {
+//         return undefined;
+//     }
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSetAndGet3.ts ===
+// --- (line: 12) skipped ---
+//         return undefined;
+//     }
+// 
+//     public [|{| kind: "none" |}set|] get(g: any) {
+//     }
+// 
+//     public /*HIGHLIGHTS*/[|{| kind: "none" |}get|] get(): any {
+//         return undefined;
+//     }
+// }

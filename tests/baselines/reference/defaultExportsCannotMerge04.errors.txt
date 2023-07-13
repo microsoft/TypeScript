@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/modules/defaultExportsCannotMerge04.ts(1,25): error TS2652: Merged declaration 'Foo' cannot include a default export declaration. Consider adding a separate 'export default Foo' declaration instead.
-tests/cases/conformance/es6/modules/defaultExportsCannotMerge04.ts(4,11): error TS2652: Merged declaration 'Foo' cannot include a default export declaration. Consider adding a separate 'export default Foo' declaration instead.
-tests/cases/conformance/es6/modules/defaultExportsCannotMerge04.ts(8,11): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
-tests/cases/conformance/es6/modules/defaultExportsCannotMerge04.ts(11,18): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
+defaultExportsCannotMerge04.ts(1,25): error TS2652: Merged declaration 'Foo' cannot include a default export declaration. Consider adding a separate 'export default Foo' declaration instead.
+defaultExportsCannotMerge04.ts(4,11): error TS2652: Merged declaration 'Foo' cannot include a default export declaration. Consider adding a separate 'export default Foo' declaration instead.
+defaultExportsCannotMerge04.ts(8,11): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
+defaultExportsCannotMerge04.ts(11,18): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
 
 
-==== tests/cases/conformance/es6/modules/defaultExportsCannotMerge04.ts (4 errors) ====
+==== defaultExportsCannotMerge04.ts (4 errors) ====
     export default function Foo() {
                             ~~~
 !!! error TS2652: Merged declaration 'Foo' cannot include a default export declaration. Consider adding a separate 'export default Foo' declaration instead.

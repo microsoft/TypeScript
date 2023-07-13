@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts] ////
+
 //// [typeParameterConstModifiers.ts]
 declare function f1<const T>(x: T): T;
 
@@ -31,6 +33,8 @@ declare function f6<const T extends readonly unknown[]>(...args: T): T;
 const x61 = f6(1, 'b', { a: 1, b: 'x' });
 const x62 = f6(...[1, 'b']);
 const x63 = f6(true, ...[1, 'b']);
+const x64 = f6(...([1, 'b']));
+const x65 = f6(true, ...([1, 'b']));
 
 class C1<const T> {
     constructor(x: T) {}
@@ -84,6 +88,20 @@ declare function inners2<const T extends readonly any[]>(args: readonly [unknown
 
 const test2 = inners2([1,2,3,4,5]);
 
+// Repro from #53307
+
+type NotEmpty<T extends Record<string, any>> = keyof T extends never ? never : T;
+
+const thing = <const O extends Record<string, any>>(o: NotEmpty<O>) => o;
+
+const t = thing({ foo: '' });  // readonly { foo: "" }
+
+type NotEmptyMapped<T extends Record<string, any>> = keyof T extends never ? never : { [K in keyof T]: T[K] };
+
+const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o;
+
+const tMapped = thingMapped({ foo: '' });  // { foo: "" }
+
 
 //// [typeParameterConstModifiers.js]
 "use strict";
@@ -111,6 +129,8 @@ var x52 = f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } });
 var x61 = f6(1, 'b', { a: 1, b: 'x' });
 var x62 = f6.apply(void 0, [1, 'b']);
 var x63 = f6.apply(void 0, __spreadArray([true], [1, 'b'], false));
+var x64 = f6.apply(void 0, ([1, 'b']));
+var x65 = f6.apply(void 0, __spreadArray([true], ([1, 'b']), false));
 var C1 = /** @class */ (function () {
     function C1(x) {
     }
@@ -130,3 +150,7 @@ function set(obj, path, value) { }
 set(obj, ['a', 'b', 'c'], value);
 var test = inners(1, 2, 3, 4, 5);
 var test2 = inners2([1, 2, 3, 4, 5]);
+var thing = function (o) { return o; };
+var t = thing({ foo: '' }); // readonly { foo: "" }
+var thingMapped = function (o) { return o; };
+var tMapped = thingMapped({ foo: '' }); // { foo: "" }

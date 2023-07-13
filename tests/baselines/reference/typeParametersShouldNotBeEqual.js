@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParametersShouldNotBeEqual.ts] ////
+
 //// [typeParametersShouldNotBeEqual.ts]
 function ff<T, U>(x: T, y: U) {
     var z: Object;

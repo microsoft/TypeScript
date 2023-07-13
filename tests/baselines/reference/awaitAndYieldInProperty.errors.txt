@@ -1,22 +1,22 @@
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(3,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(3,21): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(4,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(4,28): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(6,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(6,21): error TS1163: A 'yield' expression is only allowed in a generator body.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(7,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(7,28): error TS1163: A 'yield' expression is only allowed in a generator body.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(11,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(11,21): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(12,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(12,28): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(14,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(14,21): error TS1163: A 'yield' expression is only allowed in a generator body.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(15,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-tests/cases/conformance/classes/awaitAndYieldInProperty.ts(15,28): error TS1163: A 'yield' expression is only allowed in a generator body.
+awaitAndYieldInProperty.ts(3,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+awaitAndYieldInProperty.ts(3,21): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitAndYieldInProperty.ts(4,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+awaitAndYieldInProperty.ts(4,28): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitAndYieldInProperty.ts(6,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+awaitAndYieldInProperty.ts(6,21): error TS1163: A 'yield' expression is only allowed in a generator body.
+awaitAndYieldInProperty.ts(7,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+awaitAndYieldInProperty.ts(7,28): error TS1163: A 'yield' expression is only allowed in a generator body.
+awaitAndYieldInProperty.ts(11,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+awaitAndYieldInProperty.ts(11,21): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitAndYieldInProperty.ts(12,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+awaitAndYieldInProperty.ts(12,28): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
+awaitAndYieldInProperty.ts(14,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+awaitAndYieldInProperty.ts(14,21): error TS1163: A 'yield' expression is only allowed in a generator body.
+awaitAndYieldInProperty.ts(15,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+awaitAndYieldInProperty.ts(15,28): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
-==== tests/cases/conformance/classes/awaitAndYieldInProperty.ts (16 errors) ====
+==== awaitAndYieldInProperty.ts (16 errors) ====
     async function* test(x: Promise<string>) {
         class C {
             [await x] = await x;

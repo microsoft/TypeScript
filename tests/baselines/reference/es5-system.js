@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-system.ts] ////
+
 //// [es5-system.ts]
 export default class A
 {

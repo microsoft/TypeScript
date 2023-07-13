@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries.ts ===
+//// [tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries.ts] ////
+
+=== overloadBindingAcrossDeclarationBoundaries.ts ===
 interface Opt1 {
     p?: any;
 >p : any

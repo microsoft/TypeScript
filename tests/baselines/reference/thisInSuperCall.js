@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInSuperCall.ts] ////
+
 //// [thisInSuperCall.ts]
 class Base { 
     constructor(x: any) {}

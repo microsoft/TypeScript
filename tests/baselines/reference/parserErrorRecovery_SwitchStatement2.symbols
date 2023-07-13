@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement2.ts] ////
+
+=== parserErrorRecovery_SwitchStatement2.ts ===
 class C {
 >C : Symbol(C, Decl(parserErrorRecovery_SwitchStatement2.ts, 0, 0))
 
