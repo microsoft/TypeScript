@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringAssignmentWithDefault2.ts ===
+//// [tests/cases/compiler/destructuringAssignmentWithDefault2.ts] ////
+
+=== destructuringAssignmentWithDefault2.ts ===
 const a: { x?: number; y?: number } = { };
 >a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
 >x : Symbol(x, Decl(destructuringAssignmentWithDefault2.ts, 0, 10))

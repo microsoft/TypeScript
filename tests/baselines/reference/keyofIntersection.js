@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/keyofIntersection.ts] ////
+
 //// [keyofIntersection.ts]
 type A = { a: string };
 type B = { b: string };

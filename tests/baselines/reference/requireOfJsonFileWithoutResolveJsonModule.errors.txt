@@ -1,8 +1,8 @@
-tests/cases/compiler/file1.ts(1,21): error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
-tests/cases/compiler/file1.ts(3,21): error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
+file1.ts(1,21): error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
+file1.ts(3,21): error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 
 
-==== tests/cases/compiler/file1.ts (2 errors) ====
+==== file1.ts (2 errors) ====
     import b1 = require('./b.json'); // error
                         ~~~~~~~~~~
 !!! error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
@@ -15,5 +15,5 @@ tests/cases/compiler/file1.ts(3,21): error TS2732: Cannot find module './b.json'
         x = (b1.b === b);
     }
     
-==== tests/cases/compiler/b.json (0 errors) ====
+==== b.json (0 errors) ====
     contents Not read

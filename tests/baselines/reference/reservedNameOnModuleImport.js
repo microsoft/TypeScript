@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedNameOnModuleImport.ts] ////
+
 //// [reservedNameOnModuleImport.ts]
 declare module test {
     module mstring { }

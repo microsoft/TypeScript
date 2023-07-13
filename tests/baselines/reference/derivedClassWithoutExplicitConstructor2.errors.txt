@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor2.ts(13,9): error TS2554: Expected 1-3 arguments, but got 0.
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor2.ts(30,9): error TS2554: Expected 1-3 arguments, but got 0.
+derivedClassWithoutExplicitConstructor2.ts(13,9): error TS2554: Expected 1-3 arguments, but got 0.
+derivedClassWithoutExplicitConstructor2.ts(30,9): error TS2554: Expected 1-3 arguments, but got 0.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor2.ts (2 errors) ====
+==== derivedClassWithoutExplicitConstructor2.ts (2 errors) ====
     class Base {
         a = 1;
         constructor(x: number, y?: number, z?: number);
@@ -18,7 +18,7 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     var r = new Derived(); // error
             ~~~~~~~~~~~~~
 !!! error TS2554: Expected 1-3 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor2.ts:3:17: An argument for 'x' was not provided.
+!!! related TS6210 derivedClassWithoutExplicitConstructor2.ts:3:17: An argument for 'x' was not provided.
     var r2 = new Derived(1); 
     var r3 = new Derived(1, 2);
     var r4 = new Derived(1, 2, 3);
@@ -38,7 +38,7 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     var d = new D(); // error
             ~~~~~~~
 !!! error TS2554: Expected 1-3 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor2.ts:20:17: An argument for 'x' was not provided.
+!!! related TS6210 derivedClassWithoutExplicitConstructor2.ts:20:17: An argument for 'x' was not provided.
     var d2 = new D(new Date()); // ok
     var d3 = new D(new Date(), new Date());
     var d4 = new D(new Date(), new Date(), new Date());

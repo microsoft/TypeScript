@@ -5,7 +5,7 @@ sourceRoot:
 sources: typeResolution.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/typeResolution.js
+emittedFile:typeResolution.js
 sourceFile:typeResolution.ts
 -------------------------------------------------------------------
 >>>define(["require", "exports"], function (require, exports) {

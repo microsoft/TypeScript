@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letKeepNamesOfTopLevelItems.ts ===
+//// [tests/cases/compiler/letKeepNamesOfTopLevelItems.ts] ////
+
+=== letKeepNamesOfTopLevelItems.ts ===
 let x;
 >x : any
 

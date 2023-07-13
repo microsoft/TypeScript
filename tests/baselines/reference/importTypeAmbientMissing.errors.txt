@@ -1,7 +1,7 @@
-tests/cases/conformance/types/import/importTypeAmbientMissing.ts(8,17): error TS2307: Cannot find module 'fo' or its corresponding type declarations.
+importTypeAmbientMissing.ts(8,17): error TS2307: Cannot find module 'fo' or its corresponding type declarations.
 
 
-==== tests/cases/conformance/types/import/importTypeAmbientMissing.ts (1 errors) ====
+==== importTypeAmbientMissing.ts (1 errors) ====
     declare module "foo" {
         interface Point {
             x: number;

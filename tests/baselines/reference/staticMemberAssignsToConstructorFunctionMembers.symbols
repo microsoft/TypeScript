@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/staticMemberAssignsToConstructorFunctionMembers.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/staticMemberAssignsToConstructorFunctionMembers.ts] ////
+
+=== staticMemberAssignsToConstructorFunctionMembers.ts ===
 class C {
 >C : Symbol(C, Decl(staticMemberAssignsToConstructorFunctionMembers.ts, 0, 0))
 

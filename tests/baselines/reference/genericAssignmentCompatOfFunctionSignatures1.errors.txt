@@ -1,10 +1,10 @@
-tests/cases/compiler/genericAssignmentCompatOfFunctionSignatures1.ts(4,1): error TS2322: Type '<T, U extends { a: T; b: number; }>(x: T, z: U) => void' is not assignable to type '<T, U extends { a: T; b: string; }>(x: T, z: U) => void'.
+genericAssignmentCompatOfFunctionSignatures1.ts(4,1): error TS2322: Type '<T, U extends { a: T; b: number; }>(x: T, z: U) => void' is not assignable to type '<T, U extends { a: T; b: string; }>(x: T, z: U) => void'.
   Types of parameters 'z' and 'z' are incompatible.
     Type 'U' is not assignable to type '{ a: T; b: number; }'.
       Type '{ a: T; b: string; }' is not assignable to type '{ a: T; b: number; }'.
         Types of property 'b' are incompatible.
           Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/genericAssignmentCompatOfFunctionSignatures1.ts(5,1): error TS2322: Type '<T, U extends { a: T; b: string; }>(x: T, z: U) => void' is not assignable to type '<T, U extends { a: T; b: number; }>(x: T, z: U) => void'.
+genericAssignmentCompatOfFunctionSignatures1.ts(5,1): error TS2322: Type '<T, U extends { a: T; b: string; }>(x: T, z: U) => void' is not assignable to type '<T, U extends { a: T; b: number; }>(x: T, z: U) => void'.
   Types of parameters 'z' and 'z' are incompatible.
     Type 'U' is not assignable to type '{ a: T; b: string; }'.
       Type '{ a: T; b: number; }' is not assignable to type '{ a: T; b: string; }'.
@@ -12,7 +12,7 @@ tests/cases/compiler/genericAssignmentCompatOfFunctionSignatures1.ts(5,1): error
           Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/genericAssignmentCompatOfFunctionSignatures1.ts (2 errors) ====
+==== genericAssignmentCompatOfFunctionSignatures1.ts (2 errors) ====
     var x1 = function foo3<T, U extends { a: T; b: string }>(x: T, z: U) { }
     var x2 = function foo3<T, U extends { a: T; b: number }>(x: T, z: U) { }
     

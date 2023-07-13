@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateObjectLiteralProperty_computedName1.ts ===
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName1.ts] ////
+
+=== duplicateObjectLiteralProperty_computedName1.ts ===
 const t1 = {
 >t1 : Symbol(t1, Decl(duplicateObjectLiteralProperty_computedName1.ts, 0, 5))
 

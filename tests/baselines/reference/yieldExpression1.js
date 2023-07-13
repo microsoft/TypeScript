@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/yieldExpression1.ts] ////
+
 //// [yieldExpression1.ts]
 function* a() {
     yield;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceWithExcessProperties.ts ===
+//// [tests/cases/compiler/typeInferenceWithExcessProperties.ts] ////
+
+=== typeInferenceWithExcessProperties.ts ===
 // Repro from #17041
 
 interface Named {

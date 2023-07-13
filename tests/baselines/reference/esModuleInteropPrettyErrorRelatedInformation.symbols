@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.d.ts ===
+//// [tests/cases/compiler/esModuleInteropPrettyErrorRelatedInformation.ts] ////
+
+=== foo.d.ts ===
 declare function foo(): void;
 >foo : Symbol(foo, Decl(foo.d.ts, 0, 0), Decl(foo.d.ts, 0, 29))
 
@@ -8,7 +10,7 @@ declare namespace foo {}
 export = foo;
 >foo : Symbol(foo, Decl(foo.d.ts, 0, 0), Decl(foo.d.ts, 0, 29))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as foo from "./foo";
 >foo : Symbol(foo, Decl(index.ts, 0, 6))
 

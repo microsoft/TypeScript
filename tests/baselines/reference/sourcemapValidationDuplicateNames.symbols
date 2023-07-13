@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourcemapValidationDuplicateNames.ts ===
+//// [tests/cases/compiler/sourcemapValidationDuplicateNames.ts] ////
+
+=== sourcemapValidationDuplicateNames.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(sourcemapValidationDuplicateNames.ts, 0, 0), Decl(sourcemapValidationDuplicateNames.ts, 4, 1))
 

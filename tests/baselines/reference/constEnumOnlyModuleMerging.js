@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumOnlyModuleMerging.ts] ////
+
 //// [constEnumOnlyModuleMerging.ts]
 module Outer {
     export var x = 1;

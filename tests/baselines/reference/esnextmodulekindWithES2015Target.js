@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES2015Target.ts] ////
+
 //// [esnextmodulekindWithES2015Target.ts]
 export default class A
 {

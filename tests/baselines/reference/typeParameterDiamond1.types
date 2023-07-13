@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterDiamond1.ts ===
+//// [tests/cases/compiler/typeParameterDiamond1.ts] ////
+
+=== typeParameterDiamond1.ts ===
 function diamondTop<Top>() {
 >diamondTop : <Top>() => void
 

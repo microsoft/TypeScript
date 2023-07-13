@@ -1,8 +1,8 @@
-tests/cases/compiler/awaitedTypeStrictNull.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/awaitedTypeStrictNull.ts(26,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+awaitedTypeStrictNull.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+awaitedTypeStrictNull.ts(26,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
-==== tests/cases/compiler/awaitedTypeStrictNull.ts (2 errors) ====
+==== awaitedTypeStrictNull.ts (2 errors) ====
     type T1 = Awaited<number>;
     type T2 = Awaited<Promise<number>>;
     type T3 = Awaited<number | Promise<number>>;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/inlineSources2.ts] ////
+
+=== a.ts ===
 var a = 0;
 >a : Symbol(a, Decl(a.ts, 0, 3))
 
@@ -8,7 +10,7 @@ console.log(a);
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >a : Symbol(a, Decl(a.ts, 0, 3))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 var b = 0;
 >b : Symbol(b, Decl(b.ts, 0, 3))
 

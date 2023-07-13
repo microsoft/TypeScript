@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/contextualTypeTupleEnd.ts ===
+//// [tests/cases/conformance/types/tuple/contextualTypeTupleEnd.ts] ////
+
+=== contextualTypeTupleEnd.ts ===
 type Funcs = [...((arg: number) => void)[], (arg: string) => void];
 >Funcs : [...((arg: number) => void)[], (arg: string) => void]
 >arg : number

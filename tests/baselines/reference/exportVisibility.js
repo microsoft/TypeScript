@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportVisibility.ts] ////
+
 //// [exportVisibility.ts]
 export class Foo {
 }

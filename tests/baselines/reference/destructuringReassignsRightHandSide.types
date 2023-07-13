@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringReassignsRightHandSide.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringReassignsRightHandSide.ts] ////
+
+=== destructuringReassignsRightHandSide.ts ===
 var foo: any = { foo: 1, bar: 2 };
 >foo : any
 >{ foo: 1, bar: 2 } : { foo: number; bar: number; }

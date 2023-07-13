@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doNotInferUnrelatedTypes.ts ===
+//// [tests/cases/compiler/doNotInferUnrelatedTypes.ts] ////
+
+=== doNotInferUnrelatedTypes.ts ===
 // #16709
 declare function dearray<T>(ara: ReadonlyArray<T>): T;
 >dearray : Symbol(dearray, Decl(doNotInferUnrelatedTypes.ts, 0, 0))

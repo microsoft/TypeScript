@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts] ////
+
 //// [classWithConstructors.ts]
 module NonGeneric {
     class C {

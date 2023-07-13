@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendedUnicodeEscapeSequenceIdentifiers.ts ===
+//// [tests/cases/compiler/extendedUnicodeEscapeSequenceIdentifiers.ts] ////
+
+=== extendedUnicodeEscapeSequenceIdentifiers.ts ===
 const \u{0061} = 12;
 >\u{0061} : Symbol(\u{0061}, Decl(extendedUnicodeEscapeSequenceIdentifiers.ts, 0, 5))
 

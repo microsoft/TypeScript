@@ -1,8 +1,8 @@
-tests/cases/compiler/implicitConstParameters.ts(38,27): error TS18048: 'x' is possibly 'undefined'.
-tests/cases/compiler/implicitConstParameters.ts(44,27): error TS18048: 'x' is possibly 'undefined'.
+implicitConstParameters.ts(38,27): error TS18048: 'x' is possibly 'undefined'.
+implicitConstParameters.ts(44,27): error TS18048: 'x' is possibly 'undefined'.
 
 
-==== tests/cases/compiler/implicitConstParameters.ts (2 errors) ====
+==== implicitConstParameters.ts (2 errors) ====
     function doSomething(cb: () => void) {
         cb();
     }

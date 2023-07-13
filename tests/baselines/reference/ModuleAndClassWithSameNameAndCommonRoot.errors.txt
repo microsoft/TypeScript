@@ -1,9 +1,9 @@
-tests/cases/conformance/internalModules/DeclarationMerging/module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
-tests/cases/conformance/internalModules/DeclarationMerging/simple.ts(1,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
-tests/cases/conformance/internalModules/DeclarationMerging/simple.ts(2,31): error TS2449: Class 'A' used before its declaration.
+module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+simple.ts(1,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+simple.ts(2,31): error TS2449: Class 'A' used before its declaration.
 
 
-==== tests/cases/conformance/internalModules/DeclarationMerging/module.ts (1 errors) ====
+==== module.ts (1 errors) ====
     module X.Y {
         export module Point {
                       ~~~~~
@@ -12,7 +12,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/simple.ts(2,31): erro
         }
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/classPoint.ts (0 errors) ====
+==== classPoint.ts (0 errors) ====
     module X.Y {
         // duplicate identifier
         export class Point {
@@ -25,14 +25,14 @@ tests/cases/conformance/internalModules/DeclarationMerging/simple.ts(2,31): erro
         }
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts (2 errors) ====
+==== simple.ts (2 errors) ====
     module A {
            ~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
         export var Instance = new A();
                                   ~
 !!! error TS2449: Class 'A' used before its declaration.
-!!! related TS2728 tests/cases/conformance/internalModules/DeclarationMerging/simple.ts:6:7: 'A' is declared here.
+!!! related TS2728 simple.ts:6:7: 'A' is declared here.
     }
     
     // duplicate identifier

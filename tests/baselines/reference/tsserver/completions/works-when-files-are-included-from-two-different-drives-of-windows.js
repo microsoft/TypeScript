@@ -130,33 +130,33 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-e:/myproject/src/tsconfig.json: *new*
-  {"pollingInterval":2000}
 e:/myproject/src/jsconfig.json: *new*
   {"pollingInterval":2000}
 e:/myproject/src/node_modules: *new*
   {"pollingInterval":500}
 e:/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
+e:/myproject/src/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
+c:/a/lib/lib.d.ts: *new*
+  {}
+c:/typescript/node_modules/@types/react-router-dom/package.json: *new*
+  {}
+c:/typescript/node_modules/@types/react/package.json: *new*
+  {}
 e:/myproject/node_modules/@types/prop-types/package.json: *new*
   {}
 e:/myproject/node_modules/@types/react/package.json: *new*
   {}
-c:/a/lib/lib.d.ts: *new*
-  {}
-c:/typescript/node_modules/@types/react/package.json: *new*
-  {}
 e:/myproject/node_modules/react-router-dom/package.json: *new*
-  {}
-c:/typescript/node_modules/@types/react-router-dom/package.json: *new*
   {}
 
 FsWatchesRecursive::
-e:/myproject/node_modules: *new*
-  {}
 c:/typescript/node_modules: *new*
+  {}
+e:/myproject/node_modules: *new*
   {}
 e:/myproject/node_modules/@types: *new*
   {}
@@ -219,37 +219,37 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-e:/myproject/src/tsconfig.json:
-  {"pollingInterval":2000}
+e:/myproject/src/bower_components: *new*
+  {"pollingInterval":500}
 e:/myproject/src/jsconfig.json:
   {"pollingInterval":2000}
 e:/myproject/src/node_modules:
   {"pollingInterval":500}
 e:/myproject/src/node_modules/@types:
   {"pollingInterval":500}
-e:/myproject/src/bower_components: *new*
-  {"pollingInterval":500}
+e:/myproject/src/tsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches::
+c:/a/lib/lib.d.ts:
+  {}
+c:/typescript/node_modules/@types/react-router-dom/package.json:
+  {}
+c:/typescript/node_modules/@types/react/package.json:
+  {}
 e:/myproject/node_modules/@types/prop-types/package.json:
   {}
 e:/myproject/node_modules/@types/react/package.json:
   {}
-c:/a/lib/lib.d.ts:
-  {}
-c:/typescript/node_modules/@types/react/package.json:
-  {}
 e:/myproject/node_modules/react-router-dom/package.json:
-  {}
-c:/typescript/node_modules/@types/react-router-dom/package.json:
   {}
 e:/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::
-e:/myproject/node_modules:
-  {}
 c:/typescript/node_modules:
+  {}
+e:/myproject/node_modules:
   {}
 e:/myproject/node_modules/@types:
   {}

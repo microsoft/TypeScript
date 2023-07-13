@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts] ////
+
 //// [assignmentCompatWithObjectMembersAccessibility.ts]
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 

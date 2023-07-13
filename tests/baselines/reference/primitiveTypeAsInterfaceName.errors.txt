@@ -1,7 +1,7 @@
-tests/cases/compiler/primitiveTypeAsInterfaceName.ts(1,11): error TS2427: Interface name cannot be 'number'.
+primitiveTypeAsInterfaceName.ts(1,11): error TS2427: Interface name cannot be 'number'.
 
 
-==== tests/cases/compiler/primitiveTypeAsInterfaceName.ts (1 errors) ====
+==== primitiveTypeAsInterfaceName.ts (1 errors) ====
     interface number {}
               ~~~~~~
 !!! error TS2427: Interface name cannot be 'number'.

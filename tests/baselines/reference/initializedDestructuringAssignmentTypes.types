@@ -1,4 +1,6 @@
-=== tests/cases/compiler/initializedDestructuringAssignmentTypes.ts ===
+//// [tests/cases/compiler/initializedDestructuringAssignmentTypes.ts] ////
+
+=== initializedDestructuringAssignmentTypes.ts ===
 const [, a = ''] = ''.match('') || [];
 > : undefined
 >a : string

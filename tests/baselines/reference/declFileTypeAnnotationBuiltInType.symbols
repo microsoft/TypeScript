@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationBuiltInType.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationBuiltInType.ts] ////
+
+=== declFileTypeAnnotationBuiltInType.ts ===
 // string
 function foo(): string {
 >foo : Symbol(foo, Decl(declFileTypeAnnotationBuiltInType.ts, 0, 0))

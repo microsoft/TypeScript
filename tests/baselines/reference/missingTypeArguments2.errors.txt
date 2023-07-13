@@ -1,10 +1,10 @@
-tests/cases/compiler/missingTypeArguments2.ts(3,14): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments2.ts(4,5): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments2.ts(5,10): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments2.ts(6,5): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+missingTypeArguments2.ts(3,14): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+missingTypeArguments2.ts(4,5): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+missingTypeArguments2.ts(5,10): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+missingTypeArguments2.ts(6,5): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/missingTypeArguments2.ts (4 errors) ====
+==== missingTypeArguments2.ts (4 errors) ====
     class A<T> { }
     
     var x: () => A;

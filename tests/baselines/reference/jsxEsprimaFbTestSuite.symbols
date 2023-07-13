@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx ===
+//// [tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx] ////
+
+=== jsxEsprimaFbTestSuite.tsx ===
 declare var React: any;
 >React : Symbol(React, Decl(jsxEsprimaFbTestSuite.tsx, 0, 11))
 

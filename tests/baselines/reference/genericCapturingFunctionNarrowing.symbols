@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCapturingFunctionNarrowing.ts ===
+//// [tests/cases/compiler/genericCapturingFunctionNarrowing.ts] ////
+
+=== genericCapturingFunctionNarrowing.ts ===
 function needsToNarrowTheType<First extends { foo: string }, Second extends { bar: string }, SubFirst extends First, SubFirstMore extends First & {other: string}>(thing: First | SubFirst | SubFirstMore | Second) {
 >needsToNarrowTheType : Symbol(needsToNarrowTheType, Decl(genericCapturingFunctionNarrowing.ts, 0, 0))
 >First : Symbol(First, Decl(genericCapturingFunctionNarrowing.ts, 0, 30))

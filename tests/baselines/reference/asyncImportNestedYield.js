@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncImportNestedYield.ts] ////
+
 //// [asyncImportNestedYield.ts]
 async function* foo() {
     import((await import(yield "foo")).default);

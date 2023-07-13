@@ -94,9 +94,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/models/vessel.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/b/utils/db.ts: *new*
   {}

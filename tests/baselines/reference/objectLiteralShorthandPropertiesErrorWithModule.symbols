@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorWithModule.ts ===
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorWithModule.ts] ////
+
+=== objectLiteralShorthandPropertiesErrorWithModule.ts ===
 // module export
 var x = "Foo";
 >x : Symbol(x, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 1, 3))

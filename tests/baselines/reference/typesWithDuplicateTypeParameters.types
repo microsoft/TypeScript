@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typesWithDuplicateTypeParameters.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typesWithDuplicateTypeParameters.ts] ////
+
+=== typesWithDuplicateTypeParameters.ts ===
 class C<T, T> { }
 >C : C<T>
 

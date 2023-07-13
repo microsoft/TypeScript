@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedGetterInClass.ts(4,17): error TS6133: 'fullName' is declared but its value is never read.
+unusedGetterInClass.ts(4,17): error TS6133: 'fullName' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedGetterInClass.ts (1 errors) ====
+==== unusedGetterInClass.ts (1 errors) ====
     class Employee {
         private _fullName: string;
     

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericDefaults.ts] ////
+
 //// [genericDefaults.ts]
 interface A { a: number; }
 interface B { b: number; }

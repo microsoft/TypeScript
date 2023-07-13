@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6Module.ts] ////
+
 //// [es6Module.ts]
 export class A
 {

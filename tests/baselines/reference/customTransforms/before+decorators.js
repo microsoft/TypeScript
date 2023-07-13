@@ -13,7 +13,7 @@ var B = /** @class */ (function () {
     }
     return B;
 }());
-export var C = /** @class */ (function () {
+var C = /** @class */ (function () {
     function C(b) {
     }
     C = __decorate([
@@ -22,4 +22,5 @@ export var C = /** @class */ (function () {
     ], C);
     return C;
 }());
+export { C };
 "changed";

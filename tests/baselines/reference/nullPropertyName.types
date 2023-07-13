@@ -1,4 +1,6 @@
-=== tests/cases/conformance/declarationEmit/nullPropertyName.ts ===
+//// [tests/cases/conformance/declarationEmit/nullPropertyName.ts] ////
+
+=== nullPropertyName.ts ===
 function foo() {}
 >foo : typeof foo
 

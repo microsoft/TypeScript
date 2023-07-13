@@ -1,46 +1,46 @@
-tests/cases/compiler/jsxElementType.tsx(34,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(36,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(34,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(36,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(40,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(42,15): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(40,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(42,15): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(46,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(48,15): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(46,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(48,15): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(52,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(54,14): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(52,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(54,14): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(59,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(61,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
+jsxElementType.tsx(59,2): error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
+jsxElementType.tsx(61,16): error TS2322: Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & { title: string; }'.
   Property 'excessProp' does not exist on type 'IntrinsicAttributes & { title: string; }'.
-tests/cases/compiler/jsxElementType.tsx(70,2): error TS2769: No overload matches this call.
+jsxElementType.tsx(70,2): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
     Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
   Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
     Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
-tests/cases/compiler/jsxElementType.tsx(72,20): error TS2769: No overload matches this call.
+jsxElementType.tsx(72,20): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<{ title: string; }>): RenderStringClass', gave the following error.
     Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
       Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
   Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
     Type '{ excessProp: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
       Property 'excessProp' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RenderStringClass> & Readonly<{ children?: ReactNode; }> & Readonly<{ title: string; }>'.
-tests/cases/compiler/jsxElementType.tsx(78,1): error TS2339: Property 'boop' does not exist on type 'JSX.IntrinsicElements'.
-tests/cases/compiler/jsxElementType.tsx(79,1): error TS2339: Property 'my-undeclared-custom-element' does not exist on type 'JSX.IntrinsicElements'.
-tests/cases/compiler/jsxElementType.tsx(91,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
+jsxElementType.tsx(78,1): error TS2339: Property 'boop' does not exist on type 'JSX.IntrinsicElements'.
+jsxElementType.tsx(79,1): error TS2339: Property 'my-undeclared-custom-element' does not exist on type 'JSX.IntrinsicElements'.
+jsxElementType.tsx(91,2): error TS2786: 'ReactNativeFlatList' cannot be used as a JSX component.
   Its type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not a valid JSX element type.
     Type '(props: {}, ref: ForwardedRef<typeof ReactNativeFlatList>) => null' is not assignable to type '(props: any) => React18ReactNode'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/compiler/jsxElementType.tsx(95,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
-tests/cases/compiler/jsxElementType.tsx(98,2): error TS2304: Cannot find name 'Unresolved'.
-tests/cases/compiler/jsxElementType.tsx(99,2): error TS2304: Cannot find name 'Unresolved'.
-tests/cases/compiler/jsxElementType.tsx(110,6): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; }'.
+jsxElementType.tsx(95,11): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<T, {}>'.
+jsxElementType.tsx(98,2): error TS2304: Cannot find name 'Unresolved'.
+jsxElementType.tsx(99,2): error TS2304: Cannot find name 'Unresolved'.
+jsxElementType.tsx(110,6): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; }'.
   Property 'b' does not exist on type '{ a: string; }'.
-tests/cases/compiler/jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
+jsxElementType.tsx(111,19): error TS2322: Type '{ a: string; b: string; }' is not assignable to type '{ a: string; }'.
   Property 'b' does not exist on type '{ a: string; }'.
 
 
-==== tests/cases/compiler/jsxElementType.tsx (20 errors) ====
+==== jsxElementType.tsx (20 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     import * as React from "react";
     
@@ -77,7 +77,7 @@ tests/cases/compiler/jsxElementType.tsx(111,19): error TS2322: Type '{ a: string
     <RenderElement />;
      ~~~~~~~~~~~~~
 !!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:32:37: 'title' is declared here.
+!!! related TS2728 jsxElementType.tsx:32:37: 'title' is declared here.
     <RenderElement title="react" />;
     <RenderElement excessProp />;
                    ~~~~~~~~~~
@@ -89,7 +89,7 @@ tests/cases/compiler/jsxElementType.tsx(111,19): error TS2322: Type '{ a: string
     <RenderString />;
      ~~~~~~~~~~~~
 !!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:38:36: 'title' is declared here.
+!!! related TS2728 jsxElementType.tsx:38:36: 'title' is declared here.
     <RenderString title="react" />;
     <RenderString excessProp />;
                   ~~~~~~~~~~
@@ -101,7 +101,7 @@ tests/cases/compiler/jsxElementType.tsx(111,19): error TS2322: Type '{ a: string
     <RenderNumber />;
      ~~~~~~~~~~~~
 !!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:44:36: 'title' is declared here.
+!!! related TS2728 jsxElementType.tsx:44:36: 'title' is declared here.
     <RenderNumber title="react" />;
     <RenderNumber excessProp />;
                   ~~~~~~~~~~
@@ -113,7 +113,7 @@ tests/cases/compiler/jsxElementType.tsx(111,19): error TS2322: Type '{ a: string
     <RenderArray />;
      ~~~~~~~~~~~
 !!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:50:35: 'title' is declared here.
+!!! related TS2728 jsxElementType.tsx:50:35: 'title' is declared here.
     <RenderArray title="react" />;
     <RenderArray excessProp />;
                  ~~~~~~~~~~
@@ -126,7 +126,7 @@ tests/cases/compiler/jsxElementType.tsx(111,19): error TS2322: Type '{ a: string
     <RenderPromise />;
      ~~~~~~~~~~~~~
 !!! error TS2741: Property 'title' is missing in type '{}' but required in type '{ title: string; }'.
-!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:57:43: 'title' is declared here.
+!!! related TS2728 jsxElementType.tsx:57:43: 'title' is declared here.
     <RenderPromise title="react" />;
     <RenderPromise excessProp />;
                    ~~~~~~~~~~
@@ -147,8 +147,8 @@ tests/cases/compiler/jsxElementType.tsx(111,19): error TS2322: Type '{ a: string
 !!! error TS2769:     Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
 !!! error TS2769:   Overload 2 of 2, '(props: { title: string; }, context?: any): RenderStringClass', gave the following error.
 !!! error TS2769:     Property 'title' is missing in type '{}' but required in type 'Readonly<{ title: string; }>'.
-!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:64:51: 'title' is declared here.
-!!! related TS2728 tests/cases/compiler/jsxElementType.tsx:64:51: 'title' is declared here.
+!!! related TS2728 jsxElementType.tsx:64:51: 'title' is declared here.
+!!! related TS2728 jsxElementType.tsx:64:51: 'title' is declared here.
     <RenderStringClass title="react" />;
     <RenderStringClass excessProp />;
                        ~~~~~~~~~~

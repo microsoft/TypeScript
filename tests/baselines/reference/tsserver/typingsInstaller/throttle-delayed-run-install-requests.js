@@ -202,15 +202,15 @@ TI:: [hh:mm:ss:mss] #1 with arguments'["@types/jquery@tsFakeMajor.Minor","@types
 TI:: Before installWorker
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/a/app/bower_components: *new*
+  {"pollingInterval":500}
+/a/app/node_modules: *new*
   {"pollingInterval":500}
 /a/b/bower_components: *new*
   {"pollingInterval":500}
 /a/b/node_modules: *new*
   {"pollingInterval":500}
-/a/app/bower_components: *new*
-  {"pollingInterval":500}
-/a/app/node_modules: *new*
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::

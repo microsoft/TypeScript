@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/optionalProperties01.ts] ////
+
 //// [optionalProperties01.ts]
 interface Foo {
   required1: string;

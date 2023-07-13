@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/constructor/parameter/decoratorOnClassConstructorParameter5.ts] ////
+
 //// [decoratorOnClassConstructorParameter5.ts]
 // https://github.com/microsoft/TypeScript/issues/44931
 interface IFoo { }

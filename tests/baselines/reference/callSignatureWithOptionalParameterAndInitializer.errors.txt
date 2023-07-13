@@ -1,22 +1,22 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(3,14): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(4,22): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(5,22): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(15,9): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(23,6): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(23,6): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(24,20): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(24,20): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(34,6): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(34,6): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(35,9): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(35,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(44,9): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(45,32): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(45,32): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(46,9): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(3,14): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(4,22): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(5,22): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(15,9): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(23,6): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(23,6): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+callSignatureWithOptionalParameterAndInitializer.ts(24,20): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(24,20): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+callSignatureWithOptionalParameterAndInitializer.ts(34,6): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(34,6): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+callSignatureWithOptionalParameterAndInitializer.ts(35,9): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(35,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+callSignatureWithOptionalParameterAndInitializer.ts(44,9): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(45,32): error TS1015: Parameter cannot have question mark and initializer.
+callSignatureWithOptionalParameterAndInitializer.ts(45,32): error TS2322: Type 'string' is not assignable to type 'number'.
+callSignatureWithOptionalParameterAndInitializer.ts(46,9): error TS1015: Parameter cannot have question mark and initializer.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts (16 errors) ====
+==== callSignatureWithOptionalParameterAndInitializer.ts (16 errors) ====
     // Optional parameters cannot also have initializer expressions, these are all errors
     
     function foo(x?: number = 1) { }

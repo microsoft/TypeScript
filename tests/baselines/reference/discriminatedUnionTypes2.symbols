@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/discriminatedUnionTypes2.ts ===
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes2.ts] ////
+
+=== discriminatedUnionTypes2.ts ===
 function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
 >f10 : Symbol(f10, Decl(discriminatedUnionTypes2.ts, 0, 0))
 >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 0, 13))

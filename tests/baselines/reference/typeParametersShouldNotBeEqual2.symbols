@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParametersShouldNotBeEqual2.ts ===
+//// [tests/cases/compiler/typeParametersShouldNotBeEqual2.ts] ////
+
+=== typeParametersShouldNotBeEqual2.ts ===
 function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
 >ff : Symbol(ff, Decl(typeParametersShouldNotBeEqual2.ts, 0, 0))
 >T : Symbol(T, Decl(typeParametersShouldNotBeEqual2.ts, 0, 12))

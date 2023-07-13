@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTyping34.ts] ////
+
 //// [contextualTyping34.ts]
 var foo = <{ id: number;}> ({id:4});
 

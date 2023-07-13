@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionVariableInReturnTypeAnnotation.ts ===
+//// [tests/cases/compiler/functionVariableInReturnTypeAnnotation.ts] ////
+
+=== functionVariableInReturnTypeAnnotation.ts ===
 function bar(): typeof b {
 >bar : () => any
 >b : any

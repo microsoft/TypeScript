@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lambdaArgCrash.ts ===
+//// [tests/cases/compiler/lambdaArgCrash.ts] ////
+
+=== lambdaArgCrash.ts ===
 class Event {
 >Event : Symbol(Event, Decl(lambdaArgCrash.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/client.ts ===
+//// [tests/cases/compiler/declFileWithErrorsInInputDeclarationFile.ts] ////
+
+=== client.ts ===
 ///<reference path="declFile.d.ts"/>
 var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file
 >x : M.C
@@ -7,7 +9,7 @@ var x = new M.C(); // Declaration file wont get emitted because there are errors
 >M : typeof M
 >C : typeof M.C
 
-=== tests/cases/compiler/declFile.d.ts ===
+=== declFile.d.ts ===
 declare module M {
 >M : typeof M
 

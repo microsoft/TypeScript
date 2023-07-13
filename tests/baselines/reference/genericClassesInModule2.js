@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClassesInModule2.ts] ////
+
 //// [genericClassesInModule2.ts]
 export class A<T1>{
     constructor( public callback: (self: A<T1>) => void) {

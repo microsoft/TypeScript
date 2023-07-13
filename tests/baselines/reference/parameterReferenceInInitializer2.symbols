@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parameterReferenceInInitializer2.ts ===
+//// [tests/cases/compiler/parameterReferenceInInitializer2.ts] ////
+
+=== parameterReferenceInInitializer2.ts ===
 function Example(x = function(x: any) { return x; }) { // Error: parameter 'x' cannot be 
 >Example : Symbol(Example, Decl(parameterReferenceInInitializer2.ts, 0, 0))
 >x : Symbol(x, Decl(parameterReferenceInInitializer2.ts, 0, 17))

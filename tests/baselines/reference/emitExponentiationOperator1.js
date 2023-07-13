@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator1.ts] ////
+
 //// [emitExponentiationOperator1.ts]
 1 ** -2;
 1 ** 2;

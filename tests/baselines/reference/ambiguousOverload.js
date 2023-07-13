@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambiguousOverload.ts] ////
+
 //// [ambiguousOverload.ts]
 function foof(bar: string, y): number;
 function foof(bar: string, x): string;

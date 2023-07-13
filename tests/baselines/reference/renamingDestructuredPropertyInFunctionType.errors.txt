@@ -1,27 +1,27 @@
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(5,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(6,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(7,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(8,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(10,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(15,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(16,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(17,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(18,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(20,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(26,20): error TS2842: 'string' is an unused renaming of '"a"'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(27,18): error TS2842: 'string' is an unused renaming of '2'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(28,22): error TS2842: 'string' is an unused renaming of '["a"]'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(29,20): error TS2842: 'string' is an unused renaming of '[2]'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(30,24): error TS2842: 'string' is an unused renaming of '"a"'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(31,22): error TS2842: 'string' is an unused renaming of '2'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(32,26): error TS2842: 'string' is an unused renaming of '["a"]'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(33,24): error TS2842: 'string' is an unused renaming of '[2]'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(37,16): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(40,9): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(43,13): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(5,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(6,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(7,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(8,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(10,17): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(15,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(16,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(17,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(18,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(20,21): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(26,20): error TS2842: 'string' is an unused renaming of '"a"'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(27,18): error TS2842: 'string' is an unused renaming of '2'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(28,22): error TS2842: 'string' is an unused renaming of '["a"]'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(29,20): error TS2842: 'string' is an unused renaming of '[2]'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(30,24): error TS2842: 'string' is an unused renaming of '"a"'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(31,22): error TS2842: 'string' is an unused renaming of '2'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(32,26): error TS2842: 'string' is an unused renaming of '["a"]'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(33,24): error TS2842: 'string' is an unused renaming of '[2]'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(37,16): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(40,9): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+renamingDestructuredPropertyInFunctionType.ts(43,13): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
 
 
-==== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts (21 errors) ====
+==== renamingDestructuredPropertyInFunctionType.ts (21 errors) ====
     // GH#37454, GH#41044
     
     type O = { a?: string; b: number; c: number; };
@@ -42,7 +42,7 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(43,13): error
     type F7 = ({ a: string, b: number }) => typeof number; // Error
                     ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:10:36: We can only write a type for 'a' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:10:36: We can only write a type for 'a' by adding a type for the entire parameter here.
     type F8 = ({ a, b: number }) => typeof number; // OK
     type F9 = ([a, b, c]) => void; // OK
     
@@ -63,7 +63,7 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(43,13): error
     type G7 = new ({ a: string, b: number }) => typeof number; // Error
                         ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:20:40: We can only write a type for 'a' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:20:40: We can only write a type for 'a' by adding a type for the entire parameter here.
     type G8 = new ({ a, b: number }) => typeof number; // OK
     type G9 = new ([a, b, c]) => void; // OK
     
@@ -72,52 +72,52 @@ tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts(43,13): error
     type F10 = ({ "a": string }) => void; // Error
                        ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of '"a"'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:26:28: We can only write a type for '"a"' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:26:28: We can only write a type for '"a"' by adding a type for the entire parameter here.
     type F11 = ({ 2: string }) => void; // Error
                      ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of '2'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:27:26: We can only write a type for '2' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:27:26: We can only write a type for '2' by adding a type for the entire parameter here.
     type F12 = ({ ["a"]: string }: O) => void; // Error
                          ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of '["a"]'. Did you intend to use it as a type annotation?
     type F13 = ({ [2]: string }) => void; // Error
                        ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of '[2]'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:29:28: We can only write a type for '[2]' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:29:28: We can only write a type for '[2]' by adding a type for the entire parameter here.
     type G10 = new ({ "a": string }) => void; // Error
                            ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of '"a"'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:30:32: We can only write a type for '"a"' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:30:32: We can only write a type for '"a"' by adding a type for the entire parameter here.
     type G11 = new ({ 2: string }) => void; // Error
                          ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of '2'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:31:30: We can only write a type for '2' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:31:30: We can only write a type for '2' by adding a type for the entire parameter here.
     type G12 = new ({ ["a"]: string }: O) => void; // Error
                              ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of '["a"]'. Did you intend to use it as a type annotation?
     type G13 = new ({ [2]: string }) => void; // Error
                            ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of '[2]'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:33:32: We can only write a type for '[2]' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:33:32: We can only write a type for '[2]' by adding a type for the entire parameter here.
     
     interface I {
       method1(arg: number): any; // OK
       method2({ a: string }): any; // Error
                    ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:37:24: We can only write a type for 'a' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:37:24: We can only write a type for 'a' by adding a type for the entire parameter here.
     
       (arg: number): any; // OK
       ({ a: string }): any; // Error
             ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:40:17: We can only write a type for 'a' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:40:17: We can only write a type for 'a' by adding a type for the entire parameter here.
     
       new (arg: number): any; // OK
       new ({ a: string }): any; // Error
                 ~~~~~~
 !!! error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts:43:21: We can only write a type for 'a' by adding a type for the entire parameter here.
+!!! related TS2843 renamingDestructuredPropertyInFunctionType.ts:43:21: We can only write a type for 'a' by adding a type for the entire parameter here.
     }
     
     // Below are OK but renaming should be removed from declaration emit

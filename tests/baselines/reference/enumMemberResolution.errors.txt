@@ -1,8 +1,8 @@
-tests/cases/compiler/enumMemberResolution.ts(4,9): error TS2304: Cannot find name 'IgnoreRulesSpecific'.
-tests/cases/compiler/enumMemberResolution.ts(4,29): error TS1003: Identifier expected.
+enumMemberResolution.ts(4,9): error TS2304: Cannot find name 'IgnoreRulesSpecific'.
+enumMemberResolution.ts(4,29): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/enumMemberResolution.ts (2 errors) ====
+==== enumMemberResolution.ts (2 errors) ====
     enum Position2 {
         IgnoreRulesSpecific = 0
     }

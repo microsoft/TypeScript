@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts] ////
+
 //// [parserSuperExpression2.ts]
 class C {
   M() {

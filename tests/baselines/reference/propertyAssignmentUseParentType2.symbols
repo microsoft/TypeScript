@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/propertyAssignmentUseParentType2.js ===
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType2.ts] ////
+
+=== propertyAssignmentUseParentType2.js ===
 /** @type {{ (): boolean; nuo: 789 }} */
 export const inlined = () => true
 >inlined : Symbol(inlined, Decl(propertyAssignmentUseParentType2.js, 1, 12), Decl(propertyAssignmentUseParentType2.js, 1, 33))

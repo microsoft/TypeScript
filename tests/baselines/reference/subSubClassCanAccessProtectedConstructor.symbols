@@ -1,4 +1,6 @@
-=== tests/cases/compiler/subSubClassCanAccessProtectedConstructor.ts ===
+//// [tests/cases/compiler/subSubClassCanAccessProtectedConstructor.ts] ////
+
+=== subSubClassCanAccessProtectedConstructor.ts ===
 class Base {
 >Base : Symbol(Base, Decl(subSubClassCanAccessProtectedConstructor.ts, 0, 0))
 

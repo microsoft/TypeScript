@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/booleanAssignment.ts] ////
+
 //// [booleanAssignment.ts]
 var b = new Boolean();
 b = 1; // Error

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUnusedLocals_writeOnlyProperty_dynamicNames.ts ===
+//// [tests/cases/compiler/noUnusedLocals_writeOnlyProperty_dynamicNames.ts] ////
+
+=== noUnusedLocals_writeOnlyProperty_dynamicNames.ts ===
 const x = Symbol("x");
 >x : Symbol(x, Decl(noUnusedLocals_writeOnlyProperty_dynamicNames.ts, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

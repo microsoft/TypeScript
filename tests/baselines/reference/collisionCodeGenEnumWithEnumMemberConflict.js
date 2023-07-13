@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionCodeGenEnumWithEnumMemberConflict.ts] ////
+
 //// [collisionCodeGenEnumWithEnumMemberConflict.ts]
 enum Color {
     Color,

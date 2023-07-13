@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts] ////
+
+=== classConstructorAccessibility3.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(classConstructorAccessibility3.ts, 0, 0))
 

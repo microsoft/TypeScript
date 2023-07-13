@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferTInParentheses.ts ===
+//// [tests/cases/compiler/inferTInParentheses.ts] ////
+
+=== inferTInParentheses.ts ===
 type F1 = (num: [number]) => void;
 >F1 : Symbol(F1, Decl(inferTInParentheses.ts, 0, 0))
 >num : Symbol(num, Decl(inferTInParentheses.ts, 0, 11))

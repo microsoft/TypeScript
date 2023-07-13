@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionWithThrowButNoReturn1.ts ===
+//// [tests/cases/compiler/functionWithThrowButNoReturn1.ts] ////
+
+=== functionWithThrowButNoReturn1.ts ===
 function fn(): number {
 >fn : Symbol(fn, Decl(functionWithThrowButNoReturn1.ts, 0, 0))
 

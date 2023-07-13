@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multipleBaseInterfaesWithIncompatibleProperties.ts ===
+//// [tests/cases/compiler/multipleBaseInterfaesWithIncompatibleProperties.ts] ////
+
+=== multipleBaseInterfaesWithIncompatibleProperties.ts ===
 interface A<T>
 >A : Symbol(A, Decl(multipleBaseInterfaesWithIncompatibleProperties.ts, 0, 0))
 >T : Symbol(T, Decl(multipleBaseInterfaesWithIncompatibleProperties.ts, 0, 12))

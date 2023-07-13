@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceImplementation7.ts] ////
+
 //// [interfaceImplementation7.ts]
 interface i1{ name(): { s: string; }; }
 interface i2{ name(): { n: number; }; }

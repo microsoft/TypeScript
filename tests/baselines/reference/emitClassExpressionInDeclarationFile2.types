@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts ===
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts] ////
+
+=== emitClassExpressionInDeclarationFile2.ts ===
 export var noPrivates = class {
 >noPrivates : typeof noPrivates
 >class {    static getTags() { }    tags() { }    private static ps = -1    private p = 12} : typeof noPrivates

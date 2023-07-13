@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultNamedExportWithType4.ts ===
+//// [tests/cases/compiler/defaultNamedExportWithType4.ts] ////
+
+=== defaultNamedExportWithType4.ts ===
 interface Foo {}
 >Foo : Symbol(Foo, Decl(defaultNamedExportWithType4.ts, 0, 0), Decl(defaultNamedExportWithType4.ts, 1, 5))
 

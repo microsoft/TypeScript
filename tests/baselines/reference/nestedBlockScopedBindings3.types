@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedBlockScopedBindings3.ts ===
+//// [tests/cases/compiler/nestedBlockScopedBindings3.ts] ////
+
+=== nestedBlockScopedBindings3.ts ===
 function a0() {
 >a0 : () => void
     {

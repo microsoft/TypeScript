@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitTupleRestSignatureLeadingVariadic.ts ===
+//// [tests/cases/compiler/declarationEmitTupleRestSignatureLeadingVariadic.ts] ////
+
+=== declarationEmitTupleRestSignatureLeadingVariadic.ts ===
 const f = <TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]): void => {};
 >f : Symbol(f, Decl(declarationEmitTupleRestSignatureLeadingVariadic.ts, 0, 5))
 >TFirstArgs : Symbol(TFirstArgs, Decl(declarationEmitTupleRestSignatureLeadingVariadic.ts, 0, 11))

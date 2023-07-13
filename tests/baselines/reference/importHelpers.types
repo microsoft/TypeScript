@@ -1,4 +1,6 @@
-=== tests/cases/compiler/external.ts ===
+//// [tests/cases/compiler/importHelpers.ts] ////
+
+=== external.ts ===
 export class A { }
 >A : A
 
@@ -36,7 +38,7 @@ export const result = id`hello world`;
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 
-=== tests/cases/compiler/script.ts ===
+=== script.ts ===
 class A { }
 >A : A
 
@@ -74,7 +76,7 @@ const result = id`hello world`;
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
 >d : Function

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts] ////
+
 //// [inOperatorWithInvalidOperands.ts]
 class Foo {}
 enum E { a }

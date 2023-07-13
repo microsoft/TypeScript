@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendingOptionalChain.ts] ////
+
 //// [interfaceExtendingOptionalChain.ts]
 namespace Foo {
     export class Bar {}

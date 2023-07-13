@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexWithUndefinedAndNull.ts] ////
+
 //// [indexWithUndefinedAndNull.ts]
 interface N {
     [n: number]: string;

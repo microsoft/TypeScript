@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/instanceMemberAssignsToClassPrototype.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/instanceMemberAssignsToClassPrototype.ts] ////
+
+=== instanceMemberAssignsToClassPrototype.ts ===
 class C {
 >C : Symbol(C, Decl(instanceMemberAssignsToClassPrototype.ts, 0, 0))
 

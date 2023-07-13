@@ -1,4 +1,6 @@
-=== tests/cases/conformance/override/override7.ts ===
+//// [tests/cases/conformance/override/override7.ts] ////
+
+=== override7.ts ===
 class B {
 >B : B
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalTupleElementsAndUndefined.ts ===
+//// [tests/cases/compiler/optionalTupleElementsAndUndefined.ts] ////
+
+=== optionalTupleElementsAndUndefined.ts ===
 // Repro from #50753
 
 type UnNullify<T> = { [K in keyof T]: NonNullable<T[K]> };

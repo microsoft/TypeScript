@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(6,21): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(9,21): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(12,21): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(15,21): error TS1107: Jump target cannot cross function boundary.
+classStaticBlock8.ts(6,21): error TS1107: Jump target cannot cross function boundary.
+classStaticBlock8.ts(9,21): error TS1107: Jump target cannot cross function boundary.
+classStaticBlock8.ts(12,21): error TS1107: Jump target cannot cross function boundary.
+classStaticBlock8.ts(15,21): error TS1107: Jump target cannot cross function boundary.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts (4 errors) ====
+==== classStaticBlock8.ts (4 errors) ====
     function foo (v: number) {
         label: while (v) {
             class C {

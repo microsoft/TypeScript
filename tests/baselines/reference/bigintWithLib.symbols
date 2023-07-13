@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bigintWithLib.ts ===
+//// [tests/cases/compiler/bigintWithLib.ts] ////
+
+=== bigintWithLib.ts ===
 // Test BigInt functions
 let bigintVal: bigint = BigInt(123);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithLib.ts, 1, 3))

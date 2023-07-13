@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tailRecursiveConditionalTypes.ts ===
+//// [tests/cases/compiler/tailRecursiveConditionalTypes.ts] ////
+
+=== tailRecursiveConditionalTypes.ts ===
 type Trim<S extends string> =
 >Trim : Trim<S>
 

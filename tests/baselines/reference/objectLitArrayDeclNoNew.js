@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLitArrayDeclNoNew.ts] ////
+
 //// [objectLitArrayDeclNoNew.ts]
 declare var console;
 "use strict";

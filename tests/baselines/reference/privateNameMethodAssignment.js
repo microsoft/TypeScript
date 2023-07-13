@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodAssignment.ts] ////
+
 //// [privateNameMethodAssignment.ts]
 class A3 {
     #method() { };

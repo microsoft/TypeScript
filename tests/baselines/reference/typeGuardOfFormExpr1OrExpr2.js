@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormExpr1OrExpr2.ts] ////
+
 //// [typeGuardOfFormExpr1OrExpr2.ts]
 var str: string;
 var bool: boolean;

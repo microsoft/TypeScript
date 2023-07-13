@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts] ////
+
+=== classStaticBlock8.ts ===
 function foo (v: number) {
 >foo : (v: number) => void
 >v : number

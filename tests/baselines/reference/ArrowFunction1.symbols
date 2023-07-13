@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/ArrowFunction1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/ArrowFunction1.ts] ////
+
+=== ArrowFunction1.ts ===
 var v = (a: ) => {
 >v : Symbol(v, Decl(ArrowFunction1.ts, 0, 3))
 >a : Symbol(a, Decl(ArrowFunction1.ts, 0, 9))

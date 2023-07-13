@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts] ////
+
+=== nonPrimitiveAndTypeVariables.ts ===
 // Repros from #23800
 
 type A<T, V> = { [P in keyof T]: T[P] extends V ? 1 : 0; };

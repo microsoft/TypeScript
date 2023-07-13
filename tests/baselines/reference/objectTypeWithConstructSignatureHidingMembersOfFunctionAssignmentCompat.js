@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts] ////
+
 //// [objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts]
 interface I {
     new(): any;

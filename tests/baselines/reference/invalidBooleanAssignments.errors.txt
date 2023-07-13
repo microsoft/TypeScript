@@ -1,17 +1,17 @@
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(3,5): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(4,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(5,5): error TS2322: Type 'boolean' is not assignable to type 'void'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(9,5): error TS2322: Type 'true' is not assignable to type 'E'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(12,5): error TS2322: Type 'boolean' is not assignable to type 'C'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(15,5): error TS2322: Type 'boolean' is not assignable to type 'I'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(17,5): error TS2322: Type 'boolean' is not assignable to type '() => string'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(21,1): error TS2631: Cannot assign to 'M' because it is a namespace.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(24,5): error TS2322: Type 'boolean' is not assignable to type 'T'.
+invalidBooleanAssignments.ts(3,5): error TS2322: Type 'boolean' is not assignable to type 'number'.
+invalidBooleanAssignments.ts(4,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
+invalidBooleanAssignments.ts(5,5): error TS2322: Type 'boolean' is not assignable to type 'void'.
+invalidBooleanAssignments.ts(9,5): error TS2322: Type 'true' is not assignable to type 'E'.
+invalidBooleanAssignments.ts(12,5): error TS2322: Type 'boolean' is not assignable to type 'C'.
+invalidBooleanAssignments.ts(15,5): error TS2322: Type 'boolean' is not assignable to type 'I'.
+invalidBooleanAssignments.ts(17,5): error TS2322: Type 'boolean' is not assignable to type '() => string'.
+invalidBooleanAssignments.ts(21,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+invalidBooleanAssignments.ts(24,5): error TS2322: Type 'boolean' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'boolean'.
-tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(26,1): error TS2630: Cannot assign to 'i' because it is a function.
+invalidBooleanAssignments.ts(26,1): error TS2630: Cannot assign to 'i' because it is a function.
 
 
-==== tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts (10 errors) ====
+==== invalidBooleanAssignments.ts (10 errors) ====
     var x = true;
     
     var a: number = x;

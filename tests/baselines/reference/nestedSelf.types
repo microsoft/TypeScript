@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedSelf.ts ===
+//// [tests/cases/compiler/nestedSelf.ts] ////
+
+=== nestedSelf.ts ===
 module M {
 >M : typeof M
 

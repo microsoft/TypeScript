@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2020/constructBigint.ts ===
+//// [tests/cases/conformance/es2020/constructBigint.ts] ////
+
+=== constructBigint.ts ===
 BigInt(1);
 >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 

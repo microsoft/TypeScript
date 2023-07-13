@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMap-Comment1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-Comment1.js
+emittedFile:sourceMap-Comment1.js
 sourceFile:sourceMap-Comment1.ts
 -------------------------------------------------------------------
 >>>// Comment

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts] ////
+
 //// [argumentExpressionContextualTyping.ts]
 // In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
 function foo({x: [a, b], y: {c, d, e}}) { }

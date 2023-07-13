@@ -1,8 +1,8 @@
-tests/cases/conformance/salsa/other.js(5,5): error TS2339: Property 'wat' does not exist on type 'One'.
-tests/cases/conformance/salsa/other.js(10,5): error TS2339: Property 'wat' does not exist on type 'Two'.
+other.js(5,5): error TS2339: Property 'wat' does not exist on type 'One'.
+other.js(10,5): error TS2339: Property 'wat' does not exist on type 'Two'.
 
 
-==== tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.js (0 errors) ====
+==== prototypePropertyAssignmentMergeAcrossFiles2.js (0 errors) ====
     var Ns = {}
     Ns.One = function() {};
     Ns.Two = function() {};
@@ -13,7 +13,7 @@ tests/cases/conformance/salsa/other.js(10,5): error TS2339: Property 'wat' does 
     Ns.Two.prototype = {
     }
     
-==== tests/cases/conformance/salsa/other.js (2 errors) ====
+==== other.js (2 errors) ====
     /**
      * @type {Ns.One}
      */

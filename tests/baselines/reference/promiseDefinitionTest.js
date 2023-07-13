@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promiseDefinitionTest.ts] ////
+
 //// [promiseDefinitionTest.ts]
 class Promise<T> {}
 async function foo() {}

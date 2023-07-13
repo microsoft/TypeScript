@@ -1,12 +1,12 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(12,4): error TS2345: Argument of type '[number, number, string[][], number]' is not assignable to parameter of type '[number, number, string[][]]'.
+destructuringParameterDeclaration1ES5.ts(12,4): error TS2345: Argument of type '[number, number, string[][], number]' is not assignable to parameter of type '[number, number, string[][]]'.
   Source has 4 element(s) but target allows only 3.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(57,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
+destructuringParameterDeclaration1ES5.ts(57,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
   Source has 5 element(s) but target allows only 3.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(62,10): error TS2393: Duplicate function implementation.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(63,10): error TS2393: Duplicate function implementation.
+destructuringParameterDeclaration1ES5.ts(62,10): error TS2393: Duplicate function implementation.
+destructuringParameterDeclaration1ES5.ts(63,10): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts (4 errors) ====
+==== destructuringParameterDeclaration1ES5.ts (4 errors) ====
     // A parameter declaration may specify either an identifier or a binding pattern.
     // The identifiers specified in parameter declarations and binding patterns
     // in a parameter list must be unique within that parameter list.

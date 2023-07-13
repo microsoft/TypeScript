@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyMemberAccess.ts] ////
+
 //// [emptyMemberAccess.ts]
 function getObj() {
 

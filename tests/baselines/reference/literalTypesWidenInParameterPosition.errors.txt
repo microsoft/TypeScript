@@ -1,7 +1,7 @@
-tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts(4,9): error TS2322: Type '5' is not assignable to type '1'.
+literalTypesWidenInParameterPosition.ts(4,9): error TS2322: Type '5' is not assignable to type '1'.
 
 
-==== tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts (1 errors) ====
+==== literalTypesWidenInParameterPosition.ts (1 errors) ====
     class D {
         readonly noWiden = 1
         constructor(readonly widen = 2) {

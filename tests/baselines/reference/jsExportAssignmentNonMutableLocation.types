@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/jsExportAssignmentNonMutableLocation.ts] ////
+
+=== file.js ===
 const customSymbol = Symbol("custom");
 >customSymbol : unique symbol
 >Symbol("custom") : unique symbol
@@ -21,7 +23,7 @@ module.exports = {
 exports.customSymbol2 = Symbol("custom");
 >exports.customSymbol2 = Symbol("custom") : unique symbol
 >exports.customSymbol2 : unique symbol
->exports : typeof import("tests/cases/compiler/file")
+>exports : typeof import("file")
 >customSymbol2 : unique symbol
 >Symbol("custom") : unique symbol
 >Symbol : SymbolConstructor

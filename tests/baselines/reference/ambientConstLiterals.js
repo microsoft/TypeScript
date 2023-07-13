@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientConstLiterals.ts] ////
+
 //// [ambientConstLiterals.ts]
 function f<T>(x: T): T {
     return x;

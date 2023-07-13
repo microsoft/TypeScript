@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionSignatureAssignmentCompat1.ts] ////
+
 //// [functionSignatureAssignmentCompat1.ts]
 interface ParserFunc {
     (eventEmitter: number, buffer: string): void;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop10.ts] ////
+
 //// [capturedLetConstInLoop10.ts]
 class A {
     foo() {

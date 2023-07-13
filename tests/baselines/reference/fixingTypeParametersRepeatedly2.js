@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fixingTypeParametersRepeatedly2.ts] ////
+
 //// [fixingTypeParametersRepeatedly2.ts]
 interface Base {
     baseProp;

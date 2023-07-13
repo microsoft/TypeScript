@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsExportAssignment.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 const a = {};
 >a : {}
@@ -7,7 +9,7 @@ const a = {};
 export = a;
 >a : {}
 
-=== tests/cases/conformance/node/allowJs/subfolder/file.js ===
+=== subfolder/file.js ===
 // cjs format file
 const a = {};
 >a : {}
@@ -20,7 +22,7 @@ module.exports = a;
 >exports : {}
 >a : {}
 
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 const a = {};
 >a : {}
@@ -29,7 +31,7 @@ const a = {};
 export = a;
 >a : {}
 
-=== tests/cases/conformance/node/allowJs/file.js ===
+=== file.js ===
 // esm format file
 import "fs";
 const a = {};

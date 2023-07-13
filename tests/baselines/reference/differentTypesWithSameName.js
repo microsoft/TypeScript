@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/differentTypesWithSameName.ts] ////
+
 //// [differentTypesWithSameName.ts]
 module m {
   export class variable{

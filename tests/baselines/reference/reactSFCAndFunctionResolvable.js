@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactSFCAndFunctionResolvable.tsx] ////
+
 //// [reactSFCAndFunctionResolvable.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

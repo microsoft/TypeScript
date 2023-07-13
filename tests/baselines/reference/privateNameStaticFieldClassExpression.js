@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldClassExpression.ts] ////
+
 //// [privateNameStaticFieldClassExpression.ts]
 class B {
     static #foo = class {

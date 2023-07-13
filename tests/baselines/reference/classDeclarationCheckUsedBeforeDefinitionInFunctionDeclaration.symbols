@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.ts ===
+//// [tests/cases/compiler/classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.ts] ////
+
+=== classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.ts ===
 function f() {
 >f : Symbol(f, Decl(classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.ts, 0, 0))
 

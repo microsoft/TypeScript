@@ -1,11 +1,11 @@
-tests/cases/compiler/classStaticPropertyAccess.ts(10,1): error TS2576: Property '"' does not exist on type 'A'. Did you mean to access the static member 'A["\""]' instead?
-tests/cases/compiler/classStaticPropertyAccess.ts(11,1): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A['y']' instead?
-tests/cases/compiler/classStaticPropertyAccess.ts(12,3): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A.y' instead?
-tests/cases/compiler/classStaticPropertyAccess.ts(13,3): error TS2341: Property '_b' is private and only accessible within class 'A'.
-tests/cases/compiler/classStaticPropertyAccess.ts(14,3): error TS2339: Property 'a' does not exist on type 'typeof A'.
+classStaticPropertyAccess.ts(10,1): error TS2576: Property '"' does not exist on type 'A'. Did you mean to access the static member 'A["\""]' instead?
+classStaticPropertyAccess.ts(11,1): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A['y']' instead?
+classStaticPropertyAccess.ts(12,3): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A.y' instead?
+classStaticPropertyAccess.ts(13,3): error TS2341: Property '_b' is private and only accessible within class 'A'.
+classStaticPropertyAccess.ts(14,3): error TS2339: Property 'a' does not exist on type 'typeof A'.
 
 
-==== tests/cases/compiler/classStaticPropertyAccess.ts (5 errors) ====
+==== classStaticPropertyAccess.ts (5 errors) ====
     class A {
         public static "\""() {}
         public static x: number = 1;

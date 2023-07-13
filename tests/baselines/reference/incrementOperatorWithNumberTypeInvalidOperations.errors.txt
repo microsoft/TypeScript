@@ -1,26 +1,26 @@
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(18,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(22,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(23,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(26,23): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(27,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(28,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(31,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(32,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(33,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(35,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(36,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(37,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(40,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(41,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(42,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(44,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(45,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts(46,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(18,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithNumberTypeInvalidOperations.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithNumberTypeInvalidOperations.ts(22,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(23,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithNumberTypeInvalidOperations.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithNumberTypeInvalidOperations.ts(26,23): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(27,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithNumberTypeInvalidOperations.ts(28,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithNumberTypeInvalidOperations.ts(31,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(32,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(33,26): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(35,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(36,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(37,24): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(40,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(41,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithNumberTypeInvalidOperations.ts(42,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(44,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+incrementOperatorWithNumberTypeInvalidOperations.ts(45,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+incrementOperatorWithNumberTypeInvalidOperations.ts(46,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts (20 errors) ====
+==== incrementOperatorWithNumberTypeInvalidOperations.ts (20 errors) ====
     // ++ operator on number type
     var NUMBER: number;
     var NUMBER1: number[] = [1, 2];

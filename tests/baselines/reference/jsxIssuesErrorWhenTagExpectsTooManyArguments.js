@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx] ////
+
 //// [jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

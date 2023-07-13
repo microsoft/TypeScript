@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedIdentifiersConsolidated1.ts] ////
+
 //// [unusedIdentifiersConsolidated1.ts]
 function greeter(person: string) {
     var unused = 20;

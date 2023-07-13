@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseIdentityWithAny.ts ===
+//// [tests/cases/compiler/promiseIdentityWithAny.ts] ////
+
+=== promiseIdentityWithAny.ts ===
 export interface IPromise<T, V> {
 >IPromise : Symbol(IPromise, Decl(promiseIdentityWithAny.ts, 0, 0))
 >T : Symbol(T, Decl(promiseIdentityWithAny.ts, 0, 26))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mixedTypeEnumComparison.ts] ////
+
 //// [mixedTypeEnumComparison.ts]
 const enum E {
     S1 = "foo",

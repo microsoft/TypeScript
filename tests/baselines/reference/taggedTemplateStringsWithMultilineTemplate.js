@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplateStringsWithMultilineTemplate.ts] ////
+
 //// [taggedTemplateStringsWithMultilineTemplate.ts]
 function f(...args: any[]): void {
 }

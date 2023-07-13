@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/coAndContraVariantInferences.ts] ////
+
 //// [coAndContraVariantInferences.ts]
 type A = { kind: 'a' };
 type B = { kind: 'b' };

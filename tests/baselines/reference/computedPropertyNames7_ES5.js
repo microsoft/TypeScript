@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames7_ES5.ts] ////
+
 //// [computedPropertyNames7_ES5.ts]
 enum E {
     member

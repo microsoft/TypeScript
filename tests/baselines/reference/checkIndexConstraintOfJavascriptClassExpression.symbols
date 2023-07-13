@@ -1,4 +1,6 @@
-=== tests/cases/compiler/weird.js ===
+//// [tests/cases/compiler/checkIndexConstraintOfJavascriptClassExpression.ts] ////
+
+=== weird.js ===
 someFunction(function(BaseClass) {
 >BaseClass : Symbol(BaseClass, Decl(weird.js, 0, 22))
 

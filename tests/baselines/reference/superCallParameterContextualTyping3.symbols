@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping3.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping3.ts] ////
+
+=== superCallParameterContextualTyping3.ts ===
 interface ContextualType<T> {
 >ContextualType : Symbol(ContextualType, Decl(superCallParameterContextualTyping3.ts, 0, 0))
 >T : Symbol(T, Decl(superCallParameterContextualTyping3.ts, 0, 25))

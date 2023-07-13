@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts ===
+//// [tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts] ////
+
+=== excessPropertyErrorForFunctionTypes.ts ===
 type FunctionType = () => any;
 >FunctionType : Symbol(FunctionType, Decl(excessPropertyErrorForFunctionTypes.ts, 0, 0))
 

@@ -1,7 +1,7 @@
-tests/cases/compiler/aliasBug.ts(16,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
+aliasBug.ts(16,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
 
 
-==== tests/cases/compiler/aliasBug.ts (1 errors) ====
+==== aliasBug.ts (1 errors) ====
     module foo {    
         export class Provide {
         }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowBreakContinueWithLabel.ts] ////
+
 //// [controlFlowBreakContinueWithLabel.ts]
 enum User { A, B }
 

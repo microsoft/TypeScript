@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfBoolean.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfBoolean.ts] ////
+
+=== typeGuardOfFormTypeOfBoolean.ts ===
 class C { private p: string };
 >C : C
 >p : string

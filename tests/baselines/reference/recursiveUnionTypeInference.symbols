@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveUnionTypeInference.ts ===
+//// [tests/cases/compiler/recursiveUnionTypeInference.ts] ////
+
+=== recursiveUnionTypeInference.ts ===
 interface Foo<T> {
 >Foo : Symbol(Foo, Decl(recursiveUnionTypeInference.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 0, 14))

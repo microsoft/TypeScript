@@ -1,4 +1,6 @@
-=== tests/cases/compiler/readonlyAssignmentInSubclassOfClassExpression.ts ===
+//// [tests/cases/compiler/readonlyAssignmentInSubclassOfClassExpression.ts] ////
+
+=== readonlyAssignmentInSubclassOfClassExpression.ts ===
 class C extends (class {} as new () => Readonly<{ attrib: number }>) {
 >C : C
 >(class {} as new () => Readonly<{ attrib: number }>) : Readonly<{ attrib: number; }>

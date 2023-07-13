@@ -1,10 +1,10 @@
-tests/cases/conformance/externalModules/exportNonInitializedVariablesCommonJS.ts(1,4): error TS1123: Variable declaration list cannot be empty.
-tests/cases/conformance/externalModules/exportNonInitializedVariablesCommonJS.ts(2,1): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
-tests/cases/conformance/externalModules/exportNonInitializedVariablesCommonJS.ts(2,1): error TS2304: Cannot find name 'let'.
-tests/cases/conformance/externalModules/exportNonInitializedVariablesCommonJS.ts(3,6): error TS1123: Variable declaration list cannot be empty.
+exportNonInitializedVariablesCommonJS.ts(1,4): error TS1123: Variable declaration list cannot be empty.
+exportNonInitializedVariablesCommonJS.ts(2,1): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
+exportNonInitializedVariablesCommonJS.ts(2,1): error TS2304: Cannot find name 'let'.
+exportNonInitializedVariablesCommonJS.ts(3,6): error TS1123: Variable declaration list cannot be empty.
 
 
-==== tests/cases/conformance/externalModules/exportNonInitializedVariablesCommonJS.ts (4 errors) ====
+==== exportNonInitializedVariablesCommonJS.ts (4 errors) ====
     var;
        
 !!! error TS1123: Variable declaration list cannot be empty.

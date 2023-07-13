@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts] ////
+
 //// [generatorTypeCheck63.ts]
 export interface StrategicState {
     lastStrategyApplied?: string;

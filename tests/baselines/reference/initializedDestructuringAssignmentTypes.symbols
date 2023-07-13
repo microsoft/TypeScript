@@ -1,4 +1,6 @@
-=== tests/cases/compiler/initializedDestructuringAssignmentTypes.ts ===
+//// [tests/cases/compiler/initializedDestructuringAssignmentTypes.ts] ////
+
+=== initializedDestructuringAssignmentTypes.ts ===
 const [, a = ''] = ''.match('') || [];
 >a : Symbol(a, Decl(initializedDestructuringAssignmentTypes.ts, 0, 8))
 >''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerExtern.ts ===
+//// [tests/cases/compiler/innerExtern.ts] ////
+
+=== innerExtern.ts ===
 module A {
 >A : typeof A
 

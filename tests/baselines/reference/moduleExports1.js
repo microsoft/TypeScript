@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleExports1.ts] ////
+
 //// [moduleExports1.ts]
 export module TypeScript.Strasse.Street {
 	export class Rue {

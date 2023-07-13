@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleVariableStatement.ts] ////
+
 //// [es6ModuleVariableStatement.ts]
 export var a = "hello";
 export var x: string = a, y = x;

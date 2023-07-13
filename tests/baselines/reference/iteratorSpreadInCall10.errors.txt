@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/spread/iteratorSpreadInCall10.ts(15,5): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+iteratorSpreadInCall10.ts(15,5): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
-==== tests/cases/conformance/es6/spread/iteratorSpreadInCall10.ts (1 errors) ====
+==== iteratorSpreadInCall10.ts (1 errors) ====
     function foo<T>(s: T[]) { return s[0] }
     class SymbolIterator {
         next() {

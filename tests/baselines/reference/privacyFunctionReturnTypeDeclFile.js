@@ -2339,7 +2339,7 @@ export declare class publicClassWithPrivateModuleParameterTypes {
 export declare function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
 export declare function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
 export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClass {
     }
     export class publicClass {
@@ -2399,7 +2399,7 @@ export declare module publicModule {
     export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClass {
     }
     export class publicClass {
@@ -2482,12 +2482,12 @@ declare class publicClassWithWithPublicParmeterTypesInGlobal {
 declare function publicFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
 declare function publicFunctionWithPublicParmeterTypesInGlobal1(): publicClassInGlobal;
 declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
-declare module publicModuleInGlobal {
+declare namespace publicModuleInGlobal {
     class privateClass {
     }
     export class publicClass {
     }
-    module privateModule {
+    namespace privateModule {
         class privateClass {
         }
         export class publicClass {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/inferFromBindingPattern.ts ===
+//// [tests/cases/conformance/inferFromBindingPattern.ts] ////
+
+=== inferFromBindingPattern.ts ===
 declare function f1<T extends string>(): T;
 >f1 : Symbol(f1, Decl(inferFromBindingPattern.ts, 0, 0))
 >T : Symbol(T, Decl(inferFromBindingPattern.ts, 0, 20))

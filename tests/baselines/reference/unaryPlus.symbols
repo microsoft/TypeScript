@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unaryPlus.ts ===
+//// [tests/cases/compiler/unaryPlus.ts] ////
+
+=== unaryPlus.ts ===
 // allowed per spec
 var a = +1;
 >a : Symbol(a, Decl(unaryPlus.ts, 1, 3))

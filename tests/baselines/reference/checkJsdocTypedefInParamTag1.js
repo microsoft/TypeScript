@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypedefInParamTag1.ts] ////
+
 //// [0.js]
 // @ts-check
 /**

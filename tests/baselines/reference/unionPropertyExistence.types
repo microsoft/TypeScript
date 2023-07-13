@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionPropertyExistence.ts ===
+//// [tests/cases/compiler/unionPropertyExistence.ts] ////
+
+=== unionPropertyExistence.ts ===
 interface A {
     inAll: string;
 >inAll : string

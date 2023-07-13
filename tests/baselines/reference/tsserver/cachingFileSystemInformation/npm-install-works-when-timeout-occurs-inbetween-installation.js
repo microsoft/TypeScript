@@ -536,25 +536,25 @@ exports['default'] = result;
 
 
 PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules: *new*
-  {"pollingInterval":500}
 /user/username/rootfolder/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/rootfolder/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/rootfolder/otherfolder/a/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -1099,17 +1099,17 @@ Before running Timeout callback:: count: 3
 //// [/user/username/rootfolder/otherfolder/a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041] deleted
 
 PolledWatches::
-/user/username/rootfolder/otherfolder/a/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
 /user/username/rootfolder/node_modules:
+  {"pollingInterval":500}
+/user/username/rootfolder/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/node_modules/@types:
   {"pollingInterval":500}
-/user/username/rootfolder/otherfolder/node_modules/@types:
+/user/username/rootfolder/otherfolder/node_modules:
   {"pollingInterval":500}
-/user/username/rootfolder/node_modules/@types:
+/user/username/rootfolder/otherfolder/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -1117,9 +1117,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -1985,29 +1985,29 @@ Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/t
 After running Timeout callback:: count: 0
 
 PolledWatches::
+/user/username/rootfolder/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules/@types:
   {"pollingInterval":500}
-/user/username/rootfolder/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
+/user/username/rootfolder/node_modules:
+  {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules:
   {"pollingInterval":500}
-/user/username/rootfolder/node_modules:
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/package.json: *new*
   {}
 /user/username/rootfolder/otherfolder/a/b/node_modules/lodash/package.json: *new*
+  {}
+/user/username/rootfolder/otherfolder/a/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::

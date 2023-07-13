@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncImportNestedYield.ts ===
+//// [tests/cases/compiler/asyncImportNestedYield.ts] ////
+
+=== asyncImportNestedYield.ts ===
 async function* foo() {
 >foo : Symbol(foo, Decl(asyncImportNestedYield.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsClauseClassNotReferringConstructor.ts ===
+//// [tests/cases/compiler/classExtendsClauseClassNotReferringConstructor.ts] ////
+
+=== classExtendsClauseClassNotReferringConstructor.ts ===
 class A { a: number; }
 >A : A
 >a : number

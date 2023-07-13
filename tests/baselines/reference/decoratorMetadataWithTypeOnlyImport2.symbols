@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/services.ts ===
+//// [tests/cases/conformance/decorators/decoratorMetadataWithTypeOnlyImport2.ts] ////
+
+=== services.ts ===
 export namespace Services {
 >Services : Symbol(Services, Decl(services.ts, 0, 0))
 
@@ -6,7 +8,7 @@ export namespace Services {
 >Service : Symbol(Service, Decl(services.ts, 0, 27))
 }
 
-=== tests/cases/conformance/decorators/index.ts ===
+=== index.ts ===
 import type { Services } from './services';
 >Services : Symbol(Services, Decl(index.ts, 0, 13))
 

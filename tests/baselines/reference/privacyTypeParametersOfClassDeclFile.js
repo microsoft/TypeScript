@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts] ////
+
 //// [privacyTypeParametersOfClassDeclFile.ts]
 class privateClass {
 }
@@ -403,7 +405,7 @@ export declare class publicClassWithPublicTypeParametersWithoutExtends<T> {
 export declare class publicClassWithTypeParametersFromPrivateModule<T extends privateModule.publicClassInPrivateModule> {
     myMethod(val: T): T;
 }
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClassInPublicModule {
     }
     export class publicClassInPublicModule {
@@ -422,7 +424,7 @@ export declare module publicModule {
     }
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClassInPrivateModule {
     }
     export class publicClassInPrivateModule {

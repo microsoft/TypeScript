@@ -1,4 +1,6 @@
-=== tests/cases/compiler/primaryExpressionMods.ts ===
+//// [tests/cases/compiler/primaryExpressionMods.ts] ////
+
+=== primaryExpressionMods.ts ===
 module M
 >M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
 {

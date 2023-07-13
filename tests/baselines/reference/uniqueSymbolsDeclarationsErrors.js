@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsErrors.ts] ////
+
 //// [uniqueSymbolsDeclarationsErrors.ts]
 declare const s: unique symbol;
 interface I { readonly readonlyType: unique symbol; }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInGenericFunction_main.ts ===
+//// [tests/cases/compiler/aliasUsageInGenericFunction.ts] ////
+
+=== aliasUsageInGenericFunction_main.ts ===
 import Backbone = require("./aliasUsageInGenericFunction_backbone");
 >Backbone : typeof Backbone
 
@@ -36,7 +38,7 @@ var r2 = foo({ a: <IHasVisualizationModel>null });
 >a : IHasVisualizationModel
 ><IHasVisualizationModel>null : IHasVisualizationModel
 
-=== tests/cases/compiler/aliasUsageInGenericFunction_backbone.ts ===
+=== aliasUsageInGenericFunction_backbone.ts ===
 export class Model {
 >Model : Model
 
@@ -44,7 +46,7 @@ export class Model {
 >someData : string
 }
 
-=== tests/cases/compiler/aliasUsageInGenericFunction_moduleA.ts ===
+=== aliasUsageInGenericFunction_moduleA.ts ===
 import Backbone = require("./aliasUsageInGenericFunction_backbone");
 >Backbone : typeof Backbone
 

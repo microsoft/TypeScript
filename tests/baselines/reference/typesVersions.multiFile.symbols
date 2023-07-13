@@ -1,20 +1,6 @@
-=== tests/cases/conformance/moduleResolution/node_modules/ext/index.d.ts ===
-export const a = "default a";
->a : Symbol(a, Decl(index.d.ts, 0, 12))
+//// [tests/cases/conformance/moduleResolution/typesVersions.multiFile.ts] ////
 
-=== tests/cases/conformance/moduleResolution/node_modules/ext/other.d.ts ===
-export const b = "default b";
->b : Symbol(b, Decl(other.d.ts, 0, 12))
-
-=== tests/cases/conformance/moduleResolution/node_modules/ext/ts3.1/index.d.ts ===
-export const a = "ts3.1 a";
->a : Symbol(a, Decl(index.d.ts, 0, 12))
-
-=== tests/cases/conformance/moduleResolution/node_modules/ext/ts3.1/other.d.ts ===
-export const b = "ts3.1 b";
->b : Symbol(b, Decl(other.d.ts, 0, 12))
-
-=== tests/cases/conformance/moduleResolution/main.ts ===
+=== main.ts ===
 import { a } from "ext";
 >a : Symbol(a, Decl(main.ts, 0, 8))
 
@@ -28,4 +14,12 @@ const aa: "ts3.1 a" = a;
 const bb: "ts3.1 b" = b;
 >bb : Symbol(bb, Decl(main.ts, 4, 5))
 >b : Symbol(b, Decl(main.ts, 1, 8))
+
+=== node_modules/ext/ts3.1/index.d.ts ===
+export const a = "ts3.1 a";
+>a : Symbol(a, Decl(index.d.ts, 0, 12))
+
+=== node_modules/ext/ts3.1/other.d.ts ===
+export const b = "ts3.1 b";
+>b : Symbol(b, Decl(other.d.ts, 0, 12))
 

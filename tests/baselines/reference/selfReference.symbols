@@ -1,4 +1,6 @@
-=== tests/cases/compiler/selfReference.ts ===
+//// [tests/cases/compiler/selfReference.ts] ////
+
+=== selfReference.ts ===
 declare function asFunction<T>(value: T): () => T;
 >asFunction : Symbol(asFunction, Decl(selfReference.ts, 0, 0))
 >T : Symbol(T, Decl(selfReference.ts, 0, 28))

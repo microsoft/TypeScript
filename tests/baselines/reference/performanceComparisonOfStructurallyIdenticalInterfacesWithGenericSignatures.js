@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts] ////
+
 //// [performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts]
 export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<infer U> ? U : T;
 

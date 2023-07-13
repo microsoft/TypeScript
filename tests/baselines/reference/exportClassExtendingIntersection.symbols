@@ -1,4 +1,6 @@
-=== tests/cases/compiler/BaseClass.ts ===
+//// [tests/cases/compiler/exportClassExtendingIntersection.ts] ////
+
+=== BaseClass.ts ===
 export type Constructor<T> = new (...args: any[]) => T;
 >Constructor : Symbol(Constructor, Decl(BaseClass.ts, 0, 0))
 >T : Symbol(T, Decl(BaseClass.ts, 0, 24))
@@ -16,7 +18,7 @@ export class MyBaseClass<T> {
 >value : Symbol(value, Decl(BaseClass.ts, 4, 16))
 >T : Symbol(T, Decl(BaseClass.ts, 2, 25))
 }
-=== tests/cases/compiler/MixinClass.ts ===
+=== MixinClass.ts ===
 import { Constructor, MyBaseClass } from './BaseClass';
 >Constructor : Symbol(Constructor, Decl(MixinClass.ts, 0, 8))
 >MyBaseClass : Symbol(MyBaseClass, Decl(MixinClass.ts, 0, 21))
@@ -46,7 +48,7 @@ export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & C
 >mixinProperty : Symbol((Anonymous class).mixinProperty, Decl(MixinClass.ts, 7, 31))
     }
 }
-=== tests/cases/compiler/FinalClass.ts ===
+=== FinalClass.ts ===
 import { MyBaseClass } from './BaseClass';
 >MyBaseClass : Symbol(MyBaseClass, Decl(FinalClass.ts, 0, 8))
 
@@ -61,7 +63,7 @@ export class MyExtendedClass extends MyMixin(MyBaseClass)<string> {
     extendedClassProperty: number;
 >extendedClassProperty : Symbol(MyExtendedClass.extendedClassProperty, Decl(FinalClass.ts, 3, 67))
 }
-=== tests/cases/compiler/Main.ts ===
+=== Main.ts ===
 import { MyExtendedClass } from './FinalClass';
 >MyExtendedClass : Symbol(MyExtendedClass, Decl(Main.ts, 0, 8))
 

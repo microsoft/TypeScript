@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList14.ts(2,7): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+parserParameterList14.ts(2,7): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList14.ts (1 errors) ====
+==== parserParameterList14.ts (1 errors) ====
     declare class C {
       foo(a = 1): void;
           ~~~~~

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingByDiscriminantInLoop.ts] ////
+
 //// [narrowingByDiscriminantInLoop.ts]
 // Repro from #9977
 

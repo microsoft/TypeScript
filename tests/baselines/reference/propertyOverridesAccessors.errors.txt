@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors.ts(5,5): error TS2610: 'p' is defined as an accessor in class 'A', but is overridden here in 'B' as an instance property.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors.ts(13,5): error TS2610: 'p' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
+propertyOverridesAccessors.ts(5,5): error TS2610: 'p' is defined as an accessor in class 'A', but is overridden here in 'B' as an instance property.
+propertyOverridesAccessors.ts(13,5): error TS2610: 'p' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors.ts (2 errors) ====
+==== propertyOverridesAccessors.ts (2 errors) ====
     class A {
         get p() { return 'oh no' }
     }

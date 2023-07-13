@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric1.ts] ////
+
+=== parserUnterminatedGeneric1.ts ===
  interface IQService {
 >IQService : Symbol(IQService, Decl(parserUnterminatedGeneric1.ts, 0, 0))
 

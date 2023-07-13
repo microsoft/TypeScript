@@ -1,0 +1,8 @@
+const a = function () { return 1}
+                     ^
+{
+  "text": ": number",
+  "position": 21,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

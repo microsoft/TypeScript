@@ -1,0 +1,8 @@
+    foo(...x, 1);
+              ^
+{
+  "text": "d:",
+  "position": 152,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

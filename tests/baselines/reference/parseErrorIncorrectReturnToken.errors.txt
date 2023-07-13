@@ -1,13 +1,13 @@
-tests/cases/compiler/parseErrorIncorrectReturnToken.ts(2,17): error TS1005: ':' expected.
-tests/cases/compiler/parseErrorIncorrectReturnToken.ts(4,22): error TS1005: '=>' expected.
-tests/cases/compiler/parseErrorIncorrectReturnToken.ts(4,24): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/parseErrorIncorrectReturnToken.ts(9,18): error TS1005: '{' expected.
-tests/cases/compiler/parseErrorIncorrectReturnToken.ts(9,21): error TS1434: Unexpected keyword or identifier.
-tests/cases/compiler/parseErrorIncorrectReturnToken.ts(9,21): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/parseErrorIncorrectReturnToken.ts(12,1): error TS1128: Declaration or statement expected.
+parseErrorIncorrectReturnToken.ts(2,17): error TS1005: ':' expected.
+parseErrorIncorrectReturnToken.ts(4,22): error TS1005: '=>' expected.
+parseErrorIncorrectReturnToken.ts(4,24): error TS2693: 'string' only refers to a type, but is being used as a value here.
+parseErrorIncorrectReturnToken.ts(9,18): error TS1005: '{' expected.
+parseErrorIncorrectReturnToken.ts(9,21): error TS1434: Unexpected keyword or identifier.
+parseErrorIncorrectReturnToken.ts(9,21): error TS2693: 'string' only refers to a type, but is being used as a value here.
+parseErrorIncorrectReturnToken.ts(12,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/parseErrorIncorrectReturnToken.ts (7 errors) ====
+==== parseErrorIncorrectReturnToken.ts (7 errors) ====
     type F1 = {
         (n: number) => string; // should be : not =>
                     ~~

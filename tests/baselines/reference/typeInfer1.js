@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInfer1.ts] ////
+
 //// [typeInfer1.ts]
 interface ITextWriter2 {
     Write(s:string):void;

@@ -1,115 +1,115 @@
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(1,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(2,1): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(3,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(4,1): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(5,1): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(6,5): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(7,5): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(8,5): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(9,5): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(10,5): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(11,4): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(12,4): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(13,4): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(14,4): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(15,4): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(18,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(19,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(20,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(21,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(22,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(23,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(24,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(26,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(27,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(28,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(29,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(30,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(31,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(32,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(34,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(35,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(36,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(37,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x0f'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(38,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x0f'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(39,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(40,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x7f'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(41,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(42,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(43,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(44,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(45,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(46,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(47,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(48,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(49,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(50,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(51,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(52,2): error TS1488: Escape sequence '\8' is not allowed.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(53,2): error TS1488: Escape sequence '\8' is not allowed.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(54,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(55,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(56,2): error TS1488: Escape sequence '\8' is not allowed.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(57,2): error TS1488: Escape sequence '\8' is not allowed.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(58,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(59,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(60,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(61,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(62,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(63,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x0f'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(64,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x0f'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(65,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(66,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x7f'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(67,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(68,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(69,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(70,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(71,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(72,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(73,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(74,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(75,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(76,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(77,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(78,2): error TS1488: Escape sequence '\8' is not allowed.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(79,2): error TS1488: Escape sequence '\8' is not allowed.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(80,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(81,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(82,2): error TS1488: Escape sequence '\8' is not allowed.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(83,2): error TS1488: Escape sequence '\8' is not allowed.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(84,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(85,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(88,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(89,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(90,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(91,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(92,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(93,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(94,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(96,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(97,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(98,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(99,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(100,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(101,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(102,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(104,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(105,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(106,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(107,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(108,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(109,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(110,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(112,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(113,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(114,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(115,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(116,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(117,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
-tests/cases/compiler/octalLiteralAndEscapeSequence.ts(118,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(1,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+octalLiteralAndEscapeSequence.ts(2,1): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+octalLiteralAndEscapeSequence.ts(3,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+octalLiteralAndEscapeSequence.ts(4,1): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+octalLiteralAndEscapeSequence.ts(5,1): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+octalLiteralAndEscapeSequence.ts(6,5): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+octalLiteralAndEscapeSequence.ts(7,5): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+octalLiteralAndEscapeSequence.ts(8,5): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+octalLiteralAndEscapeSequence.ts(9,5): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+octalLiteralAndEscapeSequence.ts(10,5): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+octalLiteralAndEscapeSequence.ts(11,4): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+octalLiteralAndEscapeSequence.ts(12,4): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+octalLiteralAndEscapeSequence.ts(13,4): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+octalLiteralAndEscapeSequence.ts(14,4): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+octalLiteralAndEscapeSequence.ts(15,4): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+octalLiteralAndEscapeSequence.ts(18,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(19,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(20,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(21,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(22,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(23,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(24,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(26,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(27,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(28,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(29,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(30,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(31,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(32,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(34,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(35,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(36,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(37,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x0f'.
+octalLiteralAndEscapeSequence.ts(38,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x0f'.
+octalLiteralAndEscapeSequence.ts(39,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(40,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x7f'.
+octalLiteralAndEscapeSequence.ts(41,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(42,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(43,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(44,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(45,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
+octalLiteralAndEscapeSequence.ts(46,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
+octalLiteralAndEscapeSequence.ts(47,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(48,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
+octalLiteralAndEscapeSequence.ts(49,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(50,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(51,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(52,2): error TS1488: Escape sequence '\8' is not allowed.
+octalLiteralAndEscapeSequence.ts(53,2): error TS1488: Escape sequence '\8' is not allowed.
+octalLiteralAndEscapeSequence.ts(54,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(55,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(56,2): error TS1488: Escape sequence '\8' is not allowed.
+octalLiteralAndEscapeSequence.ts(57,2): error TS1488: Escape sequence '\8' is not allowed.
+octalLiteralAndEscapeSequence.ts(58,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(59,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(60,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(61,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(62,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(63,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x0f'.
+octalLiteralAndEscapeSequence.ts(64,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x0f'.
+octalLiteralAndEscapeSequence.ts(65,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(66,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x7f'.
+octalLiteralAndEscapeSequence.ts(67,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(68,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(69,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+octalLiteralAndEscapeSequence.ts(70,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(71,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
+octalLiteralAndEscapeSequence.ts(72,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
+octalLiteralAndEscapeSequence.ts(73,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(74,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x27'.
+octalLiteralAndEscapeSequence.ts(75,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(76,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(77,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
+octalLiteralAndEscapeSequence.ts(78,2): error TS1488: Escape sequence '\8' is not allowed.
+octalLiteralAndEscapeSequence.ts(79,2): error TS1488: Escape sequence '\8' is not allowed.
+octalLiteralAndEscapeSequence.ts(80,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(81,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(82,2): error TS1488: Escape sequence '\8' is not allowed.
+octalLiteralAndEscapeSequence.ts(83,2): error TS1488: Escape sequence '\8' is not allowed.
+octalLiteralAndEscapeSequence.ts(84,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(85,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(88,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(89,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(90,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(91,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(92,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(93,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(94,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(96,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(97,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(98,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(99,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(100,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(101,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(102,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(104,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(105,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(106,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(107,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(108,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(109,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(110,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(112,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(113,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(114,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(115,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
+octalLiteralAndEscapeSequence.ts(116,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+octalLiteralAndEscapeSequence.ts(117,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+octalLiteralAndEscapeSequence.ts(118,6): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x2d'.
 
 
-==== tests/cases/compiler/octalLiteralAndEscapeSequence.ts (109 errors) ====
+==== octalLiteralAndEscapeSequence.ts (109 errors) ====
     00;
     ~~
 !!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.

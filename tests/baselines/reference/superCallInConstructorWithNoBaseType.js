@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/superCallInConstructorWithNoBaseType.ts] ////
+
 //// [superCallInConstructorWithNoBaseType.ts]
 class C {
     constructor() {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restParameterAssignmentCompatibility.ts] ////
+
 //// [restParameterAssignmentCompatibility.ts]
 class T {
     m(...p3) {

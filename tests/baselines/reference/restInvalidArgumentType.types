@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restInvalidArgumentType.ts ===
+//// [tests/cases/compiler/restInvalidArgumentType.ts] ////
+
+=== restInvalidArgumentType.ts ===
 enum E { v1, v2 };
 >E : E
 >v1 : E.v1

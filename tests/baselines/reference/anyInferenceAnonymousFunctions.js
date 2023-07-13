@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anyInferenceAnonymousFunctions.ts] ////
+
 //// [anyInferenceAnonymousFunctions.ts]
 var paired: any[];
 

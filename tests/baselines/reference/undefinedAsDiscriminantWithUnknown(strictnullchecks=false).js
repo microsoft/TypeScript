@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedAsDiscriminantWithUnknown.ts] ////
+
 //// [undefinedAsDiscriminantWithUnknown.ts]
 type S = 
 | { type: 'string', value: string } 

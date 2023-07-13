@@ -1,4 +1,6 @@
-=== tests/cases/compiler/semicolonsInModuleDeclarations.ts ===
+//// [tests/cases/compiler/semicolonsInModuleDeclarations.ts] ////
+
+=== semicolonsInModuleDeclarations.ts ===
 declare module ambiModule {
 >ambiModule : Symbol(ambiModule, Decl(semicolonsInModuleDeclarations.ts, 0, 0))
 

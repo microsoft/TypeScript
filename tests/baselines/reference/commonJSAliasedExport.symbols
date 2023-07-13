@@ -1,8 +1,10 @@
-=== tests/cases/conformance/salsa/bug43713.js ===
+//// [tests/cases/conformance/salsa/commonJSAliasedExport.ts] ////
+
+=== bug43713.js ===
 const { funky } = require('./commonJSAliasedExport');
 >funky : Symbol(funky, Decl(bug43713.js, 0, 7))
 >require : Symbol(require)
->'./commonJSAliasedExport' : Symbol("tests/cases/conformance/salsa/commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
+>'./commonJSAliasedExport' : Symbol("commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
 
 /** @type {boolean} */
 var diddy
@@ -13,7 +15,7 @@ var diddy = funky(1)
 >funky : Symbol(funky, Decl(bug43713.js, 0, 7))
 
 
-=== tests/cases/conformance/salsa/commonJSAliasedExport.js ===
+=== commonJSAliasedExport.js ===
 const donkey = (ast) =>  ast;
 >donkey : Symbol(donkey, Decl(commonJSAliasedExport.js, 0, 5))
 >ast : Symbol(ast, Decl(commonJSAliasedExport.js, 0, 16))

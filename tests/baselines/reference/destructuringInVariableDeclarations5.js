@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringInVariableDeclarations5.ts] ////
+
 //// [destructuringInVariableDeclarations5.ts]
 export let { toString } = 1;
 {

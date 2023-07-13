@@ -1,7 +1,7 @@
-tests/cases/compiler/exportClassWithoutName.ts(1,1): error TS1211: A class declaration without the 'default' modifier must have a name.
+exportClassWithoutName.ts(1,1): error TS1211: A class declaration without the 'default' modifier must have a name.
 
 
-==== tests/cases/compiler/exportClassWithoutName.ts (1 errors) ====
+==== exportClassWithoutName.ts (1 errors) ====
     export class {
     ~~~~~~
 !!! error TS1211: A class declaration without the 'default' modifier must have a name.

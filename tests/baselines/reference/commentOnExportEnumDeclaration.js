@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnExportEnumDeclaration.ts] ////
+
 //// [commentOnExportEnumDeclaration.ts]
 /**
  * comment

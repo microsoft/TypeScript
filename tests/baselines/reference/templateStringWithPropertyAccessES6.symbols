@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithPropertyAccessES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithPropertyAccessES6.ts] ////
+
+=== templateStringWithPropertyAccessES6.ts ===
 `abc${0}abc`.indexOf(`abc`);
 >`abc${0}abc`.indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))
 >indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))

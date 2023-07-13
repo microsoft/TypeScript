@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentVariable_B.ts ===
+//// [tests/cases/compiler/exportAssignmentVariable.ts] ////
+
+=== exportAssignmentVariable_B.ts ===
 import y = require("./exportAssignmentVariable_A");
 >y : number
 
@@ -6,7 +8,7 @@ var n: number = y;
 >n : number
 >y : number
 
-=== tests/cases/compiler/exportAssignmentVariable_A.ts ===
+=== exportAssignmentVariable_A.ts ===
 var x = 0;
 >x : number
 >0 : 0

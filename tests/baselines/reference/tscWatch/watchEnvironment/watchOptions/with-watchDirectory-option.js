@@ -51,15 +51,15 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (used version)
 
 FsWatches::
-/a/b/tsconfig.json: *new*
+/a/b: *new*
   {}
 /a/b/commonfile1.ts: *new*
   {}
 /a/b/commonfile2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/b/tsconfig.json: *new*
   {}
-/a/b: *new*
+/a/lib/lib.d.ts: *new*
   {}
 
 exitCode:: ExitStatus.undefined

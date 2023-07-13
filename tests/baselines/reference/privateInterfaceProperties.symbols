@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privateInterfaceProperties.ts ===
+//// [tests/cases/compiler/privateInterfaceProperties.ts] ////
+
+=== privateInterfaceProperties.ts ===
 interface i1 { name:string; }
 >i1 : Symbol(i1, Decl(privateInterfaceProperties.ts, 0, 0))
 >name : Symbol(i1.name, Decl(privateInterfaceProperties.ts, 0, 14))

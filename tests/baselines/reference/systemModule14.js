@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule14.ts] ////
+
 //// [systemModule14.ts]
 function foo() {
     return a;

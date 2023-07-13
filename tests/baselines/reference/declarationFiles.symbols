@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/declarationFiles.ts ===
+//// [tests/cases/conformance/types/thisType/declarationFiles.ts] ////
+
+=== declarationFiles.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(declarationFiles.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames.ts] ////
+
 //// [mergedInterfacesWithConflictingPropertyNames.ts]
 interface A {
     x: string; // error

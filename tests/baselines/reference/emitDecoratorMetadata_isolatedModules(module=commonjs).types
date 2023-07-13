@@ -1,17 +1,19 @@
-=== tests/cases/compiler/type1.ts ===
+//// [tests/cases/compiler/emitDecoratorMetadata_isolatedModules.ts] ////
+
+=== type1.ts ===
 interface T1 {}
 export type { T1 }
 >T1 : T1
 
-=== tests/cases/compiler/type2.ts ===
+=== type2.ts ===
 
 export interface T2 {}
 
-=== tests/cases/compiler/class3.ts ===
+=== class3.ts ===
 export class C3 {}
 >C3 : C3
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { T1 } from "./type1";
 >T1 : any
 

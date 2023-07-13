@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/undefinedAssignableToEveryType.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/undefinedAssignableToEveryType.ts] ////
+
+=== undefinedAssignableToEveryType.ts ===
 class C {
 >C : Symbol(C, Decl(undefinedAssignableToEveryType.ts, 0, 0))
 

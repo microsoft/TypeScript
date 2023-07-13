@@ -1,11 +1,11 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(4,9): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(5,15): error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(10,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(11,15): error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(23,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+initializerReferencingConstructorParameters.ts(4,9): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+initializerReferencingConstructorParameters.ts(5,15): error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
+initializerReferencingConstructorParameters.ts(10,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
+initializerReferencingConstructorParameters.ts(11,15): error TS2844: Type of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
+initializerReferencingConstructorParameters.ts(23,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts (5 errors) ====
+==== initializerReferencingConstructorParameters.ts (5 errors) ====
     // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
     
     class C {

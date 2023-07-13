@@ -1,8 +1,8 @@
-tests/cases/compiler/shadowPrivateMembers.ts(2,7): error TS2415: Class 'derived' incorrectly extends base class 'base'.
+shadowPrivateMembers.ts(2,7): error TS2415: Class 'derived' incorrectly extends base class 'base'.
   Types have separate declarations of a private property 'n'.
 
 
-==== tests/cases/compiler/shadowPrivateMembers.ts (1 errors) ====
+==== shadowPrivateMembers.ts (1 errors) ====
     class base { private n() {} }
     class derived extends base { private n() {} }
           ~~~~~~~

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varArgConstructorMemberParameter.ts] ////
+
 //// [varArgConstructorMemberParameter.ts]
 class Foo1 {
     constructor (...args: string[]) { }

@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
+emittedFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
 sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 -------------------------------------------------------------------
 >>>var __extends = (this && this.__extends) || (function () {

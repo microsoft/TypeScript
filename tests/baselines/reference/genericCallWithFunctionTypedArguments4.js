@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments4.ts] ////
+
 //// [genericCallWithFunctionTypedArguments4.ts]
 // No inference is made from function typed arguments which have multiple call signatures
 

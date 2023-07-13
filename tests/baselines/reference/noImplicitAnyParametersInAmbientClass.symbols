@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyParametersInAmbientClass.ts ===
+//// [tests/cases/compiler/noImplicitAnyParametersInAmbientClass.ts] ////
+
+=== noImplicitAnyParametersInAmbientClass.ts ===
 declare class D_C {
 >D_C : Symbol(D_C, Decl(noImplicitAnyParametersInAmbientClass.ts, 0, 0))
 

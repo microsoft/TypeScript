@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInConstructorParameter2.ts ===
+//// [tests/cases/compiler/thisInConstructorParameter2.ts] ////
+
+=== thisInConstructorParameter2.ts ===
 class P {
 >P : Symbol(P, Decl(thisInConstructorParameter2.ts, 0, 0))
 

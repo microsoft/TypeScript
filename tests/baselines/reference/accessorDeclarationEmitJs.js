@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorDeclarationEmitJs.ts] ////
+
 //// [a.js]
 export const t1 = {
     p: 'value',

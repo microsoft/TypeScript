@@ -1,13 +1,13 @@
-tests/cases/compiler/enumAssignmentCompat2.ts(25,5): error TS2322: Type 'typeof W' is not assignable to type 'number'.
-tests/cases/compiler/enumAssignmentCompat2.ts(27,5): error TS2322: Type 'W' is not assignable to type 'typeof W'.
-tests/cases/compiler/enumAssignmentCompat2.ts(29,5): error TS2322: Type 'number' is not assignable to type 'typeof W'.
-tests/cases/compiler/enumAssignmentCompat2.ts(30,5): error TS2322: Type '4' is not assignable to type 'W.a'.
-tests/cases/compiler/enumAssignmentCompat2.ts(31,5): error TS2322: Type 'W' is not assignable to type 'WStatic'.
-tests/cases/compiler/enumAssignmentCompat2.ts(32,5): error TS2322: Type 'number' is not assignable to type 'WStatic'.
-tests/cases/compiler/enumAssignmentCompat2.ts(33,5): error TS2322: Type '3' is not assignable to type 'W'.
+enumAssignmentCompat2.ts(25,5): error TS2322: Type 'typeof W' is not assignable to type 'number'.
+enumAssignmentCompat2.ts(27,5): error TS2322: Type 'W' is not assignable to type 'typeof W'.
+enumAssignmentCompat2.ts(29,5): error TS2322: Type 'number' is not assignable to type 'typeof W'.
+enumAssignmentCompat2.ts(30,5): error TS2322: Type '4' is not assignable to type 'W.a'.
+enumAssignmentCompat2.ts(31,5): error TS2322: Type 'W' is not assignable to type 'WStatic'.
+enumAssignmentCompat2.ts(32,5): error TS2322: Type 'number' is not assignable to type 'WStatic'.
+enumAssignmentCompat2.ts(33,5): error TS2322: Type '3' is not assignable to type 'W'.
 
 
-==== tests/cases/compiler/enumAssignmentCompat2.ts (7 errors) ====
+==== enumAssignmentCompat2.ts (7 errors) ====
     enum W {
     
         a, b, c,

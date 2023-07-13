@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayFakeFlatNoCrashInferenceDeclarations.ts] ////
+
 //// [arrayFakeFlatNoCrashInferenceDeclarations.ts]
 type BadFlatArray<Arr, Depth extends number> = {obj: {
     "done": Arr,

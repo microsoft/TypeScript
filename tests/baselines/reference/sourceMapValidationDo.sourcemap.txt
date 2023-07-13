@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDo.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDo.js
+emittedFile:sourceMapValidationDo.js
 sourceFile:sourceMapValidationDo.ts
 -------------------------------------------------------------------
 >>>var i = 0;

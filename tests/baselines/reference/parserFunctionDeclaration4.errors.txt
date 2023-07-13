@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration4.ts(2,10): error TS2389: Function implementation name must be 'foo'.
+parserFunctionDeclaration4.ts(2,10): error TS2389: Function implementation name must be 'foo'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration4.ts (1 errors) ====
+==== parserFunctionDeclaration4.ts (1 errors) ====
     function foo();
     function bar() { }
              ~~~

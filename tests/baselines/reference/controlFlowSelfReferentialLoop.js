@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowSelfReferentialLoop.ts] ////
+
 //// [controlFlowSelfReferentialLoop.ts]
 // Repro from #12319
 

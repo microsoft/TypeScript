@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultNamedExportWithType2.ts] ////
+
 //// [defaultNamedExportWithType2.ts]
 type Foo = number;
 const Foo = 1;

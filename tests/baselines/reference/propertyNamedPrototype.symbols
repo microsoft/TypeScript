@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts] ////
+
+=== propertyNamedPrototype.ts ===
 class C {
 >C : Symbol(C, Decl(propertyNamedPrototype.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts ===
+//// [tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts] ////
+
+=== errorMessageOnIntersectionsWithDiscriminants01.ts ===
 export type Common = { test: true } | { test: false };
 >Common : Symbol(Common, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 0, 0))
 >test : Symbol(test, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 0, 22))

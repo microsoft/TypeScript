@@ -1,4 +1,6 @@
-=== tests/cases/compiler/node.d.ts ===
+//// [tests/cases/compiler/resolveNameWithNamspace.ts] ////
+
+=== node.d.ts ===
 declare function require(moduleName: string): any;
 >require : (moduleName: string) => any
 >moduleName : string
@@ -13,7 +15,7 @@ declare module "assert" {
 >message : string | Error
 }
 
-=== tests/cases/compiler/ns.ts ===
+=== ns.ts ===
 /// <reference path="node.d.ts"/>
 namespace myAssert {
     export type cool = 'cool'
@@ -25,11 +27,11 @@ var myAssert = require('assert')
 >require : (moduleName: string) => any
 >'assert' : "assert"
 
-=== tests/cases/compiler/app.js ===
+=== app.js ===
 exports.equal = myAssert.equal
 >exports.equal = myAssert.equal : any
 >exports.equal : error
->exports : typeof import("tests/cases/compiler/app")
+>exports : typeof import("app")
 >equal : any
 >myAssert.equal : any
 >myAssert : any
@@ -38,6 +40,6 @@ exports.equal = myAssert.equal
 exports.equal()
 >exports.equal() : error
 >exports.equal : error
->exports : typeof import("tests/cases/compiler/app")
+>exports : typeof import("app")
 >equal : any
 

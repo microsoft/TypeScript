@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reboundIdentifierOnImportAlias.ts ===
+//// [tests/cases/compiler/reboundIdentifierOnImportAlias.ts] ////
+
+=== reboundIdentifierOnImportAlias.ts ===
 module Foo {
 >Foo : Symbol(Foo, Decl(reboundIdentifierOnImportAlias.ts, 0, 0))
 

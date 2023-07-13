@@ -1,7 +1,7 @@
-tests/cases/conformance/controlFlow/controlFlowNullishCoalesce.ts(4,1): error TS2454: Variable 'a' is used before being assigned.
+controlFlowNullishCoalesce.ts(4,1): error TS2454: Variable 'a' is used before being assigned.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowNullishCoalesce.ts (1 errors) ====
+==== controlFlowNullishCoalesce.ts (1 errors) ====
     // assignments in shortcutting rhs
     let a: number;
     o ?? (a = 1);

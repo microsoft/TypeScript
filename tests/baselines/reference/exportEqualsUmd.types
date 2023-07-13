@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportEqualsUmd.ts ===
+//// [tests/cases/compiler/exportEqualsUmd.ts] ////
+
+=== exportEqualsUmd.ts ===
 export = { ["hi"]: "there" };
 >{ ["hi"]: "there" } : { hi: string; }
 >["hi"] : string

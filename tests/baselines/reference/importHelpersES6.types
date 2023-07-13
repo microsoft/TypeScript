@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/importHelpersES6.ts] ////
+
+=== a.ts ===
 declare var dec: any;
 >dec : any
 
@@ -38,7 +40,7 @@ const y = { ...o };
 >{ ...o } : { a: number; }
 >o : { a: number; }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
 >d : Function

@@ -1,9 +1,9 @@
-tests/cases/compiler/destructureTupleWithVariableElement.ts(9,1): error TS18048: 's1' is possibly 'undefined'.
-tests/cases/compiler/destructureTupleWithVariableElement.ts(10,1): error TS18048: 's2' is possibly 'undefined'.
-tests/cases/compiler/destructureTupleWithVariableElement.ts(18,1): error TS18048: 's5' is possibly 'undefined'.
+destructureTupleWithVariableElement.ts(9,1): error TS18048: 's1' is possibly 'undefined'.
+destructureTupleWithVariableElement.ts(10,1): error TS18048: 's2' is possibly 'undefined'.
+destructureTupleWithVariableElement.ts(18,1): error TS18048: 's5' is possibly 'undefined'.
 
 
-==== tests/cases/compiler/destructureTupleWithVariableElement.ts (3 errors) ====
+==== destructureTupleWithVariableElement.ts (3 errors) ====
     // repro from #52302
     
     type NonEmptyStringArray = [string, ...Array<string>]

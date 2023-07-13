@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/continueTarget3.ts] ////
+
 //// [continueTarget3.ts]
 target1:
 target2:

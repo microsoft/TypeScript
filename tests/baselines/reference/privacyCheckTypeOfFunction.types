@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyCheckTypeOfFunction.ts ===
+//// [tests/cases/compiler/privacyCheckTypeOfFunction.ts] ////
+
+=== privacyCheckTypeOfFunction.ts ===
 function foo() {
 >foo : () => void
 }

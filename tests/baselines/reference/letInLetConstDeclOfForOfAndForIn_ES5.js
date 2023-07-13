@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES5.ts] ////
+
 //// [letInLetConstDeclOfForOfAndForIn_ES5.ts]
 // Should be an error
 for (let let of [1,2,3]) {}

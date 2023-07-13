@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/definePropertyOutputES3.ts] ////
+
 //// [definePropertyOutputES3.ts]
 class A {
     a = 12

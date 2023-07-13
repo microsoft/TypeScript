@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallInsideClassExpression.ts ===
+//// [tests/cases/compiler/superCallInsideClassExpression.ts] ////
+
+=== superCallInsideClassExpression.ts ===
 class A {
 >A : A
 }

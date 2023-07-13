@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment1.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment1.ts] ////
+
+=== parserShorthandPropertyAssignment1.ts ===
 function foo(obj: { name?: string; id: number }) { }
 >foo : Symbol(foo, Decl(parserShorthandPropertyAssignment1.ts, 0, 0))
 >obj : Symbol(obj, Decl(parserShorthandPropertyAssignment1.ts, 0, 13))

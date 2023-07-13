@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeParameters/typeParameterAsBaseType.ts(4,20): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/types/typeParameters/typeParameterAsBaseType.ts(5,24): error TS2304: Cannot find name 'U'.
-tests/cases/conformance/types/typeParameters/typeParameterAsBaseType.ts(7,24): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
-tests/cases/conformance/types/typeParameters/typeParameterAsBaseType.ts(8,28): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
+typeParameterAsBaseType.ts(4,20): error TS2304: Cannot find name 'T'.
+typeParameterAsBaseType.ts(5,24): error TS2304: Cannot find name 'U'.
+typeParameterAsBaseType.ts(7,24): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
+typeParameterAsBaseType.ts(8,28): error TS2312: An interface can only extend an object type or intersection of object types with statically known members.
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterAsBaseType.ts (4 errors) ====
+==== typeParameterAsBaseType.ts (4 errors) ====
     // type parameters cannot be used as base types
     // these are all errors
     

@@ -1,9 +1,11 @@
-=== tests/cases/conformance/salsa/index.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment19.ts] ////
+
+=== index.js ===
 /// <reference path='./types.d.ts'/>
 const C = require("./semver")
 >C : Symbol(C, Decl(index.js, 1, 5))
 >require : Symbol(require, Decl(types.d.ts, 0, 11))
->"./semver" : Symbol("tests/cases/conformance/salsa/semver", Decl(semver.js, 0, 0))
+>"./semver" : Symbol("semver", Decl(semver.js, 0, 0))
 
 var two = C.f(1)
 >two : Symbol(two, Decl(index.js, 2, 3))
@@ -11,17 +13,17 @@ var two = C.f(1)
 >C : Symbol(C, Decl(index.js, 1, 5))
 >f : Symbol(C.f, Decl(semver.js, 1, 28))
 
-=== tests/cases/conformance/salsa/types.d.ts ===
+=== types.d.ts ===
 declare var require: any;
 >require : Symbol(require, Decl(types.d.ts, 0, 11))
 
 declare var module: any;
 >module : Symbol(module, Decl(types.d.ts, 1, 11))
 
-=== tests/cases/conformance/salsa/semver.js ===
+=== semver.js ===
 /// <reference path='./types.d.ts'/>
 exports = module.exports = C
->exports : Symbol("tests/cases/conformance/salsa/semver", Decl(semver.js, 0, 0))
+>exports : Symbol("semver", Decl(semver.js, 0, 0))
 >module.exports : Symbol(module.exports, Decl(semver.js, 0, 0))
 >module : Symbol(export=, Decl(semver.js, 1, 9))
 >exports : Symbol(export=, Decl(semver.js, 1, 9))

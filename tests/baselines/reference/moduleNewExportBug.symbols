@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleNewExportBug.ts ===
+//// [tests/cases/compiler/moduleNewExportBug.ts] ////
+
+=== moduleNewExportBug.ts ===
 module mod1 {
 >mod1 : Symbol(mod1, Decl(moduleNewExportBug.ts, 0, 0))
 

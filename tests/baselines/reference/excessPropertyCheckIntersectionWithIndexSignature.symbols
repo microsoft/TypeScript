@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts ===
+//// [tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts] ////
+
+=== excessPropertyCheckIntersectionWithIndexSignature.ts ===
 // Repro from #51875
 
 let x: { [x: string]: { a: 0 } } & { [x: string]: { b: 0 } };

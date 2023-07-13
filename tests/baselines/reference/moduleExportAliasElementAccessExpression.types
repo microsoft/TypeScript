@@ -1,11 +1,13 @@
-=== tests/cases/conformance/salsa/moduleExportAliasElementAccessExpression.js ===
+//// [tests/cases/conformance/salsa/moduleExportAliasElementAccessExpression.ts] ////
+
+=== moduleExportAliasElementAccessExpression.js ===
 function D () { }
 >D : () => void
 
 exports["D"] = D;
 >exports["D"] = D : () => void
 >exports["D"] : () => void
->exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasElementAccessExpression")
+>exports : typeof import("moduleExportAliasElementAccessExpression")
 >"D" : "D"
 >D : () => void
 
@@ -13,7 +15,7 @@ exports["D"] = D;
 exports["Does not work yet"] = D;
 >exports["Does not work yet"] = D : () => void
 >exports["Does not work yet"] : () => void
->exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasElementAccessExpression")
+>exports : typeof import("moduleExportAliasElementAccessExpression")
 >"Does not work yet" : "Does not work yet"
 >D : () => void
 

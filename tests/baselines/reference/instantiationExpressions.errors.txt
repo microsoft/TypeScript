@@ -1,24 +1,24 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(6,16): error TS1099: Type argument list cannot be empty.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(9,17): error TS2635: Type '{ <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(12,21): error TS1099: Type argument list cannot be empty.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(15,22): error TS2635: Type '{ <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(18,21): error TS1099: Type argument list cannot be empty.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(20,22): error TS2635: Type 'ArrayConstructor' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(23,24): error TS1099: Type argument list cannot be empty.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(25,25): error TS2635: Type 'ArrayConstructor' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(50,16): error TS2635: Type '{ x: string; y: string; }' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(82,16): error TS2635: Type '{ x: string; } & { y: string; }' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(106,16): error TS2635: Type '(a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(114,16): error TS2635: Type '{ x: string; } | { y: string; }' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(126,16): error TS2635: Type '(a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(130,16): error TS2635: Type 'new (a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(163,40): error TS2344: Type 'U' does not satisfy the constraint 'number'.
+instantiationExpressions.ts(6,16): error TS1099: Type argument list cannot be empty.
+instantiationExpressions.ts(9,17): error TS2635: Type '{ <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(12,21): error TS1099: Type argument list cannot be empty.
+instantiationExpressions.ts(15,22): error TS2635: Type '{ <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(18,21): error TS1099: Type argument list cannot be empty.
+instantiationExpressions.ts(20,22): error TS2635: Type 'ArrayConstructor' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(23,24): error TS1099: Type argument list cannot be empty.
+instantiationExpressions.ts(25,25): error TS2635: Type 'ArrayConstructor' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(50,16): error TS2635: Type '{ x: string; y: string; }' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(82,16): error TS2635: Type '{ x: string; } & { y: string; }' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(106,16): error TS2635: Type '(a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(114,16): error TS2635: Type '{ x: string; } | { y: string; }' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(126,16): error TS2635: Type '(a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(130,16): error TS2635: Type 'new (a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+instantiationExpressions.ts(163,40): error TS2344: Type 'U' does not satisfy the constraint 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(164,40): error TS2344: Type 'U' does not satisfy the constraint 'string'.
+instantiationExpressions.ts(164,40): error TS2344: Type 'U' does not satisfy the constraint 'string'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts (16 errors) ====
+==== instantiationExpressions.ts (16 errors) ====
     declare function fx<T>(x: T): T;
     declare function fx<T>(x: T, n: number): T;
     declare function fx<T, U>(t: [T, U]): [T, U];

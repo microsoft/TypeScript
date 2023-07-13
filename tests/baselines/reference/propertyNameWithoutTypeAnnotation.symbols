@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNameWithoutTypeAnnotation.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNameWithoutTypeAnnotation.ts] ////
+
+=== propertyNameWithoutTypeAnnotation.ts ===
 class C {
 >C : Symbol(C, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 0))
 

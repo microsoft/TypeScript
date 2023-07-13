@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/parentheses.ts] ////
+
 //// [parentheses.ts]
 declare const o1: ((...args: any[]) => number);
 declare const o2: { b: (...args: any[]) => number };

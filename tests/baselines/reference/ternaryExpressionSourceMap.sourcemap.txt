@@ -5,7 +5,7 @@ sourceRoot:
 sources: ternaryExpressionSourceMap.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/ternaryExpressionSourceMap.js
+emittedFile:ternaryExpressionSourceMap.js
 sourceFile:ternaryExpressionSourceMap.ts
 -------------------------------------------------------------------
 >>>var x = 1;

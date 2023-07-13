@@ -1,7 +1,7 @@
-tests/cases/compiler/missingCloseBraceInObjectLiteral.ts(5,1): error TS1005: '}' expected.
+missingCloseBraceInObjectLiteral.ts(5,1): error TS1005: '}' expected.
 
 
-==== tests/cases/compiler/missingCloseBraceInObjectLiteral.ts (1 errors) ====
+==== missingCloseBraceInObjectLiteral.ts (1 errors) ====
     var foo = {
         a: 'a',
         b: 'b',
@@ -9,4 +9,4 @@ tests/cases/compiler/missingCloseBraceInObjectLiteral.ts(5,1): error TS1005: '}'
     
     
 !!! error TS1005: '}' expected.
-!!! related TS1007 tests/cases/compiler/missingCloseBraceInObjectLiteral.ts:1:11: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 missingCloseBraceInObjectLiteral.ts:1:11: The parser expected to find a '}' to match the '{' token here.

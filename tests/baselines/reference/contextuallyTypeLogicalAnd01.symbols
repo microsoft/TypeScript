@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd01.ts ===
+//// [tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd01.ts] ////
+
+=== contextuallyTypeLogicalAnd01.ts ===
 let x: (a: string) => string;
 >x : Symbol(x, Decl(contextuallyTypeLogicalAnd01.ts, 0, 3))
 >a : Symbol(a, Decl(contextuallyTypeLogicalAnd01.ts, 0, 8))

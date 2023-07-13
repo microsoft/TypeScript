@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectAssignLikeNonUnionResult.ts] ////
+
 //// [objectAssignLikeNonUnionResult.ts]
 interface Interface {
     field: number;

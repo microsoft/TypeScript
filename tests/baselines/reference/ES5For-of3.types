@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of3.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of3.ts] ////
+
+=== ES5For-of3.ts ===
 for (var v of ['a', 'b', 'c'])
 >v : string
 >['a', 'b', 'c'] : string[]

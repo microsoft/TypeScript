@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations_access_2.ts ===
+//// [tests/cases/compiler/constDeclarations-access5.ts] ////
+
+=== constDeclarations_access_2.ts ===
 ///<reference path='constDeclarations_access_1.ts'/>
 import m = require('constDeclarations_access_1');
 >m : typeof m
@@ -186,7 +188,7 @@ m.x.toString();
 >x : 0
 >toString : (radix?: number) => string
 
-=== tests/cases/compiler/constDeclarations_access_1.ts ===
+=== constDeclarations_access_1.ts ===
 export const x = 0;
 >x : 0
 >0 : 0

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithEnumType.ts] ////
+
 //// [negateOperatorWithEnumType.ts]
 // - operator on enum type
 

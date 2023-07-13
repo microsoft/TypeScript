@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeName1.ts] ////
+
 //// [typeName1.ts]
 interface I {
     k;

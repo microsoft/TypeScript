@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientEnum1.ts] ////
+
 //// [ambientEnum1.ts]
     declare enum E1 {
         y = 4.23

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceGrandParentPublicMemberCollisionWithPrivateMember.ts] ////
+
 //// [inheritanceGrandParentPublicMemberCollisionWithPrivateMember.ts]
 class A {
     public myMethod() { }

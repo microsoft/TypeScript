@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incorrectNumberOfTypeArgumentsDuringErrorReporting.ts] ////
+
 //// [incorrectNumberOfTypeArgumentsDuringErrorReporting.ts]
 interface ObjA {
   y?:string,

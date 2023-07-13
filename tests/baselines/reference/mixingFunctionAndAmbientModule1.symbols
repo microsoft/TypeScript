@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mixingFunctionAndAmbientModule1.ts ===
+//// [tests/cases/compiler/mixingFunctionAndAmbientModule1.ts] ////
+
+=== mixingFunctionAndAmbientModule1.ts ===
 module A {
 >A : Symbol(A, Decl(mixingFunctionAndAmbientModule1.ts, 0, 0))
 

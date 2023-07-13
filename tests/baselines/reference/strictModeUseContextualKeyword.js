@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeUseContextualKeyword.ts] ////
+
 //// [strictModeUseContextualKeyword.ts]
 "use strict"
 var as = 0;

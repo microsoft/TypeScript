@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/callChain/callChain.3.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/callChain.3.ts] ////
+
+=== callChain.3.ts ===
 declare function absorb<T>(): T;
 >absorb : <T>() => T
 

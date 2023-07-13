@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedSymbolNamedProperties.ts] ////
+
 //// [contextuallyTypedSymbolNamedProperties.ts]
 // Repros from #43628
 

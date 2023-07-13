@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts] ////
+
+=== TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts ===
 module A {
     export interface Point {
         x: number;

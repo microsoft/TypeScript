@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts ===
+//// [tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts] ////
+
+=== objectTypeHidingMembersOfObjectAssignmentCompat.ts ===
 interface I {
 >I : Symbol(I, Decl(objectTypeHidingMembersOfObjectAssignmentCompat.ts, 0, 0))
 

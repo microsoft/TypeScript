@@ -1,11 +1,11 @@
-tests/cases/compiler/useBeforeDeclaration_destructuring.ts(1,1): error TS2448: Block-scoped variable 'a' used before its declaration.
+useBeforeDeclaration_destructuring.ts(1,1): error TS2448: Block-scoped variable 'a' used before its declaration.
 
 
-==== tests/cases/compiler/useBeforeDeclaration_destructuring.ts (1 errors) ====
+==== useBeforeDeclaration_destructuring.ts (1 errors) ====
     a;
     ~
 !!! error TS2448: Block-scoped variable 'a' used before its declaration.
-!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_destructuring.ts:2:6: 'a' is declared here.
+!!! related TS2728 useBeforeDeclaration_destructuring.ts:2:6: 'a' is declared here.
     let {a, b = a} = {a: '', b: 1};
     b;
     

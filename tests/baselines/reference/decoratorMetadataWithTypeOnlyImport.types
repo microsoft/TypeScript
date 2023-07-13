@@ -1,8 +1,10 @@
-=== tests/cases/conformance/decorators/service.ts ===
+//// [tests/cases/conformance/decorators/decoratorMetadataWithTypeOnlyImport.ts] ////
+
+=== service.ts ===
 export class Service {
 >Service : Service
 }
-=== tests/cases/conformance/decorators/component.ts ===
+=== component.ts ===
 import type { Service } from "./service";
 >Service : Service
 

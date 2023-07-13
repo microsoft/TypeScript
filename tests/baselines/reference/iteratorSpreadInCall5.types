@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/spread/iteratorSpreadInCall5.ts ===
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInCall5.ts] ////
+
+=== iteratorSpreadInCall5.ts ===
 function foo(...s: (symbol | string)[]) { }
 >foo : (...s: (symbol | string)[]) => void
 >s : (string | symbol)[]

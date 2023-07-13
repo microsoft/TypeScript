@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeAssertionToGenericFunctionType.ts ===
+//// [tests/cases/compiler/typeAssertionToGenericFunctionType.ts] ////
+
+=== typeAssertionToGenericFunctionType.ts ===
 var x = {
 >x : { a: <T>(x: T) => T; b: <T>(x: T) => void; }
 >{    a: < <T>(x: T) => T > ((x: any) => 1),    b: <T>(x: T) => { x }} : { a: <T>(x: T) => T; b: <T>(x: T) => void; }

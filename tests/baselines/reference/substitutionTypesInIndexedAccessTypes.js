@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/substitutionTypesInIndexedAccessTypes.ts] ////
+
 //// [substitutionTypesInIndexedAccessTypes.ts]
 // Repro from #31086
 

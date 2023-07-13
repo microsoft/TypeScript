@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexer.ts ===
+//// [tests/cases/compiler/indexer.ts] ////
+
+=== indexer.ts ===
 interface JQueryElement {
 >JQueryElement : Symbol(JQueryElement, Decl(indexer.ts, 0, 0))
 

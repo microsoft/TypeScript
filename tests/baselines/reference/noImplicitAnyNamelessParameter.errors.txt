@@ -1,15 +1,15 @@
-tests/cases/compiler/noImplicitAnyNamelessParameter.ts(2,20): error TS7051: Parameter has a name but no type. Did you mean 'arg0: string[]'?
-tests/cases/compiler/noImplicitAnyNamelessParameter.ts(3,17): error TS7051: Parameter has a name but no type. Did you mean 'arg0: string'?
-tests/cases/compiler/noImplicitAnyNamelessParameter.ts(3,25): error TS7051: Parameter has a name but no type. Did you mean 'arg1: C'?
-tests/cases/compiler/noImplicitAnyNamelessParameter.ts(4,19): error TS7051: Parameter has a name but no type. Did you mean 'arg0: C'?
-tests/cases/compiler/noImplicitAnyNamelessParameter.ts(4,22): error TS7051: Parameter has a name but no type. Did you mean 'arg1: number'?
-tests/cases/compiler/noImplicitAnyNamelessParameter.ts(5,20): error TS7051: Parameter has a name but no type. Did you mean 'arg0: boolean'?
-tests/cases/compiler/noImplicitAnyNamelessParameter.ts(5,29): error TS7051: Parameter has a name but no type. Did you mean 'arg1: C'?
-tests/cases/compiler/noImplicitAnyNamelessParameter.ts(5,32): error TS7051: Parameter has a name but no type. Did you mean 'arg2: object'?
-tests/cases/compiler/noImplicitAnyNamelessParameter.ts(5,40): error TS7051: Parameter has a name but no type. Did you mean 'arg3: undefined'?
+noImplicitAnyNamelessParameter.ts(2,20): error TS7051: Parameter has a name but no type. Did you mean 'arg0: string[]'?
+noImplicitAnyNamelessParameter.ts(3,17): error TS7051: Parameter has a name but no type. Did you mean 'arg0: string'?
+noImplicitAnyNamelessParameter.ts(3,25): error TS7051: Parameter has a name but no type. Did you mean 'arg1: C'?
+noImplicitAnyNamelessParameter.ts(4,19): error TS7051: Parameter has a name but no type. Did you mean 'arg0: C'?
+noImplicitAnyNamelessParameter.ts(4,22): error TS7051: Parameter has a name but no type. Did you mean 'arg1: number'?
+noImplicitAnyNamelessParameter.ts(5,20): error TS7051: Parameter has a name but no type. Did you mean 'arg0: boolean'?
+noImplicitAnyNamelessParameter.ts(5,29): error TS7051: Parameter has a name but no type. Did you mean 'arg1: C'?
+noImplicitAnyNamelessParameter.ts(5,32): error TS7051: Parameter has a name but no type. Did you mean 'arg2: object'?
+noImplicitAnyNamelessParameter.ts(5,40): error TS7051: Parameter has a name but no type. Did you mean 'arg3: undefined'?
 
 
-==== tests/cases/compiler/noImplicitAnyNamelessParameter.ts (9 errors) ====
+==== noImplicitAnyNamelessParameter.ts (9 errors) ====
     class C { }
     declare var a: { m(...string): void }
                        ~~~~~~~~~

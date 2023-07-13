@@ -1,8 +1,8 @@
-tests/cases/compiler/numericClassMembers1.ts(3,3): error TS2300: Duplicate identifier '0.0'.
-tests/cases/compiler/numericClassMembers1.ts(8,2): error TS2300: Duplicate identifier ''0''.
+numericClassMembers1.ts(3,3): error TS2300: Duplicate identifier '0.0'.
+numericClassMembers1.ts(8,2): error TS2300: Duplicate identifier ''0''.
 
 
-==== tests/cases/compiler/numericClassMembers1.ts (2 errors) ====
+==== numericClassMembers1.ts (2 errors) ====
     class C234 {
       0 = 1; 
       0.0 = 2;

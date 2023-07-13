@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts] ////
+
 //// [overloadresolutionWithConstraintCheckingDeferred.ts]
 interface A { x }
 interface B { x; y }

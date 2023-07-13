@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts ===
+//// [tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts] ////
+
+=== deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 0, 0))
 

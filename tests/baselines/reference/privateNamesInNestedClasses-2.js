@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts] ////
+
 //// [privateNamesInNestedClasses-2.ts]
 class A {
     static #x = 5;

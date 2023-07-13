@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tsxReactPropsInferenceSucceedsOnIntersections.tsx ===
+//// [tests/cases/compiler/tsxReactPropsInferenceSucceedsOnIntersections.tsx] ////
+
+=== tsxReactPropsInferenceSucceedsOnIntersections.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from "react";

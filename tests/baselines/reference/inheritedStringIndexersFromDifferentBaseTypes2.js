@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts] ////
+
 //// [inheritedStringIndexersFromDifferentBaseTypes2.ts]
 // indexer in B is a subtype of indexer in A
 interface A {

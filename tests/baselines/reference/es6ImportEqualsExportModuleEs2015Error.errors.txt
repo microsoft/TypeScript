@@ -1,14 +1,14 @@
-tests/cases/compiler/a.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-tests/cases/compiler/main.ts(1,20): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
+a.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+main.ts(1,20): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
 
 
-==== tests/cases/compiler/a.ts (1 errors) ====
+==== a.ts (1 errors) ====
     class a { }
     export = a;
     ~~~~~~~~~~~
 !!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== tests/cases/compiler/main.ts (1 errors) ====
+==== main.ts (1 errors) ====
     import * as a from "./a";
                        ~~~~~
 !!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.

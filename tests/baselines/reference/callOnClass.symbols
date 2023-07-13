@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callOnClass.ts ===
+//// [tests/cases/compiler/callOnClass.ts] ////
+
+=== callOnClass.ts ===
 class C { }
 >C : Symbol(C, Decl(callOnClass.ts, 0, 0))
 

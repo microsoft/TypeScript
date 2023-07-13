@@ -1,7 +1,7 @@
-tests/cases/compiler/constDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+constDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== tests/cases/compiler/constDeclarations-validContexts.ts (1 errors) ====
+==== constDeclarations-validContexts.ts (1 errors) ====
     // Control flow statements with blocks
     if (true) { 
         const c1 = 0;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowAssignmentExpression.ts] ////
+
 //// [controlFlowAssignmentExpression.ts]
 let x: string | boolean | number;
 let obj: any;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTemplateOverloadResolution.ts] ////
+
 //// [genericTemplateOverloadResolution.ts]
 interface IFooFn {
     (strings: TemplateStringsArray): Promise<{}>;

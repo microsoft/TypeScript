@@ -1,4 +1,6 @@
-=== tests/cases/compiler/keyofObjectWithGlobalSymbolIncluded.ts ===
+//// [tests/cases/compiler/keyofObjectWithGlobalSymbolIncluded.ts] ////
+
+=== keyofObjectWithGlobalSymbolIncluded.ts ===
 const obj = {
 >obj : { [Symbol.species]: ArrayConstructor; }
 >{    [Symbol.species]: Array} : { [Symbol.species]: ArrayConstructor; }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration5.ts] ////
+
+=== parserEnumDeclaration5.ts ===
 enum E {
 >E : Symbol(E, Decl(parserEnumDeclaration5.ts, 0, 0))
 

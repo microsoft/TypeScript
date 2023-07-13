@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/booleanLiteralsContextuallyTypedFromUnion.tsx] ////
+
 //// [booleanLiteralsContextuallyTypedFromUnion.tsx]
 interface A { isIt: true; text: string; }
 interface B { isIt: false; value: number; }

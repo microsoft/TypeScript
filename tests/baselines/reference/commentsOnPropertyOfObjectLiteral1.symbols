@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsOnPropertyOfObjectLiteral1.ts ===
+//// [tests/cases/compiler/commentsOnPropertyOfObjectLiteral1.ts] ////
+
+=== commentsOnPropertyOfObjectLiteral1.ts ===
 var resolve = {
 >resolve : Symbol(resolve, Decl(commentsOnPropertyOfObjectLiteral1.ts, 0, 3))
 

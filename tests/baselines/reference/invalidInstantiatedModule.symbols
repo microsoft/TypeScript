@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts ===
+//// [tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts] ////
+
+=== invalidInstantiatedModule.ts ===
 module M {
 >M : Symbol(M, Decl(invalidInstantiatedModule.ts, 0, 0))
 

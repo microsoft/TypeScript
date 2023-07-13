@@ -1,3 +1,13 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution_rootImport_aliasWithRoot_differentRootTypes.ts] ////
+
+=== /root/src/foo.ts ===
+export function foo() {}
+>foo : Symbol(foo, Decl(foo.ts, 0, 0))
+
+=== /root/src/bar.js ===
+export function bar() {}
+>bar : Symbol(bar, Decl(bar.js, 0, 0))
+
 === /root/a.ts ===
 import { foo as foo1 } from "/foo";
 >foo : Symbol(foo1, Decl(foo.ts, 0, 0))
@@ -70,12 +80,4 @@ import { foo as foo9 } from "http://server/foo";
 import { bar as bar9 } from "http://server/bar";
 >bar : Symbol(bar1, Decl(bar.js, 0, 0))
 >bar9 : Symbol(bar9, Decl(a.ts, 17, 8))
-
-=== /root/src/foo.ts ===
-export function foo() {}
->foo : Symbol(foo, Decl(foo.ts, 0, 0))
-
-=== /root/src/bar.js ===
-export function bar() {}
->bar : Symbol(bar, Decl(bar.js, 0, 0))
 

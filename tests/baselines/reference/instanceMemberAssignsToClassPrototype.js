@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/instanceMemberAssignsToClassPrototype.ts] ////
+
 //// [instanceMemberAssignsToClassPrototype.ts]
 class C {
     foo() {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/generics1NoError.ts ===
+//// [tests/cases/compiler/generics1NoError.ts] ////
+
+=== generics1NoError.ts ===
 interface A { a: string; }
 >a : string
 

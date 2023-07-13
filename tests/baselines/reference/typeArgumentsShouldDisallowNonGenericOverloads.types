@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgumentsShouldDisallowNonGenericOverloads.ts ===
+//// [tests/cases/compiler/typeArgumentsShouldDisallowNonGenericOverloads.ts] ////
+
+=== typeArgumentsShouldDisallowNonGenericOverloads.ts ===
 function foo(a: string): string;
 >foo : { (a: string): string; <T>(a: T): number; }
 >a : string

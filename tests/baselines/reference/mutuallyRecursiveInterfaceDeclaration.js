@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mutuallyRecursiveInterfaceDeclaration.ts] ////
+
 //// [mutuallyRecursiveInterfaceDeclaration.ts]
 interface A {
     b: B

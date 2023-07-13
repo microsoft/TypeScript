@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ModuleFunctionDeclaration.ts ===
+//// [tests/cases/compiler/es6ModuleFunctionDeclaration.ts] ////
+
+=== es6ModuleFunctionDeclaration.ts ===
 export function foo() {
 >foo : Symbol(foo, Decl(es6ModuleFunctionDeclaration.ts, 0, 0))
 }

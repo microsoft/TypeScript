@@ -721,6 +721,7 @@ export interface RefactorEditInfo {
      */
     renameLocation?: Location;
     renameFilename?: string;
+    notApplicableReason?: string;
 }
 
 /**
@@ -2335,6 +2336,11 @@ export interface CompletionEntry {
      * coupled with `replacementSpan` to replace a dotted access with a bracket access.
      */
     insertText?: string;
+    /**
+     * A string that should be used when filtering a set of
+     * completion items.
+     */
+    filterText?: string;
     /**
      * `insertText` should be interpreted as a snippet if true.
      */

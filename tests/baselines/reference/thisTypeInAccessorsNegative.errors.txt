@@ -1,8 +1,8 @@
-tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(10,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(11,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessorsNegative.ts(10,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
+thisTypeInAccessorsNegative.ts(11,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts (2 errors) ====
+==== thisTypeInAccessorsNegative.ts (2 errors) ====
     interface Foo {
         n: number;
         x: number;

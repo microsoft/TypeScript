@@ -1,9 +1,9 @@
-tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts(25,11): error TS2430: Interface 'E1<T>' incorrectly extends interface 'Base'.
+mappedTypesAndObjects.ts(25,11): error TS2430: Interface 'E1<T>' incorrectly extends interface 'Base'.
   Types of property 'foo' are incompatible.
     Type 'T' is not assignable to type '{ [key: string]: any; }'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts (1 errors) ====
+==== mappedTypesAndObjects.ts (1 errors) ====
     function f1<T>(x: Partial<T>, y: Readonly<T>) {
         let obj: {};
         obj = x;
@@ -33,7 +33,7 @@ tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts(25,11): error TS24
 !!! error TS2430: Interface 'E1<T>' incorrectly extends interface 'Base'.
 !!! error TS2430:   Types of property 'foo' are incompatible.
 !!! error TS2430:     Type 'T' is not assignable to type '{ [key: string]: any; }'.
-!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts:25:14: This type parameter might need an `extends { [key: string]: any; }` constraint.
+!!! related TS2208 mappedTypesAndObjects.ts:25:14: This type parameter might need an `extends { [key: string]: any; }` constraint.
         foo: T;
     }
     

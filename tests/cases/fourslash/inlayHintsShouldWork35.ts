@@ -2,28 +2,20 @@
 
 //// function foo (v: any) {}
 
-//// foo(/*a*/1);
-//// foo(/*b*/'');
-//// foo(/*c*/true);
-//// foo(/*d*/() => 1);
-//// foo(/*e*/function () { return 1 });
-//// foo(/*f*/{});
-//// foo(/*g*/{ a: 1 });
-//// foo(/*h*/[]);
-//// foo(/*i*/[1]);
+//// foo(1);
+//// foo('');
+//// foo(true);
+//// foo(() => 1);
+//// foo(function () { return 1 });
+//// foo({});
+//// foo({ a: 1 });
+//// foo([]);
+//// foo([1]);
 
-//// foo(/*j*/foo);
-//// foo(/*k*/(1));
-//// foo(/*l*/foo(/*m*/1));
+//// foo(foo);
+//// foo((1));
+//// foo(foo(1));
 
-const markers = test.markers();
-
-verify.getInlayHints(
-    markers.map(m => ({
-        text: 'v:',
-        position: m.position,
-        kind: ts.InlayHintKind.Parameter,
-        whitespaceAfter: true
-    })) , undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayParameterNameHints: "all"
 });

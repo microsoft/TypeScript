@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldUnaryMutation.ts] ////
+
 //// [privateNameStaticFieldUnaryMutation.ts]
 class C {
     static #test: number = 24;

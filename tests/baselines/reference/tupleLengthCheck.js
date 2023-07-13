@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/tupleLengthCheck.ts] ////
+
 //// [tupleLengthCheck.ts]
 declare const a: [number, string]
 declare const rest: [number, string, ...boolean[]]

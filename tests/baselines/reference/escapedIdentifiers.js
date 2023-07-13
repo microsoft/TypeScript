@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/escapedIdentifiers.ts] ////
+
 //// [escapedIdentifiers.ts]
 /*
     0 .. \u0030

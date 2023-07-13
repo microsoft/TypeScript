@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethodOverload1.ts ===
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethodOverload1.ts] ////
+
+=== decoratorOnClassMethodOverload1.ts ===
 declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec : Symbol(dec, Decl(decoratorOnClassMethodOverload1.ts, 0, 0))
 >T : Symbol(T, Decl(decoratorOnClassMethodOverload1.ts, 0, 21))

@@ -1,7 +1,7 @@
-tests/cases/compiler/decoratorMetadataGenericTypeVariableInScope.ts(5,4): error TS2304: Cannot find name 'Decorate'.
+decoratorMetadataGenericTypeVariableInScope.ts(5,4): error TS2304: Cannot find name 'Decorate'.
 
 
-==== tests/cases/compiler/decoratorMetadataGenericTypeVariableInScope.ts (1 errors) ====
+==== decoratorMetadataGenericTypeVariableInScope.ts (1 errors) ====
     // Unused, but could collide with the named type argument below.
     class TypeVariable {}
     

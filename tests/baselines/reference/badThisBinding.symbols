@@ -1,4 +1,6 @@
-=== tests/cases/compiler/badThisBinding.ts ===
+//// [tests/cases/compiler/badThisBinding.ts] ////
+
+=== badThisBinding.ts ===
 declare function foo(a:any): any;
 >foo : Symbol(foo, Decl(badThisBinding.ts, 0, 0))
 >a : Symbol(a, Decl(badThisBinding.ts, 0, 21))

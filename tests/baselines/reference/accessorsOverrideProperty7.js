@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty7.ts] ////
+
 //// [accessorsOverrideProperty7.ts]
 abstract class A {
     abstract p = 'yep'

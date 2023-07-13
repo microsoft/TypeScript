@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lift.ts] ////
+
 //// [lift.ts]
 class B {
     constructor(public y:number) {

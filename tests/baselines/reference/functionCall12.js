@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionCall12.ts] ////
+
 //// [functionCall12.ts]
 function foo(a:string, b?:number, c?:string){}
 foo('foo', 1); 

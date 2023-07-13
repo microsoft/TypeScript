@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAsBaseType.ts] ////
+
 //// [moduleAsBaseType.ts]
 module M {}
 class C extends M {}

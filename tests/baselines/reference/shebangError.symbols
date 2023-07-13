@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shebangError.ts ===
+//// [tests/cases/compiler/shebangError.ts] ////
+
+=== shebangError.ts ===
 var foo = 'Shebang is only allowed on the first line';
 >foo : Symbol(foo, Decl(shebangError.ts, 0, 3))
 

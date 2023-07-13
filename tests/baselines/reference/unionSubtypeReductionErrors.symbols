@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionSubtypeReductionErrors.ts ===
+//// [tests/cases/compiler/unionSubtypeReductionErrors.ts] ////
+
+=== unionSubtypeReductionErrors.ts ===
 let a = [
 >a : Symbol(a, Decl(unionSubtypeReductionErrors.ts, 0, 3))
 

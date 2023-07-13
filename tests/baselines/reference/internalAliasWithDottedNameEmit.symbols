@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasWithDottedNameEmit.ts ===
+//// [tests/cases/compiler/internalAliasWithDottedNameEmit.ts] ////
+
+=== internalAliasWithDottedNameEmit.ts ===
 module a.b.c {
 >a : Symbol(a, Decl(internalAliasWithDottedNameEmit.ts, 0, 0), Decl(internalAliasWithDottedNameEmit.ts, 2, 1))
 >b : Symbol(b, Decl(internalAliasWithDottedNameEmit.ts, 0, 9))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts ===
+//// [tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts] ////
+
+=== catchClauseWithTypeAnnotation.ts ===
 type any1 = any;
 >any1 : Symbol(any1, Decl(catchClauseWithTypeAnnotation.ts, 0, 0))
 

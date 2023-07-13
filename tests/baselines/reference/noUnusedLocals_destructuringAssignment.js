@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_destructuringAssignment.ts] ////
+
 //// [noUnusedLocals_destructuringAssignment.ts]
 class C {
     private x = 0;

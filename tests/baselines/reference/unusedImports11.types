@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/unusedImports11.ts] ////
+
+=== a.ts ===
 import { Member } from './b';
 >Member : typeof Member
 
@@ -37,7 +39,7 @@ new r.Member();
 >r : typeof ns
 >Member : typeof Member
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export class Member {}
 >Member : Member
 

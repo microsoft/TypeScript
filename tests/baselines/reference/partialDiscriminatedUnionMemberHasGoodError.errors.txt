@@ -1,8 +1,8 @@
-tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts(20,13): error TS2322: Type '{ type: "A"; }' is not assignable to type 'ValidType'.
+partialDiscriminatedUnionMemberHasGoodError.ts(20,13): error TS2322: Type '{ type: "A"; }' is not assignable to type 'ValidType'.
   Property 'param' is missing in type '{ type: "A"; }' but required in type 'TypeA'.
 
 
-==== tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts (1 errors) ====
+==== partialDiscriminatedUnionMemberHasGoodError.ts (1 errors) ====
     interface TypeA {
         type: "A";
         param: string;
@@ -30,5 +30,5 @@ tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts(20,13): erro
     ~~~~~
 !!! error TS2322: Type '{ type: "A"; }' is not assignable to type 'ValidType'.
 !!! error TS2322:   Property 'param' is missing in type '{ type: "A"; }' but required in type 'TypeA'.
-!!! related TS2728 tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts:3:5: 'param' is declared here.
+!!! related TS2728 partialDiscriminatedUnionMemberHasGoodError.ts:3:5: 'param' is declared here.
     });

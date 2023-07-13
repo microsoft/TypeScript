@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts] ////
+
+=== callWithMissingVoid.ts ===
 // From #4260
 class X<T> {
 >X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))

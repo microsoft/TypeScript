@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedAsDiscriminantWithUnknown.ts ===
+//// [tests/cases/compiler/undefinedAsDiscriminantWithUnknown.ts] ////
+
+=== undefinedAsDiscriminantWithUnknown.ts ===
 type S = 
 >S : Symbol(S, Decl(undefinedAsDiscriminantWithUnknown.ts, 0, 0))
 

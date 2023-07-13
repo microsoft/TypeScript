@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importsNotUsedAsValues_error.ts] ////
+
 === /a.ts ===
 export default class {}
 export class A {}

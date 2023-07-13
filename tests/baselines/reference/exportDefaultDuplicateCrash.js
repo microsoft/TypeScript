@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultDuplicateCrash.ts] ////
+
 //// [exportDefaultDuplicateCrash.ts]
 // #38214
 

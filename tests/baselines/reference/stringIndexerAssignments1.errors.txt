@@ -1,9 +1,9 @@
-tests/cases/compiler/stringIndexerAssignments1.ts(5,1): error TS2322: Type '{ one: number; two: string; }' is not assignable to type '{ [index: string]: string; one: string; }'.
+stringIndexerAssignments1.ts(5,1): error TS2322: Type '{ one: number; two: string; }' is not assignable to type '{ [index: string]: string; one: string; }'.
   Types of property 'one' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/stringIndexerAssignments1.ts (1 errors) ====
+==== stringIndexerAssignments1.ts (1 errors) ====
     var x: { [index: string]: string; one: string; };
     var a: { one: string; };
     var b: { one: number; two: string; };

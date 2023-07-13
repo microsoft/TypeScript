@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classMemberInitializerWithLamdaScoping.ts] ////
+
 //// [classMemberInitializerWithLamdaScoping.ts]
 declare var console: {
     log(msg?: any): void;

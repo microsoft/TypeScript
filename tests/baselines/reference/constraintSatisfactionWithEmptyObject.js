@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/constraintSatisfactionWithEmptyObject.ts] ////
+
 //// [constraintSatisfactionWithEmptyObject.ts]
 // valid uses of a basic object constraint, no errors expected
 

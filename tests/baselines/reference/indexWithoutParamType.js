@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexWithoutParamType.ts] ////
+
 //// [indexWithoutParamType.ts]
 var y: { []; } // Error
 

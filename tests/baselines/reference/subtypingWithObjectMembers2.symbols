@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers2.ts] ////
+
+=== subtypingWithObjectMembers2.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts] ////
+
+=== ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts ===
 module A {
 >A : Symbol(A, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 0, 0))
 

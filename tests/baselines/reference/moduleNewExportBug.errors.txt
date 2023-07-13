@@ -1,7 +1,7 @@
-tests/cases/compiler/moduleNewExportBug.ts(10,14): error TS2694: Namespace 'mod1' has no exported member 'C'.
+moduleNewExportBug.ts(10,14): error TS2694: Namespace 'mod1' has no exported member 'C'.
 
 
-==== tests/cases/compiler/moduleNewExportBug.ts (1 errors) ====
+==== moduleNewExportBug.ts (1 errors) ====
     module mod1 {
     	interface mInt {
     		new (bar:any):any;

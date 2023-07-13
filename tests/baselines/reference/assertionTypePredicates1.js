@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/assertionTypePredicates1.ts] ////
+
 //// [assertionTypePredicates1.ts]
 declare function isString(value: unknown): value is string;
 declare function isArrayOfStrings(value: unknown): value is string[];

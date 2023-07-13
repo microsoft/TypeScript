@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeObjectSpreadExpression.ts ===
+//// [tests/cases/compiler/contextualTypeObjectSpreadExpression.ts] ////
+
+=== contextualTypeObjectSpreadExpression.ts ===
 interface I {
 >I : Symbol(I, Decl(contextualTypeObjectSpreadExpression.ts, 0, 0))
 

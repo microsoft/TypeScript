@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/baseClassImprovedMismatchErrors.ts] ////
+
 //// [baseClassImprovedMismatchErrors.ts]
 class Base {
     n: Base | string;

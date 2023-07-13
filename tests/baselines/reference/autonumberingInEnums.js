@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/autonumberingInEnums.ts] ////
+
 //// [autonumberingInEnums.ts]
 enum Foo {
     a = 1

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts] ////
+
+=== privateNameStaticMethodClassExpression.ts ===
 const C = class D {
 >C : Symbol(C, Decl(privateNameStaticMethodClassExpression.ts, 0, 5))
 >D : Symbol(D, Decl(privateNameStaticMethodClassExpression.ts, 0, 9))

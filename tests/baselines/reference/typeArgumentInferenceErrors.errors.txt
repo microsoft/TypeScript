@@ -1,16 +1,16 @@
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(3,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(7,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+typeArgumentInferenceErrors.ts(3,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+typeArgumentInferenceErrors.ts(7,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(11,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
+typeArgumentInferenceErrors.ts(11,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(15,41): error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
+typeArgumentInferenceErrors.ts(15,41): error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
   Types of parameters 'n' and 'b' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts (4 errors) ====
+==== typeArgumentInferenceErrors.ts (4 errors) ====
     // Generic call with multiple type parameters and only one used in parameter type annotation
     function someGenerics1<T, U>(n: T, m: number) { }
     someGenerics1<string, number>(3, 4); // Error

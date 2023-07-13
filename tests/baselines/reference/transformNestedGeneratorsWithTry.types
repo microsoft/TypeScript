@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/transformNestedGeneratorsWithTry.ts] ////
+
+=== main.ts ===
 // https://github.com/Microsoft/TypeScript/issues/11177
 import * as Bluebird from 'bluebird';
 >Bluebird : PromiseConstructor
@@ -34,7 +36,7 @@ async function a(): Bluebird<void> {
 >error : any
 }
 
-=== tests/cases/compiler/bluebird.d.ts ===
+=== bluebird.d.ts ===
 declare module "bluebird" {
 >"bluebird" : typeof import("bluebird")
 

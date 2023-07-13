@@ -1,30 +1,30 @@
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(4,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(5,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(13,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(15,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(18,2): error TS2631: Cannot assign to 'M' because it is a namespace.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(25,5): error TS2631: Cannot assign to 'M3' because it is a namespace.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(31,11): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(32,13): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(33,13): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(37,1): error TS2630: Cannot assign to 'fn' because it is a function.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(38,2): error TS2630: Cannot assign to 'fn' because it is a function.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(43,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(44,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(48,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(49,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(54,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(55,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(56,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(62,1): error TS2628: Cannot assign to 'E' because it is an enum.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(63,2): error TS2628: Cannot assign to 'E' because it is an enum.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(69,1): error TS2629: Cannot assign to 'C' because it is a class.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(70,2): error TS2629: Cannot assign to 'C' because it is a class.
+assignmentToParenthesizedIdentifiers.ts(4,1): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(5,1): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(13,1): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(15,1): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+assignmentToParenthesizedIdentifiers.ts(18,2): error TS2631: Cannot assign to 'M' because it is a namespace.
+assignmentToParenthesizedIdentifiers.ts(25,5): error TS2631: Cannot assign to 'M3' because it is a namespace.
+assignmentToParenthesizedIdentifiers.ts(31,11): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(32,13): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(33,13): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(37,1): error TS2630: Cannot assign to 'fn' because it is a function.
+assignmentToParenthesizedIdentifiers.ts(38,2): error TS2630: Cannot assign to 'fn' because it is a function.
+assignmentToParenthesizedIdentifiers.ts(43,5): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(44,5): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(48,5): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(49,5): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(54,5): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(55,5): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(56,5): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(62,1): error TS2628: Cannot assign to 'E' because it is an enum.
+assignmentToParenthesizedIdentifiers.ts(63,2): error TS2628: Cannot assign to 'E' because it is an enum.
+assignmentToParenthesizedIdentifiers.ts(69,1): error TS2629: Cannot assign to 'C' because it is a class.
+assignmentToParenthesizedIdentifiers.ts(70,2): error TS2629: Cannot assign to 'C' because it is a class.
 
 
-==== tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts (24 errors) ====
+==== assignmentToParenthesizedIdentifiers.ts (24 errors) ====
     var x: number;
     x = 3; // OK
     (x) = 3; // OK
@@ -74,15 +74,15 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     M2.M3 = { x: '' }; // Error
               ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
+!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
     (M2).M3 = { x: '' }; // Error
                 ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
+!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
     (M2.M3) = { x: '' }; // Error
                 ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
+!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
     
     
     function fn() { }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionsInClassExpressions.ts ===
+//// [tests/cases/compiler/functionsInClassExpressions.ts] ////
+
+=== functionsInClassExpressions.ts ===
 let Foo = class {
 >Foo : typeof Foo
 >class {    constructor() {        this.bar++;    }    bar = 0;    inc = () => {        this.bar++;    }    m() { return this.bar; }} : typeof Foo

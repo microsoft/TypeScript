@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedObjectRest.ts] ////
+
 //// [nestedObjectRest.ts]
 // https://github.com/microsoft/TypeScript/issues/43400
 var x, y;

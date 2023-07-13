@@ -1,9 +1,9 @@
-tests/cases/compiler/libMembers.ts(4,3): error TS2339: Property 'subby' does not exist on type 'string'.
-tests/cases/compiler/libMembers.ts(9,17): error TS1011: An element access expression should take an argument.
-tests/cases/compiler/libMembers.ts(12,15): error TS2339: Property 'prototype' does not exist on type 'C'.
+libMembers.ts(4,3): error TS2339: Property 'subby' does not exist on type 'string'.
+libMembers.ts(9,17): error TS1011: An element access expression should take an argument.
+libMembers.ts(12,15): error TS2339: Property 'prototype' does not exist on type 'C'.
 
 
-==== tests/cases/compiler/libMembers.ts (3 errors) ====
+==== libMembers.ts (3 errors) ====
     var s="hello";
     s.substring(0);
     s.substring(3,4);

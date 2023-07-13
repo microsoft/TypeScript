@@ -1,12 +1,12 @@
-tests/cases/compiler/typeComparisonCaching.ts(26,1): error TS2322: Type 'B' is not assignable to type 'A'.
+typeComparisonCaching.ts(26,1): error TS2322: Type 'B' is not assignable to type 'A'.
   Types of property 's' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/typeComparisonCaching.ts(27,1): error TS2322: Type 'D' is not assignable to type 'C'.
+typeComparisonCaching.ts(27,1): error TS2322: Type 'D' is not assignable to type 'C'.
   Types of property 'q' are incompatible.
     Type 'B' is not assignable to type 'A'.
 
 
-==== tests/cases/compiler/typeComparisonCaching.ts (2 errors) ====
+==== typeComparisonCaching.ts (2 errors) ====
     // Check that we only cache results of type comparisons that are free of assumptions
     
     interface A {

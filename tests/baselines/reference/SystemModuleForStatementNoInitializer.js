@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/SystemModuleForStatementNoInitializer.ts] ////
+
 //// [SystemModuleForStatementNoInitializer.ts]
 export { };
 

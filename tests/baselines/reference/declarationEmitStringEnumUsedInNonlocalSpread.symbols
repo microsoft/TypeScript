@@ -1,4 +1,6 @@
-=== tests/cases/compiler/class.ts ===
+//// [tests/cases/compiler/declarationEmitStringEnumUsedInNonlocalSpread.ts] ////
+
+=== class.ts ===
 export const enum TestEnum {
 >TestEnum : Symbol(TestEnum, Decl(class.ts, 0, 0))
 
@@ -48,7 +50,7 @@ export class A {
         };
     }
 }
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { A } from './class';
 >A : Symbol(A, Decl(index.ts, 0, 8))
 

@@ -1,9 +1,9 @@
-tests/cases/conformance/types/mapped/mappedTypes5.ts(6,9): error TS2322: Type 'Partial<T>' is not assignable to type 'Readonly<T>'.
-tests/cases/conformance/types/mapped/mappedTypes5.ts(8,9): error TS2322: Type 'Partial<Readonly<T>>' is not assignable to type 'Readonly<T>'.
-tests/cases/conformance/types/mapped/mappedTypes5.ts(9,9): error TS2322: Type 'Readonly<Partial<T>>' is not assignable to type 'Readonly<T>'.
+mappedTypes5.ts(6,9): error TS2322: Type 'Partial<T>' is not assignable to type 'Readonly<T>'.
+mappedTypes5.ts(8,9): error TS2322: Type 'Partial<Readonly<T>>' is not assignable to type 'Readonly<T>'.
+mappedTypes5.ts(9,9): error TS2322: Type 'Readonly<Partial<T>>' is not assignable to type 'Readonly<T>'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypes5.ts (3 errors) ====
+==== mappedTypes5.ts (3 errors) ====
     function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) {
         let a1: Partial<T> = p;
         let a2: Partial<T> = r;

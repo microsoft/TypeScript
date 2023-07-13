@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictFunctionTypes1.ts ===
+//// [tests/cases/compiler/strictFunctionTypes1.ts] ////
+
+=== strictFunctionTypes1.ts ===
 declare function f1<T>(f1: (x: T) => void, f2: (x: T) => void): (x: T) => void;
 >f1 : Symbol(f1, Decl(strictFunctionTypes1.ts, 0, 0))
 >T : Symbol(T, Decl(strictFunctionTypes1.ts, 0, 20))

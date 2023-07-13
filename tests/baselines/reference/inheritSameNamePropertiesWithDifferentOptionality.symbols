@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritSameNamePropertiesWithDifferentOptionality.ts ===
+//// [tests/cases/compiler/inheritSameNamePropertiesWithDifferentOptionality.ts] ////
+
+=== inheritSameNamePropertiesWithDifferentOptionality.ts ===
 interface C {
 >C : Symbol(C, Decl(inheritSameNamePropertiesWithDifferentOptionality.ts, 0, 0))
 

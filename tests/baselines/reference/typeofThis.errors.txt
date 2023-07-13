@@ -1,14 +1,14 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(24,19): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(32,19): error TS18048: 'this' is possibly 'undefined'.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(46,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(46,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(52,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(52,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(57,19): error TS7041: The containing arrow function captures the global value of 'this'.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(57,24): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+typeofThis.ts(24,19): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeofThis.ts(32,19): error TS18048: 'this' is possibly 'undefined'.
+typeofThis.ts(46,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
+typeofThis.ts(46,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeofThis.ts(52,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
+typeofThis.ts(52,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeofThis.ts(57,19): error TS7041: The containing arrow function captures the global value of 'this'.
+typeofThis.ts(57,24): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts (8 errors) ====
+==== typeofThis.ts (8 errors) ====
     class Test {
         data = {};
         constructor() {

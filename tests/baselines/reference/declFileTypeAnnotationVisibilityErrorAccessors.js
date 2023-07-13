@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorAccessors.ts] ////
+
 //// [declFileTypeAnnotationVisibilityErrorAccessors.ts]
 module m {
     class private1 {
@@ -261,12 +263,12 @@ var m;
 
 
 //// [declFileTypeAnnotationVisibilityErrorAccessors.d.ts]
-declare module m {
+declare namespace m {
     class private1 {
     }
     export class public1 {
     }
-    module m2 {
+    namespace m2 {
         class public2 {
         }
     }

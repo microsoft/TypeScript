@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithExtensions_withAmbientPresent.ts] ////
+
 === /a.ts ===
 /// <reference path="declarations.d.ts" />
 import { x } from "js";

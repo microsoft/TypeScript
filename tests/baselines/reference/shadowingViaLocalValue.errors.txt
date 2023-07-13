@@ -1,8 +1,8 @@
-tests/cases/compiler/shadowingViaLocalValue.ts(4,13): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
-tests/cases/compiler/shadowingViaLocalValue.ts(11,18): error TS2481: Cannot initialize outer scoped variable 'x1' in the same scope as block scoped declaration 'x1'.
+shadowingViaLocalValue.ts(4,13): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
+shadowingViaLocalValue.ts(11,18): error TS2481: Cannot initialize outer scoped variable 'x1' in the same scope as block scoped declaration 'x1'.
 
 
-==== tests/cases/compiler/shadowingViaLocalValue.ts (2 errors) ====
+==== shadowingViaLocalValue.ts (2 errors) ====
     {
         let x;
         {

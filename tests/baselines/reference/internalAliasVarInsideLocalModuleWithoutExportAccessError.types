@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExportAccessError.ts ===
+//// [tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExportAccessError.ts] ////
+
+=== internalAliasVarInsideLocalModuleWithoutExportAccessError.ts ===
 export module a {
 >a : typeof a
 

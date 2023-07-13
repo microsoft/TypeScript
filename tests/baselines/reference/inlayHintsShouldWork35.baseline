@@ -1,0 +1,116 @@
+foo(1);
+    ^
+{
+  "text": "v:",
+  "position": 29,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo('');
+    ^
+{
+  "text": "v:",
+  "position": 37,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(true);
+    ^
+{
+  "text": "v:",
+  "position": 46,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(() => 1);
+    ^
+{
+  "text": "v:",
+  "position": 57,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(function () { return 1 });
+    ^
+{
+  "text": "v:",
+  "position": 71,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo({});
+    ^
+{
+  "text": "v:",
+  "position": 102,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo({ a: 1 });
+    ^
+{
+  "text": "v:",
+  "position": 111,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo([]);
+    ^
+{
+  "text": "v:",
+  "position": 126,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo([1]);
+    ^
+{
+  "text": "v:",
+  "position": 135,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(foo);
+    ^
+{
+  "text": "v:",
+  "position": 145,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo((1));
+    ^
+{
+  "text": "v:",
+  "position": 155,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(foo(1));
+    ^
+{
+  "text": "v:",
+  "position": 165,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(foo(1));
+        ^
+{
+  "text": "v:",
+  "position": 169,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

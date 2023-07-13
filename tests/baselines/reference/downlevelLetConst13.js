@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/downlevelLetConst13.ts] ////
+
 //// [downlevelLetConst13.ts]
 'use strict'
 // exported let\const bindings should not be renamed

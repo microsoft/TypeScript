@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadParameterTupleType.ts ===
+//// [tests/cases/compiler/spreadParameterTupleType.ts] ////
+
+=== spreadParameterTupleType.ts ===
 function f1() {
 >f1 : () => (s: string, s_1: string) => void
 

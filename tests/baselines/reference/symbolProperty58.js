@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty58.ts] ////
+
 //// [symbolProperty58.ts]
 interface SymbolConstructor {
     foo: string;

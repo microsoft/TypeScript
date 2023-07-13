@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts] ////
+
 //// [unusedVariablesWithUnderscoreInBindingElement.ts]
 function t1() {
     const [_a1, b1] = [1, 2];

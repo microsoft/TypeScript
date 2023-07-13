@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNamespacePrefixInName.tsx] ////
+
 //// [jsxNamespacePrefixInName.tsx]
 var justElement1 = <a:element />;
 var justElement2 = <a:element></a:element>;

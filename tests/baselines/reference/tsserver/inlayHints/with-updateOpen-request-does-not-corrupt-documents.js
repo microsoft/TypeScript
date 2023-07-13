@@ -90,11 +90,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/commonfile1.ts: *new*
   {}
 /a/b/commonfile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -117,7 +117,16 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":2,"success":true,"performanceData":{"updateGraphDurationMs":*}}
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "configure",
+     "request_seq": 2,
+     "success": true,
+     "performanceData": {
+      "updateGraphDurationMs": *
+     }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false

@@ -1,8 +1,8 @@
-tests/cases/conformance/jsdoc/a.js(4,5): error TS2322: Type 'null' is not assignable to type 'number | undefined'.
-tests/cases/conformance/jsdoc/a.js(8,3): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
+a.js(4,5): error TS2322: Type 'null' is not assignable to type 'number | undefined'.
+a.js(8,3): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
 
 
-==== tests/cases/conformance/jsdoc/a.js (2 errors) ====
+==== a.js (2 errors) ====
     /** @param {number=} a */
     function f(a) {
         a = 1

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts ===
+//// [tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts] ////
+
+=== varNameConflictsWithImportInDifferentPartOfModule.ts ===
 module M1 {
 >M1 : Symbol(M1, Decl(varNameConflictsWithImportInDifferentPartOfModule.ts, 0, 0), Decl(varNameConflictsWithImportInDifferentPartOfModule.ts, 3, 1))
 

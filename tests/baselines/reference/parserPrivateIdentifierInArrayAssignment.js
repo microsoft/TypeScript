@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parserPrivateIdentifierInArrayAssignment.ts] ////
+
 //// [parserPrivateIdentifierInArrayAssignment.ts]
 [#abc]=
 

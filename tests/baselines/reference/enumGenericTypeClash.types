@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumGenericTypeClash.ts ===
+//// [tests/cases/compiler/enumGenericTypeClash.ts] ////
+
+=== enumGenericTypeClash.ts ===
 class X<A,B,C> { }
 >X : X<A, B, C>
 

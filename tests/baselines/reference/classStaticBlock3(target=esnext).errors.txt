@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts(7,29): error TS2729: Property 'f2' is used before its initialization.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts(7,35): error TS2729: Property 'f3' is used before its initialization.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts(13,35): error TS2729: Property 'f3' is used before its initialization.
+classStaticBlock3.ts(7,29): error TS2729: Property 'f2' is used before its initialization.
+classStaticBlock3.ts(7,35): error TS2729: Property 'f3' is used before its initialization.
+classStaticBlock3.ts(13,35): error TS2729: Property 'f3' is used before its initialization.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts (3 errors) ====
+==== classStaticBlock3.ts (3 errors) ====
     const a = 1;
     
     class C {
@@ -13,10 +13,10 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts(13,35): er
             console.log(C.f1, C.f2, C.f3)
                                 ~~
 !!! error TS2729: Property 'f2' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts:10:12: 'f2' is declared here.
+!!! related TS2728 classStaticBlock3.ts:10:12: 'f2' is declared here.
                                       ~~
 !!! error TS2729: Property 'f3' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts:16:12: 'f3' is declared here.
+!!! related TS2728 classStaticBlock3.ts:16:12: 'f3' is declared here.
         }
     
         static f2 = 2;
@@ -25,7 +25,7 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts(13,35): er
             console.log(C.f1, C.f2, C.f3)
                                       ~~
 !!! error TS2729: Property 'f3' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts:16:12: 'f3' is declared here.
+!!! related TS2728 classStaticBlock3.ts:16:12: 'f3' is declared here.
         }
     
         static f3 = 3;

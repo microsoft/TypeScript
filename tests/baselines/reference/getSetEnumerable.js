@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getSetEnumerable.ts] ////
+
 //// [getSetEnumerable.ts]
 class GetSetEnumerableClassGet {
     get prop() { return true;}

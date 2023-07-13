@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/declarationEmitLateBoundJSAssignments.ts] ////
+
+=== file.js ===
 export function foo() {}
 >foo : typeof foo
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonNullableTypes1.ts ===
+//// [tests/cases/compiler/nonNullableTypes1.ts] ////
+
+=== nonNullableTypes1.ts ===
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
 >x : T

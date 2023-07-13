@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts] ////
+
+=== derivedClassSuperProperties.ts ===
 declare const decorate: any;
 >decorate : Symbol(decorate, Decl(derivedClassSuperProperties.ts, 0, 13))
 

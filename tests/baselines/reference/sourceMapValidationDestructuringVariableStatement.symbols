@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatement.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringVariableStatement.ts] ////
+
+=== sourceMapValidationDestructuringVariableStatement.ts ===
 interface Robot {
 >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringVariableStatement.ts, 0, 0))
 

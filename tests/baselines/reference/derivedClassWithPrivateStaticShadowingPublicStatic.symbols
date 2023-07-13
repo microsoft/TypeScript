@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts] ////
+
+=== derivedClassWithPrivateStaticShadowingPublicStatic.ts ===
 class Base {
 >Base : Symbol(Base, Decl(derivedClassWithPrivateStaticShadowingPublicStatic.ts, 0, 0))
 

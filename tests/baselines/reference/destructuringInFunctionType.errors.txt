@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,18): error TS2842: 'b' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,28): error TS2842: 'a' is an unused renaming of 'b'. Did you intend to use it as a type annotation?
+destructuringInFunctionType.ts(12,18): error TS2842: 'b' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
+destructuringInFunctionType.ts(12,28): error TS2842: 'a' is an unused renaming of 'b'. Did you intend to use it as a type annotation?
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts (2 errors) ====
+==== destructuringInFunctionType.ts (2 errors) ====
     interface a { a }
     interface b { b }
     interface c { c }
@@ -17,10 +17,10 @@ tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,28):
     type F3 = ([{ a: b }, { b: a }]) => void;
                      ~
 !!! error TS2842: 'b' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts:12:32: We can only write a type for 'a' by adding a type for the entire parameter here.
+!!! related TS2843 destructuringInFunctionType.ts:12:32: We can only write a type for 'a' by adding a type for the entire parameter here.
                                ~
 !!! error TS2842: 'a' is an unused renaming of 'b'. Did you intend to use it as a type annotation?
-!!! related TS2843 tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts:12:32: We can only write a type for 'b' by adding a type for the entire parameter here.
+!!! related TS2843 destructuringInFunctionType.ts:12:32: We can only write a type for 'b' by adding a type for the entire parameter here.
     
     type T4 = ([{ a: [b, c] }]);
     type F4 = ([{ a: [b, c] }]) => void;

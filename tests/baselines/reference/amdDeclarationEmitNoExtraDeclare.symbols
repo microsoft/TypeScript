@@ -1,4 +1,6 @@
-=== tests/cases/compiler/Class.ts ===
+//// [tests/cases/compiler/amdDeclarationEmitNoExtraDeclare.ts] ////
+
+=== Class.ts ===
 import { Configurable } from "./Configurable"
 >Configurable : Symbol(Configurable, Decl(Class.ts, 0, 8))
 
@@ -10,7 +12,7 @@ export class ActualClass extends Configurable(HiddenClass) {}
 >Configurable : Symbol(Configurable, Decl(Class.ts, 0, 8))
 >HiddenClass : Symbol(HiddenClass, Decl(Class.ts, 0, 45))
 
-=== tests/cases/compiler/Configurable.ts ===
+=== Configurable.ts ===
 export type Constructor<T> = {
 >Constructor : Symbol(Constructor, Decl(Configurable.ts, 0, 0))
 >T : Symbol(T, Decl(Configurable.ts, 0, 24))

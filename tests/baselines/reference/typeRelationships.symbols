@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/typeRelationships.ts ===
+//// [tests/cases/conformance/types/thisType/typeRelationships.ts] ////
+
+=== typeRelationships.ts ===
 class C {
 >C : Symbol(C, Decl(typeRelationships.ts, 0, 0))
 

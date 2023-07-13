@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionThisExpressionAndModuleInGlobal.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndModuleInGlobal.ts] ////
+
+=== collisionThisExpressionAndModuleInGlobal.ts ===
 module _this { //Error
 >_this : Symbol(_this, Decl(collisionThisExpressionAndModuleInGlobal.ts, 0, 0))
 

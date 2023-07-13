@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralArraySpecialization.ts ===
+//// [tests/cases/compiler/objectLiteralArraySpecialization.ts] ////
+
+=== objectLiteralArraySpecialization.ts ===
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
 >initialValues : T[]

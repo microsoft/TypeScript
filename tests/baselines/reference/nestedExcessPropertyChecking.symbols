@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedExcessPropertyChecking.ts ===
+//// [tests/cases/compiler/nestedExcessPropertyChecking.ts] ////
+
+=== nestedExcessPropertyChecking.ts ===
 type A1 = { x: { a?: string } };
 >A1 : Symbol(A1, Decl(nestedExcessPropertyChecking.ts, 0, 0))
 >x : Symbol(x, Decl(nestedExcessPropertyChecking.ts, 0, 11))

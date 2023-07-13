@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unmatchedParameterPositions.ts ===
+//// [tests/cases/compiler/unmatchedParameterPositions.ts] ////
+
+=== unmatchedParameterPositions.ts ===
 // Repros from #40251
 
 declare let s: (...items: never[]) => never[];

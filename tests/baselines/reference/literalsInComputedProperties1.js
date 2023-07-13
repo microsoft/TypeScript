@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/literalsInComputedProperties1.ts] ////
+
 //// [literalsInComputedProperties1.ts]
 let x = {
     1:1,

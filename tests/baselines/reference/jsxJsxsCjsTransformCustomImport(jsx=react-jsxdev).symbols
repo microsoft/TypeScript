@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImport.tsx ===
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImport.tsx] ////
+
+=== jsxJsxsCjsTransformCustomImport.tsx ===
 /// <reference path="react16.d.ts" />
 const a = <>
 >a : Symbol(a, Decl(jsxJsxsCjsTransformCustomImport.tsx, 1, 5))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx ===
+//// [tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx] ////
+
+=== tsxNotUsingApparentTypeOfSFC.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from 'react';

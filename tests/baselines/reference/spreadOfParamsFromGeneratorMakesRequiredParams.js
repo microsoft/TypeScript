@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts] ////
+
 //// [spreadOfParamsFromGeneratorMakesRequiredParams.ts]
 declare function call<Fn extends (...args: any[]) => any>(
     fn: Fn,

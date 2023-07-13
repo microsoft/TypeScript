@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonNullableReductionNonStrict.ts] ////
+
 //// [nonNullableReductionNonStrict.ts]
 // Repros from #43425
 

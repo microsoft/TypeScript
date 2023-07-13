@@ -81,11 +81,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /project/b.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -132,9 +132,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -211,11 +211,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /project/b.ts: *new*
+  {}
+/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::

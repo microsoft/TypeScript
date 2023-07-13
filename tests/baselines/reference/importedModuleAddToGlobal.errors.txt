@@ -1,7 +1,7 @@
-tests/cases/compiler/importedModuleAddToGlobal.ts(15,23): error TS2833: Cannot find namespace 'b'. Did you mean 'B'?
+importedModuleAddToGlobal.ts(15,23): error TS2833: Cannot find namespace 'b'. Did you mean 'B'?
 
 
-==== tests/cases/compiler/importedModuleAddToGlobal.ts (1 errors) ====
+==== importedModuleAddToGlobal.ts (1 errors) ====
     // Binding for an import statement in a typeref position is being added to the global scope
     // Shouldn't compile b.B is not defined in C
     module A {
@@ -19,5 +19,5 @@ tests/cases/compiler/importedModuleAddToGlobal.ts(15,23): error TS2833: Cannot f
         function hello(): b.B { return null; }
                           ~
 !!! error TS2833: Cannot find namespace 'b'. Did you mean 'B'?
-!!! related TS2728 tests/cases/compiler/importedModuleAddToGlobal.ts:8:8: 'B' is declared here.
+!!! related TS2728 importedModuleAddToGlobal.ts:8:8: 'B' is declared here.
     }

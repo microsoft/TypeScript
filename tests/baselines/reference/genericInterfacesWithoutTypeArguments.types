@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts ===
+//// [tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts] ////
+
+=== genericInterfacesWithoutTypeArguments.ts ===
 interface I<T> { }
 class C<T> { }
 >C : C<T>

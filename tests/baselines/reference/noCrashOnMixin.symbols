@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCrashOnMixin.ts ===
+//// [tests/cases/compiler/noCrashOnMixin.ts] ////
+
+=== noCrashOnMixin.ts ===
 class Abstract {
 >Abstract : Symbol(Abstract, Decl(noCrashOnMixin.ts, 0, 0))
 

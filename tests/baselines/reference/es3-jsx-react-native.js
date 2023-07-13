@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es3-jsx-react-native.tsx] ////
+
 //// [es3-jsx-react-native.tsx]
 const React: any = null;
 

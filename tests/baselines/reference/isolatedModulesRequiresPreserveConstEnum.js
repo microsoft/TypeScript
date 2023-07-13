@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesRequiresPreserveConstEnum.ts] ////
+
 //// [file1.ts]
 export {};
 

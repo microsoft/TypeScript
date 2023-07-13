@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportNamespaceDeclarationRetainsVisibility.ts] ////
+
 //// [exportNamespaceDeclarationRetainsVisibility.ts]
 namespace X {
     interface A {

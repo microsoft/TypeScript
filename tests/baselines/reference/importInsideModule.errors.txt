@@ -1,8 +1,8 @@
-tests/cases/compiler/importInsideModule_file2.ts(2,26): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/importInsideModule_file2.ts(2,26): error TS2307: Cannot find module 'importInsideModule_file1' or its corresponding type declarations.
+importInsideModule_file2.ts(2,26): error TS1147: Import declarations in a namespace cannot reference a module.
+importInsideModule_file2.ts(2,26): error TS2307: Cannot find module 'importInsideModule_file1' or its corresponding type declarations.
 
 
-==== tests/cases/compiler/importInsideModule_file2.ts (2 errors) ====
+==== importInsideModule_file2.ts (2 errors) ====
     export module myModule {
         import foo = require("importInsideModule_file1");
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -11,6 +11,6 @@ tests/cases/compiler/importInsideModule_file2.ts(2,26): error TS2307: Cannot fin
 !!! error TS2307: Cannot find module 'importInsideModule_file1' or its corresponding type declarations.
         var a = foo.x;
     }
-==== tests/cases/compiler/importInsideModule_file1.ts (0 errors) ====
+==== importInsideModule_file1.ts (0 errors) ====
     export var x = 1;
     

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/functionCalls.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/functionCalls.ts] ////
+
+=== functionCalls.ts ===
 // Invoke function call on value of type 'any' with no type arguments
 var anyVar: any;
 >anyVar : Symbol(anyVar, Decl(functionCalls.ts, 1, 3))

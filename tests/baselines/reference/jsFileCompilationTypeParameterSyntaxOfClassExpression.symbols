@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationTypeParameterSyntaxOfClassExpression.ts] ////
+
+=== a.js ===
 const Bar = class<T> {};
 >Bar : Symbol(Bar, Decl(a.js, 0, 5))
 >T : Symbol(T, Decl(a.js, 0, 18))

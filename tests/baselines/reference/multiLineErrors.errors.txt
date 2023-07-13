@@ -1,10 +1,10 @@
-tests/cases/compiler/multiLineErrors.ts(3,22): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/multiLineErrors.ts(21,1): error TS2322: Type 'A2' is not assignable to type 'A1'.
+multiLineErrors.ts(3,22): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+multiLineErrors.ts(21,1): error TS2322: Type 'A2' is not assignable to type 'A1'.
   The types of 'x.y' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/multiLineErrors.ts (2 errors) ====
+==== multiLineErrors.ts (2 errors) ====
     var t = 32;
     
     function noReturn(): {

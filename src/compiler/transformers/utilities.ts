@@ -12,20 +12,19 @@ import {
     ClassExpression,
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
-    CompilerOptions,
     CompoundAssignmentOperator,
     CoreTransformationContext,
     createExternalHelpersImportDeclarationIfNeeded,
-    createMultiMap,
     Decorator,
-    EmitResolver,
     ExportAssignment,
     ExportDeclaration,
     ExportSpecifier,
     Expression,
     filter,
+    formatGeneratedName,
     FunctionDeclaration,
     FunctionLikeDeclaration,
+    GeneratedIdentifierFlags,
     getAllAccessorDeclarations,
     getDecorators,
     getFirstConstructorWithBody,
@@ -53,6 +52,7 @@ import {
     isIdentifier,
     isKeyword,
     isLocalName,
+    isMemberName,
     isMethodOrAccessor,
     isNamedExports,
     isNamedImports,
@@ -62,6 +62,7 @@ import {
     isStatic,
     isStringLiteralLike,
     isSuperCall,
+    isTryStatement,
     LogicalOperatorOrHigher,
     map,
     MethodDeclaration,
@@ -83,8 +84,9 @@ import {
     SuperCall,
     SyntaxKind,
     TransformationContext,
+    unorderedRemoveItem,
     VariableDeclaration,
-    VariableStatement,
+    VariableStatement
 } from "../_namespaces/ts";
 
 /** @internal */
@@ -97,7 +99,7 @@ export function getOriginalNodeId(node: Node) {
 export interface ExternalModuleInfo {
     externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
     externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
-    exportSpecifiers: Map<string, ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
+    exportSpecifiers: IdentifierNameMap<ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
     exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported
     exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
@@ -159,9 +161,11 @@ export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): bool
 }
 
 /** @internal */
-export function collectExternalModuleInfo(context: TransformationContext, sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
+export function collectExternalModuleInfo(context: TransformationContext, sourceFile: SourceFile): ExternalModuleInfo {
+    const resolver = context.getEmitResolver();
+    const compilerOptions = context.getCompilerOptions();
     const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-    const exportSpecifiers = createMultiMap<string, ExportSpecifier>();
+    const exportSpecifiers = new IdentifierNameMultiMap<ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
     let exportedNames: Identifier[] | undefined;
@@ -298,7 +302,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
             if (!uniqueExports.get(idText(specifier.name))) {
                 const name = specifier.propertyName || specifier.name;
                 if (!node.moduleSpecifier) {
-                    exportSpecifiers.add(idText(name), specifier);
+                    exportSpecifiers.add(name, specifier);
                 }
 
                 const decl = resolver.getReferencedImportDeclaration(name)
@@ -346,6 +350,83 @@ function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
         map[key] = values = [value];
     }
     return values;
+}
+
+/** @internal */
+export class IdentifierNameMap<V> {
+    private readonly _map = new Map<string, V>();
+
+    get size() {
+        return this._map.size;
+    }
+
+    has(key: Identifier) {
+        return this._map.has(IdentifierNameMap.toKey(key));
+    }
+
+    get(key: Identifier) {
+        return this._map.get(IdentifierNameMap.toKey(key));
+    }
+
+    set(key: Identifier, value: V) {
+        this._map.set(IdentifierNameMap.toKey(key), value);
+        return this;
+    }
+
+    delete(key: Identifier): boolean {
+        return this._map?.delete(IdentifierNameMap.toKey(key)) ?? false;
+    }
+
+    clear(): void {
+        this._map.clear();
+    }
+
+    values() {
+        return this._map.values();
+    }
+
+    private static toKey(name: Identifier | PrivateIdentifier): string {
+        if (isGeneratedPrivateIdentifier(name) || isGeneratedIdentifier(name)) {
+            const autoGenerate = name.emitNode.autoGenerate;
+            if ((autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
+                const node = getNodeForGeneratedName(name);
+                const baseName = isMemberName(node) && node !== name ? IdentifierNameMap.toKey(node) : `(generated@${getNodeId(node)})`;
+                return formatGeneratedName(/*privateName*/ false, autoGenerate.prefix, baseName, autoGenerate.suffix, IdentifierNameMap.toKey);
+            }
+            else {
+                const baseName = `(auto@${autoGenerate.id})`;
+                return formatGeneratedName(/*privateName*/ false, autoGenerate.prefix, baseName, autoGenerate.suffix, IdentifierNameMap.toKey);
+            }
+        }
+        if (isPrivateIdentifier(name)) {
+            return idText(name).slice(1);
+        }
+        return idText(name);
+    }
+}
+
+/** @internal */
+export class IdentifierNameMultiMap<V> extends IdentifierNameMap<V[]> {
+    add(key: Identifier, value: V): V[] {
+        let values = this.get(key);
+        if (values) {
+            values.push(value);
+        }
+        else {
+            this.set(key, values = [value]);
+        }
+        return values;
+    }
+
+    remove(key: Identifier, value: V) {
+        const values = this.get(key);
+        if (values) {
+            unorderedRemoveItem(values, value);
+            if (!values.length) {
+                this.delete(key);
+            }
+        }
+    }
 }
 
 /**
@@ -417,21 +498,34 @@ export function getSuperCallFromStatement(statement: Statement): SuperCall | und
         : undefined;
 }
 
-/**
- * @returns The index (after prologue statements) of a super call, or -1 if not found.
- *
- * @internal
- */
-export function findSuperStatementIndex(statements: NodeArray<Statement>, indexAfterLastPrologueStatement: number) {
-    for (let i = indexAfterLastPrologueStatement; i < statements.length; i += 1) {
+function findSuperStatementIndexPathWorker(statements: NodeArray<Statement>, start: number, indices: number[]) {
+    for (let i = start; i < statements.length; i += 1) {
         const statement = statements[i];
-
         if (getSuperCallFromStatement(statement)) {
-            return i;
+            indices.unshift(i);
+            return true;
+        }
+        else if (isTryStatement(statement) && findSuperStatementIndexPathWorker(statement.tryBlock.statements, 0, indices)) {
+            indices.unshift(i);
+            return true;
         }
     }
 
-    return -1;
+    return false;
+}
+
+/**
+ * Finds a path of indices to navigate to a `super()` call, descending only through `try` statements.
+ *
+ * @returns An array of indicies to walk down through `try` statements, with the last element being the index of
+ * the statement containing `super()`. Otherwise, an empty array if `super()` was not found.
+ *
+ * @internal
+ */
+export function findSuperStatementIndexPath(statements: NodeArray<Statement>, start: number) {
+    const indices: number[] = [];
+    findSuperStatementIndexPathWorker(statements, start, indices);
+    return indices;
 }
 
 /**

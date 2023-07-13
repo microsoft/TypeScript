@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment36.ts] ////
+
 //// [typeFromPropertyAssignment36.ts]
 function f(b: boolean) {
     function d() {

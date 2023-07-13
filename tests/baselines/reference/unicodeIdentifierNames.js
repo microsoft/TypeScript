@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unicodeIdentifierNames.ts] ////
+
 //// [unicodeIdentifierNames.ts]
 // This test is passing, except that on node the resulting file will not have a BOM and on CScript it will which makes 
 // impossible to use a single baseline file to match the result of both. this test should be enabled once this issue is resolved.

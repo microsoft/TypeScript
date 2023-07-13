@@ -1,11 +1,11 @@
-tests/cases/compiler/index.ts(9,10): error TS2749: 'originalZZZ' refers to a value, but is being used as a type here. Did you mean 'typeof originalZZZ'?
+index.ts(9,10): error TS2749: 'originalZZZ' refers to a value, but is being used as a type here. Did you mean 'typeof originalZZZ'?
 
 
-==== tests/cases/compiler/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     export const zzz = 123;
     export default zzz;
     
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     export default interface zzz {
         x: string;
     }
@@ -17,7 +17,7 @@ tests/cases/compiler/index.ts(9,10): error TS2749: 'originalZZZ' refers to a val
     
     export { zzz as default };
     
-==== tests/cases/compiler/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     import zzz from "./a";
     
     const x: zzz = { x: "" };

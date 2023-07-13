@@ -144,29 +144,29 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/demo/animals/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/demo/core/tsconfig.json: *new*
-  {}
-/user/username/projects/demo/tsconfig-base.json: *new*
+/user/username/projects/demo/animals: *new*
   {}
 /user/username/projects/demo/animals/animal.ts: *new*
   {}
 /user/username/projects/demo/animals/dog.ts: *new*
   {}
-/user/username/projects/demo/animals: *new*
-  {}
 /user/username/projects/demo/animals/index.ts: *new*
+  {}
+/user/username/projects/demo/animals/tsconfig.json: *new*
+  {}
+/user/username/projects/demo/core/tsconfig.json: *new*
   {}
 /user/username/projects/demo/core/utilities.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/demo/tsconfig-base.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/demo/core: *new*
-  {}
 /user/username/projects/demo/animals: *new*
+  {}
+/user/username/projects/demo/core: *new*
   {}
 
 exitCode:: ExitStatus.undefined

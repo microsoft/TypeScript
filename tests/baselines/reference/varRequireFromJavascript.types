@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/varRequireFromJavascript.ts] ////
+
+=== use.js ===
 var ex = require('./ex')
 >ex : typeof ex
 >require('./ex') : typeof ex
@@ -34,7 +36,7 @@ function f(wrap) {
 >n : number
 }
 
-=== tests/cases/conformance/salsa/ex.js ===
+=== ex.js ===
 export class Crunch {
 >Crunch : Crunch
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts ===
+//// [tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts] ////
+
+=== undefinedAssignableToGenericMappedIntersection.ts ===
 type Errors<T> = { [P in keyof T]: string | undefined } & {all: string | undefined};
 >Errors : Symbol(Errors, Decl(undefinedAssignableToGenericMappedIntersection.ts, 0, 0))
 >T : Symbol(T, Decl(undefinedAssignableToGenericMappedIntersection.ts, 0, 12))

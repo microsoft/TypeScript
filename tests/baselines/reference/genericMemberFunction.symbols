@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericMemberFunction.ts ===
+//// [tests/cases/compiler/genericMemberFunction.ts] ////
+
+=== genericMemberFunction.ts ===
 export class BuildError<A, B, C>{
 >BuildError : Symbol(BuildError, Decl(genericMemberFunction.ts, 0, 0))
 >A : Symbol(A, Decl(genericMemberFunction.ts, 0, 24))

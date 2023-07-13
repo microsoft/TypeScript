@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParamAssignmentCompat.ts] ////
+
 //// [optionalParamAssignmentCompat.ts]
 interface I1 {
     (p1: number, p2: string): void;

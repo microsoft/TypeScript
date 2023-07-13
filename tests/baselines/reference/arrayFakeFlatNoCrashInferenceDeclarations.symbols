@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayFakeFlatNoCrashInferenceDeclarations.ts ===
+//// [tests/cases/compiler/arrayFakeFlatNoCrashInferenceDeclarations.ts] ////
+
+=== arrayFakeFlatNoCrashInferenceDeclarations.ts ===
 type BadFlatArray<Arr, Depth extends number> = {obj: {
 >BadFlatArray : Symbol(BadFlatArray, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 0))
 >Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))

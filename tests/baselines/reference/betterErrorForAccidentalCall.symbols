@@ -1,4 +1,6 @@
-=== tests/cases/compiler/betterErrorForAccidentalCall.ts ===
+//// [tests/cases/compiler/betterErrorForAccidentalCall.ts] ////
+
+=== betterErrorForAccidentalCall.ts ===
 declare function foo(): string;
 >foo : Symbol(foo, Decl(betterErrorForAccidentalCall.ts, 0, 0))
 

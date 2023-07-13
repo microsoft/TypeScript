@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameConstructorSignature.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameConstructorSignature.ts] ////
+
+=== privateNameConstructorSignature.ts ===
 interface D {
 >D : Symbol(D, Decl(privateNameConstructorSignature.ts, 0, 0))
 

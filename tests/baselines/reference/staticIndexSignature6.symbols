@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature6.ts ===
+//// [tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature6.ts] ////
+
+=== staticIndexSignature6.ts ===
 function foo () {
 >foo : Symbol(foo, Decl(staticIndexSignature6.ts, 0, 0))
 

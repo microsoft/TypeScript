@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadModifiersMustAgree.ts ===
+//// [tests/cases/compiler/overloadModifiersMustAgree.ts] ////
+
+=== overloadModifiersMustAgree.ts ===
 class baz {
 >baz : Symbol(baz, Decl(overloadModifiersMustAgree.ts, 0, 0))
 

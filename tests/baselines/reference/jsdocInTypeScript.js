@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocInTypeScript.ts] ////
+
 //// [jsdocInTypeScript.ts]
 // JSDoc typedef tags are not bound TypeScript files.
 /** @typedef {function} T */

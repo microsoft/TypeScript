@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/Symbols/symbolProperty39.ts(2,5): error TS2393: Duplicate function implementation.
-tests/cases/conformance/es6/Symbols/symbolProperty39.ts(3,5): error TS2393: Duplicate function implementation.
-tests/cases/conformance/es6/Symbols/symbolProperty39.ts(4,5): error TS2393: Duplicate function implementation.
-tests/cases/conformance/es6/Symbols/symbolProperty39.ts(7,5): error TS2393: Duplicate function implementation.
+symbolProperty39.ts(2,5): error TS2393: Duplicate function implementation.
+symbolProperty39.ts(3,5): error TS2393: Duplicate function implementation.
+symbolProperty39.ts(4,5): error TS2393: Duplicate function implementation.
+symbolProperty39.ts(7,5): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolProperty39.ts (4 errors) ====
+==== symbolProperty39.ts (4 errors) ====
     class C {
         [Symbol.iterator](x: string): string;
         ~~~~~~~~~~~~~~~~~

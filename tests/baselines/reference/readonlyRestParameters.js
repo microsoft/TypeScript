@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/restParameters/readonlyRestParameters.ts] ////
+
 //// [readonlyRestParameters.ts]
 function f0(a: string, b: string) {
     f0(a, b);

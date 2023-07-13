@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnImportStatement2.ts] ////
+
 //// [commentOnImportStatement2.ts]
 /* not copyright */
 import foo = require('./foo');

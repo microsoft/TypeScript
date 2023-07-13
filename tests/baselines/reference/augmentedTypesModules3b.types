@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypesModules3b.ts ===
+//// [tests/cases/compiler/augmentedTypesModules3b.ts] ////
+
+=== augmentedTypesModules3b.ts ===
 class m3b { foo() { } }
 >m3b : m3b
 >foo : () => void

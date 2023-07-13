@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameWhenNotUseDefineForClassFieldsInEsNext.ts] ////
+
 //// [privateNameWhenNotUseDefineForClassFieldsInEsNext.ts]
 class TestWithStatics {
     #prop = 0

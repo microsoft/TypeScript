@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumIdentifierLiterals.ts] ////
+
 //// [enumIdentifierLiterals.ts]
 enum Nums {
     1.0,

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts] ////
+
 //// [conditionalOperatorConditionIsObjectType.ts]
 //Cond ? Expr1 : Expr2,  Cond is of object type, Expr1 and Expr2 have the same type
 var condObject: Object;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceConflictingCandidates.ts] ////
+
 //// [typeInferenceConflictingCandidates.ts]
 declare function g<T>(a: T, b: T, c: (t: T) => T): T;
 

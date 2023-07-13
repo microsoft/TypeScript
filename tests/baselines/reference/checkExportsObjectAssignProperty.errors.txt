@@ -1,16 +1,16 @@
-tests/cases/conformance/jsdoc/validator.ts(17,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
-tests/cases/conformance/jsdoc/validator.ts(18,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
-tests/cases/conformance/jsdoc/validator.ts(19,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsdoc/validator.ts(20,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsdoc/validator.ts(21,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/validator.ts(37,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
-tests/cases/conformance/jsdoc/validator.ts(38,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
-tests/cases/conformance/jsdoc/validator.ts(39,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/validator.ts(40,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsdoc/validator.ts(41,1): error TS2322: Type 'number' is not assignable to type 'string'.
+validator.ts(17,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
+validator.ts(18,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
+validator.ts(19,1): error TS2322: Type 'string' is not assignable to type 'number'.
+validator.ts(20,1): error TS2322: Type 'string' is not assignable to type 'number'.
+validator.ts(21,1): error TS2322: Type 'number' is not assignable to type 'string'.
+validator.ts(37,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
+validator.ts(38,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
+validator.ts(39,1): error TS2322: Type 'number' is not assignable to type 'string'.
+validator.ts(40,1): error TS2322: Type 'string' is not assignable to type 'number'.
+validator.ts(41,1): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsdoc/validator.ts (10 errors) ====
+==== validator.ts (10 errors) ====
     import "./";
     
     import m1 = require("./mod1");
@@ -73,7 +73,7 @@ tests/cases/conformance/jsdoc/validator.ts(41,1): error TS2322: Type 'number' is
     ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     
-==== tests/cases/conformance/jsdoc/mod1.js (0 errors) ====
+==== mod1.js (0 errors) ====
     Object.defineProperty(exports, "thing", { value: 42, writable: true });
     Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false });
     Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
@@ -85,7 +85,7 @@ tests/cases/conformance/jsdoc/validator.ts(41,1): error TS2322: Type 'number' is
         }
     });
     
-==== tests/cases/conformance/jsdoc/mod2.js (0 errors) ====
+==== mod2.js (0 errors) ====
     Object.defineProperty(module.exports, "thing", { value: "yes", writable: true });
     Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false });
     Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
@@ -97,7 +97,7 @@ tests/cases/conformance/jsdoc/validator.ts(41,1): error TS2322: Type 'number' is
         }
     });
     
-==== tests/cases/conformance/jsdoc/index.js (0 errors) ====
+==== index.js (0 errors) ====
     /**
      * @type {number}
      */

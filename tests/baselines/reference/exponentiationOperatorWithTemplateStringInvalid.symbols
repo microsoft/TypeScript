@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithTemplateStringInvalid.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithTemplateStringInvalid.ts] ////
+
+=== exponentiationOperatorWithTemplateStringInvalid.ts ===
 var a = 1 ** `${ 3 }`;
 >a : Symbol(a, Decl(exponentiationOperatorWithTemplateStringInvalid.ts, 0, 3))
 

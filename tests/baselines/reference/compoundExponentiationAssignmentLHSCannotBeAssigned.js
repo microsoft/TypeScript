@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts] ////
+
 //// [compoundExponentiationAssignmentLHSCannotBeAssigned.ts]
 enum E { a, b }
 

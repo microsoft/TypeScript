@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/modules/m1.ts(1,25): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/conformance/es6/modules/m1.ts(1,25): error TS2393: Duplicate function implementation.
-tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2393: Duplicate function implementation.
+m1.ts(1,25): error TS2323: Cannot redeclare exported variable 'default'.
+m1.ts(1,25): error TS2393: Duplicate function implementation.
+m1.ts(5,25): error TS2323: Cannot redeclare exported variable 'default'.
+m1.ts(5,25): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/conformance/es6/modules/m1.ts (4 errors) ====
+==== m1.ts (4 errors) ====
     export default function foo() {
                             ~~~
 !!! error TS2323: Cannot redeclare exported variable 'default'.
@@ -21,7 +21,7 @@ tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2393: Duplicate functio
     
     }
     
-==== tests/cases/conformance/es6/modules/m2.ts (0 errors) ====
+==== m2.ts (0 errors) ====
     import Entity from "./m1"
     
     Entity();

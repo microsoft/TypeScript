@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints2.ts] ////
+
 //// [genericCallWithObjectTypeArgsAndConstraints2.ts]
 // Generic call with constraints infering type parameter from object member properties
 // No errors expected

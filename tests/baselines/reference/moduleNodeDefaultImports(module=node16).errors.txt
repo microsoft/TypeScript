@@ -1,21 +1,21 @@
-tests/cases/compiler/b.mts(15,1): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.mts(16,1): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.mts(17,1): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.mts(18,1): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.mts(19,6): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
-tests/cases/compiler/b.mts(20,6): error TS2349: This expression is not callable.
-  Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+b.mts(15,1): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.mts(16,1): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.mts(17,1): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.mts(18,1): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.mts(19,6): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
+b.mts(20,6): error TS2349: This expression is not callable.
+  Type 'typeof import("mod")' has no call signatures.
 
 
-==== tests/cases/compiler/mod.cts (0 errors) ====
+==== mod.cts (0 errors) ====
     declare function fun(): void;
     export default fun;
-==== tests/cases/compiler/b.mts (6 errors) ====
+==== b.mts (6 errors) ====
     import a from "./mod.cjs";
     import { default as b } from "./mod.cjs";
     import c, { default as d } from "./mod.cjs";
@@ -33,27 +33,27 @@ tests/cases/compiler/b.mts(20,6): error TS2349: This expression is not callable.
     a();
     ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     b();
     ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     c();
     ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     d();
     ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     self.default();
          ~~~~~~~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     self.def();
          ~~~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'typeof import("tests/cases/compiler/mod")' has no call signatures.
+!!! error TS2349:   Type 'typeof import("mod")' has no call signatures.
     
     // should all work
     a.default();

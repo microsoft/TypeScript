@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionCall8.ts] ////
+
 //// [functionCall8.ts]
 function foo(a?:string){}
 foo('foo'); 

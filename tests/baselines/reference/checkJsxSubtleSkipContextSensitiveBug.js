@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx] ////
+
 //// [checkJsxSubtleSkipContextSensitiveBug.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/chrome-devtools-DOMExtension.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment21.ts] ////
+
+=== chrome-devtools-DOMExtension.js ===
 // Extend that DOM! (doesn't work, but shouldn't crash)
 Event.prototype.removeChildren = function () {
 >Event.prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))

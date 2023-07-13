@@ -1,10 +1,10 @@
-tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter.ts(10,5): error TS2322: Type 'A<string>' is not assignable to type 'B<string>'.
+typeParameterConstrainedToOuterTypeParameter.ts(10,5): error TS2322: Type 'A<string>' is not assignable to type 'B<string>'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'U' is not assignable to type 'string[]'.
       Type 'string' is not assignable to type 'string[]'.
 
 
-==== tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter.ts (1 errors) ====
+==== typeParameterConstrainedToOuterTypeParameter.ts (1 errors) ====
     interface A<T> {
         <U extends T>(x: U[])
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mutuallyRecursiveInference.ts ===
+//// [tests/cases/compiler/mutuallyRecursiveInference.ts] ////
+
+=== mutuallyRecursiveInference.ts ===
 class T<A> {
 >T : Symbol(T, Decl(mutuallyRecursiveInference.ts, 0, 0))
 >A : Symbol(A, Decl(mutuallyRecursiveInference.ts, 0, 8))

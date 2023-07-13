@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constEnumSyntheticNodesComments.ts ===
+//// [tests/cases/compiler/constEnumSyntheticNodesComments.ts] ////
+
+=== constEnumSyntheticNodesComments.ts ===
 const enum En { A, B, C, D }
 >En : Symbol(En, Decl(constEnumSyntheticNodesComments.ts, 0, 0))
 >A : Symbol(En.A, Decl(constEnumSyntheticNodesComments.ts, 0, 15))

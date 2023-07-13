@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationImport.ts] ////
+
 //// [sourceMapValidationImport.ts]
 export module m {
     export class c {

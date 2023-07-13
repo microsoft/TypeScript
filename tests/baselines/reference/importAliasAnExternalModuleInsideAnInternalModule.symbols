@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file1.ts ===
+//// [tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule.ts] ////
+
+=== importAliasAnExternalModuleInsideAnInternalModule_file1.ts ===
 import r = require('./importAliasAnExternalModuleInsideAnInternalModule_file0');
 >r : Symbol(r, Decl(importAliasAnExternalModuleInsideAnInternalModule_file1.ts, 0, 0))
 
@@ -18,7 +20,7 @@ module m_private {
 >foo : Symbol(C.m.foo, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 17))
 }
 
-=== tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file0.ts ===
+=== importAliasAnExternalModuleInsideAnInternalModule_file0.ts ===
 export module m {
 >m : Symbol(m, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 0))
 

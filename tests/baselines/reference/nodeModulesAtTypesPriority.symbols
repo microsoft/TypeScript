@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/nodeModulesAtTypesPriority.ts] ////
+
 === /node_modules/@types/react/index.d.ts ===
 declare const React: any;
 >React : Symbol(React, Decl(index.d.ts, 0, 13))

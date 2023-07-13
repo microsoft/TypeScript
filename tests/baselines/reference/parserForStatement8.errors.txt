@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement8.ts(1,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
-tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement8.ts(1,14): error TS2304: Cannot find name 'b'.
+parserForStatement8.ts(1,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+parserForStatement8.ts(1,14): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement8.ts (2 errors) ====
+==== parserForStatement8.ts (2 errors) ====
     for (this in b) {
          ~~~~
 !!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.

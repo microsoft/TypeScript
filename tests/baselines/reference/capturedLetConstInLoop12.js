@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop12.ts] ////
+
 //// [capturedLetConstInLoop12.ts]
 (function() {
     "use strict";

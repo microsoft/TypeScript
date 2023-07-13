@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importDecl_1.ts ===
+//// [tests/cases/compiler/importDecl.ts] ////
+
+=== importDecl_1.ts ===
 ///<reference path='importDecl_require.ts'/>
 ///<reference path='importDecl_require1.ts'/>
 ///<reference path='importDecl_require2.ts'/>
@@ -157,7 +159,7 @@ export var useMultiImport_m4_f4 = multiImport_m4.foo();
 >multiImport_m4 : typeof m4
 >foo : () => m4.d
 
-=== tests/cases/compiler/importDecl_require.ts ===
+=== importDecl_require.ts ===
 export class d {
 >d : d
 
@@ -170,7 +172,7 @@ export var x: d;
 export function foo(): d { return null; }
 >foo : () => d
 
-=== tests/cases/compiler/importDecl_require1.ts ===
+=== importDecl_require1.ts ===
 export class d {
 >d : d
 
@@ -183,7 +185,7 @@ var x: d;
 export function foo(): d { return null; }
 >foo : () => d
 
-=== tests/cases/compiler/importDecl_require2.ts ===
+=== importDecl_require2.ts ===
 export class d {
 >d : d
 
@@ -196,7 +198,7 @@ export var x: d;
 export function foo(): d { return null; }
 >foo : () => d
 
-=== tests/cases/compiler/importDecl_require3.ts ===
+=== importDecl_require3.ts ===
 export class d {
 >d : d
 
@@ -209,7 +211,7 @@ export var x: d;
 export function foo(): d { return null; }
 >foo : () => d
 
-=== tests/cases/compiler/importDecl_require4.ts ===
+=== importDecl_require4.ts ===
 import m4 = require("./importDecl_require");
 >m4 : typeof m4
 

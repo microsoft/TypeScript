@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/members/accessibility/protectedStaticClassPropertyAccessibleWithinSubclass2.ts(11,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/classes/members/accessibility/protectedStaticClassPropertyAccessibleWithinSubclass2.ts(19,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+protectedStaticClassPropertyAccessibleWithinSubclass2.ts(11,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+protectedStaticClassPropertyAccessibleWithinSubclass2.ts(19,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/conformance/classes/members/accessibility/protectedStaticClassPropertyAccessibleWithinSubclass2.ts (2 errors) ====
+==== protectedStaticClassPropertyAccessibleWithinSubclass2.ts (2 errors) ====
     class Base {
         protected static x: string;
         static staticMethod() {

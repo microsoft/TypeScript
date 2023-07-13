@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classExpressions/modifierOnClassExpressionMemberInFunction.ts] ////
+
 //// [modifierOnClassExpressionMemberInFunction.ts]
 function g() {
     var x = class C {

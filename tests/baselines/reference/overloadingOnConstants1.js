@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadingOnConstants1.ts] ////
+
 //// [overloadingOnConstants1.ts]
 class Base { foo() { } }
 class Derived1 extends Base { bar() { } }

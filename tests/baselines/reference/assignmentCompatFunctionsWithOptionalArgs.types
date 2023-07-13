@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts ===
+//// [tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts] ////
+
+=== assignmentCompatFunctionsWithOptionalArgs.ts ===
 function foo(x: { id: number; name?: string; }): void;
 >foo : (x: {    id: number;    name?: string;}) => void
 >x : { id: number; name?: string; }

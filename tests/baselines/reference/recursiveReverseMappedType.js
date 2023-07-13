@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveReverseMappedType.ts] ////
+
 //// [recursiveReverseMappedType.ts]
 // Repro from #38198
 

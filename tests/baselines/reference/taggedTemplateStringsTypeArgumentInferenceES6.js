@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInferenceES6.ts] ////
+
 //// [taggedTemplateStringsTypeArgumentInferenceES6.ts]
 // Generic tag with one parameter
 function noParams<T>(n: T) { }

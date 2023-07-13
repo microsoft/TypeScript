@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCatchBlock.ts] ////
+
 //// [noCatchBlock.ts]
 try {
  // ...

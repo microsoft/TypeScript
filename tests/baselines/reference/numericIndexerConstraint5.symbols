@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numericIndexerConstraint5.ts ===
+//// [tests/cases/compiler/numericIndexerConstraint5.ts] ////
+
+=== numericIndexerConstraint5.ts ===
 var x = { name: "x", 0: new Date() };
 >x : Symbol(x, Decl(numericIndexerConstraint5.ts, 0, 3))
 >name : Symbol(name, Decl(numericIndexerConstraint5.ts, 0, 9))

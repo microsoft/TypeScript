@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndAmbientFunction.ts] ////
+
 //// [collisionExportsRequireAndAmbientFunction.ts]
 export declare function exports(): number;
 

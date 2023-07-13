@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularAccessorAnnotations.ts ===
+//// [tests/cases/compiler/circularAccessorAnnotations.ts] ////
+
+=== circularAccessorAnnotations.ts ===
 declare const c1: {
 >c1 : Symbol(c1, Decl(circularAccessorAnnotations.ts, 0, 13))
 

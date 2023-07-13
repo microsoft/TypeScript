@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadIntersection.ts] ////
+
 //// [spreadIntersection.ts]
 var intersection: { a: number } & { b: string };
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts] ////
+
 //// [derivedClassSuperCallsWithThisArg.ts]
 class Base {
     x: string;

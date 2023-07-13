@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varArgParamTypeCheck.ts] ////
+
 //// [varArgParamTypeCheck.ts]
 function sequence(...sequences:{():void;}[]) {
 }

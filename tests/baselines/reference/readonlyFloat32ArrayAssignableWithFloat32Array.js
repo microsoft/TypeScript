@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyFloat32ArrayAssignableWithFloat32Array.ts] ////
+
 //// [readonlyFloat32ArrayAssignableWithFloat32Array.ts]
 function update(b: Readonly<Float32Array>) {
     const c = copy(b);

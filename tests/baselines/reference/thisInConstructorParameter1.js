@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInConstructorParameter1.ts] ////
+
 //// [thisInConstructorParameter1.ts]
 class Foo {
     public y;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeOfOnTypeArg.ts ===
+//// [tests/cases/compiler/typeOfOnTypeArg.ts] ////
+
+=== typeOfOnTypeArg.ts ===
 var A = { '': 3 };
 >A : Symbol(A, Decl(typeOfOnTypeArg.ts, 0, 3))
 >'' : Symbol('', Decl(typeOfOnTypeArg.ts, 0, 9))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadResolutionTest1.ts ===
+//// [tests/cases/compiler/overloadResolutionTest1.ts] ////
+
+=== overloadResolutionTest1.ts ===
 function foo(bar:{a:number;}[]):string;
 >foo : { (bar: {    a: number;}[]): string; (bar: { a: boolean; }[]): number; }
 >bar : { a: number; }[]

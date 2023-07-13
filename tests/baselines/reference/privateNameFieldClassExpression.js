@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldClassExpression.ts] ////
+
 //// [privateNameFieldClassExpression.ts]
 class B {
     #foo = class {

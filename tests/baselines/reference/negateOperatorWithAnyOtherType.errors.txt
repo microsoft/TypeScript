@@ -1,9 +1,9 @@
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(34,24): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(35,23): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operator is unused and has no side effects.
+negateOperatorWithAnyOtherType.ts(34,24): error TS18050: The value 'undefined' cannot be used here.
+negateOperatorWithAnyOtherType.ts(35,23): error TS18050: The value 'null' cannot be used here.
+negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts (3 errors) ====
+==== negateOperatorWithAnyOtherType.ts (3 errors) ====
     // - operator on any type
     
     var ANY: any;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment8_1.ts] ////
+
+=== a.js ===
 var my = my ?? {};
 >my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 1, 22))
 >my : Symbol(my, Decl(a.js, 0, 3), Decl(a.js, 0, 18), Decl(a.js, 1, 22))
@@ -34,7 +36,7 @@ my.app.Application()
 >app : Symbol(my.app, Decl(a.js, 0, 18), Decl(a.js, 3, 3))
 >Application : Symbol(my.app.Application, Decl(a.js, 1, 22))
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 var min = window.min ?? {};
 >min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))
 >window.min : Symbol(min, Decl(b.js, 0, 3), Decl(b.js, 0, 27), Decl(b.js, 1, 24))

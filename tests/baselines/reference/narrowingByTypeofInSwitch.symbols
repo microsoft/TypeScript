@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingByTypeofInSwitch.ts ===
+//// [tests/cases/compiler/narrowingByTypeofInSwitch.ts] ////
+
+=== narrowingByTypeofInSwitch.ts ===
 function assertNever(x: never) {
 >assertNever : Symbol(assertNever, Decl(narrowingByTypeofInSwitch.ts, 0, 0))
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 0, 21))

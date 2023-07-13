@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/setterBeforeGetter.ts] ////
+
 //// [setterBeforeGetter.ts]
 class Foo {
 

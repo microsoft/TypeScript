@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ImportNamedImportMergeErrors_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportMergeErrors.ts] ////
+
+=== es6ImportNamedImportMergeErrors_0.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(es6ImportNamedImportMergeErrors_0.ts, 0, 10))
 
@@ -14,7 +16,7 @@ export var z1 = a;
 >z1 : Symbol(z1, Decl(es6ImportNamedImportMergeErrors_0.ts, 3, 10))
 >a : Symbol(a, Decl(es6ImportNamedImportMergeErrors_0.ts, 0, 10))
 
-=== tests/cases/compiler/es6ImportNamedImportMergeErrors_1.ts ===
+=== es6ImportNamedImportMergeErrors_1.ts ===
 import { a } from "./es6ImportNamedImportMergeErrors_0";
 >a : Symbol(a, Decl(es6ImportNamedImportMergeErrors_1.ts, 0, 8), Decl(es6ImportNamedImportMergeErrors_1.ts, 0, 56))
 

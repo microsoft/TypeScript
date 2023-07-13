@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritance1.ts] ////
+
 //// [inheritance1.ts]
 class Control {
     private state: any;

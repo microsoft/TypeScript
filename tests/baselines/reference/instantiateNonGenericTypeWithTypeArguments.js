@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts] ////
+
 //// [instantiateNonGenericTypeWithTypeArguments.ts]
 // it is an error to provide type arguments to a non-generic call
 // all of these are errors

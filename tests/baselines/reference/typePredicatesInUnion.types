@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicatesInUnion.ts ===
+//// [tests/cases/compiler/typePredicatesInUnion.ts] ////
+
+=== typePredicatesInUnion.ts ===
 interface A {
     pred(x: {}): x is boolean;
 >pred : (x: {}) => x is boolean

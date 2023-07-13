@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceReturnTypeCallback.ts ===
+//// [tests/cases/compiler/typeInferenceReturnTypeCallback.ts] ////
+
+=== typeInferenceReturnTypeCallback.ts ===
 interface IList<A> {
 >IList : Symbol(IList, Decl(typeInferenceReturnTypeCallback.ts, 0, 0))
 >A : Symbol(A, Decl(typeInferenceReturnTypeCallback.ts, 0, 16))

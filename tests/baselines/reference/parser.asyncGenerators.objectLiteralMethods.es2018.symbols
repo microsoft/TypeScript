@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/methodIsOk.ts ===
+//// [tests/cases/conformance/parser/ecmascript2018/asyncGenerators/parser.asyncGenerators.objectLiteralMethods.es2018.ts] ////
+
+=== methodIsOk.ts ===
 const o1 = {
 >o1 : Symbol(o1, Decl(methodIsOk.ts, 0, 5))
 
@@ -6,7 +8,7 @@ const o1 = {
 >f : Symbol(f, Decl(methodIsOk.ts, 0, 12))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMethodNameIsOk.ts ===
+=== awaitMethodNameIsOk.ts ===
 const o2 = {
 >o2 : Symbol(o2, Decl(awaitMethodNameIsOk.ts, 0, 5))
 
@@ -14,7 +16,7 @@ const o2 = {
 >await : Symbol(await, Decl(awaitMethodNameIsOk.ts, 0, 12))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldMethodNameIsOk.ts ===
+=== yieldMethodNameIsOk.ts ===
 const o3 = {
 >o3 : Symbol(o3, Decl(yieldMethodNameIsOk.ts, 0, 5))
 
@@ -22,7 +24,7 @@ const o3 = {
 >yield : Symbol(yield, Decl(yieldMethodNameIsOk.ts, 0, 12))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts ===
+=== awaitParameterIsError.ts ===
 const o4 = {
 >o4 : Symbol(o4, Decl(awaitParameterIsError.ts, 0, 5))
 
@@ -31,7 +33,7 @@ const o4 = {
 >await : Symbol(await, Decl(awaitParameterIsError.ts, 1, 14))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts ===
+=== yieldParameterIsError.ts ===
 const o5 = {
 >o5 : Symbol(o5, Decl(yieldParameterIsError.ts, 0, 5))
 
@@ -40,7 +42,7 @@ const o5 = {
 >yield : Symbol(yield, Decl(yieldParameterIsError.ts, 1, 14))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitInParameterInitializerIsError.ts ===
+=== awaitInParameterInitializerIsError.ts ===
 const o6 = {
 >o6 : Symbol(o6, Decl(awaitInParameterInitializerIsError.ts, 0, 5))
 
@@ -49,7 +51,7 @@ const o6 = {
 >a : Symbol(a, Decl(awaitInParameterInitializerIsError.ts, 1, 14))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInParameterInitializerIsError.ts ===
+=== yieldInParameterInitializerIsError.ts ===
 const o7 = {
 >o7 : Symbol(o7, Decl(yieldInParameterInitializerIsError.ts, 0, 5))
 
@@ -58,7 +60,7 @@ const o7 = {
 >a : Symbol(a, Decl(yieldInParameterInitializerIsError.ts, 1, 14))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedAsyncGeneratorIsOk.ts ===
+=== nestedAsyncGeneratorIsOk.ts ===
 const o8 = {
 >o8 : Symbol(o8, Decl(nestedAsyncGeneratorIsOk.ts, 0, 5))
 
@@ -70,7 +72,7 @@ const o8 = {
         }
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts ===
+=== nestedFunctionDeclarationNamedYieldIsError.ts ===
 const o9 = {
 >o9 : Symbol(o9, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 5))
 
@@ -82,7 +84,7 @@ const o9 = {
         }
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts ===
+=== nestedFunctionExpressionNamedYieldIsError.ts ===
 const o10 = {
 >o10 : Symbol(o10, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 0, 5))
 
@@ -96,7 +98,7 @@ const o10 = {
         };
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts ===
+=== nestedFunctionDeclarationNamedAwaitIsError.ts ===
 const o11 = {
 >o11 : Symbol(o11, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 5))
 
@@ -108,7 +110,7 @@ const o11 = {
         }
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts ===
+=== nestedFunctionExpressionNamedAwaitIsError.ts ===
 const o12 = {
 >o12 : Symbol(o12, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 0, 5))
 
@@ -122,7 +124,7 @@ const o12 = {
         };
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldIsOk.ts ===
+=== yieldIsOk.ts ===
 const o13 = {
 >o13 : Symbol(o13, Decl(yieldIsOk.ts, 0, 5))
 
@@ -132,7 +134,7 @@ const o13 = {
         yield;
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldWithValueIsOk.ts ===
+=== yieldWithValueIsOk.ts ===
 const o14 = {
 >o14 : Symbol(o14, Decl(yieldWithValueIsOk.ts, 0, 5))
 
@@ -142,7 +144,7 @@ const o14 = {
         yield 1;
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingValueIsError.ts ===
+=== yieldStarMissingValueIsError.ts ===
 const o15 = {
 >o15 : Symbol(o15, Decl(yieldStarMissingValueIsError.ts, 0, 5))
 
@@ -152,7 +154,7 @@ const o15 = {
         yield *;
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarWithValueIsOk.ts ===
+=== yieldStarWithValueIsOk.ts ===
 const o16 = {
 >o16 : Symbol(o16, Decl(yieldStarWithValueIsOk.ts, 0, 5))
 
@@ -162,7 +164,7 @@ const o16 = {
         yield * [];
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitWithValueIsOk.ts ===
+=== awaitWithValueIsOk.ts ===
 const o17 = {
 >o17 : Symbol(o17, Decl(awaitWithValueIsOk.ts, 0, 5))
 
@@ -172,7 +174,7 @@ const o17 = {
         await 1;
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMissingValueIsError.ts ===
+=== awaitMissingValueIsError.ts ===
 const o18 = {
 >o18 : Symbol(o18, Decl(awaitMissingValueIsError.ts, 0, 5))
 
@@ -182,7 +184,7 @@ const o18 = {
         await;
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitAsTypeIsOk.ts ===
+=== awaitAsTypeIsOk.ts ===
 interface await {}
 >await : Symbol(await, Decl(awaitAsTypeIsOk.ts, 0, 0))
 
@@ -197,7 +199,7 @@ const o19 = {
 >await : Symbol(await, Decl(awaitAsTypeIsOk.ts, 0, 0))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldAsTypeIsOk.ts ===
+=== yieldAsTypeIsOk.ts ===
 interface yield {}
 >yield : Symbol(yield, Decl(yieldAsTypeIsOk.ts, 0, 0))
 
@@ -212,7 +214,7 @@ const o20 = {
 >yield : Symbol(yield, Decl(yieldAsTypeIsOk.ts, 0, 0))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===
+=== yieldInNestedComputedPropertyIsOk.ts ===
 const o21 = {
 >o21 : Symbol(o21, Decl(yieldInNestedComputedPropertyIsOk.ts, 0, 5))
 
@@ -224,7 +226,7 @@ const o21 = {
 >[yield] : Symbol([yield], Decl(yieldInNestedComputedPropertyIsOk.ts, 2, 19))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorGetAccessorIsError.ts ===
+=== asyncGeneratorGetAccessorIsError.ts ===
 const o22 = {
 >o22 : Symbol(o22, Decl(asyncGeneratorGetAccessorIsError.ts, 0, 5))
 
@@ -235,7 +237,7 @@ const o22 = {
         return 1;
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorSetAccessorIsError.ts ===
+=== asyncGeneratorSetAccessorIsError.ts ===
 const o23 = {
 >o23 : Symbol(o23, Decl(asyncGeneratorSetAccessorIsError.ts, 0, 5))
 
@@ -245,7 +247,7 @@ const o23 = {
 >value : Symbol(value, Decl(asyncGeneratorSetAccessorIsError.ts, 1, 18))
     }
 };
-=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorPropertyIsError.ts ===
+=== asyncGeneratorPropertyIsError.ts ===
 const o24 = {
 >o24 : Symbol(o24, Decl(asyncGeneratorPropertyIsError.ts, 0, 5))
 

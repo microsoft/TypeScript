@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/modules/importEmptyFromModuleNotExisted.ts(1,16): error TS2307: Cannot find module 'module-not-existed' or its corresponding type declarations.
+importEmptyFromModuleNotExisted.ts(1,16): error TS2307: Cannot find module 'module-not-existed' or its corresponding type declarations.
 
 
-==== tests/cases/conformance/es6/modules/importEmptyFromModuleNotExisted.ts (1 errors) ====
+==== importEmptyFromModuleNotExisted.ts (1 errors) ====
     import {} from 'module-not-existed'
                    ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'module-not-existed' or its corresponding type declarations.

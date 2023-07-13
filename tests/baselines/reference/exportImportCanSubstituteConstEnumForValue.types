@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportImportCanSubstituteConstEnumForValue.ts ===
+//// [tests/cases/compiler/exportImportCanSubstituteConstEnumForValue.ts] ////
+
+=== exportImportCanSubstituteConstEnumForValue.ts ===
 module MsPortalFx.ViewModels.Dialogs {
 >MsPortalFx : typeof MsPortalFx
 >ViewModels : typeof ViewModels

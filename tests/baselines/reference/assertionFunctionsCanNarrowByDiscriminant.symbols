@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assertionFunctionsCanNarrowByDiscriminant.ts ===
+//// [tests/cases/compiler/assertionFunctionsCanNarrowByDiscriminant.ts] ////
+
+=== assertionFunctionsCanNarrowByDiscriminant.ts ===
 interface Cat {
 >Cat : Symbol(Cat, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 0))
 

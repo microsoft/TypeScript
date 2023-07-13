@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bluebirdStaticThis.ts] ////
+
 //// [bluebirdStaticThis.ts]
 // This version is reduced from the full d.ts by removing almost all the tests
 // and all the comments.

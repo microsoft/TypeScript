@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasEnumInsideTopLevelModuleWithExport.ts] ////
+
 //// [internalAliasEnumInsideTopLevelModuleWithExport.ts]
 export module a {
     export enum weekend {
@@ -31,7 +33,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasEnumInsideTopLevelModuleWithExport.d.ts]
-export declare module a {
+export declare namespace a {
     enum weekend {
         Friday = 0,
         Saturday = 1,

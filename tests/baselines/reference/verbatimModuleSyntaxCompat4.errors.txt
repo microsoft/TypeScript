@@ -28,11 +28,11 @@
 !!! error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
         }
     }
+==== /index.ts (0 errors) ====
+    
 ==== /tsconfig.base.json (0 errors) ====
     {
         "compilerOptions": {
             "verbatimModuleSyntax": true
         }
     }
-==== /index.ts (0 errors) ====
-    

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotEmitPinnedDetachedComments.ts] ////
+
 //// [doNotEmitPinnedDetachedComments.ts]
 var x = 10;
 

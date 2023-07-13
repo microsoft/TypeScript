@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts ===
+//// [tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts] ////
+
+=== circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts ===
 declare class Component<P> {
 >Component : Component<P>
 

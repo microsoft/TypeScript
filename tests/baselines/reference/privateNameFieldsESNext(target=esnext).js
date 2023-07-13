@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts] ////
+
 //// [privateNameFieldsESNext.ts]
 class C {
     a = 123;

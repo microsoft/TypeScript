@@ -1,24 +1,24 @@
-tests/cases/compiler/client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(2,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(3,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(4,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(5,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(6,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(7,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(8,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(9,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(10,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(2,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(3,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(4,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(5,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(6,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(7,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(8,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(9,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(10,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
 
 
-==== tests/cases/compiler/server.ts (0 errors) ====
+==== server.ts (0 errors) ====
     export var a = 10;
     export var x = a;
     export var m = a;
     export default {};
     
-==== tests/cases/compiler/client.ts (12 errors) ====
+==== client.ts (12 errors) ====
     export import defaultBinding1, { } from "server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.

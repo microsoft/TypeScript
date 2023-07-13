@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts] ////
+
 //// [arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.ts]
 // regression test for https://github.com/microsoft/TypeScript/issues/32914
 declare var value: boolean;

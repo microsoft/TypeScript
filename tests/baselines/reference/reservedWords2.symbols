@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reservedWords2.ts ===
+//// [tests/cases/compiler/reservedWords2.ts] ////
+
+=== reservedWords2.ts ===
 import while = require("dfdf");
 import * as  while from "foo"
 > : Symbol((Missing), Decl(reservedWords2.ts, 3, 16), Decl(reservedWords2.ts, 1, 6))

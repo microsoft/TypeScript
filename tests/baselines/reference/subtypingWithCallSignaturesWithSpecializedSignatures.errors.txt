@@ -1,13 +1,13 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts(70,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
+subtypingWithCallSignaturesWithSpecializedSignatures.ts(70,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
   The types returned by 'a(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts(76,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+subtypingWithCallSignaturesWithSpecializedSignatures.ts(76,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
   The types returned by 'a2(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithSpecializedSignatures.ts (2 errors) ====
+==== subtypingWithCallSignaturesWithSpecializedSignatures.ts (2 errors) ====
     // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
     
     module CallSignature {

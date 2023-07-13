@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/node10IsNode_node10.ts] ////
+
 === /node_modules/fancy-lib/index.d.ts ===
 export declare const fancy: "feast";
 >fancy : Symbol(fancy, Decl(index.d.ts, 0, 20))

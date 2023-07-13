@@ -117,11 +117,11 @@ Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 After running Timeout callback:: count: 0
 
 FsWatches::
+/a/b/commonfile2.ts: *new*
+  {}
 /a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
-  {}
-/a/b/commonfile2.ts: *new*
   {}
 
 FsWatchesRecursive::

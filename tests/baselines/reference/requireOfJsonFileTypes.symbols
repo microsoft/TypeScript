@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileTypes.ts] ////
+
+=== file1.ts ===
 import b = require('./b.json');
 >b : Symbol(b, Decl(file1.ts, 0, 0))
 
@@ -71,7 +73,7 @@ booleanLiteral = g[0];
 >booleanLiteral : Symbol(booleanLiteral, Decl(file1.ts, 7, 3))
 >g : Symbol(g, Decl(file1.ts, 4, 31))
 
-=== tests/cases/compiler/b.json ===
+=== b.json ===
 {
     "a": true,
 >"a" : Symbol("a", Decl(b.json, 0, 1))
@@ -86,22 +88,22 @@ booleanLiteral = g[0];
 >"d" : Symbol("d", Decl(b.json, 3, 14))
 }
 
-=== tests/cases/compiler/c.json ===
+=== c.json ===
 
 ["a", null, "string"]
 
-=== tests/cases/compiler/d.json ===
+=== d.json ===
 
 "dConfig"
 
-=== tests/cases/compiler/e.json ===
+=== e.json ===
 
 -10
 
-=== tests/cases/compiler/f.json ===
+=== f.json ===
 
 [-10, 30]
 
-=== tests/cases/compiler/g.json ===
+=== g.json ===
 
 [true, false]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ipromise4.ts] ////
+
 //// [ipromise4.ts]
 declare module Windows.Foundation {
     export interface IPromise<T> {

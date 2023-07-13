@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonNullableAndObjectIntersections.ts] ////
+
 //// [nonNullableAndObjectIntersections.ts]
 // These should all resolve to never
 

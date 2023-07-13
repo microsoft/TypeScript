@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.js ===
+//// [tests/cases/compiler/tslibInJs.ts] ////
+
+=== main.js ===
 "use strict";
 >"use strict" : "use strict"
 

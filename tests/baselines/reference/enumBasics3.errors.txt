@@ -1,8 +1,8 @@
-tests/cases/compiler/enumBasics3.ts(5,13): error TS2339: Property 'a' does not exist on type 'E1.a'.
-tests/cases/compiler/enumBasics3.ts(14,20): error TS2339: Property 'a' does not exist on type 'E1.a'.
+enumBasics3.ts(5,13): error TS2339: Property 'a' does not exist on type 'E1.a'.
+enumBasics3.ts(14,20): error TS2339: Property 'a' does not exist on type 'E1.a'.
 
 
-==== tests/cases/compiler/enumBasics3.ts (2 errors) ====
+==== enumBasics3.ts (2 errors) ====
     module M {
       export namespace N {
         export enum E1 {

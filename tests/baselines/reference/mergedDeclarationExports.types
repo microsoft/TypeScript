@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mergedDeclarationExports.ts ===
+//// [tests/cases/compiler/mergedDeclarationExports.ts] ////
+
+=== mergedDeclarationExports.ts ===
 // OK -- one is type, one is value
 interface b {}
 export const b = 1;
@@ -23,7 +25,7 @@ export interface c {}
 // both types (class is also value, but that doesn't matter)
 interface d {}
 export class d {}
->d : import("tests/cases/compiler/mergedDeclarationExports").d
+>d : import("mergedDeclarationExports").d
 
 // both namespaces
 namespace N { }

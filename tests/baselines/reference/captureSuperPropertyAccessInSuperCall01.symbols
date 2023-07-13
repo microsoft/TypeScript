@@ -1,4 +1,6 @@
-=== tests/cases/compiler/captureSuperPropertyAccessInSuperCall01.ts ===
+//// [tests/cases/compiler/captureSuperPropertyAccessInSuperCall01.ts] ////
+
+=== captureSuperPropertyAccessInSuperCall01.ts ===
 class A {
 >A : Symbol(A, Decl(captureSuperPropertyAccessInSuperCall01.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardConstructorDerivedClass.ts ===
+//// [tests/cases/compiler/typeGuardConstructorDerivedClass.ts] ////
+
+=== typeGuardConstructorDerivedClass.ts ===
 // Derived class with different structures
 class C1 {
 >C1 : Symbol(C1, Decl(typeGuardConstructorDerivedClass.ts, 0, 0))

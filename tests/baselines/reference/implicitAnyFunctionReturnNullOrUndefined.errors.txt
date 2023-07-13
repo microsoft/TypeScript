@@ -1,10 +1,10 @@
-tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts(2,10): error TS7010: 'nullWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
-tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts(3,10): error TS7010: 'undefinedWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
-tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts(6,5): error TS7010: 'nullWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
-tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts(10,5): error TS7010: 'underfinedWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyFunctionReturnNullOrUndefined.ts(2,10): error TS7010: 'nullWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyFunctionReturnNullOrUndefined.ts(3,10): error TS7010: 'undefinedWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyFunctionReturnNullOrUndefined.ts(6,5): error TS7010: 'nullWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
+implicitAnyFunctionReturnNullOrUndefined.ts(10,5): error TS7010: 'underfinedWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts (4 errors) ====
+==== implicitAnyFunctionReturnNullOrUndefined.ts (4 errors) ====
     // this should be an error
     function nullWidenFunction() { return null;}             // error at "nullWidenFunction"
              ~~~~~~~~~~~~~~~~~

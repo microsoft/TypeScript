@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.ts ===
+//// [tests/cases/compiler/declarationEmitPrivateNameCausesError.ts] ////
+
+=== file.ts ===
 const IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 >IGNORE_EXTRA_VARIABLES : Symbol(IGNORE_EXTRA_VARIABLES, Decl(file.ts, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

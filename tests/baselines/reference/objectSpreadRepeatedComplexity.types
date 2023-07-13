@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts] ////
+
+=== objectSpreadRepeatedComplexity.ts ===
 function f(cnd: Record<number, boolean>){
 >f : (cnd: Record<number, boolean>) => { prop20a?: number | undefined; prop20b?: number | undefined; prop19a?: number | undefined; prop19b?: number | undefined; prop18a?: number | undefined; prop18b?: number | undefined; prop17a?: number | undefined; prop17b?: number | undefined; prop16a?: number | undefined; prop16b?: number | undefined; prop15a?: number | undefined; prop15b?: number | undefined; prop14a?: number | undefined; prop14b?: number | undefined; prop13a?: number | undefined; prop13b?: number | undefined; prop12a?: number | undefined; prop12b?: number | undefined; prop11a?: number | undefined; prop11b?: number | undefined; prop10a?: number | undefined; prop10b?: number | undefined; prop9a?: number | undefined; prop9b?: number | undefined; prop8a?: number | undefined; prop8b?: number | undefined; prop7a?: number | undefined; prop7b?: number | undefined; prop6a?: number | undefined; prop6b?: number | undefined; prop5a?: number | undefined; prop5b?: number | undefined; prop4a?: number | undefined; prop4b?: number | undefined; prop3a?: number | undefined; prop3b?: number | undefined; prop0?: number | undefined; }
 >cnd : Record<number, boolean>

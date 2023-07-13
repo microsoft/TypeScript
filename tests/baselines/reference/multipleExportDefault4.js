@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/multipleExportDefault4.ts] ////
+
 //// [multipleExportDefault4.ts]
 export default class C { }
 

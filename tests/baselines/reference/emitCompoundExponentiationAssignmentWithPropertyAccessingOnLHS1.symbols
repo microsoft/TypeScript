@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts] ////
+
+=== emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts ===
 var globalCounter = 0;
 >globalCounter : Symbol(globalCounter, Decl(emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts, 0, 3))
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/jsxs/preact.tsx(4,11): error TS2307: Cannot find module 'preact/jsx-dev-runtime' or its corresponding type declarations.
+preact.tsx(4,11): error TS2307: Cannot find module 'preact/jsx-dev-runtime' or its corresponding type declarations.
 
 
-==== tests/cases/conformance/jsx/jsxs/react.tsx (0 errors) ====
+==== react.tsx (0 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     /* @jsxImportSource react */
     import "./preact";
@@ -11,7 +11,7 @@ tests/cases/conformance/jsx/jsxs/preact.tsx(4,11): error TS2307: Cannot find mod
     
     export {};
     
-==== tests/cases/conformance/jsx/jsxs/preact.tsx (1 errors) ====
+==== preact.tsx (1 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     /* @jsxImportSource preact */
     const props = { answer: 42 }

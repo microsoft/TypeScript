@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts ===
+//// [tests/cases/compiler/mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts] ////
+
+=== mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts ===
 type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean : null }
 >HomomorphicMappedType : Symbol(HomomorphicMappedType, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts, 0, 27))

@@ -1,9 +1,9 @@
-tests/cases/conformance/override/override8.ts(6,17): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
-tests/cases/conformance/override/override8.ts(18,17): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'BB'.
-tests/cases/conformance/override/override8.ts(24,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'BB'.
+override8.ts(6,17): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
+override8.ts(18,17): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'BB'.
+override8.ts(24,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'BB'.
 
 
-==== tests/cases/conformance/override/override8.ts (3 errors) ====
+==== override8.ts (3 errors) ====
     class B {
         a: string
     }

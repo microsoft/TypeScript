@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts] ////
+
 //// [overloadResolutionOverNonCTObjectLit.ts]
 module Bugs {
                 export interface IToken {

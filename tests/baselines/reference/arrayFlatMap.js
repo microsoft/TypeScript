@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayFlatMap.ts] ////
+
 //// [arrayFlatMap.ts]
 const array: number[] = [];
 const readonlyArray: ReadonlyArray<number> = [];

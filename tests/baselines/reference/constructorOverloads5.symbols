@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorOverloads5.ts ===
+//// [tests/cases/compiler/constructorOverloads5.ts] ////
+
+=== constructorOverloads5.ts ===
  interface IArguments {}
 >IArguments : Symbol(IArguments, Decl(lib.es5.d.ts, --, --), Decl(constructorOverloads5.ts, 0, 0))
 

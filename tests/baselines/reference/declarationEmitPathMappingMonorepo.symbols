@@ -1,4 +1,18 @@
-=== tests/cases/compiler/packages/a/index.d.ts ===
+//// [tests/cases/compiler/declarationEmitPathMappingMonorepo.ts] ////
+
+=== packages/b/src/index.ts ===
+import { a } from "@ts-bug/a";
+>a : Symbol(a, Decl(index.ts, 0, 8))
+
+export function b(text: string) {
+>b : Symbol(b, Decl(index.ts, 0, 30))
+>text : Symbol(text, Decl(index.ts, 2, 18))
+
+  return a(text);
+>a : Symbol(a, Decl(index.ts, 0, 8))
+>text : Symbol(text, Decl(index.ts, 2, 18))
+}
+=== packages/a/index.d.ts ===
 declare module "@ts-bug/a" {
 >"@ts-bug/a" : Symbol("@ts-bug/a", Decl(index.d.ts, 0, 0))
 
@@ -15,15 +29,3 @@ declare module "@ts-bug/a" {
 >AText : Symbol(AText, Decl(index.d.ts, 0, 28))
   }
   
-=== tests/cases/compiler/packages/b/src/index.ts ===
-import { a } from "@ts-bug/a";
->a : Symbol(a, Decl(index.ts, 0, 8))
-
-export function b(text: string) {
->b : Symbol(b, Decl(index.ts, 0, 30))
->text : Symbol(text, Decl(index.ts, 2, 18))
-
-  return a(text);
->a : Symbol(a, Decl(index.ts, 0, 8))
->text : Symbol(text, Decl(index.ts, 2, 18))
-}

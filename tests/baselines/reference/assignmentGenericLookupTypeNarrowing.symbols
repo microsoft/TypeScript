@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/assignmentOperator/assignmentGenericLookupTypeNarrowing.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentGenericLookupTypeNarrowing.ts] ////
+
+=== assignmentGenericLookupTypeNarrowing.ts ===
 // Repro from #26130
 
 let mappedObject: {[K in "foo"]: null | {x: string}} = {foo: {x: "hello"}};

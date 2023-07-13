@@ -1,22 +1,22 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(28,1): error TS2322: Type 'S2' is not assignable to type 'T'.
+assignmentCompatWithConstructSignatures.ts(28,1): error TS2322: Type 'S2' is not assignable to type 'T'.
   Type 'S2' provides no match for the signature 'new (x: number): void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(29,1): error TS2322: Type '(x: string) => void' is not assignable to type 'T'.
+assignmentCompatWithConstructSignatures.ts(29,1): error TS2322: Type '(x: string) => void' is not assignable to type 'T'.
   Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(30,1): error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
+assignmentCompatWithConstructSignatures.ts(30,1): error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
   Type '(x: string) => number' provides no match for the signature 'new (x: number): void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(31,1): error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
+assignmentCompatWithConstructSignatures.ts(31,1): error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
   Type '(x: string) => string' provides no match for the signature 'new (x: number): void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(32,1): error TS2322: Type 'S2' is not assignable to type 'new (x: number) => void'.
+assignmentCompatWithConstructSignatures.ts(32,1): error TS2322: Type 'S2' is not assignable to type 'new (x: number) => void'.
   Type 'S2' provides no match for the signature 'new (x: number): void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(33,1): error TS2322: Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
+assignmentCompatWithConstructSignatures.ts(33,1): error TS2322: Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
   Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(34,1): error TS2322: Type '(x: string) => number' is not assignable to type 'new (x: number) => void'.
+assignmentCompatWithConstructSignatures.ts(34,1): error TS2322: Type '(x: string) => number' is not assignable to type 'new (x: number) => void'.
   Type '(x: string) => number' provides no match for the signature 'new (x: number): void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(35,1): error TS2322: Type '(x: string) => string' is not assignable to type 'new (x: number) => void'.
+assignmentCompatWithConstructSignatures.ts(35,1): error TS2322: Type '(x: string) => string' is not assignable to type 'new (x: number) => void'.
   Type '(x: string) => string' provides no match for the signature 'new (x: number): void'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts (8 errors) ====
+==== assignmentCompatWithConstructSignatures.ts (8 errors) ====
     // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
     
     interface T {

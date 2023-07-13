@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralFreshnessWithSpread.ts ===
+//// [tests/cases/compiler/objectLiteralFreshnessWithSpread.ts] ////
+
+=== objectLiteralFreshnessWithSpread.ts ===
 let x = { b: 1, extra: 2 }
 >x : Symbol(x, Decl(objectLiteralFreshnessWithSpread.ts, 0, 3))
 >b : Symbol(b, Decl(objectLiteralFreshnessWithSpread.ts, 0, 9))

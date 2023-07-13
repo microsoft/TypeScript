@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads8.ts ===
+//// [tests/cases/compiler/functionOverloads8.ts] ////
+
+=== functionOverloads8.ts ===
 function foo();
 >foo : { (): any; (foo: string): any; }
 

@@ -1704,6 +1704,9 @@ export function createLanguageService(
             useCaseSensitiveFileNames,
             fileExists: fileName => compilerHost!.fileExists(fileName),
             readFile: fileName => compilerHost!.readFile(fileName),
+            directoryExists: f => compilerHost!.directoryExists!(f),
+            getDirectories: f => compilerHost!.getDirectories!(f),
+            realpath: compilerHost.realpath,
             readDirectory: (...args) => compilerHost!.readDirectory!(...args),
             trace: compilerHost.trace,
             getCurrentDirectory: compilerHost.getCurrentDirectory,
@@ -1714,9 +1717,13 @@ export function createLanguageService(
         // calculate this early so it's not undefined if downleveled to a var (or, if emitted
         // as a const variable without downleveling, doesn't crash).
         const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
+        let releasedScriptKinds: Set<Path> | undefined = new Set();
 
         // If the program is already up-to-date, we can reuse it
         if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolutions, hasInvalidatedLibResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+            compilerHost = undefined;
+            parsedCommandLines = undefined;
+            releasedScriptKinds = undefined;
             return;
         }
 
@@ -1739,6 +1746,7 @@ export function createLanguageService(
         // After this point, the cache needs to be cleared to allow all collected snapshots to be released
         compilerHost = undefined;
         parsedCommandLines = undefined;
+        releasedScriptKinds = undefined;
 
         // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
         // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
@@ -1842,12 +1850,13 @@ export function createLanguageService(
                     // We do not support the scenario where a host can modify a registered
                     // file's script kind, i.e. in one project some file is treated as ".ts"
                     // and in another as ".js"
-                    if (scriptKind === oldSourceFile.scriptKind) {
+                    if (scriptKind === oldSourceFile.scriptKind || releasedScriptKinds!.has(oldSourceFile.resolvedPath)) {
                         return documentRegistry.updateDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind, languageVersionOrOptions);
                     }
                     else {
                         // Release old source file and fall through to aquire new file with new script kind
                         documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
+                        releasedScriptKinds!.add(oldSourceFile.resolvedPath);
                     }
                 }
 
@@ -1932,10 +1941,6 @@ export function createLanguageService(
     }
 
     function cleanupSemanticCache(): void {
-        program = undefined!; // TODO: GH#18217
-    }
-
-    function dispose(): void {
         if (program) {
             // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
             const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
@@ -1943,6 +1948,10 @@ export function createLanguageService(
                 documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind, f.impliedNodeFormat));
             program = undefined!; // TODO: GH#18217
         }
+    }
+
+    function dispose(): void {
+        cleanupSemanticCache();
         host = undefined!;
     }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts] ////
+
 //// [negateOperatorInvalidOperations.ts]
 // Unary operator -
 

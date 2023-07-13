@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/typings/typingsLookupAmd.ts] ////
+
 === /x/y/foo.ts ===
 import {B} from "b";
 >B : Symbol(B, Decl(foo.ts, 0, 8))

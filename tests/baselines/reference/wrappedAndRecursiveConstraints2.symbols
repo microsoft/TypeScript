@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts] ////
+
+=== wrappedAndRecursiveConstraints2.ts ===
 class C<T extends C<T>> { // error
 >C : Symbol(C, Decl(wrappedAndRecursiveConstraints2.ts, 0, 0))
 >T : Symbol(T, Decl(wrappedAndRecursiveConstraints2.ts, 0, 8))

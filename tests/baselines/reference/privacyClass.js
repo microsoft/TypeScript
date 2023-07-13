@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyClass.ts] ////
+
 //// [privacyClass.ts]
 export module m1 {
     export interface m1_i_public {

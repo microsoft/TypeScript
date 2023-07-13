@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/multipleExportDefault1.ts] ////
+
 //// [multipleExportDefault1.ts]
 export default function Foo (){
     

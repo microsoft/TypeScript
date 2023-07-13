@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unreachable.ts ===
+//// [tests/cases/compiler/unreachableSwitchTypeofAny.ts] ////
+
+=== unreachable.ts ===
 const unreachable = (x: any): number => {
 >unreachable : Symbol(unreachable, Decl(unreachable.ts, 0, 5))
 >x : Symbol(x, Decl(unreachable.ts, 0, 21))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/invocationExpressionInFunctionParameter.ts ===
+//// [tests/cases/compiler/invocationExpressionInFunctionParameter.ts] ////
+
+=== invocationExpressionInFunctionParameter.ts ===
 function foo1(val: string) {
 >foo1 : Symbol(foo1, Decl(invocationExpressionInFunctionParameter.ts, 0, 0))
 >val : Symbol(val, Decl(invocationExpressionInFunctionParameter.ts, 0, 14))

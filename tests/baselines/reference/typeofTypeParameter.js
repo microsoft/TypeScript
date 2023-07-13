@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts] ////
+
 //// [typeofTypeParameter.ts]
 function f<T>(x: T): T {
     var a: typeof x;

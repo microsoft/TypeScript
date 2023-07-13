@@ -1,4 +1,6 @@
-=== tests/cases/compiler/module.ts ===
+//// [tests/cases/compiler/dynamicNames.ts] ////
+
+=== module.ts ===
 export const c0 = "a";
 >c0 : "a"
 >"a" : "a"
@@ -61,7 +63,7 @@ export declare type T3 = {
 
 };
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { c0, c1, s0, T0, T1, T2, T3 } from "./module";
 >c0 : "a"
 >c1 : 1

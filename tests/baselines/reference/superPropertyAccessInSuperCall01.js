@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superPropertyAccessInSuperCall01.ts] ////
+
 //// [superPropertyAccessInSuperCall01.ts]
 class A {
 	constructor(f: string) {

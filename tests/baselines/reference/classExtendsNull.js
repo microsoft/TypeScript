@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExtendsNull.ts] ////
+
 //// [classExtendsNull.ts]
 class C extends null {
     constructor() {

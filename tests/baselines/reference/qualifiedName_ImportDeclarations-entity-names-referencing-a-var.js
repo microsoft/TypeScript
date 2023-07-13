@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts] ////
+
 //// [qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts]
 module Alpha {
     export var x = 100;

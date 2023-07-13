@@ -1,36 +1,6 @@
-=== tests/cases/conformance/declarationEmit/node_modules/ext/index.d.ts ===
-export interface A {}
->A : Symbol(A, Decl(index.d.ts, 0, 0))
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFile.ts] ////
 
-export function fa(): A;
->fa : Symbol(fa, Decl(index.d.ts, 0, 21))
->A : Symbol(A, Decl(index.d.ts, 0, 0))
-
-=== tests/cases/conformance/declarationEmit/node_modules/ext/other.d.ts ===
-export interface B {}
->B : Symbol(B, Decl(other.d.ts, 0, 0))
-
-export function fb(): B;
->fb : Symbol(fb, Decl(other.d.ts, 0, 21))
->B : Symbol(B, Decl(other.d.ts, 0, 0))
-
-=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts ===
-export interface A {}
->A : Symbol(A, Decl(index.d.ts, 0, 0))
-
-export function fa(): A;
->fa : Symbol(fa, Decl(index.d.ts, 0, 21))
->A : Symbol(A, Decl(index.d.ts, 0, 0))
-
-=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/other.d.ts ===
-export interface B {}
->B : Symbol(B, Decl(other.d.ts, 0, 0))
-
-export function fb(): B;
->fb : Symbol(fb, Decl(other.d.ts, 0, 21))
->B : Symbol(B, Decl(other.d.ts, 0, 0))
-
-=== tests/cases/conformance/declarationEmit/main.ts ===
+=== main.ts ===
 import { fa } from "ext";
 >fa : Symbol(fa, Decl(main.ts, 0, 8))
 
@@ -44,4 +14,20 @@ export const va = fa();
 export const vb = fb();
 >vb : Symbol(vb, Decl(main.ts, 4, 12))
 >fb : Symbol(fb, Decl(main.ts, 1, 8))
+
+=== node_modules/ext/ts3.1/index.d.ts ===
+export interface A {}
+>A : Symbol(A, Decl(index.d.ts, 0, 0))
+
+export function fa(): A;
+>fa : Symbol(fa, Decl(index.d.ts, 0, 21))
+>A : Symbol(A, Decl(index.d.ts, 0, 0))
+
+=== node_modules/ext/ts3.1/other.d.ts ===
+export interface B {}
+>B : Symbol(B, Decl(other.d.ts, 0, 0))
+
+export function fb(): B;
+>fb : Symbol(fb, Decl(other.d.ts, 0, 21))
+>B : Symbol(B, Decl(other.d.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignatureNoImplicitAny.ts] ////
+
 //// [propertyAccessStringIndexSignatureNoImplicitAny.ts]
 interface Flags { [name: string]: boolean }
 let flags: Flags;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts] ////
+
 //// [classConstructorParametersAccessibility2.ts]
 class C1 {
     constructor(public x?: number) { }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompat1.ts ===
+//// [tests/cases/compiler/assignmentCompat1.ts] ////
+
+=== assignmentCompat1.ts ===
 var x = { one: 1 };
 >x : Symbol(x, Decl(assignmentCompat1.ts, 0, 3))
 >one : Symbol(one, Decl(assignmentCompat1.ts, 0, 9))

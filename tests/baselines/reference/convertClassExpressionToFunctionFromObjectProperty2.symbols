@@ -1,4 +1,6 @@
-=== tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty2.ts ===
+//// [tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty2.ts] ////
+
+=== convertClassExpressionToFunctionFromObjectProperty2.ts ===
 ({
     x: class {
 >x : Symbol(x, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 0, 2))

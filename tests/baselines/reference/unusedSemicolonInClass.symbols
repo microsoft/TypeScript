@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedSemicolonInClass.ts ===
+//// [tests/cases/compiler/unusedSemicolonInClass.ts] ////
+
+=== unusedSemicolonInClass.ts ===
 class Unused {
 >Unused : Symbol(Unused, Decl(unusedSemicolonInClass.ts, 0, 0))
 

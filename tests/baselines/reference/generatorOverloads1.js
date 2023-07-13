@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorOverloads1.ts] ////
+
 //// [generatorOverloads1.ts]
 module M {
     function* f(s: string): Iterable<any>;

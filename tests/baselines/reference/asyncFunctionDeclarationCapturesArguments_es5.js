@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclarationCapturesArguments_es5.ts] ////
+
 //// [asyncFunctionDeclarationCapturesArguments_es5.ts]
 class C {
    method() {

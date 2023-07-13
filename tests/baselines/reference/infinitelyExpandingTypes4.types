@@ -1,4 +1,6 @@
-=== tests/cases/compiler/infinitelyExpandingTypes4.ts ===
+//// [tests/cases/compiler/infinitelyExpandingTypes4.ts] ////
+
+=== infinitelyExpandingTypes4.ts ===
 interface Query<T> {
     // ...
     groupBy<K>(keySelector: (item: T) => K): Query<Grouping<K, T>>;

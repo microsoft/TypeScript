@@ -61,9 +61,9 @@ Before running Timeout callback:: count: 0
 PolledWatches::
 /a/b/app: *new*
   {"pollingInterval":500}
-/a/b/test: *new*
-  {"pollingInterval":500}
 /a/b/something: *new*
+  {"pollingInterval":500}
+/a/b/test: *new*
   {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}

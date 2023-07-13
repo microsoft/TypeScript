@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts ===
+//// [tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts] ////
+
+=== functionAndInterfaceWithSeparateErrors.ts ===
 function Foo(s: string);
 >Foo : (s: string) => any
 >s : string

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reservedNameOnModuleImport.ts ===
+//// [tests/cases/compiler/reservedNameOnModuleImport.ts] ////
+
+=== reservedNameOnModuleImport.ts ===
 declare module test {
 >test : typeof test
 

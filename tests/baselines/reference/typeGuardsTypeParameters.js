@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/typeGuardsTypeParameters.ts] ////
+
 //// [typeGuardsTypeParameters.ts]
 // Type guards involving type parameters produce intersection types
 

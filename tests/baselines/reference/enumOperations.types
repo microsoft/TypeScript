@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumOperations.ts ===
+//// [tests/cases/compiler/enumOperations.ts] ////
+
+=== enumOperations.ts ===
 enum Enum { None = 0 }
 >Enum : Enum
 >None : Enum.None

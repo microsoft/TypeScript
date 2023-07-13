@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts] ////
+
 //// [renamingDestructuredPropertyInFunctionType.ts]
 // GH#37454, GH#41044
 

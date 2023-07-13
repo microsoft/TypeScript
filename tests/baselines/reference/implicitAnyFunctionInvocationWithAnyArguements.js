@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts] ////
+
 //// [implicitAnyFunctionInvocationWithAnyArguements.ts]
 // this should be errors
 var arg0 = null;  // error at "arg0"

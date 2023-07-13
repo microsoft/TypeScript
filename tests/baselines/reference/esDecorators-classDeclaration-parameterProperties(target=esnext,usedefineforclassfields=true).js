@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-parameterProperties.ts] ////
+
 //// [esDecorators-classDeclaration-parameterProperties.ts]
 declare var bound: any;
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator03.ts ===
+//// [tests/cases/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator03.ts] ////
+
+=== contextuallyTypeCommaOperator03.ts ===
 let x: (a: string) => string;
 >x : Symbol(x, Decl(contextuallyTypeCommaOperator03.ts, 0, 3))
 >a : Symbol(a, Decl(contextuallyTypeCommaOperator03.ts, 0, 8))

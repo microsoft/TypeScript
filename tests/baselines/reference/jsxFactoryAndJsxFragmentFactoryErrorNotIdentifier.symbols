@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx ===
+//// [tests/cases/compiler/jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx] ////
+
+=== jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx ===
 declare var h: any;
 >h : Symbol(h, Decl(jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx, 0, 11))
 

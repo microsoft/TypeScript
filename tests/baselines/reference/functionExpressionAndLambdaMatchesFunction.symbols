@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionExpressionAndLambdaMatchesFunction.ts ===
+//// [tests/cases/compiler/functionExpressionAndLambdaMatchesFunction.ts] ////
+
+=== functionExpressionAndLambdaMatchesFunction.ts ===
 class CDoc {
 >CDoc : Symbol(CDoc, Decl(functionExpressionAndLambdaMatchesFunction.ts, 0, 0))
 

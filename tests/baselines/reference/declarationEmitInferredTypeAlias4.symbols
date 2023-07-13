@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitInferredTypeAlias4.ts ===
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias4.ts] ////
+
+=== declarationEmitInferredTypeAlias4.ts ===
 function f<A>() {
 >f : Symbol(f, Decl(declarationEmitInferredTypeAlias4.ts, 0, 0))
 >A : Symbol(A, Decl(declarationEmitInferredTypeAlias4.ts, 0, 11))

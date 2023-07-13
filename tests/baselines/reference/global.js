@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/global.ts] ////
+
 //// [global.ts]
 module M {
     export function f(y:number) {

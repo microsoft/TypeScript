@@ -1,8 +1,10 @@
-=== tests/cases/compiler/existingModule.ts ===
+//// [tests/cases/compiler/shorthandPropertyAssignmentInES6Module.ts] ////
+
+=== existingModule.ts ===
 export var x = 1;
 >x : Symbol(x, Decl(existingModule.ts, 0, 10))
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import {x} from './existingModule';
 >x : Symbol(x, Decl(test.ts, 0, 8))
 

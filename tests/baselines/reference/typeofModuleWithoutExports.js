@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofModuleWithoutExports.ts] ////
+
 //// [typeofModuleWithoutExports.ts]
 module M {
     var x = 1;

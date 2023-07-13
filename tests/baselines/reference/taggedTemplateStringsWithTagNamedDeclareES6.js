@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagNamedDeclareES6.ts] ////
+
 //// [taggedTemplateStringsWithTagNamedDeclareES6.ts]
 function declare(x: any, ...ys: any[]) {
 }

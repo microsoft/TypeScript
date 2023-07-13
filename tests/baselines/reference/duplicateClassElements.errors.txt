@@ -1,20 +1,20 @@
-tests/cases/compiler/duplicateClassElements.ts(3,12): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/duplicateClassElements.ts(4,12): error TS2393: Duplicate function implementation.
-tests/cases/compiler/duplicateClassElements.ts(6,12): error TS2393: Duplicate function implementation.
-tests/cases/compiler/duplicateClassElements.ts(8,12): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/duplicateClassElements.ts(9,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/duplicateClassElements.ts(12,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/duplicateClassElements.ts(21,12): error TS2300: Duplicate identifier 'z'.
-tests/cases/compiler/duplicateClassElements.ts(23,9): error TS2300: Duplicate identifier 'z'.
-tests/cases/compiler/duplicateClassElements.ts(26,9): error TS2300: Duplicate identifier 'z'.
-tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2300: Duplicate identifier 'x2'.
-tests/cases/compiler/duplicateClassElements.ts(34,12): error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
-tests/cases/compiler/duplicateClassElements.ts(36,9): error TS2300: Duplicate identifier 'z2'.
-tests/cases/compiler/duplicateClassElements.ts(39,9): error TS2300: Duplicate identifier 'z2'.
-tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
+duplicateClassElements.ts(3,12): error TS2300: Duplicate identifier 'a'.
+duplicateClassElements.ts(4,12): error TS2393: Duplicate function implementation.
+duplicateClassElements.ts(6,12): error TS2393: Duplicate function implementation.
+duplicateClassElements.ts(8,12): error TS2300: Duplicate identifier 'x'.
+duplicateClassElements.ts(9,9): error TS2300: Duplicate identifier 'x'.
+duplicateClassElements.ts(12,9): error TS2300: Duplicate identifier 'x'.
+duplicateClassElements.ts(21,12): error TS2300: Duplicate identifier 'z'.
+duplicateClassElements.ts(23,9): error TS2300: Duplicate identifier 'z'.
+duplicateClassElements.ts(26,9): error TS2300: Duplicate identifier 'z'.
+duplicateClassElements.ts(34,12): error TS2300: Duplicate identifier 'x2'.
+duplicateClassElements.ts(34,12): error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
+duplicateClassElements.ts(36,9): error TS2300: Duplicate identifier 'z2'.
+duplicateClassElements.ts(39,9): error TS2300: Duplicate identifier 'z2'.
+duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
 
 
-==== tests/cases/compiler/duplicateClassElements.ts (14 errors) ====
+==== duplicateClassElements.ts (14 errors) ====
     class a {
         public a;
         public a;
@@ -71,7 +71,7 @@ tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate i
 !!! error TS2300: Duplicate identifier 'x2'.
                ~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'x2' must be of type 'number', but here has type 'any'.
-!!! related TS6203 tests/cases/compiler/duplicateClassElements.ts:29:9: 'x2' was also declared here.
+!!! related TS6203 duplicateClassElements.ts:29:9: 'x2' was also declared here.
     
         get z2() {
             ~~

@@ -1,12 +1,12 @@
-tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(4,58): error TS2345: Argument of type '{ value: string; readonly: boolean; }' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
+excessPropertyCheckWithEmptyObject.ts(4,58): error TS2345: Argument of type '{ value: string; readonly: boolean; }' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Object literal may only specify known properties, and 'readonly' does not exist in type 'PropertyDescriptor & ThisType<any>'.
-tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(9,30): error TS2322: Type '{ y: number; }' is not assignable to type 'A & ThisType<any>'.
+excessPropertyCheckWithEmptyObject.ts(9,30): error TS2322: Type '{ y: number; }' is not assignable to type 'A & ThisType<any>'.
   Object literal may only specify known properties, and 'y' does not exist in type 'A & ThisType<any>'.
-tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts(14,34): error TS2322: Type '{ y: string; }' is not assignable to type 'Empty & { x: number; }'.
+excessPropertyCheckWithEmptyObject.ts(14,34): error TS2322: Type '{ y: string; }' is not assignable to type 'Empty & { x: number; }'.
   Object literal may only specify known properties, and 'y' does not exist in type 'Empty & { x: number; }'.
 
 
-==== tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts (3 errors) ====
+==== excessPropertyCheckWithEmptyObject.ts (3 errors) ====
     // Repro from #14910
     
     // Excess property error expected here

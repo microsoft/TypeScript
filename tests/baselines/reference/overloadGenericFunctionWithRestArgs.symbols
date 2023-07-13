@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadGenericFunctionWithRestArgs.ts ===
+//// [tests/cases/compiler/overloadGenericFunctionWithRestArgs.ts] ////
+
+=== overloadGenericFunctionWithRestArgs.ts ===
 class B<V>{
 >B : Symbol(B, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 0))
 >V : Symbol(V, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 8))

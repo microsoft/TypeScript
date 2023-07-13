@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts ===
+//// [tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts] ////
+
+=== genericMergedDeclarationUsingTypeParameter2.ts ===
 class foo<T> { constructor(x: T) { } }
 >foo : foo<T>
 >x : T

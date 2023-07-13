@@ -1,4 +1,6 @@
-=== tests/cases/compiler/qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts ===
+//// [tests/cases/compiler/qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts] ////
+
+=== qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts ===
 module Alpha {
 >Alpha : Symbol(Alpha, Decl(qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts, 0, 0))
 

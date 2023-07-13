@@ -1,10 +1,10 @@
-tests/cases/compiler/objectCreationOfElementAccessExpression.ts(53,25): error TS2538: Type 'Cookie' cannot be used as an index type.
-tests/cases/compiler/objectCreationOfElementAccessExpression.ts(53,63): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
-tests/cases/compiler/objectCreationOfElementAccessExpression.ts(54,41): error TS2538: Type 'Cookie' cannot be used as an index type.
-tests/cases/compiler/objectCreationOfElementAccessExpression.ts(54,79): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
+objectCreationOfElementAccessExpression.ts(53,25): error TS2538: Type 'Cookie' cannot be used as an index type.
+objectCreationOfElementAccessExpression.ts(53,63): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
+objectCreationOfElementAccessExpression.ts(54,41): error TS2538: Type 'Cookie' cannot be used as an index type.
+objectCreationOfElementAccessExpression.ts(54,79): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
 
 
-==== tests/cases/compiler/objectCreationOfElementAccessExpression.ts (4 errors) ====
+==== objectCreationOfElementAccessExpression.ts (4 errors) ====
     class Food {
         private amount: number;
         constructor(public name: string) {

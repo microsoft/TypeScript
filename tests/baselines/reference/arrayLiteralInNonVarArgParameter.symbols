@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayLiteralInNonVarArgParameter.ts ===
+//// [tests/cases/compiler/arrayLiteralInNonVarArgParameter.ts] ////
+
+=== arrayLiteralInNonVarArgParameter.ts ===
 function panic(val: string[], ...opt: string[]) { }
 >panic : Symbol(panic, Decl(arrayLiteralInNonVarArgParameter.ts, 0, 0))
 >val : Symbol(val, Decl(arrayLiteralInNonVarArgParameter.ts, 0, 15))

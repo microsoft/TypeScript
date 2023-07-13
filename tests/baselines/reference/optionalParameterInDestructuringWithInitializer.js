@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts] ////
+
 //// [optionalParameterInDestructuringWithInitializer.ts]
 // https://github.com/Microsoft/TypeScript/issues/17080
 

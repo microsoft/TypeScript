@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mergedEnumDeclarationCodeGen.ts ===
+//// [tests/cases/compiler/mergedEnumDeclarationCodeGen.ts] ////
+
+=== mergedEnumDeclarationCodeGen.ts ===
 enum E {
 >E : Symbol(E, Decl(mergedEnumDeclarationCodeGen.ts, 0, 0), Decl(mergedEnumDeclarationCodeGen.ts, 3, 1))
 

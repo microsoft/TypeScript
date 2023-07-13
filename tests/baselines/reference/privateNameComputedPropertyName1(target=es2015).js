@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName1.ts] ////
+
 //// [privateNameComputedPropertyName1.ts]
 class A {
     #a = 'a';

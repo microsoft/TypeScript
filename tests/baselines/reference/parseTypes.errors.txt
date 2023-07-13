@@ -1,14 +1,14 @@
-tests/cases/compiler/parseTypes.ts(8,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
+parseTypes.ts(8,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
-tests/cases/compiler/parseTypes.ts(9,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
+parseTypes.ts(9,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
-tests/cases/compiler/parseTypes.ts(10,1): error TS2322: Type '(s: string) => void' is not assignable to type '{ [x: number]: number; }'.
+parseTypes.ts(10,1): error TS2322: Type '(s: string) => void' is not assignable to type '{ [x: number]: number; }'.
   Index signature for type 'number' is missing in type '(s: string) => void'.
-tests/cases/compiler/parseTypes.ts(11,1): error TS2322: Type '(s: string) => void' is not assignable to type 'new () => number'.
+parseTypes.ts(11,1): error TS2322: Type '(s: string) => void' is not assignable to type 'new () => number'.
   Type '(s: string) => void' provides no match for the signature 'new (): number'.
 
 
-==== tests/cases/compiler/parseTypes.ts (4 errors) ====
+==== parseTypes.ts (4 errors) ====
     var x = <() => number>null;
     var y = <{(): number; }>null;
     var z = <{new(): number; }>null

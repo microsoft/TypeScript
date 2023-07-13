@@ -1,16 +1,16 @@
-tests/cases/compiler/service.ts(1,8): error TS2613: Module '"tests/cases/compiler/db"' has no default export. Did you mean to use 'import { db } from "tests/cases/compiler/db"' instead?
+service.ts(1,8): error TS2613: Module '"db"' has no default export. Did you mean to use 'import { db } from "db"' instead?
 
 
-==== tests/cases/compiler/db.ts (0 errors) ====
+==== db.ts (0 errors) ====
     export class db {
         public doSomething() {
         }
     }
     
-==== tests/cases/compiler/service.ts (1 errors) ====
+==== service.ts (1 errors) ====
     import db from './db'; // error no default export
            ~~
-!!! error TS2613: Module '"tests/cases/compiler/db"' has no default export. Did you mean to use 'import { db } from "tests/cases/compiler/db"' instead?
+!!! error TS2613: Module '"db"' has no default export. Did you mean to use 'import { db } from "db"' instead?
     function someDecorator(target) {
         return target;
     }

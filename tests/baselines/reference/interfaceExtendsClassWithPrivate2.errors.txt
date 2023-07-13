@@ -1,14 +1,14 @@
-tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(10,7): error TS2415: Class 'D' incorrectly extends base class 'C'.
+interfaceExtendsClassWithPrivate2.ts(10,7): error TS2415: Class 'D' incorrectly extends base class 'C'.
   Types have separate declarations of a private property 'x'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(10,7): error TS2420: Class 'D' incorrectly implements interface 'I'.
+interfaceExtendsClassWithPrivate2.ts(10,7): error TS2420: Class 'D' incorrectly implements interface 'I'.
   Types have separate declarations of a private property 'x'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: Property 'x' in type 'D2' is not assignable to the same property in base type 'C'.
+interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: Property 'x' in type 'D2' is not assignable to the same property in base type 'C'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: Property 'x' in type 'D2' is not assignable to the same property in base type 'I'.
+interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: Property 'x' in type 'D2' is not assignable to the same property in base type 'I'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts (4 errors) ====
+==== interfaceExtendsClassWithPrivate2.ts (4 errors) ====
     class C {
         public foo(x: any) { return x; }
         private x = 1;

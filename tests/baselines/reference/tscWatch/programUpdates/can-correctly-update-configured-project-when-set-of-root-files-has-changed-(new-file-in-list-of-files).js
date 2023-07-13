@@ -48,9 +48,9 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (used version)
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/f1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -98,13 +98,13 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (computed .d.ts)
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/f1.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /a/b/f2.ts: *new*
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
   {}
 
 exitCode:: ExitStatus.undefined

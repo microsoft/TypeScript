@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorElaboration.ts] ////
+
 //// [errorElaboration.ts]
 // Repro for #5712
 

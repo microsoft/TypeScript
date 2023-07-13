@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseTypeStrictNull.ts ===
+//// [tests/cases/compiler/promiseTypeStrictNull.ts] ////
+
+=== promiseTypeStrictNull.ts ===
 declare var p: Promise<boolean>;
 >p : Symbol(p, Decl(promiseTypeStrictNull.ts, 0, 11))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts] ////
+
 //// [classExtendsClauseClassMergedWithModuleNotReferingConstructor.ts]
 class A {
     a: number;

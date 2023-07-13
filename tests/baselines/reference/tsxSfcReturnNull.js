@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSfcReturnNull.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

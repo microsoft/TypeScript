@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts] ////
+
 //// [parserErrorRecovery_ClassElement3.ts]
 module M {
    ¬

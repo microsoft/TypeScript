@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedParameterInCatchClause.ts ===
+//// [tests/cases/compiler/unusedParameterInCatchClause.ts] ////
+
+=== unusedParameterInCatchClause.ts ===
 function f1() {
 >f1 : Symbol(f1, Decl(unusedParameterInCatchClause.ts, 0, 0))
 

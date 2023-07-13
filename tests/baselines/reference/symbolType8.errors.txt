@@ -1,16 +1,16 @@
-tests/cases/conformance/es6/Symbols/symbolType8.ts(2,1): error TS2469: The '<' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType8.ts(3,1): error TS2469: The '<' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType8.ts(4,1): error TS2469: The '>' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType8.ts(5,1): error TS2469: The '>' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType8.ts(6,1): error TS2469: The '<=' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType8.ts(7,1): error TS2469: The '<=' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType8.ts(8,1): error TS2469: The '>=' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType8.ts(9,1): error TS2469: The '>=' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType8.ts(11,6): error TS2469: The '>=' operator cannot be applied to type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType8.ts(12,1): error TS2469: The '>=' operator cannot be applied to type 'symbol'.
+symbolType8.ts(2,1): error TS2469: The '<' operator cannot be applied to type 'symbol'.
+symbolType8.ts(3,1): error TS2469: The '<' operator cannot be applied to type 'symbol'.
+symbolType8.ts(4,1): error TS2469: The '>' operator cannot be applied to type 'symbol'.
+symbolType8.ts(5,1): error TS2469: The '>' operator cannot be applied to type 'symbol'.
+symbolType8.ts(6,1): error TS2469: The '<=' operator cannot be applied to type 'symbol'.
+symbolType8.ts(7,1): error TS2469: The '<=' operator cannot be applied to type 'symbol'.
+symbolType8.ts(8,1): error TS2469: The '>=' operator cannot be applied to type 'symbol'.
+symbolType8.ts(9,1): error TS2469: The '>=' operator cannot be applied to type 'symbol'.
+symbolType8.ts(11,6): error TS2469: The '>=' operator cannot be applied to type 'symbol'.
+symbolType8.ts(12,1): error TS2469: The '>=' operator cannot be applied to type 'symbol'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolType8.ts (10 errors) ====
+==== symbolType8.ts (10 errors) ====
     var s = Symbol.for("compare");
     s < s;
     ~

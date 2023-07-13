@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticsInConstructorBodies.ts ===
+//// [tests/cases/compiler/staticsInConstructorBodies.ts] ////
+
+=== staticsInConstructorBodies.ts ===
 class C {
 >C : Symbol(C, Decl(staticsInConstructorBodies.ts, 0, 0))
 

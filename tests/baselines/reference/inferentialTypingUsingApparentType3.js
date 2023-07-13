@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferentialTypingUsingApparentType3.ts] ////
+
 //// [inferentialTypingUsingApparentType3.ts]
 interface Field<T> {
     clean(input: T): T

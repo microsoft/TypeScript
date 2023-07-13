@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/globalIsContextualKeyword.ts] ////
+
 //// [globalIsContextualKeyword.ts]
 function a() {
     let global = 1;

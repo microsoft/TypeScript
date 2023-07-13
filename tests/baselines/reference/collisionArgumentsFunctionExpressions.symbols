@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionArgumentsFunctionExpressions.ts ===
+//// [tests/cases/compiler/collisionArgumentsFunctionExpressions.ts] ////
+
+=== collisionArgumentsFunctionExpressions.ts ===
 function foo() {
 >foo : Symbol(foo, Decl(collisionArgumentsFunctionExpressions.ts, 0, 0))
 

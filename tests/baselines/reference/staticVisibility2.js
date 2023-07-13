@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticVisibility2.ts] ////
+
 //// [staticVisibility2.ts]
 class Square {
     static sideLength;

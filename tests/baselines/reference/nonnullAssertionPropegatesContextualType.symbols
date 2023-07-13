@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonnullAssertionPropegatesContextualType.ts ===
+//// [tests/cases/compiler/nonnullAssertionPropegatesContextualType.ts] ////
+
+=== nonnullAssertionPropegatesContextualType.ts ===
 let rect2: SVGRectElement = document.querySelector('.svg-rectangle')!; // Error: Element
 >rect2 : Symbol(rect2, Decl(nonnullAssertionPropegatesContextualType.ts, 0, 3))
 >SVGRectElement : Symbol(SVGRectElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))

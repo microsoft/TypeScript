@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionDeclarationWithResolutionOfTypeNamedArguments01.ts ===
+//// [tests/cases/compiler/functionDeclarationWithResolutionOfTypeNamedArguments01.ts] ////
+
+=== functionDeclarationWithResolutionOfTypeNamedArguments01.ts ===
 interface arguments {
 >arguments : Symbol(arguments, Decl(functionDeclarationWithResolutionOfTypeNamedArguments01.ts, 0, 0))
 }

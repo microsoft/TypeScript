@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reachabilityChecks5.ts ===
+//// [tests/cases/compiler/reachabilityChecks5.ts] ////
+
+=== reachabilityChecks5.ts ===
 function f0(x): number {
 >f0 : (x: any) => number
 >x : any

@@ -1,12 +1,12 @@
-tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(4,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
-tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(8,14): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
-tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(27,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
-tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts(37,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+invalidWhileContinueStatements.ts(4,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+invalidWhileContinueStatements.ts(8,14): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+invalidWhileContinueStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
+invalidWhileContinueStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
+invalidWhileContinueStatements.ts(27,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+invalidWhileContinueStatements.ts(37,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
 
 
-==== tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts (6 errors) ====
+==== invalidWhileContinueStatements.ts (6 errors) ====
     // All errors
     
     // naked continue not allowed

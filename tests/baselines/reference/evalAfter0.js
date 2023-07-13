@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/evalAfter0.ts] ////
+
 //// [evalAfter0.ts]
 (0,eval)("10"); // fine: special case for eval
 

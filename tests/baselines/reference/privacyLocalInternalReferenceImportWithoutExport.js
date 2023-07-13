@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyLocalInternalReferenceImportWithoutExport.ts] ////
+
 //// [privacyLocalInternalReferenceImportWithoutExport.ts]
 // private elements
 module m_private {
@@ -301,7 +303,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [privacyLocalInternalReferenceImportWithoutExport.d.ts]
-declare module m_private {
+declare namespace m_private {
     class c_private {
     }
     enum e_private {
@@ -312,16 +314,16 @@ declare module m_private {
     var v_private: c_private;
     interface i_private {
     }
-    module mi_private {
+    namespace mi_private {
         class c {
         }
     }
-    module mu_private {
+    namespace mu_private {
         interface i {
         }
     }
 }
-export declare module m_public {
+export declare namespace m_public {
     class c_public {
     }
     enum e_public {
@@ -332,16 +334,16 @@ export declare module m_public {
     var v_public: number;
     interface i_public {
     }
-    module mi_public {
+    namespace mi_public {
         class c {
         }
     }
-    module mu_public {
+    namespace mu_public {
         interface i {
         }
     }
 }
-export declare module import_public {
+export declare namespace import_public {
     import im_private_c_private = m_private.c_private;
     import im_private_e_private = m_private.e_private;
     import im_private_i_private = m_private.i_private;

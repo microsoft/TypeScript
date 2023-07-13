@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock10.ts] ////
+
 //// [classStaticBlock10.ts]
 var a1 = 1;
 var a2 = 1;

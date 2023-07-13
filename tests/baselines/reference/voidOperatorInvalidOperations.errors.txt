@@ -1,9 +1,9 @@
-tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorInvalidOperations.ts(4,15): error TS1005: ',' expected.
-tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorInvalidOperations.ts(4,20): error TS1109: Expression expected.
-tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorInvalidOperations.ts(7,17): error TS1109: Expression expected.
+voidOperatorInvalidOperations.ts(4,15): error TS1005: ',' expected.
+voidOperatorInvalidOperations.ts(4,20): error TS1109: Expression expected.
+voidOperatorInvalidOperations.ts(7,17): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorInvalidOperations.ts (3 errors) ====
+==== voidOperatorInvalidOperations.ts (3 errors) ====
     // Unary operator void
     
     // operand before void

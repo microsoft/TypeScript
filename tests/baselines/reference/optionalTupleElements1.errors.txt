@@ -1,19 +1,19 @@
-tests/cases/conformance/types/tuple/optionalTupleElements1.ts(11,29): error TS1257: A required element cannot follow an optional element.
-tests/cases/conformance/types/tuple/optionalTupleElements1.ts(15,5): error TS2322: Type 'T2' is not assignable to type 'T1'.
+optionalTupleElements1.ts(11,29): error TS1257: A required element cannot follow an optional element.
+optionalTupleElements1.ts(15,5): error TS2322: Type 'T2' is not assignable to type 'T1'.
   Source provides no match for required element at position 2 in target.
-tests/cases/conformance/types/tuple/optionalTupleElements1.ts(16,5): error TS2322: Type 'T3' is not assignable to type 'T1'.
+optionalTupleElements1.ts(16,5): error TS2322: Type 'T3' is not assignable to type 'T1'.
   Source provides no match for required element at position 1 in target.
-tests/cases/conformance/types/tuple/optionalTupleElements1.ts(17,5): error TS2322: Type 'T4' is not assignable to type 'T1'.
+optionalTupleElements1.ts(17,5): error TS2322: Type 'T4' is not assignable to type 'T1'.
   Source provides no match for required element at position 0 in target.
-tests/cases/conformance/types/tuple/optionalTupleElements1.ts(20,5): error TS2322: Type 'T3' is not assignable to type 'T2'.
+optionalTupleElements1.ts(20,5): error TS2322: Type 'T3' is not assignable to type 'T2'.
   Source provides no match for required element at position 1 in target.
-tests/cases/conformance/types/tuple/optionalTupleElements1.ts(21,5): error TS2322: Type 'T4' is not assignable to type 'T2'.
+optionalTupleElements1.ts(21,5): error TS2322: Type 'T4' is not assignable to type 'T2'.
   Source provides no match for required element at position 0 in target.
-tests/cases/conformance/types/tuple/optionalTupleElements1.ts(25,5): error TS2322: Type 'T4' is not assignable to type 'T3'.
+optionalTupleElements1.ts(25,5): error TS2322: Type 'T4' is not assignable to type 'T3'.
   Source provides no match for required element at position 0 in target.
 
 
-==== tests/cases/conformance/types/tuple/optionalTupleElements1.ts (7 errors) ====
+==== optionalTupleElements1.ts (7 errors) ====
     type T1 = [number, string, boolean];
     type T2 = [number, string, boolean?];
     type T3 = [number, string?, boolean?];

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializer.ts] ////
+
 //// [contextuallyTypedBindingInitializer.ts]
 interface Show {
     show: (x: number) => string;

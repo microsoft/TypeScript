@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidOperator1.ts] ////
+
 //// [voidOperator1.ts]
 var x: any = void 1;
 var y: void = void 1;

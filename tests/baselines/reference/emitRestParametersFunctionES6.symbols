@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/restParameters/emitRestParametersFunctionES6.ts ===
+//// [tests/cases/conformance/es6/restParameters/emitRestParametersFunctionES6.ts] ////
+
+=== emitRestParametersFunctionES6.ts ===
 function bar(...rest) { }
 >bar : Symbol(bar, Decl(emitRestParametersFunctionES6.ts, 0, 0))
 >rest : Symbol(rest, Decl(emitRestParametersFunctionES6.ts, 0, 13))

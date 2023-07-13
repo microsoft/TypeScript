@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList5.ts] ////
+
+=== parserErrorRecovery_ParameterList5.ts ===
 (a:number => { }
 >a : Symbol(a, Decl(parserErrorRecovery_ParameterList5.ts, 0, 1))
 

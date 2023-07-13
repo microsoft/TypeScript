@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration6.ts] ////
+
 //// [parserInterfaceDeclaration6.ts]
 export export interface I {
 }

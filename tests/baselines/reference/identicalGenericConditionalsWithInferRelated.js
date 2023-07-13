@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/identicalGenericConditionalsWithInferRelated.ts] ////
+
 //// [identicalGenericConditionalsWithInferRelated.ts]
 function f<X>(arg: X) {
     type Cond1 = X extends [infer A] ? A : never;

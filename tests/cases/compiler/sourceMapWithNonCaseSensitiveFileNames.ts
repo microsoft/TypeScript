@@ -1,4 +1,4 @@
-// @out: tests/cases/compiler/testfiles/fooResult.js
+// @out: testfiles/fooResult.js
 // @sourcemap: true
 // @useCaseSensitiveFileNames: false
 // @Filename: testFiles/app.ts

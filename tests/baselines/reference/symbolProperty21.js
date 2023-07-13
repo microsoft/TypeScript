@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty21.ts] ////
+
 //// [symbolProperty21.ts]
 interface I<T, U> {
     [Symbol.unscopables]: T;

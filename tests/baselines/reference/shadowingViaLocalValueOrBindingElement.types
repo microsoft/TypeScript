@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shadowingViaLocalValueOrBindingElement.ts ===
+//// [tests/cases/compiler/shadowingViaLocalValueOrBindingElement.ts] ////
+
+=== shadowingViaLocalValueOrBindingElement.ts ===
 if (true) {
 >true : true
 

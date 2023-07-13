@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientWithStatements.ts] ////
+
 //// [ambientWithStatements.ts]
 declare module M {
     break;

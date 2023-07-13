@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParamReferencingOtherParams3.ts] ////
+
 //// [optionalParamReferencingOtherParams3.ts]
 function right(a = b, b = a) {
     a;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedExcessPropertyChecking.ts ===
+//// [tests/cases/compiler/nestedExcessPropertyChecking.ts] ////
+
+=== nestedExcessPropertyChecking.ts ===
 type A1 = { x: { a?: string } };
 >A1 : { x: {    a?: string;}; }
 >x : { a?: string | undefined; }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution9.tsx] ////
+
+=== react.d.ts ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(react.d.ts, 0, 0))
 
@@ -23,7 +25,7 @@ interface Props {
 >foo : Symbol(Props.foo, Decl(react.d.ts, 9, 17))
 }
 
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 export class MyComponent {  
 >MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType8.ts] ////
+
 //// [symbolType8.ts]
 var s = Symbol.for("compare");
 s < s;

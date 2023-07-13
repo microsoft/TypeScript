@@ -1,24 +1,24 @@
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(18,31): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(19,31): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(22,31): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(23,31): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(24,31): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(30,31): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(31,32): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(32,33): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(33,32): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(36,32): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(36,39): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(37,32): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(37,39): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(37,47): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(40,8): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(41,8): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(42,8): error TS2703: The operand of a 'delete' operator must be a property reference.
-tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts(43,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(18,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(19,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(22,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(23,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(24,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(30,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(31,32): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(32,33): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(33,32): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(36,32): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(36,39): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(37,32): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(37,39): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(37,47): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(40,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(41,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(42,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithStringType.ts(43,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts (18 errors) ====
+==== deleteOperatorWithStringType.ts (18 errors) ====
     // delete  operator on string type
     var STRING: string;
     var STRING1: string[] = ["", "abc"];

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/circularMultipleAssignmentDeclaration.js ===
+//// [tests/cases/conformance/salsa/circularMultipleAssignmentDeclaration.ts] ////
+
+=== circularMultipleAssignmentDeclaration.js ===
 ns.next = ns.next || { shared: {} };
 >ns.next : Symbol(ns.next, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 1, 3))
 >ns : Symbol(ns, Decl(circularMultipleAssignmentDeclaration.js, 0, 0), Decl(circularMultipleAssignmentDeclaration.js, 0, 36))

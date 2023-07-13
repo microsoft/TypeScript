@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocVariadicType.ts] ////
+
+=== a.js ===
 /**
  * @type {function(boolean, string, ...*):void}
  */
@@ -9,7 +11,7 @@ const foo = function (a, b, ...r) { };
 >b : string
 >r : any[]
 
-=== tests/cases/conformance/jsdoc/b.ts ===
+=== b.ts ===
 foo(false, '');
 >foo(false, '') : void
 >foo : (arg0: boolean, arg1: string, ...arg2: any[]) => void

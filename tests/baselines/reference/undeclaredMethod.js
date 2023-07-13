@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undeclaredMethod.ts] ////
+
 //// [undeclaredMethod.ts]
 module M {
     export class C {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/O1.ts ===
+//// [tests/cases/conformance/emitter/es2018/asyncGenerators/emitter.asyncGenerators.objectLiteralMethods.es2018.ts] ////
+
+=== O1.ts ===
 const o1 = {
 >o1 : { f(): AsyncGenerator<never, void, unknown>; }
 >{    async * f() {    }} : { f(): AsyncGenerator<never, void, unknown>; }
@@ -7,7 +9,7 @@ const o1 = {
 >f : () => AsyncGenerator<never, void, unknown>
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/O2.ts ===
+=== O2.ts ===
 const o2 = {
 >o2 : { f(): AsyncGenerator<any, void, unknown>; }
 >{    async * f() {        const x = yield;    }} : { f(): AsyncGenerator<any, void, unknown>; }
@@ -20,7 +22,7 @@ const o2 = {
 >yield : any
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/O3.ts ===
+=== O3.ts ===
 const o3 = {
 >o3 : { f(): AsyncGenerator<number, void, unknown>; }
 >{    async * f() {        const x = yield 1;    }} : { f(): AsyncGenerator<number, void, unknown>; }
@@ -34,7 +36,7 @@ const o3 = {
 >1 : 1
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/O4.ts ===
+=== O4.ts ===
 const o4 = {
 >o4 : { f(): AsyncGenerator<number, void, undefined>; }
 >{    async * f() {        const x = yield* [1];    }} : { f(): AsyncGenerator<number, void, undefined>; }
@@ -49,7 +51,7 @@ const o4 = {
 >1 : 1
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/O5.ts ===
+=== O5.ts ===
 const o5 = {
 >o5 : { f(): AsyncGenerator<number, void, unknown>; }
 >{    async * f() {        const x = yield* (async function*() { yield 1; })();    }} : { f(): AsyncGenerator<number, void, unknown>; }
@@ -67,7 +69,7 @@ const o5 = {
 >1 : 1
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/O6.ts ===
+=== O6.ts ===
 const o6 = {
 >o6 : { f(): AsyncGenerator<never, void, unknown>; }
 >{    async * f() {        const x = await 1;    }} : { f(): AsyncGenerator<never, void, unknown>; }
@@ -81,7 +83,7 @@ const o6 = {
 >1 : 1
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/O7.ts ===
+=== O7.ts ===
 const o7 = {
 >o7 : { f(): AsyncGenerator<never, number, unknown>; }
 >{    async * f() {        return 1;    }} : { f(): AsyncGenerator<never, number, unknown>; }

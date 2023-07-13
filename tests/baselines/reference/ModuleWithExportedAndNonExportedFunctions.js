@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts] ////
+
 //// [ModuleWithExportedAndNonExportedFunctions.ts]
 module A {
 

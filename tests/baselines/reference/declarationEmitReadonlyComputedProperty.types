@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bug.ts ===
+//// [tests/cases/compiler/declarationEmitReadonlyComputedProperty.ts] ////
+
+=== bug.ts ===
 export const SYMBOL = Symbol()
 >SYMBOL : unique symbol
 >Symbol() : unique symbol
@@ -23,15 +25,15 @@ export function createInstance(): Interface {
   }
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { createInstance } from './bug'
->createInstance : () => import("tests/cases/compiler/bug").Interface
+>createInstance : () => import("bug").Interface
 
 export const spread = {
 >spread : { [SYMBOL]: string; }
 >{  ...createInstance(),} : { [SYMBOL]: string; }
 
   ...createInstance(),
->createInstance() : import("tests/cases/compiler/bug").Interface
->createInstance : () => import("tests/cases/compiler/bug").Interface
+>createInstance() : import("bug").Interface
+>createInstance : () => import("bug").Interface
 }

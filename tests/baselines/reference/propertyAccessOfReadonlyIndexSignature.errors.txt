@@ -1,7 +1,7 @@
-tests/cases/compiler/propertyAccessOfReadonlyIndexSignature.ts(6,1): error TS2542: Index signature in type 'Test' only permits reading.
+propertyAccessOfReadonlyIndexSignature.ts(6,1): error TS2542: Index signature in type 'Test' only permits reading.
 
 
-==== tests/cases/compiler/propertyAccessOfReadonlyIndexSignature.ts (1 errors) ====
+==== propertyAccessOfReadonlyIndexSignature.ts (1 errors) ====
     interface Test {
         readonly [key: string]: string;
     }

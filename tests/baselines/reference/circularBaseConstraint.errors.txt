@@ -1,0 +1,22 @@
+circularBaseConstraint.ts(14,8): error TS2304: Cannot find name 'a'.
+
+
+==== circularBaseConstraint.ts (1 errors) ====
+    // Repro from #54610
+    
+    type A<T> = T;
+    
+    type B<T> = T extends any[]
+        ? never
+        : A<T> extends infer key
+        ? key extends keyof T
+            ? B<T[key]>
+            : never
+        : never;
+    
+    function foo<T>() {
+        `${a}` as B<T>;
+           ~
+!!! error TS2304: Cannot find name 'a'.
+    }
+    

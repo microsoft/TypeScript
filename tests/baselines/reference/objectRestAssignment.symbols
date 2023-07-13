@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/objectRestAssignment.ts ===
+//// [tests/cases/conformance/types/rest/objectRestAssignment.ts] ////
+
+=== objectRestAssignment.ts ===
 let ka: any;
 >ka : Symbol(ka, Decl(objectRestAssignment.ts, 0, 3))
 

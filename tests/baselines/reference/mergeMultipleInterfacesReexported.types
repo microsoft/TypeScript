@@ -1,8 +1,10 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/mergeMultipleInterfacesReexported.ts] ////
+
+=== index.ts ===
 
 export * from './eventList';
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import { EventList } from "./eventList";
 >EventList : any
 
@@ -13,15 +15,15 @@ const t: keyof EventList = p012
 >t : keyof EventList
 >p012 : "p0" | "p1" | "p2"
 
-=== tests/cases/compiler/eventList.ts ===
+=== eventList.ts ===
 export interface EventList {
     p0: [];
 >p0 : []
 }
 
-=== tests/cases/compiler/foo.ts ===
+=== foo.ts ===
 declare module './index' {
->'./index' : typeof import("tests/cases/compiler/index")
+>'./index' : typeof import("index")
 
     interface EventList {
         p1: []
@@ -31,9 +33,9 @@ declare module './index' {
 export {};
 
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 declare module './index' {
->'./index' : typeof import("tests/cases/compiler/index")
+>'./index' : typeof import("index")
 
     interface EventList {
         p2: []

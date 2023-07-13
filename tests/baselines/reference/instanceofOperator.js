@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofOperator.ts] ////
+
 //// [instanceofOperator.ts]
 // Spec:
 // The instanceof operator requires the left operand to be of type Any or an object type, and the right 

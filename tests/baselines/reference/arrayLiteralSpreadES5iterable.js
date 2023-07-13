@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/spread/arrayLiteralSpreadES5iterable.ts] ////
+
 //// [arrayLiteralSpreadES5iterable.ts]
 function f0() {
     var a = [1, 2, 3];

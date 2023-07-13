@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceAndStaticDeclarations1.ts] ////
+
 //// [instanceAndStaticDeclarations1.ts]
 // from spec
 

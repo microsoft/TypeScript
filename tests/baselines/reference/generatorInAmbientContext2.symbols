@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext2.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext2.ts] ////
+
+=== generatorInAmbientContext2.ts ===
 declare module M {
 >M : Symbol(M, Decl(generatorInAmbientContext2.ts, 0, 0))
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/yieldExpressions/YieldExpression8_es6.ts(1,1): error TS2304: Cannot find name 'yield'.
+YieldExpression8_es6.ts(1,1): error TS2304: Cannot find name 'yield'.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/YieldExpression8_es6.ts (1 errors) ====
+==== YieldExpression8_es6.ts (1 errors) ====
     yield(foo);
     ~~~~~
 !!! error TS2304: Cannot find name 'yield'.

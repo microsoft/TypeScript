@@ -1,4 +1,4 @@
-tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(63,84): error TS2344: Type 'GetProps<C>' does not satisfy the constraint 'Shared<TInjectedProps, GetProps<C>>'.
+circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(63,84): error TS2344: Type 'GetProps<C>' does not satisfy the constraint 'Shared<TInjectedProps, GetProps<C>>'.
   Type 'unknown' is not assignable to type 'Shared<TInjectedProps, GetProps<C>>'.
     Type 'Matching<TInjectedProps, GetProps<C>>' is not assignable to type 'Shared<TInjectedProps, GetProps<C>>'.
       Type 'P extends keyof TInjectedProps ? TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : TInjectedProps[P] : GetProps<C>[P]' is not assignable to type '(TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never) | undefined'.
@@ -28,7 +28,7 @@ tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfin
                                                       Type 'string extends keyof TInjectedProps ? TInjectedProps[keyof TInjectedProps & string] extends GetProps<C>[keyof TInjectedProps & string] ? GetProps<C>[keyof TInjectedProps & string] : TInjectedProps[keyof TInjectedProps & string] : GetProps<C>[string]' is not assignable to type '(TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never) | undefined'.
 
 
-==== tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts (1 errors) ====
+==== circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts (1 errors) ====
     declare class Component<P> {
         constructor(props: Readonly<P>);
         constructor(props: P, context?: any);

@@ -1,7 +1,7 @@
-tests/cases/compiler/matchReturnTypeInAllBranches.ts(30,13): error TS2322: Type 'number' is not assignable to type 'boolean'.
+matchReturnTypeInAllBranches.ts(30,13): error TS2322: Type 'number' is not assignable to type 'boolean'.
 
 
-==== tests/cases/compiler/matchReturnTypeInAllBranches.ts (1 errors) ====
+==== matchReturnTypeInAllBranches.ts (1 errors) ====
     // Represents a monster who enjoys ice cream
     class IceCreamMonster {
         private iceCreamFlavor: string;

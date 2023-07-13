@@ -1,7 +1,7 @@
-tests/cases/compiler/defaultValueInConstructorOverload1.ts(2,17): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+defaultValueInConstructorOverload1.ts(2,17): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
-==== tests/cases/compiler/defaultValueInConstructorOverload1.ts (1 errors) ====
+==== defaultValueInConstructorOverload1.ts (1 errors) ====
     class C {
         constructor(x = '');
                     ~~~~~~

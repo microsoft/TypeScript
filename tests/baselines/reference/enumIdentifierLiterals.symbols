@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumIdentifierLiterals.ts ===
+//// [tests/cases/compiler/enumIdentifierLiterals.ts] ////
+
+=== enumIdentifierLiterals.ts ===
 enum Nums {
 >Nums : Symbol(Nums, Decl(enumIdentifierLiterals.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
+//// [tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.tsx] ////
+
+=== jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
 /// <reference path="react16.d.ts" />
 import PropTypes from 'prop-types';
 >PropTypes : typeof PropTypes

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingArrayOfLambdas.ts ===
+//// [tests/cases/compiler/contextualTypingArrayOfLambdas.ts] ////
+
+=== contextualTypingArrayOfLambdas.ts ===
 class A {
 >A : Symbol(A, Decl(contextualTypingArrayOfLambdas.ts, 0, 0))
 

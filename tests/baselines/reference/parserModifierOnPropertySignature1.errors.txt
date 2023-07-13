@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnPropertySignature1.ts(2,5): error TS1070: 'public' modifier cannot appear on a type member.
+parserModifierOnPropertySignature1.ts(2,5): error TS1070: 'public' modifier cannot appear on a type member.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnPropertySignature1.ts (1 errors) ====
+==== parserModifierOnPropertySignature1.ts (1 errors) ====
     interface Foo{
         public biz;
         ~~~~~~

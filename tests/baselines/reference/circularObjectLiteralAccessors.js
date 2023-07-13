@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularObjectLiteralAccessors.ts] ////
+
 //// [circularObjectLiteralAccessors.ts]
 // Repro from #6000
 

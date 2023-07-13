@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dataViewConstructor.ts ===
+//// [tests/cases/compiler/dataViewConstructor.ts] ////
+
+=== dataViewConstructor.ts ===
 new DataView(new Uint8Array(32)); // should error
 >DataView : Symbol(DataView, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

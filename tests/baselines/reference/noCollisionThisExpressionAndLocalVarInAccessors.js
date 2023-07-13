@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInAccessors.ts] ////
+
 //// [noCollisionThisExpressionAndLocalVarInAccessors.ts]
 class class1 {
     get a(): number {

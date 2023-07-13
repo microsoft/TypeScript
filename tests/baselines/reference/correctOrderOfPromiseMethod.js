@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/correctOrderOfPromiseMethod.ts] ////
+
 //// [correctOrderOfPromiseMethod.ts]
 interface A {
     id: string

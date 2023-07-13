@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfConstructor.ts ===
+//// [tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfConstructor.ts] ////
+
+=== doNotEmitDetachedCommentsAtStartOfConstructor.ts ===
 class A {
 >A : Symbol(A, Decl(doNotEmitDetachedCommentsAtStartOfConstructor.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericClassesRedeclaration.ts ===
+//// [tests/cases/compiler/genericClassesRedeclaration.ts] ////
+
+=== genericClassesRedeclaration.ts ===
 declare module TypeScript {
 >TypeScript : typeof TypeScript
 

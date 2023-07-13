@@ -69,9 +69,9 @@ Before running Timeout callback:: count: 2
 
 
 FsWatches::
-/src/tsconfig.json: *new*
-  {}
 /compiler/lib.es5.d.ts: *new*
+  {}
+/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -134,11 +134,11 @@ Info seq  [hh:mm:ss:mss] 		Projects: /src/tsconfig.json
 After running Timeout callback:: count: 0
 
 FsWatches::
-/src/tsconfig.json:
+/compiler/lib.es2015.promise.d.ts: *new*
   {}
 /compiler/lib.es5.d.ts:
   {}
-/compiler/lib.es2015.promise.d.ts: *new*
+/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::

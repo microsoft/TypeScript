@@ -1,20 +1,20 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type '(x: number) => number' is not assignable to type '() => number'.
+assignmentCompatWithCallSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type '(x: number) => number' is not assignable to type '() => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(19,5): error TS2322: Type '(x: number) => number' is not assignable to type '() => number'.
+assignmentCompatWithCallSignaturesWithOptionalParameters.ts(19,5): error TS2322: Type '(x: number) => number' is not assignable to type '() => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(20,5): error TS2322: Type '(x: number, y?: number) => number' is not assignable to type '() => number'.
+assignmentCompatWithCallSignaturesWithOptionalParameters.ts(20,5): error TS2322: Type '(x: number, y?: number) => number' is not assignable to type '() => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(22,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '() => number'.
+assignmentCompatWithCallSignaturesWithOptionalParameters.ts(22,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '() => number'.
   Target signature provides too few arguments. Expected 2 or more, but got 0.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(33,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x?: number) => number'.
+assignmentCompatWithCallSignaturesWithOptionalParameters.ts(33,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x?: number) => number'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(39,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+assignmentCompatWithCallSignaturesWithOptionalParameters.ts(39,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(45,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+assignmentCompatWithCallSignaturesWithOptionalParameters.ts(45,5): error TS2322: Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts (7 errors) ====
+==== assignmentCompatWithCallSignaturesWithOptionalParameters.ts (7 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     
     interface Base { 

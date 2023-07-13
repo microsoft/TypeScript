@@ -1,17 +1,17 @@
-tests/cases/conformance/types/spread/spreadUnion3.ts(2,14): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/spread/spreadUnion3.ts(9,9): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+spreadUnion3.ts(2,14): error TS2322: Type 'number' is not assignable to type 'string'.
+spreadUnion3.ts(9,9): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-tests/cases/conformance/types/spread/spreadUnion3.ts(17,11): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/spreadUnion3.ts(17,37): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/spreadUnion3.ts(18,11): error TS2698: Spread types may only be created from object types.
+spreadUnion3.ts(17,11): error TS2698: Spread types may only be created from object types.
+spreadUnion3.ts(17,37): error TS2698: Spread types may only be created from object types.
+spreadUnion3.ts(18,11): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/conformance/types/spread/spreadUnion3.ts (5 errors) ====
+==== spreadUnion3.ts (5 errors) ====
     function f(x: { y: string } | undefined): { y: string } {
         return { y: 123, ...x } // y: string | number
                  ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/types/spread/spreadUnion3.ts:1:45: The expected type comes from property 'y' which is declared here on type '{ y: string; }'
+!!! related TS6500 spreadUnion3.ts:1:45: The expected type comes from property 'y' which is declared here on type '{ y: string; }'
     }
     f(undefined)
     

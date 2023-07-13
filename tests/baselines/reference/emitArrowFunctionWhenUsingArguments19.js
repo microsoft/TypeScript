@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments19.ts] ////
+
 //// [emitArrowFunctionWhenUsingArguments19.ts]
 function f() {
     function g() {

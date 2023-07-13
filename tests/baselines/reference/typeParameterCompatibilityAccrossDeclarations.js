@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterCompatibilityAccrossDeclarations.ts] ////
+
 //// [typeParameterCompatibilityAccrossDeclarations.ts]
 var a = {
    x: function <T>(y: T): T { return null; }

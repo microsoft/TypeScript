@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeMultiInference.ts ===
+//// [tests/cases/compiler/mappedTypeMultiInference.ts] ////
+
+=== mappedTypeMultiInference.ts ===
 interface Style {
 >Style : Symbol(Style, Decl(mappedTypeMultiInference.ts, 0, 0))
 

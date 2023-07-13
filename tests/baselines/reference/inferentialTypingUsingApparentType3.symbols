@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferentialTypingUsingApparentType3.ts ===
+//// [tests/cases/compiler/inferentialTypingUsingApparentType3.ts] ////
+
+=== inferentialTypingUsingApparentType3.ts ===
 interface Field<T> {
 >Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
 >T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndGenericClasses-2.ts] ////
+
 //// [privateNamesAndGenericClasses-2.ts]
 class C<T> {
     #foo: T;

@@ -1,12 +1,12 @@
-tests/cases/conformance/ambient/test.ts(6,6): error TS2339: Property 'a' does not exist on type 'OhNo'.
+test.ts(6,6): error TS2339: Property 'a' does not exist on type 'OhNo'.
 
 
-==== tests/cases/conformance/ambient/types.ts (0 errors) ====
+==== types.ts (0 errors) ====
     declare module "*.foo" {
       export interface OhNo { star: string }
     }
     
-==== tests/cases/conformance/ambient/test.ts (1 errors) ====
+==== test.ts (1 errors) ====
     declare module "a.foo" {
       export interface OhNo { a: string }
     }

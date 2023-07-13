@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts] ////
+
 //// [bitwiseNotOperatorWithAnyOtherType.ts]
 // ~ operator on any type
 

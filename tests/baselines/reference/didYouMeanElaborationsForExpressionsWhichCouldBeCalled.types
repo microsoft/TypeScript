@@ -1,4 +1,6 @@
-=== tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts ===
+//// [tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts] ////
+
+=== didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts ===
 class Bar {
 >Bar : Bar
 

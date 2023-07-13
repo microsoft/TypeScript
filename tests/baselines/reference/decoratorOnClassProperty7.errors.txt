@@ -1,8 +1,8 @@
-tests/cases/conformance/decorators/class/property/decoratorOnClassProperty7.ts(4,5): error TS1240: Unable to resolve signature of property decorator when called as an expression.
+decoratorOnClassProperty7.ts(4,5): error TS1240: Unable to resolve signature of property decorator when called as an expression.
   The runtime will invoke the decorator with 2 arguments, but the decorator expects 3.
 
 
-==== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty7.ts (1 errors) ====
+==== decoratorOnClassProperty7.ts (1 errors) ====
     declare function dec(target: Function, propertyKey: string | symbol, paramIndex: number): void;
     
     class C {
@@ -10,5 +10,5 @@ tests/cases/conformance/decorators/class/property/decoratorOnClassProperty7.ts(4
         ~~~~
 !!! error TS1240: Unable to resolve signature of property decorator when called as an expression.
 !!! error TS1240:   The runtime will invoke the decorator with 2 arguments, but the decorator expects 3.
-!!! related TS6210 tests/cases/conformance/decorators/class/property/decoratorOnClassProperty7.ts:1:70: An argument for 'paramIndex' was not provided.
+!!! related TS6210 decoratorOnClassProperty7.ts:1:70: An argument for 'paramIndex' was not provided.
     }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts ===
+//// [tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts] ////
+
+=== enumConstantMemberWithTemplateLiterals.ts ===
 enum T1 {
 >T1 : T1
 
@@ -106,7 +108,7 @@ enum T5 {
 
     g = `1${"2"}3`,
 >g : T5.c
->`1${"2"}3` : string
+>`1${"2"}3` : "123"
 >"2" : "2"
 
     h = `1`.length

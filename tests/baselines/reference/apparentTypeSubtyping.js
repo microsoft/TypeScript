@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSubtyping.ts] ////
+
 //// [apparentTypeSubtyping.ts]
 // subtype checks use the apparent type of the target type
 // S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:

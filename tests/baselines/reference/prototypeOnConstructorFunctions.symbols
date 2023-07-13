@@ -1,4 +1,6 @@
-=== tests/cases/compiler/prototypeOnConstructorFunctions.ts ===
+//// [tests/cases/compiler/prototypeOnConstructorFunctions.ts] ////
+
+=== prototypeOnConstructorFunctions.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(prototypeOnConstructorFunctions.ts, 0, 0))
 

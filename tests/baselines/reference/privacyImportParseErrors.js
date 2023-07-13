@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyImportParseErrors.ts] ////
+
 //// [privacyImportParseErrors.ts]
 export module m1 {
     export module m1_M1_public {

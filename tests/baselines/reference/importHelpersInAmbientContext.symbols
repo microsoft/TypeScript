@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.d.ts ===
+//// [tests/cases/compiler/importHelpersInAmbientContext.ts] ////
+
+=== a.d.ts ===
 export { };
 
 // Extends
@@ -40,7 +42,7 @@ export var { a, ...x } : Foo;
 >x : Symbol(x, Decl(a.d.ts, 19, 15))
 >Foo : Symbol(Foo, Decl(a.d.ts, 12, 1))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export {};
 declare namespace N {
 >N : Symbol(N, Decl(b.ts, 0, 10))
@@ -85,7 +87,7 @@ declare namespace N {
 >Foo : Symbol(Foo, Decl(b.ts, 12, 2))
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : Symbol(__extends, Decl(tslib.d.ts, --, --))
 >d : Symbol(d, Decl(tslib.d.ts, --, --))

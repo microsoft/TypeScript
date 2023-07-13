@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldUnaryMutation.ts] ////
+
 //// [privateNameFieldUnaryMutation.ts]
 class C {
     #test: number = 24;

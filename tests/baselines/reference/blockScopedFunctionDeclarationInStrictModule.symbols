@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedFunctionDeclarationInStrictModule.ts ===
+//// [tests/cases/compiler/blockScopedFunctionDeclarationInStrictModule.ts] ////
+
+=== blockScopedFunctionDeclarationInStrictModule.ts ===
 if (true) {
     function foo() { }
 >foo : Symbol(foo, Decl(blockScopedFunctionDeclarationInStrictModule.ts, 0, 11))

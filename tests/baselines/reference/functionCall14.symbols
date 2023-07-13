@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionCall14.ts ===
+//// [tests/cases/compiler/functionCall14.ts] ////
+
+=== functionCall14.ts ===
 function foo(a?:string, ...b:number[]){} 
 >foo : Symbol(foo, Decl(functionCall14.ts, 0, 0))
 >a : Symbol(a, Decl(functionCall14.ts, 0, 13))

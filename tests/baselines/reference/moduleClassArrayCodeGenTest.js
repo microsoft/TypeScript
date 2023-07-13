@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleClassArrayCodeGenTest.ts] ////
+
 //// [moduleClassArrayCodeGenTest.ts]
 // Invalid code gen for Array of Module class
 

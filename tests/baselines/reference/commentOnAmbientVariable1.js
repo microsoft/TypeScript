@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnAmbientVariable1.ts] ////
+
 //// [commentOnAmbientVariable1.ts]
 /*!=========
     Keep this pinned comment

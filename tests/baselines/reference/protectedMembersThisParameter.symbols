@@ -1,4 +1,6 @@
-=== tests/cases/compiler/protectedMembersThisParameter.ts ===
+//// [tests/cases/compiler/protectedMembersThisParameter.ts] ////
+
+=== protectedMembersThisParameter.ts ===
 class Message {
 >Message : Symbol(Message, Decl(protectedMembersThisParameter.ts, 0, 0))
 

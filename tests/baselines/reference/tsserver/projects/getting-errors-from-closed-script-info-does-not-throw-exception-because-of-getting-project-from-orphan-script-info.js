@@ -106,11 +106,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
+/a/b/app.ts: *new*
+  {}
 /a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
-  {}
-/a/b/app.ts: *new*
   {}
 
 FsWatchesRecursive::

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts] ////
+
 //// [assignmentCompatWithConstructSignatures.ts]
 // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
 

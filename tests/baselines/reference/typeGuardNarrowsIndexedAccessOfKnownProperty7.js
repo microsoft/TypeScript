@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty7.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty7.ts]
 export namespace Foo {
     export const key = Symbol();

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadExpressionContextualType.ts] ////
+
 //// [spreadExpressionContextualType.ts]
 // Repro from #43966
 

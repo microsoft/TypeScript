@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts ===
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts] ////
+
+=== contextuallyTypedByDiscriminableUnion.ts ===
 type ADT = {
 >ADT : Symbol(ADT, Decl(contextuallyTypedByDiscriminableUnion.ts, 0, 0))
 

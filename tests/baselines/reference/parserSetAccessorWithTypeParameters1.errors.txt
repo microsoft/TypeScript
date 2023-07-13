@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Accessors/parserSetAccessorWithTypeParameters1.ts(2,8): error TS1094: An accessor cannot have type parameters.
+parserSetAccessorWithTypeParameters1.ts(2,8): error TS1094: An accessor cannot have type parameters.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Accessors/parserSetAccessorWithTypeParameters1.ts (1 errors) ====
+==== parserSetAccessorWithTypeParameters1.ts (1 errors) ====
     class C {
        set foo<T>(v) { }
            ~~~

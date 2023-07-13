@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dash.d.ts ===
+//// [tests/cases/compiler/jsFileImportPreservedWhenUsed.ts] ////
+
+=== dash.d.ts ===
 type ObjectIterator<TObject, TResult> = (value: TObject[keyof TObject], key: string, collection: TObject) => TResult;
 >ObjectIterator : ObjectIterator<TObject, TResult>
 >value : TObject[keyof TObject]
@@ -17,12 +19,12 @@ declare const _: LoDashStatic;
 export = _;
 >_ : LoDashStatic
 
-=== tests/cases/compiler/Consts.ts ===
+=== Consts.ts ===
 export const INDEX_FIELD = '__INDEX';
 >INDEX_FIELD : "__INDEX"
 >'__INDEX' : "__INDEX"
 
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 import * as _ from './dash';
 >_ : LoDashStatic
 

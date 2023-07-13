@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadsWithComputedNames.ts] ////
+
 //// [overloadsWithComputedNames.ts]
 // https://github.com/microsoft/TypeScript/issues/52329
 class Person {

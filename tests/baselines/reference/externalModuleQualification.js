@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externalModuleQualification.ts] ////
+
 //// [externalModuleQualification.ts]
 export var ID = "test";
 export class DiffEditor<A, B, C> {

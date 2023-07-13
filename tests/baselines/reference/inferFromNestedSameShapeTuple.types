@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferFromNestedSameShapeTuple.ts ===
+//// [tests/cases/compiler/inferFromNestedSameShapeTuple.ts] ////
+
+=== inferFromNestedSameShapeTuple.ts ===
 // repro #48524
 
 type Magic<X> = X extends [[infer Y, ...infer _], ...infer __] ? Y : never;

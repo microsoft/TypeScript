@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specializedSignatureInInterface.ts ===
+//// [tests/cases/compiler/specializedSignatureInInterface.ts] ////
+
+=== specializedSignatureInInterface.ts ===
 interface A {
 >A : Symbol(A, Decl(specializedSignatureInInterface.ts, 0, 0))
 

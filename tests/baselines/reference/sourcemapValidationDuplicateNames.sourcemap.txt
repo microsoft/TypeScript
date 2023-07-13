@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourcemapValidationDuplicateNames.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourcemapValidationDuplicateNames.js
+emittedFile:sourcemapValidationDuplicateNames.js
 sourceFile:sourcemapValidationDuplicateNames.ts
 -------------------------------------------------------------------
 >>>var m1;

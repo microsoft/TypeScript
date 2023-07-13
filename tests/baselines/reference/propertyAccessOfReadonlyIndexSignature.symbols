@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyAccessOfReadonlyIndexSignature.ts ===
+//// [tests/cases/compiler/propertyAccessOfReadonlyIndexSignature.ts] ////
+
+=== propertyAccessOfReadonlyIndexSignature.ts ===
 interface Test {
 >Test : Symbol(Test, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 0))
 

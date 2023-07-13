@@ -1,18 +1,18 @@
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(20,1): error TS2322: Type 'MyList<string>' is not assignable to type 'List<number>'.
+objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(20,1): error TS2322: Type 'MyList<string>' is not assignable to type 'List<number>'.
   Types of property 'data' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(22,1): error TS2322: Type 'MyList<number>' is not assignable to type 'List<string>'.
+objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(22,1): error TS2322: Type 'MyList<number>' is not assignable to type 'List<string>'.
   Types of property 'data' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(30,5): error TS2322: Type 'U' is not assignable to type 'T'.
+objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(30,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'List<number>'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(31,5): error TS2322: Type 'T' is not assignable to type 'U'.
+objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(31,5): error TS2322: Type 'T' is not assignable to type 'U'.
   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'MyList<number>'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(42,5): error TS2322: Type 'U' is not assignable to type 'T'.
+objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(42,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
 
 
-==== tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts (5 errors) ====
+==== objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts (5 errors) ====
     // Types with infinitely expanding recursive types are type checked nominally
     
     class List<T> {

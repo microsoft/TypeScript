@@ -1,7 +1,7 @@
-tests/cases/compiler/infinitelyExpandingTypes1.ts(21,1): error TS2367: This comparison appears to be unintentional because the types 'List<number>' and 'List<string>' have no overlap.
+infinitelyExpandingTypes1.ts(21,1): error TS2367: This comparison appears to be unintentional because the types 'List<number>' and 'List<string>' have no overlap.
 
 
-==== tests/cases/compiler/infinitelyExpandingTypes1.ts (1 errors) ====
+==== infinitelyExpandingTypes1.ts (1 errors) ====
     interface List<T> {
         data: T;
         next: List<T>;

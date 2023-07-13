@@ -1,9 +1,9 @@
-tests/cases/conformance/salsa/a.js(5,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
-tests/cases/conformance/salsa/a.js(5,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
-tests/cases/conformance/salsa/a.js(17,5): error TS2322: Type 'string' is not assignable to type 'number'.
+a.js(5,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
+a.js(5,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
+a.js(17,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/salsa/a.js (3 errors) ====
+==== a.js (3 errors) ====
     /** @type {number | undefined} */
     var n;
     

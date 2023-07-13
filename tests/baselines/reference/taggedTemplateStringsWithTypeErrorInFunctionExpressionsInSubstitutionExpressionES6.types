@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.ts] ////
+
+=== taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.ts ===
 function foo(...rest: any[]) {
 >foo : (...rest: any[]) => void
 >rest : any[]

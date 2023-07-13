@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/emptyAssignmentPatterns04_ES5iterable.ts ===
+//// [tests/cases/conformance/es6/destructuring/emptyAssignmentPatterns04_ES5iterable.ts] ////
+
+=== emptyAssignmentPatterns04_ES5iterable.ts ===
 var a: any;
 >a : Symbol(a, Decl(emptyAssignmentPatterns04_ES5iterable.ts, 0, 3))
 

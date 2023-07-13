@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts] ////
+
+=== classExtendingNonConstructor.ts ===
 var x: {};
 >x : Symbol(x, Decl(classExtendingNonConstructor.ts, 0, 3))
 

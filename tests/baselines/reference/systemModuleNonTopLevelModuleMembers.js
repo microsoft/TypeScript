@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModuleNonTopLevelModuleMembers.ts] ////
+
 //// [systemModuleNonTopLevelModuleMembers.ts]
 export class TopLevelClass {}
 export module TopLevelModule {var v;}

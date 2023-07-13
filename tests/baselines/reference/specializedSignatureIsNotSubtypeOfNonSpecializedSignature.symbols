@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts] ////
+
+=== specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts ===
 function foo(x: 'a');
 >foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 0, 0), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 0, 21))
 >x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 0, 13))

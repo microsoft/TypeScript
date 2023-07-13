@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/newTarget/newTarget.es5.ts ===
+//// [tests/cases/conformance/es6/newTarget/newTarget.es5.ts] ////
+
+=== newTarget.es5.ts ===
 class A {
 >A : Symbol(A, Decl(newTarget.es5.ts, 0, 0))
 

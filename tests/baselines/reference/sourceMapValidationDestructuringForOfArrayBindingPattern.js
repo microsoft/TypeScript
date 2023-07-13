@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationDestructuringForOfArrayBindingPattern.ts] ////
+
 //// [sourceMapValidationDestructuringForOfArrayBindingPattern.ts]
 declare var console: {
     log(msg: any): void;

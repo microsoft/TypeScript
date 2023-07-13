@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts] ////
+
 //// [controlFlowOptionalChain2.ts]
 type A = {
   type: 'A';

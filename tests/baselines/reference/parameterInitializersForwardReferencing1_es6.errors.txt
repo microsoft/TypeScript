@@ -1,10 +1,10 @@
-tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(13,20): error TS2373: Parameter 'bar' cannot reference identifier 'foo' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(21,18): error TS2372: Parameter 'a' cannot reference itself.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(25,22): error TS2372: Parameter 'async' cannot reference itself.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts(29,15): error TS2537: Type 'any[]' has no matching index signature for type 'string'.
+parameterInitializersForwardReferencing1_es6.ts(13,20): error TS2373: Parameter 'bar' cannot reference identifier 'foo' declared after it.
+parameterInitializersForwardReferencing1_es6.ts(21,18): error TS2372: Parameter 'a' cannot reference itself.
+parameterInitializersForwardReferencing1_es6.ts(25,22): error TS2372: Parameter 'async' cannot reference itself.
+parameterInitializersForwardReferencing1_es6.ts(29,15): error TS2537: Type 'any[]' has no matching index signature for type 'string'.
 
 
-==== tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.ts (4 errors) ====
+==== parameterInitializersForwardReferencing1_es6.ts (4 errors) ====
     let foo: string = "";
     
     function f1 (bar = foo) { // unexpected compiler error; works at runtime

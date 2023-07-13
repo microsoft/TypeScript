@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commaOperatorLeftSideUnused.ts ===
+//// [tests/cases/compiler/commaOperatorLeftSideUnused.ts] ////
+
+=== commaOperatorLeftSideUnused.ts ===
 var xx: any;
 >xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
 

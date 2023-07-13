@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedMultipleParameter1InContructor.ts] ////
+
 //// [unusedMultipleParameter1InContructor.ts]
 class Dummy {
     constructor(person: string, person2: string) {

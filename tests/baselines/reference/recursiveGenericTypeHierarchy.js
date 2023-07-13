@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveGenericTypeHierarchy.ts] ////
+
 //// [recursiveGenericTypeHierarchy.ts]
 // used to ICE
 interface A<T extends A<T, S>, S extends A<T, S>> { }

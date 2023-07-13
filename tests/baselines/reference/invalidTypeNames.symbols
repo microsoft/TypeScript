@@ -1,4 +1,6 @@
-=== tests/cases/compiler/invalidTypeNames.ts ===
+//// [tests/cases/compiler/invalidTypeNames.ts] ////
+
+=== invalidTypeNames.ts ===
 // Refer to calling code - a real illegal name is subbed in here
 class illegal_name_here {
 >illegal_name_here : Symbol(illegal_name_here, Decl(invalidTypeNames.ts, 0, 0))

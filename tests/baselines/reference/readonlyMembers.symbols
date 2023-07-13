@@ -1,4 +1,6 @@
-=== tests/cases/compiler/readonlyMembers.ts ===
+//// [tests/cases/compiler/readonlyMembers.ts] ////
+
+=== readonlyMembers.ts ===
 interface X {
 >X : Symbol(X, Decl(readonlyMembers.ts, 0, 0))
 

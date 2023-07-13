@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCombinators2.ts] ////
+
 //// [genericCombinators2.ts]
 interface Collection<T, U> {
     length: number;

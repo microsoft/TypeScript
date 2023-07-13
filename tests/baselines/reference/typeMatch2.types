@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeMatch2.ts ===
+//// [tests/cases/compiler/typeMatch2.ts] ////
+
+=== typeMatch2.ts ===
 function f1() {
 >f1 : () => void
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedMultipleParameters2InMethodDeclaration.ts] ////
+
 //// [unusedMultipleParameters2InMethodDeclaration.ts]
 class Dummy {
     public greeter(person: string, person2: string, person3: string) {

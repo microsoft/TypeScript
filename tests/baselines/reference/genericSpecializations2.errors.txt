@@ -1,16 +1,16 @@
-tests/cases/compiler/genericSpecializations2.ts(8,5): error TS2416: Property 'foo' in type 'IntFooBad' is not assignable to the same property in base type 'IFoo<number>'.
+genericSpecializations2.ts(8,5): error TS2416: Property 'foo' in type 'IntFooBad' is not assignable to the same property in base type 'IFoo<number>'.
   Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'T' is not assignable to type 'string'.
-tests/cases/compiler/genericSpecializations2.ts(8,9): error TS2368: Type parameter name cannot be 'string'.
-tests/cases/compiler/genericSpecializations2.ts(12,5): error TS2416: Property 'foo' in type 'StringFoo2' is not assignable to the same property in base type 'IFoo<string>'.
+genericSpecializations2.ts(8,9): error TS2368: Type parameter name cannot be 'string'.
+genericSpecializations2.ts(12,5): error TS2416: Property 'foo' in type 'StringFoo2' is not assignable to the same property in base type 'IFoo<string>'.
   Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'T' is not assignable to type 'string'.
-tests/cases/compiler/genericSpecializations2.ts(12,9): error TS2368: Type parameter name cannot be 'string'.
+genericSpecializations2.ts(12,9): error TS2368: Type parameter name cannot be 'string'.
 
 
-==== tests/cases/compiler/genericSpecializations2.ts (4 errors) ====
+==== genericSpecializations2.ts (4 errors) ====
     class IFoo<T> {
         foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
             return null;
@@ -24,7 +24,7 @@ tests/cases/compiler/genericSpecializations2.ts(12,9): error TS2368: Type parame
 !!! error TS2416:   Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
 !!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2416:       Type 'T' is not assignable to type 'string'.
-!!! related TS2208 tests/cases/compiler/genericSpecializations2.ts:2:9: This type parameter might need an `extends string` constraint.
+!!! related TS2208 genericSpecializations2.ts:2:9: This type parameter might need an `extends string` constraint.
             ~~~~~~
 !!! error TS2368: Type parameter name cannot be 'string'.
     }
@@ -36,7 +36,7 @@ tests/cases/compiler/genericSpecializations2.ts(12,9): error TS2368: Type parame
 !!! error TS2416:   Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
 !!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2416:       Type 'T' is not assignable to type 'string'.
-!!! related TS2208 tests/cases/compiler/genericSpecializations2.ts:2:9: This type parameter might need an `extends string` constraint.
+!!! related TS2208 genericSpecializations2.ts:2:9: This type parameter might need an `extends string` constraint.
             ~~~~~~
 !!! error TS2368: Type parameter name cannot be 'string'.
     }

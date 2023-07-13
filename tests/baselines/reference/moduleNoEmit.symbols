@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleNoEmit.ts ===
+//// [tests/cases/compiler/moduleNoEmit.ts] ////
+
+=== moduleNoEmit.ts ===
 module Foo {
 >Foo : Symbol(Foo, Decl(moduleNoEmit.ts, 0, 0))
 

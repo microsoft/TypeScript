@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts] ////
+
 //// [privateNameNestedMethodAccess.ts]
 class C {
     #foo = 42;

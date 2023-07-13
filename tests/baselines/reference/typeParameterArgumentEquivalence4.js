@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterArgumentEquivalence4.ts] ////
+
 //// [typeParameterArgumentEquivalence4.ts]
 function foo<T,U>() {
     var x: (item) => U;

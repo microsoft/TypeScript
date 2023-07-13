@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment37.ts] ////
+
+=== use.js ===
 const util = require('./mod')
 >util : typeof util
 >require('./mod') : typeof util
@@ -18,11 +20,11 @@ util.existy // no error
 >util : typeof util
 >existy : () => void
 
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 const util = exports = module.exports = {}
 >util : typeof module.exports
 >exports = module.exports = {} : typeof module.exports
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>exports : typeof import("mod")
 >module.exports = {} : typeof module.exports
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }

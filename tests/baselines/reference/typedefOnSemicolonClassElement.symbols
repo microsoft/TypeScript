@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/jsdoc/typedefOnSemicolonClassElement.ts] ////
+
+=== typedefOnSemicolonClassElement.js ===
+export class Preferences {
+>Preferences : Symbol(Preferences, Decl(typedefOnSemicolonClassElement.js, 0, 0))
+
+  /** @typedef {string} A */
+  ;
+  /** @type {A} */
+  a = 'ok'
+>a : Symbol(Preferences.a, Decl(typedefOnSemicolonClassElement.js, 2, 3))
+}
+

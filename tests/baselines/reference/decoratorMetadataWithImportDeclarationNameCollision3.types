@@ -1,4 +1,6 @@
-=== tests/cases/compiler/service.ts ===
+//// [tests/cases/compiler/decoratorMetadataWithImportDeclarationNameCollision3.ts] ////
+
+=== service.ts ===
 import db = require('./db');
 >db : typeof db
 
@@ -42,7 +44,7 @@ class MyClass {
 export {MyClass};
 >MyClass : typeof MyClass
 
-=== tests/cases/compiler/db.ts ===
+=== db.ts ===
 export class db {
 >db : db
 

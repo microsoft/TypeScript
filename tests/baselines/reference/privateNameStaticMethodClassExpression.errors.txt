@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts(9,14): error TS18013: Property '#method' is not accessible outside class 'D' because it has a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts(10,14): error TS18013: Property '#field' is not accessible outside class 'D' because it has a private identifier.
+privateNameStaticMethodClassExpression.ts(9,14): error TS18013: Property '#method' is not accessible outside class 'D' because it has a private identifier.
+privateNameStaticMethodClassExpression.ts(10,14): error TS18013: Property '#field' is not accessible outside class 'D' because it has a private identifier.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts (2 errors) ====
+==== privateNameStaticMethodClassExpression.ts (2 errors) ====
     const C = class D {
         static #field = D.#method();
         static #method() { return 42; }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping1.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping1.ts] ////
+
+=== typeSatisfaction_contextualTyping1.ts ===
 type Predicates = { [s: string]: (n: number) => boolean };
 >Predicates : Symbol(Predicates, Decl(typeSatisfaction_contextualTyping1.ts, 0, 0))
 >s : Symbol(s, Decl(typeSatisfaction_contextualTyping1.ts, 0, 21))

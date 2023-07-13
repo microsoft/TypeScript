@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileMethods_0.ts ===
+//// [tests/cases/compiler/declFileMethods.ts] ////
+
+=== declFileMethods_0.ts ===
 export class c1 {
 >c1 : Symbol(c1, Decl(declFileMethods_0.ts, 0, 0))
 
@@ -213,7 +215,7 @@ export interface I1 {
 >a : Symbol(a, Decl(declFileMethods_0.ts, 90, 21))
 }
 
-=== tests/cases/compiler/declFileMethods_1.ts ===
+=== declFileMethods_1.ts ===
 class c2 {
 >c2 : Symbol(c2, Decl(declFileMethods_1.ts, 0, 0))
 

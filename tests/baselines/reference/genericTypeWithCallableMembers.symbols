@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeWithCallableMembers.ts ===
+//// [tests/cases/compiler/genericTypeWithCallableMembers.ts] ////
+
+=== genericTypeWithCallableMembers.ts ===
 interface Constructable {
 >Constructable : Symbol(Constructable, Decl(genericTypeWithCallableMembers.ts, 0, 0))
 

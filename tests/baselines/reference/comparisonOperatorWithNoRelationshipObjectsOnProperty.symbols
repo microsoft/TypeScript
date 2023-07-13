@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts] ////
+
+=== comparisonOperatorWithNoRelationshipObjectsOnProperty.ts ===
 class A1 {
 >A1 : Symbol(A1, Decl(comparisonOperatorWithNoRelationshipObjectsOnProperty.ts, 0, 0))
 

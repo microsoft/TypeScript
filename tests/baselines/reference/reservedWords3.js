@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedWords3.ts] ////
+
 //// [reservedWords3.ts]
 function f1(enum) {}
 function f2(class) {}

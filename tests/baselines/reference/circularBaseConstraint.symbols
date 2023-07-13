@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/circularBaseConstraint.ts] ////
+
+=== circularBaseConstraint.ts ===
+// Repro from #54610
+
+type A<T> = T;
+>A : Symbol(A, Decl(circularBaseConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(circularBaseConstraint.ts, 2, 7))
+>T : Symbol(T, Decl(circularBaseConstraint.ts, 2, 7))
+
+type B<T> = T extends any[]
+>B : Symbol(B, Decl(circularBaseConstraint.ts, 2, 14))
+>T : Symbol(T, Decl(circularBaseConstraint.ts, 4, 7))
+>T : Symbol(T, Decl(circularBaseConstraint.ts, 4, 7))
+
+    ? never
+    : A<T> extends infer key
+>A : Symbol(A, Decl(circularBaseConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(circularBaseConstraint.ts, 4, 7))
+>key : Symbol(key, Decl(circularBaseConstraint.ts, 6, 24))
+
+    ? key extends keyof T
+>key : Symbol(key, Decl(circularBaseConstraint.ts, 6, 24))
+>T : Symbol(T, Decl(circularBaseConstraint.ts, 4, 7))
+
+        ? B<T[key]>
+>B : Symbol(B, Decl(circularBaseConstraint.ts, 2, 14))
+>T : Symbol(T, Decl(circularBaseConstraint.ts, 4, 7))
+>key : Symbol(key, Decl(circularBaseConstraint.ts, 6, 24))
+
+        : never
+    : never;
+
+function foo<T>() {
+>foo : Symbol(foo, Decl(circularBaseConstraint.ts, 10, 12))
+>T : Symbol(T, Decl(circularBaseConstraint.ts, 12, 13))
+
+    `${a}` as B<T>;
+>B : Symbol(B, Decl(circularBaseConstraint.ts, 2, 14))
+>T : Symbol(T, Decl(circularBaseConstraint.ts, 12, 13))
+}
+

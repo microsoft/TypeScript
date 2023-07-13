@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty9.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty9.ts]
 class C1 {
     private a = "a"; // ok

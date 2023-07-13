@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasExport.ts] ////
+
 //// [typeAliasExport.ts]
 declare module "a" {
   export default undefined

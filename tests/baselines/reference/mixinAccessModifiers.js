@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinAccessModifiers.ts] ////
+
 //// [mixinAccessModifiers.ts]
 type Constructable = new (...args: any[]) => object;
 

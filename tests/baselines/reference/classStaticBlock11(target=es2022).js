@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock11.ts] ////
+
 //// [classStaticBlock11.ts]
 let getX;
 class C {

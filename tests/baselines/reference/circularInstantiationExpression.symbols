@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularInstantiationExpression.ts ===
+//// [tests/cases/compiler/circularInstantiationExpression.ts] ////
+
+=== circularInstantiationExpression.ts ===
 declare function foo<T>(t: T): typeof foo<T>;
 >foo : Symbol(foo, Decl(circularInstantiationExpression.ts, 0, 0))
 >T : Symbol(T, Decl(circularInstantiationExpression.ts, 0, 21))

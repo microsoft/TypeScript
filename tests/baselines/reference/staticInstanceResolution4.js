@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticInstanceResolution4.ts] ////
+
 //// [staticInstanceResolution4.ts]
 class A {
    public foo() {}

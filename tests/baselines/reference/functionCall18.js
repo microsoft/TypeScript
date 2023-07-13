@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionCall18.ts] ////
+
 //// [functionCall18.ts]
 // Repro from #26835
 declare function foo<T>(a: T, b: T);

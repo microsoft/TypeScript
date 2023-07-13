@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts ===
+//// [tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts] ////
+
+=== asyncFunctionReturnExpressionErrorSpans.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(asyncFunctionReturnExpressionErrorSpans.ts, 0, 0))
 

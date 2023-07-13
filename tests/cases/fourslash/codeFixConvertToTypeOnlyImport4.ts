@@ -12,6 +12,11 @@
 goTo.file("/a.ts");
 verify.codeFix({
     index: 0,
-    description: ts.Diagnostics.Convert_to_type_only_import.message,
+    description: ts.Diagnostics.Use_import_type.message,
+    newFileContent: `import type { I, foo } from "./b";`
+});
+verify.codeFix({
+    index: 1,
+    description: `Use 'type I'`,
     newFileContent: `import { type I, foo } from "./b";`
 });

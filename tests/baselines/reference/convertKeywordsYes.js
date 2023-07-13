@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/convertKeywordsYes.ts] ////
+
 //// [convertKeywordsYes.ts]
 // reserved ES5 future in strict mode
 

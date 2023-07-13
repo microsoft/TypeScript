@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/multipleExportDefault3.ts] ////
+
 //// [multipleExportDefault3.ts]
 export default {
     uhoh: "another default",

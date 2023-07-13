@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadOnConstNoAnyImplementation2.ts] ////
+
 //// [overloadOnConstNoAnyImplementation2.ts]
 interface I {
     x1(a: number, callback: (x: 'hi') => number);

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts] ////
+
 //// [comparisonOperatorWithIdenticalPrimitiveType.ts]
 enum E { a, b, c }
 

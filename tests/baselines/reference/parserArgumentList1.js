@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts] ////
+
 //// [parserArgumentList1.ts]
 export function removeClass (node:HTMLElement, className:string) {
 	node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationClassMethodContainingArrowFunction.ts] ////
+
 //// [a.js]
 class c {
     method(a) {

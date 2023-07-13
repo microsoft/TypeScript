@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts] ////
+
 //// [objectTypeWithStringAndNumberIndexSignatureToAny.ts]
 // When checking compatibility between two types,
 // TypeScript should not require an index signature if

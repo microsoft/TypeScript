@@ -1,30 +1,30 @@
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(9,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(9,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(10,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(10,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(11,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(11,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(13,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(13,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(14,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(14,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(15,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(15,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(17,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(17,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(18,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(18,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(19,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(19,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(21,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(21,20): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(22,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(22,18): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(23,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(23,18): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(9,12): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(9,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(10,12): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(10,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(11,12): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(11,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(13,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(13,17): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(14,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(14,17): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(15,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(15,17): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(17,12): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(17,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(18,12): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(18,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(19,12): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(19,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(21,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(21,20): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(22,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(22,18): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(23,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts(23,18): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts (24 errors) ====
+==== exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts (24 errors) ====
     // If one operand is the undefined or undefined value, it is treated as having the type of the
     // other operand.
     

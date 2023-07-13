@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mapOnTupleTypes02.ts ===
+//// [tests/cases/compiler/mapOnTupleTypes02.ts] ////
+
+=== mapOnTupleTypes02.ts ===
 export type Point = [number, number];
 >Point : Symbol(Point, Decl(mapOnTupleTypes02.ts, 0, 0))
 

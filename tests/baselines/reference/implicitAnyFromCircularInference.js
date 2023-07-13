@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyFromCircularInference.ts] ////
+
 //// [implicitAnyFromCircularInference.ts]
 // Error expected
 var a: typeof a;

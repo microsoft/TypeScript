@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts ===
+//// [tests/cases/compiler/noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts] ////
+
+=== noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts ===
 const cat = 12;
 >cat : Symbol(cat, Decl(noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts, 0, 5))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorOverloads4.ts] ////
+
 //// [constructorOverloads4.ts]
 declare module M {    
     export class Function {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx ===
+//// [tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx] ////
+
+=== tsxLibraryManagedAttributes.tsx ===
 type Defaultize<TProps, TDefaults> =
 >Defaultize : Symbol(Defaultize, Decl(tsxLibraryManagedAttributes.tsx, 0, 0))
 >TProps : Symbol(TProps, Decl(tsxLibraryManagedAttributes.tsx, 0, 16))

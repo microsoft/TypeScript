@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAnnotationBestCommonTypeInArrayLiteral.ts] ////
+
 //// [typeAnnotationBestCommonTypeInArrayLiteral.ts]
 interface IMenuItem {
     id: string;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/caller.js ===
+//// [tests/cases/compiler/elidedJSImport1.ts] ////
+
+=== caller.js ===
 import * as fs from 'fs';
 >fs : Symbol(fs, Decl(caller.js, 0, 6))
 
@@ -17,7 +19,7 @@ console.log('TruffleContract is ', typeof TruffleContract, TruffleContract); // 
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
 
-=== tests/cases/compiler/node_modules/@truffle/contract/index.d.ts ===
+=== node_modules/@truffle/contract/index.d.ts ===
 declare module "@truffle/contract" {
 >"@truffle/contract" : Symbol("@truffle/contract", Decl(index.d.ts, 0, 0))
 

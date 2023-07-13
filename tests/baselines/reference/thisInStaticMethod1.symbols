@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInStaticMethod1.ts ===
+//// [tests/cases/compiler/thisInStaticMethod1.ts] ////
+
+=== thisInStaticMethod1.ts ===
 class foo {
 >foo : Symbol(foo, Decl(thisInStaticMethod1.ts, 0, 0))
 

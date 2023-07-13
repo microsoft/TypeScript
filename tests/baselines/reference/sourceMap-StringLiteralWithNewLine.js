@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMap-StringLiteralWithNewLine.ts] ////
+
 //// [sourceMap-StringLiteralWithNewLine.ts]
 interface Document {
 }

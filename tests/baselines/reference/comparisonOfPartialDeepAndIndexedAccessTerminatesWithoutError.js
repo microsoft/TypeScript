@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts] ////
+
 //// [comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts]
 type PartialDeep<T> = {[K in keyof T]?: PartialDeep<T[K]>};
 type Many<T> = T | readonly T[];

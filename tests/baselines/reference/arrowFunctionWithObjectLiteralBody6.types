@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrowFunctionWithObjectLiteralBody6.ts ===
+//// [tests/cases/compiler/arrowFunctionWithObjectLiteralBody6.ts] ////
+
+=== arrowFunctionWithObjectLiteralBody6.ts ===
 var a = () => <Error>{ name: "foo", message: "bar" };      
 >a : () => Error
 >() => <Error>{ name: "foo", message: "bar" } : () => Error

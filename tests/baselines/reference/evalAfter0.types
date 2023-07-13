@@ -1,4 +1,6 @@
-=== tests/cases/compiler/evalAfter0.ts ===
+//// [tests/cases/compiler/evalAfter0.ts] ////
+
+=== evalAfter0.ts ===
 (0,eval)("10"); // fine: special case for eval
 >(0,eval)("10") : any
 >(0,eval) : (x: string) => any

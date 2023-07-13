@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ExportEquals.ts ===
+//// [tests/cases/compiler/es6ExportEquals.ts] ////
+
+=== es6ExportEquals.ts ===
 export function f() { }
 >f : Symbol(f, Decl(es6ExportEquals.ts, 0, 0))
 

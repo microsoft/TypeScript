@@ -1,14 +1,14 @@
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(4,17): error TS2689: Cannot extend an interface 'I'. Did you mean 'implements'?
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,18): error TS2507: Type '{ foo: any; }' is not a constructor function type.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,25): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,31): error TS1005: ',' expected.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(8,18): error TS2507: Type '{ foo: string; }' is not a constructor function type.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(11,18): error TS2507: Type 'typeof M' is not a constructor function type.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(14,18): error TS2507: Type '() => void' is not a constructor function type.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'undefined[]' is not a constructor function type.
+classExtendsEveryObjectType.ts(4,17): error TS2689: Cannot extend an interface 'I'. Did you mean 'implements'?
+classExtendsEveryObjectType.ts(6,18): error TS2507: Type '{ foo: any; }' is not a constructor function type.
+classExtendsEveryObjectType.ts(6,25): error TS2693: 'string' only refers to a type, but is being used as a value here.
+classExtendsEveryObjectType.ts(6,31): error TS1005: ',' expected.
+classExtendsEveryObjectType.ts(8,18): error TS2507: Type '{ foo: string; }' is not a constructor function type.
+classExtendsEveryObjectType.ts(11,18): error TS2507: Type 'typeof M' is not a constructor function type.
+classExtendsEveryObjectType.ts(14,18): error TS2507: Type '() => void' is not a constructor function type.
+classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'undefined[]' is not a constructor function type.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts (8 errors) ====
+==== classExtendsEveryObjectType.ts (8 errors) ====
     interface I {
         foo: string;
     }

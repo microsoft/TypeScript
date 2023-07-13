@@ -20,7 +20,7 @@
 goTo.file("imports.ts");
 verify.codeFix({
     index: 0,
-    description: ts.Diagnostics.Convert_to_type_only_import.message,
+    description: ts.Diagnostics.Use_import_type.message,
     newFileContent: `import type {
     B,
     C,

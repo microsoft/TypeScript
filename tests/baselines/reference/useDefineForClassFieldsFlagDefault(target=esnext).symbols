@@ -1,4 +1,6 @@
-=== tests/cases/compiler/useDefineForClassFieldsFlagDefault.ts ===
+//// [tests/cases/compiler/useDefineForClassFieldsFlagDefault.ts] ////
+
+=== useDefineForClassFieldsFlagDefault.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(useDefineForClassFieldsFlagDefault.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letDeclarations-scopes-duplicates.ts ===
+//// [tests/cases/compiler/letDeclarations-scopes-duplicates.ts] ////
+
+=== letDeclarations-scopes-duplicates.ts ===
 // Errors: redeclaration
 let var1 = 0;
 >var1 : Symbol(var1, Decl(letDeclarations-scopes-duplicates.ts, 1, 3))

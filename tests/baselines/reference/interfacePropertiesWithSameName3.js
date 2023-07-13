@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfacePropertiesWithSameName3.ts] ////
+
 //// [interfacePropertiesWithSameName3.ts]
 interface D { a: number; }
 interface E { a: string; }

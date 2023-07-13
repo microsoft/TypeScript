@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionReturningItself.ts ===
+//// [tests/cases/compiler/functionReturningItself.ts] ////
+
+=== functionReturningItself.ts ===
 function somefn() {
 >somefn : Symbol(somefn, Decl(functionReturningItself.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deleteOperatorInStrictMode.ts ===
+//// [tests/cases/compiler/deleteOperatorInStrictMode.ts] ////
+
+=== deleteOperatorInStrictMode.ts ===
 "use strict"
 var a;
 >a : Symbol(a, Decl(deleteOperatorInStrictMode.ts, 1, 3))

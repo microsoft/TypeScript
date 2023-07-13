@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commaOperator1.ts] ////
+
 //// [commaOperator1.ts]
 var v1 = ((1, 2, 3), 4, 5, (6, 7));
 function f1() {

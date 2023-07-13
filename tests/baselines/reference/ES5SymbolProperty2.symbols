@@ -1,4 +1,6 @@
-=== tests/cases/conformance/Symbols/ES5SymbolProperty2.ts ===
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty2.ts] ////
+
+=== ES5SymbolProperty2.ts ===
 module M {
 >M : Symbol(M, Decl(ES5SymbolProperty2.ts, 0, 0))
 

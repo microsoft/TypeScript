@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeAppliedToVarArgs.ts ===
+//// [tests/cases/compiler/contextualTypeAppliedToVarArgs.ts] ////
+
+=== contextualTypeAppliedToVarArgs.ts ===
 function delegate(instance: any, method: (...args: any[]) => any, data?: any): (...args: any[]) => any {
 >delegate : (instance: any, method: (...args: any[]) => any, data?: any) => (...args: any[]) => any
 >instance : any

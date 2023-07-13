@@ -1,7 +1,7 @@
-tests/cases/compiler/asiReturn.ts(2,1): error TS1108: A 'return' statement can only be used within a function body.
+asiReturn.ts(2,1): error TS1108: A 'return' statement can only be used within a function body.
 
 
-==== tests/cases/compiler/asiReturn.ts (1 errors) ====
+==== asiReturn.ts (1 errors) ====
     // This should be an error for using a return outside a function, but ASI should work properly
     return
     ~~~~~~

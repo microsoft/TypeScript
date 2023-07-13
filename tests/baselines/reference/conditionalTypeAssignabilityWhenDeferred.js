@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypeAssignabilityWhenDeferred.ts] ////
+
 //// [conditionalTypeAssignabilityWhenDeferred.ts]
 export type FilterPropsByType<T, TT> = {
   [K in keyof T]: T[K] extends TT ? K : never

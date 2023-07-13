@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/items.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsMultipleExportFromMerge.ts] ////
+
+=== items.js ===
 export const a = 1;
 >a : Symbol(a, Decl(items.js, 0, 12))
 
@@ -8,13 +10,13 @@ export const b = 2;
 export const c = 3;
 >c : Symbol(c, Decl(items.js, 2, 12))
 
-=== tests/cases/conformance/jsdoc/declarations/justone.js ===
+=== justone.js ===
 export { a, b, c } from "./items";
 >a : Symbol(a, Decl(justone.js, 0, 8))
 >b : Symbol(b, Decl(justone.js, 0, 11))
 >c : Symbol(c, Decl(justone.js, 0, 14))
 
-=== tests/cases/conformance/jsdoc/declarations/two.js ===
+=== two.js ===
 export { a } from "./items";
 >a : Symbol(a, Decl(two.js, 0, 8))
 
@@ -22,7 +24,7 @@ export { b, c } from "./items";
 >b : Symbol(b, Decl(two.js, 1, 8))
 >c : Symbol(c, Decl(two.js, 1, 11))
 
-=== tests/cases/conformance/jsdoc/declarations/multiple.js ===
+=== multiple.js ===
 export {a, b} from "./items";
 >a : Symbol(a, Decl(multiple.js, 0, 8))
 >b : Symbol(b, Decl(multiple.js, 0, 10))

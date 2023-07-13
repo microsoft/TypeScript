@@ -1,12 +1,12 @@
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(16,42): error TS2345: Argument of type 'string' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(17,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(18,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(19,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(20,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(25,1): error TS2552: Cannot find name 'runTestCase'. Did you mean 'testcase'?
+parser15.4.4.14-9-2.ts(16,42): error TS2345: Argument of type 'string' is not assignable to parameter of type 'boolean'.
+parser15.4.4.14-9-2.ts(17,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+parser15.4.4.14-9-2.ts(18,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+parser15.4.4.14-9-2.ts(19,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+parser15.4.4.14-9-2.ts(20,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+parser15.4.4.14-9-2.ts(25,1): error TS2552: Cannot find name 'runTestCase'. Did you mean 'testcase'?
 
 
-==== tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts (6 errors) ====
+==== parser15.4.4.14-9-2.ts (6 errors) ====
     /// Copyright (c) 2012 Ecma International.  All rights reserved. 
     /// Ecma International makes this code available under the terms and conditions set
     /// forth on http://hg.ecmascript.org/tests/test262/raw-file/tip/LICENSE (the 
@@ -44,5 +44,5 @@ tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(25,1): error T
     runTestCase(testcase);
     ~~~~~~~~~~~
 !!! error TS2552: Cannot find name 'runTestCase'. Did you mean 'testcase'?
-!!! related TS2728 tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts:12:10: 'testcase' is declared here.
+!!! related TS2728 parser15.4.4.14-9-2.ts:12:10: 'testcase' is declared here.
     

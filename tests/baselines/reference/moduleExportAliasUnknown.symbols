@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug27025.js ===
+//// [tests/cases/conformance/salsa/moduleExportAliasUnknown.ts] ////
+
+=== bug27025.js ===
 module.exports = window.nonprop;
 >module.exports : Symbol(module.exports, Decl(bug27025.js, 0, 0))
 >module : Symbol(export=, Decl(bug27025.js, 0, 0))

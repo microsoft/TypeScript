@@ -1,8 +1,10 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingDts.ts] ////
+
+=== server.ts ===
 export class a { }
 >a : a
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 import defaultBinding, * as nameSpaceBinding  from "./server";
 >defaultBinding : any
 >nameSpaceBinding : typeof nameSpaceBinding

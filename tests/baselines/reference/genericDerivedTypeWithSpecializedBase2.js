@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts] ////
+
 //// [genericDerivedTypeWithSpecializedBase2.ts]
 class A<T extends { length: number }> {
     x: T;

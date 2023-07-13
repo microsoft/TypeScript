@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability01.ts] ////
+
+=== stringLiteralTypesOverloadAssignability01.ts ===
 function f(x: "foo"): number;
 >f : Symbol(f, Decl(stringLiteralTypesOverloadAssignability01.ts, 0, 0), Decl(stringLiteralTypesOverloadAssignability01.ts, 0, 29))
 >x : Symbol(x, Decl(stringLiteralTypesOverloadAssignability01.ts, 0, 11))

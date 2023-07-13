@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug43713.js ===
+//// [tests/cases/conformance/salsa/commonJSAliasedExport.ts] ////
+
+=== bug43713.js ===
 const { funky } = require('./commonJSAliasedExport');
 >funky : (declaration: any) => boolean
 >require('./commonJSAliasedExport') : (ast: any) => any
@@ -16,7 +18,7 @@ var diddy = funky(1)
 >1 : 1
 
 
-=== tests/cases/conformance/salsa/commonJSAliasedExport.js ===
+=== commonJSAliasedExport.js ===
 const donkey = (ast) =>  ast;
 >donkey : (ast: any) => any
 >(ast) =>  ast : (ast: any) => any

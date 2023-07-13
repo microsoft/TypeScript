@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadObjectOrFalsy.ts] ////
+
 //// [spreadObjectOrFalsy.ts]
 function f1<T>(a: T & undefined) {
     return { ...a };  // Error

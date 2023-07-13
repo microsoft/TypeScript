@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedVarInLoop.ts] ////
+
 //// [capturedVarInLoop.ts]
 for (var i = 0; i < 10; i++) {
     var str = 'x', len = str.length;

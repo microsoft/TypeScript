@@ -1,13 +1,13 @@
-tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(3,66): error TS2314: Generic type 'MemberName<A, B, C>' requires 3 type argument(s).
-tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(10,22): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
-tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(12,48): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
-tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(13,31): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
-tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(14,46): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
-tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(18,53): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
-tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts(19,22): error TS2339: Property 'isArray' does not exist on type 'PullTypeSymbol<A, B, C>'.
+genericRecursiveImplicitConstructorErrors3.ts(3,66): error TS2314: Generic type 'MemberName<A, B, C>' requires 3 type argument(s).
+genericRecursiveImplicitConstructorErrors3.ts(10,22): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
+genericRecursiveImplicitConstructorErrors3.ts(12,48): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
+genericRecursiveImplicitConstructorErrors3.ts(13,31): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
+genericRecursiveImplicitConstructorErrors3.ts(14,46): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
+genericRecursiveImplicitConstructorErrors3.ts(18,53): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).
+genericRecursiveImplicitConstructorErrors3.ts(19,22): error TS2339: Property 'isArray' does not exist on type 'PullTypeSymbol<A, B, C>'.
 
 
-==== tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts (7 errors) ====
+==== genericRecursiveImplicitConstructorErrors3.ts (7 errors) ====
     module TypeScript {
         export class MemberName <A,B,C>{
             static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {

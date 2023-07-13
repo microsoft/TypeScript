@@ -1,4 +1,6 @@
-=== tests/cases/compiler/types.ts ===
+//// [tests/cases/compiler/recursiveResolveDeclaredMembers.ts] ////
+
+=== types.ts ===
 
 // #23025
 export interface F {
@@ -6,7 +8,7 @@ export interface F {
 }
 export interface D<T extends F = F> {}
 
-=== tests/cases/compiler/other.js ===
+=== other.js ===
 
 /** @typedef {import("./types").D} E */
 

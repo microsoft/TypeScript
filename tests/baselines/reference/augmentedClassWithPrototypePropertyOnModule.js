@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedClassWithPrototypePropertyOnModule.ts] ////
+
 //// [augmentedClassWithPrototypePropertyOnModule.ts]
 declare module m {
     var f;

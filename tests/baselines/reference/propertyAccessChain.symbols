@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.ts] ////
+
+=== propertyAccessChain.ts ===
 declare const o1: undefined | { b: string };
 >o1 : Symbol(o1, Decl(propertyAccessChain.ts, 0, 13))
 >b : Symbol(b, Decl(propertyAccessChain.ts, 0, 31))

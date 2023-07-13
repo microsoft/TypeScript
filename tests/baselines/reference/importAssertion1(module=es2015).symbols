@@ -1,11 +1,13 @@
-=== tests/cases/conformance/importAssertion/0.ts ===
+//// [tests/cases/conformance/importAssertion/importAssertion1.ts] ////
+
+=== 0.ts ===
 export const a = 1;
 >a : Symbol(a, Decl(0.ts, 0, 12))
 
 export const b = 2;
 >b : Symbol(b, Decl(0.ts, 1, 12))
 
-=== tests/cases/conformance/importAssertion/1.ts ===
+=== 1.ts ===
 import './0' assert { type: "json" }
 import { a, b } from './0' assert { "type": "json" }
 >a : Symbol(a, Decl(1.ts, 1, 8))
@@ -30,7 +32,7 @@ foo.b;
 >foo : Symbol(foo, Decl(1.ts, 2, 6))
 >b : Symbol(b, Decl(0.ts, 1, 12))
 
-=== tests/cases/conformance/importAssertion/2.ts ===
+=== 2.ts ===
 import { a, b } from './0' assert {}
 >a : Symbol(a, Decl(2.ts, 0, 8))
 >b : Symbol(b, Decl(2.ts, 0, 11))
@@ -53,39 +55,39 @@ c;
 d;
 >d : Symbol(d, Decl(2.ts, 1, 16))
 
-=== tests/cases/conformance/importAssertion/3.ts ===
+=== 3.ts ===
 const a = import('./0')
 >a : Symbol(a, Decl(3.ts, 0, 5))
->'./0' : Symbol("tests/cases/conformance/importAssertion/0", Decl(0.ts, 0, 0))
+>'./0' : Symbol("0", Decl(0.ts, 0, 0))
 
 const b = import('./0', { assert: { type: "json" } })
 >b : Symbol(b, Decl(3.ts, 1, 5))
->'./0' : Symbol("tests/cases/conformance/importAssertion/0", Decl(0.ts, 0, 0))
+>'./0' : Symbol("0", Decl(0.ts, 0, 0))
 >assert : Symbol(assert, Decl(3.ts, 1, 25))
 >type : Symbol(type, Decl(3.ts, 1, 35))
 
 const c = import('./0', { assert: { type: "json", ttype: "typo" } })
 >c : Symbol(c, Decl(3.ts, 2, 5))
->'./0' : Symbol("tests/cases/conformance/importAssertion/0", Decl(0.ts, 0, 0))
+>'./0' : Symbol("0", Decl(0.ts, 0, 0))
 >assert : Symbol(assert, Decl(3.ts, 2, 25))
 >type : Symbol(type, Decl(3.ts, 2, 35))
 >ttype : Symbol(ttype, Decl(3.ts, 2, 49))
 
 const d = import('./0', { assert: {} })
 >d : Symbol(d, Decl(3.ts, 3, 5))
->'./0' : Symbol("tests/cases/conformance/importAssertion/0", Decl(0.ts, 0, 0))
+>'./0' : Symbol("0", Decl(0.ts, 0, 0))
 >assert : Symbol(assert, Decl(3.ts, 3, 25))
 
 const dd = import('./0', {})
 >dd : Symbol(dd, Decl(3.ts, 4, 5))
->'./0' : Symbol("tests/cases/conformance/importAssertion/0", Decl(0.ts, 0, 0))
+>'./0' : Symbol("0", Decl(0.ts, 0, 0))
 
 declare function foo(): any;
 >foo : Symbol(foo, Decl(3.ts, 4, 28))
 
 const e = import('./0', foo())
 >e : Symbol(e, Decl(3.ts, 6, 5))
->'./0' : Symbol("tests/cases/conformance/importAssertion/0", Decl(0.ts, 0, 0))
+>'./0' : Symbol("0", Decl(0.ts, 0, 0))
 >foo : Symbol(foo, Decl(3.ts, 4, 28))
 
 const f = import()
@@ -93,11 +95,11 @@ const f = import()
 
 const g = import('./0', {}, {})
 >g : Symbol(g, Decl(3.ts, 8, 5))
->'./0' : Symbol("tests/cases/conformance/importAssertion/0", Decl(0.ts, 0, 0))
+>'./0' : Symbol("0", Decl(0.ts, 0, 0))
 
 const h = import('./0', { assert: { type: "json" }},)
 >h : Symbol(h, Decl(3.ts, 9, 5))
->'./0' : Symbol("tests/cases/conformance/importAssertion/0", Decl(0.ts, 0, 0))
+>'./0' : Symbol("0", Decl(0.ts, 0, 0))
 >assert : Symbol(assert, Decl(3.ts, 9, 25))
 >type : Symbol(type, Decl(3.ts, 9, 35))
 

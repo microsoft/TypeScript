@@ -1,8 +1,8 @@
-tests/cases/conformance/types/rest/restElementMustBeLast.ts(1,9): error TS2462: A rest element must be last in a destructuring pattern.
-tests/cases/conformance/types/rest/restElementMustBeLast.ts(2,2): error TS2462: A rest element must be last in a destructuring pattern.
+restElementMustBeLast.ts(1,9): error TS2462: A rest element must be last in a destructuring pattern.
+restElementMustBeLast.ts(2,2): error TS2462: A rest element must be last in a destructuring pattern.
 
 
-==== tests/cases/conformance/types/rest/restElementMustBeLast.ts (2 errors) ====
+==== restElementMustBeLast.ts (2 errors) ====
     var [...a, x] = [1, 2, 3];  // Error, rest must be last element
             ~
 !!! error TS2462: A rest element must be last in a destructuring pattern.

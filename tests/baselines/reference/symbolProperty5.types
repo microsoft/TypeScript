@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty5.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty5.ts] ////
+
+=== symbolProperty5.ts ===
 var x = {
 >x : { [Symbol.iterator]: number; [Symbol.toPrimitive](): void; readonly [Symbol.toStringTag]: number; }
 >{    [Symbol.iterator]: 0,    [Symbol.toPrimitive]() { },    get [Symbol.toStringTag]() {        return 0;    }} : { [Symbol.iterator]: number; [Symbol.toPrimitive](): void; readonly [Symbol.toStringTag]: number; }

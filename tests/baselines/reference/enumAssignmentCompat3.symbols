@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumAssignmentCompat3.ts ===
+//// [tests/cases/compiler/enumAssignmentCompat3.ts] ////
+
+=== enumAssignmentCompat3.ts ===
 namespace First {
 >First : Symbol(First, Decl(enumAssignmentCompat3.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypes1.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypes1.ts] ////
+
+=== mappedTypes1.ts ===
 type Item = { a: string, b: number, c: boolean };
 >Item : Symbol(Item, Decl(mappedTypes1.ts, 0, 0))
 >a : Symbol(a, Decl(mappedTypes1.ts, 0, 13))

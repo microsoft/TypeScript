@@ -1,10 +1,10 @@
-tests/cases/compiler/conflictMarkerDiff3Trivia1.ts(2,1): error TS1185: Merge conflict marker encountered.
-tests/cases/compiler/conflictMarkerDiff3Trivia1.ts(4,1): error TS1185: Merge conflict marker encountered.
-tests/cases/compiler/conflictMarkerDiff3Trivia1.ts(6,1): error TS1185: Merge conflict marker encountered.
-tests/cases/compiler/conflictMarkerDiff3Trivia1.ts(8,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerDiff3Trivia1.ts(2,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerDiff3Trivia1.ts(4,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerDiff3Trivia1.ts(6,1): error TS1185: Merge conflict marker encountered.
+conflictMarkerDiff3Trivia1.ts(8,1): error TS1185: Merge conflict marker encountered.
 
 
-==== tests/cases/compiler/conflictMarkerDiff3Trivia1.ts (4 errors) ====
+==== conflictMarkerDiff3Trivia1.ts (4 errors) ====
     class C {
     <<<<<<< HEAD
     ~~~~~~~

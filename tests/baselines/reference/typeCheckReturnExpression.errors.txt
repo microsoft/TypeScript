@@ -1,7 +1,7 @@
-tests/cases/compiler/typeCheckReturnExpression.ts(1,11): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
+typeCheckReturnExpression.ts(1,11): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== tests/cases/compiler/typeCheckReturnExpression.ts (1 errors) ====
+==== typeCheckReturnExpression.ts (1 errors) ====
     var foo = () => undefined;
               ~~~~~~~~~~~~~~~
 !!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.

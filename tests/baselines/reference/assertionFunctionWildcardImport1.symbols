@@ -1,18 +1,20 @@
-=== tests/cases/compiler/src/core/_namespaces/ts.ts ===
+//// [tests/cases/compiler/assertionFunctionWildcardImport1.ts] ////
+
+=== src/core/_namespaces/ts.ts ===
 import * as Debug from "../debug";
 >Debug : Symbol(Debug, Decl(ts.ts, 0, 6))
 
 export { Debug };
 >Debug : Symbol(Debug, Decl(ts.ts, 1, 8))
 
-=== tests/cases/compiler/src/core/debug.ts ===
+=== src/core/debug.ts ===
 export declare function assert(expression: unknown): asserts expression;
 >assert : Symbol(assert, Decl(debug.ts, 0, 0))
 >expression : Symbol(expression, Decl(debug.ts, 0, 31))
 >expression : Symbol(expression, Decl(debug.ts, 0, 31))
 
 
-=== tests/cases/compiler/src/core/foo.ts ===
+=== src/core/foo.ts ===
 import * as ts from "./_namespaces/ts";
 >ts : Symbol(ts, Decl(foo.ts, 0, 6))
 
@@ -32,12 +34,12 @@ Debug.assert(true);
 >assert : Symbol(ts.Debug.assert, Decl(debug.ts, 0, 0))
 
 
-=== tests/cases/compiler/src/other/_namespaces/ts.ts ===
+=== src/other/_namespaces/ts.ts ===
 
 export * from "../../core/_namespaces/ts"
 
 
-=== tests/cases/compiler/src/other/bar.ts ===
+=== src/other/bar.ts ===
 import * as ts from "./_namespaces/ts";
 >ts : Symbol(ts, Decl(bar.ts, 0, 6))
 

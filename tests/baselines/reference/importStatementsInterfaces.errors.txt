@@ -1,7 +1,7 @@
-tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts(23,19): error TS2708: Cannot use namespace 'a' as a value.
+importStatementsInterfaces.ts(23,19): error TS2708: Cannot use namespace 'a' as a value.
 
 
-==== tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts (1 errors) ====
+==== importStatementsInterfaces.ts (1 errors) ====
     module A {
         export interface Point {
             x: number;

@@ -1,44 +1,10 @@
-=== /node_modules/some-library/foo.ios.js ===
-"use strict";
-exports.__esModule = true;
->exports.__esModule : Symbol(__esModule, Decl(foo.ios.js, 0, 13))
->exports : Symbol(__esModule, Decl(foo.ios.js, 0, 13))
->__esModule : Symbol(__esModule, Decl(foo.ios.js, 0, 13))
-
-function iosfoo() {}
->iosfoo : Symbol(iosfoo, Decl(foo.ios.js, 1, 26))
-
-exports.iosfoo = iosfoo;
->exports.iosfoo : Symbol(iosfoo, Decl(foo.ios.js, 2, 20))
->exports : Symbol(iosfoo, Decl(foo.ios.js, 2, 20))
->iosfoo : Symbol(iosfoo, Decl(foo.ios.js, 2, 20))
->iosfoo : Symbol(iosfoo, Decl(foo.ios.js, 1, 26))
-
-=== /node_modules/some-library/foo.ios.d.ts ===
-export declare function iosfoo(): void;
->iosfoo : Symbol(iosfoo, Decl(foo.ios.d.ts, 0, 0))
-
-=== /node_modules/some-library/foo.js ===
-"use strict";
-exports.__esModule = true;
->exports.__esModule : Symbol(__esModule, Decl(foo.js, 0, 13))
->exports : Symbol(__esModule, Decl(foo.js, 0, 13))
->__esModule : Symbol(__esModule, Decl(foo.js, 0, 13))
-
-function basefoo() {}
->basefoo : Symbol(basefoo, Decl(foo.js, 1, 26))
-
-exports.basefoo = basefoo;
->exports.basefoo : Symbol(basefoo, Decl(foo.js, 2, 21))
->exports : Symbol(basefoo, Decl(foo.js, 2, 21))
->basefoo : Symbol(basefoo, Decl(foo.js, 2, 21))
->basefoo : Symbol(basefoo, Decl(foo.js, 1, 26))
-
-=== /node_modules/some-library/foo.d.ts ===
-export declare function basefoo(): void;
->basefoo : Symbol(basefoo, Decl(foo.d.ts, 0, 0))
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one_externalModulePath.ts] ////
 
 === /index.ts ===
 import { iosfoo } from "some-library/foo";
 >iosfoo : Symbol(iosfoo, Decl(index.ts, 0, 8))
+
+=== /node_modules/some-library/foo.ios.d.ts ===
+export declare function iosfoo(): void;
+>iosfoo : Symbol(iosfoo, Decl(foo.ios.d.ts, 0, 0))
 

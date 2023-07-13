@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeAndIndexSignatureRelation.ts] ////
+
 //// [mappedTypeAndIndexSignatureRelation.ts]
 type Same<T> = { [P in keyof T]: T[P] };
 

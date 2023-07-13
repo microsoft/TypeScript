@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts ===
+//// [tests/cases/compiler/destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts] ////
+
+=== destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts ===
 // test for #10668
 function qux(bar: { value: number }) {
 >qux : Symbol(qux, Decl(destructuringPropertyAssignmentNameIsNotAssignmentTarget.ts, 0, 0))

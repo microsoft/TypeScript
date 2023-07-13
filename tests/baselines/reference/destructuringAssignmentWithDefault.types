@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringAssignmentWithDefault.ts ===
+//// [tests/cases/compiler/destructuringAssignmentWithDefault.ts] ////
+
+=== destructuringAssignmentWithDefault.ts ===
 const a: { x?: number } = { };
 >a : { x?: number | undefined; }
 >x : number | undefined

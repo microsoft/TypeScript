@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicates01.ts] ////
+
 //// [declarationEmitIdentifierPredicates01.ts]
 export function f(x: any): x is number {
     return typeof x === "number";

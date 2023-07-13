@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/typeFromPropertyAssignment36.ts ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment36.ts] ////
+
+=== typeFromPropertyAssignment36.ts ===
 function f(b: boolean) {
 >f : (b: boolean) => { (): void; e: number; q: boolean; r: number; s: string; }
 >b : boolean

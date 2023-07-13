@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndLocalVarInConstructor.ts] ////
+
 //// [collisionThisExpressionAndLocalVarInConstructor.ts]
 class class1 {
     constructor() {

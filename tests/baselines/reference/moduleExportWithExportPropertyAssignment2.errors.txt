@@ -1,8 +1,8 @@
-tests/cases/conformance/salsa/a.js(4,6): error TS2339: Property 'f' does not exist on type 'number'.
-tests/cases/conformance/salsa/mod1.js(3,16): error TS2339: Property 'f' does not exist on type 'number'.
+a.js(4,6): error TS2339: Property 'f' does not exist on type 'number'.
+mod1.js(3,16): error TS2339: Property 'f' does not exist on type 'number'.
 
 
-==== tests/cases/conformance/salsa/a.js (1 errors) ====
+==== a.js (1 errors) ====
     /// <reference path='./requires.d.ts' />
     var mod1 = require('./mod1')
     mod1.toFixed(12)
@@ -10,10 +10,10 @@ tests/cases/conformance/salsa/mod1.js(3,16): error TS2339: Property 'f' does not
          ~
 !!! error TS2339: Property 'f' does not exist on type 'number'.
     
-==== tests/cases/conformance/salsa/requires.d.ts (0 errors) ====
+==== requires.d.ts (0 errors) ====
     declare var module: { exports: any };
     declare function require(name: string): any;
-==== tests/cases/conformance/salsa/mod1.js (1 errors) ====
+==== mod1.js (1 errors) ====
     /// <reference path='./requires.d.ts' />
     module.exports = 1
     module.exports.f = function () { }

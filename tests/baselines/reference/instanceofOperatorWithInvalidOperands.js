@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidOperands.ts] ////
+
 //// [instanceofOperatorWithInvalidOperands.ts]
 class C {
     foo() { }

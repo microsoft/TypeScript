@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tailRecursiveConditionalTypes.ts ===
+//// [tests/cases/compiler/tailRecursiveConditionalTypes.ts] ////
+
+=== tailRecursiveConditionalTypes.ts ===
 type Trim<S extends string> =
 >Trim : Symbol(Trim, Decl(tailRecursiveConditionalTypes.ts, 0, 0))
 >S : Symbol(S, Decl(tailRecursiveConditionalTypes.ts, 0, 10))

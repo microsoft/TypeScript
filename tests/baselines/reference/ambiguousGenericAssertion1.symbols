@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambiguousGenericAssertion1.ts ===
+//// [tests/cases/compiler/ambiguousGenericAssertion1.ts] ////
+
+=== ambiguousGenericAssertion1.ts ===
 function f<T>(x: T): T { return null; }
 >f : Symbol(f, Decl(ambiguousGenericAssertion1.ts, 0, 0))
 >T : Symbol(T, Decl(ambiguousGenericAssertion1.ts, 0, 11))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsDynamicImport.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 export async function main() {
 >main : () => Promise<void>
@@ -9,7 +11,7 @@ export async function main() {
 >import("fs") : Promise<any>
 >"fs" : "fs"
 }
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 export async function main() {
 >main : () => Promise<void>
@@ -20,7 +22,7 @@ export async function main() {
 >import("fs") : Promise<any>
 >"fs" : "fs"
 }
-=== tests/cases/conformance/node/allowJs/types.d.ts ===
+=== types.d.ts ===
 declare module "fs";
 >"fs" : any
 

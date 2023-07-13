@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts ===
+//// [tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts] ////
+
+=== genericObjectCreationWithoutTypeArgs.ts ===
 class SS<T>{
 >SS : SS<T>
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts ===
+//// [tests/cases/compiler/typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts] ////
+
+=== typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts ===
 type TreeNode = {
 >TreeNode : Symbol(TreeNode, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts, 0, 0))
 

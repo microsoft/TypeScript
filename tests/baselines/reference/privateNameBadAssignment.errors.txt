@@ -1,12 +1,12 @@
-tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(1,1): error TS2304: Cannot find name 'exports'.
-tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(1,9): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(3,13): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(6,3): error TS2339: Property '#foo' does not exist on type 'typeof B'.
-tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(11,9): error TS2304: Cannot find name 'exports'.
-tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts(12,14): error TS2339: Property '#foo' does not exist on type 'C'.
+privateNameBadAssignment.ts(1,1): error TS2304: Cannot find name 'exports'.
+privateNameBadAssignment.ts(1,9): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameBadAssignment.ts(3,13): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameBadAssignment.ts(6,3): error TS2339: Property '#foo' does not exist on type 'typeof B'.
+privateNameBadAssignment.ts(11,9): error TS2304: Cannot find name 'exports'.
+privateNameBadAssignment.ts(12,14): error TS2339: Property '#foo' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameBadAssignment.ts (6 errors) ====
+==== privateNameBadAssignment.ts (6 errors) ====
     exports.#nope = 1;           // Error (outside class body)
     ~~~~~~~
 !!! error TS2304: Cannot find name 'exports'.

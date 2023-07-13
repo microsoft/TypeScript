@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5ExportDefaultFunctionDeclaration4.ts ===
+//// [tests/cases/compiler/es5ExportDefaultFunctionDeclaration4.ts] ////
+
+=== es5ExportDefaultFunctionDeclaration4.ts ===
 declare module "bar" {
 >"bar" : Symbol("bar", Decl(es5ExportDefaultFunctionDeclaration4.ts, 0, 0))
 

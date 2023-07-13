@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty5.ts] ////
+
+=== parserES5SymbolProperty5.ts ===
 class C {
 >C : Symbol(C, Decl(parserES5SymbolProperty5.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/directives/a.ts ===
+//// [tests/cases/conformance/directives/multiline.tsx] ////
+
+=== a.ts ===
 export const texts: string[] = [];
 >texts : string[]
 >[] : undefined[]
@@ -30,7 +32,7 @@ texts.push("100");
 >push : (...items: string[]) => number
 >"100" : "100"
 
-=== tests/cases/conformance/directives/b.tsx ===
+=== b.tsx ===
 import * as React from "react";
 >React : typeof React
 

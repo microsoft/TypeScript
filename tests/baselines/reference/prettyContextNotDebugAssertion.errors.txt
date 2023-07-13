@@ -1,19 +1,19 @@
-[96mtests/cases/compiler/index.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m'}' expected.
+[96mindex.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m'}' expected.
 
 [7m2[0m 
 [7m [0m [91m[0m
 
-  [96mtests/cases/compiler/index.ts[0m:[93m1[0m:[93m11[0m
+  [96mindex.ts[0m:[93m1[0m:[93m11[0m
     [7m1[0m if (true) {
     [7m [0m [96m          ~[0m
     The parser expected to find a '}' to match the '{' token here.
 
 
-==== tests/cases/compiler/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     if (true) {
     
     
 !!! error TS1005: '}' expected.
-!!! related TS1007 tests/cases/compiler/index.ts:1:11: The parser expected to find a '}' to match the '{' token here.
-Found 1 error in tests/cases/compiler/index.ts[90m:2[0m
+!!! related TS1007 index.ts:1:11: The parser expected to find a '}' to match the '{' token here.
+Found 1 error in index.ts[90m:2[0m
 

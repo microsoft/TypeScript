@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofClass.ts] ////
+
 //// [typeofClass.ts]
 class K {
     foo: number;

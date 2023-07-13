@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolution_relativeImportJsFile.ts] ////
+
 === /src/a.ts ===
 import * as b from "./b";
 >b : error

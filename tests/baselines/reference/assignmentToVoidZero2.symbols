@@ -1,11 +1,13 @@
-=== tests/cases/conformance/salsa/assignmentToVoidZero2.js ===
+//// [tests/cases/conformance/salsa/assignmentToVoidZero2.ts] ////
+
+=== assignmentToVoidZero2.js ===
 exports.j = 1;
 >exports.j : Symbol(j, Decl(assignmentToVoidZero2.js, 0, 0))
 >exports : Symbol(j, Decl(assignmentToVoidZero2.js, 0, 0))
 >j : Symbol(j, Decl(assignmentToVoidZero2.js, 0, 0))
 
 exports.k = void 0;
->exports : Symbol("tests/cases/conformance/salsa/assignmentToVoidZero2", Decl(assignmentToVoidZero2.js, 0, 0))
+>exports : Symbol("assignmentToVoidZero2", Decl(assignmentToVoidZero2.js, 0, 0))
 
 var o = {}
 >o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3), Decl(assignmentToVoidZero2.js, 2, 10))
@@ -45,7 +47,7 @@ c.p + c.q
 >p : Symbol(C.p, Decl(assignmentToVoidZero2.js, 7, 14))
 >c : Symbol(c, Decl(assignmentToVoidZero2.js, 11, 3))
 
-=== tests/cases/conformance/salsa/importer.js ===
+=== importer.js ===
 import { j, k } from './assignmentToVoidZero2'
 >j : Symbol(j, Decl(importer.js, 0, 8))
 >k : Symbol(k, Decl(importer.js, 0, 11))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts ===
+//// [tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts] ////
+
+=== overloadresolutionWithConstraintCheckingDeferred.ts ===
 interface A { x }
 >A : Symbol(A, Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 0, 0))
 >x : Symbol(A.x, Decl(overloadresolutionWithConstraintCheckingDeferred.ts, 0, 13))

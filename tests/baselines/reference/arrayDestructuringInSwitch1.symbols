@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayDestructuringInSwitch1.ts ===
+//// [tests/cases/compiler/arrayDestructuringInSwitch1.ts] ////
+
+=== arrayDestructuringInSwitch1.ts ===
 export type Expression = BooleanLogicExpression | 'true' | 'false';
 >Expression : Symbol(Expression, Decl(arrayDestructuringInSwitch1.ts, 0, 0))
 >BooleanLogicExpression : Symbol(BooleanLogicExpression, Decl(arrayDestructuringInSwitch1.ts, 0, 67))

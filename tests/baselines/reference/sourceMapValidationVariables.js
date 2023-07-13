@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationVariables.ts] ////
+
 //// [sourceMapValidationVariables.ts]
 var a = 10;
 var b;

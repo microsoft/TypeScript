@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchCaseCircularRefeference.ts] ////
+
 //// [switchCaseCircularRefeference.ts]
 // Repro from #9507
 

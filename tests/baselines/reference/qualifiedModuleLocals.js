@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/qualifiedModuleLocals.ts] ////
+
 //// [qualifiedModuleLocals.ts]
 module A {
 

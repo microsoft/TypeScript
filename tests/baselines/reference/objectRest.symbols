@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/objectRest.ts ===
+//// [tests/cases/conformance/types/rest/objectRest.ts] ////
+
+=== objectRest.ts ===
 var o = { a: 1, b: 'no' }
 >o : Symbol(o, Decl(objectRest.ts, 0, 3), Decl(objectRest.ts, 42, 51))
 >a : Symbol(a, Decl(objectRest.ts, 0, 9))

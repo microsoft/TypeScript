@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadObjectPermutations.ts ===
+//// [tests/cases/compiler/spreadObjectPermutations.ts] ////
+
+=== spreadObjectPermutations.ts ===
 declare const a: { x: string | number };
 >a : Symbol(a, Decl(spreadObjectPermutations.ts, 0, 13))
 >x : Symbol(x, Decl(spreadObjectPermutations.ts, 0, 18))

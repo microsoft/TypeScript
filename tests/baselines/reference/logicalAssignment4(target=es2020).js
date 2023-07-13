@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts] ////
+
 //// [logicalAssignment4.ts]
 function foo1(results: number[] | undefined) {
     (results ||= []).push(100);

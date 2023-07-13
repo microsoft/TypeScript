@@ -1,9 +1,9 @@
-tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(8,15): error TS1125: Hexadecimal digit expected.
-tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(8,33): error TS1125: Hexadecimal digit expected.
-tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts(8,75): error TS1125: Hexadecimal digit expected.
+invalidTaggedTemplateEscapeSequences.ts(8,15): error TS1125: Hexadecimal digit expected.
+invalidTaggedTemplateEscapeSequences.ts(8,33): error TS1125: Hexadecimal digit expected.
+invalidTaggedTemplateEscapeSequences.ts(8,75): error TS1125: Hexadecimal digit expected.
 
 
-==== tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts (3 errors) ====
+==== invalidTaggedTemplateEscapeSequences.ts (3 errors) ====
     function tag (str: any, ...args: any[]): any {
       return str
     }

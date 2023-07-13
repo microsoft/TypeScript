@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superWithGenericSpecialization.ts] ////
+
 //// [superWithGenericSpecialization.ts]
 class C<T> {
     x: T;

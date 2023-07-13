@@ -1,10 +1,10 @@
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates3.ts(9,11): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
+mergedInterfacesWithInheritedPrivates3.ts(9,11): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
   Named property 'x' of types 'C' and 'C2' are not identical.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates3.ts(31,15): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
+mergedInterfacesWithInheritedPrivates3.ts(31,15): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
   Named property 'x' of types 'C' and 'C2' are not identical.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates3.ts (2 errors) ====
+==== mergedInterfacesWithInheritedPrivates3.ts (2 errors) ====
     class C {
         private x: number;
     }

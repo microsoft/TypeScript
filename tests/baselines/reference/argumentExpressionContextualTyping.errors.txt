@@ -1,14 +1,14 @@
-tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(16,5): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
+argumentExpressionContextualTyping.ts(16,5): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
   Target requires 3 element(s) but source may have fewer.
-tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(17,5): error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.
+argumentExpressionContextualTyping.ts(17,5): error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.
   Target allows only 3 element(s) but source may have more.
-tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(18,5): error TS2345: Argument of type '{ x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }' is not assignable to parameter of type '{ x: [any, any]; y: { c: any; d: any; e: any; }; }'.
+argumentExpressionContextualTyping.ts(18,5): error TS2345: Argument of type '{ x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }' is not assignable to parameter of type '{ x: [any, any]; y: { c: any; d: any; e: any; }; }'.
   Types of property 'x' are incompatible.
     Type '(string | number)[]' is not assignable to type '[any, any]'.
       Target requires 2 element(s) but source may have fewer.
 
 
-==== tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts (3 errors) ====
+==== argumentExpressionContextualTyping.ts (3 errors) ====
     // In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
     function foo({x: [a, b], y: {c, d, e}}) { }
     function bar({x: [a, b = 10], y: {c, d, e = { f:1 }}}) { }

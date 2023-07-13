@@ -1,8 +1,8 @@
-tests/cases/compiler/constructorOverloads4.ts(10,1): error TS2349: This expression is not callable.
+constructorOverloads4.ts(10,1): error TS2349: This expression is not callable.
   Type 'Function' has no call signatures.
 
 
-==== tests/cases/compiler/constructorOverloads4.ts (1 errors) ====
+==== constructorOverloads4.ts (1 errors) ====
     declare module M {    
         export class Function {
             constructor(...args: string[]);

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts ===
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts] ////
+
+=== logicalAssignment8.ts ===
 declare const bar: { value?: number[] } | undefined
 >bar : { value?: number[] | undefined; } | undefined
 >value : number[] | undefined

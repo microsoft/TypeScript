@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectFreeze.ts ===
+//// [tests/cases/compiler/objectFreeze.ts] ////
+
+=== objectFreeze.ts ===
 const f = Object.freeze(function foo(a: number, b: string) { return false; });
 >f : (a: number, b: string) => false
 >Object.freeze(function foo(a: number, b: string) { return false; }) : (a: number, b: string) => false

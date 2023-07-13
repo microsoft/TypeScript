@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/declarationEmitExpressionWithNonlocalPrivateUniqueSymbol.ts] ////
+
+=== a.ts ===
 type AX = { readonly A: unique symbol };
 >AX : { readonly A: unique symbol; }
 >A : unique symbol
@@ -8,7 +10,7 @@ export const A: AX = 0 as any;
 >0 as any : any
 >0 : 0
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { A } from './a';
 >A : { readonly A: unique symbol; }
 

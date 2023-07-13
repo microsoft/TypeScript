@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypes5.ts] ////
+
 //// [mappedTypes5.ts]
 function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) {
     let a1: Partial<T> = p;

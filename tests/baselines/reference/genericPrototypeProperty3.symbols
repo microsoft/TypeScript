@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericPrototypeProperty3.ts ===
+//// [tests/cases/compiler/genericPrototypeProperty3.ts] ////
+
+=== genericPrototypeProperty3.ts ===
 class BaseEvent {
 >BaseEvent : Symbol(BaseEvent, Decl(genericPrototypeProperty3.ts, 0, 0))
 

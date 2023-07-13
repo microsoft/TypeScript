@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadExcessProperty.ts] ////
+
 //// [spreadExcessProperty.ts]
 type A = { a: string, b: string };
 const extra1 = { a: "a", b: "b", extra: "extra" };

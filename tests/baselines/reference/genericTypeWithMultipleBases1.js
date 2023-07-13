@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeWithMultipleBases1.ts] ////
+
 //// [genericTypeWithMultipleBases1.ts]
 export interface I1 {
     m1: () => void;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts ===
+//// [tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts] ////
+
+=== reservedNameOnModuleImportWithInterface.ts ===
 declare module test {
 >test : Symbol(test, Decl(reservedNameOnModuleImportWithInterface.ts, 0, 0))
 

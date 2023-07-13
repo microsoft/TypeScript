@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionsAndConditionalInference.ts ===
+//// [tests/cases/compiler/genericFunctionsAndConditionalInference.ts] ////
+
+=== genericFunctionsAndConditionalInference.ts ===
 type Boxified<T> = { [P in keyof T]: { value: T[P]} };
 >Boxified : Boxified<T>
 >value : T[P]

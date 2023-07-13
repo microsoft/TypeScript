@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts] ////
+
 //// [memberFunctionOverloadMixingStaticAndInstance.ts]
 class C {
     foo();

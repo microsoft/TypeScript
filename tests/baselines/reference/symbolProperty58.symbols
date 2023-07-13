@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty58.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty58.ts] ////
+
+=== symbolProperty58.ts ===
 interface SymbolConstructor {
 >SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolProperty58.ts, 0, 0))
 

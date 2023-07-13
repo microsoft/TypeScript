@@ -1,4 +1,6 @@
-=== tests/cases/compiler/2dArrays.ts ===
+//// [tests/cases/compiler/2dArrays.ts] ////
+
+=== 2dArrays.ts ===
 class Cell {
 >Cell : Symbol(Cell, Decl(2dArrays.ts, 0, 0))
 }

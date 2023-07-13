@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameterInLambda3.ts] ////
+
 //// [unusedTypeParameterInLambda3.ts]
 class A<T> {
     public x: T;

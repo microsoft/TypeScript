@@ -1,12 +1,14 @@
-=== tests/cases/conformance/moduleResolution/a.ts ===
+//// [tests/cases/conformance/moduleResolution/importFromDot.ts] ////
+
+=== a.ts ===
 export const rootA = 0;
 >rootA : Symbol(rootA, Decl(a.ts, 0, 12))
 
-=== tests/cases/conformance/moduleResolution/a/index.ts ===
+=== a/index.ts ===
 export const indexInA = 0;
 >indexInA : Symbol(indexInA, Decl(index.ts, 0, 12))
 
-=== tests/cases/conformance/moduleResolution/a/b.ts ===
+=== a/b.ts ===
 import { indexInA, rootA } from ".";
 >indexInA : Symbol(indexInA, Decl(b.ts, 0, 8))
 >rootA : Symbol(rootA, Decl(b.ts, 0, 18))

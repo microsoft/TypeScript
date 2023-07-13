@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryDeclarationsLocalTypes.tsx] ////
+
+=== renderer.d.ts ===
 export namespace dom {
 >dom : Symbol(dom, Decl(renderer.d.ts, 17, 1), Decl(renderer.d.ts, 0, 0))
 
@@ -49,7 +51,7 @@ export function dom(): dom.JSX.Element;
 >JSX : Symbol(dom.JSX, Decl(renderer.d.ts, 0, 22))
 >Element : Symbol(dom.JSX.Element, Decl(renderer.d.ts, 4, 9))
 
-=== tests/cases/conformance/jsx/inline/renderer2.d.ts ===
+=== renderer2.d.ts ===
 export namespace predom {
 >predom : Symbol(predom, Decl(renderer2.d.ts, 17, 1), Decl(renderer2.d.ts, 0, 0))
 
@@ -100,7 +102,7 @@ export function predom(): predom.JSX.Element;
 >JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
 >Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))
 
-=== tests/cases/conformance/jsx/inline/component.tsx ===
+=== component.tsx ===
 /** @jsx predom */
 import { predom } from "./renderer2"
 >predom : Symbol(predom, Decl(component.tsx, 1, 8))
@@ -205,7 +207,7 @@ export default <h></h>
 >h : Symbol(predom.JSX.IntrinsicElements, Decl(renderer2.d.ts, 1, 19))
 >h : Symbol(predom.JSX.IntrinsicElements, Decl(renderer2.d.ts, 1, 19))
 
-=== tests/cases/conformance/jsx/inline/index.tsx ===
+=== index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer"
 >dom : Symbol(dom, Decl(index.tsx, 1, 8))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classAppearsToHaveMembersOfObject.ts] ////
+
 //// [classAppearsToHaveMembersOfObject.ts]
 class C { foo: string; }
 

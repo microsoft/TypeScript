@@ -47,9 +47,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (used version)
 
 FsWatches::
-/users/username/projects/project/foo.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/foo.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -105,11 +105,11 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (computed .d.ts)
 
 FsWatches::
-/users/username/projects/project/foo.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
 /users/username/projects/project/bar.d.ts: *new*
+  {}
+/users/username/projects/project/foo.ts:
   {}
 
 FsWatchesRecursive::

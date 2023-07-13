@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts] ////
+
+=== taggedTemplatesWithTypeArguments1.ts ===
 declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
 >f : Symbol(f, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 0))
 >T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 19))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts] ////
+
 //// [elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts]
 declare var ohno: new () => number;
 declare function ff(t: number): void;

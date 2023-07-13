@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunctionCapturesArguments_es6.ts] ////
+
 //// [asyncArrowFunctionCapturesArguments_es6.ts]
 class C {
    method() {

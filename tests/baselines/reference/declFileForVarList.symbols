@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileForVarList.ts ===
+//// [tests/cases/compiler/declFileForVarList.ts] ////
+
+=== declFileForVarList.ts ===
 var x, y, z = 1;
 >x : Symbol(x, Decl(declFileForVarList.ts, 0, 3))
 >y : Symbol(y, Decl(declFileForVarList.ts, 0, 6))

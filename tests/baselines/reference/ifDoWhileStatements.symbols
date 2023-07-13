@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/ifDoWhileStatements/ifDoWhileStatements.ts ===
+//// [tests/cases/conformance/statements/ifDoWhileStatements/ifDoWhileStatements.ts] ////
+
+=== ifDoWhileStatements.ts ===
 interface I {
 >I : Symbol(I, Decl(ifDoWhileStatements.ts, 0, 0))
 

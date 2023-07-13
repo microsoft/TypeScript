@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorMetadataNoStrictNull.ts ===
+//// [tests/cases/compiler/decoratorMetadataNoStrictNull.ts] ////
+
+=== decoratorMetadataNoStrictNull.ts ===
 const dec = (obj: {}, prop: string) => undefined
 >dec : Symbol(dec, Decl(decoratorMetadataNoStrictNull.ts, 0, 5))
 >obj : Symbol(obj, Decl(decoratorMetadataNoStrictNull.ts, 0, 13))

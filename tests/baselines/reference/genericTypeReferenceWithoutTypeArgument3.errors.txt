@@ -1,20 +1,20 @@
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(8,16): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(10,21): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(11,22): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(11,26): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(12,19): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(12,22): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(12,26): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(14,23): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(14,27): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(16,25): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(22,28): error TS2339: Property 'C' does not exist on type 'typeof M'.
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(23,28): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(25,30): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(26,30): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(8,16): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(10,21): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(11,22): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(11,26): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(12,19): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+genericTypeReferenceWithoutTypeArgument3.ts(12,22): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(12,26): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(14,23): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(14,27): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(16,25): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(22,28): error TS2339: Property 'C' does not exist on type 'typeof M'.
+genericTypeReferenceWithoutTypeArgument3.ts(23,28): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(25,30): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument3.ts(26,30): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts (14 errors) ====
+==== genericTypeReferenceWithoutTypeArgument3.ts (14 errors) ====
     // it is an error to use a generic type without type arguments
     // all of these are errors 
     

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/whileStatementInnerComments.ts] ////
+
 //// [whileStatementInnerComments.ts]
 /*a*/ while /*b*/ ( /*c*/ false /*d*/ ) /*e*/ {}
 

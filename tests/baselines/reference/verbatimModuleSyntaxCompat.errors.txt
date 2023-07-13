@@ -16,5 +16,5 @@ error TS5105: Option 'verbatimModuleSyntax' cannot be used when 'module' is set 
 !!! error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 !!! error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
 !!! error TS5105: Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.
-==== tests/cases/conformance/externalModules/verbatimModuleSyntaxCompat.ts (0 errors) ====
+==== verbatimModuleSyntaxCompat.ts (0 errors) ====
     export {};

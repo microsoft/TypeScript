@@ -54,14 +54,14 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-c:/myprojects/project/tsconfig.json: *new*
-  {"pollingInterval":2000}
+c:/myprojects/node_modules/@types: *new*
+  {"pollingInterval":500}
 c:/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 c:/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-c:/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
+c:/myprojects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 c:/a/lib/lib.d.ts: *new*
@@ -118,18 +118,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/myprojects/project/tsconfig.json:
-  {"pollingInterval":2000}
-c:/myprojects/project/jsconfig.json:
-  {"pollingInterval":2000}
-c:/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 c:/myprojects/node_modules/@types:
   {"pollingInterval":500}
 c:/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
+c:/myprojects/project/jsconfig.json:
+  {"pollingInterval":2000}
 c:/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
+c:/myprojects/project/node_modules/@types:
+  {"pollingInterval":500}
+c:/myprojects/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 c:/a/lib/lib.d.ts:
@@ -304,14 +304,14 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-//vda1cs4850/c$/myprojects/project/tsconfig.json: *new*
-  {"pollingInterval":2000}
+//vda1cs4850/c$/myprojects/node_modules/@types: *new*
+  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 //vda1cs4850/c$/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
+//vda1cs4850/c$/myprojects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 //vda1cs4850/a/lib/lib.d.ts: *new*
@@ -368,18 +368,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-//vda1cs4850/c$/myprojects/project/tsconfig.json:
-  {"pollingInterval":2000}
-//vda1cs4850/c$/myprojects/project/jsconfig.json:
-  {"pollingInterval":2000}
-//vda1cs4850/c$/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/node_modules/@types:
   {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
+//vda1cs4850/c$/myprojects/project/jsconfig.json:
+  {"pollingInterval":2000}
 //vda1cs4850/c$/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
+//vda1cs4850/c$/myprojects/project/node_modules/@types:
+  {"pollingInterval":500}
+//vda1cs4850/c$/myprojects/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 //vda1cs4850/a/lib/lib.d.ts:
@@ -441,14 +441,14 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-c:/users/username/myprojects/project/tsconfig.json: *new*
-  {"pollingInterval":2000}
+c:/users/username/myprojects/node_modules/@types: *new*
+  {"pollingInterval":500}
 c:/users/username/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 c:/users/username/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-c:/users/username/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
+c:/users/username/myprojects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 c:/a/lib/lib.d.ts: *new*
@@ -505,18 +505,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/users/username/myprojects/project/tsconfig.json:
-  {"pollingInterval":2000}
-c:/users/username/myprojects/project/jsconfig.json:
-  {"pollingInterval":2000}
-c:/users/username/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 c:/users/username/myprojects/node_modules/@types:
   {"pollingInterval":500}
 c:/users/username/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
+c:/users/username/myprojects/project/jsconfig.json:
+  {"pollingInterval":2000}
 c:/users/username/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
+c:/users/username/myprojects/project/node_modules/@types:
+  {"pollingInterval":500}
+c:/users/username/myprojects/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 c:/a/lib/lib.d.ts:
@@ -578,14 +578,14 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-//vda1cs4850/c$/users/username/myprojects/project/tsconfig.json: *new*
-  {"pollingInterval":2000}
+//vda1cs4850/c$/users/username/myprojects/node_modules/@types: *new*
+  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 //vda1cs4850/c$/users/username/myprojects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/users/username/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
+//vda1cs4850/c$/users/username/myprojects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 //vda1cs4850/a/lib/lib.d.ts: *new*
@@ -642,18 +642,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-//vda1cs4850/c$/users/username/myprojects/project/tsconfig.json:
-  {"pollingInterval":2000}
-//vda1cs4850/c$/users/username/myprojects/project/jsconfig.json:
-  {"pollingInterval":2000}
-//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/node_modules/@types:
   {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
+//vda1cs4850/c$/users/username/myprojects/project/jsconfig.json:
+  {"pollingInterval":2000}
 //vda1cs4850/c$/users/username/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
+//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types:
+  {"pollingInterval":500}
+//vda1cs4850/c$/users/username/myprojects/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 //vda1cs4850/a/lib/lib.d.ts:

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty3.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty3.ts] ////
+
+=== parserSymbolProperty3.ts ===
 declare class C {
 >C : Symbol(C, Decl(parserSymbolProperty3.ts, 0, 0))
 

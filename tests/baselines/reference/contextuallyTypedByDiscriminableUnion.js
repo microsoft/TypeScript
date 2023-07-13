@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedByDiscriminableUnion.ts] ////
+
 //// [contextuallyTypedByDiscriminableUnion.ts]
 type ADT = {
     kind: "a",

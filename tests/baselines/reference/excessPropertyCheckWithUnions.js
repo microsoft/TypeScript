@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckWithUnions.ts] ////
+
 //// [excessPropertyCheckWithUnions.ts]
 type ADT = {
     tag: "A",

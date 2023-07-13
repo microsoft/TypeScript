@@ -1,23 +1,23 @@
-tests/cases/compiler/moduleElementsInWrongContext.ts(2,5): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(3,5): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(7,5): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(9,5): error TS1234: An ambient module declaration is only allowed at the top level in a file.
-tests/cases/compiler/moduleElementsInWrongContext.ts(13,5): error TS1231: An export assignment must be at the top level of a file or module declaration.
-tests/cases/compiler/moduleElementsInWrongContext.ts(17,5): error TS1233: An export declaration can only be used at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(18,5): error TS1233: An export declaration can only be used at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(19,5): error TS1233: An export declaration can only be used at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(20,5): error TS1258: A default export must be at the top level of a file or module declaration.
-tests/cases/compiler/moduleElementsInWrongContext.ts(21,5): error TS1184: Modifiers cannot appear here.
-tests/cases/compiler/moduleElementsInWrongContext.ts(22,5): error TS1184: Modifiers cannot appear here.
-tests/cases/compiler/moduleElementsInWrongContext.ts(23,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(24,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(25,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(26,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(27,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
-tests/cases/compiler/moduleElementsInWrongContext.ts(28,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(2,5): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(3,5): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(7,5): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(9,5): error TS1234: An ambient module declaration is only allowed at the top level in a file.
+moduleElementsInWrongContext.ts(13,5): error TS1231: An export assignment must be at the top level of a file or module declaration.
+moduleElementsInWrongContext.ts(17,5): error TS1233: An export declaration can only be used at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(18,5): error TS1233: An export declaration can only be used at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(19,5): error TS1233: An export declaration can only be used at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(20,5): error TS1258: A default export must be at the top level of a file or module declaration.
+moduleElementsInWrongContext.ts(21,5): error TS1184: Modifiers cannot appear here.
+moduleElementsInWrongContext.ts(22,5): error TS1184: Modifiers cannot appear here.
+moduleElementsInWrongContext.ts(23,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(24,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(25,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(26,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(27,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
+moduleElementsInWrongContext.ts(28,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
 
 
-==== tests/cases/compiler/moduleElementsInWrongContext.ts (17 errors) ====
+==== moduleElementsInWrongContext.ts (17 errors) ====
     {
         module M { }
         ~~~~~~

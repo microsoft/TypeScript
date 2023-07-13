@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionThisCapturingES6.ts] ////
+
 //// [emitArrowFunctionThisCapturingES6.ts]
 var f1 = () => {
     this.age = 10

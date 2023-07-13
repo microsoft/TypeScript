@@ -1,4 +1,6 @@
-=== tests/cases/compiler/modFunctionCrash.ts ===
+//// [tests/cases/compiler/modFunctionCrash.ts] ////
+
+=== modFunctionCrash.ts ===
 declare module Q {
 >Q : Symbol(Q, Decl(modFunctionCrash.ts, 0, 0))
 

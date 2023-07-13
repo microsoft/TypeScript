@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendingSetWithCheckJs.ts ===
+//// [tests/cases/compiler/extendingSetWithCheckJs.ts] ////
+
+=== extendingSetWithCheckJs.ts ===
 class MySet extends Set {
 >MySet : Symbol(MySet, Decl(extendingSetWithCheckJs.ts, 0, 0))
 >Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

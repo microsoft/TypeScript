@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUnusedLocals_destructuringAssignment.ts ===
+//// [tests/cases/compiler/noUnusedLocals_destructuringAssignment.ts] ////
+
+=== noUnusedLocals_destructuringAssignment.ts ===
 class C {
 >C : Symbol(C, Decl(noUnusedLocals_destructuringAssignment.ts, 0, 0))
 

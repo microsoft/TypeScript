@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/t1.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImports1-amd.ts] ////
+
+=== t1.ts ===
 var v = 1;
 >v : Symbol(v, Decl(t1.ts, 0, 3))
 
@@ -60,7 +62,7 @@ export { v, f, C, I, E, D, M, N, T, a };
 >T : Symbol(T, Decl(t1.ts, 22, 32))
 >a : Symbol(a, Decl(t1.ts, 22, 35))
 
-=== tests/cases/conformance/es6/modules/t2.ts ===
+=== t2.ts ===
 export { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >v : Symbol(v, Decl(t2.ts, 0, 8))
 >f : Symbol(f, Decl(t2.ts, 0, 11))
@@ -73,7 +75,7 @@ export { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >T : Symbol(T, Decl(t2.ts, 0, 32))
 >a : Symbol(a, Decl(t2.ts, 0, 35))
 
-=== tests/cases/conformance/es6/modules/t3.ts ===
+=== t3.ts ===
 import { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >v : Symbol(v, Decl(t3.ts, 0, 8))
 >f : Symbol(f, Decl(t3.ts, 0, 11))

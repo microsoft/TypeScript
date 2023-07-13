@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates.ts ===
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithPrivates.ts] ////
+
+=== interfaceExtendingClassWithPrivates.ts ===
 class Foo {
 >Foo : Foo
 

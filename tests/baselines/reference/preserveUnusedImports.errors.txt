@@ -4,13 +4,13 @@ error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functi
 
 !!! error TS5101: Option 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 !!! error TS5101:   Use 'verbatimModuleSyntax' instead.
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     export type A = {};
     
-==== tests/cases/compiler/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     export class B {}
     
-==== tests/cases/compiler/c.ts (0 errors) ====
+==== c.ts (0 errors) ====
     import { A } from './a';
     import { B } from './b';
     

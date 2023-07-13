@@ -1648,6 +1648,15 @@ type Uncapitalize<S extends string> = intrinsic;
 interface ThisType<T> { }
 
 /**
+ * Stores types to be used with WeakSet, WeakMap, WeakRef, and FinalizationRegistry
+ */
+interface WeakKeyTypes {
+    object: object;
+}
+
+type WeakKey = WeakKeyTypes[keyof WeakKeyTypes];
+
+/**
  * Represents a raw buffer of binary data, which is used to store data for the
  * different typed arrays. ArrayBuffers cannot be read from or written to directly,
  * but can be passed to a typed array or DataView Object to interpret the raw

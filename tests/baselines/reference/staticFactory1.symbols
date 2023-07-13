@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/staticFactory1.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/staticFactory1.ts] ////
+
+=== staticFactory1.ts ===
 class Base {
 >Base : Symbol(Base, Decl(staticFactory1.ts, 0, 0))
 

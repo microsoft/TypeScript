@@ -1,89 +1,89 @@
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(6,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(11,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(12,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(17,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(18,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(23,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(24,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(30,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(36,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(42,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(48,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(56,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(56,9): error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(61,9): error TS2393: Duplicate function implementation.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(62,9): error TS2393: Duplicate function implementation.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(67,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(68,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(73,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(74,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(80,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(86,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(92,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(98,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(107,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(112,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(113,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(118,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(119,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(131,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(137,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(143,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(149,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(157,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(162,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(163,9): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(174,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(175,13): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(181,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(187,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(193,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(199,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(207,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(213,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(219,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(225,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(231,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(236,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(237,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(242,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(243,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(248,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(249,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(257,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(263,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(269,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(275,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(281,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(281,16): error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(286,16): error TS2393: Duplicate function implementation.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(287,16): error TS2393: Duplicate function implementation.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(292,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(293,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(298,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(299,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(308,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(314,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(320,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(326,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(331,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(332,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(337,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(338,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(343,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(344,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(357,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(363,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(370,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(376,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(382,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(387,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(388,16): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(399,20): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(400,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(6,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(11,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(12,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(17,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(18,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(23,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(24,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(30,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(36,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(42,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(48,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(56,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(56,9): error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
+privateNameDuplicateField.ts(61,9): error TS2393: Duplicate function implementation.
+privateNameDuplicateField.ts(62,9): error TS2393: Duplicate function implementation.
+privateNameDuplicateField.ts(67,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(68,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(73,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(74,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(80,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(86,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(92,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(98,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(107,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(112,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(113,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(118,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(119,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(131,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(137,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(143,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(149,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(157,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(162,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(163,9): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(174,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(175,13): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(181,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(187,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(193,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(199,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(207,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(213,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(219,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(225,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(231,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(236,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(237,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(242,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(243,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(248,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(249,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(257,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(263,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(269,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(275,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(281,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(281,16): error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
+privateNameDuplicateField.ts(286,16): error TS2393: Duplicate function implementation.
+privateNameDuplicateField.ts(287,16): error TS2393: Duplicate function implementation.
+privateNameDuplicateField.ts(292,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(293,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(298,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(299,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(308,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(314,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(320,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(326,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(331,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(332,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(337,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(338,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(343,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(344,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(357,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(363,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(370,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(376,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+privateNameDuplicateField.ts(382,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(387,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(388,16): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(399,20): error TS2300: Duplicate identifier '#foo'.
+privateNameDuplicateField.ts(400,20): error TS2300: Duplicate identifier '#foo'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts (83 errors) ====
+==== privateNameDuplicateField.ts (83 errors) ====
     function Field() {
     
         // Error
@@ -166,7 +166,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.t
 !!! error TS2300: Duplicate identifier '#foo'.
             ~~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts:55:9: '#foo' was also declared here.
+!!! related TS6203 privateNameDuplicateField.ts:55:9: '#foo' was also declared here.
         }
     
         // Error
@@ -482,7 +482,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.t
 !!! error TS2300: Duplicate identifier '#foo'.
                    ~~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts:280:16: '#foo' was also declared here.
+!!! related TS6203 privateNameDuplicateField.ts:280:16: '#foo' was also declared here.
         }
     
         // Error

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts] ////
+
+=== assignmentCompatWithObjectMembers5.ts ===
 class C {
 >C : Symbol(C, Decl(assignmentCompatWithObjectMembers5.ts, 0, 0))
 

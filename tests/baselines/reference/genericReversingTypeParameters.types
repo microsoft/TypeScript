@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericReversingTypeParameters.ts ===
+//// [tests/cases/compiler/genericReversingTypeParameters.ts] ////
+
+=== genericReversingTypeParameters.ts ===
 class BiMap<K, V> {
 >BiMap : BiMap<K, V>
 

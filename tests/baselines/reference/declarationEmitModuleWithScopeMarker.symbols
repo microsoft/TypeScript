@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitModuleWithScopeMarker.ts ===
+//// [tests/cases/compiler/declarationEmitModuleWithScopeMarker.ts] ////
+
+=== declarationEmitModuleWithScopeMarker.ts ===
 declare module "bar" {
 >"bar" : Symbol("bar", Decl(declarationEmitModuleWithScopeMarker.ts, 0, 0))
 

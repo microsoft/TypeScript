@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendGenericArray.ts ===
+//// [tests/cases/compiler/extendGenericArray.ts] ////
+
+=== extendGenericArray.ts ===
 interface Array<T> {
     foo(): T;
 >foo : () => T

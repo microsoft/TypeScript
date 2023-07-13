@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericBaseClassLiteralProperty2.ts ===
+//// [tests/cases/compiler/genericBaseClassLiteralProperty2.ts] ////
+
+=== genericBaseClassLiteralProperty2.ts ===
 class CollectionItem2 { }
 >CollectionItem2 : Symbol(CollectionItem2, Decl(genericBaseClassLiteralProperty2.ts, 0, 0))
 

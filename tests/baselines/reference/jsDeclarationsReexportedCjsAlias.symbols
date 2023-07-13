@@ -1,10 +1,12 @@
-=== tests/cases/conformance/jsdoc/declarations/main.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportedCjsAlias.ts] ////
+
+=== main.js ===
 const { SomeClass, SomeClass: Another } = require('./lib');
 >SomeClass : Symbol(SomeClass, Decl(main.js, 0, 7))
 >SomeClass : Symbol(SomeClass, Decl(lib.js, 14, 8))
 >Another : Symbol(Another, Decl(main.js, 0, 18))
 >require : Symbol(require)
->'./lib' : Symbol("tests/cases/conformance/jsdoc/declarations/lib", Decl(lib.js, 0, 0))
+>'./lib' : Symbol("lib", Decl(lib.js, 0, 0))
 
 module.exports = {
 >module.exports : Symbol(module.exports, Decl(main.js, 0, 0))
@@ -17,7 +19,7 @@ module.exports = {
     Another
 >Another : Symbol(Another, Decl(main.js, 3, 14))
 }
-=== tests/cases/conformance/jsdoc/declarations/lib.js ===
+=== lib.js ===
 /**
  * @param {string} a
  */

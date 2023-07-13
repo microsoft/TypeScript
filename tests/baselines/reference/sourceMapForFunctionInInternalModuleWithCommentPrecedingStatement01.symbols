@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts ===
+//// [tests/cases/compiler/sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts] ////
+
+=== sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts ===
 module Q {
 >Q : Symbol(Q, Decl(sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/targetTypeArgs.ts ===
+//// [tests/cases/compiler/targetTypeArgs.ts] ////
+
+=== targetTypeArgs.ts ===
 function foo(callback: (x: string) => void) {
 >foo : Symbol(foo, Decl(targetTypeArgs.ts, 0, 0))
 >callback : Symbol(callback, Decl(targetTypeArgs.ts, 0, 13))

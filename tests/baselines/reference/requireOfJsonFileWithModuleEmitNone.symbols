@@ -1,8 +1,10 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithModuleEmitNone.ts] ////
+
+=== file1.ts ===
 import * as b from './b.json';
 >b : Symbol(b, Decl(file1.ts, 0, 6))
 
-=== tests/cases/compiler/b.json ===
+=== b.json ===
 {
     "a": true,
 >"a" : Symbol("a", Decl(b.json, 0, 1))

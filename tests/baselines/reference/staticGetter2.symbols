@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticGetter2.ts ===
+//// [tests/cases/compiler/staticGetter2.ts] ////
+
+=== staticGetter2.ts ===
 // once caused stack overflow
 class C {
 >C : Symbol(C, Decl(staticGetter2.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat3.ts] ////
+
 //// [enumAssignmentCompat3.ts]
 namespace First {
     export enum E {

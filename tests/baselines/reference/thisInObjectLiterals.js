@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts] ////
+
 //// [thisInObjectLiterals.ts]
 class MyClass {
     t: number;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeRelationships.ts] ////
+
 //// [mappedTypeRelationships.ts]
 function f1<T>(x: T, k: keyof T) {
     return x[k];

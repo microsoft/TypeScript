@@ -1,11 +1,11 @@
-tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(34,24): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(35,24): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(46,26): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(47,26): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
-tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(48,26): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+bitwiseNotOperatorWithAnyOtherType.ts(34,24): error TS18050: The value 'undefined' cannot be used here.
+bitwiseNotOperatorWithAnyOtherType.ts(35,24): error TS18050: The value 'null' cannot be used here.
+bitwiseNotOperatorWithAnyOtherType.ts(46,26): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+bitwiseNotOperatorWithAnyOtherType.ts(47,26): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+bitwiseNotOperatorWithAnyOtherType.ts(48,26): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts (5 errors) ====
+==== bitwiseNotOperatorWithAnyOtherType.ts (5 errors) ====
     // ~ operator on any type
     
     var ANY: any;

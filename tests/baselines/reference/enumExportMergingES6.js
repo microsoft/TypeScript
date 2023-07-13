@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumExportMergingES6.ts] ////
+
 //// [enumExportMergingES6.ts]
 export enum Animals {
 	Cat = 1

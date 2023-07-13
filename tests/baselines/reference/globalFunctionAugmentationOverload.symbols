@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mod.d.ts ===
+//// [tests/cases/compiler/globalFunctionAugmentationOverload.ts] ////
+
+=== mod.d.ts ===
 declare function expect(spy: Function): void;
 >expect : Symbol(expect, Decl(mod.d.ts, 0, 0), Decl(mine.ts, 2, 16))
 >spy : Symbol(spy, Decl(mod.d.ts, 0, 24))
@@ -13,7 +15,7 @@ declare module "mod" {
     export = mod;
 >mod : Symbol(mod, Decl(mod.d.ts, 1, 22))
 }
-=== tests/cases/compiler/mine.ts ===
+=== mine.ts ===
 import "mod";
 
 declare global {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralThisWidenedOnUse.ts] ////
+
 //// [objectLiteralThisWidenedOnUse.ts]
 interface Foo { bar: boolean; }
 

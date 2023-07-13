@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameFieldDestructuredBinding.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldDestructuredBinding.ts] ////
+
+=== privateNameFieldDestructuredBinding.ts ===
 class A {
 >A : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
 

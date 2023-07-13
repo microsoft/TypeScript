@@ -1,12 +1,12 @@
-tests/cases/compiler/declarationEmitDestructuring2.ts(3,13): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/declarationEmitDestructuring2.ts(3,17): error TS2300: Duplicate identifier 'b'.
-tests/cases/compiler/declarationEmitDestructuring2.ts(3,23): error TS2300: Duplicate identifier 'c'.
-tests/cases/compiler/declarationEmitDestructuring2.ts(3,41): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/declarationEmitDestructuring2.ts(3,44): error TS2300: Duplicate identifier 'b'.
-tests/cases/compiler/declarationEmitDestructuring2.ts(3,47): error TS2300: Duplicate identifier 'c'.
+declarationEmitDestructuring2.ts(3,13): error TS2300: Duplicate identifier 'a'.
+declarationEmitDestructuring2.ts(3,17): error TS2300: Duplicate identifier 'b'.
+declarationEmitDestructuring2.ts(3,23): error TS2300: Duplicate identifier 'c'.
+declarationEmitDestructuring2.ts(3,41): error TS2300: Duplicate identifier 'a'.
+declarationEmitDestructuring2.ts(3,44): error TS2300: Duplicate identifier 'b'.
+declarationEmitDestructuring2.ts(3,47): error TS2300: Duplicate identifier 'c'.
 
 
-==== tests/cases/compiler/declarationEmitDestructuring2.ts (6 errors) ====
+==== declarationEmitDestructuring2.ts (6 errors) ====
     function f({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]} = { x: 10, y: [2, 4, 6, 8] }) { }
     function g([a, b, c, d] = [1, 2, 3, 4]) { }
     function h([a, [b], [[c]], {x = 10, y: [a, b, c], z: {a1, b1}}]){ }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration4.ts] ////
+
+=== parserMemberAccessorDeclaration4.ts ===
 class C {
 >C : Symbol(C, Decl(parserMemberAccessorDeclaration4.ts, 0, 0))
 

@@ -1,3 +1,5 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationInterfaceSyntax.ts] ////
+
+=== a.js ===
 
 interface I { }

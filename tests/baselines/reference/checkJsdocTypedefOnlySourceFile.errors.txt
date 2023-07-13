@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/0.js(10,20): error TS2694: Namespace 'exports' has no exported member 'SomeName'.
+0.js(10,20): error TS2694: Namespace 'exports' has no exported member 'SomeName'.
 
 
-==== tests/cases/conformance/jsdoc/0.js (1 errors) ====
+==== 0.js (1 errors) ====
     // @ts-check
     
     var exports = {};

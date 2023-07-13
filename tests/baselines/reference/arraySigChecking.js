@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arraySigChecking.ts] ////
+
 //// [arraySigChecking.ts]
 declare module M {
     interface iBar { t: any; }

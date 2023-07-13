@@ -1,10 +1,10 @@
-tests/cases/compiler/overloadModifiersMustAgree.ts(2,12): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/compiler/overloadModifiersMustAgree.ts(6,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-tests/cases/compiler/overloadModifiersMustAgree.ts(7,17): error TS2383: Overload signatures must all be exported or non-exported.
-tests/cases/compiler/overloadModifiersMustAgree.ts(12,5): error TS2386: Overload signatures must all be optional or required.
+overloadModifiersMustAgree.ts(2,12): error TS2385: Overload signatures must all be public, private or protected.
+overloadModifiersMustAgree.ts(6,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+overloadModifiersMustAgree.ts(7,17): error TS2383: Overload signatures must all be exported or non-exported.
+overloadModifiersMustAgree.ts(12,5): error TS2386: Overload signatures must all be optional or required.
 
 
-==== tests/cases/compiler/overloadModifiersMustAgree.ts (4 errors) ====
+==== overloadModifiersMustAgree.ts (4 errors) ====
     class baz {
         public foo();
                ~~~

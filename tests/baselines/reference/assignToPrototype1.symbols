@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignToPrototype1.ts ===
+//// [tests/cases/compiler/assignToPrototype1.ts] ////
+
+=== assignToPrototype1.ts ===
 declare class Point {
 >Point : Symbol(Point, Decl(assignToPrototype1.ts, 0, 0))
 

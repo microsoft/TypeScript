@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/requireTwoPropertyAccesses.js ===
+//// [tests/cases/conformance/salsa/requireTwoPropertyAccesses.ts] ////
+
+=== requireTwoPropertyAccesses.js ===
 const value = require("./mod").x.y
 >value : error
 >require("./mod").x.y : string
@@ -16,7 +18,7 @@ console.log(value)
 >log : (...data: any[]) => void
 >value : error
 
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 // @declaration
 module.exports = {
 >module.exports = {    x: {        y: "value"    }} : { x: { y: string; }; }

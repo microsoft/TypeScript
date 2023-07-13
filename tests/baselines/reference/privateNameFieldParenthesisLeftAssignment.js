@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldParenthesisLeftAssignment.ts] ////
+
 //// [privateNameFieldParenthesisLeftAssignment.ts]
 class Foo {
     #p: number;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations.ts ===
+//// [tests/cases/compiler/constDeclarations.ts] ////
+
+=== constDeclarations.ts ===
 // No error
 const c1 = false;
 >c1 : Symbol(c1, Decl(constDeclarations.ts, 1, 5))

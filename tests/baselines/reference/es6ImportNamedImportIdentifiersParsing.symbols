@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts] ////
+
+=== es6ImportNamedImportIdentifiersParsing.ts ===
 import { yield } from "somemodule"; // Allowed
 >yield : Symbol(yield, Decl(es6ImportNamedImportIdentifiersParsing.ts, 0, 8))
 

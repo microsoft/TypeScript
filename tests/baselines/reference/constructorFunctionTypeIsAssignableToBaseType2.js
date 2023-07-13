@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/constructorFunctionTypeIsAssignableToBaseType2.ts] ////
+
 //// [constructorFunctionTypeIsAssignableToBaseType2.ts]
 // the constructor function itself does not need to be a subtype of the base type constructor function
 

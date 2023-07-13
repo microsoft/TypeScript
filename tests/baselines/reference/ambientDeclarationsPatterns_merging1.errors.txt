@@ -1,19 +1,19 @@
-tests/cases/conformance/ambient/testB.ts(1,22): error TS2305: Module '"*.foo"' has no exported member 'onlyInA'.
+testB.ts(1,22): error TS2305: Module '"*.foo"' has no exported member 'onlyInA'.
 
 
-==== tests/cases/conformance/ambient/types.ts (0 errors) ====
+==== types.ts (0 errors) ====
     declare module "*.foo" {
       let everywhere: string;
     }
     
     
-==== tests/cases/conformance/ambient/testA.ts (0 errors) ====
+==== testA.ts (0 errors) ====
     import { everywhere, onlyInA } from "a.foo";
     declare module "a.foo" {
       let onlyInA: number;
     }
     
-==== tests/cases/conformance/ambient/testB.ts (1 errors) ====
+==== testB.ts (1 errors) ====
     import { everywhere, onlyInA } from "b.foo"; // Error
                          ~~~~~~~
 !!! error TS2305: Module '"*.foo"' has no exported member 'onlyInA'.

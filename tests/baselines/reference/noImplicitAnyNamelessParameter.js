@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyNamelessParameter.ts] ////
+
 //// [noImplicitAnyNamelessParameter.ts]
 class C { }
 declare var a: { m(...string): void }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringFromUnionSpread.ts] ////
+
 //// [destructuringFromUnionSpread.ts]
 interface A { a: string }
 interface B { b: number }

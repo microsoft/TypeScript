@@ -46,9 +46,9 @@ No shapes updated in the builder::
 PolledWatches::
 /a/b/app: *new*
   {"pollingInterval":500}
-/a/b/test: *new*
-  {"pollingInterval":500}
 /a/b/something: *new*
+  {"pollingInterval":500}
+/a/b/test: *new*
   {"pollingInterval":500}
 
 FsWatches::

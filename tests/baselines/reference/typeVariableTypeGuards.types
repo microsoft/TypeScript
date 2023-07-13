@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeVariableTypeGuards.ts ===
+//// [tests/cases/compiler/typeVariableTypeGuards.ts] ////
+
+=== typeVariableTypeGuards.ts ===
 // Repro from #14091
 
 interface Foo {

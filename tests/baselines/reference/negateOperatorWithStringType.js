@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithStringType.ts] ////
+
 //// [negateOperatorWithStringType.ts]
 // - operator on string type
 var STRING: string;

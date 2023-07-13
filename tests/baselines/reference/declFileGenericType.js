@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileGenericType.ts] ////
+
 //// [declFileGenericType.ts]
 export module C {
     export class A<T>{ }
@@ -112,7 +114,7 @@ exports.j = C.F6;
 
 
 //// [declFileGenericType.d.ts]
-export declare module C {
+export declare namespace C {
     class A<T> {
     }
     class B {

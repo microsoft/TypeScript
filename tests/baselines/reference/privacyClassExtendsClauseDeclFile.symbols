@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyClassExtendsClauseDeclFile_externalModule.ts ===
+//// [tests/cases/compiler/privacyClassExtendsClauseDeclFile.ts] ////
+
+=== privacyClassExtendsClauseDeclFile_externalModule.ts ===
 export module publicModule {
 >publicModule : Symbol(publicModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 0, 0))
 
@@ -133,7 +135,7 @@ export class publicClassExtendingFromPrivateModuleClass extends privateModule.pu
 >publicClassInPrivateModule : Symbol(privateModule.publicClassInPrivateModule, Decl(privacyClassExtendsClauseDeclFile_externalModule.ts, 24, 22))
 }
 
-=== tests/cases/compiler/privacyClassExtendsClauseDeclFile_GlobalFile.ts ===
+=== privacyClassExtendsClauseDeclFile_GlobalFile.ts ===
 module publicModuleInGlobal {
 >publicModuleInGlobal : Symbol(publicModuleInGlobal, Decl(privacyClassExtendsClauseDeclFile_GlobalFile.ts, 0, 0))
 

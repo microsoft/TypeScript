@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_consumer.ts ===
+//// [tests/cases/compiler/privacyCannotNameVarTypeDeclFile.ts] ////
+
+=== privacyCannotNameVarTypeDeclFile_consumer.ts ===
 import exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
 >exporter : Symbol(exporter, Decl(privacyCannotNameVarTypeDeclFile_consumer.ts, 0, 0))
 
@@ -208,7 +210,7 @@ var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4()
 >exporter : Symbol(exporter, Decl(privacyCannotNameVarTypeDeclFile_consumer.ts, 0, 0))
 >createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameVarTypeDeclFile_exporter.ts, 11, 1))
 
-=== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts ===
+=== privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
 >"GlobalWidgets" : Symbol("GlobalWidgets", Decl(privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts, 0, 0))
 
@@ -237,7 +239,7 @@ declare module "GlobalWidgets" {
     }
 }
 
-=== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_Widgets.ts ===
+=== privacyCannotNameVarTypeDeclFile_Widgets.ts ===
 export class Widget1 {
 >Widget1 : Symbol(Widget1, Decl(privacyCannotNameVarTypeDeclFile_Widgets.ts, 0, 0))
 
@@ -268,7 +270,7 @@ export module SpecializedWidget {
     }
 }
 
-=== tests/cases/compiler/privacyCannotNameVarTypeDeclFile_exporter.ts ===
+=== privacyCannotNameVarTypeDeclFile_exporter.ts ===
 ///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
 import Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
 >Widgets : Symbol(Widgets, Decl(privacyCannotNameVarTypeDeclFile_exporter.ts, 0, 0))

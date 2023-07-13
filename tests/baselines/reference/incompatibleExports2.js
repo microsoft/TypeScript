@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incompatibleExports2.ts] ////
+
 //// [incompatibleExports2.ts]
 declare module "foo" { 
     export interface x { a: string } 

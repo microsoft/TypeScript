@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericReduce.ts] ////
+
 //// [genericReduce.ts]
 var a = ["An", "array", "of", "strings"];
 var b = a.map(s => s.length);

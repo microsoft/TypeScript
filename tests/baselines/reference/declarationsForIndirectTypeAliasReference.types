@@ -1,4 +1,6 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/declarationsForIndirectTypeAliasReference.ts] ////
+
+=== b.ts ===
 export {
     Hash,
 >Hash : any
@@ -18,7 +20,7 @@ type StringHash = Hash<string>;
 >StringHash : Hash<string>
 
 interface StringHash2 extends Hash<string> {}
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import {StringHash, StringHash2} from "./b";
 >StringHash : any
 >StringHash2 : any

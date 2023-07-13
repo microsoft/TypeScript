@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/superCalls/superCalls.ts ===
+//// [tests/cases/conformance/expressions/superCalls/superCalls.ts] ////
+
+=== superCalls.ts ===
 class Base {
 >Base : Base
 

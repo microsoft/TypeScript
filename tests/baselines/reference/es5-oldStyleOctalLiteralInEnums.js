@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-oldStyleOctalLiteralInEnums.ts] ////
+
 //// [es5-oldStyleOctalLiteralInEnums.ts]
 enum E {
   x = -01,

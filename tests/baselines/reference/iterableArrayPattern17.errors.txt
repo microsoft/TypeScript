@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(17,5): error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type 'Bar'.
+iterableArrayPattern17.ts(17,5): error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type 'Bar'.
   Property 'x' is missing in type 'FooIterator' but required in type 'Bar'.
 
 
-==== tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts (1 errors) ====
+==== iterableArrayPattern17.ts (1 errors) ====
     class Bar { x }
     class Foo extends Bar { y }
     class FooIterator {
@@ -23,4 +23,4 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(17,5): error
         ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type 'Bar'.
 !!! error TS2345:   Property 'x' is missing in type 'FooIterator' but required in type 'Bar'.
-!!! related TS2728 tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts:1:13: 'x' is declared here.
+!!! related TS2728 iterableArrayPattern17.ts:1:13: 'x' is declared here.

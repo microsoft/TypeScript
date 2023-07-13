@@ -1,0 +1,20 @@
+error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+
+!!! error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+==== /project/a.js (0 errors) ====
+    export default "a.js";
+    
+==== /project/a.js.js (0 errors) ====
+    export default "a.js.js";
+    
+==== /project/dir/index.ts (0 errors) ====
+    export default "dir/index.ts";
+    
+==== /project/dir.js (0 errors) ====
+    export default "dir.js";
+    
+==== /project/b.ts (0 errors) ====
+    import a from "./a.js";
+    import dir from "./dir";
+    

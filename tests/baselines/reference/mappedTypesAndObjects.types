@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts] ////
+
+=== mappedTypesAndObjects.ts ===
 function f1<T>(x: Partial<T>, y: Readonly<T>) {
 >f1 : <T>(x: Partial<T>, y: Readonly<T>) => void
 >x : Partial<T>

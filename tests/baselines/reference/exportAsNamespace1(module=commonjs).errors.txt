@@ -1,12 +1,12 @@
-tests/cases/conformance/es2020/modules/1.ts(2,1): error TS2304: Cannot find name 'ns'.
-tests/cases/conformance/es2020/modules/1.ts(3,1): error TS2304: Cannot find name 'ns'.
+1.ts(2,1): error TS2304: Cannot find name 'ns'.
+1.ts(3,1): error TS2304: Cannot find name 'ns'.
 
 
-==== tests/cases/conformance/es2020/modules/0.ts (0 errors) ====
+==== 0.ts (0 errors) ====
     export const a = 1;
     export const b = 2;
     
-==== tests/cases/conformance/es2020/modules/1.ts (2 errors) ====
+==== 1.ts (2 errors) ====
     export * as ns from './0';
     ns.a;
     ~~
@@ -15,7 +15,7 @@ tests/cases/conformance/es2020/modules/1.ts(3,1): error TS2304: Cannot find name
     ~~
 !!! error TS2304: Cannot find name 'ns'.
     
-==== tests/cases/conformance/es2020/modules/2.ts (0 errors) ====
+==== 2.ts (0 errors) ====
     import * as foo from './1'
     
     foo.ns.a;

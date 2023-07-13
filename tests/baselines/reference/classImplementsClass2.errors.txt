@@ -1,15 +1,15 @@
-tests/cases/compiler/classImplementsClass2.ts(2,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+classImplementsClass2.ts(2,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
   Property 'foo' is missing in type 'C' but required in type 'A'.
-tests/cases/compiler/classImplementsClass2.ts(13,1): error TS2741: Property 'foo' is missing in type 'C' but required in type 'C2'.
+classImplementsClass2.ts(13,1): error TS2741: Property 'foo' is missing in type 'C' but required in type 'C2'.
 
 
-==== tests/cases/compiler/classImplementsClass2.ts (2 errors) ====
+==== classImplementsClass2.ts (2 errors) ====
     class A { foo(): number { return 1; } }
     class C implements A {} // error
           ~
 !!! error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
 !!! error TS2720:   Property 'foo' is missing in type 'C' but required in type 'A'.
-!!! related TS2728 tests/cases/compiler/classImplementsClass2.ts:1:11: 'foo' is declared here.
+!!! related TS2728 classImplementsClass2.ts:1:11: 'foo' is declared here.
     
     class C2 extends A {
         foo() {
@@ -23,4 +23,4 @@ tests/cases/compiler/classImplementsClass2.ts(13,1): error TS2741: Property 'foo
     c2 = c;
     ~~
 !!! error TS2741: Property 'foo' is missing in type 'C' but required in type 'C2'.
-!!! related TS2728 tests/cases/compiler/classImplementsClass2.ts:5:5: 'foo' is declared here.
+!!! related TS2728 classImplementsClass2.ts:5:5: 'foo' is declared here.

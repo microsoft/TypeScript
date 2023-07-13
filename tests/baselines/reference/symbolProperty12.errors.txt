@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/Symbols/symbolProperty12.ts(9,1): error TS2322: Type 'C' is not assignable to type 'I'.
+symbolProperty12.ts(9,1): error TS2322: Type 'C' is not assignable to type 'I'.
   Property '[Symbol.iterator]' is private in type 'C' but not in type 'I'.
-tests/cases/conformance/es6/Symbols/symbolProperty12.ts(10,5): error TS2322: Type 'I' is not assignable to type 'C'.
+symbolProperty12.ts(10,5): error TS2322: Type 'I' is not assignable to type 'C'.
   Property '[Symbol.iterator]' is private in type 'C' but not in type 'I'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolProperty12.ts (2 errors) ====
+==== symbolProperty12.ts (2 errors) ====
     class C {
         private [Symbol.iterator]: { x };
     }

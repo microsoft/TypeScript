@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericNewInterface.ts] ////
+
 //// [genericNewInterface.ts]
 function createInstance<T>(ctor: new (s: string) => T): T {
     return new ctor(42); //should be an error

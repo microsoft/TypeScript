@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts] ////
+
 //// [newOperatorErrorCases.ts]
 class C0 {
 

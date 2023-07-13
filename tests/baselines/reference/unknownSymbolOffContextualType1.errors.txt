@@ -1,7 +1,7 @@
-tests/cases/compiler/unknownSymbolOffContextualType1.ts(16,18): error TS2339: Property 'xyxyxyx' does not exist on type 'HTMLElement'.
+unknownSymbolOffContextualType1.ts(16,18): error TS2339: Property 'xyxyxyx' does not exist on type 'HTMLElement'.
 
 
-==== tests/cases/compiler/unknownSymbolOffContextualType1.ts (1 errors) ====
+==== unknownSymbolOffContextualType1.ts (1 errors) ====
     declare var document: Document;
     interface Document {
         getElementById(elementId: string): HTMLElement;

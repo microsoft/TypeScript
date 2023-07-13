@@ -1,8 +1,10 @@
-=== tests/cases/compiler/10_lib.ts ===
+//// [tests/cases/compiler/commonjsSafeImport.ts] ////
+
+=== 10_lib.ts ===
 export function Foo() {}
 >Foo : Symbol(Foo, Decl(10_lib.ts, 0, 0))
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { Foo } from './10_lib';
 >Foo : Symbol(Foo, Decl(main.ts, 0, 8))
 

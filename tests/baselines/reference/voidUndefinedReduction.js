@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidUndefinedReduction.ts] ////
+
 //// [voidUndefinedReduction.ts]
 // Repro from #42786
 

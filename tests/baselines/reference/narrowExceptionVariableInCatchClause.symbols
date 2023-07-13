@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts ===
+//// [tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts] ////
+
+=== narrowExceptionVariableInCatchClause.ts ===
 declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
 >isFooError : Symbol(isFooError, Decl(narrowExceptionVariableInCatchClause.ts, 0, 0))
 >x : Symbol(x, Decl(narrowExceptionVariableInCatchClause.ts, 0, 28))

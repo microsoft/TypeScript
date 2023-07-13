@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultFunctionInNamespace.ts] ////
+
 //// [exportDefaultFunctionInNamespace.ts]
 namespace ns_function {
     export default function () {}

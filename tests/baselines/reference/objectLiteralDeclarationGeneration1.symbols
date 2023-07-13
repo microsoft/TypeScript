@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralDeclarationGeneration1.ts ===
+//// [tests/cases/compiler/objectLiteralDeclarationGeneration1.ts] ////
+
+=== objectLiteralDeclarationGeneration1.ts ===
 class y<T extends {}>{ }
 >y : Symbol(y, Decl(objectLiteralDeclarationGeneration1.ts, 0, 0))
 >T : Symbol(T, Decl(objectLiteralDeclarationGeneration1.ts, 0, 8))

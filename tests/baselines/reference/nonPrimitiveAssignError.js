@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts] ////
+
 //// [nonPrimitiveAssignError.ts]
 var x = {};
 var y = {foo: "bar"};

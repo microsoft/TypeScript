@@ -1,17 +1,17 @@
-tests/cases/conformance/externalModules/foo1.ts(3,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo1.ts(4,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo2.ts(3,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo2.ts(4,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo3.ts(7,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo3.ts(8,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo4.ts(1,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo4.ts(8,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo5.ts(4,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo5.ts(5,10): error TS2300: Duplicate identifier 'export='.
-tests/cases/conformance/externalModules/foo5.ts(6,10): error TS2300: Duplicate identifier 'export='.
+foo1.ts(3,10): error TS2300: Duplicate identifier 'export='.
+foo1.ts(4,10): error TS2300: Duplicate identifier 'export='.
+foo2.ts(3,10): error TS2300: Duplicate identifier 'export='.
+foo2.ts(4,10): error TS2300: Duplicate identifier 'export='.
+foo3.ts(7,10): error TS2300: Duplicate identifier 'export='.
+foo3.ts(8,10): error TS2300: Duplicate identifier 'export='.
+foo4.ts(1,10): error TS2300: Duplicate identifier 'export='.
+foo4.ts(8,10): error TS2300: Duplicate identifier 'export='.
+foo5.ts(4,10): error TS2300: Duplicate identifier 'export='.
+foo5.ts(5,10): error TS2300: Duplicate identifier 'export='.
+foo5.ts(6,10): error TS2300: Duplicate identifier 'export='.
 
 
-==== tests/cases/conformance/externalModules/foo1.ts (2 errors) ====
+==== foo1.ts (2 errors) ====
     var x = 10;
     var y = 20;
     export = x;
@@ -21,7 +21,7 @@ tests/cases/conformance/externalModules/foo5.ts(6,10): error TS2300: Duplicate i
              ~
 !!! error TS2300: Duplicate identifier 'export='.
     
-==== tests/cases/conformance/externalModules/foo2.ts (2 errors) ====
+==== foo2.ts (2 errors) ====
     var x = 10;
     class y {};
     export = x;
@@ -31,7 +31,7 @@ tests/cases/conformance/externalModules/foo5.ts(6,10): error TS2300: Duplicate i
              ~
 !!! error TS2300: Duplicate identifier 'export='.
     
-==== tests/cases/conformance/externalModules/foo3.ts (2 errors) ====
+==== foo3.ts (2 errors) ====
     module x {
     	export var x = 10;
     }
@@ -45,7 +45,7 @@ tests/cases/conformance/externalModules/foo5.ts(6,10): error TS2300: Duplicate i
              ~
 !!! error TS2300: Duplicate identifier 'export='.
     
-==== tests/cases/conformance/externalModules/foo4.ts (2 errors) ====
+==== foo4.ts (2 errors) ====
     export = x;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
@@ -59,7 +59,7 @@ tests/cases/conformance/externalModules/foo5.ts(6,10): error TS2300: Duplicate i
              ~
 !!! error TS2300: Duplicate identifier 'export='.
     
-==== tests/cases/conformance/externalModules/foo5.ts (3 errors) ====
+==== foo5.ts (3 errors) ====
     var x = 5;
     var y = "test";
     var z = {};

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incompatibleTypes.ts] ////
+
 //// [incompatibleTypes.ts]
 interface IFoo1 {
     p1(): number;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertySignatures.ts ===
+//// [tests/cases/compiler/propertySignatures.ts] ////
+
+=== propertySignatures.ts ===
 // Should be error - duplicate identifiers
 var foo1: { a:string; a: string; };
 >foo1 : Symbol(foo1, Decl(propertySignatures.ts, 1, 3))

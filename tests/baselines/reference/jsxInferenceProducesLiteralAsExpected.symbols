@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx ===
+//// [tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx] ////
+
+=== jsxInferenceProducesLiteralAsExpected.tsx ===
 import React = require("react");
 >React : Symbol(React, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 0, 0))
 

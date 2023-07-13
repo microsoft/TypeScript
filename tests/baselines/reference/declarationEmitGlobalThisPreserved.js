@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitGlobalThisPreserved.ts] ////
+
 //// [declarationEmitGlobalThisPreserved.ts]
 // Adding this makes tooltips fail too.
 // declare global {

@@ -1,13 +1,13 @@
-tests/cases/compiler/es6ImportDefaultBindingMergeErrors_1.ts(5,8): error TS2440: Import declaration conflicts with local declaration of 'defaultBinding2'.
-tests/cases/compiler/es6ImportDefaultBindingMergeErrors_1.ts(7,8): error TS2300: Duplicate identifier 'defaultBinding3'.
-tests/cases/compiler/es6ImportDefaultBindingMergeErrors_1.ts(8,8): error TS2300: Duplicate identifier 'defaultBinding3'.
+es6ImportDefaultBindingMergeErrors_1.ts(5,8): error TS2440: Import declaration conflicts with local declaration of 'defaultBinding2'.
+es6ImportDefaultBindingMergeErrors_1.ts(7,8): error TS2300: Duplicate identifier 'defaultBinding3'.
+es6ImportDefaultBindingMergeErrors_1.ts(8,8): error TS2300: Duplicate identifier 'defaultBinding3'.
 
 
-==== tests/cases/compiler/es6ImportDefaultBindingMergeErrors_0.ts (0 errors) ====
+==== es6ImportDefaultBindingMergeErrors_0.ts (0 errors) ====
     var a = 10;
     export default a;
     
-==== tests/cases/compiler/es6ImportDefaultBindingMergeErrors_1.ts (3 errors) ====
+==== es6ImportDefaultBindingMergeErrors_1.ts (3 errors) ====
     import defaultBinding from "./es6ImportDefaultBindingMergeErrors_0";
     interface defaultBinding { // This is ok
     }

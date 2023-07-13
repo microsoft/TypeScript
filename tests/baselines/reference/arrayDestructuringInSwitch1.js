@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayDestructuringInSwitch1.ts] ////
+
 //// [arrayDestructuringInSwitch1.ts]
 export type Expression = BooleanLogicExpression | 'true' | 'false';
 export type BooleanLogicExpression = ['and', ...Expression[]] | ['not', Expression];

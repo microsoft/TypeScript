@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferringAnyFunctionType1.ts] ////
+
 //// [inferringAnyFunctionType1.ts]
 function f<T extends { "0": (p1: number) => number }>(p: T): T {
     return p;

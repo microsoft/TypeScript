@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noSelfOnVars.ts] ////
+
 //// [noSelfOnVars.ts]
 function foo() {
     function bar() { }

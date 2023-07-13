@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOnPropertyOfObjectLiteral1.ts] ////
+
 //// [commentsOnPropertyOfObjectLiteral1.ts]
 var resolve = {
     id: /*! @ngInject */ (details: any) => details.id,

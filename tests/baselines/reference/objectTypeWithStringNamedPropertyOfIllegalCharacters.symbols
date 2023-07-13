@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/objectTypeWithStringNamedPropertyOfIllegalCharacters.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithStringNamedPropertyOfIllegalCharacters.ts] ////
+
+=== objectTypeWithStringNamedPropertyOfIllegalCharacters.ts ===
 class C {
 >C : Symbol(C, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 0, 0))
 

@@ -43,16 +43,16 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/user/username/projects/san2/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/san2/jsconfig.json: *new*
-  {"pollingInterval":2000}
 /a/lib/lib.es2016.full.d.ts: *new*
-  {"pollingInterval":500}
-/user/username/projects/san2/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/san2/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/san2/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/san2/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 TI:: [hh:mm:ss:mss] Global cache location '/users/username/Library/Caches/typescript/2.7', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/users/username/Library/Caches/typescript/2.7'

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lambdaParamTypes.ts] ////
+
 //// [lambdaParamTypes.ts]
 interface MyArrayWrapper<T> {
     constructor(initialItems?: T[]);

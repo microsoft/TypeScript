@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/mod2.js ===
+//// [tests/cases/conformance/jsdoc/typedefCrossModule3.ts] ////
+
+=== mod2.js ===
 /** @typedef {number} Foo */
 const ns = {};
 >ns : Symbol(ns, Decl(mod2.js, 1, 5), Decl(mod2.js, 1, 14))

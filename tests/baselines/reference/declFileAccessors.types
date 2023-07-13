@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileAccessors_0.ts ===
+//// [tests/cases/compiler/declFileAccessors.ts] ////
+
+=== declFileAccessors_0.ts ===
 /** This is comment for c1*/
 export class c1 {
 >c1 : c1
@@ -85,7 +87,7 @@ export class c1 {
     }
 }
 
-=== tests/cases/compiler/declFileAccessors_1.ts ===
+=== declFileAccessors_1.ts ===
 /** This is comment for c2 - the global class*/
 class c2 {
 >c2 : c2

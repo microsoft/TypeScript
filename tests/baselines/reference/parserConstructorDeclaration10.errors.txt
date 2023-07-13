@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration10.ts(2,18): error TS1093: Type annotation cannot appear on a constructor declaration.
+parserConstructorDeclaration10.ts(2,18): error TS1093: Type annotation cannot appear on a constructor declaration.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration10.ts (1 errors) ====
+==== parserConstructorDeclaration10.ts (1 errors) ====
     class C {
       constructor(): number { }
                      ~~~~~~

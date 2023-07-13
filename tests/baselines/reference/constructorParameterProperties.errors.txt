@@ -1,11 +1,11 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(8,12): error TS2341: Property 'x' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(9,12): error TS2445: Property 'z' is protected and only accessible within class 'C' and its subclasses.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(18,12): error TS2341: Property 'x' is private and only accessible within class 'D<T>'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(19,12): error TS2339: Property 'a' does not exist on type 'D<string>'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts(20,12): error TS2445: Property 'z' is protected and only accessible within class 'D<T>' and its subclasses.
+constructorParameterProperties.ts(8,12): error TS2341: Property 'x' is private and only accessible within class 'C'.
+constructorParameterProperties.ts(9,12): error TS2445: Property 'z' is protected and only accessible within class 'C' and its subclasses.
+constructorParameterProperties.ts(18,12): error TS2341: Property 'x' is private and only accessible within class 'D<T>'.
+constructorParameterProperties.ts(19,12): error TS2339: Property 'a' does not exist on type 'D<string>'.
+constructorParameterProperties.ts(20,12): error TS2445: Property 'z' is protected and only accessible within class 'D<T>' and its subclasses.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts (5 errors) ====
+==== constructorParameterProperties.ts (5 errors) ====
     class C {
         y: string;
         constructor(private x: string, protected z: string) { }

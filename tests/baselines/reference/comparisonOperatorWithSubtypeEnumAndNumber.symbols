@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeEnumAndNumber.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeEnumAndNumber.ts] ////
+
+=== comparisonOperatorWithSubtypeEnumAndNumber.ts ===
 enum E { a, b, c }
 >E : Symbol(E, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 0))
 >a : Symbol(E.a, Decl(comparisonOperatorWithSubtypeEnumAndNumber.ts, 0, 8))

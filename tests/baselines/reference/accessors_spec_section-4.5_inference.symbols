@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessors_spec_section-4.5_inference.ts ===
+//// [tests/cases/compiler/accessors_spec_section-4.5_inference.ts] ////
+
+=== accessors_spec_section-4.5_inference.ts ===
 class A { }
 >A : Symbol(A, Decl(accessors_spec_section-4.5_inference.ts, 0, 0))
 

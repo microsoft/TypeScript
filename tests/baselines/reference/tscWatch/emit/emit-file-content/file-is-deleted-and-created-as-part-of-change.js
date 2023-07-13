@@ -49,11 +49,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/username/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /home/username/project/app/file.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/home/username/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

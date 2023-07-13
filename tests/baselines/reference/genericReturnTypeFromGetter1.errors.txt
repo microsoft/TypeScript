@@ -1,7 +1,7 @@
-tests/cases/compiler/genericReturnTypeFromGetter1.ts(5,18): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+genericReturnTypeFromGetter1.ts(5,18): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/genericReturnTypeFromGetter1.ts (1 errors) ====
+==== genericReturnTypeFromGetter1.ts (1 errors) ====
     export interface A<T> {
        new (dbSet: DbSet<T>): T;
     }

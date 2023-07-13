@@ -1,8 +1,8 @@
-tests/cases/conformance/types/spread/spreadDuplicateExact.ts(10,12): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
-tests/cases/conformance/types/spread/spreadDuplicateExact.ts(12,12): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+spreadDuplicateExact.ts(10,12): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+spreadDuplicateExact.ts(12,12): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
 
 
-==== tests/cases/conformance/types/spread/spreadDuplicateExact.ts (2 errors) ====
+==== spreadDuplicateExact.ts (2 errors) ====
     // Repro from #44438
     
     declare let a: { a: string };
@@ -15,12 +15,12 @@ tests/cases/conformance/types/spread/spreadDuplicateExact.ts(12,12): error TS278
     let a1 = { a: 123, ...a };  // string (Error)
                ~~~~~~
 !!! error TS2783: 'a' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/spreadDuplicateExact.ts:10:20: This spread always overwrites this property.
+!!! related TS2785 spreadDuplicateExact.ts:10:20: This spread always overwrites this property.
     let b1 = { a: 123, ...b };  // string | number
     let c1 = { a: 123, ...c };  // string | undefined (Error)
                ~~~~~~
 !!! error TS2783: 'a' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/spreadDuplicateExact.ts:12:20: This spread always overwrites this property.
+!!! related TS2785 spreadDuplicateExact.ts:12:20: This spread always overwrites this property.
     let d1 = { a: 123, ...d };  // string | number | undefined
     
     let a2 = { a: 123, ...(t ? a : {}) };  // string | number

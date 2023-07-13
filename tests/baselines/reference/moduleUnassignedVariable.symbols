@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleUnassignedVariable.ts ===
+//// [tests/cases/compiler/moduleUnassignedVariable.ts] ////
+
+=== moduleUnassignedVariable.ts ===
 module Bar {
 >Bar : Symbol(Bar, Decl(moduleUnassignedVariable.ts, 0, 0))
 

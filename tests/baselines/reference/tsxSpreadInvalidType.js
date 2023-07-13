@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadInvalidType.tsx] ////
+
 //// [a.tsx]
 namespace JSX {
     export interface IntrinsicElements { [key: string]: any }

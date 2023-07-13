@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importNotElidedWhenNotFound.ts] ////
+
 //// [importNotElidedWhenNotFound.ts]
 import X from 'file';
 import Z from 'other_file';

@@ -283,3 +283,22 @@ const obj = {
 if (a) { }
 
 const a = obj.fn();
+
+// repro from https://github.com/microsoft/TypeScript/issues/53267
+class Utils {
+  static isDefined<T>(value: T): value is NonNullable<T> {
+    return value != null;
+  }
+}
+
+class A53267 {
+  public readonly testNumber: number | undefined;
+
+  foo() {
+    const isNumber = Utils.isDefined(this.testNumber);
+
+    if (isNumber) {
+      const x: number = this.testNumber;
+    }
+  }
+}

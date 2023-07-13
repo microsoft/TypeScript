@@ -1,7 +1,7 @@
-tests/cases/conformance/statements/withStatements/withStatements.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+withStatements.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== tests/cases/conformance/statements/withStatements/withStatements.ts (1 errors) ====
+==== withStatements.ts (1 errors) ====
     var x = 12;
     with (x) {
     ~~~~~~~~

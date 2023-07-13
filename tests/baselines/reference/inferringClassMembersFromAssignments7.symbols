@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments7.js ===
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments7.ts] ////
+
+=== inferringClassMembersFromAssignments7.js ===
 class C {
 >C : Symbol(C, Decl(inferringClassMembersFromAssignments7.js, 0, 0))
 

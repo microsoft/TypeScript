@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts] ////
+
 //// [stringNamedPropertyDuplicates.ts]
 class C {
     "a b": number;

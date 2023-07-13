@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveProperties.ts ===
+//// [tests/cases/compiler/recursiveProperties.ts] ////
+
+=== recursiveProperties.ts ===
 class A {
 >A : Symbol(A, Decl(recursiveProperties.ts, 0, 0))
 

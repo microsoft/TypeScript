@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringAssignmentWithStrictNullChecks.ts ===
+//// [tests/cases/compiler/destructuringAssignmentWithStrictNullChecks.ts] ////
+
+=== destructuringAssignmentWithStrictNullChecks.ts ===
 let bar: {};
 >bar : Symbol(bar, Decl(destructuringAssignmentWithStrictNullChecks.ts, 0, 3))
 

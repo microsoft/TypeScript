@@ -1,12 +1,12 @@
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(1,11): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(5,11): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(10,15): error TS2428: All declarations of 'B' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(14,15): error TS2428: All declarations of 'B' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(32,22): error TS2428: All declarations of 'A' must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts(38,22): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithDifferentConstraints.ts(1,11): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithDifferentConstraints.ts(5,11): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithDifferentConstraints.ts(10,15): error TS2428: All declarations of 'B' must have identical type parameters.
+twoGenericInterfacesWithDifferentConstraints.ts(14,15): error TS2428: All declarations of 'B' must have identical type parameters.
+twoGenericInterfacesWithDifferentConstraints.ts(32,22): error TS2428: All declarations of 'A' must have identical type parameters.
+twoGenericInterfacesWithDifferentConstraints.ts(38,22): error TS2428: All declarations of 'A' must have identical type parameters.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithDifferentConstraints.ts (6 errors) ====
+==== twoGenericInterfacesWithDifferentConstraints.ts (6 errors) ====
     interface A<T extends Date> {
               ~
 !!! error TS2428: All declarations of 'A' must have identical type parameters.

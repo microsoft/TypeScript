@@ -1,10 +1,10 @@
-tests/cases/compiler/thisInFunctionCall.ts(10,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/compiler/thisInFunctionCall.ts(16,25): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/compiler/thisInFunctionCall.ts(24,25): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/compiler/thisInFunctionCall.ts(32,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInFunctionCall.ts(10,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInFunctionCall.ts(16,25): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInFunctionCall.ts(24,25): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInFunctionCall.ts(32,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== tests/cases/compiler/thisInFunctionCall.ts (4 errors) ====
+==== thisInFunctionCall.ts (4 errors) ====
     class Test {
       data: number[]
     
@@ -17,7 +17,7 @@ tests/cases/compiler/thisInFunctionCall.ts(32,20): error TS2683: 'this' implicit
           return d === this.data.length
                        ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-!!! related TS2738 tests/cases/compiler/thisInFunctionCall.ts:9:20: An outer value of 'this' is shadowed by this container.
+!!! related TS2738 thisInFunctionCall.ts:9:20: An outer value of 'this' is shadowed by this container.
         })
       }
     
@@ -26,7 +26,7 @@ tests/cases/compiler/thisInFunctionCall.ts(32,20): error TS2683: 'this' implicit
           console.log(d === this.data.length)
                             ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-!!! related TS2738 tests/cases/compiler/thisInFunctionCall.ts:15:23: An outer value of 'this' is shadowed by this container.
+!!! related TS2738 thisInFunctionCall.ts:15:23: An outer value of 'this' is shadowed by this container.
         })
       }
     
@@ -37,7 +37,7 @@ tests/cases/compiler/thisInFunctionCall.ts(32,20): error TS2683: 'this' implicit
           console.log(d === this.data.length)
                             ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-!!! related TS2738 tests/cases/compiler/thisInFunctionCall.ts:23:5: An outer value of 'this' is shadowed by this container.
+!!! related TS2738 thisInFunctionCall.ts:23:5: An outer value of 'this' is shadowed by this container.
         }, this)
       }
     
@@ -48,7 +48,7 @@ tests/cases/compiler/thisInFunctionCall.ts(32,20): error TS2683: 'this' implicit
           return d === this.data.length
                        ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-!!! related TS2738 tests/cases/compiler/thisInFunctionCall.ts:31:5: An outer value of 'this' is shadowed by this container.
+!!! related TS2738 thisInFunctionCall.ts:31:5: An outer value of 'this' is shadowed by this container.
         }, this)
       }
     }

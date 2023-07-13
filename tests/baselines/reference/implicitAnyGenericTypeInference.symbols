@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyGenericTypeInference.ts ===
+//// [tests/cases/compiler/implicitAnyGenericTypeInference.ts] ////
+
+=== implicitAnyGenericTypeInference.ts ===
 interface Comparer<T> {
 >Comparer : Symbol(Comparer, Decl(implicitAnyGenericTypeInference.ts, 0, 0))
 >T : Symbol(T, Decl(implicitAnyGenericTypeInference.ts, 0, 19))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/withExportDecl.ts] ////
+
 //// [withExportDecl.ts]
 var simpleVar;
 export var exportedSimpleVar;
@@ -122,10 +124,10 @@ export declare function exportedFunction(): {
     y: string;
     n: number;
 };
-export declare module m2 {
+export declare namespace m2 {
     var a: number;
 }
-export declare module m3 {
+export declare namespace m3 {
     function foo(): string;
 }
 export declare var eVar1: any, eVar2: number;

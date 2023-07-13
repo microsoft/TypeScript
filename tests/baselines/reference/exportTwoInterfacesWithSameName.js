@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportTwoInterfacesWithSameName.ts] ////
+
 //// [exportTwoInterfacesWithSameName.ts]
 export interface I {}
 export interface I {}

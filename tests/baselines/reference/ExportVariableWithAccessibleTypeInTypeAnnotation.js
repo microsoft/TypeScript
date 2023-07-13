@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithAccessibleTypeInTypeAnnotation.ts] ////
+
 //// [ExportVariableWithAccessibleTypeInTypeAnnotation.ts]
 module A {
 

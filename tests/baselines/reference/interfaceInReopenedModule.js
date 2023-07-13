@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceInReopenedModule.ts] ////
+
 //// [interfaceInReopenedModule.ts]
 module m {
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithSpecializedCallAndConstructSignatures.ts] ////
+
 //// [interfaceWithSpecializedCallAndConstructSignatures.ts]
 interface Foo {
     (x: 'a'): number;

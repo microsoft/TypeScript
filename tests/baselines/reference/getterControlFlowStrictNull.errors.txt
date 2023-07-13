@@ -1,9 +1,9 @@
-tests/cases/compiler/getterControlFlowStrictNull.ts(2,9): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-tests/cases/compiler/getterControlFlowStrictNull.ts(11,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-tests/cases/compiler/getterControlFlowStrictNull.ts(20,9): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+getterControlFlowStrictNull.ts(2,9): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+getterControlFlowStrictNull.ts(11,14): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+getterControlFlowStrictNull.ts(20,9): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 
 
-==== tests/cases/compiler/getterControlFlowStrictNull.ts (3 errors) ====
+==== getterControlFlowStrictNull.ts (3 errors) ====
     class A {
        a(): string | null {
             ~~~~~~~~~~~~~

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionsWithOptionalParameters3.ts ===
+//// [tests/cases/compiler/genericFunctionsWithOptionalParameters3.ts] ////
+
+=== genericFunctionsWithOptionalParameters3.ts ===
 class Collection<T> {
 >Collection : Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
 >T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 17))

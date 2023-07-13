@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/typesWithProtectedConstructor.ts] ////
+
 //// [typesWithProtectedConstructor.ts]
 class C {
     protected constructor() { }

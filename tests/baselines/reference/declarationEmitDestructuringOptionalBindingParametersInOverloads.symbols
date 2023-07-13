@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringOptionalBindingParametersInOverloads.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringOptionalBindingParametersInOverloads.ts] ////
+
+=== declarationEmitDestructuringOptionalBindingParametersInOverloads.ts ===
 function foo([x, y, z] ?: [string, number, boolean]);
 >foo : Symbol(foo, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 0, 0), Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 0, 53))
 >x : Symbol(x, Decl(declarationEmitDestructuringOptionalBindingParametersInOverloads.ts, 0, 14))

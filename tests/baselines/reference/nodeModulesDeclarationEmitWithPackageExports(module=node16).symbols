@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesDeclarationEmitWithPackageExports.ts] ////
+
+=== index.ts ===
 // esm format file
 import * as cjs from "package/cjs";
 >cjs : Symbol(cjs, Decl(index.ts, 1, 6))
@@ -42,7 +44,7 @@ export const f = typei;
 >f : Symbol(type.f, Decl(index.ts, 12, 12))
 >typei : Symbol(typei, Decl(index.ts, 9, 6))
 
-=== tests/cases/conformance/node/index.mts ===
+=== index.mts ===
 // esm format file
 import * as cjs from "package/cjs";
 >cjs : Symbol(cjs, Decl(index.mts, 1, 6))
@@ -86,7 +88,7 @@ export const f = typei;
 >f : Symbol(mjs.f, Decl(index.mts, 12, 12))
 >typei : Symbol(typei, Decl(index.mts, 9, 6))
 
-=== tests/cases/conformance/node/index.cts ===
+=== index.cts ===
 // cjs format file
 import * as cjs from "package/cjs";
 >cjs : Symbol(cjs, Decl(index.cts, 1, 6))
@@ -130,7 +132,7 @@ export const f = typei;
 >f : Symbol(cjs.f, Decl(index.cts, 12, 12))
 >typei : Symbol(typei, Decl(index.cts, 9, 6))
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 // cjs format file
 import * as cjs from "inner/cjs";
 >cjs : Symbol(cjs, Decl(index.d.ts, 1, 6))
@@ -153,7 +155,7 @@ type;
 export const cjsMain = true;
 >cjsMain : Symbol(type.cjsMain, Decl(index.d.ts, 7, 12))
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.mts ===
+=== node_modules/inner/index.d.mts ===
 // esm format file
 import * as cjs from "inner/cjs";
 >cjs : Symbol(cjs, Decl(index.d.mts, 1, 6))
@@ -176,7 +178,7 @@ type;
 export const esm = true;
 >esm : Symbol(mjs.esm, Decl(index.d.mts, 7, 12))
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.cts ===
+=== node_modules/inner/index.d.cts ===
 // cjs format file
 import * as cjs from "inner/cjs";
 >cjs : Symbol(cjs, Decl(index.d.cts, 1, 6))

@@ -60,11 +60,11 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer1.ts (used version)
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/file1consumer1.ts: *new*
   {}
 /a/b/modulefile1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

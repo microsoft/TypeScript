@@ -1,8 +1,8 @@
-tests/cases/compiler/importAndVariableDeclarationConflict3.ts(5,8): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/importAndVariableDeclarationConflict3.ts(6,8): error TS2300: Duplicate identifier 'x'.
+importAndVariableDeclarationConflict3.ts(5,8): error TS2300: Duplicate identifier 'x'.
+importAndVariableDeclarationConflict3.ts(6,8): error TS2300: Duplicate identifier 'x'.
 
 
-==== tests/cases/compiler/importAndVariableDeclarationConflict3.ts (2 errors) ====
+==== importAndVariableDeclarationConflict3.ts (2 errors) ====
     module m {
       export var m = '';
     }

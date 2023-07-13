@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationInterfaceSyntax.ts] ////
+
+=== a.js ===
 interface I { }
 >I : Symbol(I, Decl(a.js, 0, 0))
 

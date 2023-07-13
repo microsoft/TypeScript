@@ -1,15 +1,15 @@
-tests/cases/compiler/main.mts(1,8): error TS1192: Module '"tests/cases/compiler/other"' has no default export.
-tests/cases/compiler/other.d.mts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+main.mts(1,8): error TS1192: Module '"other"' has no default export.
+other.d.mts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== tests/cases/compiler/other.d.mts (1 errors) ====
+==== other.d.mts (1 errors) ====
     declare function example(): 5;
     export = example;
     ~~~~~~~~~~~~~~~~~
 !!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== tests/cases/compiler/main.mts (1 errors) ====
+==== main.mts (1 errors) ====
     import example from "./other.mjs";
            ~~~~~~~
-!!! error TS1192: Module '"tests/cases/compiler/other"' has no default export.
+!!! error TS1192: Module '"other"' has no default export.
     example();

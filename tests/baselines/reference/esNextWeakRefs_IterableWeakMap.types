@@ -1,4 +1,6 @@
-=== tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts ===
+//// [tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts] ////
+
+=== esNextWeakRefs_IterableWeakMap.ts ===
 /** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }: {
 >IterableWeakMap_cleanup : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
@@ -127,10 +129,10 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
             this.#finalizationGroup.register(key, {
 >this.#finalizationGroup.register(key, {                set: this.#refSet,                ref,            }, ref) : void
->this.#finalizationGroup.register : (target: object, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: object | undefined) => void
+>this.#finalizationGroup.register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey | undefined) => void
 >this.#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
 >this : this
->register : (target: object, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: object | undefined) => void
+>register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey | undefined) => void
 >key : K
 >{                set: this.#refSet,                ref,            } : { set: Set<WeakRef<K>>; ref: WeakRef<K>; }
 
@@ -221,10 +223,10 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
         this.#finalizationGroup.unregister(ref);
 >this.#finalizationGroup.unregister(ref) : void
->this.#finalizationGroup.unregister : (unregisterToken: object) => void
+>this.#finalizationGroup.unregister : (unregisterToken: WeakKey) => void
 >this.#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
 >this : this
->unregister : (unregisterToken: object) => void
+>unregister : (unregisterToken: WeakKey) => void
 >ref : WeakRef<K>
 
         return true;

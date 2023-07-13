@@ -1,4 +1,6 @@
-=== tests/cases/compiler/DateTimeFormatAndNumberFormatES2021.ts ===
+//// [tests/cases/compiler/DateTimeFormatAndNumberFormatES2021.ts] ////
+
+=== DateTimeFormatAndNumberFormatES2021.ts ===
 Intl.NumberFormat.prototype.formatRange
 >Intl.NumberFormat.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))

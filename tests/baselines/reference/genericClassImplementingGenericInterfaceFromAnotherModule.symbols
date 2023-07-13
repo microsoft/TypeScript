@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericClassImplementingGenericInterfaceFromAnotherModule.ts ===
+//// [tests/cases/compiler/genericClassImplementingGenericInterfaceFromAnotherModule.ts] ////
+
+=== genericClassImplementingGenericInterfaceFromAnotherModule.ts ===
 module foo {
 >foo : Symbol(foo, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 0, 0))
 

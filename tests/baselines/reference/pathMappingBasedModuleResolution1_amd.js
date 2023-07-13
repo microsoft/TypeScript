@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution1_amd.ts] ////
+
 //// [f1.ts]
 export var x = 1;
 

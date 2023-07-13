@@ -1,12 +1,12 @@
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers9.ts(6,48): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers9.ts(7,56): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers9.ts(8,44): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers9.ts(11,20): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers9.ts(14,17): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers9.ts(16,24): error TS2335: 'super' can only be referenced in a derived class.
+typeOfThisInStaticMembers9.ts(6,48): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+typeOfThisInStaticMembers9.ts(7,56): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+typeOfThisInStaticMembers9.ts(8,44): error TS2335: 'super' can only be referenced in a derived class.
+typeOfThisInStaticMembers9.ts(11,20): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+typeOfThisInStaticMembers9.ts(14,17): error TS2335: 'super' can only be referenced in a derived class.
+typeOfThisInStaticMembers9.ts(16,24): error TS2335: 'super' can only be referenced in a derived class.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers9.ts (6 errors) ====
+==== typeOfThisInStaticMembers9.ts (6 errors) ====
     class C {
         static f = 1
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts] ////
+
 //// [noUncheckedIndexedAccessDestructuring.ts]
 declare const strArray: string[];
 declare const strStrTuple: [string, string];

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sliceResultCast.ts] ////
+
 //// [sliceResultCast.ts]
 declare var x: [number, string] | [number, string, string];
 

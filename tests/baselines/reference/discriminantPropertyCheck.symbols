@@ -1,4 +1,6 @@
-=== tests/cases/compiler/discriminantPropertyCheck.ts ===
+//// [tests/cases/compiler/discriminantPropertyCheck.ts] ////
+
+=== discriminantPropertyCheck.ts ===
 type Item = Item1 | Item2;
 >Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
 >Item1 : Symbol(Item1, Decl(discriminantPropertyCheck.ts, 4, 1))

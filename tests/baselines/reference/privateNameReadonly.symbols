@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameReadonly.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameReadonly.ts] ////
+
+=== privateNameReadonly.ts ===
 const C = class {
 >C : Symbol(C, Decl(privateNameReadonly.ts, 0, 5))
 

@@ -1,8 +1,8 @@
-tests/cases/compiler/implementsIncorrectlyNoAssertion.ts(9,5): error TS2416: Property 'x' in type 'Baz' is not assignable to the same property in base type 'Foo & Bar'.
+implementsIncorrectlyNoAssertion.ts(9,5): error TS2416: Property 'x' in type 'Baz' is not assignable to the same property in base type 'Foo & Bar'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/implementsIncorrectlyNoAssertion.ts (1 errors) ====
+==== implementsIncorrectlyNoAssertion.ts (1 errors) ====
     declare class Foo {
         x: string;
     }

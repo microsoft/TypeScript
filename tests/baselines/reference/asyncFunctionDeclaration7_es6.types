@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration7_es6.ts ===
+//// [tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration7_es6.ts] ////
+
+=== asyncFunctionDeclaration7_es6.ts ===
 async function bar(): Promise<void> {
 >bar : () => Promise<void>
 

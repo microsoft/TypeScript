@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/moduleExportsSystem/topLevelVarHoistingSystem.ts] ////
+
 //// [topLevelVarHoistingSystem.ts]
 if (false) {
     var y = 1;

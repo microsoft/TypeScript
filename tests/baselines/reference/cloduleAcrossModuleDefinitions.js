@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleAcrossModuleDefinitions.ts] ////
+
 //// [cloduleAcrossModuleDefinitions.ts]
 module A {
     export class B {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useStrictLikePrologueString01.ts] ////
+
 //// [useStrictLikePrologueString01.ts]
 "hey!"
 " use strict "

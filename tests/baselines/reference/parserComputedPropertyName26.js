@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName26.ts] ////
+
 //// [parserComputedPropertyName26.ts]
 enum E {
     // No ASI

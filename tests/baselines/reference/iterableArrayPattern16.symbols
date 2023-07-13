@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts] ////
+
+=== iterableArrayPattern16.ts ===
 function fun(...[a, b]: [Bar, Bar][]) { }
 >fun : Symbol(fun, Decl(iterableArrayPattern16.ts, 0, 0))
 >a : Symbol(a, Decl(iterableArrayPattern16.ts, 0, 17))

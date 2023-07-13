@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypesClass4.ts ===
+//// [tests/cases/compiler/augmentedTypesClass4.ts] ////
+
+=== augmentedTypesClass4.ts ===
 //// class then class
 class c3 { public foo() { } } // error
 >c3 : Symbol(c3, Decl(augmentedTypesClass4.ts, 0, 0))

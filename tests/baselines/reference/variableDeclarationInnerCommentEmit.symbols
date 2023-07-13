@@ -1,4 +1,6 @@
-=== tests/cases/compiler/variableDeclarationInnerCommentEmit.ts ===
+//// [tests/cases/compiler/variableDeclarationInnerCommentEmit.ts] ////
+
+=== variableDeclarationInnerCommentEmit.ts ===
 var a = /*some comment*/ null;
 >a : Symbol(a, Decl(variableDeclarationInnerCommentEmit.ts, 0, 3), Decl(variableDeclarationInnerCommentEmit.ts, 5, 3))
 

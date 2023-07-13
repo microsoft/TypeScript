@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionInConstructorArgument1.ts] ////
+
 //// [arrowFunctionInConstructorArgument1.ts]
 class C {
     constructor(x: () => void) { }

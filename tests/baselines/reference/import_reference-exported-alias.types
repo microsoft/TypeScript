@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/import_reference-exported-alias.ts] ////
+
+=== file2.ts ===
 import appJs = require("file1");
 >appJs : typeof appJs
 
@@ -20,7 +22,7 @@ var x = new UserServices().getUserName();
 >UserServices : typeof Services.UserServices
 >getUserName : () => string
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 module App {
 >App : typeof App
 

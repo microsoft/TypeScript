@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyNewExprLackConstructorSignature.ts ===
+//// [tests/cases/compiler/implicitAnyNewExprLackConstructorSignature.ts] ////
+
+=== implicitAnyNewExprLackConstructorSignature.ts ===
 function Point() { this.x = 3; }
 >Point : Symbol(Point, Decl(implicitAnyNewExprLackConstructorSignature.ts, 0, 0))
 

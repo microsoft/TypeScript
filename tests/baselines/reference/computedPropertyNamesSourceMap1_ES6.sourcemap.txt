@@ -5,7 +5,7 @@ sourceRoot:
 sources: computedPropertyNamesSourceMap1_ES6.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap1_ES6.js
+emittedFile:computedPropertyNamesSourceMap1_ES6.js
 sourceFile:computedPropertyNamesSourceMap1_ES6.ts
 -------------------------------------------------------------------
 >>>class C {

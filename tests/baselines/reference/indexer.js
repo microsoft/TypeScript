@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexer.ts] ////
+
 //// [indexer.ts]
 interface JQueryElement {
     id:string;

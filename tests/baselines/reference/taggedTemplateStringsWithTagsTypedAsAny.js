@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts] ////
+
 //// [taggedTemplateStringsWithTagsTypedAsAny.ts]
 var f: any;
 

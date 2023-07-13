@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts ===
+//// [tests/cases/compiler/exhaustiveSwitchImplicitReturn.ts] ////
+
+=== exhaustiveSwitchImplicitReturn.ts ===
 function foo1(bar: "a"): number {
 >foo1 : (bar: "a") => number
 >bar : "a"

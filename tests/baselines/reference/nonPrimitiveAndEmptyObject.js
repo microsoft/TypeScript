@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndEmptyObject.ts] ////
+
 //// [nonPrimitiveAndEmptyObject.ts]
 // Repro from #49480
 

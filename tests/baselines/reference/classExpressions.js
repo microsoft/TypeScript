@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExpressions.ts] ////
+
 //// [classExpressions.ts]
 interface A {}
 let x = class B implements A {

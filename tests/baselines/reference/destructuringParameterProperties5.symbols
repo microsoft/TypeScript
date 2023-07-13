@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts] ////
+
+=== destructuringParameterProperties5.ts ===
 type ObjType1 = { x: number; y: string; z: boolean }
 >ObjType1 : Symbol(ObjType1, Decl(destructuringParameterProperties5.ts, 0, 0))
 >x : Symbol(x, Decl(destructuringParameterProperties5.ts, 0, 17))

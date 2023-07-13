@@ -1,26 +1,26 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(22,7): error TS2415: Class 'Derived1' incorrectly extends base class 'Base'.
+derivedClassOverridesProtectedMembers3.ts(22,7): error TS2415: Class 'Derived1' incorrectly extends base class 'Base'.
   Property 'a' is protected in type 'Derived1' but public in type 'Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(27,7): error TS2415: Class 'Derived2' incorrectly extends base class 'Base'.
+derivedClassOverridesProtectedMembers3.ts(27,7): error TS2415: Class 'Derived2' incorrectly extends base class 'Base'.
   Property 'b' is protected in type 'Derived2' but public in type 'Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(32,7): error TS2415: Class 'Derived3' incorrectly extends base class 'Base'.
+derivedClassOverridesProtectedMembers3.ts(32,7): error TS2415: Class 'Derived3' incorrectly extends base class 'Base'.
   Property 'c' is protected in type 'Derived3' but public in type 'Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(37,7): error TS2415: Class 'Derived4' incorrectly extends base class 'Base'.
+derivedClassOverridesProtectedMembers3.ts(37,7): error TS2415: Class 'Derived4' incorrectly extends base class 'Base'.
   Property 'c' is protected in type 'Derived4' but public in type 'Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(42,7): error TS2415: Class 'Derived5' incorrectly extends base class 'Base'.
+derivedClassOverridesProtectedMembers3.ts(42,7): error TS2415: Class 'Derived5' incorrectly extends base class 'Base'.
   Property 'd' is protected in type 'Derived5' but public in type 'Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(47,7): error TS2417: Class static side 'typeof Derived6' incorrectly extends base class static side 'typeof Base'.
+derivedClassOverridesProtectedMembers3.ts(47,7): error TS2417: Class static side 'typeof Derived6' incorrectly extends base class static side 'typeof Base'.
   Property 'r' is protected in type 'typeof Derived6' but public in type 'typeof Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(52,7): error TS2417: Class static side 'typeof Derived7' incorrectly extends base class static side 'typeof Base'.
+derivedClassOverridesProtectedMembers3.ts(52,7): error TS2417: Class static side 'typeof Derived7' incorrectly extends base class static side 'typeof Base'.
   Property 's' is protected in type 'typeof Derived7' but public in type 'typeof Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(57,7): error TS2417: Class static side 'typeof Derived8' incorrectly extends base class static side 'typeof Base'.
+derivedClassOverridesProtectedMembers3.ts(57,7): error TS2417: Class static side 'typeof Derived8' incorrectly extends base class static side 'typeof Base'.
   Property 't' is protected in type 'typeof Derived8' but public in type 'typeof Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(62,7): error TS2417: Class static side 'typeof Derived9' incorrectly extends base class static side 'typeof Base'.
+derivedClassOverridesProtectedMembers3.ts(62,7): error TS2417: Class static side 'typeof Derived9' incorrectly extends base class static side 'typeof Base'.
   Property 't' is protected in type 'typeof Derived9' but public in type 'typeof Base'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side 'typeof Derived10' incorrectly extends base class static side 'typeof Base'.
+derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side 'typeof Derived10' incorrectly extends base class static side 'typeof Base'.
   Property 'u' is protected in type 'typeof Derived10' but public in type 'typeof Base'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts (10 errors) ====
+==== derivedClassOverridesProtectedMembers3.ts (10 errors) ====
     var x: { foo: string; }
     var y: { foo: string; bar: string; }
     

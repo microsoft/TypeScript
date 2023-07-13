@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts ===
+//// [tests/cases/compiler/declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts] ////
+
+=== declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.ts ===
 const _data = Symbol('data');
 >_data : unique symbol
 >Symbol('data') : unique symbol

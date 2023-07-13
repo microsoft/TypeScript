@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/b.js ===
+//// [tests/cases/conformance/jsdoc/jsdocImportTypeReferenceToStringLiteral.ts] ////
+
+=== b.js ===
 export const FOO = "foo";
 >FOO : Symbol(FOO, Decl(b.js, 0, 12))
 
-=== tests/cases/conformance/jsdoc/a.js ===
+=== a.js ===
 /** @type {import('./b').FOO} */
 let x;
 >x : Symbol(x, Decl(a.js, 1, 3))

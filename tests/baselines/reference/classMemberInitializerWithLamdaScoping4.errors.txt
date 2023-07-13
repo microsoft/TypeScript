@@ -1,10 +1,10 @@
-tests/cases/compiler/classMemberInitializerWithLamdaScoping3_1.ts(8,21): error TS2663: Cannot find name 'field1'. Did you mean the instance member 'this.field1'?
+classMemberInitializerWithLamdaScoping3_1.ts(8,21): error TS2663: Cannot find name 'field1'. Did you mean the instance member 'this.field1'?
 
 
-==== tests/cases/compiler/classMemberInitializerWithLamdaScoping3_0.ts (0 errors) ====
+==== classMemberInitializerWithLamdaScoping3_0.ts (0 errors) ====
     export var field1: string;
     
-==== tests/cases/compiler/classMemberInitializerWithLamdaScoping3_1.ts (1 errors) ====
+==== classMemberInitializerWithLamdaScoping3_1.ts (1 errors) ====
     declare var console: {
         log(msg?: any): void;
     };

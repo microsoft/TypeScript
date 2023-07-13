@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleAndInterfaceSharingName2.ts ===
+//// [tests/cases/compiler/moduleAndInterfaceSharingName2.ts] ////
+
+=== moduleAndInterfaceSharingName2.ts ===
 module X {
 >X : Symbol(X, Decl(moduleAndInterfaceSharingName2.ts, 0, 0))
 

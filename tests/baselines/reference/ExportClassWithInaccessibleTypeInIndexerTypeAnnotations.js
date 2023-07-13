@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts] ////
+
 //// [ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts]
 module A {
 

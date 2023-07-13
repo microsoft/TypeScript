@@ -180,6 +180,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-webworker'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
@@ -200,6 +201,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-scripthost' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-scripthost' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-scripthost'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist.
@@ -214,6 +216,7 @@ Info seq  [hh:mm:ss:mss] ======== Module name '@typescript/lib-scripthost' was s
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-es5'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist.
@@ -237,6 +240,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
@@ -309,23 +313,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json: *new*
-  {}
 /home/src/projects/project1/core.d.ts: *new*
   {}
 /home/src/projects/project1/file.ts: *new*
   {}
 /home/src/projects/project1/file2.ts: *new*
   {}
-/home/src/projects/project1/utils.d.ts: *new*
+/home/src/projects/project1/tsconfig.json: *new*
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts: *new*
   {}
+/home/src/projects/project1/utils.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/home/src/projects/project1: *new*
-  {}
 /home/src/projects/node_modules: *new*
+  {}
+/home/src/projects/project1: *new*
   {}
 /home/src/projects/project1/typeroot1: *new*
   {}
@@ -353,6 +357,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'sometyp
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
@@ -371,6 +376,7 @@ Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-do
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.js' does not exist.
@@ -445,7 +451,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts: *new*
   {}
 /home/src/projects/project1/core.d.ts:
   {}
@@ -453,17 +459,17 @@ FsWatches::
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts: *new*
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
@@ -538,17 +544,17 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -556,9 +562,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
@@ -655,6 +661,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module '@typescript/lib-es5' from
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
@@ -811,23 +818,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
@@ -890,6 +897,7 @@ Info seq  [hh:mm:ss:mss] ======== Type reference directive 'sometype' was succes
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-dom' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
@@ -908,6 +916,7 @@ Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-do
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-dom'
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-dom.js' does not exist.
@@ -984,23 +993,23 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
@@ -1024,6 +1033,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-webworker'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
@@ -1042,6 +1052,7 @@ Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-we
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-webworker'
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: JavaScript.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fallback extensions: JavaScript.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker.js' does not exist.
@@ -1117,25 +1128,25 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/projects/project1/tsconfig.json:
+/home/src/lib/lib.dom.d.ts:
+  {}
+/home/src/lib/lib.webworker.d.ts: *new*
   {}
 /home/src/projects/project1/file.ts:
   {}
 /home/src/projects/project1/file2.ts:
   {}
-/home/src/projects/project1/utils.d.ts:
+/home/src/projects/project1/tsconfig.json:
   {}
 /home/src/projects/project1/typeroot1/sometype/index.d.ts:
   {}
-/home/src/lib/lib.dom.d.ts:
-  {}
-/home/src/lib/lib.webworker.d.ts: *new*
+/home/src/projects/project1/utils.d.ts:
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project1:
-  {}
 /home/src/projects/node_modules:
+  {}
+/home/src/projects/project1:
   {}
 /home/src/projects/project1/typeroot1:
   {}
@@ -1167,6 +1178,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Scoped package detected, looking in 'typescript__lib-webworker'
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.

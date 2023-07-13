@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts] ////
+
+=== switchCaseWithIntersectionTypes01.ts ===
 var strAndNum: string & number;
 >strAndNum : Symbol(strAndNum, Decl(switchCaseWithIntersectionTypes01.ts, 0, 3))
 

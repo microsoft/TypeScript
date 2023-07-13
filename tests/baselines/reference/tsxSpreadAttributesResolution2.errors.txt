@@ -1,15 +1,15 @@
-tests/cases/conformance/jsx/file.tsx(20,10): error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
-tests/cases/conformance/jsx/file.tsx(21,10): error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
-tests/cases/conformance/jsx/file.tsx(22,19): error TS2322: Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(22,21): error TS2322: Type 'true' is not assignable to type '"2"'.
-tests/cases/conformance/jsx/file.tsx(23,10): error TS2322: Type '{ x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.
+file.tsx(20,10): error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
+file.tsx(21,10): error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
+file.tsx(22,19): error TS2322: Type 'boolean' is not assignable to type 'string'.
+file.tsx(22,21): error TS2322: Type 'true' is not assignable to type '"2"'.
+file.tsx(23,10): error TS2322: Type '{ x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.
   Types of property 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(24,40): error TS2322: Type '{ X: string; x: number; y: "2"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
+file.tsx(24,40): error TS2322: Type '{ X: string; x: number; y: "2"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
   Property 'X' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'. Did you mean 'x'?
 
 
-==== tests/cases/conformance/jsx/file.tsx (6 errors) ====
+==== file.tsx (6 errors) ====
     import React = require('react');
     
     interface PoisonedProp {
@@ -38,10 +38,10 @@ tests/cases/conformance/jsx/file.tsx(24,40): error TS2322: Type '{ X: string; x:
     let z = <Poisoned x y/>;
                       ~
 !!! error TS2322: Type 'boolean' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'
                         ~
 !!! error TS2322: Type 'true' is not assignable to type '"2"'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'y' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:5:5: The expected type comes from property 'y' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'
     let w = <Poisoned {...{x: 5, y: "2"}}/>;
              ~~~~~~~~
 !!! error TS2322: Type '{ x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.

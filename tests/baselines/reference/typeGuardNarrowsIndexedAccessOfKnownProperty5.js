@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty5.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty5.ts]
 const a: { key?: { x?: number } } = {};
 const aIndex = "key";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportRedeclarationTypeAliases.ts] ////
+
 //// [exportRedeclarationTypeAliases.ts]
 export type Foo = number;
 export function Foo(): number;

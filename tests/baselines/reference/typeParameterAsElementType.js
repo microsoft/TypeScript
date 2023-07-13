@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterAsElementType.ts] ////
+
 //// [typeParameterAsElementType.ts]
 function fee<T>() {
     var t: T;

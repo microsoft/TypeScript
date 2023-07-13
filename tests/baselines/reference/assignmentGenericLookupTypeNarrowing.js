@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentGenericLookupTypeNarrowing.ts] ////
+
 //// [assignmentGenericLookupTypeNarrowing.ts]
 // Repro from #26130
 

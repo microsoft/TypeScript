@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target11.ts] ////
+
 //// [es6modulekindWithES5Target11.ts]
 declare function foo(...args: any[]): any;
 @foo

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedParametersinConstructor3.ts] ////
+
 //// [unusedParametersinConstructor3.ts]
 class greeter {
     constructor(param1: string, param2: string, param3: string) {

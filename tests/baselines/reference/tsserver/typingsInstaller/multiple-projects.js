@@ -79,15 +79,15 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/tsconfig.json: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -173,21 +173,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/bower_components: *new*
   {"pollingInterval":500}
 /user/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /user/username/projects/project/package.json: *new*
+  {}
+/user/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -289,23 +289,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/bower_components:
   {"pollingInterval":500}
 /user/username/projects/project/node_modules:
   {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/project/app.js: *new*
   {}
 /user/username/projects/project/package.json:
   {}
-/user/username/projects/project/app.js: *new*
+/user/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -427,19 +427,19 @@ After request
 PolledWatches::
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/project2/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project2/bower_components: *new*
   {"pollingInterval":500}
 /user/username/projects/project2/node_modules: *new*
   {"pollingInterval":500}
+/user/username/projects/project2/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/bower_components:
   {"pollingInterval":500}
 /user/username/projects/project/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -447,15 +447,15 @@ FsWatches::
   {}
 /user/username/projects/project/package.json:
   {}
-/user/username/projects/project2/tsconfig.json: *new*
-  {}
 /user/username/projects/project2/package.json: *new*
+  {}
+/user/username/projects/project2/tsconfig.json: *new*
   {}
 
 FsWatches *deleted*::
-/user/username/projects/project/tsconfig.json:
-  {}
 /user/username/projects/project/app.js:
+  {}
+/user/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::

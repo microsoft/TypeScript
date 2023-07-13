@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/importElisionExportNonExportAndDefault.ts] ////
+
+=== main.ts ===
 import MyFunction from "./MyComponent";
 >MyFunction : any
 
@@ -10,7 +12,7 @@ MyFunction({msg: "Hello World"});
 >"Hello World" : "Hello World"
 
 
-=== tests/cases/compiler/MyComponent.ts ===
+=== MyComponent.ts ===
 interface MyFunction { msg: string; }
 >msg : string
 

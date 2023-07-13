@@ -1,8 +1,8 @@
-tests/cases/compiler/index.ts(2,3): error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any>' is not assignable to 'symbol' index type 'string'.
-tests/cases/compiler/index.ts(2,3): error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
+index.ts(2,3): error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any>' is not assignable to 'symbol' index type 'string'.
+index.ts(2,3): error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
 
 
-==== tests/cases/compiler/other.ts (0 errors) ====
+==== other.ts (0 errors) ====
     interface Array1<T> {
       length: number;
       [n: number]: T;
@@ -36,13 +36,13 @@ tests/cases/compiler/index.ts(2,3): error TS2411: Property '[Symbol.unscopables]
       };
     }
     
-==== tests/cases/compiler/index.ts (2 errors) ====
+==== index.ts (2 errors) ====
     class Test extends Array1 {
       [key: symbol]: string
       ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any>' is not assignable to 'symbol' index type 'string'.
-!!! related TS2728 tests/cases/compiler/other.ts:14:3: '[Symbol.iterator]' is declared here.
+!!! related TS2728 other.ts:14:3: '[Symbol.iterator]' is declared here.
       ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
-!!! related TS2728 tests/cases/compiler/other.ts:23:3: '[Symbol.unscopables]' is declared here.
+!!! related TS2728 other.ts:23:3: '[Symbol.unscopables]' is declared here.
     }

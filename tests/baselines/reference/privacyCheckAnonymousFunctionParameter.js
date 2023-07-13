@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyCheckAnonymousFunctionParameter.ts] ////
+
 //// [privacyCheckAnonymousFunctionParameter.ts]
 export var x = 1;  // Makes this an external module
 interface Iterator<T> {

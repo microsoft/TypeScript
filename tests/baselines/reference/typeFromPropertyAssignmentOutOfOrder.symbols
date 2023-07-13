@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/index.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignmentOutOfOrder.ts] ////
+
+=== index.js ===
 First.Item = class I {}
 >First.Item : Symbol(First.Item, Decl(index.js, 0, 0))
 >First : Symbol(First, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
@@ -25,7 +27,7 @@ Workspace.Object = class extends Common.Object {}
 var am;
 >am : Symbol(am, Decl(index.js, 6, 3))
 
-=== tests/cases/conformance/salsa/roots.js ===
+=== roots.js ===
 var First = {};
 >First : Symbol(First, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
 

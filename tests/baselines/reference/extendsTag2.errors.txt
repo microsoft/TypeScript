@@ -2,7 +2,7 @@ error TS8022: JSDoc '@extends' is not attached to a class.
 
 
 !!! error TS8022: JSDoc '@extends' is not attached to a class.
-==== tests/cases/conformance/jsdoc/foo.js (0 errors) ====
+==== foo.js (0 errors) ====
     /**
      * @constructor
      */

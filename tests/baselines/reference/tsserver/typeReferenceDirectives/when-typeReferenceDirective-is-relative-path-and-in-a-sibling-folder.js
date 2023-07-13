@@ -97,11 +97,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/myproject/background/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/typedefs/filesystem.d.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::

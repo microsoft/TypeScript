@@ -1,4 +1,6 @@
-=== tests/cases/compiler/incrementalInvalid.ts ===
+//// [tests/cases/compiler/incrementalInvalid.ts] ////
+
+=== incrementalInvalid.ts ===
 const x = 10;
 >x : Symbol(x, Decl(incrementalInvalid.ts, 0, 5))
 

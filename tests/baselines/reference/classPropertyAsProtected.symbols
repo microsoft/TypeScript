@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts] ////
+
+=== classPropertyAsProtected.ts ===
 class C {
 >C : Symbol(C, Decl(classPropertyAsProtected.ts, 0, 0))
 

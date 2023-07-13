@@ -1,8 +1,8 @@
-tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions3.ts(5,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions3.ts(5,23): error TS1109: Expression expected.
+taggedTemplatesWithIncompleteTemplateExpressions3.ts(5,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+taggedTemplatesWithIncompleteTemplateExpressions3.ts(5,23): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions3.ts (2 errors) ====
+==== taggedTemplatesWithIncompleteTemplateExpressions3.ts (2 errors) ====
     function f(x: TemplateStringsArray, y: string, z: string) {
     }
     

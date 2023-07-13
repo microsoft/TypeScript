@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts] ////
+
 //// [templateStringInFunctionParameterType.ts]
 function f(`hello`);
 function f(x: string);

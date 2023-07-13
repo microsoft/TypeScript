@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spellingSuggestionGlobal4.ts ===
+//// [tests/cases/compiler/spellingSuggestionGlobal4.ts] ////
+
+=== spellingSuggestionGlobal4.ts ===
 export {}
 declare global { var x: any }
 >global : Symbol(global, Decl(spellingSuggestionGlobal4.ts, 0, 9))

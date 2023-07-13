@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateInterfaceMembers1.ts] ////
+
 //// [duplicateInterfaceMembers1.ts]
 interface Bar {
    x: number;

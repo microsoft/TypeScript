@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularConstrainedMappedTypeNoCrash.ts ===
+//// [tests/cases/compiler/circularConstrainedMappedTypeNoCrash.ts] ////
+
+=== circularConstrainedMappedTypeNoCrash.ts ===
 type Loop<T, U extends Loop<T, U>> = {
 >Loop : Symbol(Loop, Decl(circularConstrainedMappedTypeNoCrash.ts, 0, 0))
 >T : Symbol(T, Decl(circularConstrainedMappedTypeNoCrash.ts, 0, 10))

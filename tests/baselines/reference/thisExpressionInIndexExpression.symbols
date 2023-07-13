@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisExpressionInIndexExpression.ts ===
+//// [tests/cases/compiler/thisExpressionInIndexExpression.ts] ////
+
+=== thisExpressionInIndexExpression.ts ===
 function f() {
 >f : Symbol(f, Decl(thisExpressionInIndexExpression.ts, 0, 0))
 

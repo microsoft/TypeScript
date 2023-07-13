@@ -131,23 +131,23 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/reexport/src/pure/tsconfig.json: *new*
+/user/username/projects/reexport/src/main/index.ts: *new*
+  {}
+/user/username/projects/reexport/src/main/tsconfig.json: *new*
   {}
 /user/username/projects/reexport/src/pure/index.ts: *new*
   {}
 /user/username/projects/reexport/src/pure/session.ts: *new*
   {}
-/user/username/projects/reexport/src/main/tsconfig.json: *new*
-  {}
-/user/username/projects/reexport/src/main/index.ts: *new*
+/user/username/projects/reexport/src/pure/tsconfig.json: *new*
   {}
 /user/username/projects/reexport/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/reexport/src/pure: *new*
-  {}
 /user/username/projects/reexport/src/main: *new*
+  {}
+/user/username/projects/reexport/src/pure: *new*
   {}
 
 exitCode:: ExitStatus.undefined

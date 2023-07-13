@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js ===
+//// [tests/cases/conformance/jsdoc/exportedAliasedEnumTag.ts] ////
+
+=== exportedAliasedEnumTag.js ===
 var middlewarify = module.exports = {};
 >middlewarify : typeof module.exports
 >module.exports = {} : typeof module.exports

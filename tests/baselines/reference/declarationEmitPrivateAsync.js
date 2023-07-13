@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPrivateAsync.ts] ////
+
 //// [declarationEmitPrivateAsync.ts]
 export class Foo {
     private async baz() {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowSuperPropertyAccess.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowSuperPropertyAccess.ts] ////
+
+=== controlFlowSuperPropertyAccess.ts ===
 class B {
 >B : Symbol(B, Decl(controlFlowSuperPropertyAccess.ts, 0, 0))
 

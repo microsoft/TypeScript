@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedLoopWithOnlyInnerLetCaptured.ts ===
+//// [tests/cases/compiler/nestedLoopWithOnlyInnerLetCaptured.ts] ////
+
+=== nestedLoopWithOnlyInnerLetCaptured.ts ===
 declare let doSomething;
 >doSomething : Symbol(doSomething, Decl(nestedLoopWithOnlyInnerLetCaptured.ts, 0, 11))
 

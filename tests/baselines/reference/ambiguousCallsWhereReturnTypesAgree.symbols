@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambiguousCallsWhereReturnTypesAgree.ts ===
+//// [tests/cases/compiler/ambiguousCallsWhereReturnTypesAgree.ts] ////
+
+=== ambiguousCallsWhereReturnTypesAgree.ts ===
 class TestClass {
 >TestClass : Symbol(TestClass, Decl(ambiguousCallsWhereReturnTypesAgree.ts, 0, 0))
 

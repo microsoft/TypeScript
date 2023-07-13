@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexAt.ts ===
+//// [tests/cases/compiler/indexAt.ts] ////
+
+=== indexAt.ts ===
 [0].at(0);
 >[0].at : Symbol(Array.at, Decl(lib.es2022.array.d.ts, --, --))
 >at : Symbol(Array.at, Decl(lib.es2022.array.d.ts, --, --))

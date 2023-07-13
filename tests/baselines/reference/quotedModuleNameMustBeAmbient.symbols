@@ -1,4 +1,6 @@
-=== tests/cases/compiler/quotedModuleNameMustBeAmbient.ts ===
+//// [tests/cases/compiler/quotedModuleNameMustBeAmbient.ts] ////
+
+=== quotedModuleNameMustBeAmbient.ts ===
 module 'M' {}
 >'M' : Symbol("M", Decl(quotedModuleNameMustBeAmbient.ts, 0, 0))
 

@@ -3,6 +3,6 @@
 //// declare const unknownCall: any;
 //// unknownCall();
 
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayParameterNameHints: "literals"
 });

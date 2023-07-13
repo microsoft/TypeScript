@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayLiteralAndArrayConstructorEquivalence1.ts] ////
+
 //// [arrayLiteralAndArrayConstructorEquivalence1.ts]
 var myCars=new Array(); 
 var myCars3 = new Array({});

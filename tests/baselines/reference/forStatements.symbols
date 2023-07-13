@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/forStatements/forStatements.ts ===
+//// [tests/cases/conformance/statements/forStatements/forStatements.ts] ////
+
+=== forStatements.ts ===
 interface I {
 >I : Symbol(I, Decl(forStatements.ts, 0, 0))
 

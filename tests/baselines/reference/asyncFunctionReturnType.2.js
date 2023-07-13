@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncFunctionReturnType.2.ts] ////
+
 //// [asyncFunctionReturnType.2.ts]
 // https://github.com/microsoft/TypeScript/issues/47291
 class X {

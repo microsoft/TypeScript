@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts] ////
+
 //// [commaOperatorOtherInvalidOperation.ts]
 //Expect to have compiler errors
 //Comma operator in function arguments and return

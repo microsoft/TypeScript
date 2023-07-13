@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment8.ts] ////
+
 //// [parserExportAssignment8.ts]
 export = B;
 

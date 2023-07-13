@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeOfIndexedAccessParameter.ts ===
+//// [tests/cases/compiler/contextualTypeOfIndexedAccessParameter.ts] ////
+
+=== contextualTypeOfIndexedAccessParameter.ts ===
 type Keys = "a" | "b";
 >Keys : Symbol(Keys, Decl(contextualTypeOfIndexedAccessParameter.ts, 0, 0))
 

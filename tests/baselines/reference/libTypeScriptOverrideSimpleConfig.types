@@ -1,6 +1,4 @@
-=== /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
-interface ABC { abc: string }
->abc : string
+//// [tests/cases/compiler/libTypeScriptOverrideSimpleConfig.ts] ////
 
 === /somepath/index.ts ===
 /// <reference lib="dom" />
@@ -16,4 +14,8 @@ window.localStorage
 >window.localStorage : any
 >window : any
 >localStorage : any
+
+=== /somepath/node_modules/@typescript/lib-dom/index.d.ts ===
+interface ABC { abc: string }
+>abc : string
 

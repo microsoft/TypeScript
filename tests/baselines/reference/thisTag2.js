@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/thisTag2.ts] ////
+
 //// [a.js]
 /** @this {string} */
 export function f1() {}

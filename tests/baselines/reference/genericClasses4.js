@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClasses4.ts] ////
+
 //// [genericClasses4.ts]
 // once caused stack overflow
 class Vec2_T<A>

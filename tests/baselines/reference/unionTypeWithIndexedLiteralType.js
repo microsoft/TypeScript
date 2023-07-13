@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeWithIndexedLiteralType.ts] ////
+
 //// [unionTypeWithIndexedLiteralType.ts]
 interface I { x: number; }
 interface Idx { [index: string]: U; }

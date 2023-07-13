@@ -11,6 +11,6 @@
 
 
 goTo.file('/a.js')
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayParameterNameHints: "literals"
 });

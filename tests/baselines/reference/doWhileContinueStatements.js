@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/continueStatements/doWhileContinueStatements.ts] ////
+
 //// [doWhileContinueStatements.ts]
 do {
     continue;

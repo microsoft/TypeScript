@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts ===
+//// [tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts] ////
+
+=== errorForUsingPropertyOfTypeAsType03.ts ===
 namespace Test1 {
 >Test1 : typeof Test1
 

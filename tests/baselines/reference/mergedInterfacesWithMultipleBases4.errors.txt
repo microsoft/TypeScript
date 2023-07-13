@@ -1,8 +1,8 @@
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithMultipleBases4.ts(19,11): error TS2320: Interface 'A<T>' cannot simultaneously extend types 'C<string>' and 'C<number>'.
+mergedInterfacesWithMultipleBases4.ts(19,11): error TS2320: Interface 'A<T>' cannot simultaneously extend types 'C<string>' and 'C<number>'.
   Named property 'a' of types 'C<string>' and 'C<number>' are not identical.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithMultipleBases4.ts (1 errors) ====
+==== mergedInterfacesWithMultipleBases4.ts (1 errors) ====
     // merged interfaces behave as if all extends clauses from each declaration are merged together
     
     class C<T> {

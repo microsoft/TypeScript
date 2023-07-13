@@ -1,4 +1,6 @@
-=== tests/cases/compiler/modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts ===
+//// [tests/cases/compiler/modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts] ////
+
+=== modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts ===
 function f(x: number, y: number, z: number) {
 >f : Symbol(f, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 0, 0))
 >x : Symbol(x, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 0, 11))

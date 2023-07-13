@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateInLoop.ts] ////
+
 //// [typePredicateInLoop.ts]
 // Repro from #12101
 

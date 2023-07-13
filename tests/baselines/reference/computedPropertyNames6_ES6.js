@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames6_ES6.ts] ////
+
 //// [computedPropertyNames6_ES6.ts]
 var p1: number | string;
 var p2: number | number[];

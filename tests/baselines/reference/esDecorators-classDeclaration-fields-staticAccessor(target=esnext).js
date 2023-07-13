@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/fields/esDecorators-classDeclaration-fields-staticAccessor.ts] ////
+
 //// [esDecorators-classDeclaration-fields-staticAccessor.ts]
 declare let dec: any;
 

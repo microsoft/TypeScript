@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts] ////
+
 //// [duplicateIdentifierBindingElementInParameterDeclaration1.ts]
 function f0(a, [a, [b]], {b}) { }
 function f1([a, a]) { }

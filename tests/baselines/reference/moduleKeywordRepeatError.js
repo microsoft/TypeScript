@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleKeywordRepeatError.ts] ////
+
 //// [moduleKeywordRepeatError.ts]
 // "module.module { }" should raise a syntax error
 

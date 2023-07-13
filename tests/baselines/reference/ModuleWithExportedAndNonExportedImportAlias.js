@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedImportAlias.ts] ////
+
 //// [ModuleWithExportedAndNonExportedImportAlias.ts]
 module A {
     export interface Point {

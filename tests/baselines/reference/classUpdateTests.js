@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classUpdateTests.ts] ////
+
 //// [classUpdateTests.ts]
 //
 // test codegen for instance properties

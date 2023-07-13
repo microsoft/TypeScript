@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsDeclarationsWithDefaultAsNamespaceLikeMerge.ts] ////
+
 === /helper.d.ts ===
 type Computed = () => any;
 >Computed : Symbol(Computed, Decl(helper.d.ts, 0, 0))

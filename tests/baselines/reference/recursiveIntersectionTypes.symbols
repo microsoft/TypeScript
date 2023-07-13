@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/recursiveIntersectionTypes.ts ===
+//// [tests/cases/conformance/types/intersection/recursiveIntersectionTypes.ts] ////
+
+=== recursiveIntersectionTypes.ts ===
 type LinkedList<T> = T & { next: LinkedList<T> };
 >LinkedList : Symbol(LinkedList, Decl(recursiveIntersectionTypes.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveIntersectionTypes.ts, 0, 16))

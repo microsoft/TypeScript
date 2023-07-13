@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInference2.ts ===
+//// [tests/cases/compiler/genericInference2.ts] ////
+
+=== genericInference2.ts ===
     declare module ko { 
 >ko : typeof ko
 

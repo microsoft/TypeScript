@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileAlternativeUseOfOverloadTag.ts] ////
+
 //// [jsFileAlternativeUseOfOverloadTag.js]
 // These are a few examples of existing alternative uses of @overload tag.
 // They will not work as expected with our implementation, but we are

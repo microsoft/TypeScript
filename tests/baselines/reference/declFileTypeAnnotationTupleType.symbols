@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationTupleType.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationTupleType.ts] ////
+
+=== declFileTypeAnnotationTupleType.ts ===
 class c {
 >c : Symbol(c, Decl(declFileTypeAnnotationTupleType.ts, 0, 0))
 }

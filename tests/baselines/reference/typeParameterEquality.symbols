@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterEquality.ts ===
+//// [tests/cases/compiler/typeParameterEquality.ts] ////
+
+=== typeParameterEquality.ts ===
 class C {
 >C : Symbol(C, Decl(typeParameterEquality.ts, 0, 0))
 

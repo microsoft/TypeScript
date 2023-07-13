@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitClassMemberNameConflict2.ts ===
+//// [tests/cases/compiler/declarationEmitClassMemberNameConflict2.ts] ////
+
+=== declarationEmitClassMemberNameConflict2.ts ===
 const Bar = 'bar';
 >Bar : Symbol(Bar, Decl(declarationEmitClassMemberNameConflict2.ts, 0, 5))
 

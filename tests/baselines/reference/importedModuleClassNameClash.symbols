@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importedModuleClassNameClash.ts ===
+//// [tests/cases/compiler/importedModuleClassNameClash.ts] ////
+
+=== importedModuleClassNameClash.ts ===
 import foo = m1;
 >foo : Symbol(foo, Decl(importedModuleClassNameClash.ts, 0, 0), Decl(importedModuleClassNameClash.ts, 2, 20))
 >m1 : Symbol(foo, Decl(importedModuleClassNameClash.ts, 0, 16))

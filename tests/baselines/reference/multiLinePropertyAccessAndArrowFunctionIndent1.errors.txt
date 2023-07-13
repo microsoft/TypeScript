@@ -1,7 +1,7 @@
-tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts(1,1): error TS1108: A 'return' statement can only be used within a function body.
+multiLinePropertyAccessAndArrowFunctionIndent1.ts(1,1): error TS1108: A 'return' statement can only be used within a function body.
 
 
-==== tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts (1 errors) ====
+==== multiLinePropertyAccessAndArrowFunctionIndent1.ts (1 errors) ====
     return this.edit(role)
     ~~~~~~
 !!! error TS1108: A 'return' statement can only be used within a function body.

@@ -1,24 +1,24 @@
-tests/cases/compiler/constDeclarations_access_2.ts(4,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(5,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(6,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(7,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(8,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(9,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(10,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(11,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(12,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(13,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(14,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(15,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(17,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(18,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(19,5): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(20,5): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(22,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
-tests/cases/compiler/constDeclarations_access_2.ts(24,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(4,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(5,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(6,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(7,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(8,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(9,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(10,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(11,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(12,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(13,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(14,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(15,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(17,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(18,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(19,5): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(20,5): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(22,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
+constDeclarations_access_2.ts(24,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
 
 
-==== tests/cases/compiler/constDeclarations_access_2.ts (18 errors) ====
+==== constDeclarations_access_2.ts (18 errors) ====
     ///<reference path='constDeclarations_access_1.ts'/>
     import m = require('constDeclarations_access_1');
     // Errors
@@ -96,6 +96,6 @@ tests/cases/compiler/constDeclarations_access_2.ts(24,3): error TS2540: Cannot a
     
     m.x.toString();
     
-==== tests/cases/compiler/constDeclarations_access_1.ts (0 errors) ====
+==== constDeclarations_access_1.ts (0 errors) ====
     export const x = 0;
     

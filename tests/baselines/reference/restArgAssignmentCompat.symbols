@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restArgAssignmentCompat.ts ===
+//// [tests/cases/compiler/restArgAssignmentCompat.ts] ////
+
+=== restArgAssignmentCompat.ts ===
 function f(...x: number[]) {
 >f : Symbol(f, Decl(restArgAssignmentCompat.ts, 0, 0))
 >x : Symbol(x, Decl(restArgAssignmentCompat.ts, 0, 11))

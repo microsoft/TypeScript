@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticMethodWithTypeParameterExtendsClauseDeclFile.ts ===
+//// [tests/cases/compiler/staticMethodWithTypeParameterExtendsClauseDeclFile.ts] ////
+
+=== staticMethodWithTypeParameterExtendsClauseDeclFile.ts ===
 class privateClass {
 >privateClass : Symbol(privateClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 0, 0))
 }

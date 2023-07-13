@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts] ////
+
 //// [unionThisTypeInFunctions.ts]
 interface Real {
     method(this: this, n: number): void;

@@ -1,14 +1,14 @@
-tests/cases/compiler/moduleInTypePosition1_1.ts(3,14): error TS2709: Cannot use namespace 'WinJS' as a type.
+moduleInTypePosition1_1.ts(3,14): error TS2709: Cannot use namespace 'WinJS' as a type.
 
 
-==== tests/cases/compiler/moduleInTypePosition1_1.ts (1 errors) ====
+==== moduleInTypePosition1_1.ts (1 errors) ====
     ///<reference path='moduleInTypePosition1_0.ts'/>
     import WinJS = require('./moduleInTypePosition1_0');
     var x = (w1: WinJS) => { };
                  ~~~~~
 !!! error TS2709: Cannot use namespace 'WinJS' as a type.
     
-==== tests/cases/compiler/moduleInTypePosition1_0.ts (0 errors) ====
+==== moduleInTypePosition1_0.ts (0 errors) ====
     export class Promise {
         foo: string;
     }

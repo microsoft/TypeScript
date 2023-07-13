@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts] ////
+
 //// [privateNameInInExpressionUnused.ts]
 class Foo {
     #unused: undefined; // expect unused error

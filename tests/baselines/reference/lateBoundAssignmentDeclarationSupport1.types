@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/usage.js ===
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1.ts] ////
+
+=== usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport1.js");
 >x : typeof x
 >require("./lateBoundAssignmentDeclarationSupport1.js") : typeof x
@@ -19,7 +21,7 @@ const z = x[x.S];
 >x : typeof x
 >S : unique symbol
 
-=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1.js ===
+=== lateBoundAssignmentDeclarationSupport1.js ===
 // currently unsupported
 const _sym = Symbol();
 >_sym : unique symbol
@@ -33,21 +35,21 @@ const _str = "my-fake-sym";
 exports[_sym] = "ok";
 >exports[_sym] = "ok" : "ok"
 >exports[_sym] : any
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")
+>exports : typeof import("lateBoundAssignmentDeclarationSupport1")
 >_sym : unique symbol
 >"ok" : "ok"
 
 exports[_str] = "ok";
 >exports[_str] = "ok" : "ok"
 >exports[_str] : any
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")
+>exports : typeof import("lateBoundAssignmentDeclarationSupport1")
 >_str : "my-fake-sym"
 >"ok" : "ok"
 
 exports.S = _sym;
 >exports.S = _sym : unique symbol
 >exports.S : unique symbol
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport1")
+>exports : typeof import("lateBoundAssignmentDeclarationSupport1")
 >S : unique symbol
 >_sym : unique symbol
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/newTarget/newTargetNarrowing.ts ===
+//// [tests/cases/conformance/es6/newTarget/newTargetNarrowing.ts] ////
+
+=== newTargetNarrowing.ts ===
 function foo(x: true) { }
 >foo : (x: true) => void
 >x : true

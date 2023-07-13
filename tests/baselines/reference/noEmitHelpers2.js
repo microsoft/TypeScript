@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noEmitHelpers2.ts] ////
+
 //// [noEmitHelpers2.ts]
 declare var decorator: any;
 

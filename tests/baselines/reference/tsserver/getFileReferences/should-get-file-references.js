@@ -90,13 +90,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/project/tsconfig.json: *new*
-  {}
 /project/b.ts: *new*
   {}
 /project/c.ts: *new*
   {}
 /project/d.ts: *new*
+  {}
+/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -137,11 +137,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/project/tsconfig.json:
-  {}
 /project/c.ts:
   {}
 /project/d.ts:
+  {}
+/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -188,9 +188,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/project/tsconfig.json:
-  {}
 /project/d.ts:
+  {}
+/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::

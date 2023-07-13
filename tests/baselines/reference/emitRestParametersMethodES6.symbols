@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/restParameters/emitRestParametersMethodES6.ts ===
+//// [tests/cases/conformance/es6/restParameters/emitRestParametersMethodES6.ts] ////
+
+=== emitRestParametersMethodES6.ts ===
 class C {
 >C : Symbol(C, Decl(emitRestParametersMethodES6.ts, 0, 0))
 

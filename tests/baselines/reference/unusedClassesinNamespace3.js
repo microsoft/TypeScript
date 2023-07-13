@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedClassesinNamespace3.ts] ////
+
 //// [unusedClassesinNamespace3.ts]
 namespace Validation {
     class c1 {

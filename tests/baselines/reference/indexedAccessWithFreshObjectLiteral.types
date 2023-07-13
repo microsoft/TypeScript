@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts ===
+//// [tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts] ////
+
+=== indexedAccessWithFreshObjectLiteral.ts ===
 function foo (id: string) {
 >foo : (id: string) => string | number | boolean | undefined
 >id : string

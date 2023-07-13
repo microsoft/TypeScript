@@ -1,8 +1,8 @@
-tests/cases/compiler/reachabilityChecks8.ts(4,24): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks8.ts(5,24): error TS7027: Unreachable code detected.
+reachabilityChecks8.ts(4,24): error TS7027: Unreachable code detected.
+reachabilityChecks8.ts(5,24): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/reachabilityChecks8.ts (2 errors) ====
+==== reachabilityChecks8.ts (2 errors) ====
     try {
         for (
             (function () { throw "1"; })();

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/typings/typingsSuggestion2.ts] ////
+
 //// [a.ts]
 module.exports = 1;
 

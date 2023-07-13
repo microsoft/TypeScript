@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/widenToAny1.ts] ////
+
 //// [widenToAny1.ts]
 function foo1<T>(f1: { x: T; y: T }): T {
     return undefined;

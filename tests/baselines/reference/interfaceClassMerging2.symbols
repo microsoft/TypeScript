@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceClassMerging2.ts ===
+//// [tests/cases/compiler/interfaceClassMerging2.ts] ////
+
+=== interfaceClassMerging2.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(interfaceClassMerging2.ts, 0, 0), Decl(interfaceClassMerging2.ts, 3, 1))
 

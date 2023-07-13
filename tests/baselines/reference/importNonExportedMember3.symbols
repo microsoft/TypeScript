@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/importNonExportedMember3.ts] ////
+
+=== a.ts ===
 export {}
 interface Foo {}
 >Foo : Symbol(Foo, Decl(a.ts, 0, 9), Decl(a.ts, 1, 16), Decl(a.ts, 2, 16))
@@ -9,7 +11,7 @@ interface Foo {}
 namespace Foo {}
 >Foo : Symbol(Foo, Decl(a.ts, 0, 9), Decl(a.ts, 1, 16), Decl(a.ts, 2, 16))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { Foo } from './a';
 >Foo : Symbol(Foo, Decl(b.ts, 0, 8))
 

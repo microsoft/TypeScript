@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParameters9.ts ===
+//// [tests/cases/compiler/unusedTypeParameters9.ts] ////
+
+=== unusedTypeParameters9.ts ===
 // clas + interface
 class C1<T> { }
 >C1 : Symbol(C1, Decl(unusedTypeParameters9.ts, 0, 0), Decl(unusedTypeParameters9.ts, 1, 15))

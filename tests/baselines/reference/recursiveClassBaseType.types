@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveClassBaseType.ts ===
+//// [tests/cases/compiler/recursiveClassBaseType.ts] ////
+
+=== recursiveClassBaseType.ts ===
 // Repro from #44281
 
 declare const p: <T>(fn: () => T) => T;

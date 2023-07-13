@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/systemModule15.ts] ////
+
+=== file1.ts ===
 import * as moduleB from "./file2"
 >moduleB : Symbol(moduleB, Decl(file1.ts, 0, 6))
 
@@ -24,7 +26,7 @@ use(moduleB.moduleCStar);
 >moduleB : Symbol(moduleB, Decl(file1.ts, 0, 6))
 >moduleCStar : Symbol(moduleB.moduleCStar, Decl(file2.ts, 5, 8))
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import * as moduleCStar from "./file3"
 >moduleCStar : Symbol(moduleCStar, Decl(file2.ts, 0, 6))
 
@@ -48,14 +50,14 @@ export {
 >value : Symbol(value, Decl(file2.ts, 7, 12))
 }
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 export var value = "youpi";
 >value : Symbol(value, Decl(file3.ts, 0, 10))
 
 export default value;
 >value : Symbol(value, Decl(file3.ts, 0, 10))
 
-=== tests/cases/compiler/file4.ts ===
+=== file4.ts ===
 export var value2 = "v";
 >value2 : Symbol(value2, Decl(file4.ts, 0, 10))
 

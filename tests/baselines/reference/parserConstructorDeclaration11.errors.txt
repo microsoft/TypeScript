@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration11.ts(2,14): error TS1098: Type parameter list cannot be empty.
-tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration11.ts(2,15): error TS1092: Type parameters cannot appear on a constructor declaration.
+parserConstructorDeclaration11.ts(2,14): error TS1098: Type parameter list cannot be empty.
+parserConstructorDeclaration11.ts(2,15): error TS1092: Type parameters cannot appear on a constructor declaration.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration11.ts (2 errors) ====
+==== parserConstructorDeclaration11.ts (2 errors) ====
     class C {
       constructor<>() { }
                  ~~

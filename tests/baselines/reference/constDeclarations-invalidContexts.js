@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-invalidContexts.ts] ////
+
 //// [constDeclarations-invalidContexts.ts]
 // Errors, const must be defined inside a block
 if (true) 

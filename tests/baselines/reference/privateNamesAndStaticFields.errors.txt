@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(6,11): error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(7,11): error TS2339: Property '#bar' does not exist on type 'typeof B'.
+privateNamesAndStaticFields.ts(6,11): error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
+privateNamesAndStaticFields.ts(7,11): error TS2339: Property '#bar' does not exist on type 'typeof B'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts (2 errors) ====
+==== privateNamesAndStaticFields.ts (2 errors) ====
     class A {
         static #foo: number;
         static #bar: number;

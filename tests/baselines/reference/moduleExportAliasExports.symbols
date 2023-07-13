@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/Eloquent.js ===
+//// [tests/cases/conformance/salsa/moduleExportAliasExports.ts] ////
+
+=== Eloquent.js ===
 // bug #27365, crashes from github.com/marijnh/Eloquent-JavaScript
 (function() {
 exports.bigOak = 1
@@ -15,7 +17,7 @@ module.exports = exports
 >module.exports : Symbol(module.exports, Decl(Eloquent.js, 0, 0))
 >module : Symbol(export=, Decl(Eloquent.js, 3, 22))
 >exports : Symbol(export=, Decl(Eloquent.js, 3, 22))
->exports : Symbol("tests/cases/conformance/salsa/Eloquent", Decl(Eloquent.js, 0, 0))
+>exports : Symbol("Eloquent", Decl(Eloquent.js, 0, 0))
 
 })()
 

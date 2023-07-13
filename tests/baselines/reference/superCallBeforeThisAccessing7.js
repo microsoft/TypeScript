@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing7.ts] ////
+
 //// [superCallBeforeThisAccessing7.ts]
 class Base {
     constructor(c) { }

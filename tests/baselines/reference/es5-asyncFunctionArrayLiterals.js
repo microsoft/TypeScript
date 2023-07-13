@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-asyncFunctionArrayLiterals.ts] ////
+
 //// [es5-asyncFunctionArrayLiterals.ts]
 declare var x, y, z, a;
 

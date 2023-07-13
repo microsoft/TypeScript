@@ -1,9 +1,9 @@
-tests/cases/compiler/superAccess.ts(9,24): error TS2576: Property 'S1' does not exist on type 'MyBase'. Did you mean to access the static member 'MyBase.S1' instead?
-tests/cases/compiler/superAccess.ts(10,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/compiler/superAccess.ts(11,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superAccess.ts(9,24): error TS2576: Property 'S1' does not exist on type 'MyBase'. Did you mean to access the static member 'MyBase.S1' instead?
+superAccess.ts(10,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superAccess.ts(11,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/compiler/superAccess.ts (3 errors) ====
+==== superAccess.ts (3 errors) ====
     class MyBase {
         static S1: number = 5;
         private S2: string = "test";

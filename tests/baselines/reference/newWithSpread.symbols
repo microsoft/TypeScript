@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/newWithSpread.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/newWithSpread.ts] ////
+
+=== newWithSpread.ts ===
 function f(x: number, y: number, ...z: string[]) {
 >f : Symbol(f, Decl(newWithSpread.ts, 0, 0))
 >x : Symbol(x, Decl(newWithSpread.ts, 0, 11))

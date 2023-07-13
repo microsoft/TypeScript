@@ -1,4 +1,6 @@
-=== tests/cases/compiler/switchStatementsWithMultipleDefaults1.ts ===
+//// [tests/cases/compiler/switchStatementsWithMultipleDefaults1.ts] ////
+
+=== switchStatementsWithMultipleDefaults1.ts ===
     var x = 10;
 >x : Symbol(x, Decl(switchStatementsWithMultipleDefaults1.ts, 0, 7))
     

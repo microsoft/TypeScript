@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeAliasDeclareKeyword01.d.ts ===
+//// [tests/cases/compiler/typeAliasDeclareKeyword01.d.ts] ////
+
+=== typeAliasDeclareKeyword01.d.ts ===
 type Foo = number;
 >Foo : Symbol(Foo, Decl(typeAliasDeclareKeyword01.d.ts, 0, 0))
 

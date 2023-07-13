@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts] ////
+
 //// [looseThisTypeInFunctions.ts]
 interface I {
     n: number;

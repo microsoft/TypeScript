@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringAssignmentWithDefault2.ts] ////
+
 //// [destructuringAssignmentWithDefault2.ts]
 const a: { x?: number; y?: number } = { };
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_writeOnlyProperty.ts] ////
+
 //// [noUnusedLocals_writeOnlyProperty.ts]
 class C {
     private x;

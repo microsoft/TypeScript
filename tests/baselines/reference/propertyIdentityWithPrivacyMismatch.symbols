@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyIdentityWithPrivacyMismatch_1.ts ===
+//// [tests/cases/compiler/propertyIdentityWithPrivacyMismatch.ts] ////
+
+=== propertyIdentityWithPrivacyMismatch_1.ts ===
 ///<reference path='propertyIdentityWithPrivacyMismatch_0.ts'/>
 import m1 = require('mod1');
 >m1 : Symbol(m1, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 0, 0))
@@ -36,7 +38,7 @@ var y: Foo2;
 >y : Symbol(y, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 11, 3), Decl(propertyIdentityWithPrivacyMismatch_1.ts, 12, 3))
 >Foo2 : Symbol(Foo2, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 7, 1))
 
-=== tests/cases/compiler/propertyIdentityWithPrivacyMismatch_0.ts ===
+=== propertyIdentityWithPrivacyMismatch_0.ts ===
 declare module 'mod1' {
 >'mod1' : Symbol("mod1", Decl(propertyIdentityWithPrivacyMismatch_0.ts, 0, 0))
 

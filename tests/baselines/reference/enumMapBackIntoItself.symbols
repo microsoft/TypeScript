@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumMapBackIntoItself.ts ===
+//// [tests/cases/compiler/enumMapBackIntoItself.ts] ////
+
+=== enumMapBackIntoItself.ts ===
 enum TShirtSize {
 >TShirtSize : Symbol(TShirtSize, Decl(enumMapBackIntoItself.ts, 0, 0))
 

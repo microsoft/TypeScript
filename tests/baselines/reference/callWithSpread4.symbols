@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts] ////
+
+=== callWithSpread4.ts ===
 type R = { a: number }
 >R : Symbol(R, Decl(callWithSpread4.ts, 0, 0))
 >a : Symbol(a, Decl(callWithSpread4.ts, 0, 10))

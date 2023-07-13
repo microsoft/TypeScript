@@ -213,9 +213,9 @@ Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::

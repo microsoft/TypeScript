@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts] ////
+
+=== callWithSpread3.ts ===
 declare const s2: [string, string];
 >s2 : Symbol(s2, Decl(callWithSpread3.ts, 0, 13))
 

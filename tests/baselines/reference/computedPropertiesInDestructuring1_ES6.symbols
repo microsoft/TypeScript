@@ -1,4 +1,6 @@
-=== tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts ===
+//// [tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts] ////
+
+=== computedPropertiesInDestructuring1_ES6.ts ===
 // destructuring in variable declarations
 let foo = "bar";
 >foo : Symbol(foo, Decl(computedPropertiesInDestructuring1_ES6.ts, 1, 3))

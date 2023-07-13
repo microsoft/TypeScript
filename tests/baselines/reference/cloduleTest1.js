@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleTest1.ts] ////
+
 //// [cloduleTest1.ts]
   declare function $(selector: string): $;  
   interface $ {

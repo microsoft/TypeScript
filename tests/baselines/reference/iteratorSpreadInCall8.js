@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/spread/iteratorSpreadInCall8.ts] ////
+
 //// [iteratorSpreadInCall8.ts]
 class Foo<T> {
     constructor(...s: T[]) { }

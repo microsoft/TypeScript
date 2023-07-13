@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleVariableArrayIndexer.ts] ////
+
 //// [moduleVariableArrayIndexer.ts]
 module Bar {
     export var a = 1;

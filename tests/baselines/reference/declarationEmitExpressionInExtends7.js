@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpressionInExtends7.ts] ////
+
 //// [declarationEmitExpressionInExtends7.ts]
 export default class extends SomeUndefinedFunction {}
 

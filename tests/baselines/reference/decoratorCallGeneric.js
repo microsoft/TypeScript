@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/decoratorCallGeneric.ts] ////
+
 //// [decoratorCallGeneric.ts]
 interface I<T> {
     prototype: T,

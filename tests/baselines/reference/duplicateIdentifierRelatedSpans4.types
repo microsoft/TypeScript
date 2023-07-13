@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans4.ts] ////
+
+=== file1.ts ===
 interface TopLevel {
     duplicate1: () => string;
 >duplicate1 : () => string
@@ -24,7 +26,7 @@ interface TopLevel {
     duplicate8: () => string;
 >duplicate8 : () => string
 }
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 interface TopLevel {
     duplicate1(): number;
 >duplicate1 : () => number

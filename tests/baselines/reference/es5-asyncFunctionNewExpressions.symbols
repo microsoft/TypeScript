@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-asyncFunctionNewExpressions.ts ===
+//// [tests/cases/compiler/es5-asyncFunctionNewExpressions.ts] ////
+
+=== es5-asyncFunctionNewExpressions.ts ===
 declare var x, y, z, a, b, c;
 >x : Symbol(x, Decl(es5-asyncFunctionNewExpressions.ts, 0, 11))
 >y : Symbol(y, Decl(es5-asyncFunctionNewExpressions.ts, 0, 14))

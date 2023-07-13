@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceWithExcessProperties.ts] ////
+
 //// [typeInferenceWithExcessProperties.ts]
 // Repro from #17041
 

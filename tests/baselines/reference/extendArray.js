@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendArray.ts] ////
+
 //// [extendArray.ts]
 var a = [1,2];
 a.forEach(function (v,i,a) {});

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/external.ts ===
+//// [tests/cases/compiler/importHelpersNoHelpers.ts] ////
+
+=== external.ts ===
 export * from "./other";
 export class A { }
 >A : Symbol(A, Decl(external.ts, 0, 24))
@@ -35,11 +37,11 @@ const { ...x } = y;
 >x : Symbol(x, Decl(external.ts, 14, 7))
 >y : Symbol(y, Decl(external.ts, 13, 5))
 
-=== tests/cases/compiler/other.ts ===
+=== other.ts ===
 export const x = 1;
 >x : Symbol(x, Decl(other.ts, 0, 12))
 
-=== tests/cases/compiler/script.ts ===
+=== script.ts ===
 class A { }
 >A : Symbol(A, Decl(script.ts, 0, 0))
 
@@ -63,7 +65,7 @@ class C {
     }
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 
 export {}
 

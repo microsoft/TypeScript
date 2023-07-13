@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyAsReturnTypeForNewOnCall.ts ===
+//// [tests/cases/compiler/anyAsReturnTypeForNewOnCall.ts] ////
+
+=== anyAsReturnTypeForNewOnCall.ts ===
 function Point(x, y) {
 >Point : (x: any, y: any) => void
 >x : any

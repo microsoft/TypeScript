@@ -1,9 +1,9 @@
-tests/cases/compiler/awaitedType.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/awaitedType.ts(26,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
+awaitedType.ts(22,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+awaitedType.ts(26,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+awaitedType.ts(236,28): error TS2493: Tuple type '[number]' of length '1' has no element at index '1'.
 
 
-==== tests/cases/compiler/awaitedType.ts (3 errors) ====
+==== awaitedType.ts (3 errors) ====
     type T1 = Awaited<number>;
     type T2 = Awaited<Promise<number>>;
     type T3 = Awaited<number | Promise<number>>;

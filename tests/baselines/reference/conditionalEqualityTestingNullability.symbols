@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalEqualityTestingNullability.ts ===
+//// [tests/cases/compiler/conditionalEqualityTestingNullability.ts] ////
+
+=== conditionalEqualityTestingNullability.ts ===
 export type Equals<A1 extends any, A2 extends any> =
 >Equals : Symbol(Equals, Decl(conditionalEqualityTestingNullability.ts, 0, 0))
 >A1 : Symbol(A1, Decl(conditionalEqualityTestingNullability.ts, 0, 19))

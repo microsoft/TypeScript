@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts] ////
+
 //// [privateNameAndObjectRestSpread.ts]
 class C {
     #prop = 1;

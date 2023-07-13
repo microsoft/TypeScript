@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandProperties.ts ===
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandProperties.ts] ////
+
+=== objectLiteralShorthandProperties.ts ===
 var a, b, c;
 >a : Symbol(a, Decl(objectLiteralShorthandProperties.ts, 0, 3))
 >b : Symbol(b, Decl(objectLiteralShorthandProperties.ts, 0, 6))

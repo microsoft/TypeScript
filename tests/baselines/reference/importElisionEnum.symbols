@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enum.ts ===
+//// [tests/cases/compiler/importElisionEnum.ts] ////
+
+=== enum.ts ===
 export enum MyEnum {
 >MyEnum : Symbol(MyEnum, Decl(enum.ts, 0, 0))
 
@@ -15,7 +17,7 @@ export enum MyEnum {
 >d : Symbol(MyEnum.d, Decl(enum.ts, 3, 4))
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { MyEnum as MyEnumFromModule } from "./enum";
 >MyEnum : Symbol(MyEnumFromModule, Decl(enum.ts, 0, 0))
 >MyEnumFromModule : Symbol(MyEnumFromModule, Decl(index.ts, 0, 8))

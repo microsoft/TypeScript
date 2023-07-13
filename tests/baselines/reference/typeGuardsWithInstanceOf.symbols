@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts] ////
+
+=== typeGuardsWithInstanceOf.ts ===
 interface I { global: string; }
 >I : Symbol(I, Decl(typeGuardsWithInstanceOf.ts, 0, 0))
 >global : Symbol(I.global, Decl(typeGuardsWithInstanceOf.ts, 0, 13))

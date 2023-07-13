@@ -1,7 +1,7 @@
-tests/cases/compiler/jsCheckObjectDefineThisNoCrash.js(5,36): error TS2339: Property '_prop' does not exist on type 'C'.
+jsCheckObjectDefineThisNoCrash.js(5,36): error TS2339: Property '_prop' does not exist on type 'C'.
 
 
-==== tests/cases/compiler/jsCheckObjectDefineThisNoCrash.js (1 errors) ====
+==== jsCheckObjectDefineThisNoCrash.js (1 errors) ====
     class C {
         constructor() {
             // Neither of the following should be recognized as declarations yet

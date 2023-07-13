@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'unknown', but here has type '{}'.
+objectLiteralContextualTyping.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'unknown', but here has type '{}'.
 
 
-==== tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts (1 errors) ====
+==== objectLiteralContextualTyping.ts (1 errors) ====
     // In a contextually typed object literal, each property value expression is contextually typed by
     //      the type of the property with a matching name in the contextual type, if any, or otherwise
     //      for a numerically named property, the numeric index type of the contextual type, if any, or otherwise
@@ -33,5 +33,5 @@ tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTypi
     var b: {};
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'unknown', but here has type '{}'.
-!!! related TS6203 tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts:28:5: 'b' was also declared here.
+!!! related TS6203 objectLiteralContextualTyping.ts:28:5: 'b' was also declared here.
     

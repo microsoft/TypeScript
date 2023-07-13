@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts] ////
+
 //// [privateNamesUnique-3.ts]
 class A {
     #foo = 1;

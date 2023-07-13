@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypeOfIndexedAccessParameter.ts] ////
+
 //// [contextualTypeOfIndexedAccessParameter.ts]
 type Keys = "a" | "b";
 

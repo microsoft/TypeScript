@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts ===
+//// [tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts] ////
+
+=== assignFromStringInterface.ts ===
 var x = '';
 >x : Symbol(x, Decl(assignFromStringInterface.ts, 0, 3))
 

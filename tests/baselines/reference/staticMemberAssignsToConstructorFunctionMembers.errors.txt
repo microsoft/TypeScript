@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/staticMemberAssignsToConstructorFunctionMembers.ts(7,9): error TS2322: Type '() => void' is not assignable to type '(x: number) => number'.
+staticMemberAssignsToConstructorFunctionMembers.ts(7,9): error TS2322: Type '() => void' is not assignable to type '(x: number) => number'.
   Type 'void' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/staticMemberAssignsToConstructorFunctionMembers.ts (1 errors) ====
+==== staticMemberAssignsToConstructorFunctionMembers.ts (1 errors) ====
     class C {
         static foo() {
             C.foo = () => { }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMemberWithString.ts] ////
+
 //// [enumConstantMemberWithString.ts]
 enum T1 {
     a = "1",

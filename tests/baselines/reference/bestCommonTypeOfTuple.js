@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts] ////
+
 //// [bestCommonTypeOfTuple.ts]
 function f1(x: number): string { return "foo"; }
 

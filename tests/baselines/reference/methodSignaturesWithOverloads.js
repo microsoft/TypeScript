@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/methodSignatures/methodSignaturesWithOverloads.ts] ////
+
 //// [methodSignaturesWithOverloads.ts]
 // Object type literals permit overloads with optionality but they must match
 

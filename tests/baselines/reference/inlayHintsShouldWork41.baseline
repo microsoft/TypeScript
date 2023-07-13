@@ -1,0 +1,8 @@
+const a = () => 1
+            ^
+{
+  "text": ": number",
+  "position": 12,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

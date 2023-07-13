@@ -58,11 +58,11 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/d/f0.ts (used version)
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /users/username/projects/project/d/f0.ts: *new*
   {}
 /users/username/projects/project/f1.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -179,9 +179,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/d/f0.ts (computed .d.ts)
 
 FsWatches::
-/users/username/projects/project/d/f0.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/d/f0.ts:
   {}
 
 FsWatches *deleted*::
@@ -248,9 +248,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/d/f0.ts (computed .d.ts)
 
 FsWatches::
-/users/username/projects/project/d/f0.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/d/f0.ts:
   {}
 /users/username/projects/project/f1.ts: *new*
   {}

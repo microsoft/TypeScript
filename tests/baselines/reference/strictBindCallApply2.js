@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/strictBindCallApply2.ts] ////
+
 //// [strictBindCallApply2.ts]
 // Repro from #32964
 

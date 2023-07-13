@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classAppearsToHaveMembersOfObject.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classAppearsToHaveMembersOfObject.ts] ////
+
+=== classAppearsToHaveMembersOfObject.ts ===
 class C { foo: string; }
 >C : Symbol(C, Decl(classAppearsToHaveMembersOfObject.ts, 0, 0))
 >foo : Symbol(C.foo, Decl(classAppearsToHaveMembersOfObject.ts, 0, 9))

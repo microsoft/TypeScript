@@ -1,8 +1,10 @@
-=== tests/cases/compiler/fs.d.ts ===
+//// [tests/cases/compiler/esModuleInteropWithExportStar.ts] ////
+
+=== fs.d.ts ===
 export const x: number;
 >x : Symbol(x, Decl(fs.d.ts, 0, 12))
 
-=== tests/cases/compiler/mjts.ts ===
+=== mjts.ts ===
 import * as fs from "./fs";
 >fs : Symbol(fs, Decl(mjts.ts, 0, 6))
 

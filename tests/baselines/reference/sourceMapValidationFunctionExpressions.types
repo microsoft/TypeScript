@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationFunctionExpressions.ts ===
+//// [tests/cases/compiler/sourceMapValidationFunctionExpressions.ts] ////
+
+=== sourceMapValidationFunctionExpressions.ts ===
 var greetings = 0;
 >greetings : number
 >0 : 0

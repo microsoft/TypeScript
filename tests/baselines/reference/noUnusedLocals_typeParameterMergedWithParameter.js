@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts] ////
+
 //// [noUnusedLocals_typeParameterMergedWithParameter.ts]
 function useNone<T>(T: number) {}
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts ===
+//// [tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts] ////
+
+=== inferentialTypingWithObjectLiteralProperties.ts ===
 function f<T>(x: T, y: T): T {
 >f : Symbol(f, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 0))
 >T : Symbol(T, Decl(inferentialTypingWithObjectLiteralProperties.ts, 0, 11))

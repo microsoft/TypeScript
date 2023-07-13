@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyGloFunc.ts] ////
+
 //// [privacyGloFunc.ts]
 export module m1 {
     export class C1_public {

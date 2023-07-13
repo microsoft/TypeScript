@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingFunctionImplementation.ts] ////
+
 //// [missingFunctionImplementation.ts]
 export class C1 {
   m(): void;

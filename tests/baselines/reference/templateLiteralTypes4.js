@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes4.ts] ////
+
 //// [templateLiteralTypes4.ts]
 // infer from number
 type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100

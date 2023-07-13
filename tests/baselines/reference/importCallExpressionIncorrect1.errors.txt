@@ -1,10 +1,10 @@
-tests/cases/conformance/dynamicImport/1.ts(2,1): error TS1109: Expression expected.
+1.ts(2,1): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/dynamicImport/0.ts (0 errors) ====
+==== 0.ts (0 errors) ====
     export function foo() { return "foo"; }
     
-==== tests/cases/conformance/dynamicImport/1.ts (1 errors) ====
+==== 1.ts (1 errors) ====
     import
     import { foo } from './0';
     ~~~~~~

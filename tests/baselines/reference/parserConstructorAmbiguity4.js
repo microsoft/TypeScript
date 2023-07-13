@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity4.ts] ////
+
 //// [parserConstructorAmbiguity4.ts]
 new Date<A ? B : C
 

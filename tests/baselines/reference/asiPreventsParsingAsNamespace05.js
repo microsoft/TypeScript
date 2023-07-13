@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace05.ts] ////
+
 //// [asiPreventsParsingAsNamespace05.ts]
 let namespace = 10;
 namespace a.b {

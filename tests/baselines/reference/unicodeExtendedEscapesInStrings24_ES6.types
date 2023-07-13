@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings24_ES6.ts ===
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings24_ES6.ts] ////
+
+=== unicodeExtendedEscapesInStrings24_ES6.ts ===
 var x = "\u{00000000000067
 >x : string
 >"\u{00000000000067 : "\\u{00000000000067"

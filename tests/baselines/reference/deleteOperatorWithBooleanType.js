@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithBooleanType.ts] ////
+
 //// [deleteOperatorWithBooleanType.ts]
 // delete  operator on boolean type
 var BOOLEAN: boolean;

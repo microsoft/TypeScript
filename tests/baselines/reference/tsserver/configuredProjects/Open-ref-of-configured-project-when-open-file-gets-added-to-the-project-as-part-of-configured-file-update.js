@@ -151,9 +151,9 @@ Before running Timeout callback:: count: 2
 
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /a/b/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -248,9 +248,9 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -377,13 +377,13 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/file3.ts: *new*
   {}
 /a/b/src/file1.ts: *new*
   {}
 /a/b/src/file2.ts: *new*
   {}
-/a/b/file3.ts: *new*
+/a/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::

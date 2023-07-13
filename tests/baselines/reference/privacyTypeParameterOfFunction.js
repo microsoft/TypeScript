@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTypeParameterOfFunction.ts] ////
+
 //// [privacyTypeParameterOfFunction.ts]
 class privateClass {
 }

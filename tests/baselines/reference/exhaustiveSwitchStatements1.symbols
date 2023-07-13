@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts ===
+//// [tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts] ////
+
+=== exhaustiveSwitchStatements1.ts ===
 function f1(x: 1 | 2): string {
 >f1 : Symbol(f1, Decl(exhaustiveSwitchStatements1.ts, 0, 0))
 >x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 0, 12))

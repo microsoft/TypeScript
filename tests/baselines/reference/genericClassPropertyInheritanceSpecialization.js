@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClassPropertyInheritanceSpecialization.ts] ////
+
 //// [genericClassPropertyInheritanceSpecialization.ts]
 interface KnockoutObservableBase<T> {
     peek(): T;

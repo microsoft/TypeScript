@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varArgsOnConstructorTypes.ts] ////
+
 //// [varArgsOnConstructorTypes.ts]
 export class A {
     constructor(ctor) { }

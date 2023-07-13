@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveGenericMethodCall.ts ===
+//// [tests/cases/compiler/recursiveGenericMethodCall.ts] ////
+
+=== recursiveGenericMethodCall.ts ===
 interface Generator<T> { (): T; }
 >Generator : Symbol(Generator, Decl(recursiveGenericMethodCall.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveGenericMethodCall.ts, 0, 20))

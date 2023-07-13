@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingFunctionReturningFunction.ts ===
+//// [tests/cases/compiler/contextualTypingFunctionReturningFunction.ts] ////
+
+=== contextualTypingFunctionReturningFunction.ts ===
 interface I {
 >I : Symbol(I, Decl(contextualTypingFunctionReturningFunction.ts, 0, 0))
 

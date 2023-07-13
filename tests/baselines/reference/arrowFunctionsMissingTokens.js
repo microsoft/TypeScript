@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionsMissingTokens.ts] ////
+
 //// [arrowFunctionsMissingTokens.ts]
 module missingArrowsWithCurly {
     var a = () { };

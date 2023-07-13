@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidArrayLit.ts] ////
+
 //// [voidArrayLit.ts]
 var va = [(() => {})()]; // ok
 (() => {})(); // ok

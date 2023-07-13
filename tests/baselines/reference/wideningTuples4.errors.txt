@@ -1,8 +1,8 @@
-tests/cases/conformance/types/tuple/wideningTuples4.ts(3,9): error TS2322: Type '[undefined, null]' is not assignable to type '[any]'.
+wideningTuples4.ts(3,9): error TS2322: Type '[undefined, null]' is not assignable to type '[any]'.
   Source has 2 element(s) but target allows only 1.
 
 
-==== tests/cases/conformance/types/tuple/wideningTuples4.ts (1 errors) ====
+==== wideningTuples4.ts (1 errors) ====
     var a: [any];
     
     var b = a = [undefined, null];

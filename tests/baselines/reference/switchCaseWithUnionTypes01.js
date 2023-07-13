@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts] ////
+
 //// [switchCaseWithUnionTypes01.ts]
 var strOrNum: string | number;
 var numOrBool: number | boolean;

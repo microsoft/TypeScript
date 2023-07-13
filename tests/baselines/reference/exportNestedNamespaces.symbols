@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/mod.js ===
+//// [tests/cases/conformance/salsa/exportNestedNamespaces.ts] ////
+
+=== mod.js ===
 exports.n = {};
 >exports.n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
 >exports : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
@@ -7,7 +9,7 @@ exports.n = {};
 exports.n.K = function () {
 >exports.n.K : Symbol(n.K, Decl(mod.js, 0, 15))
 >exports.n : Symbol(n.K, Decl(mod.js, 0, 15))
->exports : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>exports : Symbol("mod", Decl(mod.js, 0, 0))
 >n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
 >K : Symbol(n.K, Decl(mod.js, 0, 15))
 
@@ -29,7 +31,7 @@ exports.Classic = class {
     }
 }
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 import * as s from './mod'
 >s : Symbol(s, Decl(use.js, 0, 6))
 

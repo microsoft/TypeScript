@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/bug25149.js ===
+//// [tests/cases/conformance/es6/yieldExpressions/yieldExpressionInControlFlow.ts] ////
+
+=== bug25149.js ===
 function* f() {
 >f : () => Generator<any, void, any>
 
@@ -16,7 +18,7 @@ function* f() {
     }
 }
 
-=== tests/cases/conformance/es6/yieldExpressions/alsoFails.ts ===
+=== alsoFails.ts ===
 // fails in Typescript too
 function* g() {
 >g : () => Generator<any, void, any>

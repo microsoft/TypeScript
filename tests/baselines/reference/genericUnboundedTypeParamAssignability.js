@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericUnboundedTypeParamAssignability.ts] ////
+
 //// [genericUnboundedTypeParamAssignability.ts]
 function f1<T>(o: T) {
   o.toString(); // error

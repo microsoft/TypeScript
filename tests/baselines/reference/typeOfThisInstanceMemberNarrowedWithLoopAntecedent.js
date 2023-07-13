@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts] ////
+
 //// [typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts]
 // #31995
 type State = {

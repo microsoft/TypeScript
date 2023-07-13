@@ -1,35 +1,35 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(16,5): error TS2411: Property 'foo4' of type 'boolean' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(18,5): error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(19,5): error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(20,5): error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(21,5): error TS2411: Property 'foo9' of type 'I8' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(22,5): error TS2411: Property 'foo10' of type 'A' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(23,5): error TS2411: Property 'foo11' of type 'A2<number>' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(24,5): error TS2411: Property 'foo12' of type '(x: any) => number' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(25,5): error TS2411: Property 'foo13' of type '<T>(x: T) => T' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(26,5): error TS2411: Property 'foo14' of type 'typeof f' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(27,5): error TS2411: Property 'foo15' of type 'typeof c' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(28,5): error TS2411: Property 'foo16' of type 'T' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(29,5): error TS2411: Property 'foo17' of type 'Object' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(30,5): error TS2411: Property 'foo18' of type '{}' is not assignable to 'string' index type 'string | number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(35,5): error TS2411: Property 'foo2' of type 'string' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(37,5): error TS2411: Property 'foo4' of type 'boolean' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(39,5): error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(40,5): error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(41,5): error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(42,5): error TS2411: Property 'foo9' of type 'I8' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(43,5): error TS2411: Property 'foo10' of type 'A' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(44,5): error TS2411: Property 'foo11' of type 'A2<number>' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(45,5): error TS2411: Property 'foo12' of type '(x: any) => number' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(46,5): error TS2411: Property 'foo13' of type '<T>(x: T) => T' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(47,5): error TS2411: Property 'foo14' of type 'typeof f' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(48,5): error TS2411: Property 'foo15' of type 'typeof c' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(49,5): error TS2411: Property 'foo16' of type 'T' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(50,5): error TS2411: Property 'foo17' of type 'Object' is not assignable to 'string' index type 'number'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts(51,5): error TS2411: Property 'foo18' of type '{}' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(16,5): error TS2411: Property 'foo4' of type 'boolean' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(18,5): error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(19,5): error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(20,5): error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(21,5): error TS2411: Property 'foo9' of type 'I8' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(22,5): error TS2411: Property 'foo10' of type 'A' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(23,5): error TS2411: Property 'foo11' of type 'A2<number>' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(24,5): error TS2411: Property 'foo12' of type '(x: any) => number' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(25,5): error TS2411: Property 'foo13' of type '<T>(x: T) => T' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(26,5): error TS2411: Property 'foo14' of type 'typeof f' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(27,5): error TS2411: Property 'foo15' of type 'typeof c' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(28,5): error TS2411: Property 'foo16' of type 'T' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(29,5): error TS2411: Property 'foo17' of type 'Object' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(30,5): error TS2411: Property 'foo18' of type '{}' is not assignable to 'string' index type 'string | number'.
+subtypesOfUnion.ts(35,5): error TS2411: Property 'foo2' of type 'string' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(37,5): error TS2411: Property 'foo4' of type 'boolean' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(39,5): error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(40,5): error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(41,5): error TS2411: Property 'foo8' of type '{ bar: number; }' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(42,5): error TS2411: Property 'foo9' of type 'I8' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(43,5): error TS2411: Property 'foo10' of type 'A' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(44,5): error TS2411: Property 'foo11' of type 'A2<number>' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(45,5): error TS2411: Property 'foo12' of type '(x: any) => number' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(46,5): error TS2411: Property 'foo13' of type '<T>(x: T) => T' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(47,5): error TS2411: Property 'foo14' of type 'typeof f' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(48,5): error TS2411: Property 'foo15' of type 'typeof c' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(49,5): error TS2411: Property 'foo16' of type 'T' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(50,5): error TS2411: Property 'foo17' of type 'Object' is not assignable to 'string' index type 'number'.
+subtypesOfUnion.ts(51,5): error TS2411: Property 'foo18' of type '{}' is not assignable to 'string' index type 'number'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts (29 errors) ====
+==== subtypesOfUnion.ts (29 errors) ====
     enum E { e1, e2 }
     interface I8 { [x: string]: number[]; }
     class A { foo: number; }

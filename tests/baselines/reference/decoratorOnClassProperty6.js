@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/property/decoratorOnClassProperty6.ts] ////
+
 //// [decoratorOnClassProperty6.ts]
 declare function dec(target: Function): void;
 

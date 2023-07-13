@@ -1,5 +1,7 @@
 //// [tests/cases/compiler/pathMappingBasedModuleResolution5_classic.ts] ////
 
+//// [file4.ts]
+export var z1 = 1;
 //// [file1.ts]
 import {x} from "folder2/file1"
 import {y} from "folder3/file2"
@@ -22,8 +24,6 @@ export var y = 1;
 //// [file3.ts]
 export var z = 1;
 
-//// [file4.ts]
-export var z1 = 1;
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {

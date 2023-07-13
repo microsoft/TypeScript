@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformChildren.tsx ===
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformChildren.tsx] ////
+
+=== jsxJsxsCjsTransformChildren.tsx ===
 /// <reference path="react16.d.ts" />
 const a = <div>text</div>;
 >a : Symbol(a, Decl(jsxJsxsCjsTransformChildren.tsx, 1, 5))

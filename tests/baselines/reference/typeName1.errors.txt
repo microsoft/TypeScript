@@ -1,23 +1,23 @@
-tests/cases/compiler/typeName1.ts(9,5): error TS2322: Type 'number' is not assignable to type '{ f(s: string): number; f(n: number): string; }'.
-tests/cases/compiler/typeName1.ts(10,5): error TS2322: Type 'number' is not assignable to type '{ f(s: string): number; }'.
-tests/cases/compiler/typeName1.ts(11,5): error TS2322: Type 'number' is not assignable to type '{ (s: string): number; (n: number): string; }'.
-tests/cases/compiler/typeName1.ts(12,5): error TS2322: Type 'number' is not assignable to type '{ x: any; y: any; z: number; f(n: number): string; f(s: string): number; }'.
-tests/cases/compiler/typeName1.ts(13,5): error TS2322: Type 'number' is not assignable to type '{ (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }'.
-tests/cases/compiler/typeName1.ts(14,5): error TS2322: Type 'number' is not assignable to type '{ z: number; f: { (n: number): string; (s: string): number; }; }'.
-tests/cases/compiler/typeName1.ts(15,5): error TS2322: Type 'number' is not assignable to type '(s: string) => boolean'.
-tests/cases/compiler/typeName1.ts(16,5): error TS2322: Type 'number' is not assignable to type '{ (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }'.
-tests/cases/compiler/typeName1.ts(16,10): error TS2411: Property 'z' of type 'I' is not assignable to 'string' index type '{ x: any; y: any; }'.
-tests/cases/compiler/typeName1.ts(17,5): error TS2322: Type 'number' is not assignable to type 'I'.
-tests/cases/compiler/typeName1.ts(18,5): error TS2322: Type 'number' is not assignable to type 'I[][][][]'.
-tests/cases/compiler/typeName1.ts(19,5): error TS2322: Type 'number' is not assignable to type '{ z: I; x: boolean; }[][]'.
-tests/cases/compiler/typeName1.ts(20,5): error TS2322: Type 'number' is not assignable to type '{ z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }; }[][]'.
-tests/cases/compiler/typeName1.ts(20,50): error TS2411: Property 'z' of type 'I' is not assignable to 'string' index type '{ x: any; y: any; }'.
-tests/cases/compiler/typeName1.ts(21,5): error TS2322: Type 'number' is not assignable to type '{ (): {}; new (): number; new (n: number): number; x: string; w: { y: number; }; }'.
-tests/cases/compiler/typeName1.ts(22,5): error TS2322: Type 'number' is not assignable to type '{ (): string; f(x: number): boolean; p: any; q: any; }'.
-tests/cases/compiler/typeName1.ts(23,5): error TS2322: Type 'typeof C' is not assignable to type 'number'.
+typeName1.ts(9,5): error TS2322: Type 'number' is not assignable to type '{ f(s: string): number; f(n: number): string; }'.
+typeName1.ts(10,5): error TS2322: Type 'number' is not assignable to type '{ f(s: string): number; }'.
+typeName1.ts(11,5): error TS2322: Type 'number' is not assignable to type '{ (s: string): number; (n: number): string; }'.
+typeName1.ts(12,5): error TS2322: Type 'number' is not assignable to type '{ x: any; y: any; z: number; f(n: number): string; f(s: string): number; }'.
+typeName1.ts(13,5): error TS2322: Type 'number' is not assignable to type '{ (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }'.
+typeName1.ts(14,5): error TS2322: Type 'number' is not assignable to type '{ z: number; f: { (n: number): string; (s: string): number; }; }'.
+typeName1.ts(15,5): error TS2322: Type 'number' is not assignable to type '(s: string) => boolean'.
+typeName1.ts(16,5): error TS2322: Type 'number' is not assignable to type '{ (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }'.
+typeName1.ts(16,10): error TS2411: Property 'z' of type 'I' is not assignable to 'string' index type '{ x: any; y: any; }'.
+typeName1.ts(17,5): error TS2322: Type 'number' is not assignable to type 'I'.
+typeName1.ts(18,5): error TS2322: Type 'number' is not assignable to type 'I[][][][]'.
+typeName1.ts(19,5): error TS2322: Type 'number' is not assignable to type '{ z: I; x: boolean; }[][]'.
+typeName1.ts(20,5): error TS2322: Type 'number' is not assignable to type '{ z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }; }[][]'.
+typeName1.ts(20,50): error TS2411: Property 'z' of type 'I' is not assignable to 'string' index type '{ x: any; y: any; }'.
+typeName1.ts(21,5): error TS2322: Type 'number' is not assignable to type '{ (): {}; new (): number; new (n: number): number; x: string; w: { y: number; }; }'.
+typeName1.ts(22,5): error TS2322: Type 'number' is not assignable to type '{ (): string; f(x: number): boolean; p: any; q: any; }'.
+typeName1.ts(23,5): error TS2322: Type 'typeof C' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/typeName1.ts (17 errors) ====
+==== typeName1.ts (17 errors) ====
     interface I {
         k;
     }

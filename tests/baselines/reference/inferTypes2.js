@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/inferTypes2.ts] ////
+
 //// [inferTypes2.ts]
 // Repros from #22755
 

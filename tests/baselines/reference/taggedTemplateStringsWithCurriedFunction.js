@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplateStringsWithCurriedFunction.ts] ////
+
 //// [taggedTemplateStringsWithCurriedFunction.ts]
 // Originated from #38558
 

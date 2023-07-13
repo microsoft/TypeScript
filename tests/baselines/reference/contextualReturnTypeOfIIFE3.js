@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualReturnTypeOfIIFE3.ts] ////
+
 //// [contextualReturnTypeOfIIFE3.ts]
 declare namespace app {
   var foo: {

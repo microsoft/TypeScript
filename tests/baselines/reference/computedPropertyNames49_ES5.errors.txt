@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames49_ES5.ts(9,9): error TS1049: A 'set' accessor must have exactly one parameter.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames49_ES5.ts(13,9): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames49_ES5.ts(18,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames49_ES5.ts(18,9): error TS2300: Duplicate identifier 'foo'.
+computedPropertyNames49_ES5.ts(9,9): error TS1049: A 'set' accessor must have exactly one parameter.
+computedPropertyNames49_ES5.ts(13,9): error TS2300: Duplicate identifier 'foo'.
+computedPropertyNames49_ES5.ts(18,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+computedPropertyNames49_ES5.ts(18,9): error TS2300: Duplicate identifier 'foo'.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames49_ES5.ts (4 errors) ====
+==== computedPropertyNames49_ES5.ts (4 errors) ====
     var x = {
         p1: 10,
         get [1 + 1]() {

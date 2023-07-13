@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultTypeAndClass.ts] ////
+
 //// [exportDefaultTypeAndClass.ts]
 export default class Foo {}
 type Bar = {}

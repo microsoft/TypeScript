@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts] ////
+
+=== parserAstSpans1.ts ===
 /** i1 is interface with properties*/
 interface i1 {
 >i1 : Symbol(i1, Decl(parserAstSpans1.ts, 0, 0))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans5.ts] ////
+
+=== file1.ts ===
 declare global {
 >global : Symbol(global, Decl(file1.ts, 0, 0))
 
@@ -16,7 +18,7 @@ declare global {
     }
 }
 export {}
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import "./file1";
 declare global {
 >global : Symbol(global, Decl(file2.ts, 0, 17))

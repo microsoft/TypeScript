@@ -171,9 +171,9 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 After running Timeout callback:: count: 0
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /a/b/commonfile2.ts: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 Before request

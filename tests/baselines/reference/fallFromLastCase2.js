@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fallFromLastCase2.ts] ////
+
 //// [fallFromLastCase2.ts]
 declare function use(a: string);
 

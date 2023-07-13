@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/module_augmentExistingVariable.ts] ////
+
 //// [module_augmentExistingVariable.ts]
 var console: any;
 

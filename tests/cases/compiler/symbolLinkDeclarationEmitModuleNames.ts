@@ -22,4 +22,4 @@ export class BindingKey<T> {
 export * from "./src/value-promise";
 export * from "./src/bindingkey";
 
-// @link: tests/cases/compiler/monorepo/context -> tests/cases/compiler/monorepo/node_modules/@loopback/context
+// @link: monorepo/context -> monorepo/node_modules/@loopback/context

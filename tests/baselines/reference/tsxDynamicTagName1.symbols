@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/tsxDynamicTagName1.tsx ===
+//// [tests/cases/conformance/jsx/tsxDynamicTagName1.tsx] ////
+
+=== tsxDynamicTagName1.tsx ===
 var CustomTag = "h1";
 >CustomTag : Symbol(CustomTag, Decl(tsxDynamicTagName1.tsx, 0, 3))
 

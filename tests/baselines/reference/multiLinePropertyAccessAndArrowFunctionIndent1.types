@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts ===
+//// [tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts] ////
+
+=== multiLinePropertyAccessAndArrowFunctionIndent1.ts ===
 return this.edit(role)
 >this.edit(role)    .then((role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data)) : any
 >this.edit(role)    .then : any

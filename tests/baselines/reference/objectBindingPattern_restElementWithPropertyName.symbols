@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectBindingPattern_restElementWithPropertyName.ts ===
+//// [tests/cases/compiler/objectBindingPattern_restElementWithPropertyName.ts] ////
+
+=== objectBindingPattern_restElementWithPropertyName.ts ===
 const { ...a: b } = {};
 >b : Symbol(b, Decl(objectBindingPattern_restElementWithPropertyName.ts, 0, 7))
 

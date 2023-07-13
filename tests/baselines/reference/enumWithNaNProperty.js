@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithNaNProperty.ts] ////
+
 //// [enumWithNaNProperty.ts]
 enum A {
     NaN = 1

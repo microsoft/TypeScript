@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-asyncFunctionWhileStatements.ts] ////
+
 //// [es5-asyncFunctionWhileStatements.ts]
 declare var x, y, z, a, b, c;
 

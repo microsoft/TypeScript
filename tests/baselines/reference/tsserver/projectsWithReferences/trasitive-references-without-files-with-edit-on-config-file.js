@@ -181,29 +181,29 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/b/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/a/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject: *new*
   {}
+/user/username/projects/myproject/a/index.ts: *new*
+  {}
+/user/username/projects/myproject/a/tsconfig.json: *new*
+  {}
 /user/username/projects/myproject/b/index.ts: *new*
   {}
-/user/username/projects/myproject/a/index.ts: *new*
+/user/username/projects/myproject/b/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/c/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/refs/a.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/c: *new*
+/user/username/projects/myproject/a: *new*
   {}
 /user/username/projects/myproject/b: *new*
   {}
-/user/username/projects/myproject/a: *new*
+/user/username/projects/myproject/c: *new*
   {}
 /user/username/projects/myproject/refs: *new*
   {}
@@ -288,31 +288,31 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/a/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/b/index.ts:
-  {}
 /user/username/projects/myproject/a/index.ts:
   {}
-/user/username/projects/myproject/refs/a.d.ts:
+/user/username/projects/myproject/a/tsconfig.json:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/c/tsconfig.json:
   {}
 /user/username/projects/myproject/nrefs/a.d.ts: *new*
   {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/c:
+/user/username/projects/myproject/a:
   {}
 /user/username/projects/myproject/b:
   {}
-/user/username/projects/myproject/a:
+/user/username/projects/myproject/c:
   {}
 /user/username/projects/myproject/nrefs: *new*
   {}
@@ -410,31 +410,31 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
-  {}
-/user/username/projects/myproject/a/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/b/index.ts:
-  {}
 /user/username/projects/myproject/a/index.ts:
   {}
-/user/username/projects/myproject/refs/a.d.ts:
+/user/username/projects/myproject/a/tsconfig.json:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/c/tsconfig.json:
   {}
 /user/username/projects/myproject/nrefs/a.d.ts:
   {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/c:
+/user/username/projects/myproject/a:
   {}
 /user/username/projects/myproject/b:
   {}
-/user/username/projects/myproject/a:
+/user/username/projects/myproject/c:
   {}
 /user/username/projects/myproject/refs: *new*
   {}

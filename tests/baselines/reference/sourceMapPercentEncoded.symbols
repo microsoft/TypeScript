@@ -1,4 +1,6 @@
-=== tests/cases/compiler/①Ⅻㄨㄩ 啊阿鼾齄丂丄狚狛狜狝﨨﨩ˊˋ˙–⿻〇㐀㐁䶴䶵U1[]U2[]U3[].ts ===
+//// [tests/cases/compiler/sourceMapPercentEncoded.ts] ////
+
+=== ①Ⅻㄨㄩ 啊阿鼾齄丂丄狚狛狜狝﨨﨩ˊˋ˙–⿻〇㐀㐁䶴䶵U1[]U2[]U3[].ts ===
 var a = 1;
 >a : Symbol(a, Decl(①Ⅻㄨㄩ 啊阿鼾齄丂丄狚狛狜狝﨨﨩ˊˋ˙–⿻〇㐀㐁䶴䶵U1[]U2[]U3[].ts, 0, 3))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts] ////
+
 //// [twoAccessorsWithSameName.ts]
 class C {
     get x() { return 1; }

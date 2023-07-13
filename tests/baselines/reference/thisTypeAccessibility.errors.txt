@@ -1,18 +1,18 @@
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(26,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(29,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(30,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(35,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(38,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(39,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(44,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(47,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(48,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(55,10): error TS2341: Property 'p' is private and only accessible within class 'MyGenericClass<T>'.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(58,20): error TS2341: Property 'sp' is private and only accessible within class 'MyGenericClass<T>'.
-tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(59,20): error TS2445: Property 'spp' is protected and only accessible within class 'MyGenericClass<T>' and its subclasses.
+thisTypeAccessibility.ts(26,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+thisTypeAccessibility.ts(29,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+thisTypeAccessibility.ts(30,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+thisTypeAccessibility.ts(35,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+thisTypeAccessibility.ts(38,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+thisTypeAccessibility.ts(39,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+thisTypeAccessibility.ts(44,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+thisTypeAccessibility.ts(47,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+thisTypeAccessibility.ts(48,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+thisTypeAccessibility.ts(55,10): error TS2341: Property 'p' is private and only accessible within class 'MyGenericClass<T>'.
+thisTypeAccessibility.ts(58,20): error TS2341: Property 'sp' is private and only accessible within class 'MyGenericClass<T>'.
+thisTypeAccessibility.ts(59,20): error TS2445: Property 'spp' is protected and only accessible within class 'MyGenericClass<T>' and its subclasses.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeAccessibility.ts (12 errors) ====
+==== thisTypeAccessibility.ts (12 errors) ====
     class MyClass {
         private p: number = 123;
         protected pp: number = 123;

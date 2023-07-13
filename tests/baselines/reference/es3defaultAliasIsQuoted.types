@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es3defaultAliasQuoted_file0.ts ===
+//// [tests/cases/compiler/es3defaultAliasIsQuoted.ts] ////
+
+=== es3defaultAliasQuoted_file0.ts ===
 export class Foo {
 >Foo : Foo
 
@@ -19,7 +21,7 @@ export default function assert(value: boolean) {
 >"Assertion failed!" : "Assertion failed!"
 }
 
-=== tests/cases/compiler/es3defaultAliasQuoted_file1.ts ===
+=== es3defaultAliasQuoted_file1.ts ===
 import {Foo, default as assert} from "./es3defaultAliasQuoted_file0";
 >Foo : typeof Foo
 >default : (value: boolean) => void

@@ -52,6 +52,7 @@ File '/a/fs.d.ts' does not exist.
 File '/fs.ts' does not exist.
 File '/fs.tsx' does not exist.
 File '/fs.d.ts' does not exist.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
 File '/a/b/node_modules/@types/fs/package.json' does not exist.
 File '/a/b/node_modules/@types/fs.d.ts' does not exist.
 File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.
@@ -178,6 +179,7 @@ File '/a/fs.d.ts' does not exist.
 File '/fs.ts' does not exist.
 File '/fs.tsx' does not exist.
 File '/fs.d.ts' does not exist.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
 File '/a/b/node_modules/@types/fs/package.json' does not exist.
 File '/a/b/node_modules/@types/fs.d.ts' does not exist.
 File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.

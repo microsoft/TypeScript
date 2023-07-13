@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es5/asyncAwaitNestedClasses_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncAwaitNestedClasses_es5.ts] ////
+
+=== asyncAwaitNestedClasses_es5.ts ===
 // https://github.com/Microsoft/TypeScript/issues/20744
 class A {
 >A : Symbol(A, Decl(asyncAwaitNestedClasses_es5.ts, 0, 0))

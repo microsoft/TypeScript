@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mixinIntersectionIsValidbaseType.ts] ////
+
 //// [mixinIntersectionIsValidbaseType.ts]
 export type Constructor<T extends object = object> = new (...args: any[]) => T;
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/point.d.ts ===
+//// [tests/cases/compiler/esModuleInteropDefaultMemberMustBeSyntacticallyDefaultExport.ts] ////
+
+=== point.d.ts ===
 declare class Point {
 >Point : Symbol(Point, Decl(point.d.ts, 0, 0))
 
@@ -19,7 +21,7 @@ declare class Point {
 export = Point;
 >Point : Symbol(Point, Decl(point.d.ts, 0, 0))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import Point from "./point";
 >Point : Symbol(Point, Decl(index.ts, 0, 6))
 

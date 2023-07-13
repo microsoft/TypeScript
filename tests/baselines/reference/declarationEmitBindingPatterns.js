@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitBindingPatterns.ts] ////
+
 //// [declarationEmitBindingPatterns.ts]
 const k = ({x: z = 'y'}) => { }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterExtendsPrimitive.ts] ////
+
 //// [typeParameterExtendsPrimitive.ts]
 // #14473
 function f<T extends number>() {

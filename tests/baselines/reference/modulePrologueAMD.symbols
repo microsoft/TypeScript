@@ -1,4 +1,6 @@
-=== tests/cases/compiler/modulePrologueAMD.ts ===
+//// [tests/cases/compiler/modulePrologueAMD.ts] ////
+
+=== modulePrologueAMD.ts ===
 "use strict";
 
 export class Foo {}

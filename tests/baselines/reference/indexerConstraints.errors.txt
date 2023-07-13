@@ -1,10 +1,10 @@
-tests/cases/compiler/indexerConstraints.ts(17,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
-tests/cases/compiler/indexerConstraints.ts(25,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
-tests/cases/compiler/indexerConstraints.ts(33,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
-tests/cases/compiler/indexerConstraints.ts(41,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+indexerConstraints.ts(17,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+indexerConstraints.ts(25,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+indexerConstraints.ts(33,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+indexerConstraints.ts(41,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
 
 
-==== tests/cases/compiler/indexerConstraints.ts (4 errors) ====
+==== indexerConstraints.ts (4 errors) ====
     interface A { a: number; }
     interface B extends A { b: number; }
     

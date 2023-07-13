@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck28.ts] ////
+
 //// [generatorTypeCheck28.ts]
 function* g(): IterableIterator<(x: string) => number> {
     yield * {

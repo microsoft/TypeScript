@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/undefined/invalidUndefinedValues.ts] ////
+
 //// [invalidUndefinedValues.ts]
 var x: typeof undefined;
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nameCollisions.ts] ////
+
 //// [nameCollisions.ts]
 module T {
     var x = 2;

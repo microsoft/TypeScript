@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsInheritance.ts ===
+//// [tests/cases/compiler/commentsInheritance.ts] ////
+
+=== commentsInheritance.ts ===
 /** i1 is interface with properties*/
 interface i1 {
 >i1 : Symbol(i1, Decl(commentsInheritance.ts, 0, 0))

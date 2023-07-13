@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads26.ts ===
+//// [tests/cases/compiler/functionOverloads26.ts] ////
+
+=== functionOverloads26.ts ===
 function foo():string;
 >foo : { (): string; (bar: string): number; }
 

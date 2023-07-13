@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing8.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing8.ts] ////
+
+=== superCallBeforeThisAccessing8.ts ===
 class Base {
 >Base : Symbol(Base, Decl(superCallBeforeThisAccessing8.ts, 0, 0))
 

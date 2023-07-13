@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importOnAliasedIdentifiers.ts] ////
+
 //// [importOnAliasedIdentifiers.ts]
 module A {
     export interface X { s: string }

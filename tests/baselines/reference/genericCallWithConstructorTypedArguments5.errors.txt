@@ -1,14 +1,14 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstructorTypedArguments5.ts(11,14): error TS2345: Argument of type '{ cb: new <T>(x: T, y: T) => string; }' is not assignable to parameter of type '{ cb: new (t: unknown) => string; }'.
+genericCallWithConstructorTypedArguments5.ts(11,14): error TS2345: Argument of type '{ cb: new <T>(x: T, y: T) => string; }' is not assignable to parameter of type '{ cb: new (t: unknown) => string; }'.
   Types of property 'cb' are incompatible.
     Type 'new <T>(x: T, y: T) => string' is not assignable to type 'new (t: unknown) => string'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstructorTypedArguments5.ts(13,14): error TS2345: Argument of type '{ cb: new (x: string, y: number) => string; }' is not assignable to parameter of type '{ cb: new (t: string) => string; }'.
+genericCallWithConstructorTypedArguments5.ts(13,14): error TS2345: Argument of type '{ cb: new (x: string, y: number) => string; }' is not assignable to parameter of type '{ cb: new (t: string) => string; }'.
   Types of property 'cb' are incompatible.
     Type 'new (x: string, y: number) => string' is not assignable to type 'new (t: string) => string'.
       Target signature provides too few arguments. Expected 2 or more, but got 1.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstructorTypedArguments5.ts (2 errors) ====
+==== genericCallWithConstructorTypedArguments5.ts (2 errors) ====
     // Generic call with parameter of object type with member of function type of n args passed object whose associated member is call signature with n+1 args
     
     function foo<T, U>(arg: { cb: new(t: T) => U }) {

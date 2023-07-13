@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterListAsTupleType.ts] ////
+
 //// [parameterListAsTupleType.ts]
 function foo(a: number, b: string) {
   return true;

@@ -107,15 +107,15 @@ export class Cookie { }
 
 
 PolledWatches::
-/Users/someuser/work/applications/frontend/types: *new*
-  {"pollingInterval":500}
 /Users/someuser/work/applications/frontend/node_modules: *new*
+  {"pollingInterval":500}
+/Users/someuser/work/applications/frontend/types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/Users/someuser/work/applications/frontend/tsconfig.json: *new*
-  {}
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts: *new*
+  {}
+/Users/someuser/work/applications/frontend/tsconfig.json: *new*
   {}
 /a/lib/lib.es2016.full.d.ts: *new*
   {}
@@ -166,19 +166,19 @@ Info seq  [hh:mm:ss:mss] 		Projects: /Users/someuser/work/applications/frontend/
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/Users/someuser/work/applications/frontend/types:
-  {"pollingInterval":500}
 /Users/someuser/work/applications/frontend/node_modules:
+  {"pollingInterval":500}
+/Users/someuser/work/applications/frontend/types:
   {"pollingInterval":500}
 
 FsWatches::
-/Users/someuser/work/applications/frontend/tsconfig.json:
-  {}
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:
   {}
-/a/lib/lib.es2016.full.d.ts:
-  {}
 /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts: *new*
+  {}
+/Users/someuser/work/applications/frontend/tsconfig.json:
+  {}
+/a/lib/lib.es2016.full.d.ts:
   {}
 
 FsWatchesRecursive::

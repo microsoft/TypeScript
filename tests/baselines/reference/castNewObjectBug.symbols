@@ -1,4 +1,6 @@
-=== tests/cases/compiler/castNewObjectBug.ts ===
+//// [tests/cases/compiler/castNewObjectBug.ts] ////
+
+=== castNewObjectBug.ts ===
 interface Foo { }
 >Foo : Symbol(Foo, Decl(castNewObjectBug.ts, 0, 0))
 

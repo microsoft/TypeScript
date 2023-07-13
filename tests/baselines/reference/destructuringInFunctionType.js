@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts] ////
+
 //// [destructuringInFunctionType.ts]
 interface a { a }
 interface b { b }

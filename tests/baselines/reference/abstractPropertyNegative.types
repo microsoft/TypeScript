@@ -1,4 +1,6 @@
-=== tests/cases/compiler/abstractPropertyNegative.ts ===
+//// [tests/cases/compiler/abstractPropertyNegative.ts] ////
+
+=== abstractPropertyNegative.ts ===
 interface A {
     prop: string;
 >prop : string

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemModule16.ts ===
+//// [tests/cases/compiler/systemModule16.ts] ////
+
+=== systemModule16.ts ===
 import * as x from "foo";
 >x : any
 

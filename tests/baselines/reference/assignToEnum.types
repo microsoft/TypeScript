@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignToEnum.ts ===
+//// [tests/cases/compiler/assignToEnum.ts] ////
+
+=== assignToEnum.ts ===
 enum A { foo, bar }
 >A : A
 >foo : A.foo

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumWithExport.ts ===
+//// [tests/cases/compiler/enumWithExport.ts] ////
+
+=== enumWithExport.ts ===
 namespace x {
 >x : typeof x
 

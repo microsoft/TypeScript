@@ -1,12 +1,12 @@
-tests/cases/compiler/genericTypeAssertions6.ts(8,13): error TS2352: Conversion of type 'U' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+genericTypeAssertions6.ts(8,13): error TS2352: Conversion of type 'U' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/compiler/genericTypeAssertions6.ts(9,13): error TS2352: Conversion of type 'T' to type 'U' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+genericTypeAssertions6.ts(9,13): error TS2352: Conversion of type 'T' to type 'U' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/compiler/genericTypeAssertions6.ts(19,17): error TS2352: Conversion of type 'U' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+genericTypeAssertions6.ts(19,17): error TS2352: Conversion of type 'U' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 
 
-==== tests/cases/compiler/genericTypeAssertions6.ts (3 errors) ====
+==== genericTypeAssertions6.ts (3 errors) ====
     class A<T,U> {
         constructor(x) {
             var y = <T>x;
@@ -18,12 +18,12 @@ tests/cases/compiler/genericTypeAssertions6.ts(19,17): error TS2352: Conversion 
                 ~~~~
 !!! error TS2352: Conversion of type 'U' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/compiler/genericTypeAssertions6.ts:1:11: This type parameter might need an `extends T` constraint.
+!!! related TS2208 genericTypeAssertions6.ts:1:11: This type parameter might need an `extends T` constraint.
             y = <U>x;
                 ~~~~
 !!! error TS2352: Conversion of type 'T' to type 'U' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/compiler/genericTypeAssertions6.ts:1:9: This type parameter might need an `extends U` constraint.
+!!! related TS2208 genericTypeAssertions6.ts:1:9: This type parameter might need an `extends U` constraint.
         }
     }
     

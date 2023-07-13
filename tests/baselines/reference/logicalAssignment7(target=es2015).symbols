@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment7.ts ===
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment7.ts] ////
+
+=== logicalAssignment7.ts ===
 function foo1(results: number[] | undefined, results1: number[] | undefined) {
 >foo1 : Symbol(foo1, Decl(logicalAssignment7.ts, 0, 0))
 >results : Symbol(results, Decl(logicalAssignment7.ts, 0, 14))

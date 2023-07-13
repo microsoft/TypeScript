@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorReferences.ts] ////
+
 //// [decoratorReferences.ts]
 declare function y(...args: any[]): any;
 type T = number;

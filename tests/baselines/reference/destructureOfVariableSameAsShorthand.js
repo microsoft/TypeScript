@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructureOfVariableSameAsShorthand.ts] ////
+
 //// [destructureOfVariableSameAsShorthand.ts]
 // https://github.com/microsoft/TypeScript/issues/38969
 interface AxiosResponse<T = never> {

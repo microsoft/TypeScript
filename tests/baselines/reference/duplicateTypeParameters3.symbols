@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateTypeParameters3.ts ===
+//// [tests/cases/compiler/duplicateTypeParameters3.ts] ////
+
+=== duplicateTypeParameters3.ts ===
 interface X {
 >X : Symbol(X, Decl(duplicateTypeParameters3.ts, 0, 0))
 

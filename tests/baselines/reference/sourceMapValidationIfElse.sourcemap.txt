@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationIfElse.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationIfElse.js
+emittedFile:sourceMapValidationIfElse.js
 sourceFile:sourceMapValidationIfElse.ts
 -------------------------------------------------------------------
 >>>var i = 10;

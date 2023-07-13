@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts] ////
+
+=== invalidTypeOfTarget.ts ===
 var x1: typeof {};
 >x1 : Symbol(x1, Decl(invalidTypeOfTarget.ts, 0, 3))
 

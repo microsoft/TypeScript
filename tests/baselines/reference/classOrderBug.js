@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classOrderBug.ts] ////
+
 //// [classOrderBug.ts]
 class bar {
     public baz: foo;

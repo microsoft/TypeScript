@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/EnumAndModuleWithSameNameAndCommonRoot.ts] ////
+
 //// [EnumAndModuleWithSameNameAndCommonRoot.ts]
 enum enumdule {
     Red, Blue

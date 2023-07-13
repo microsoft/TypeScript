@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayBestCommonTypes.ts] ////
+
 //// [arrayBestCommonTypes.ts]
 module EmptyTypes {
     interface iface { }

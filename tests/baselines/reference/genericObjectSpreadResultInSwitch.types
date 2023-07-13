@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericObjectSpreadResultInSwitch.ts ===
+//// [tests/cases/compiler/genericObjectSpreadResultInSwitch.ts] ////
+
+=== genericObjectSpreadResultInSwitch.ts ===
 type Params = {
 >Params : { foo: string; } & ({ tag: 'a'; type: number; } | { tag: 'b'; type: string; })
 

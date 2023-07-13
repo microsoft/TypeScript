@@ -1,7 +1,7 @@
-tests/cases/conformance/salsa/a.js(28,24): error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
+a.js(28,24): error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
 
 
-==== tests/cases/conformance/salsa/a.js (1 errors) ====
+==== a.js (1 errors) ====
     // non top-level:
     // all references to _map, set, get, addon should be ok
     (function container() {

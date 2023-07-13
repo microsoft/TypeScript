@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveSpecializationOfSignatures.ts ===
+//// [tests/cases/compiler/recursiveSpecializationOfSignatures.ts] ////
+
+=== recursiveSpecializationOfSignatures.ts ===
 class S0<B, A> {
 >S0 : S0<B, A>
 

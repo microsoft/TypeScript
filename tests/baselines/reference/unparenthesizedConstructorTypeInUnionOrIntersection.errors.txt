@@ -1,22 +1,22 @@
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(1,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(2,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(3,12): error TS1386: Constructor type notation must be parenthesized when used in a union type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(4,12): error TS1386: Constructor type notation must be parenthesized when used in a union type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(5,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(8,4): error TS1386: Constructor type notation must be parenthesized when used in a union type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(11,19): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(12,19): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(13,12): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(14,12): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(15,19): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(18,4): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(20,37): error TS1386: Constructor type notation must be parenthesized when used in a union type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(21,31): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(22,16): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
-tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(22,41): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(1,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(2,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(3,12): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(4,12): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(5,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(8,4): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(11,19): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(12,19): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(13,12): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(14,12): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(15,19): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(18,4): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(20,37): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(21,31): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(22,16): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+unparenthesizedConstructorTypeInUnionOrIntersection.ts(22,41): error TS1386: Constructor type notation must be parenthesized when used in a union type.
 
 
-==== tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts (16 errors) ====
+==== unparenthesizedConstructorTypeInUnionOrIntersection.ts (16 errors) ====
     type U1 = string | new () => void;
                       ~~~~~~~~~~~~~~~
 !!! error TS1386: Constructor type notation must be parenthesized when used in a union type.

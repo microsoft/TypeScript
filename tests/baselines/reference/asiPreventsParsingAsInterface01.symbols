@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface01.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface01.ts] ////
+
+=== asiPreventsParsingAsInterface01.ts ===
 var interface: number, I: string;
 >interface : Symbol(interface, Decl(asiPreventsParsingAsInterface01.ts, 0, 3))
 >I : Symbol(I, Decl(asiPreventsParsingAsInterface01.ts, 0, 22))

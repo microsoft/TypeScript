@@ -1,4 +1,6 @@
-=== tests/cases/compiler/localAliasExportAssignment_1.ts ===
+//// [tests/cases/compiler/localAliasExportAssignment.ts] ////
+
+=== localAliasExportAssignment_1.ts ===
 ///<reference path='localAliasExportAssignment_0.ts'/>
 import connect = require('./localAliasExportAssignment_0');
 >connect : () => any
@@ -9,7 +11,7 @@ connect();
 
 
 
-=== tests/cases/compiler/localAliasExportAssignment_0.ts ===
+=== localAliasExportAssignment_0.ts ===
 var server: {
 >server : () => any
 

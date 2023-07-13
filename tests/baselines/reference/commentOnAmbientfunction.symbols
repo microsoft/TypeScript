@@ -1,4 +1,6 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/commentOnAmbientfunction.ts] ////
+
+=== b.ts ===
 ///<reference path="a.ts"/>
 declare function foobar(a: typeof foo): typeof bar;
 >foobar : Symbol(foobar, Decl(b.ts, 0, 0))
@@ -6,7 +8,7 @@ declare function foobar(a: typeof foo): typeof bar;
 >foo : Symbol(foo, Decl(a.ts, 0, 0))
 >bar : Symbol(bar, Decl(a.ts, 6, 23))
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 /*!=========
     Keep this pinned comment
    =========

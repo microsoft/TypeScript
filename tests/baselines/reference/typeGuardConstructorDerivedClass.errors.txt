@@ -1,7 +1,7 @@
-tests/cases/compiler/typeGuardConstructorDerivedClass.ts(13,10): error TS2339: Property 'property1' does not exist on type 'never'.
+typeGuardConstructorDerivedClass.ts(13,10): error TS2339: Property 'property1' does not exist on type 'never'.
 
 
-==== tests/cases/compiler/typeGuardConstructorDerivedClass.ts (1 errors) ====
+==== typeGuardConstructorDerivedClass.ts (1 errors) ====
     // Derived class with different structures
     class C1 {
         property1: number;

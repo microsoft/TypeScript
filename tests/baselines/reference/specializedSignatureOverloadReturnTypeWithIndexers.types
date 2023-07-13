@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specializedSignatureOverloadReturnTypeWithIndexers.ts ===
+//// [tests/cases/compiler/specializedSignatureOverloadReturnTypeWithIndexers.ts] ////
+
+=== specializedSignatureOverloadReturnTypeWithIndexers.ts ===
 interface A {
     f(p: string): { [p: string]: string; };
 >f : { (p: string): { [p: string]: string; }; (p: "spec"): { [p: string]: any; }; }

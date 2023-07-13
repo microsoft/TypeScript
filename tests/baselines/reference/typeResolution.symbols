@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeResolution.ts ===
+//// [tests/cases/compiler/typeResolution.ts] ////
+
+=== typeResolution.ts ===
 export module TopLevelModule1 {
 >TopLevelModule1 : Symbol(TopLevelModule1, Decl(typeResolution.ts, 0, 0))
 

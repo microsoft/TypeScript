@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spaceBeforeQuestionMarkInPropertyAssignment.ts ===
+//// [tests/cases/compiler/spaceBeforeQuestionMarkInPropertyAssignment.ts] ////
+
+=== spaceBeforeQuestionMarkInPropertyAssignment.ts ===
 var x = {x ?: 1} // should not crash
 >x : Symbol(x, Decl(spaceBeforeQuestionMarkInPropertyAssignment.ts, 0, 3))
 >x : Symbol(x, Decl(spaceBeforeQuestionMarkInPropertyAssignment.ts, 0, 9))

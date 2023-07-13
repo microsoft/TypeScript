@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement7.ts(1,6): error TS2406: The left-hand side of a 'for...in' statement must be a variable or a property access.
-tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement7.ts(1,10): error TS2304: Cannot find name 'foo'.
-tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement7.ts(1,19): error TS2304: Cannot find name 'b'.
+parserForStatement7.ts(1,6): error TS2406: The left-hand side of a 'for...in' statement must be a variable or a property access.
+parserForStatement7.ts(1,10): error TS2304: Cannot find name 'foo'.
+parserForStatement7.ts(1,19): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement7.ts (3 errors) ====
+==== parserForStatement7.ts (3 errors) ====
     for (new foo() in b) {
          ~~~~~~~~~
 !!! error TS2406: The left-hand side of a 'for...in' statement must be a variable or a property access.

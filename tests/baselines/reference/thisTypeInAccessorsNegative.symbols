@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts] ////
+
+=== thisTypeInAccessorsNegative.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(thisTypeInAccessorsNegative.ts, 0, 0))
 

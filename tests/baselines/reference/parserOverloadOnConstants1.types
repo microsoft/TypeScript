@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserOverloadOnConstants1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserOverloadOnConstants1.ts] ////
+
+=== parserOverloadOnConstants1.ts ===
 interface Document {
     createElement(tagName: string): HTMLElement;
 >createElement : { <K extends keyof HTMLElementTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementTagNameMap[K]; <K extends keyof HTMLElementDeprecatedTagNameMap>(tagName: K, options?: ElementCreationOptions): HTMLElementDeprecatedTagNameMap[K]; (tagName: string, options?: ElementCreationOptions): HTMLElement; (tagName: string): HTMLElement; (tagName: "canvas"): HTMLCanvasElement; (tagName: "div"): HTMLDivElement; (tagName: "span"): HTMLSpanElement; }

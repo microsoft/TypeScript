@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/conditional/conditionalTypes1.ts ===
+//// [tests/cases/conformance/types/conditional/conditionalTypes1.ts] ////
+
+=== conditionalTypes1.ts ===
 type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
 >T00 : Symbol(T00, Decl(conditionalTypes1.ts, 0, 0))
 >Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))

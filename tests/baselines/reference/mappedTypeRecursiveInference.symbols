@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeRecursiveInference.ts ===
+//// [tests/cases/compiler/mappedTypeRecursiveInference.ts] ////
+
+=== mappedTypeRecursiveInference.ts ===
 interface A { a: A }
 >A : Symbol(A, Decl(mappedTypeRecursiveInference.ts, 0, 0))
 >a : Symbol(A.a, Decl(mappedTypeRecursiveInference.ts, 0, 13))

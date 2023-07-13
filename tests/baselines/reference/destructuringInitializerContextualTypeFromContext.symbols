@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringInitializerContextualTypeFromContext.ts ===
+//// [tests/cases/compiler/destructuringInitializerContextualTypeFromContext.ts] ////
+
+=== destructuringInitializerContextualTypeFromContext.ts ===
 interface SFC<P = {}> {
 >SFC : Symbol(SFC, Decl(destructuringInitializerContextualTypeFromContext.ts, 0, 0))
 >P : Symbol(P, Decl(destructuringInitializerContextualTypeFromContext.ts, 0, 14))

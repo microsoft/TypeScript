@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyParametersInModule.ts ===
+//// [tests/cases/compiler/noImplicitAnyParametersInModule.ts] ////
+
+=== noImplicitAnyParametersInModule.ts ===
 module M {
 >M : Symbol(M, Decl(noImplicitAnyParametersInModule.ts, 0, 0))
 

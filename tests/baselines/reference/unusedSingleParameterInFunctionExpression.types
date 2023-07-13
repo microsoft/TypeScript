@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedSingleParameterInFunctionExpression.ts ===
+//// [tests/cases/compiler/unusedSingleParameterInFunctionExpression.ts] ////
+
+=== unusedSingleParameterInFunctionExpression.ts ===
 var func = function(person: string) {
 >func : (person: string) => void
 >function(person: string) {    var unused = 20;} : (person: string) => void

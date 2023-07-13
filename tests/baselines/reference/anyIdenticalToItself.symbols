@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyIdenticalToItself.ts ===
+//// [tests/cases/compiler/anyIdenticalToItself.ts] ////
+
+=== anyIdenticalToItself.ts ===
 function foo(x: any);
 >foo : Symbol(foo, Decl(anyIdenticalToItself.ts, 0, 0), Decl(anyIdenticalToItself.ts, 0, 21), Decl(anyIdenticalToItself.ts, 1, 21))
 >x : Symbol(x, Decl(anyIdenticalToItself.ts, 0, 13))

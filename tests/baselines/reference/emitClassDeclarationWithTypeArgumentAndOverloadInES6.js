@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts] ////
+
 //// [emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts]
 class B<T> {
     x: T;

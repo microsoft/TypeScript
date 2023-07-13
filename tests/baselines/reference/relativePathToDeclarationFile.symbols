@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/test/file1.ts ===
+//// [tests/cases/conformance/externalModules/relativePathToDeclarationFile.ts] ////
+
+=== test/file1.ts ===
 import foo = require('foo');
 >foo : Symbol(foo, Decl(file1.ts, 0, 0))
 
@@ -27,7 +29,7 @@ if(foo.M2.x){
 >charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 }
 
-=== tests/cases/conformance/externalModules/test/foo.d.ts ===
+=== test/foo.d.ts ===
 export declare module M2 {
 >M2 : Symbol(M2, Decl(foo.d.ts, 0, 0))
 
@@ -35,7 +37,7 @@ export declare module M2 {
 >x : Symbol(x, Decl(foo.d.ts, 1, 11))
 }
 
-=== tests/cases/conformance/externalModules/test/other.d.ts ===
+=== test/other.d.ts ===
 export declare module M2 {
 >M2 : Symbol(M2, Decl(other.d.ts, 0, 0))
 
@@ -43,7 +45,7 @@ export declare module M2 {
 >x : Symbol(x, Decl(other.d.ts, 1, 11))
 }
 
-=== tests/cases/conformance/externalModules/test/sub/relMod.d.ts ===
+=== test/sub/relMod.d.ts ===
 declare class Test {
 >Test : Symbol(Test, Decl(relMod.d.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxElementTypeLiteralWithGeneric.tsx ===
+//// [tests/cases/compiler/jsxElementTypeLiteralWithGeneric.tsx] ////
+
+=== jsxElementTypeLiteralWithGeneric.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : Symbol(React, Decl(jsxElementTypeLiteralWithGeneric.tsx, 1, 6))

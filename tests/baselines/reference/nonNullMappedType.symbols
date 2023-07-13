@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonNullMappedType.ts ===
+//// [tests/cases/compiler/nonNullMappedType.ts] ////
+
+=== nonNullMappedType.ts ===
 function f<A extends string>(p0: { [key in A]: {} | undefined }, p1: A) {
 >f : Symbol(f, Decl(nonNullMappedType.ts, 0, 0))
 >A : Symbol(A, Decl(nonNullMappedType.ts, 0, 11))

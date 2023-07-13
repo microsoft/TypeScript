@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts] ////
+
 //// [controlFlowDestructuringVariablesInTryCatch.ts]
 declare function f1(): string;
 declare function f2(): [b: string];

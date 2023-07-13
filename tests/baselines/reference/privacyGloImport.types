@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyGloImport.ts ===
+//// [tests/cases/compiler/privacyGloImport.ts] ////
+
+=== privacyGloImport.ts ===
 module m1 {
 >m1 : typeof m1
 

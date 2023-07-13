@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ClassTest5.ts ===
+//// [tests/cases/compiler/es6ClassTest5.ts] ////
+
+=== es6ClassTest5.ts ===
 class C1T5 {
 >C1T5 : Symbol(C1T5, Decl(es6ClassTest5.ts, 0, 0))
 

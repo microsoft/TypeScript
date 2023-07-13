@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorHandlingInInstanceOf.ts ===
+//// [tests/cases/compiler/errorHandlingInInstanceOf.ts] ////
+
+=== errorHandlingInInstanceOf.ts ===
 if (x instanceof String) {
 >String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }

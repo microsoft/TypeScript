@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mergedClassNamespaceRecordCast.ts ===
+//// [tests/cases/compiler/mergedClassNamespaceRecordCast.ts] ////
+
+=== mergedClassNamespaceRecordCast.ts ===
 class C1 { foo() {} }
 >C1 : Symbol(C1, Decl(mergedClassNamespaceRecordCast.ts, 0, 0))
 >foo : Symbol(C1.foo, Decl(mergedClassNamespaceRecordCast.ts, 0, 10))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modulePrologueAMD.ts] ////
+
 //// [modulePrologueAMD.ts]
 "use strict";
 

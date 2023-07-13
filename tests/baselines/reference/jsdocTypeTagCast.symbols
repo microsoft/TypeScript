@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/a.ts ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeTagCast.ts] ////
+
+=== a.ts ===
 var W: string;
 >W : Symbol(W, Decl(a.ts, 0, 3), Decl(b.js, 1, 3), Decl(b.js, 3, 3))
 
-=== tests/cases/conformance/jsdoc/b.js ===
+=== b.js ===
 // @ts-check
 var W = /** @type {string} */(/** @type {*} */ (4));
 >W : Symbol(W, Decl(a.ts, 0, 3), Decl(b.js, 1, 3), Decl(b.js, 3, 3))

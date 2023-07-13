@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdDependencyComment1.ts] ////
+
 //// [amdDependencyComment1.ts]
 ///<amd-dependency path='bar'/>
 

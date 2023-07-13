@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowCommaOperatorNestedWithinLHS.ts] ////
+
 //// [narrowCommaOperatorNestedWithinLHS.ts]
 const otherValue = () => true;
 const value: { inner: number | string } = null as any;

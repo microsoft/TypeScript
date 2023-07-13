@@ -1,8 +1,8 @@
-tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts(3,16): error TS1109: Expression expected.
-tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts(3,17): error TS1005: ';' expected.
+decoratorOnArrowFunction.ts(3,16): error TS1109: Expression expected.
+decoratorOnArrowFunction.ts(3,17): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts (2 errors) ====
+==== decoratorOnArrowFunction.ts (2 errors) ====
     declare function dec<T>(target: T): T;
     
     var F = @dec () => {

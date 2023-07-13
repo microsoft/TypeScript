@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatement.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatement.js
+emittedFile:sourceMapValidationDestructuringVariableStatement.js
 sourceFile:sourceMapValidationDestructuringVariableStatement.ts
 -------------------------------------------------------------------
 >>>var hello = "hello";

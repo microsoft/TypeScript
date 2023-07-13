@@ -1,0 +1,8 @@
+foo(1, 2, 3)
+    ^
+{
+  "text": "c:",
+  "position": 81,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

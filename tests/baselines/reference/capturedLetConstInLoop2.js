@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop2.ts] ////
+
 //// [capturedLetConstInLoop2.ts]
 // ========let
 function foo0(x) {

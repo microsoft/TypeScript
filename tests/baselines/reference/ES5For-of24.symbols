@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of24.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of24.ts] ////
+
+=== ES5For-of24.ts ===
 var a = [1, 2, 3];
 >a : Symbol(a, Decl(ES5For-of24.ts, 0, 3))
 

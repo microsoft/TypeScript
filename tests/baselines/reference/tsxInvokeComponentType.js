@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxInvokeComponentType.tsx] ////
+
 //// [tsxInvokeComponentType.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import React, { ComponentType } from "react";

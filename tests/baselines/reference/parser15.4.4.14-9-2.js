@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts] ////
+
 //// [parser15.4.4.14-9-2.ts]
 /// Copyright (c) 2012 Ecma International.  All rights reserved. 
 /// Ecma International makes this code available under the terms and conditions set

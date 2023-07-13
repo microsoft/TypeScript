@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/checkJsxUnionSFXContextualTypeInferredCorrectly.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxUnionSFXContextualTypeInferredCorrectly.tsx] ////
+
+=== checkJsxUnionSFXContextualTypeInferredCorrectly.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from 'react';

@@ -2624,7 +2624,13 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "configure",
+     "request_seq": 1,
+     "success": true
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -2937,8 +2943,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /lib/a_0.ts: *new*
   {}
 /lib/a_1.ts: *new*
@@ -3038,6 +3042,8 @@ FsWatches::
 /lib/a_8.ts: *new*
   {}
 /lib/a_9.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

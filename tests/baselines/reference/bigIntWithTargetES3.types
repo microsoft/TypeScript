@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bigIntWithTargetES3.ts ===
+//// [tests/cases/compiler/bigIntWithTargetES3.ts] ////
+
+=== bigIntWithTargetES3.ts ===
 const normalNumber = 123; // should not error
 >normalNumber : 123
 >123 : 123

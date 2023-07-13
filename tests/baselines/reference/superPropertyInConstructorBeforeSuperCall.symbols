@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/superPropertyInConstructorBeforeSuperCall.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/superPropertyInConstructorBeforeSuperCall.ts] ////
+
+=== superPropertyInConstructorBeforeSuperCall.ts ===
 class B {
 >B : Symbol(B, Decl(superPropertyInConstructorBeforeSuperCall.ts, 0, 0))
 

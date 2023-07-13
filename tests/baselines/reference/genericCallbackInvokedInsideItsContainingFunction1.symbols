@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts ===
+//// [tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts] ////
+
+=== genericCallbackInvokedInsideItsContainingFunction1.ts ===
 function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >foo : Symbol(foo, Decl(genericCallbackInvokedInsideItsContainingFunction1.ts, 0, 0))
 >T : Symbol(T, Decl(genericCallbackInvokedInsideItsContainingFunction1.ts, 0, 13))

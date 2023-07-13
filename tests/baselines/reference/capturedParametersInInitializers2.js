@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedParametersInInitializers2.ts] ////
+
 //// [capturedParametersInInitializers2.ts]
 function foo(
     y = class {

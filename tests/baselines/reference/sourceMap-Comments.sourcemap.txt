@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMap-Comments.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-Comments.js
+emittedFile:sourceMap-Comments.js
 sourceFile:sourceMap-Comments.ts
 -------------------------------------------------------------------
 >>>var sas;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParameters3.ts ===
+//// [tests/cases/compiler/unusedTypeParameters3.ts] ////
+
+=== unusedTypeParameters3.ts ===
 class greeter<typeparameter1, typeparameter2, typeparameter3> {
 >greeter : greeter<typeparameter1, typeparameter2, typeparameter3>
 

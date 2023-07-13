@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads03.ts] ////
+
 //// [stringLiteralTypesOverloads03.ts]
 interface Base {
     x: string;

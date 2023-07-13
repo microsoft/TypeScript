@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_preserve.ts ===
+//// [tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_preserve.ts] ////
+
+=== blockScopedEnumVariablesUseBeforeDef_preserve.ts ===
 function foo1() {
 >foo1 : Symbol(foo1, Decl(blockScopedEnumVariablesUseBeforeDef_preserve.ts, 0, 0))
 

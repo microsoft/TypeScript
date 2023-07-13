@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts] ////
+
 //// [undefinedSymbolReferencedInArrayLiteral1.ts]
 var tokens = [{ startIndex: deltaOffset }];
 

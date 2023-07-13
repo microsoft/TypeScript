@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts ===
+//// [tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts] ////
+
+=== ambientExternalModuleInAnotherExternalModule.ts ===
 class D { }
 >D : Symbol(D, Decl(ambientExternalModuleInAnotherExternalModule.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/coAndContraVariantInferences3.ts] ////
+
 //// [coAndContraVariantInferences3.ts]
 interface DeprecationOptions {
     message?: string;

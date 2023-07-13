@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classExtendingBuiltinType.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classExtendingBuiltinType.ts] ////
+
+=== classExtendingBuiltinType.ts ===
 class C1 extends Object { }
 >C1 : C1
 >Object : Object

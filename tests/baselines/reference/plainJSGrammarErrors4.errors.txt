@@ -1,0 +1,14 @@
+plainJSGrammarErrors4.js(5,14): error TS1111: Private field '#b' must be declared in an enclosing class.
+
+
+==== plainJSGrammarErrors4.js (1 errors) ====
+    class A {
+        #a;
+        m() {
+            this.#a; // ok
+            this.#b; // error
+                 ~~
+!!! error TS1111: Private field '#b' must be declared in an enclosing class.
+        }
+    }
+    

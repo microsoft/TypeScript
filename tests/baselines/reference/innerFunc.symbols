@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerFunc.ts ===
+//// [tests/cases/compiler/innerFunc.ts] ////
+
+=== innerFunc.ts ===
 function salt() {
 >salt : Symbol(salt, Decl(innerFunc.ts, 0, 0))
 

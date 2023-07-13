@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule7.ts] ////
+
 //// [systemModule7.ts]
 // filename: instantiatedModule.ts
 export module M {

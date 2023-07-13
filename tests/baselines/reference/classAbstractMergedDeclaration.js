@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts] ////
+
 //// [classAbstractMergedDeclaration.ts]
 abstract class CM {}
 module CM {}

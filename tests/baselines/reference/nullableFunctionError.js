@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nullableFunctionError.ts] ////
+
 //// [nullableFunctionError.ts]
 null();
 undefined();

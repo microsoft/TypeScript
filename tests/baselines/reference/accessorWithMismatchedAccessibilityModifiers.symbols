@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithMismatchedAccessibilityModifiers.ts] ////
+
+=== accessorWithMismatchedAccessibilityModifiers.ts ===
 class C {
 >C : Symbol(C, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexerConstraints2.ts ===
+//// [tests/cases/compiler/indexerConstraints2.ts] ////
+
+=== indexerConstraints2.ts ===
 class A { a: number; }
 >A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
 >a : Symbol(A.a, Decl(indexerConstraints2.ts, 0, 9))

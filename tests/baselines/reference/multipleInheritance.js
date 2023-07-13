@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleInheritance.ts] ////
+
 //// [multipleInheritance.ts]
 class B1 {
     public x;

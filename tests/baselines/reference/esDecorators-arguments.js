@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-arguments.ts] ////
+
 //// [esDecorators-arguments.ts]
 @(() => {})
 @((a: any) => {})

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDerivedClasses.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldDerivedClasses.ts] ////
+
+=== privateNameStaticFieldDerivedClasses.ts ===
 class Base {
 >Base : Symbol(Base, Decl(privateNameStaticFieldDerivedClasses.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyGloClass.ts ===
+//// [tests/cases/compiler/privacyGloClass.ts] ////
+
+=== privacyGloClass.ts ===
 module m1 {
 >m1 : typeof m1
 

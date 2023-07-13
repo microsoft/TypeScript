@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNames.tsx ===
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNames.tsx] ////
+
+=== jsxJsxsCjsTransformSubstitutesNames.tsx ===
 /// <reference path="react16.d.ts" />
 const a = <div></div>
 >a : Symbol(a, Decl(jsxJsxsCjsTransformSubstitutesNames.tsx, 1, 5))

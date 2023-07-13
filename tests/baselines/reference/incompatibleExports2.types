@@ -1,4 +1,6 @@
-=== tests/cases/compiler/incompatibleExports2.ts ===
+//// [tests/cases/compiler/incompatibleExports2.ts] ////
+
+=== incompatibleExports2.ts ===
 declare module "foo" { 
 >"foo" : typeof import("foo")
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectAssignLikeNonUnionResult.ts ===
+//// [tests/cases/compiler/objectAssignLikeNonUnionResult.ts] ////
+
+=== objectAssignLikeNonUnionResult.ts ===
 interface Interface {
 >Interface : Symbol(Interface, Decl(objectAssignLikeNonUnionResult.ts, 0, 0))
 

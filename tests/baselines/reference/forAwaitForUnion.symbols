@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forAwaitForUnion.ts ===
+//// [tests/cases/compiler/forAwaitForUnion.ts] ////
+
+=== forAwaitForUnion.ts ===
 async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 >f : Symbol(f, Decl(forAwaitForUnion.ts, 0, 0))
 >T : Symbol(T, Decl(forAwaitForUnion.ts, 0, 17))

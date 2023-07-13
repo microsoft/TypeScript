@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParametersInStaticAccessors.ts ===
+//// [tests/cases/compiler/typeParametersInStaticAccessors.ts] ////
+
+=== typeParametersInStaticAccessors.ts ===
 class foo<T> {
 >foo : Symbol(foo, Decl(typeParametersInStaticAccessors.ts, 0, 0))
 >T : Symbol(T, Decl(typeParametersInStaticAccessors.ts, 0, 10))

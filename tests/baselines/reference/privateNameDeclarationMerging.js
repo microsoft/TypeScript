@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameDeclarationMerging.ts] ////
+
 //// [privateNameDeclarationMerging.ts]
 class D {};
 

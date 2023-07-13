@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/abstractClassUnionInstantiation.ts] ////
+
 //// [abstractClassUnionInstantiation.ts]
 class ConcreteA {}
 class ConcreteB {}

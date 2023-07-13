@@ -1,7 +1,7 @@
-tests/cases/compiler/getterMissingReturnError.ts(2,16): error TS2378: A 'get' accessor must return a value.
+getterMissingReturnError.ts(2,16): error TS2378: A 'get' accessor must return a value.
 
 
-==== tests/cases/compiler/getterMissingReturnError.ts (1 errors) ====
+==== getterMissingReturnError.ts (1 errors) ====
     class test {
         public get p2(){
                    ~~

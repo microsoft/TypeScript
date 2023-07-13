@@ -1,4 +1,6 @@
-=== tests/cases/compiler/EnumExample.ts ===
+//// [tests/cases/compiler/declarationEmitComputedNameConstEnumAlias.ts] ////
+
+=== EnumExample.ts ===
 enum EnumExample {
 >EnumExample : EnumExample
 
@@ -10,7 +12,7 @@ enum EnumExample {
 export default EnumExample;
 >EnumExample : EnumExample
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import EnumExample from './EnumExample';
 >EnumExample : typeof EnumExample
 

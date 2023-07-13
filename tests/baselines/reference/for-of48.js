@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of48.ts] ////
+
 //// [for-of48.ts]
 var x: string, y: number;
 var array = [{ x: "", y: true }]

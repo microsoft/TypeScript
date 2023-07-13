@@ -1,13 +1,13 @@
-tests/cases/compiler/arithmeticOnInvalidTypes.ts(3,9): error TS2365: Operator '+' cannot be applied to types 'Number' and 'Number'.
-tests/cases/compiler/arithmeticOnInvalidTypes.ts(4,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/arithmeticOnInvalidTypes.ts(4,14): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/arithmeticOnInvalidTypes.ts(5,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/arithmeticOnInvalidTypes.ts(5,14): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/arithmeticOnInvalidTypes.ts(6,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/arithmeticOnInvalidTypes.ts(6,14): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOnInvalidTypes.ts(3,9): error TS2365: Operator '+' cannot be applied to types 'Number' and 'Number'.
+arithmeticOnInvalidTypes.ts(4,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOnInvalidTypes.ts(4,14): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOnInvalidTypes.ts(5,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOnInvalidTypes.ts(5,14): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOnInvalidTypes.ts(6,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOnInvalidTypes.ts(6,14): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/compiler/arithmeticOnInvalidTypes.ts (7 errors) ====
+==== arithmeticOnInvalidTypes.ts (7 errors) ====
     var x: Number;
     var y: Number;
     var z = x + y;

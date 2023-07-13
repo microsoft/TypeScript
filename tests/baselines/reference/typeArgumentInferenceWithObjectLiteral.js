@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts] ////
+
 //// [typeArgumentInferenceWithObjectLiteral.ts]
 interface Computed<T> {
     read(): T;

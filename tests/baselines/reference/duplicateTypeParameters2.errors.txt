@@ -1,7 +1,7 @@
-tests/cases/compiler/duplicateTypeParameters2.ts(4,26): error TS2300: Duplicate identifier 'T'.
+duplicateTypeParameters2.ts(4,26): error TS2300: Duplicate identifier 'T'.
 
 
-==== tests/cases/compiler/duplicateTypeParameters2.ts (1 errors) ====
+==== duplicateTypeParameters2.ts (1 errors) ====
     class A { public foo() { } }
     class B { public bar() { } }
     

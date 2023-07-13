@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts] ////
+
 //// [typeofOperatorWithStringType.ts]
 // typeof  operator on string type
 var STRING: string;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_selfReference.ts] ////
+
 //// [noUnusedLocals_selfReference.ts]
 export {}; // Make this a module scope, so these are local variables.
 

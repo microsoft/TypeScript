@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/mod2.js ===
+//// [tests/cases/conformance/jsdoc/moduleExportsElementAccessAssignment.ts] ////
+
+=== mod2.js ===
 const mod1 = require("./mod1");
 >mod1 : Symbol(mod1, Decl(mod2.js, 0, 5))
 >require : Symbol(require)
@@ -36,7 +38,7 @@ mod1.default;
 >mod1 : Symbol(mod1, Decl(mod2.js, 0, 5))
 >default : Symbol(mod1.default, Decl(mod1.js, 1, 26))
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 exports.a = { x: "x" };
 >exports.a : Symbol(a, Decl(mod1.js, 0, 0))
 >exports : Symbol(a, Decl(mod1.js, 0, 0))
@@ -44,12 +46,12 @@ exports.a = { x: "x" };
 >x : Symbol(x, Decl(mod1.js, 0, 13))
 
 exports["b"] = { x: "x" };
->exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 >"b" : Symbol("b", Decl(mod1.js, 0, 23))
 >x : Symbol(x, Decl(mod1.js, 1, 16))
 
 exports["default"] = { x: "x" };
->exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 >"default" : Symbol("default", Decl(mod1.js, 1, 26))
 >x : Symbol(x, Decl(mod1.js, 2, 22))
 

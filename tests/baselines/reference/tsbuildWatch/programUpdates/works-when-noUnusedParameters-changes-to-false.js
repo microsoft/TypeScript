@@ -50,9 +50,9 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.ts (used version)
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/index.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

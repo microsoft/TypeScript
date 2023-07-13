@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target5.ts] ////
+
 //// [esnextmodulekindWithES5Target5.ts]
 export enum E1 {
     value1

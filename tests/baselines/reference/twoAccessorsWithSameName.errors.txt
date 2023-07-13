@@ -1,13 +1,13 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts(2,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts(3,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts(7,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts(8,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts(19,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts(24,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
-tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts(24,9): error TS2300: Duplicate identifier 'x'.
+twoAccessorsWithSameName.ts(2,9): error TS2300: Duplicate identifier 'x'.
+twoAccessorsWithSameName.ts(3,9): error TS2300: Duplicate identifier 'x'.
+twoAccessorsWithSameName.ts(7,9): error TS2300: Duplicate identifier 'x'.
+twoAccessorsWithSameName.ts(8,9): error TS2300: Duplicate identifier 'x'.
+twoAccessorsWithSameName.ts(19,9): error TS2300: Duplicate identifier 'x'.
+twoAccessorsWithSameName.ts(24,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
+twoAccessorsWithSameName.ts(24,9): error TS2300: Duplicate identifier 'x'.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts (7 errors) ====
+==== twoAccessorsWithSameName.ts (7 errors) ====
     class C {
         get x() { return 1; }
             ~

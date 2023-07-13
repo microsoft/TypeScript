@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts ===
+//// [tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts] ////
+
+=== strictModeReservedWordInModuleDeclaration.ts ===
 "use strict"
 module public { }
 >public : Symbol(public, Decl(strictModeReservedWordInModuleDeclaration.ts, 0, 12), Decl(strictModeReservedWordInModuleDeclaration.ts, 2, 18))

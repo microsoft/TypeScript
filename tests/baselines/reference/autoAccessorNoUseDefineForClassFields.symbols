@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file1.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorNoUseDefineForClassFields.ts] ////
+
+=== file1.ts ===
 // https://github.com/microsoft/TypeScript/issues/51528
 class C1 {
 >C1 : Symbol(C1, Decl(file1.ts, 0, 0))
@@ -7,7 +9,7 @@ class C1 {
 >x : Symbol(C1.x, Decl(file1.ts, 1, 10))
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file2.ts ===
+=== file2.ts ===
 class C2 {
 >C2 : Symbol(C2, Decl(file2.ts, 0, 0))
 
@@ -15,7 +17,7 @@ class C2 {
 >#x : Symbol(C2.#x, Decl(file2.ts, 0, 10))
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file3.ts ===
+=== file3.ts ===
 class C3 {
 >C3 : Symbol(C3, Decl(file3.ts, 0, 0))
 
@@ -25,7 +27,7 @@ class C3 {
     accessor #y = 0;
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file3.ts ===
+=== file3.ts ===
 class C3 {
 >C3 : Symbol(C3, Decl(file3.ts, 0, 0))
 
@@ -33,7 +35,7 @@ class C3 {
 >x : Symbol(C3.x, Decl(file3.ts, 0, 10))
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file4.ts ===
+=== file4.ts ===
 class C4 {
 >C4 : Symbol(C4, Decl(file4.ts, 0, 0))
 
@@ -41,7 +43,7 @@ class C4 {
 >#x : Symbol(C4.#x, Decl(file4.ts, 0, 10))
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file5.ts ===
+=== file5.ts ===
 class C5 {
 >C5 : Symbol(C5, Decl(file5.ts, 0, 0))
 
@@ -52,7 +54,7 @@ class C5 {
 >#x : Symbol(C5.#x, Decl(file5.ts, 1, 10))
 }
 
-=== tests/cases/conformance/classes/propertyMemberDeclarations/file6.ts ===
+=== file6.ts ===
 class C6 {
 >C6 : Symbol(C6, Decl(file6.ts, 0, 0))
 

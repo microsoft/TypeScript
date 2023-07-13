@@ -1,9 +1,11 @@
-=== tests/cases/compiler/m1.ts ===
+//// [tests/cases/compiler/moduleAugmentationsBundledOutput1.ts] ////
+
+=== m1.ts ===
 export class Cls {
 >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
 }
 
-=== tests/cases/compiler/m2.ts ===
+=== m2.ts ===
 import {Cls} from "./m1";
 >Cls : Symbol(Cls, Decl(m2.ts, 0, 8))
 
@@ -18,7 +20,7 @@ import {Cls} from "./m1";
 >prototype : Symbol(Cls.prototype)
 
 declare module "./m1" {
->"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+>"./m1" : Symbol("m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
 
     interface Cls {
 >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
@@ -29,7 +31,7 @@ declare module "./m1" {
 }
 
 declare module "./m1" {
->"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+>"./m1" : Symbol("m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
 
     interface Cls {
 >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
@@ -39,7 +41,7 @@ declare module "./m1" {
     }
 }
 
-=== tests/cases/compiler/m3.ts ===
+=== m3.ts ===
 export class C1 { x: number }
 >C1 : Symbol(C1, Decl(m3.ts, 0, 0))
 >x : Symbol(C1.x, Decl(m3.ts, 0, 17))
@@ -48,7 +50,7 @@ export class C2 { x: string }
 >C2 : Symbol(C2, Decl(m3.ts, 0, 29))
 >x : Symbol(C2.x, Decl(m3.ts, 1, 17))
 
-=== tests/cases/compiler/m4.ts ===
+=== m4.ts ===
 import {Cls} from "./m1";
 >Cls : Symbol(Cls, Decl(m4.ts, 0, 8))
 
@@ -69,7 +71,7 @@ import {C1, C2} from "./m3";
 >undefined : Symbol(undefined)
 
 declare module "./m1" {
->"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+>"./m1" : Symbol("m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
 
     interface Cls {
 >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
@@ -81,7 +83,7 @@ declare module "./m1" {
 }
 
 declare module "./m1" {
->"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+>"./m1" : Symbol("m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
 
     interface Cls {
 >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
@@ -92,7 +94,7 @@ declare module "./m1" {
     }
 }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import { Cls } from "./m1";
 >Cls : Symbol(Cls, Decl(test.ts, 0, 8))
 

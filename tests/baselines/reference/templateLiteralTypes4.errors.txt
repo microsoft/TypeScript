@@ -1,8 +1,8 @@
-tests/cases/conformance/types/literal/templateLiteralTypes4.ts(285,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
-tests/cases/conformance/types/literal/templateLiteralTypes4.ts(289,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
+templateLiteralTypes4.ts(285,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
+templateLiteralTypes4.ts(289,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypes4.ts (2 errors) ====
+==== templateLiteralTypes4.ts (2 errors) ====
     // infer from number
     type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100
     type TNumber1 = "-100" extends `${infer N extends number}` ? N : never; // -100

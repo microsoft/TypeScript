@@ -1,4 +1,6 @@
-=== tests/cases/compiler/0.ts ===
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias3.ts] ////
+
+=== 0.ts ===
 {
     type Data = string | boolean;
 >Data : string | boolean
@@ -9,7 +11,7 @@
 }
 export { }
 
-=== tests/cases/compiler/1.ts ===
+=== 1.ts ===
 var x = "hi" || 5;
 >x : string | number
 >"hi" || 5 : "hi" | 5

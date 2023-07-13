@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/import_reference-exported-alias.ts] ////
+
+=== file2.ts ===
 import appJs = require("file1");
 >appJs : Symbol(appJs, Decl(file2.ts, 0, 0))
 
@@ -18,7 +20,7 @@ var x = new UserServices().getUserName();
 >UserServices : Symbol(UserServices, Decl(file2.ts, 1, 33))
 >getUserName : Symbol(Services.UserServices.getUserName, Decl(file1.ts, 2, 35))
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 module App {
 >App : Symbol(App, Decl(file1.ts, 0, 0))
 

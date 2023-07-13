@@ -1,7 +1,9 @@
 import {
+    __String,
     AnyImportOrRequireStatement,
     append,
     ApplicableRefactorInfo,
+    arrayFrom,
     AssignmentDeclarationKind,
     BinaryExpression,
     BindingElement,
@@ -18,22 +20,25 @@ import {
     contains,
     createModuleSpecifierResolutionHost,
     createTextRangeFromSpan,
-    Debug,
     Declaration,
     DeclarationStatement,
     Diagnostics,
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
+    ExportDeclaration,
     Expression,
     ExpressionStatement,
     extensionFromPath,
     ExternalModuleReference,
     factory,
     fileShouldUseJavaScriptRequire,
+    filter,
     find,
     FindAllReferences,
     findIndex,
+    findLast,
+    findLastIndex,
     firstDefined,
     flatMap,
     forEachKey,
@@ -50,9 +55,12 @@ import {
     getRangesWhere,
     getRefactorContextSpan,
     getRelativePathFromFile,
+    getSourceFileOfNode,
     getSynthesizedDeepClone,
     getUniqueName,
+    hasJSFileExtension,
     hasSyntacticModifier,
+    hasTSFileExtension,
     hostGetCanonicalFileName,
     Identifier,
     ImportDeclaration,
@@ -64,12 +72,16 @@ import {
     isBinaryExpression,
     isBindingElement,
     isDeclarationName,
+    isExportDeclaration,
+    isExportSpecifier,
     isExpressionStatement,
     isExternalModuleReference,
+    isFunctionLikeDeclaration,
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isNamedDeclaration,
+    isNamedExports,
     isObjectLiteralExpression,
     isOmittedExpression,
     isPrologueDirective,
@@ -77,6 +89,7 @@ import {
     isPropertyAssignment,
     isRequireCall,
     isSourceFile,
+    isStatement,
     isStringLiteral,
     isStringLiteralLike,
     isValidTypeOnlyAliasUseSite,
@@ -131,6 +144,7 @@ import {
     VariableStatement,
 } from "../_namespaces/ts";
 
+import * as Debug from "../../compiler/debug";
 import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import { registerRefactor } from "../refactorProvider";
 
@@ -162,17 +176,29 @@ registerRefactor(refactorNameForMoveToFile, {
     getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, interactiveRefactorArguments): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
+        const { host, program } = context;
         Debug.assert(interactiveRefactorArguments, "No interactive refactor arguments available");
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
-        return { edits, renameFilename: undefined, renameLocation: undefined };
+        const targetFile = interactiveRefactorArguments.targetFile;
+        if (hasJSFileExtension(targetFile) || hasTSFileExtension(targetFile)) {
+            if (host.fileExists(targetFile) && program.getSourceFile(targetFile) === undefined) {
+                return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_statements_to_the_selected_file));
+            }
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, program, statements, t, context.host, context.preferences));
+            return { edits, renameFilename: undefined, renameLocation: undefined };
+        }
+        return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid));
     }
 });
+
+function error(notApplicableReason: string) {
+    return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason };
+}
 
 function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
-    //For a new file or an existing blank target file
-    if (!host.fileExists(targetFile) || host.fileExists(targetFile) && program.getSourceFile(targetFile)?.statements.length === 0) {
+    // For a new file
+    if (!host.fileExists(targetFile)) {
         changes.createNewFile(oldFile, targetFile, getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, usage, changes, toMove, program, host, preferences));
         addNewFileToTsconfig(program, changes, oldFile.fileName, targetFile, hostGetCanonicalFileName(host));
     }
@@ -184,7 +210,15 @@ function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: str
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, targetFile: string | SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, preferences: UserPreferences, importAdder?: codefix.ImportAdder
+    oldFile: SourceFile,
+    targetFile: string | SourceFile,
+    usage: UsageInfo,
+    changes: textChanges.ChangeTracker,
+    toMove: ToMove,
+    program: Program,
+    host: LanguageServiceHost,
+    preferences: UserPreferences,
+    importAdder?: codefix.ImportAdder
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -211,14 +245,17 @@ function getNewStatementsAndRemoveFromOldFile(
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromTargetFile, useEsModuleSyntax);
     if (typeof targetFile !== "string") {
         if (targetFile.statements.length > 0) {
-            changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], body);
+            moveStatementsToTargetFile(changes, program, body, targetFile, toMove);
+        }
+        else {
+            changes.insertNodesAtEndOfFile(targetFile, body, /*blankLineBetween*/ false);
         }
         if (imports.length > 0) {
             insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
         }
     }
     if (importAdder) {
-        importAdder.writeFixes(changes);
+        importAdder.writeFixes(changes, quotePreference);
     }
     if (imports.length && body.length) {
         return [
@@ -885,6 +922,11 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
         return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
     }
 
+    const overloadRangeToMove = getOverloadRangeToMove(file, startStatement);
+    if (overloadRangeToMove) {
+        return overloadRangeToMove;
+    }
+
     // Can't only partially include the start node or be partially into the next node
     if (range.pos > startStatement.getStart(file)) return undefined;
     const afterEndNodeIndex = findIndex(statements, s => s.end > range.end, startNodeIndex);
@@ -1104,4 +1146,69 @@ function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLev
     }
 }
 
+function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program: Program, statements: readonly Statement[], targetFile: SourceFile, toMove: ToMove) {
+    const removedExports = new Set<ExportDeclaration>();
+    const targetExports = targetFile.symbol?.exports;
+    if (targetExports) {
+        const checker = program.getTypeChecker();
+        const targetToSourceExports = new Map<ExportDeclaration, Set<TopLevelDeclaration>>();
 
+        for (const node of toMove.all) {
+            if (isTopLevelDeclarationStatement(node) && hasSyntacticModifier(node, ModifierFlags.Export)) {
+                forEachTopLevelDeclaration(node, declaration => {
+                    const targetDeclarations = canHaveSymbol(declaration) ? targetExports.get(declaration.symbol.escapedName)?.declarations : undefined;
+                    const exportDeclaration = firstDefined(targetDeclarations, d =>
+                        isExportDeclaration(d) ? d :
+                            isExportSpecifier(d) ? tryCast(d.parent.parent, isExportDeclaration) : undefined);
+                    if (exportDeclaration && exportDeclaration.moduleSpecifier) {
+                        targetToSourceExports.set(exportDeclaration,
+                            (targetToSourceExports.get(exportDeclaration) || new Set()).add(declaration));
+                    }
+                });
+            }
+        }
+
+        for (const [exportDeclaration, topLevelDeclarations] of arrayFrom(targetToSourceExports)) {
+            if (exportDeclaration.exportClause && isNamedExports(exportDeclaration.exportClause) && length(exportDeclaration.exportClause.elements)) {
+                const elements = exportDeclaration.exportClause.elements;
+                const updatedElements = filter(elements, elem =>
+                    find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclaration(d) && topLevelDeclarations.has(d)) === undefined);
+
+                if (length(updatedElements) === 0) {
+                    changes.deleteNode(targetFile, exportDeclaration);
+                    removedExports.add(exportDeclaration);
+                    continue;
+                }
+
+                if (length(updatedElements) < length(elements)) {
+                    changes.replaceNode(targetFile, exportDeclaration,
+                        factory.updateExportDeclaration(exportDeclaration, exportDeclaration.modifiers, exportDeclaration.isTypeOnly,
+                            factory.updateNamedExports(exportDeclaration.exportClause , factory.createNodeArray(updatedElements, elements.hasTrailingComma)), exportDeclaration.moduleSpecifier, exportDeclaration.assertClause));
+                }
+            }
+        }
+    }
+
+    const lastReExport = findLast(targetFile.statements, n =>
+        isExportDeclaration(n) && !!n.moduleSpecifier && !removedExports.has(n));
+    if (lastReExport) {
+        changes.insertNodesBefore(targetFile, lastReExport, statements, /*blankLineBetween*/ true);
+    }
+    else {
+        changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], statements);
+    }
+}
+
+function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
+    if (isFunctionLikeDeclaration(statement)) {
+        const declarations = statement.symbol.declarations;
+        if (declarations === undefined || length(declarations) <= 1 || !contains(declarations, statement)) {
+            return undefined;
+        }
+        const lastDecl = declarations[length(declarations) - 1];
+        const statementsToMove = mapDefined(declarations, d => getSourceFileOfNode(d) === sourceFile && isStatement(d) ? d : undefined);
+        const end = findLastIndex(sourceFile.statements, s => s.end > lastDecl.end);
+        return { toMove: statementsToMove, afterLast: end >= 0 ? sourceFile.statements[end] : undefined };
+    }
+    return undefined;
+}

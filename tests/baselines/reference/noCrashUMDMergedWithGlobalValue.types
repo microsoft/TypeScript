@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCrashUMDMergedWithGlobalValue.ts] ////
+
 === /other.d.ts ===
 export as namespace SomeInterface;
 >SomeInterface : typeof import("/other")

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2018/usePromiseFinally.ts ===
+//// [tests/cases/conformance/es2018/usePromiseFinally.ts] ////
+
+=== usePromiseFinally.ts ===
 let promise1 = new Promise(function(resolve, reject) {})
 >promise1 : Symbol(promise1, Decl(usePromiseFinally.ts, 0, 3))
 >new Promise(function(resolve, reject) {})                .finally : Symbol(Promise.finally, Decl(lib.es2018.promise.d.ts, --, --))

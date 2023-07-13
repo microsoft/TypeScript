@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of6.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of6.ts] ////
+
+=== ES5For-of6.ts ===
 for (var w of []) {
 >w : Symbol(w, Decl(ES5For-of6.ts, 0, 8))
 

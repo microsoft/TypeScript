@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocAccessibilityTagsDeclarations.ts] ////
+
 //// [jsdocAccessibilityTagDeclarations.js]
 class Protected {
     /** @protected */

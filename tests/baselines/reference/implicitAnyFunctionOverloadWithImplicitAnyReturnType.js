@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyFunctionOverloadWithImplicitAnyReturnType.ts] ////
+
 //// [implicitAnyFunctionOverloadWithImplicitAnyReturnType.ts]
 // this should be an error
 interface IFace {

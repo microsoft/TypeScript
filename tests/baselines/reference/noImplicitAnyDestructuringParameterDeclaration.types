@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts ===
+//// [tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts] ////
+
+=== noImplicitAnyDestructuringParameterDeclaration.ts ===
 function f1([a], {b}, c, d) { // error
 >f1 : ([a]: [any], { b }: { b: any; }, c: any, d: any) => void
 >a : any

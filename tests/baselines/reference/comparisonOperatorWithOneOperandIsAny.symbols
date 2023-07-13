@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsAny.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsAny.ts] ////
+
+=== comparisonOperatorWithOneOperandIsAny.ts ===
 var x: any;
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsAny.ts, 0, 3))
 

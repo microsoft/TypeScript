@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numberLiteralsWithLeadingZeros.ts] ////
+
 //// [numberLiteralsWithLeadingZeros.ts]
 00;
 000;

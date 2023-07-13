@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementsImportedInterface.ts] ////
+
 //// [classImplementsImportedInterface.ts]
 module M1 {
     export interface I {

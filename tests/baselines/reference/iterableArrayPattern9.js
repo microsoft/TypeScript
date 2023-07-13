@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern9.ts] ////
+
 //// [iterableArrayPattern9.ts]
 function fun([a, b] = new FooIterator) { }
 class Bar { x }

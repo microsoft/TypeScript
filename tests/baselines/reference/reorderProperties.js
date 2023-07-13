@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reorderProperties.ts] ////
+
 //// [reorderProperties.ts]
 interface A<T> {
     x: T

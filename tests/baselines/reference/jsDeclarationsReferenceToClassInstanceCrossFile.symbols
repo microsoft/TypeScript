@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/declarations/test.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReferenceToClassInstanceCrossFile.ts] ////
+
+=== test.js ===
 const {Render} = require("./index");
 >Render : Symbol(Render, Decl(test.js, 0, 7))
 >require : Symbol(require)
->"./index" : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>"./index" : Symbol("index", Decl(index.js, 0, 0))
 
 let render = new Render();
 >render : Symbol(render, Decl(test.js, 1, 3))
@@ -21,7 +23,7 @@ console.log("Objects", render.objects);
 >render : Symbol(render, Decl(test.js, 1, 3))
 >objects : Symbol(Render.objects, Decl(index.js, 3, 19))
 
-=== tests/cases/conformance/jsdoc/declarations/rectangle.js ===
+=== rectangle.js ===
 class Rectangle {
 >Rectangle : Symbol(Rectangle, Decl(rectangle.js, 0, 0))
 
@@ -39,11 +41,11 @@ module.exports = { Rectangle };
 >exports : Symbol(module.exports, Decl(rectangle.js, 0, 0))
 >Rectangle : Symbol(Rectangle, Decl(rectangle.js, 6, 18))
 
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 const {Rectangle} = require('./rectangle');
 >Rectangle : Symbol(Rectangle, Decl(index.js, 0, 7))
 >require : Symbol(require)
->'./rectangle' : Symbol("tests/cases/conformance/jsdoc/declarations/rectangle", Decl(rectangle.js, 0, 0))
+>'./rectangle' : Symbol("rectangle", Decl(rectangle.js, 0, 0))
 
 class Render {
 >Render : Symbol(Render, Decl(index.js, 0, 43))

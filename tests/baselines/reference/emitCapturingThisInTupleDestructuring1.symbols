@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts ===
+//// [tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts] ////
+
+=== emitCapturingThisInTupleDestructuring1.ts ===
 declare function wrapper(x: any);
 >wrapper : Symbol(wrapper, Decl(emitCapturingThisInTupleDestructuring1.ts, 0, 0))
 >x : Symbol(x, Decl(emitCapturingThisInTupleDestructuring1.ts, 0, 25))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments10.ts ===
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments10.ts] ////
+
+=== emitArrowFunctionWhenUsingArguments10.ts ===
 function f() {
 >f : () => void
 

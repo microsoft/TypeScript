@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typecheckCommaExpression.ts] ////
+
 //// [typecheckCommaExpression.ts]
 (a, b)
 

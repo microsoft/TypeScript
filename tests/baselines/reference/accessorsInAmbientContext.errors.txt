@@ -1,14 +1,14 @@
-tests/cases/compiler/accessorsInAmbientContext.ts(3,17): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorsInAmbientContext.ts(4,18): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorsInAmbientContext.ts(6,24): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorsInAmbientContext.ts(7,25): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorsInAmbientContext.ts(12,13): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorsInAmbientContext.ts(13,14): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorsInAmbientContext.ts(15,20): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/compiler/accessorsInAmbientContext.ts(16,21): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorsInAmbientContext.ts(3,17): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorsInAmbientContext.ts(4,18): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorsInAmbientContext.ts(6,24): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorsInAmbientContext.ts(7,25): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorsInAmbientContext.ts(12,13): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorsInAmbientContext.ts(13,14): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorsInAmbientContext.ts(15,20): error TS1183: An implementation cannot be declared in ambient contexts.
+accessorsInAmbientContext.ts(16,21): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/accessorsInAmbientContext.ts (8 errors) ====
+==== accessorsInAmbientContext.ts (8 errors) ====
     declare module M {
         class C {
             get X() { return 1; }

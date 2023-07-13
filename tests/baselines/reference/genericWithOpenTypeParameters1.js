@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericWithOpenTypeParameters1.ts] ////
+
 //// [genericWithOpenTypeParameters1.ts]
 class B<T> {
    foo(x: T): T { return null; }

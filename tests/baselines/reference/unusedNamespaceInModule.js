@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedNamespaceInModule.ts] ////
+
 //// [unusedNamespaceInModule.ts]
 module A {
     namespace B { }

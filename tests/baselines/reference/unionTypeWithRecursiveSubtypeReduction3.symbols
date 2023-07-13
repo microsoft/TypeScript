@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction3.ts ===
+//// [tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction3.ts] ////
+
+=== unionTypeWithRecursiveSubtypeReduction3.ts ===
 var a27: { prop: number } | { prop: T27 };
 >a27 : Symbol(a27, Decl(unionTypeWithRecursiveSubtypeReduction3.ts, 0, 3))
 >prop : Symbol(prop, Decl(unionTypeWithRecursiveSubtypeReduction3.ts, 0, 10))

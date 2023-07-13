@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx] ////
+
 //// [jsxAndTypeAssertion.tsx]
 declare var createElement: any;
 

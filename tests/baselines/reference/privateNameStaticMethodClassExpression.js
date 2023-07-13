@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts] ////
+
 //// [privateNameStaticMethodClassExpression.ts]
 const C = class D {
     static #field = D.#method();

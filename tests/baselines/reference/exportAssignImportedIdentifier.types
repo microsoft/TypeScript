@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo3.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignImportedIdentifier.ts] ////
+
+=== foo3.ts ===
 import foo2 = require('./foo2');
 >foo2 : () => boolean
 
@@ -7,7 +9,7 @@ var x = foo2(); // should be boolean
 >foo2() : boolean
 >foo2 : () => boolean
 
-=== tests/cases/conformance/externalModules/foo1.ts ===
+=== foo1.ts ===
 export function x(){
 >x : () => boolean
 
@@ -15,7 +17,7 @@ export function x(){
 >true : true
 }
 
-=== tests/cases/conformance/externalModules/foo2.ts ===
+=== foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : typeof foo1
 

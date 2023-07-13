@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts ===
+//// [tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts] ////
+
+=== typeArgumentInferenceWithConstraintAsCommonRoot.ts ===
 interface Animal { x }
 >x : any
 

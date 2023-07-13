@@ -1,0 +1,89 @@
+    "hello",
+    ^
+{
+  "text": "a:",
+  "position": 183,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    undefined,
+    ^
+{
+  "text": "b:",
+  "position": 196,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    null,
+    ^
+{
+  "text": "c:",
+  "position": 211,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    true,
+    ^
+{
+  "text": "d:",
+  "position": 221,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    false,
+    ^
+{
+  "text": "e:",
+  "position": 231,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    Infinity,
+    ^
+{
+  "text": "f:",
+  "position": 242,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    -Infinity,
+    ^
+{
+  "text": "g:",
+  "position": 256,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    NaN,
+    ^
+{
+  "text": "h:",
+  "position": 271,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    /hello/g,
+    ^
+{
+  "text": "i:",
+  "position": 280,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    123n,
+    ^
+{
+  "text": "j:",
+  "position": 294,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

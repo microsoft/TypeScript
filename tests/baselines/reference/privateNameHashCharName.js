@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameHashCharName.ts] ////
+
 //// [privateNameHashCharName.ts]
 #
 

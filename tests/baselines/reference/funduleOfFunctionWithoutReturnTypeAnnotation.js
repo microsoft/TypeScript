@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/funduleOfFunctionWithoutReturnTypeAnnotation.ts] ////
+
 //// [funduleOfFunctionWithoutReturnTypeAnnotation.ts]
 function fn() {
     return fn.n;

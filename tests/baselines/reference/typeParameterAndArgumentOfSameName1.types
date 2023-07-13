@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterAndArgumentOfSameName1.ts ===
+//// [tests/cases/compiler/typeParameterAndArgumentOfSameName1.ts] ////
+
+=== typeParameterAndArgumentOfSameName1.ts ===
 function f<A extends Number>(A: A): A {
 >f : <A extends Number>(A: A) => A
 >A : A

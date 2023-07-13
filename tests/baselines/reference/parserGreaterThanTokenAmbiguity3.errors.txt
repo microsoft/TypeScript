@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity3.ts(1,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity3.ts(1,8): error TS1109: Expression expected.
+parserGreaterThanTokenAmbiguity3.ts(1,1): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+parserGreaterThanTokenAmbiguity3.ts(1,8): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity3.ts (2 errors) ====
+==== parserGreaterThanTokenAmbiguity3.ts (2 errors) ====
     1 >/**/> 2;
     ~~~~~~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.

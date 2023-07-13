@@ -1,4 +1,6 @@
-=== tests/cases/compiler/downlevelLetConst9.ts ===
+//// [tests/cases/compiler/downlevelLetConst9.ts] ////
+
+=== downlevelLetConst9.ts ===
 let a: number
 >a : Symbol(a, Decl(downlevelLetConst9.ts, 0, 3))
 

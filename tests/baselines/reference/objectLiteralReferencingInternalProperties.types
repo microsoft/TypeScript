@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralReferencingInternalProperties.ts ===
+//// [tests/cases/compiler/objectLiteralReferencingInternalProperties.ts] ////
+
+=== objectLiteralReferencingInternalProperties.ts ===
 var a = { b: 10, c: b }; // Should give error for attempting to reference b.
 >a : { b: number; c: any; }
 >{ b: 10, c: b } : { b: number; c: any; }

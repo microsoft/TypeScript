@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/namedTypes/optionalMethods.ts] ////
+
 //// [optionalMethods.ts]
 interface Foo {
     a: number;

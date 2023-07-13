@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noSelfOnVars.ts ===
+//// [tests/cases/compiler/noSelfOnVars.ts] ////
+
+=== noSelfOnVars.ts ===
 function foo() {
 >foo : () => void
 

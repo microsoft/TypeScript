@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatBug3.ts] ////
+
 //// [assignmentCompatBug3.ts]
 function makePoint(x: number, y: number) {
     return {

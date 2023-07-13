@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts] ////
+
 //// [assignmentCompatWithStringIndexer3.ts]
 // Derived type indexer must be subtype of base type indexer
 

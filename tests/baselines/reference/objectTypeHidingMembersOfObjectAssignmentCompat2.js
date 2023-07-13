@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts] ////
+
 //// [objectTypeHidingMembersOfObjectAssignmentCompat2.ts]
 interface I {
     toString(): number;

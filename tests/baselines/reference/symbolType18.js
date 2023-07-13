@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType18.ts] ////
+
 //// [symbolType18.ts]
 interface Foo { prop }
 var x: symbol | Foo;

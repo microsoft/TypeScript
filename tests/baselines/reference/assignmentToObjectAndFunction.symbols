@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentToObjectAndFunction.ts ===
+//// [tests/cases/compiler/assignmentToObjectAndFunction.ts] ////
+
+=== assignmentToObjectAndFunction.ts ===
 var errObj: Object = { toString: 0 }; // Error, incompatible toString
 >errObj : Symbol(errObj, Decl(assignmentToObjectAndFunction.ts, 0, 3))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

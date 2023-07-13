@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInAccessors.ts] ////
+
 //// [thisTypeInAccessors.ts]
 interface Foo {
     n: number;

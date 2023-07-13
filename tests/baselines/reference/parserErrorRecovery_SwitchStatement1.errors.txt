@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement1.ts(1,9): error TS2304: Cannot find name 'e'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement1.ts(4,5): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement1.ts(6,5): error TS1109: Expression expected.
+parserErrorRecovery_SwitchStatement1.ts(1,9): error TS2304: Cannot find name 'e'.
+parserErrorRecovery_SwitchStatement1.ts(4,5): error TS1109: Expression expected.
+parserErrorRecovery_SwitchStatement1.ts(6,5): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement1.ts (3 errors) ====
+==== parserErrorRecovery_SwitchStatement1.ts (3 errors) ====
     switch (e) {
             ~
 !!! error TS2304: Cannot find name 'e'.

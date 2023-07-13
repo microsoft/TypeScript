@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList1.ts(2,4): error TS2304: Cannot find name 'bar'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList1.ts(3,4): error TS1135: Argument expression expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList1.ts(3,11): error TS2304: Cannot find name 'x'.
+parserErrorRecovery_ArgumentList1.ts(2,4): error TS2304: Cannot find name 'bar'.
+parserErrorRecovery_ArgumentList1.ts(3,4): error TS1135: Argument expression expected.
+parserErrorRecovery_ArgumentList1.ts(3,11): error TS2304: Cannot find name 'x'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList1.ts (3 errors) ====
+==== parserErrorRecovery_ArgumentList1.ts (3 errors) ====
     function foo() {
        bar(
        ~~~

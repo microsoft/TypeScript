@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts] ////
+
+=== destructuringParameterProperties1.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(destructuringParameterProperties1.ts, 0, 0))
 

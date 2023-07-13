@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseJsxExtends2.ts] ////
+
 //// [index.tsx]
 declare const React: any;
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTyping24.ts] ////
+
 //// [contextualTyping24.ts]
 var foo:(a:{():number; (i:number):number; })=>number; foo = function(this: void, a:string){return 5};
 

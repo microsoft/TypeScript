@@ -1,4 +1,6 @@
-=== tests/cases/compiler/app.ts ===
+//// [tests/cases/compiler/checkInterfaceBases.ts] ////
+
+=== app.ts ===
 ///<reference path='jquery.d.ts' />
 interface SecondEvent {
     data: any;
@@ -6,7 +8,7 @@ interface SecondEvent {
 }
 interface Third extends JQueryEventObjectTest, SecondEvent {}
 
-=== tests/cases/compiler/jquery.d.ts ===
+=== jquery.d.ts ===
 interface JQueryEventObjectTest {
     data: any;
 >data : any

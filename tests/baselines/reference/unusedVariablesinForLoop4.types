@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedVariablesinForLoop4.ts ===
+//// [tests/cases/compiler/unusedVariablesinForLoop4.ts] ////
+
+=== unusedVariablesinForLoop4.ts ===
 function f1 () {
 >f1 : () => void
 

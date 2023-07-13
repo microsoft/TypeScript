@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unspecializedConstraints.ts ===
+//// [tests/cases/compiler/unspecializedConstraints.ts] ////
+
+=== unspecializedConstraints.ts ===
 module ts {
 >ts : Symbol(ts, Decl(unspecializedConstraints.ts, 0, 0))
 

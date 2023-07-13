@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendNonClassSymbol1.ts] ////
+
 //// [extendNonClassSymbol1.ts]
 class A { foo() { } }
 var x = A;

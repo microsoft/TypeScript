@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts] ////
+
 //// [labeledStatementWithLabel_strict.ts]
 "use strict"
 label: function fn() { }

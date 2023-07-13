@@ -1,7 +1,7 @@
-tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts(7,17): error TS2315: Type 'A' is not generic.
+superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts(7,17): error TS2315: Type 'A' is not generic.
 
 
-==== tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts (1 errors) ====
+==== superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts (1 errors) ====
     class A {
         constructor(private map: (value: number) => string) {
     

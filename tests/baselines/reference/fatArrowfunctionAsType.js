@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatArrowfunctionAsType.ts] ////
+
 //// [fatArrowfunctionAsType.ts]
 declare var b: <T>(x: T) => void ;
 

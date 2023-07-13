@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentWithDeclareModifier.ts ===
+//// [tests/cases/compiler/exportAssignmentWithDeclareModifier.ts] ////
+
+=== exportAssignmentWithDeclareModifier.ts ===
 var x;
 >x : Symbol(x, Decl(exportAssignmentWithDeclareModifier.ts, 0, 3))
 

@@ -67,9 +67,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/root/typescriptproject3/typescriptproject3/foo.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/root/typescriptproject3/typescriptproject3/foo.ts: *new*
   {}
 
 Before request

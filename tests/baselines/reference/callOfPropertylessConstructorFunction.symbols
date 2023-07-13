@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/callOfPropertylessConstructorFunction.js ===
+//// [tests/cases/conformance/jsdoc/callOfPropertylessConstructorFunction.ts] ////
+
+=== callOfPropertylessConstructorFunction.js ===
 /**
  * @constructor
  */

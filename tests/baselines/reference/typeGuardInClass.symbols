@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts] ////
+
+=== typeGuardInClass.ts ===
 let x: string | number;
 >x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
 

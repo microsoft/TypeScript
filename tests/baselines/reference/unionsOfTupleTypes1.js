@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts] ////
+
 //// [unionsOfTupleTypes1.ts]
 type T1 = [string, number];
 type T2 = [boolean] | [string, number];

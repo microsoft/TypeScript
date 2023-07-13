@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping1.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping1.ts] ////
+
+=== superCallParameterContextualTyping1.ts ===
 class A<T1, T2> {
 >A : A<T1, T2>
 

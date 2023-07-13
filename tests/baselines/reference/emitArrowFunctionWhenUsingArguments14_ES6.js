@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments14_ES6.ts] ////
+
 //// [emitArrowFunctionWhenUsingArguments14_ES6.ts]
 function f() {
     if (Math.random()) {

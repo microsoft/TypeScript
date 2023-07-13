@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements4.ts] ////
+
 //// [functionWithDefaultParameterWithNoStatements4.ts]
 function foo(a = ``) { }
 

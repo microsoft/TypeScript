@@ -1,4 +1,6 @@
-=== tests/cases/compiler/app.js ===
+//// [tests/cases/compiler/localRequireFunction.ts] ////
+
+=== app.js ===
 function require(a) {
 >require : (a: any) => any
 >a : any

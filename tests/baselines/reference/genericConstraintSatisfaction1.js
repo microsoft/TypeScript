@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConstraintSatisfaction1.ts] ////
+
 //// [genericConstraintSatisfaction1.ts]
 interface I<S> {
    f: <T extends S>(x: T) => void

@@ -5,7 +5,7 @@ sourceRoot:
 sources: Element.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/Element.js
+emittedFile:Element.js
 sourceFile:Element.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -351,7 +351,7 @@ sourceRoot:
 sources: test.tsx
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/test.js
+emittedFile:test.js
 sourceFile:test.tsx
 -------------------------------------------------------------------
 >>>"use strict";

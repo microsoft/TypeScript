@@ -1,13 +1,13 @@
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(1,18): error TS6133: 'person' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(3,14): error TS6133: 'maker' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(3,20): error TS6133: 'child' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(4,13): error TS6133: 'unused2' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(6,21): error TS6133: 'child2' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(7,13): error TS6133: 'unused3' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(1,18): error TS6133: 'person' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(3,14): error TS6133: 'maker' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(3,20): error TS6133: 'child' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(4,13): error TS6133: 'unused2' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(6,21): error TS6133: 'child2' is declared but its value is never read.
+unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts(7,13): error TS6133: 'unused3' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts (7 errors) ====
+==== unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration2.ts (7 errors) ====
     function greeter(person: string, person2: string) {
                      ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.

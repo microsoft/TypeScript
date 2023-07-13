@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors2.ts] ////
+
 //// [genericRecursiveImplicitConstructorErrors2.ts]
 module TypeScript2 {
   export interface DeclKind { };

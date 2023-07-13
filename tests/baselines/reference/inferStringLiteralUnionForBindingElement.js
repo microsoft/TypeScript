@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferStringLiteralUnionForBindingElement.ts] ////
+
 //// [inferStringLiteralUnionForBindingElement.ts]
 declare function func<T extends string>(arg: { keys: T[] }): { readonly keys: T[]; readonly firstKey: T; };
 

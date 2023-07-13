@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts] ////
+
 //// [indexedAccessWithFreshObjectLiteral.ts]
 function foo (id: string) {
   return {

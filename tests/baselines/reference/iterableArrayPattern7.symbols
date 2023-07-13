@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern7.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern7.ts] ////
+
+=== iterableArrayPattern7.ts ===
 class Bar { x }
 >Bar : Symbol(Bar, Decl(iterableArrayPattern7.ts, 0, 0))
 >x : Symbol(Bar.x, Decl(iterableArrayPattern7.ts, 0, 11))

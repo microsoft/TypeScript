@@ -1,4 +1,6 @@
-=== tests/cases/compiler/consumer.ts ===
+//// [tests/cases/compiler/multiImportExport.ts] ////
+
+=== consumer.ts ===
 import Drawing = require('./Drawing');
 >Drawing : Symbol(Drawing, Decl(consumer.ts, 0, 0))
 
@@ -10,11 +12,11 @@ var addr = new Drawing.Math.Adder();
 >Math : Symbol(Drawing.Math, Decl(Drawing.ts, 0, 0))
 >Adder : Symbol(Adder, Decl(Math.ts, 2, 12))
 
-=== tests/cases/compiler/Drawing.ts ===
+=== Drawing.ts ===
 export import Math = require('./Math/Math')
 >Math : Symbol(Math, Decl(Drawing.ts, 0, 0))
 
-=== tests/cases/compiler/Math/Math.ts ===
+=== Math/Math.ts ===
 import Adder = require('./Adder');
 >Adder : Symbol(Adder, Decl(Math.ts, 0, 0))
 
@@ -30,7 +32,7 @@ var Math = {
 export = Math
 >Math : Symbol(Math, Decl(Math.ts, 2, 3))
 
-=== tests/cases/compiler/Math/Adder.ts ===
+=== Math/Adder.ts ===
 class Adder {
 >Adder : Symbol(Adder, Decl(Adder.ts, 0, 0))
 

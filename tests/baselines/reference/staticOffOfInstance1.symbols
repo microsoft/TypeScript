@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticOffOfInstance1.ts ===
+//// [tests/cases/compiler/staticOffOfInstance1.ts] ////
+
+=== staticOffOfInstance1.ts ===
 class List {
 >List : Symbol(List, Decl(staticOffOfInstance1.ts, 0, 0))
 

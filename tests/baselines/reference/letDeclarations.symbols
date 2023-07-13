@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letDeclarations.ts ===
+//// [tests/cases/compiler/letDeclarations.ts] ////
+
+=== letDeclarations.ts ===
 let l1;
 >l1 : Symbol(l1, Decl(letDeclarations.ts, 0, 3))
 

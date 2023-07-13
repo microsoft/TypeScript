@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference2.ts] ////
+
 //// [unionAndIntersectionInference2.ts]
 declare function f1<T>(x: T | string): T;
 

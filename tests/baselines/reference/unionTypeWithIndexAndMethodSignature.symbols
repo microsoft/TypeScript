@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionTypeWithIndexAndMethodSignature.ts ===
+//// [tests/cases/compiler/unionTypeWithIndexAndMethodSignature.ts] ////
+
+=== unionTypeWithIndexAndMethodSignature.ts ===
 interface Options {
 >Options : Symbol(Options, Decl(unionTypeWithIndexAndMethodSignature.ts, 0, 0))
 

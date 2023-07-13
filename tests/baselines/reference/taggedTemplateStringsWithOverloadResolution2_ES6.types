@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2_ES6.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2_ES6.ts] ////
+
+=== taggedTemplateStringsWithOverloadResolution2_ES6.ts ===
 function foo1(strs: TemplateStringsArray, x: number): string;
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >strs : TemplateStringsArray

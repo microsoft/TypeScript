@@ -221,6 +221,18 @@ export class ParseConfigHost implements ts.ParseConfigHost {
     public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
         return this.sys.readDirectory(path, extensions, excludes, includes, depth);
     }
+
+    public realpath(path: string): string {
+        return this.sys.realpath(path);
+    }
+
+    public getDirectories(path: string): string[] {
+        return this.sys.getDirectories(path);
+    }
+
+    public getCurrentDirectory(): string {
+        return this.sys.getCurrentDirectory();
+    }
 }
 
 /**

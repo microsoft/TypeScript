@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/spread/arrayLiteralSpreadES5iterable.ts ===
+//// [tests/cases/conformance/es6/spread/arrayLiteralSpreadES5iterable.ts] ////
+
+=== arrayLiteralSpreadES5iterable.ts ===
 function f0() {
 >f0 : Symbol(f0, Decl(arrayLiteralSpreadES5iterable.ts, 0, 0))
 

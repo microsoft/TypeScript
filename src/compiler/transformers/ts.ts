@@ -40,7 +40,7 @@ import {
     Expression,
     ExpressionWithTypeArguments,
     filter,
-    findSuperStatementIndex,
+    findSuperStatementIndexPath,
     flattenDestructuringAssignment,
     FlattenLevel,
     FunctionDeclaration,
@@ -78,6 +78,8 @@ import {
     isAssertionExpression,
     isBindingName,
     isBindingPattern,
+    isBlock,
+    isCatchClause,
     isClassElement,
     isClassLike,
     isComputedPropertyName,
@@ -117,6 +119,7 @@ import {
     isSourceFile,
     isStatement,
     isTemplateLiteral,
+    isTryStatement,
     JsxOpeningElement,
     JsxSelfClosingElement,
     LeftHandSideExpression,
@@ -193,7 +196,7 @@ import {
     visitNode,
     visitNodes,
     visitParameterList,
-    VisitResult,
+    VisitResult
 } from "../_namespaces/ts";
 
 import * as Debug from "../debug";
@@ -923,24 +926,19 @@ export function transformTypeScript(context: TransformationContext) {
             const iife = factory.createImmediatelyInvokedArrowFunction(statements);
             setInternalEmitFlags(iife, InternalEmitFlags.TypeScriptClassWrapper);
 
-            //  export let C = (() => { ... })();
-            const modifiers = facts & ClassFacts.IsNamedExternalExport ?
-                factory.createModifiersFromModifierFlags(ModifierFlags.Export) :
-                undefined;
-
             //  let C = (() => { ... })();
-            const varStatement = factory.createVariableStatement(
-                modifiers,
-                factory.createVariableDeclarationList([
-                    factory.createVariableDeclaration(
-                        factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
-                        /*exclamationToken*/ undefined,
-                        /*type*/ undefined,
-                        iife
-                    )
-                ], NodeFlags.Let)
+            const varDecl = factory.createVariableDeclaration(
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                iife
             );
+            setOriginalNode(varDecl, node);
 
+            const varStatement = factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList([varDecl], NodeFlags.Let)
+            );
             setOriginalNode(varStatement, node);
             setCommentRange(varStatement, node);
             setSourceMapRange(varStatement, moveRangePastDecorators(node));
@@ -964,10 +962,10 @@ export function transformTypeScript(context: TransformationContext) {
                     factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
                 ];
             }
-            if (facts & ClassFacts.IsNamedExternalExport && !promoteToIIFE) {
+            if (facts & ClassFacts.IsNamedExternalExport) {
                 return [
                     statement,
-                    factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
+                    factory.createExternalModuleExport(factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
                 ];
             }
         }
@@ -1294,6 +1292,37 @@ export function transformTypeScript(context: TransformationContext) {
         );
     }
 
+    function transformConstructorBodyWorker(statementsOut: Statement[], statementsIn: NodeArray<Statement>, statementOffset: number, superPath: readonly number[], superPathDepth: number, initializerStatements: readonly Statement[]) {
+        const superStatementIndex = superPath[superPathDepth];
+        const superStatement = statementsIn[superStatementIndex];
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset));
+        if (isTryStatement(superStatement)) {
+            const tryBlockStatements: Statement[] = [];
+
+            transformConstructorBodyWorker(
+                tryBlockStatements,
+                superStatement.tryBlock.statements,
+                /*statementOffset*/ 0,
+                superPath,
+                superPathDepth + 1,
+                initializerStatements);
+
+            const tryBlockStatementsArray = factory.createNodeArray(tryBlockStatements);
+            setTextRange(tryBlockStatementsArray, superStatement.tryBlock.statements);
+
+            statementsOut.push(factory.updateTryStatement(
+                superStatement,
+                factory.updateBlock(superStatement.tryBlock, tryBlockStatements),
+                visitNode(superStatement.catchClause, visitor, isCatchClause),
+                visitNode(superStatement.finallyBlock, visitor, isBlock)));
+        }
+        else {
+            addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex, 1));
+            addRange(statementsOut, initializerStatements);
+        }
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex + 1));
+    }
+
     function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
         const parametersWithPropertyAssignments = constructor &&
             filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as readonly ParameterPropertyDeclaration[] | undefined;
@@ -1306,15 +1335,7 @@ export function transformTypeScript(context: TransformationContext) {
         resumeLexicalEnvironment();
 
         const prologueStatementCount = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
-        const superStatementIndex = findSuperStatementIndex(body.statements, prologueStatementCount);
-
-        // If there was a super call, visit existing statements up to and including it
-        if (superStatementIndex >= 0) {
-            addRange(
-                statements,
-                visitNodes(body.statements, visitor, isStatement, prologueStatementCount, superStatementIndex + 1 - prologueStatementCount),
-            );
-        }
+        const superPath = findSuperStatementIndexPath(body.statements, prologueStatementCount);
 
         // Transform parameters into property assignments. Transforms this:
         //
@@ -1329,23 +1350,13 @@ export function transformTypeScript(context: TransformationContext) {
         //  }
         //
         const parameterPropertyAssignments = mapDefined(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment);
-
-        // If there is a super() call, the parameter properties go immediately after it
-        if (superStatementIndex >= 0) {
-            addRange(statements, parameterPropertyAssignments);
+        if (superPath.length) {
+            transformConstructorBodyWorker(statements, body.statements, prologueStatementCount, superPath, /*superPathDepth*/ 0, parameterPropertyAssignments);
         }
-        // Since there was no super() call, parameter properties are the first statements in the constructor after any prologue statements
         else {
-            statements = [
-                ...statements.slice(0, prologueStatementCount),
-                ...parameterPropertyAssignments,
-                ...statements.slice(prologueStatementCount),
-            ];
+            addRange(statements, parameterPropertyAssignments);
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, prologueStatementCount));
         }
-
-        // Add remaining statements from the body, skipping the super() call if it was found and any (already added) prologue statements
-        const start = superStatementIndex >= 0 ? superStatementIndex + 1 : prologueStatementCount;
-        addRange(statements, visitNodes(body.statements, visitor, isStatement, start));
 
         // End the lexical environment.
         statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());

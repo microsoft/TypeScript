@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalExpressions2.ts ===
+//// [tests/cases/compiler/conditionalExpressions2.ts] ////
+
+=== conditionalExpressions2.ts ===
 var a = false ? 1 : null;
 >a : Symbol(a, Decl(conditionalExpressions2.ts, 0, 3))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterArgumentEquivalence4.ts ===
+//// [tests/cases/compiler/typeParameterArgumentEquivalence4.ts] ////
+
+=== typeParameterArgumentEquivalence4.ts ===
 function foo<T,U>() {
 >foo : Symbol(foo, Decl(typeParameterArgumentEquivalence4.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterArgumentEquivalence4.ts, 0, 13))

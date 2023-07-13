@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayConstructors1.ts] ////
+
 //// [arrayConstructors1.ts]
 var x: string[];
 x = new Array(1);

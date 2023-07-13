@@ -1,4 +1,6 @@
-=== tests/cases/compiler/regexpExecAndMatchTypeUsages.ts ===
+//// [tests/cases/compiler/regexpExecAndMatchTypeUsages.ts] ////
+
+=== regexpExecAndMatchTypeUsages.ts ===
 export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
 >foo : Symbol(foo, Decl(regexpExecAndMatchTypeUsages.ts, 0, 0))
 >matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))

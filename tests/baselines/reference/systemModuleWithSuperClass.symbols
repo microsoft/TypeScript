@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.ts ===
+//// [tests/cases/compiler/systemModuleWithSuperClass.ts] ////
+
+=== foo.ts ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(foo.ts, 0, 0))
 
@@ -6,7 +8,7 @@ export class Foo {
 >a : Symbol(Foo.a, Decl(foo.ts, 0, 18))
 }
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 import {Foo} from './foo';
 >Foo : Symbol(Foo, Decl(bar.ts, 0, 8))
 

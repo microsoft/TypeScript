@@ -1,4 +1,6 @@
-=== tests/cases/compiler/chainedSpecializationToObjectTypeLiteral.ts ===
+//// [tests/cases/compiler/chainedSpecializationToObjectTypeLiteral.ts] ////
+
+=== chainedSpecializationToObjectTypeLiteral.ts ===
 interface Sequence<T> {
 >Sequence : Symbol(Sequence, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 0))
 >T : Symbol(T, Decl(chainedSpecializationToObjectTypeLiteral.ts, 0, 19))

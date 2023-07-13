@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varAsID.ts] ////
+
 //// [varAsID.ts]
 class Foo {
     var; // ok

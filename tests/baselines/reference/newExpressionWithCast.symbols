@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newExpressionWithCast.ts ===
+//// [tests/cases/compiler/newExpressionWithCast.ts] ////
+
+=== newExpressionWithCast.ts ===
 function Test() { }
 >Test : Symbol(Test, Decl(newExpressionWithCast.ts, 0, 0))
 

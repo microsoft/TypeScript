@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/inferenceLimit.ts] ////
+
+=== file1.ts ===
 "use strict";
 >"use strict" : "use strict"
 
@@ -108,7 +110,7 @@ export class BrokenClass {
   }
 }
 
-=== tests/cases/compiler/mymodule.ts ===
+=== mymodule.ts ===
 export interface MyModel {
     id: number;
 >id : number

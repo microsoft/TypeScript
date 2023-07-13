@@ -1,11 +1,11 @@
-tests/cases/compiler/index.ts(2,14): error TS4025: Exported variable 'globalThis' has or is using private name 'globalThis'.
+index.ts(2,14): error TS4025: Exported variable 'globalThis' has or is using private name 'globalThis'.
 
 
-==== tests/cases/compiler/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     import { variable } from "./variable";
     export const globalThis = variable;
                  ~~~~~~~~~~
 !!! error TS4025: Exported variable 'globalThis' has or is using private name 'globalThis'.
     
-==== tests/cases/compiler/variable.ts (0 errors) ====
+==== variable.ts (0 errors) ====
     export const variable = globalThis;

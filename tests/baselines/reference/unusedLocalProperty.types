@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalProperty.ts ===
+//// [tests/cases/compiler/unusedLocalProperty.ts] ////
+
+=== unusedLocalProperty.ts ===
 declare var console: { log(msg: any): void; }
 >console : { log(msg: any): void; }
 >log : (msg: any) => void

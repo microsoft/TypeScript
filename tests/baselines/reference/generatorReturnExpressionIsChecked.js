@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generatorReturnExpressionIsChecked.ts] ////
+
 //// [generatorReturnExpressionIsChecked.ts]
 function* f(): Iterator<number> {
     return invalid;

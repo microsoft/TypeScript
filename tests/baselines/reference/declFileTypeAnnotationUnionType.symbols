@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationUnionType.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationUnionType.ts] ////
+
+=== declFileTypeAnnotationUnionType.ts ===
 class c {
 >c : Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
 

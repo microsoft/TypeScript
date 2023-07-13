@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/void/validVoidValues.ts] ////
+
 //// [validVoidValues.ts]
 var x: void;
 x = undefined;

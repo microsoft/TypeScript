@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts] ////
+
 //// [typeAliasesForObjectTypes.ts]
 type T1 = { x: string }
 

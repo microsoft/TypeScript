@@ -6,7 +6,7 @@ const x = 0;
 
 //// [/Foo/b.ts]
 import {} from "./bar";
-const a = 1;
+    const a = 1;
 
 //// [/Foo/tsconfig.json]
 { "files": ["./a.ts", "./b.ts"] }
@@ -41,7 +41,7 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Foo/tsconfig.jso
 Info seq  [hh:mm:ss:mss] Project '/Foo/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/Foo/a.ts SVC-1-0 "const x = 0;"
-	/Foo/b.ts Text-1 "import {} from \"./bar\";\nconst a = 1;"
+	/Foo/b.ts Text-1 "import {} from \"./bar\";\n    const a = 1;"
 
 
 	a.ts
@@ -68,9 +68,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/foo/tsconfig.json: *new*
-  {}
 /foo/b.ts: *new*
+  {}
+/foo/tsconfig.json: *new*
   {}
 
 Before request
@@ -119,11 +119,11 @@ Info seq  [hh:mm:ss:mss] response:
               {
                 "start": {
                   "line": 2,
-                  "offset": 13
+                  "offset": 17
                 },
                 "end": {
                   "line": 2,
-                  "offset": 13
+                  "offset": 17
                 },
                 "newText": "\nconst x = 0;\n"
               }

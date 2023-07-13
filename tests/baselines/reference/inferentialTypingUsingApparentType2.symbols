@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferentialTypingUsingApparentType2.ts ===
+//// [tests/cases/compiler/inferentialTypingUsingApparentType2.ts] ////
+
+=== inferentialTypingUsingApparentType2.ts ===
 function foo<T extends { m(p: string): number }>(x: T): T {
 >foo : Symbol(foo, Decl(inferentialTypingUsingApparentType2.ts, 0, 0))
 >T : Symbol(T, Decl(inferentialTypingUsingApparentType2.ts, 0, 13))

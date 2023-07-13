@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/module.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment10.ts] ////
+
+=== module.js ===
 var Outer = Outer || {};
 >Outer : typeof Outer
 >Outer || {} : typeof Outer | {}
@@ -16,7 +18,7 @@ Outer.app = Outer.app || {};
 >app : typeof Outer.app
 >{} : {}
 
-=== tests/cases/conformance/salsa/someview.js ===
+=== someview.js ===
 Outer.app.SomeView = (function () {
 >Outer.app.SomeView = (function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
 >Outer.app.SomeView : () => void
@@ -89,7 +91,7 @@ Outer.app.statische = function (k) {
 >k : number
 >k : number
 }
-=== tests/cases/conformance/salsa/application.js ===
+=== application.js ===
 Outer.app.Application = (function () {
 >Outer.app.Application = (function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : typeof Application
 >Outer.app.Application : typeof Application
@@ -130,7 +132,7 @@ Outer.app.Application = (function () {
 >Application : typeof Application
 
 })();
-=== tests/cases/conformance/salsa/main.js ===
+=== main.js ===
 var app = new Outer.app.Application();
 >app : Application
 >new Outer.app.Application() : Application

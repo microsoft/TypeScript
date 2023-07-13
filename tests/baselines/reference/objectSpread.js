@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/objectSpread.ts] ////
+
 //// [objectSpread.ts]
 let o = { a: 1, b: 'no' }
 let o2 = { b: 'yes', c: true }

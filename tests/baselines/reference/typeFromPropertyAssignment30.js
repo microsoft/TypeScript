@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment30.ts] ////
+
 //// [typeFromPropertyAssignment30.ts]
 interface Combo {
     (): number;

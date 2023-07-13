@@ -1,7 +1,7 @@
-tests/cases/conformance/externalModules/topLevelAwaitErrors.3.ts(4,6): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+topLevelAwaitErrors.3.ts(4,6): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 
 
-==== tests/cases/conformance/externalModules/topLevelAwaitErrors.3.ts (1 errors) ====
+==== topLevelAwaitErrors.3.ts (1 errors) ====
     export {};
     
     // reparse binding pattern as await should fail

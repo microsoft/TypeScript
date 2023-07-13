@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts ===
+//// [tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass.ts] ////
+
+=== privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts ===
 import Foo = require("./privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
 >Foo : Symbol(Foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 0, 0))
 
@@ -12,7 +14,7 @@ interface Bar {
 >foo : Symbol(Bar.foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 2, 15))
 >Foo : Symbol(Foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts, 0, 0))
 }
-=== tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts ===
+=== privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts ===
 export = Foo;
 >Foo : Symbol(Foo, Decl(privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts, 0, 13))
 

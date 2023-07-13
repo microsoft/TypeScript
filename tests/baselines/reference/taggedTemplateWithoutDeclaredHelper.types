@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.ts ===
+//// [tests/cases/compiler/taggedTemplateWithoutDeclaredHelper.ts] ////
+
+=== foo.ts ===
 function id<T>(x: T) {
 >id : <T>(x: T) => T
 >x : T
@@ -13,7 +15,7 @@ export const result = id `hello world`;
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 
-=== tests/cases/compiler/node_modules/tslib/index.d.ts ===
+=== ./node_modules/tslib/index.d.ts ===
 
 export { };
 

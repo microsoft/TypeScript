@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typedArrays.ts] ////
+
 //// [typedArrays.ts]
 function CreateTypedArrayTypes() {
     var typedArrays = [];

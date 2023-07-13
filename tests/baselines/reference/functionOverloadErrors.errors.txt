@@ -1,17 +1,17 @@
-tests/cases/conformance/functions/functionOverloadErrors.ts(2,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/functions/functionOverloadErrors.ts(65,13): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/functions/functionOverloadErrors.ts(68,13): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/functions/functionOverloadErrors.ts(75,21): error TS2383: Overload signatures must all be exported or non-exported.
-tests/cases/conformance/functions/functionOverloadErrors.ts(79,14): error TS2383: Overload signatures must all be exported or non-exported.
-tests/cases/conformance/functions/functionOverloadErrors.ts(85,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-tests/cases/conformance/functions/functionOverloadErrors.ts(90,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-tests/cases/conformance/functions/functionOverloadErrors.ts(94,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/conformance/functions/functionOverloadErrors.ts(99,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/conformance/functions/functionOverloadErrors.ts(103,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+functionOverloadErrors.ts(2,14): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+functionOverloadErrors.ts(65,13): error TS2385: Overload signatures must all be public, private or protected.
+functionOverloadErrors.ts(68,13): error TS2385: Overload signatures must all be public, private or protected.
+functionOverloadErrors.ts(75,21): error TS2383: Overload signatures must all be exported or non-exported.
+functionOverloadErrors.ts(79,14): error TS2383: Overload signatures must all be exported or non-exported.
+functionOverloadErrors.ts(85,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+functionOverloadErrors.ts(90,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+functionOverloadErrors.ts(94,10): error TS2394: This overload signature is not compatible with its implementation signature.
+functionOverloadErrors.ts(99,10): error TS2394: This overload signature is not compatible with its implementation signature.
+functionOverloadErrors.ts(103,10): error TS2394: This overload signature is not compatible with its implementation signature.
+functionOverloadErrors.ts(116,19): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
-==== tests/cases/conformance/functions/functionOverloadErrors.ts (11 errors) ====
+==== functionOverloadErrors.ts (11 errors) ====
     //Function overload signature with initializer
     function fn1(x = 3);
                  ~~~~~
@@ -122,7 +122,7 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     function fewerParams();
              ~~~~~~~~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/conformance/functions/functionOverloadErrors.ts:95:10: The implementation signature is declared here.
+!!! related TS2750 functionOverloadErrors.ts:95:10: The implementation signature is declared here.
     function fewerParams(n: string) {
     }
     
@@ -130,14 +130,14 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     function fn13(n: string);
              ~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/conformance/functions/functionOverloadErrors.ts:100:10: The implementation signature is declared here.
+!!! related TS2750 functionOverloadErrors.ts:100:10: The implementation signature is declared here.
     function fn13(n: number) { }
     
     //Function overloads where return types are not all subtype of implementation return type
     function fn14(n: string): string;
              ~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/conformance/functions/functionOverloadErrors.ts:104:10: The implementation signature is declared here.
+!!! related TS2750 functionOverloadErrors.ts:104:10: The implementation signature is declared here.
     function fn14() {
         return 3;
     }

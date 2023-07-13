@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ExportDefaultIdentifier.ts] ////
+
 //// [es6ExportDefaultIdentifier.ts]
 export function f() { }
 

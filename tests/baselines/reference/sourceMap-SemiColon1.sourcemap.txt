@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMap-SemiColon1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-SemiColon1.js
+emittedFile:sourceMap-SemiColon1.js
 sourceFile:sourceMap-SemiColon1.ts
 -------------------------------------------------------------------
 >>>;

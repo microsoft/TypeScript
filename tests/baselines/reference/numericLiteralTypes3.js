@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/numericLiteralTypes3.ts] ////
+
 //// [numericLiteralTypes3.ts]
 type A = 1;
 type B = 2 | 3;

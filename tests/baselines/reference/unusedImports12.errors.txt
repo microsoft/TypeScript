@@ -1,10 +1,10 @@
-tests/cases/compiler/a.ts(1,1): error TS6133: 'Member' is declared but its value is never read.
-tests/cases/compiler/a.ts(2,1): error TS6192: All imports in import declaration are unused.
-tests/cases/compiler/a.ts(3,1): error TS6133: 'ns' is declared but its value is never read.
-tests/cases/compiler/a.ts(4,8): error TS6133: 'r' is declared but its value is never read.
+a.ts(1,1): error TS6133: 'Member' is declared but its value is never read.
+a.ts(2,1): error TS6192: All imports in import declaration are unused.
+a.ts(3,1): error TS6133: 'ns' is declared but its value is never read.
+a.ts(4,8): error TS6133: 'r' is declared but its value is never read.
 
 
-==== tests/cases/compiler/a.ts (4 errors) ====
+==== a.ts (4 errors) ====
     import { Member } from './b';
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6133: 'Member' is declared but its value is never read.
@@ -18,7 +18,7 @@ tests/cases/compiler/a.ts(4,8): error TS6133: 'r' is declared but its value is n
            ~
 !!! error TS6133: 'r' is declared but its value is never read.
     
-==== tests/cases/compiler/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     export class Member {}
     export default Member;
     

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts] ////
+
 //// [subtypingWithObjectMembersAccessibility2.ts]
 // Derived member is private, base member is not causes errors
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/namedTypes/classWithOnlyPublicMembersEquivalentToInterface.ts] ////
+
 //// [classWithOnlyPublicMembersEquivalentToInterface.ts]
 // no errors expected
 

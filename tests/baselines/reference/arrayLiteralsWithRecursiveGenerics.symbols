@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/arrayLiteralsWithRecursiveGenerics.ts ===
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/arrayLiteralsWithRecursiveGenerics.ts] ////
+
+=== arrayLiteralsWithRecursiveGenerics.ts ===
 class List<T> {
 >List : Symbol(List, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 0))
 >T : Symbol(T, Decl(arrayLiteralsWithRecursiveGenerics.ts, 0, 11))

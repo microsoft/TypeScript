@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchComparableCompatForBrands.ts] ////
+
 //// [switchComparableCompatForBrands.ts]
 class MyBrand
 {

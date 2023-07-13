@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock9.ts] ////
+
 //// [classStaticBlock9.ts]
 class A {
     static bar = A.foo + 1

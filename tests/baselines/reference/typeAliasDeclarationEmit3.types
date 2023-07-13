@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeAliasDeclarationEmit3.ts ===
+//// [tests/cases/compiler/typeAliasDeclarationEmit3.ts] ////
+
+=== typeAliasDeclarationEmit3.ts ===
 function f1(): void {
 >f1 : () => void
 

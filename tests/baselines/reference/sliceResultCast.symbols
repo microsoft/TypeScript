@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sliceResultCast.ts ===
+//// [tests/cases/compiler/sliceResultCast.ts] ////
+
+=== sliceResultCast.ts ===
 declare var x: [number, string] | [number, string, string];
 >x : Symbol(x, Decl(sliceResultCast.ts, 0, 11))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interface0.ts] ////
+
 //// [interface0.ts]
 interface Generic<T> {
     x: T;

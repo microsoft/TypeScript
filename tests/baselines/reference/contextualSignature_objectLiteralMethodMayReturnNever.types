@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualSignature_objectLiteralMethodMayReturnNever.ts ===
+//// [tests/cases/compiler/contextualSignature_objectLiteralMethodMayReturnNever.ts] ////
+
+=== contextualSignature_objectLiteralMethodMayReturnNever.ts ===
 interface I { m(): number; }
 >m : () => number
 

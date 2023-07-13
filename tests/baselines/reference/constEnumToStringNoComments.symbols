@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constEnumToStringNoComments.ts ===
+//// [tests/cases/compiler/constEnumToStringNoComments.ts] ////
+
+=== constEnumToStringNoComments.ts ===
 const enum Foo {
 >Foo : Symbol(Foo, Decl(constEnumToStringNoComments.ts, 0, 0))
 

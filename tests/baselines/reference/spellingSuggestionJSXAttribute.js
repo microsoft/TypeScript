@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
+
 //// [spellingSuggestionJSXAttribute.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";

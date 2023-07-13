@@ -1,4 +1,6 @@
-=== tests/cases/compiler/this_inside-enum-should-not-be-allowed.ts ===
+//// [tests/cases/compiler/this_inside-enum-should-not-be-allowed.ts] ////
+
+=== this_inside-enum-should-not-be-allowed.ts ===
 enum TopLevelEnum {
 >TopLevelEnum : Symbol(TopLevelEnum, Decl(this_inside-enum-should-not-be-allowed.ts, 0, 0))
 

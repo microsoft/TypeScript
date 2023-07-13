@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferenceOfNullableObjectTypesWithCommonBase.ts ===
+//// [tests/cases/compiler/inferenceOfNullableObjectTypesWithCommonBase.ts] ////
+
+=== inferenceOfNullableObjectTypesWithCommonBase.ts ===
 function equal<T>(a: T, b: T) { }
 >equal : Symbol(equal, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 0, 0))
 >T : Symbol(T, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 0, 15))

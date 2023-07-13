@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItself.ts] ////
+
 //// [classExtendsItself.ts]
 class C extends C { } // error
 

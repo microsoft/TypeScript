@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceContextualType.ts ===
+//// [tests/cases/compiler/interfaceContextualType.ts] ////
+
+=== interfaceContextualType.ts ===
 export interface IOptions {
 >IOptions : Symbol(IOptions, Decl(interfaceContextualType.ts, 0, 0))
 

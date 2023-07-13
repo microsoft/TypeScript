@@ -1,13 +1,13 @@
-tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(1,12): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
-tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(8,12): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
-tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(9,13): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
-tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(15,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
-tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(22,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
-tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(23,13): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
-tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js(30,21): error TS2322: Type 'number' is not assignable to type '() => Object'.
+jsdocArrayObjectPromiseNoImplicitAny.js(1,12): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(8,12): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(9,13): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(15,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(22,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(23,13): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
+jsdocArrayObjectPromiseNoImplicitAny.js(30,21): error TS2322: Type 'number' is not assignable to type '() => Object'.
 
 
-==== tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.js (7 errors) ====
+==== jsdocArrayObjectPromiseNoImplicitAny.js (7 errors) ====
     /** @type {Array} */
                ~~~~~
 !!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).

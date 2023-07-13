@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInObjectJs.ts] ////
+
 //// [index.js]
 export { }
 let obj = {

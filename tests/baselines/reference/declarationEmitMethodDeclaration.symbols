@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitMethodDeclaration.ts] ////
+
 === /a.js ===
 export default {
     methods: {

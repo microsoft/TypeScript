@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability44.ts] ////
+
 //// [assignmentCompatability44.ts]
 class Foo {
     constructor(x: number) {}

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privateNameWeakMapCollision.ts ===
+//// [tests/cases/compiler/privateNameWeakMapCollision.ts] ////
+
+=== privateNameWeakMapCollision.ts ===
 function test() {
 >test : () => void
 

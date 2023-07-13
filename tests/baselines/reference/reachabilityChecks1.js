@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks1.ts] ////
+
 //// [reachabilityChecks1.ts]
 while (true);
 var x = 1;

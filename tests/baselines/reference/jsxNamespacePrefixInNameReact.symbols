@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx ===
+//// [tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx] ////
+
+=== jsxNamespacePrefixInNameReact.tsx ===
 declare var React: any;
 >React : Symbol(React, Decl(jsxNamespacePrefixInNameReact.tsx, 0, 11))
 

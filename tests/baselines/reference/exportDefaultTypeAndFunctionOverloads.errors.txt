@@ -1,29 +1,29 @@
-tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts(1,25): error TS2528: A module cannot have multiple default exports.
-tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts(2,25): error TS2528: A module cannot have multiple default exports.
-tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts(3,25): error TS2528: A module cannot have multiple default exports.
-tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts(7,16): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeAndFunctionOverloads.ts(1,25): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeAndFunctionOverloads.ts(2,25): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeAndFunctionOverloads.ts(3,25): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeAndFunctionOverloads.ts(7,16): error TS2528: A module cannot have multiple default exports.
 
 
-==== tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts (4 errors) ====
+==== exportDefaultTypeAndFunctionOverloads.ts (4 errors) ====
     export default function foo(value: number): number
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts:7:16: Another export default is here.
+!!! related TS2753 exportDefaultTypeAndFunctionOverloads.ts:7:16: Another export default is here.
     export default function foo(value: string): string
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS6204 tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts:7:16: and here.
+!!! related TS6204 exportDefaultTypeAndFunctionOverloads.ts:7:16: and here.
     export default function foo(value: string | number): string | number {
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS6204 tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts:7:16: and here.
+!!! related TS6204 exportDefaultTypeAndFunctionOverloads.ts:7:16: and here.
         return 1
     }
     type Foo = {}
     export default Foo
                    ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts:1:25: The first export default is here.
-!!! related TS2752 tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts:2:25: The first export default is here.
-!!! related TS2752 tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts:3:25: The first export default is here.
+!!! related TS2752 exportDefaultTypeAndFunctionOverloads.ts:1:25: The first export default is here.
+!!! related TS2752 exportDefaultTypeAndFunctionOverloads.ts:2:25: The first export default is here.
+!!! related TS2752 exportDefaultTypeAndFunctionOverloads.ts:3:25: The first export default is here.
     

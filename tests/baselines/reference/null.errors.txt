@@ -1,7 +1,7 @@
-tests/cases/compiler/null.ts(3,7): error TS2365: Operator '+' cannot be applied to types '3' and 'null'.
+null.ts(3,7): error TS2365: Operator '+' cannot be applied to types '3' and 'null'.
 
 
-==== tests/cases/compiler/null.ts (1 errors) ====
+==== null.ts (1 errors) ====
     var x=null; 
     var y=3+x;  
     var z=3+null; 

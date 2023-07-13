@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/thisTag1.ts] ////
+
+=== a.js ===
 /** @this {{ n: number }} Mount Holyoke Preparatory School
  * @param {string} s
  * @return {number}

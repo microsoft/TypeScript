@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+//// [tests/cases/conformance/externalModules/nameDelimitedBySlashes.ts] ////
+
+=== foo_1.ts ===
 import foo = require('./test/foo_0');
 >foo : typeof foo
 
@@ -10,7 +12,7 @@ var x = foo.foo + 42;
 >foo : number
 >42 : 42
 
-=== tests/cases/conformance/externalModules/test/foo_0.ts ===
+=== test/foo_0.ts ===
 export var foo = 42;
 >foo : number
 >42 : 42

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts] ////
+
 //// [invalidInstantiatedModule.ts]
 module M {
     export class Point { x: number; y: number }

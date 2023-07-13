@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/0.js(24,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+0.js(24,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== tests/cases/conformance/jsdoc/0.js (1 errors) ====
+==== 0.js (1 errors) ====
     // @ts-check
     /** @type {String} */
     var S = "hello world";

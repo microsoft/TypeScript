@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts] ////
+
 //// [constructSignatureAssignabilityInInheritance.ts]
 // Checking basic subtype relations with construct signatures
 

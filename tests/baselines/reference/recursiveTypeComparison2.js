@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTypeComparison2.ts] ////
+
 //// [recursiveTypeComparison2.ts]
 // Before fix this would cause compiler to hang (#1170)
 

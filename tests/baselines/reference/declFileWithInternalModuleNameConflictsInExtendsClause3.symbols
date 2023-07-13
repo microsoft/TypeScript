@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause3.ts ===
+//// [tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause3.ts] ////
+
+=== declFileWithInternalModuleNameConflictsInExtendsClause3.ts ===
 module X.A.C {
 >X : Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 3, 1), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 7, 1))
 >A : Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 9, 9))

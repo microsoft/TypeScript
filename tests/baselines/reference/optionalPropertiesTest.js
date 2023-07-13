@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalPropertiesTest.ts] ////
+
 //// [optionalPropertiesTest.ts]
 var x: {p1:number; p2?:string; p3?:{():number;};};
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/contextualThisType.ts] ////
+
 //// [contextualThisType.ts]
 interface X {
     a: (p: this) => this;

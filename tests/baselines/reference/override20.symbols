@@ -1,4 +1,6 @@
-=== tests/cases/conformance/override/override20.ts ===
+//// [tests/cases/conformance/override/override20.ts] ////
+
+=== override20.ts ===
 const Foo: C1 & C2 =
 >Foo : Symbol(Foo, Decl(override20.ts, 0, 5))
 >C1 : Symbol(C1, Decl(override20.ts, 13, 1))

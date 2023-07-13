@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/paren.js ===
+//// [tests/cases/conformance/jsdoc/jsdocParseParenthesizedJSDocParameter.ts] ////
+
+=== paren.js ===
 /** @type {function((string)): string} */
 var x = s => s.toString()
 >x : Symbol(x, Decl(paren.js, 1, 3))

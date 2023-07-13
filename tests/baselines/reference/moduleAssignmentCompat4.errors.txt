@@ -1,8 +1,8 @@
-tests/cases/compiler/moduleAssignmentCompat4.ts(12,8): error TS2709: Cannot use namespace 'A' as a type.
-tests/cases/compiler/moduleAssignmentCompat4.ts(13,8): error TS2709: Cannot use namespace 'B' as a type.
+moduleAssignmentCompat4.ts(12,8): error TS2709: Cannot use namespace 'A' as a type.
+moduleAssignmentCompat4.ts(13,8): error TS2709: Cannot use namespace 'B' as a type.
 
 
-==== tests/cases/compiler/moduleAssignmentCompat4.ts (2 errors) ====
+==== moduleAssignmentCompat4.ts (2 errors) ====
     module A {
        export module M {
             class C { }

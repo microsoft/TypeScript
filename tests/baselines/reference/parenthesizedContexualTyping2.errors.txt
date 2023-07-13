@@ -1,10 +1,10 @@
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(35,32): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(35,56): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(36,33): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts(36,57): error TS2695: Left side of comma operator is unused and has no side effects.
+parenthesizedContexualTyping2.ts(35,32): error TS2695: Left side of comma operator is unused and has no side effects.
+parenthesizedContexualTyping2.ts(35,56): error TS2695: Left side of comma operator is unused and has no side effects.
+parenthesizedContexualTyping2.ts(36,33): error TS2695: Left side of comma operator is unused and has no side effects.
+parenthesizedContexualTyping2.ts(36,57): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping2.ts (4 errors) ====
+==== parenthesizedContexualTyping2.ts (4 errors) ====
     // These tests ensure that in cases where it may *appear* that a value has a type,
     // they actually are properly being contextually typed. The way we test this is
     // that we invoke contextually typed arguments with type arguments.

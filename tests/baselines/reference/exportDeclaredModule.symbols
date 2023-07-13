@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo2.ts ===
+//// [tests/cases/conformance/externalModules/exportDeclaredModule.ts] ////
+
+=== foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : Symbol(foo1, Decl(foo2.ts, 0, 0))
 
@@ -8,7 +10,7 @@ var x: number = foo1.b();
 >foo1 : Symbol(foo1, Decl(foo2.ts, 0, 0))
 >b : Symbol(foo1.b, Decl(foo1.ts, 1, 22))
 
-=== tests/cases/conformance/externalModules/foo1.ts ===
+=== foo1.ts ===
 declare module M1 {
 >M1 : Symbol(M1, Decl(foo1.ts, 0, 0))
 

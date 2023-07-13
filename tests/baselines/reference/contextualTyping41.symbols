@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTyping41.ts ===
+//// [tests/cases/compiler/contextualTyping41.ts] ////
+
+=== contextualTyping41.ts ===
 var foo = <{():number; (i:number):number; }> (function(){return "err";});
 >foo : Symbol(foo, Decl(contextualTyping41.ts, 0, 3))
 >i : Symbol(i, Decl(contextualTyping41.ts, 0, 24))

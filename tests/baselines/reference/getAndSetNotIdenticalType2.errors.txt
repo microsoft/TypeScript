@@ -1,11 +1,11 @@
-tests/cases/compiler/getAndSetNotIdenticalType2.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<T>'.
+getAndSetNotIdenticalType2.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<T>'.
   Type 'string' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
-tests/cases/compiler/getAndSetNotIdenticalType2.ts(15,1): error TS2322: Type 'A<unknown>' is not assignable to type 'A<string>'.
+getAndSetNotIdenticalType2.ts(15,1): error TS2322: Type 'A<unknown>' is not assignable to type 'A<string>'.
   Type 'unknown' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/getAndSetNotIdenticalType2.ts (2 errors) ====
+==== getAndSetNotIdenticalType2.ts (2 errors) ====
     class A<T> { foo: T; }
     
     class C<T> {

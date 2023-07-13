@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsInterface.ts ===
+//// [tests/cases/compiler/classExtendsInterface.ts] ////
+
+=== classExtendsInterface.ts ===
 interface Comparable {}
 class A extends Comparable {}
 >A : A

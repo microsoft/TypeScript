@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/twoMergedInterfacesWithDifferingOverloads.ts] ////
+
 //// [twoMergedInterfacesWithDifferingOverloads.ts]
 // interfaces that merge must not have members that conflict
 

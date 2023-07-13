@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constantOverloadFunction.ts ===
+//// [tests/cases/compiler/constantOverloadFunction.ts] ////
+
+=== constantOverloadFunction.ts ===
 class Base { foo() { } }
 >Base : Base
 >foo : () => void

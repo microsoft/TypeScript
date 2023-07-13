@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUncheckedIndexAccess.ts] ////
+
 //// [noUncheckedIndexAccess.ts]
 enum Meat {
     Sausage,

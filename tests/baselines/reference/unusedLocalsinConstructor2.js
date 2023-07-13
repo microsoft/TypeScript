@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsinConstructor2.ts] ////
+
 //// [unusedLocalsinConstructor2.ts]
 class greeter {
     constructor() {

@@ -1729,12 +1729,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 `;
                 assert.strictEqual(C.x, 2);
             });
-            it("multiple initializer pipe-throughs applied in reverse order", () => {
+            it("multiple initializer pipe-throughs applied in order", () => {
                 const { C } = exec`
-                    function initializer(x) { return x + 1; }
                     export class C {
-                        @((t, c) => x => [...x, 3])
                         @((t, c) => x => [...x, 2])
+                        @((t, c) => x => [...x, 3])
                         static x: number[] = [1];
                     }
                 `;
@@ -1797,12 +1796,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 `;
                 assert.strictEqual(C.x, 2);
             });
-            it("multiple initializer pipe-throughs applied in reverse order", () => {
+            it("multiple init pipe-throughs applied in order", () => {
                 const { C } = exec`
-                    function initializer(x) { return x + 1; }
                     export class C {
-                        @((t, c) => ({ init: x => [...x, 3] }))
                         @((t, c) => ({ init: x => [...x, 2] }))
+                        @((t, c) => ({ init: x => [...x, 3] }))
                         static accessor x: number[] = [1];
                     }
                 `;
@@ -1860,6 +1858,38 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
+        });
+        it("accessor 'init' evaluation order (#54267)", () => {
+            const { main } = exec`
+                function minusTwo({ set }: any, ctx: any) {
+                    return {
+                        set(v) { set.call(this, v - 2); },
+                        init(v) { return v - 2; },
+                    };
+                }
+
+                function timesFour({ set }: any, ctx: any) {
+                    return {
+                        set(v) { set.call(this, v * 4); },
+                        init(v) { return v * 4; }
+                    };
+                }
+
+                class C {
+                    @minusTwo @timesFour accessor x = 5;
+                }
+
+                export const main = () => {
+                    const obj = new C();
+                    const afterInit = obj.x;
+                    obj.x = 5;
+                    const afterSet = obj.x;
+                    return { afterInit, afterSet };
+                };
+            `;
+            const { afterInit, afterSet } = main();
+            assert.strictEqual(afterInit, 12);
+            assert.strictEqual(afterSet, 12);
         });
     });
 
@@ -2162,11 +2192,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 // order and applied to the replacement class:
                 "static block evaluation",
                 "static field initializer evaluation",
-                "static field injected initializer evaluation 2",
                 "static field injected initializer evaluation 1",
+                "static field injected initializer evaluation 2",
                 "static auto-accessor initializer evaluation",
-                "static auto-accessor injected initializer evaluation 2",
                 "static auto-accessor injected initializer evaluation 1",
+                "static auto-accessor injected initializer evaluation 2",
                 // NOTE: at this point, static private fields will be installed (TODO: on the replacement class)
 
                 // finally, class extra initializers are applied in the order they were added (i.e., methods before fields,
@@ -2208,11 +2238,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 // next, instance initializers (i.e., fields, auto-accessors, and static blocks) are evaluated in document
                 // order:
                 "instance field initializer evaluation",
-                "instance field injected initializer evaluation 2",
                 "instance field injected initializer evaluation 1",
+                "instance field injected initializer evaluation 2",
                 "instance auto-accessor initializer evaluation",
-                "instance auto-accessor injected initializer evaluation 2",
                 "instance auto-accessor injected initializer evaluation 1",
+                "instance auto-accessor injected initializer evaluation 2",
                 // NOTE: at this point, instance private fields will be installed.
 
                 // finally, statements in the constructor after the call to `super()` are evaluated:

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes3.ts] ////
+
 //// [templateLiteralTypes3.ts]
 // Inference from template literal type to template literal type
 

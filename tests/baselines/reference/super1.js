@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/super1.ts] ////
+
 //// [super1.ts]
 // Case 1
 class Base1 {

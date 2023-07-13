@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock17.ts] ////
+
 //// [classStaticBlock17.ts]
 let friendA: { getX(o: A): number, setX(o: A, v: number): void };
 

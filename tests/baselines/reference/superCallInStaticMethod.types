@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallInStaticMethod.ts ===
+//// [tests/cases/compiler/superCallInStaticMethod.ts] ////
+
+=== superCallInStaticMethod.ts ===
 class Doing {
 >Doing : Doing
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsEnums.ts ===
+//// [tests/cases/compiler/commentsEnums.ts] ////
+
+=== commentsEnums.ts ===
 /** Enum of colors*/
 enum Colors {
 >Colors : Colors

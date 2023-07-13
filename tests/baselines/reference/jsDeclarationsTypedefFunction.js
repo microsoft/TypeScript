@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefFunction.ts] ////
+
 //// [foo.js]
 /**
  * @typedef {{

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty19.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty19.ts] ////
+
+=== symbolProperty19.ts ===
 var i = {
 >i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
 >{    [Symbol.iterator]: { p: null },    [Symbol.toStringTag]() { return { p: undefined }; }} : { [Symbol.iterator]: { p: null; }; [Symbol.toStringTag](): { p: any; }; }

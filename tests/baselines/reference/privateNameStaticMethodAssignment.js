@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodAssignment.ts] ////
+
 //// [privateNameStaticMethodAssignment.ts]
 class A3 {
     static #method() { };

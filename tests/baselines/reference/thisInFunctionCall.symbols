@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInFunctionCall.ts ===
+//// [tests/cases/compiler/thisInFunctionCall.ts] ////
+
+=== thisInFunctionCall.ts ===
 class Test {
 >Test : Symbol(Test, Decl(thisInFunctionCall.ts, 0, 0))
 

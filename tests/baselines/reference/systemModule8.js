@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule8.ts] ////
+
 //// [systemModule8.ts]
 export var x;
 x = 1;

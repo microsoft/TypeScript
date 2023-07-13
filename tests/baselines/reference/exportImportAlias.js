@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/importDeclarations/exportImportAlias.ts] ////
+
 //// [exportImportAlias.ts]
 // expect no errors here
 

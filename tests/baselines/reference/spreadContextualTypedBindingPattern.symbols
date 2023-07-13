@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/spreadContextualTypedBindingPattern.ts ===
+//// [tests/cases/conformance/types/spread/spreadContextualTypedBindingPattern.ts] ////
+
+=== spreadContextualTypedBindingPattern.ts ===
 // #18308
 interface Person {
 >Person : Symbol(Person, Decl(spreadContextualTypedBindingPattern.ts, 0, 0))

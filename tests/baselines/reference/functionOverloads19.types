@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads19.ts ===
+//// [tests/cases/compiler/functionOverloads19.ts] ////
+
+=== functionOverloads19.ts ===
 function foo(bar:{b:string;});
 >foo : { (bar: {    b: string;}): any; (bar: { a: string; }): any; }
 >bar : { b: string; }

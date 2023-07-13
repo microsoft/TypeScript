@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/contextualIntersectionType.ts ===
+//// [tests/cases/conformance/types/intersection/contextualIntersectionType.ts] ////
+
+=== contextualIntersectionType.ts ===
 var x: { a: (s: string) => string } & { b: (n: number) => number };
 >x : Symbol(x, Decl(contextualIntersectionType.ts, 0, 3))
 >a : Symbol(a, Decl(contextualIntersectionType.ts, 0, 8))

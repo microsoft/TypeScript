@@ -1,10 +1,10 @@
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping1.ts(27,32): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping1.ts(27,56): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping1.ts(28,33): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping1.ts(28,57): error TS2695: Left side of comma operator is unused and has no side effects.
+parenthesizedContexualTyping1.ts(27,32): error TS2695: Left side of comma operator is unused and has no side effects.
+parenthesizedContexualTyping1.ts(27,56): error TS2695: Left side of comma operator is unused and has no side effects.
+parenthesizedContexualTyping1.ts(28,33): error TS2695: Left side of comma operator is unused and has no side effects.
+parenthesizedContexualTyping1.ts(28,57): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping1.ts (4 errors) ====
+==== parenthesizedContexualTyping1.ts (4 errors) ====
     function fun<T>(g: (x: T) => T, x: T): T;
     function fun<T>(g: (x: T) => T, h: (y: T) => T, x: T): T;
     function fun<T>(g: (x: T) => T, x: T): T {

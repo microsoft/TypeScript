@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/typesWithOptionalProperty.ts] ////
+
 //// [typesWithOptionalProperty.ts]
 // basic uses of optional properties without errors
 

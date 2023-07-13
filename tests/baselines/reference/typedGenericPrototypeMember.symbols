@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typedGenericPrototypeMember.ts ===
+//// [tests/cases/compiler/typedGenericPrototypeMember.ts] ////
+
+=== typedGenericPrototypeMember.ts ===
 class List<T> {
 >List : Symbol(List, Decl(typedGenericPrototypeMember.ts, 0, 0))
 >T : Symbol(T, Decl(typedGenericPrototypeMember.ts, 0, 11))

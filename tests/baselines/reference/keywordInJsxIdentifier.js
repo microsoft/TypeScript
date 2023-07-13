@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/keywordInJsxIdentifier.tsx] ////
+
 //// [keywordInJsxIdentifier.tsx]
 declare var React: any;
 <foo class-id/>;

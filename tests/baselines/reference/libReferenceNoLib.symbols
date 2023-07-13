@@ -1,4 +1,6 @@
-=== tests/cases/conformance/declarationEmit/fakelib.ts ===
+//// [tests/cases/conformance/declarationEmit/libReferenceNoLib.ts] ////
+
+=== fakelib.ts ===
 // Test that passing noLib disables <reference lib> resolution.
 
 interface Object { }
@@ -27,7 +29,7 @@ interface IArguments { }
 >IArguments : Symbol(IArguments, Decl(fakelib.ts, 8, 20))
 
 
-=== tests/cases/conformance/declarationEmit/file1.ts ===
+=== file1.ts ===
 /// <reference lib="dom" />
 export declare interface HTMLElement { field: string; }
 >HTMLElement : Symbol(HTMLElement, Decl(file1.ts, 0, 0))

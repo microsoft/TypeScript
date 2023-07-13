@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInTaggedTemplateCall.ts] ////
+
 //// [thisTypeInTaggedTemplateCall.ts]
 class Foo {
     static m<T>(this: new () => T, strings: TemplateStringsArray | string) {

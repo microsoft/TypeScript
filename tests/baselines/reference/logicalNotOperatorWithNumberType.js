@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithNumberType.ts] ////
+
 //// [logicalNotOperatorWithNumberType.ts]
 // ! operator on number type
 var NUMBER: number;

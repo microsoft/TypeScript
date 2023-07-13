@@ -1,6 +1,8 @@
-=== tests/cases/compiler/folder/test.ts ===
+//// [tests/cases/compiler/keepImportsInDts2.ts] ////
+
+=== folder/test.ts ===
 
 export {};
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 
 import "./folder/test"

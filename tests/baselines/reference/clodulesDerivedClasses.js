@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/clodulesDerivedClasses.ts] ////
+
 //// [clodulesDerivedClasses.ts]
 class Shape {
     id: number;

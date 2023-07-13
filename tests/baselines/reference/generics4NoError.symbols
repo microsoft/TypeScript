@@ -1,4 +1,6 @@
-=== tests/cases/compiler/generics4NoError.ts ===
+//// [tests/cases/compiler/generics4NoError.ts] ////
+
+=== generics4NoError.ts ===
 class C<T> { private x: T; }
 >C : Symbol(C, Decl(generics4NoError.ts, 0, 0))
 >T : Symbol(T, Decl(generics4NoError.ts, 0, 8))

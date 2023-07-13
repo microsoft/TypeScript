@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsAssertionsInEqualityComparisons02.ts] ////
+
 //// [stringLiteralsAssertionsInEqualityComparisons02.ts]
 type EnhancedString = string & { enhancements: any };
 

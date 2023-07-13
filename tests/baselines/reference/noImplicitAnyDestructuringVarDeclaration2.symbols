@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration2.ts ===
+//// [tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration2.ts] ////
+
+=== noImplicitAnyDestructuringVarDeclaration2.ts ===
 let [a, b, c] = [1, 2, 3]; // no error
 >a : Symbol(a, Decl(noImplicitAnyDestructuringVarDeclaration2.ts, 0, 5))
 >b : Symbol(b, Decl(noImplicitAnyDestructuringVarDeclaration2.ts, 0, 7))

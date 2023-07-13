@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyOrdering.ts] ////
+
 //// [propertyOrdering.ts]
 class Foo {
     constructor(store: string) { }

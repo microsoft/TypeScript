@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictModeWordInExportDeclaration.ts ===
+//// [tests/cases/compiler/strictModeWordInExportDeclaration.ts] ////
+
+=== strictModeWordInExportDeclaration.ts ===
 "use strict"
 var x = 1;
 >x : Symbol(x, Decl(strictModeWordInExportDeclaration.ts, 1, 3))

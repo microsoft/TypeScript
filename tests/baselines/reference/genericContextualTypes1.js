@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes1.ts] ////
+
 //// [genericContextualTypes1.ts]
 type Box<T> = { value: T };
 

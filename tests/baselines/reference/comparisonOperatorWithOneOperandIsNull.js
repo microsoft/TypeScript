@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts] ////
+
 //// [comparisonOperatorWithOneOperandIsNull.ts]
 enum E { a, b, c }
 

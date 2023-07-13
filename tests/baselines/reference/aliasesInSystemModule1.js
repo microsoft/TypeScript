@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasesInSystemModule1.ts] ////
+
 //// [aliasesInSystemModule1.ts]
 import alias = require('foo');
 import cls = alias.Class;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentInterface_B.ts ===
+//// [tests/cases/compiler/exportAssignmentInterface.ts] ////
+
+=== exportAssignmentInterface_B.ts ===
 import I1 = require("exportAssignmentInterface_A");
 >I1 : Symbol(I1, Decl(exportAssignmentInterface_B.ts, 0, 0))
 
@@ -12,7 +14,7 @@ var n: number = i.p1;
 >i : Symbol(i, Decl(exportAssignmentInterface_B.ts, 2, 3))
 >p1 : Symbol(I1.p1, Decl(exportAssignmentInterface_A.ts, 0, 13))
 
-=== tests/cases/compiler/exportAssignmentInterface_A.ts ===
+=== exportAssignmentInterface_A.ts ===
 interface A {
 >A : Symbol(A, Decl(exportAssignmentInterface_A.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesExportsSpecifierGenerationConditions.ts] ////
+
+=== index.ts ===
 // esm format file
 import { Thing } from "inner/other.js"; // should fail
 >Thing : Symbol(Thing, Decl(index.ts, 1, 8))
@@ -6,15 +8,15 @@ import { Thing } from "inner/other.js"; // should fail
 export const a = (await import("inner")).x();
 >a : Symbol(a, Decl(index.ts, 2, 12))
 >(await import("inner")).x : Symbol(x, Decl(index.d.ts, 1, 8))
->"inner" : Symbol("tests/cases/conformance/node/node_modules/inner/index", Decl(index.d.ts, 0, 0))
+>"inner" : Symbol("node_modules/inner/index", Decl(index.d.ts, 0, 0))
 >x : Symbol(x, Decl(index.d.ts, 1, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 // esm format file
 export { x } from "./other.js";
 >x : Symbol(x, Decl(index.d.ts, 1, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/other.d.ts ===
+=== node_modules/inner/other.d.ts ===
 // esm format file
 export interface Thing {}
 >Thing : Symbol(Thing, Decl(other.d.ts, 0, 0))

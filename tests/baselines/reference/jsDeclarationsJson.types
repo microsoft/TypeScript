@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsJson.ts] ////
+
+=== index.js ===
 const j = require("./obj.json");
 >j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
 >require("./obj.json") : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
@@ -12,7 +14,7 @@ module.exports = j;
 >exports : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
 >j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
 
-=== tests/cases/conformance/jsdoc/declarations/obj.json ===
+=== obj.json ===
 {
 >{    "x": 12,    "y": 12,    "obj": {        "items": [{"x": 12}, {"x": 12, "y": 12}, {"x": 0}, {"x": -1, "err": true}]    }} : { x: number; y: number; obj: { items: ({ x: number; } | { x: number; y: number; } | { x: number; err: boolean; })[]; }; }
 

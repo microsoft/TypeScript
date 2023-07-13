@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parameterPropertyInConstructor1.ts ===
+//// [tests/cases/compiler/parameterPropertyInConstructor1.ts] ////
+
+=== parameterPropertyInConstructor1.ts ===
 declare module mod {
 >mod : Symbol(mod, Decl(parameterPropertyInConstructor1.ts, 0, 0))
 

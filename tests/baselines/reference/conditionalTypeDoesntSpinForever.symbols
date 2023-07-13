@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypeDoesntSpinForever.ts ===
+//// [tests/cases/compiler/conditionalTypeDoesntSpinForever.ts] ////
+
+=== conditionalTypeDoesntSpinForever.ts ===
 // A *self-contained* demonstration of the problem follows...
 // Test this by running `tsc --target es6` on the command-line, rather than through another build tool such as Gulp, Webpack, etc.
 

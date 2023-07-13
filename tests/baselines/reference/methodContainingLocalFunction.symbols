@@ -1,4 +1,6 @@
-=== tests/cases/compiler/methodContainingLocalFunction.ts ===
+//// [tests/cases/compiler/methodContainingLocalFunction.ts] ////
+
+=== methodContainingLocalFunction.ts ===
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 class BugExhibition<T> {
 >BugExhibition : Symbol(BugExhibition, Decl(methodContainingLocalFunction.ts, 0, 0))

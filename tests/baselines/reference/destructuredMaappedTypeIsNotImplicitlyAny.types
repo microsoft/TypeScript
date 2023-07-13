@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuredMaappedTypeIsNotImplicitlyAny.ts ===
+//// [tests/cases/compiler/destructuredMaappedTypeIsNotImplicitlyAny.ts] ////
+
+=== destructuredMaappedTypeIsNotImplicitlyAny.ts ===
 function foo<T extends string>(key: T, obj: { [_ in T]: number }) {
 >foo : <T extends string>(key: T, obj: { [_ in T]: number; }) => void
 >key : T

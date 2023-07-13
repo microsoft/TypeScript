@@ -1,11 +1,11 @@
-tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts(1,26): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts(2,1): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts(2,1): error TS2393: Duplicate function implementation.
-tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts(3,1): error TS2323: Cannot redeclare exported variable 'default'.
-tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts(3,1): error TS2393: Duplicate function implementation.
+exportDefaultInterfaceAndTwoFunctions.ts(1,26): error TS2323: Cannot redeclare exported variable 'default'.
+exportDefaultInterfaceAndTwoFunctions.ts(2,1): error TS2323: Cannot redeclare exported variable 'default'.
+exportDefaultInterfaceAndTwoFunctions.ts(2,1): error TS2393: Duplicate function implementation.
+exportDefaultInterfaceAndTwoFunctions.ts(3,1): error TS2323: Cannot redeclare exported variable 'default'.
+exportDefaultInterfaceAndTwoFunctions.ts(3,1): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts (5 errors) ====
+==== exportDefaultInterfaceAndTwoFunctions.ts (5 errors) ====
     export default interface A { a: string; }
                              ~
 !!! error TS2323: Cannot redeclare exported variable 'default'.

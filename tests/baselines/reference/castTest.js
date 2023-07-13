@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/castTest.ts] ////
+
 //// [castTest.ts]
 var x : any = 0;
 var z = <number> x;

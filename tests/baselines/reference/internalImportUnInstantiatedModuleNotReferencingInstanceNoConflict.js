@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts] ////
+
 //// [internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts]
 module A {
     export interface X { s: string }

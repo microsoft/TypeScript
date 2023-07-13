@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericFunctionsWithOptionalParameters3.ts] ////
+
 //// [genericFunctionsWithOptionalParameters3.ts]
 class Collection<T> {
     public add(x: T) { }

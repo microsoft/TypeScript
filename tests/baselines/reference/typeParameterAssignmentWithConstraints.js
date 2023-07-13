@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterAssignmentWithConstraints.ts] ////
+
 //// [typeParameterAssignmentWithConstraints.ts]
 function f<A, B extends A>() {
     var a: A;

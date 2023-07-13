@@ -1,12 +1,12 @@
-tests/cases/compiler/interfaceImplementation1.ts(12,7): error TS2420: Class 'C1' incorrectly implements interface 'I1'.
+interfaceImplementation1.ts(12,7): error TS2420: Class 'C1' incorrectly implements interface 'I1'.
   Property 'iObj' is private in type 'C1' but not in type 'I1'.
-tests/cases/compiler/interfaceImplementation1.ts(12,7): error TS2420: Class 'C1' incorrectly implements interface 'I2'.
+interfaceImplementation1.ts(12,7): error TS2420: Class 'C1' incorrectly implements interface 'I2'.
   Property 'iFn' is private in type 'C1' but not in type 'I2'.
-tests/cases/compiler/interfaceImplementation1.ts(34,5): error TS2322: Type '() => C2' is not assignable to type 'I4'.
+interfaceImplementation1.ts(34,5): error TS2322: Type '() => C2' is not assignable to type 'I4'.
   Type '() => C2' provides no match for the signature 'new (): I3'.
 
 
-==== tests/cases/compiler/interfaceImplementation1.ts (3 errors) ====
+==== interfaceImplementation1.ts (3 errors) ====
     interface I1 {
         iObj:{ };
         iNum:number;

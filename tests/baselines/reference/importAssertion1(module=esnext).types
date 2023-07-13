@@ -1,4 +1,6 @@
-=== tests/cases/conformance/importAssertion/0.ts ===
+//// [tests/cases/conformance/importAssertion/importAssertion1.ts] ////
+
+=== 0.ts ===
 export const a = 1;
 >a : 1
 >1 : 1
@@ -7,7 +9,7 @@ export const b = 2;
 >b : 2
 >2 : 2
 
-=== tests/cases/conformance/importAssertion/1.ts ===
+=== 1.ts ===
 import './0' assert { type: "json" }
 >type : any
 
@@ -35,7 +37,7 @@ foo.b;
 >foo : typeof foo
 >b : 2
 
-=== tests/cases/conformance/importAssertion/2.ts ===
+=== 2.ts ===
 import { a, b } from './0' assert {}
 >a : 1
 >b : 2
@@ -61,15 +63,15 @@ c;
 d;
 >d : 2
 
-=== tests/cases/conformance/importAssertion/3.ts ===
+=== 3.ts ===
 const a = import('./0')
->a : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0') : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>a : Promise<typeof import("0")>
+>import('./0') : Promise<typeof import("0")>
 >'./0' : "./0"
 
 const b = import('./0', { assert: { type: "json" } })
->b : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', { assert: { type: "json" } }) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>b : Promise<typeof import("0")>
+>import('./0', { assert: { type: "json" } }) : Promise<typeof import("0")>
 >'./0' : "./0"
 >{ assert: { type: "json" } } : { assert: { type: string; }; }
 >assert : { type: string; }
@@ -78,8 +80,8 @@ const b = import('./0', { assert: { type: "json" } })
 >"json" : "json"
 
 const c = import('./0', { assert: { type: "json", ttype: "typo" } })
->c : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', { assert: { type: "json", ttype: "typo" } }) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>c : Promise<typeof import("0")>
+>import('./0', { assert: { type: "json", ttype: "typo" } }) : Promise<typeof import("0")>
 >'./0' : "./0"
 >{ assert: { type: "json", ttype: "typo" } } : { assert: { type: string; ttype: string; }; }
 >assert : { type: string; ttype: string; }
@@ -90,16 +92,16 @@ const c = import('./0', { assert: { type: "json", ttype: "typo" } })
 >"typo" : "typo"
 
 const d = import('./0', { assert: {} })
->d : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', { assert: {} }) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>d : Promise<typeof import("0")>
+>import('./0', { assert: {} }) : Promise<typeof import("0")>
 >'./0' : "./0"
 >{ assert: {} } : { assert: {}; }
 >assert : {}
 >{} : {}
 
 const dd = import('./0', {})
->dd : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', {}) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>dd : Promise<typeof import("0")>
+>import('./0', {}) : Promise<typeof import("0")>
 >'./0' : "./0"
 >{} : {}
 
@@ -107,8 +109,8 @@ declare function foo(): any;
 >foo : () => any
 
 const e = import('./0', foo())
->e : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', foo()) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>e : Promise<typeof import("0")>
+>import('./0', foo()) : Promise<typeof import("0")>
 >'./0' : "./0"
 >foo() : any
 >foo : () => any
@@ -118,15 +120,15 @@ const f = import()
 >import() : Promise<any>
 
 const g = import('./0', {}, {})
->g : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', {}, {}) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>g : Promise<typeof import("0")>
+>import('./0', {}, {}) : Promise<typeof import("0")>
 >'./0' : "./0"
 >{} : {}
 >{} : {}
 
 const h = import('./0', { assert: { type: "json" }},)
->h : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', { assert: { type: "json" }},) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>h : Promise<typeof import("0")>
+>import('./0', { assert: { type: "json" }},) : Promise<typeof import("0")>
 >'./0' : "./0"
 >{ assert: { type: "json" }} : { assert: { type: string; }; }
 >assert : { type: string; }

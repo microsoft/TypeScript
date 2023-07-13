@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classTypeParametersInStatics.ts ===
+//// [tests/cases/compiler/classTypeParametersInStatics.ts] ////
+
+=== classTypeParametersInStatics.ts ===
 module Editor {
 >Editor : Symbol(Editor, Decl(classTypeParametersInStatics.ts, 0, 0))
 

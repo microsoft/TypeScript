@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts] ////
+
 //// [typeArgumentsOnFunctionsWithNoTypeParameters.ts]
 function foo<T, U>(f: (v: T) => U) {
    var r1 = f<number>(1);

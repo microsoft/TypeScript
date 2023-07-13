@@ -1,10 +1,10 @@
-tests/cases/compiler/selfReferencingFile2.ts(1,21): error TS6053: File 'tests/cases/selfReferencingFile2.ts' not found.
+selfReferencingFile2.ts(1,21): error TS6053: File '../selfReferencingFile2.ts' not found.
 
 
-==== tests/cases/compiler/selfReferencingFile2.ts (1 errors) ====
+==== selfReferencingFile2.ts (1 errors) ====
     ///<reference path='../selfReferencingFile2.ts'/>
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'tests/cases/selfReferencingFile2.ts' not found.
+!!! error TS6053: File '../selfReferencingFile2.ts' not found.
     
     class selfReferencingFile2 {
     

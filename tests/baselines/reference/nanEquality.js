@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nanEquality.ts] ////
+
 //// [nanEquality.ts]
 declare const x: number;
 

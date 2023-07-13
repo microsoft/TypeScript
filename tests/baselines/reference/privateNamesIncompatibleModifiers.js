@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts] ////
+
 //// [privateNamesIncompatibleModifiers.ts]
 class A {
     public #foo = 3;         // Error

@@ -1,12 +1,12 @@
-tests/cases/conformance/constEnums/merge.ts(1,10): error TS2440: Import declaration conflicts with local declaration of 'Enum'.
+merge.ts(1,10): error TS2440: Import declaration conflicts with local declaration of 'Enum'.
 
 
-==== tests/cases/conformance/constEnums/enum.ts (0 errors) ====
+==== enum.ts (0 errors) ====
     export const enum Enum {
       One = 1,
     }
     
-==== tests/cases/conformance/constEnums/merge.ts (1 errors) ====
+==== merge.ts (1 errors) ====
     import { Enum } from "./enum";
              ~~~~
 !!! error TS2440: Import declaration conflicts with local declaration of 'Enum'.
@@ -15,7 +15,7 @@ tests/cases/conformance/constEnums/merge.ts(1,10): error TS2440: Import declarat
     }
     export { Enum };
     
-==== tests/cases/conformance/constEnums/index.ts (0 errors) ====
+==== index.ts (0 errors) ====
     import { Enum } from "./merge";
     Enum.One;
     

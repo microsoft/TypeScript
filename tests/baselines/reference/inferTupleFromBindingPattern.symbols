@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferTupleFromBindingPattern.ts ===
+//// [tests/cases/compiler/inferTupleFromBindingPattern.ts] ////
+
+=== inferTupleFromBindingPattern.ts ===
 declare function f<T>(cb: () => T): T;
 >f : Symbol(f, Decl(inferTupleFromBindingPattern.ts, 0, 0))
 >T : Symbol(T, Decl(inferTupleFromBindingPattern.ts, 0, 19))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts] ////
+
+=== thisTypeAndConstraints.ts ===
 class A {
 >A : Symbol(A, Decl(thisTypeAndConstraints.ts, 0, 0))
 

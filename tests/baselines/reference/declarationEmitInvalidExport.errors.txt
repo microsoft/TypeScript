@@ -1,8 +1,8 @@
-tests/cases/compiler/declarationEmitInvalidExport.ts(4,30): error TS4081: Exported type alias 'MyClass' has or is using private name 'myClass'.
-tests/cases/compiler/declarationEmitInvalidExport.ts(5,1): error TS1128: Declaration or statement expected.
+declarationEmitInvalidExport.ts(4,30): error TS4081: Exported type alias 'MyClass' has or is using private name 'myClass'.
+declarationEmitInvalidExport.ts(5,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/declarationEmitInvalidExport.ts (2 errors) ====
+==== declarationEmitInvalidExport.ts (2 errors) ====
     if (false) {
       export var myClass = 0;
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMap-SkippedNode.ts ===
+//// [tests/cases/compiler/sourceMap-SkippedNode.ts] ////
+
+=== sourceMap-SkippedNode.ts ===
 
 try {
 // ...

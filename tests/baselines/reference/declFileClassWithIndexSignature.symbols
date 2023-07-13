@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileClassWithIndexSignature.ts ===
+//// [tests/cases/compiler/declFileClassWithIndexSignature.ts] ////
+
+=== declFileClassWithIndexSignature.ts ===
 class BlockIntrinsics {
 >BlockIntrinsics : Symbol(BlockIntrinsics, Decl(declFileClassWithIndexSignature.ts, 0, 0))
 

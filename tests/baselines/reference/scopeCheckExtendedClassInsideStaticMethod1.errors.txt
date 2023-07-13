@@ -1,9 +1,9 @@
-tests/cases/compiler/scopeCheckExtendedClassInsideStaticMethod1.ts(4,7): error TS2304: Cannot find name 'v'.
-tests/cases/compiler/scopeCheckExtendedClassInsideStaticMethod1.ts(5,12): error TS2339: Property 'p' does not exist on type 'typeof D'.
-tests/cases/compiler/scopeCheckExtendedClassInsideStaticMethod1.ts(6,7): error TS2662: Cannot find name 's'. Did you mean the static member 'D.s'?
+scopeCheckExtendedClassInsideStaticMethod1.ts(4,7): error TS2304: Cannot find name 'v'.
+scopeCheckExtendedClassInsideStaticMethod1.ts(5,12): error TS2339: Property 'p' does not exist on type 'typeof D'.
+scopeCheckExtendedClassInsideStaticMethod1.ts(6,7): error TS2662: Cannot find name 's'. Did you mean the static member 'D.s'?
 
 
-==== tests/cases/compiler/scopeCheckExtendedClassInsideStaticMethod1.ts (3 errors) ====
+==== scopeCheckExtendedClassInsideStaticMethod1.ts (3 errors) ====
     class C { private v; public p; static s; }
     class D extends C {
        static c() {

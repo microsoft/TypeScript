@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts] ////
+
+=== objectSpreadRepeatedComplexity.ts ===
 function f(cnd: Record<number, boolean>){
 >f : Symbol(f, Decl(objectSpreadRepeatedComplexity.ts, 0, 0))
 >cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportDefaultClassNameWithObject.ts] ////
+
 //// [exportDefaultClassNameWithObject.ts]
 export default class Object {}
 

@@ -1,11 +1,11 @@
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(3,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(19,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(33,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(46,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion1.ts(3,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion1.ts(19,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion1.ts(33,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion1.ts(46,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+truthinessCallExpressionCoercion1.ts(76,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
-==== tests/cases/compiler/truthinessCallExpressionCoercion1.ts (5 errors) ====
+==== truthinessCallExpressionCoercion1.ts (5 errors) ====
     function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
         // error
         required ? console.log('required') : undefined;

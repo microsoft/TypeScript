@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeWithCallableMembers2.ts] ////
+
 //// [genericTypeWithCallableMembers2.ts]
 function foo1<T extends { (): string; }>(f: T) {
     return f(); // should return 'string', once returned 'any'

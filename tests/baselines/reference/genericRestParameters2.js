@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/genericRestParameters2.ts] ////
+
 //// [genericRestParameters2.ts]
 declare const t1: [number, string, ...boolean[]];
 declare const t2: [string, ...boolean[]];

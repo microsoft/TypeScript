@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/jsdocTypeGenericInstantiationAttempt.ts] ////
+
+=== index.js ===
 /**
  * @param {Array<*>} list
  */

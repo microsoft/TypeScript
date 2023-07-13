@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardConstructorNarrowPrimitivesInUnion.ts] ////
+
 //// [typeGuardConstructorNarrowPrimitivesInUnion.ts]
 // Union of primitives, number, arrays, and C1
 let var1: number | "hello" | "world" | true | false | number[] | string[];

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictBooleanMemberAssignability.ts ===
+//// [tests/cases/compiler/strictBooleanMemberAssignability.ts] ////
+
+=== strictBooleanMemberAssignability.ts ===
 class Abc {
 >Abc : Symbol(Abc, Decl(strictBooleanMemberAssignability.ts, 0, 0))
 

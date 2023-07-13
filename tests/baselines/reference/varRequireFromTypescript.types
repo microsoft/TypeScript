@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/varRequireFromTypescript.ts] ////
+
+=== use.js ===
 var ex = require('./ex')
 >ex : typeof ex
 >require('./ex') : typeof ex
@@ -41,7 +43,7 @@ function f(greatest, wrap) {
 >n : number
 }
 
-=== tests/cases/conformance/salsa/ex.d.ts ===
+=== ex.d.ts ===
 export type Greatest = { day: 1 }
 >Greatest : { day: 1; }
 >day : 1

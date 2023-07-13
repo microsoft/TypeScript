@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/valuesAndReferences/assignments.ts] ////
+
 //// [assignments.ts]
 // In this file:
 //  Assign to a module

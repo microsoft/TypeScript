@@ -1,4 +1,6 @@
-=== tests/cases/compiler/validUseOfThisInSuper.ts ===
+//// [tests/cases/compiler/validUseOfThisInSuper.ts] ////
+
+=== validUseOfThisInSuper.ts ===
 class Base {
 >Base : Symbol(Base, Decl(validUseOfThisInSuper.ts, 0, 0))
 

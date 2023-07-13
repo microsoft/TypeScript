@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/negativeZero.ts] ////
+
 //// [negativeZero.ts]
 var x = -0
 

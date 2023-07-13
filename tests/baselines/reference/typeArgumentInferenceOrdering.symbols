@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgumentInferenceOrdering.ts ===
+//// [tests/cases/compiler/typeArgumentInferenceOrdering.ts] ////
+
+=== typeArgumentInferenceOrdering.ts ===
 class C {
 >C : Symbol(C, Decl(typeArgumentInferenceOrdering.ts, 0, 0))
 

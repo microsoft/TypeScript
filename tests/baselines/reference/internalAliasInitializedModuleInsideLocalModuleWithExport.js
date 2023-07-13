@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithExport.ts] ////
+
 //// [internalAliasInitializedModuleInsideLocalModuleWithExport.ts]
 export module a {
     export module b {
@@ -37,13 +39,13 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasInitializedModuleInsideLocalModuleWithExport.d.ts]
-export declare module a {
-    module b {
+export declare namespace a {
+    namespace b {
         class c {
         }
     }
 }
-export declare module c {
+export declare namespace c {
     export import b = a.b;
     var x: b.c;
 }

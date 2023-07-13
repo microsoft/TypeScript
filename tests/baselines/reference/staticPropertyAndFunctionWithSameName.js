@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/staticPropertyAndFunctionWithSameName.ts] ////
+
 //// [staticPropertyAndFunctionWithSameName.ts]
 class C {
     static f: number;

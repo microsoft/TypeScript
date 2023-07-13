@@ -1,4 +1,6 @@
-=== tests/cases/conformance/importAssertion/importAssertion4.ts ===
+//// [tests/cases/conformance/importAssertion/importAssertion4.ts] ////
+
+=== importAssertion4.ts ===
 import * as f from "./first" assert
 >f : Symbol(f, Decl(importAssertion4.ts, 0, 6))
 

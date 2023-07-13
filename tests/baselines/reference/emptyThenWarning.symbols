@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyThenWarning.ts ===
+//// [tests/cases/compiler/emptyThenWarning.ts] ////
+
+=== emptyThenWarning.ts ===
 if(1);
 
 let x = 0;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalParameterRetainsNull.ts ===
+//// [tests/cases/compiler/optionalParameterRetainsNull.ts] ////
+
+=== optionalParameterRetainsNull.ts ===
 interface Bar {  bar: number; foo: object | null;  }
 >Bar : Symbol(Bar, Decl(optionalParameterRetainsNull.ts, 0, 0))
 >bar : Symbol(Bar.bar, Decl(optionalParameterRetainsNull.ts, 0, 15))

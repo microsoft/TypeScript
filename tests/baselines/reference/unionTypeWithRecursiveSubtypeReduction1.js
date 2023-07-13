@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction1.ts] ////
+
 //// [unionTypeWithRecursiveSubtypeReduction1.ts]
 class Module {
     public members: Class[];

@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(20,24): error TS2322: Type 'number' is not assignable to type 'object'.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(24,14): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(29,21): error TS1005: ';' expected.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(30,21): error TS1005: ';' expected.
+privateNameInInExpressionTransform.ts(20,24): error TS2322: Type 'number' is not assignable to type 'object'.
+privateNameInInExpressionTransform.ts(24,14): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
+privateNameInInExpressionTransform.ts(29,21): error TS1005: ';' expected.
+privateNameInInExpressionTransform.ts(30,21): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts (4 errors) ====
+==== privateNameInInExpressionTransform.ts (4 errors) ====
     class Foo {
         #field = 1;
         #method() {}

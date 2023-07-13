@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedClasses.ts] ////
+
 //// [ModuleWithExportedAndNonExportedClasses.ts]
 module A {
     export class A {

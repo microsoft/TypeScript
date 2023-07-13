@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames8_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames8_ES6.ts] ////
+
+=== computedPropertyNames8_ES6.ts ===
 function f<T, U extends string>() {
 >f : Symbol(f, Decl(computedPropertyNames8_ES6.ts, 0, 0))
 >T : Symbol(T, Decl(computedPropertyNames8_ES6.ts, 0, 11))

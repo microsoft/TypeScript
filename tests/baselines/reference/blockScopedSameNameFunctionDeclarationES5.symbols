@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts ===
+//// [tests/cases/compiler/blockScopedSameNameFunctionDeclarationES5.ts] ////
+
+=== blockScopedSameNameFunctionDeclarationES5.ts ===
 function foo(a: number) {
 >foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationES5.ts, 0, 0))
 >a : Symbol(a, Decl(blockScopedSameNameFunctionDeclarationES5.ts, 0, 13))

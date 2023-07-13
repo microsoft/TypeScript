@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCollisionThisExpressionInFunctionAndVarInGlobal.ts] ////
+
 //// [noCollisionThisExpressionInFunctionAndVarInGlobal.ts]
 var console: {
     log(val: any);

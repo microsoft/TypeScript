@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterReferencesOtherParameter2.ts] ////
+
 //// [parameterReferencesOtherParameter2.ts]
 class Model {
     public name: string;

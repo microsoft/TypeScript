@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitReturnsWithProtectedBlocks2.ts] ////
+
 //// [noImplicitReturnsWithProtectedBlocks2.ts]
 declare function log(s: string): void;
 declare function get(): number;

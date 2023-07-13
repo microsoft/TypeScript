@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ParameterList4.ts ===
+//// [tests/cases/compiler/ParameterList4.ts] ////
+
+=== ParameterList4.ts ===
 function F(public A) {
 >F : Symbol(F, Decl(ParameterList4.ts, 0, 0))
 >A : Symbol(A, Decl(ParameterList4.ts, 0, 11))

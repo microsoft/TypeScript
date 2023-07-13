@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-umd2.ts] ////
+
 //// [es5-umd2.ts]
 export class A
 {

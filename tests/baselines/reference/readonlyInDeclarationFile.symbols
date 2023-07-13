@@ -1,4 +1,6 @@
-=== tests/cases/compiler/readonlyInDeclarationFile.ts ===
+//// [tests/cases/compiler/readonlyInDeclarationFile.ts] ////
+
+=== readonlyInDeclarationFile.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(readonlyInDeclarationFile.ts, 0, 0))
 

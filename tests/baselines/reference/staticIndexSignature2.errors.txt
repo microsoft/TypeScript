@@ -1,11 +1,11 @@
-tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature2.ts(6,1): error TS2542: Index signature in type 'typeof C' only permits reading.
-tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature2.ts(7,1): error TS2542: Index signature in type 'typeof C' only permits reading.
-tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature2.ts(9,1): error TS2542: Index signature in type 'typeof C' only permits reading.
-tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature2.ts(10,1): error TS2322: Type '2' is not assignable to type '42'.
-tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature2.ts(10,1): error TS2542: Index signature in type 'typeof C' only permits reading.
+staticIndexSignature2.ts(6,1): error TS2542: Index signature in type 'typeof C' only permits reading.
+staticIndexSignature2.ts(7,1): error TS2542: Index signature in type 'typeof C' only permits reading.
+staticIndexSignature2.ts(9,1): error TS2542: Index signature in type 'typeof C' only permits reading.
+staticIndexSignature2.ts(10,1): error TS2322: Type '2' is not assignable to type '42'.
+staticIndexSignature2.ts(10,1): error TS2542: Index signature in type 'typeof C' only permits reading.
 
 
-==== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature2.ts (5 errors) ====
+==== staticIndexSignature2.ts (5 errors) ====
     class C {
         static readonly [s: string]: number;
         static readonly [s: number]: 42

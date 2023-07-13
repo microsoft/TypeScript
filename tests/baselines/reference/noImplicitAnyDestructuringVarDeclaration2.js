@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration2.ts] ////
+
 //// [noImplicitAnyDestructuringVarDeclaration2.ts]
 let [a, b, c] = [1, 2, 3]; // no error
 let [a1 = 10, b1 = 10, c1 = 10] = [1, 2, 3]; // no error

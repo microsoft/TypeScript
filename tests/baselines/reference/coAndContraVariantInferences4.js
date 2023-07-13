@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/coAndContraVariantInferences4.ts] ////
+
 //// [coAndContraVariantInferences4.ts]
 const enum SyntaxKind {
     Modifier,

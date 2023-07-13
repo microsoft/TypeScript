@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
+//// [tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts] ////
+
+=== genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
 type ExtendedService<T> = {
 >ExtendedService : Symbol(ExtendedService, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 0, 0))
 >T : Symbol(T, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 0, 21))

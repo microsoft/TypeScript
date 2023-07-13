@@ -1,4 +1,6 @@
-=== tests/cases/compiler/detachedCommentAtStartOfLambdaFunction2.ts ===
+//// [tests/cases/compiler/detachedCommentAtStartOfLambdaFunction2.ts] ////
+
+=== detachedCommentAtStartOfLambdaFunction2.ts ===
 class TestFile {
 >TestFile : Symbol(TestFile, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 0))
 

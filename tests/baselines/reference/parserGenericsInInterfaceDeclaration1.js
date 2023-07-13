@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInInterfaceDeclaration1.ts] ////
+
 //// [parserGenericsInInterfaceDeclaration1.ts]
 interface I<T> {
    v: A<T>;

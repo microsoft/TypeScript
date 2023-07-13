@@ -4,13 +4,13 @@ error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript
 
 !!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 !!! error TS5101:   Use 'outFile' instead.
-==== tests/cases/compiler/Class.ts (0 errors) ====
+==== Class.ts (0 errors) ====
     import { Configurable } from "./Configurable"
     
     export class HiddenClass {}
     
     export class ActualClass extends Configurable(HiddenClass) {}
-==== tests/cases/compiler/Configurable.ts (0 errors) ====
+==== Configurable.ts (0 errors) ====
     export type Constructor<T> = {
         new(...args: any[]): T;
     }

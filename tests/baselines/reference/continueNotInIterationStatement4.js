@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/continueNotInIterationStatement4.ts] ////
+
 //// [continueNotInIterationStatement4.ts]
 TWO:
 while (true){

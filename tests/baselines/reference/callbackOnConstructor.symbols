@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/callbackOnConstructor.js ===
+//// [tests/cases/conformance/jsdoc/callbackOnConstructor.ts] ////
+
+=== callbackOnConstructor.js ===
 export class Preferences {
 >Preferences : Symbol(Preferences, Decl(callbackOnConstructor.js, 0, 0))
 

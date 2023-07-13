@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts] ////
+
 //// [instantiationExpressionErrors.ts]
 declare let f: { <T>(): T, g<U>(): U };
 

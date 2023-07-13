@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithLHSIsObject.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithLHSIsObject.ts] ////
+
+=== instanceofOperatorWithLHSIsObject.ts ===
 class C { }
 >C : Symbol(C, Decl(instanceofOperatorWithLHSIsObject.ts, 0, 0))
 

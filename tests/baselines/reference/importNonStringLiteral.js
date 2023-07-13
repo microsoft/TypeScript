@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/importNonStringLiteral.ts] ////
+
 //// [foo_0.ts]
 var x = "filename";
 import foo = require(x); // invalid

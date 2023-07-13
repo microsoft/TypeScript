@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nameCollisionWithBlockScopedVariable1.ts] ////
+
 //// [nameCollisionWithBlockScopedVariable1.ts]
 module M {
     export class C { }

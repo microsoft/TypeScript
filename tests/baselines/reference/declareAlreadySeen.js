@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareAlreadySeen.ts] ////
+
 //// [declareAlreadySeen.ts]
 module M {
     declare declare var x;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryDeclarations.tsx] ////
+
+=== renderer.d.ts ===
 declare global {
 >global : any
 
@@ -22,7 +24,7 @@ export { dom as default };
 >dom : () => void
 >default : () => void
 
-=== tests/cases/conformance/jsx/inline/otherreacty.tsx ===
+=== otherreacty.tsx ===
 /** @jsx React.createElement */
 import * as React from "./renderer";
 >React : typeof React
@@ -32,7 +34,7 @@ import * as React from "./renderer";
 >h : any
 >h : any
 
-=== tests/cases/conformance/jsx/inline/other.tsx ===
+=== other.tsx ===
 /** @jsx h */
 import { dom as h } from "./renderer"
 >dom : () => void
@@ -44,7 +46,7 @@ export const prerendered = <h></h>;
 >h : () => void
 >h : () => void
 
-=== tests/cases/conformance/jsx/inline/othernoalias.tsx ===
+=== othernoalias.tsx ===
 /** @jsx otherdom */
 import { otherdom } from "./renderer"
 >otherdom : () => void
@@ -55,7 +57,7 @@ export const prerendered2 = <h></h>;
 >h : any
 >h : any
 
-=== tests/cases/conformance/jsx/inline/reacty.tsx ===
+=== reacty.tsx ===
 import React from "./renderer"
 >React : () => void
 
@@ -65,7 +67,7 @@ export const prerendered3 = <h></h>;
 >h : any
 >h : any
 
-=== tests/cases/conformance/jsx/inline/index.tsx ===
+=== index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer"
 >dom : () => void

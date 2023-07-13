@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts] ////
+
 //// [destructuringParameterDeclaration6.ts]
 // A parameter declaration may specify either an identifier or a binding pattern.
 

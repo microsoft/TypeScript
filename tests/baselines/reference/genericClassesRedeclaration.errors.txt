@@ -1,12 +1,12 @@
-tests/cases/compiler/genericClassesRedeclaration.ts(3,9): error TS2374: Duplicate index signature for type 'string'.
-tests/cases/compiler/genericClassesRedeclaration.ts(16,11): error TS2300: Duplicate identifier 'StringHashTable'.
-tests/cases/compiler/genericClassesRedeclaration.ts(29,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
-tests/cases/compiler/genericClassesRedeclaration.ts(42,9): error TS2374: Duplicate index signature for type 'string'.
-tests/cases/compiler/genericClassesRedeclaration.ts(55,11): error TS2300: Duplicate identifier 'StringHashTable'.
-tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+genericClassesRedeclaration.ts(3,9): error TS2374: Duplicate index signature for type 'string'.
+genericClassesRedeclaration.ts(16,11): error TS2300: Duplicate identifier 'StringHashTable'.
+genericClassesRedeclaration.ts(29,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+genericClassesRedeclaration.ts(42,9): error TS2374: Duplicate index signature for type 'string'.
+genericClassesRedeclaration.ts(55,11): error TS2300: Duplicate identifier 'StringHashTable'.
+genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
 
 
-==== tests/cases/compiler/genericClassesRedeclaration.ts (6 errors) ====
+==== genericClassesRedeclaration.ts (6 errors) ====
     declare module TypeScript {
         interface IIndexable<T> {
             [s: string]: T;

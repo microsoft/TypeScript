@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseUnaryExpressionNoTypeAssertionInJsx4.ts] ////
+
 //// [index.tsx]
 const x = "oops";
 

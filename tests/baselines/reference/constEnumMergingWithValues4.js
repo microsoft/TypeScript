@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumMergingWithValues4.ts] ////
+
 //// [m1.ts]
 module foo {
     const enum E { X }

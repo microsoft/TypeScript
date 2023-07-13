@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/boolean/extendBooleanInterface.ts] ////
+
 //// [extendBooleanInterface.ts]
 interface Boolean {
     doStuff(): string;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es2017basicAsync.ts] ////
+
 //// [es2017basicAsync.ts]
 async (): Promise<void> => {
     await 0;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes2.ts ===
+//// [tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes2.ts] ////
+
+=== genericConstraintOnExtendedBuiltinTypes2.ts ===
 module EndGate {
     export interface ICloneable {
         Clone(): any;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/optionalTupleElements1.ts] ////
+
 //// [optionalTupleElements1.ts]
 type T1 = [number, string, boolean];
 type T2 = [number, string, boolean?];

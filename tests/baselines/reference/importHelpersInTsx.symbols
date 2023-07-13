@@ -1,4 +1,6 @@
-=== tests/cases/compiler/external.tsx ===
+//// [tests/cases/compiler/importHelpersInTsx.tsx] ////
+
+=== external.tsx ===
 declare var React: any;
 >React : Symbol(React, Decl(external.tsx, 0, 11))
 
@@ -9,7 +11,7 @@ export const x = <span {...o} />
 >x : Symbol(x, Decl(external.tsx, 2, 12))
 >o : Symbol(o, Decl(external.tsx, 1, 11))
 
-=== tests/cases/compiler/script.tsx ===
+=== script.tsx ===
 declare var React: any;
 >React : Symbol(React, Decl(script.tsx, 0, 11))
 
@@ -20,7 +22,7 @@ const x = <span {...o} />
 >x : Symbol(x, Decl(script.tsx, 2, 5))
 >o : Symbol(o, Decl(script.tsx, 1, 11))
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : Symbol(__extends, Decl(tslib.d.ts, --, --))
 >d : Symbol(d, Decl(tslib.d.ts, --, --))

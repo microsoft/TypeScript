@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxLibraryManagedAttributesUnusedGeneric.tsx] ////
+
 //// [jsxLibraryManagedAttributesUnusedGeneric.tsx]
 // @ts-ignore
 import React from 'react'

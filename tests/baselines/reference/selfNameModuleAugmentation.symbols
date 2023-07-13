@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/selfNameModuleAugmentation.ts] ////
+
 === /node_modules/acorn-walk/dist/walk.d.ts ===
 export {};
 declare module 'acorn-walk' {

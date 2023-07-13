@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasClassInsideLocalModuleWithExport.ts] ////
+
 //// [internalAliasClassInsideLocalModuleWithExport.ts]
 export module x {
     export class c {
@@ -46,13 +48,13 @@ exports.d = new m2.m3.c();
 
 
 //// [internalAliasClassInsideLocalModuleWithExport.d.ts]
-export declare module x {
+export declare namespace x {
     class c {
         foo(a: number): number;
     }
 }
-export declare module m2 {
-    module m3 {
+export declare namespace m2 {
+    namespace m3 {
         export import c = x.c;
         var cProp: c;
     }

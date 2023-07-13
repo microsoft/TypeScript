@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters6.ts ===
+//// [tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters6.ts] ////
+
+=== declarationEmitTypeAliasWithTypeParameters6.ts ===
 type Foo<T, Y> = {
 >Foo : Symbol(Foo, Decl(declarationEmitTypeAliasWithTypeParameters6.ts, 0, 0))
 >T : Symbol(T, Decl(declarationEmitTypeAliasWithTypeParameters6.ts, 0, 9))

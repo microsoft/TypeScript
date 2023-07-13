@@ -179,9 +179,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
+/a/b/applib.ts: *new*
+  {}
 /a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
-  {}
-/a/b/applib.ts: *new*
   {}

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts ===
+//// [tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts] ////
+
+=== noUnusedLocals_typeParameterMergedWithParameter.ts ===
 function useNone<T>(T: number) {}
 >useNone : Symbol(useNone, Decl(noUnusedLocals_typeParameterMergedWithParameter.ts, 0, 0))
 >T : Symbol(T, Decl(noUnusedLocals_typeParameterMergedWithParameter.ts, 0, 17), Decl(noUnusedLocals_typeParameterMergedWithParameter.ts, 0, 20))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts] ////
+
 //// [inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts]
 class ClassA<TEntityClass>  {
     constructor(private entity?: TEntityClass, public settings?: SettingsInterface<TEntityClass>) {

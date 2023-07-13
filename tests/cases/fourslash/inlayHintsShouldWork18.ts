@@ -3,6 +3,6 @@
 //// class Class {}
 //// const a = new Class();
 
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayVariableTypeHints: true
 });

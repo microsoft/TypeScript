@@ -1,31 +1,31 @@
-tests/cases/conformance/externalModules/foo6.ts(1,14): error TS1109: Expression expected.
+foo6.ts(1,14): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/externalModules/foo1.ts (0 errors) ====
+==== foo1.ts (0 errors) ====
     var x = 10;
     export = typeof x; // Ok
     
-==== tests/cases/conformance/externalModules/foo2.ts (0 errors) ====
+==== foo2.ts (0 errors) ====
     export = "sausages"; // Ok
     
-==== tests/cases/conformance/externalModules/foo3.ts (0 errors) ====
+==== foo3.ts (0 errors) ====
     export = class Foo3 {}; // Error, not an expression
     
-==== tests/cases/conformance/externalModules/foo4.ts (0 errors) ====
+==== foo4.ts (0 errors) ====
     export = true; // Ok
     
-==== tests/cases/conformance/externalModules/foo5.ts (0 errors) ====
+==== foo5.ts (0 errors) ====
     export = undefined; // Valid.  undefined is an identifier in JavaScript/TypeScript
     
-==== tests/cases/conformance/externalModules/foo6.ts (1 errors) ====
+==== foo6.ts (1 errors) ====
     export = void; // Error, void operator requires an argument
                  ~
 !!! error TS1109: Expression expected.
     
-==== tests/cases/conformance/externalModules/foo7.ts (0 errors) ====
+==== foo7.ts (0 errors) ====
     export = Date || String; // Ok
     
-==== tests/cases/conformance/externalModules/foo8.ts (0 errors) ====
+==== foo8.ts (0 errors) ====
     export = null; // Ok
     
     

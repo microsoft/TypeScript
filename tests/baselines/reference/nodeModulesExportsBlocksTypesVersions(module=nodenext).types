@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesExportsBlocksTypesVersions.ts] ////
+
 === /node_modules/exports-and-types-versions/types/foo.d.ts ===
 
 export {};

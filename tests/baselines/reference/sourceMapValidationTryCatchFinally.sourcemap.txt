@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationTryCatchFinally.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationTryCatchFinally.js
+emittedFile:sourceMapValidationTryCatchFinally.js
 sourceFile:sourceMapValidationTryCatchFinally.ts
 -------------------------------------------------------------------
 >>>var x = 10;

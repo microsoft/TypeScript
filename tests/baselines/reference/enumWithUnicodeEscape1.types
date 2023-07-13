@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumWithUnicodeEscape1.ts ===
+//// [tests/cases/compiler/enumWithUnicodeEscape1.ts] ////
+
+=== enumWithUnicodeEscape1.ts ===
 enum E {
 >E : E
 

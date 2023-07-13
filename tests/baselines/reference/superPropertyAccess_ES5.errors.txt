@@ -1,8 +1,8 @@
-tests/cases/compiler/superPropertyAccess_ES5.ts(11,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/compiler/superPropertyAccess_ES5.ts(26,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess_ES5.ts(11,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+superPropertyAccess_ES5.ts(26,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/compiler/superPropertyAccess_ES5.ts (2 errors) ====
+==== superPropertyAccess_ES5.ts (2 errors) ====
     class MyBase {
       getValue(): number { return 1; }
       get value(): number { return 1; }

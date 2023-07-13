@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncaughtCompilerError1.ts] ////
+
 //// [uncaughtCompilerError1.ts]
 declare var index, lineTokens, token, tokens;
 

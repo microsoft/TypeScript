@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalDoesntLeakUninstantiatedTypeParameter.ts ===
+//// [tests/cases/compiler/conditionalDoesntLeakUninstantiatedTypeParameter.ts] ////
+
+=== conditionalDoesntLeakUninstantiatedTypeParameter.ts ===
 interface Synthetic<A, B extends A> {}
 >Synthetic : Symbol(Synthetic, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 0))
 >A : Symbol(A, Decl(conditionalDoesntLeakUninstantiatedTypeParameter.ts, 0, 20))

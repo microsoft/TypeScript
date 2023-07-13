@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveCloduleReference.ts] ////
+
 //// [recursiveCloduleReference.ts]
 module M
 {

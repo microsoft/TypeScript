@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringInEqualityChecksES6.ts] ////
+
 //// [templateStringInEqualityChecksES6.ts]
 var x = `abc${0}abc` === `abc` ||
         `abc` !== `abc${0}abc` &&

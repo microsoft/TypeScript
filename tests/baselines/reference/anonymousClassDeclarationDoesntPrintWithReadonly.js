@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anonymousClassDeclarationDoesntPrintWithReadonly.ts] ////
+
 //// [anonymousClassDeclarationDoesntPrintWithReadonly.ts]
 export class X {
     constructor(readonly a: number) { }

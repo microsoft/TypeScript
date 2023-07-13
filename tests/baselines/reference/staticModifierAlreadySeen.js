@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticModifierAlreadySeen.ts] ////
+
 //// [staticModifierAlreadySeen.ts]
 class C {
     static static foo = 1;

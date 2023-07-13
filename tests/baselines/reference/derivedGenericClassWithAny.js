@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts] ////
+
 //// [derivedGenericClassWithAny.ts]
 class C<T extends number> {
     x: T;

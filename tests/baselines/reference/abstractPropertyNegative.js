@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/abstractPropertyNegative.ts] ////
+
 //// [abstractPropertyNegative.ts]
 interface A {
     prop: string;

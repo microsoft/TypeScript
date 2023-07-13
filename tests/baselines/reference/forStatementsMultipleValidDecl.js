@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/forStatements/forStatementsMultipleValidDecl.ts] ////
+
 //// [forStatementsMultipleValidDecl.ts]
 // all expected to be valid
 

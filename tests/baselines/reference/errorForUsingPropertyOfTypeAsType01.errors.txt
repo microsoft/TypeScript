@@ -1,18 +1,18 @@
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(6,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(7,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(15,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(16,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(24,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(25,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(32,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(33,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(40,12): error TS2702: 'Foo' only refers to a type, but is being used as a namespace here.
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(41,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(44,24): error TS1003: Identifier expected.
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts(44,24): error TS2713: Cannot access 'Foo.' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property '' in 'Foo' with 'Foo[""]'?
+errorForUsingPropertyOfTypeAsType01.ts(6,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+errorForUsingPropertyOfTypeAsType01.ts(7,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+errorForUsingPropertyOfTypeAsType01.ts(15,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+errorForUsingPropertyOfTypeAsType01.ts(16,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+errorForUsingPropertyOfTypeAsType01.ts(24,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+errorForUsingPropertyOfTypeAsType01.ts(25,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+errorForUsingPropertyOfTypeAsType01.ts(32,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+errorForUsingPropertyOfTypeAsType01.ts(33,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+errorForUsingPropertyOfTypeAsType01.ts(40,12): error TS2702: 'Foo' only refers to a type, but is being used as a namespace here.
+errorForUsingPropertyOfTypeAsType01.ts(41,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
+errorForUsingPropertyOfTypeAsType01.ts(44,24): error TS1003: Identifier expected.
+errorForUsingPropertyOfTypeAsType01.ts(44,24): error TS2713: Cannot access 'Foo.' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property '' in 'Foo' with 'Foo[""]'?
 
 
-==== tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts (12 errors) ====
+==== errorForUsingPropertyOfTypeAsType01.ts (12 errors) ====
     namespace Test1 {
         export interface Foo {
             bar: string;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/baseTypeWrappingInstantiationChain.ts ===
+//// [tests/cases/compiler/baseTypeWrappingInstantiationChain.ts] ////
+
+=== baseTypeWrappingInstantiationChain.ts ===
 class CBaseBase<T3> {
 >CBaseBase : Symbol(CBaseBase, Decl(baseTypeWrappingInstantiationChain.ts, 0, 0))
 >T3 : Symbol(T3, Decl(baseTypeWrappingInstantiationChain.ts, 0, 16))

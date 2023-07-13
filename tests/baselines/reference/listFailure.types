@@ -1,4 +1,6 @@
-=== tests/cases/compiler/listFailure.ts ===
+//// [tests/cases/compiler/listFailure.ts] ////
+
+=== listFailure.ts ===
 module Editor {
 >Editor : typeof Editor
 

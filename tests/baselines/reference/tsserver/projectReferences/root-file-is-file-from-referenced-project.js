@@ -347,21 +347,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/project/src/common/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/project/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/src/common/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/project/src/common/input/keyboard.test.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/project/src/common/tsconfig.json: *new*
   {}
 /user/username/projects/project/src/tsconfig.json: *new*
   {}
@@ -464,29 +464,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/project/src/common/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/src/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/project/src/common/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/project/src/common/input/keyboard.test.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/project/src/common/tsconfig.json:
   {}
 /user/username/projects/project/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/project/src/common:
-  {}
 /user/username/projects/project/src: *new*
+  {}
+/user/username/projects/project/src/common:
   {}
 
 Before request

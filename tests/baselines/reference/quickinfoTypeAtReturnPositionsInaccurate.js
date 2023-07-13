@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts] ////
+
 //// [quickinfoTypeAtReturnPositionsInaccurate.ts]
 class NumClass<T extends number> {
     private value!: T;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocPrototypePropertyAccessWithType.ts] ////
+
 === /a.js ===
 function C() { this.x = false; };
 >C : Symbol(C, Decl(a.js, 0, 0))

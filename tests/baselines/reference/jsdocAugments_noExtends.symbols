@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocAugments_noExtends.ts] ////
+
 === /b.js ===
 class A { constructor() { this.x = 0; } }
 >A : Symbol(A, Decl(b.js, 0, 0))

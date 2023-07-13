@@ -1,4 +1,6 @@
-=== tests/cases/compiler/signatureLengthMismatchWithOptionalParameters.ts ===
+//// [tests/cases/compiler/signatureLengthMismatchWithOptionalParameters.ts] ////
+
+=== signatureLengthMismatchWithOptionalParameters.ts ===
 function callee(n: number | undefined, m: string) { }
 >callee : Symbol(callee, Decl(signatureLengthMismatchWithOptionalParameters.ts, 0, 0))
 >n : Symbol(n, Decl(signatureLengthMismatchWithOptionalParameters.ts, 0, 16))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithStringType.ts] ////
+
 //// [plusOperatorWithStringType.ts]
 // + operator on string type
 var STRING: string;

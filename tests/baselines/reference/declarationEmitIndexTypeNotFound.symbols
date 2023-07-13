@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitIndexTypeNotFound.ts ===
+//// [tests/cases/compiler/declarationEmitIndexTypeNotFound.ts] ////
+
+=== declarationEmitIndexTypeNotFound.ts ===
 export interface Test {
 >Test : Symbol(Test, Decl(declarationEmitIndexTypeNotFound.ts, 0, 0))
 

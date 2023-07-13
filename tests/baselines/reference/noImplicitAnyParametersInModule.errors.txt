@@ -1,28 +1,28 @@
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(6,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(12,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(12,22): error TS7006: Parameter 'y' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(12,25): error TS7006: Parameter 'z' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(15,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(15,30): error TS7006: Parameter 'z' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(18,19): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(21,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(21,22): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(24,19): error TS7006: Parameter 'x1' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(25,31): error TS7006: Parameter 'y2' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(26,19): error TS7006: Parameter 'x3' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(26,23): error TS7006: Parameter 'y3' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(32,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(35,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(35,21): error TS7006: Parameter 'y' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(35,24): error TS7006: Parameter 'z' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(38,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(38,29): error TS7006: Parameter 'z' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(41,18): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(44,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyParametersInModule.ts(44,21): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+noImplicitAnyParametersInModule.ts(6,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(12,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(12,22): error TS7006: Parameter 'y' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(12,25): error TS7006: Parameter 'z' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(15,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(15,30): error TS7006: Parameter 'z' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(18,19): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+noImplicitAnyParametersInModule.ts(21,19): error TS7006: Parameter 'x' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(21,22): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+noImplicitAnyParametersInModule.ts(24,19): error TS7006: Parameter 'x1' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(25,31): error TS7006: Parameter 'y2' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(26,19): error TS7006: Parameter 'x3' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(26,23): error TS7006: Parameter 'y3' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(32,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(35,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(35,21): error TS7006: Parameter 'y' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(35,24): error TS7006: Parameter 'z' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(38,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(38,29): error TS7006: Parameter 'z' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(41,18): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
+noImplicitAnyParametersInModule.ts(44,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
+noImplicitAnyParametersInModule.ts(44,21): error TS7019: Rest parameter 'r' implicitly has an 'any[]' type.
 
 
-==== tests/cases/compiler/noImplicitAnyParametersInModule.ts (22 errors) ====
+==== noImplicitAnyParametersInModule.ts (22 errors) ====
     module M {
         // No implicit-'any' errors.
         function m_f1(): void { }

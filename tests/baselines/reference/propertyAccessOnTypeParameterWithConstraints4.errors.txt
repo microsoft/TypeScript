@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts(5,22): error TS2339: Property 'notHere' does not exist on type 'T'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts(15,16): error TS2339: Property 'notHere' does not exist on type 'Date'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts(21,22): error TS2339: Property 'notHere' does not exist on type 'Date'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts(27,22): error TS2339: Property 'notHere' does not exist on type 'T'.
+propertyAccessOnTypeParameterWithConstraints4.ts(5,22): error TS2339: Property 'notHere' does not exist on type 'T'.
+propertyAccessOnTypeParameterWithConstraints4.ts(15,16): error TS2339: Property 'notHere' does not exist on type 'Date'.
+propertyAccessOnTypeParameterWithConstraints4.ts(21,22): error TS2339: Property 'notHere' does not exist on type 'Date'.
+propertyAccessOnTypeParameterWithConstraints4.ts(27,22): error TS2339: Property 'notHere' does not exist on type 'T'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts (4 errors) ====
+==== propertyAccessOnTypeParameterWithConstraints4.ts (4 errors) ====
     class C<T extends Date> {
         f() {
             var x: T;

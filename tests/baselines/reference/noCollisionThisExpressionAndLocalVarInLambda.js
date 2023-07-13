@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInLambda.ts] ////
+
 //// [noCollisionThisExpressionAndLocalVarInLambda.ts]
 declare function alert(message?: any): void;
 var x = {

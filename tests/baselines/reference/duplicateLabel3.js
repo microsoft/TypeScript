@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateLabel3.ts] ////
+
 //// [duplicateLabel3.ts]
 target:
 while (true) {

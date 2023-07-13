@@ -1,4 +1,6 @@
-=== tests/cases/compiler/funClodule.ts ===
+//// [tests/cases/compiler/funClodule.ts] ////
+
+=== funClodule.ts ===
 declare function foo();
 >foo : typeof foo
 

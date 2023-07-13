@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typesWithDuplicateTypeParameters.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typesWithDuplicateTypeParameters.ts] ////
+
+=== typesWithDuplicateTypeParameters.ts ===
 class C<T, T> { }
 >C : Symbol(C, Decl(typesWithDuplicateTypeParameters.ts, 0, 0))
 >T : Symbol(T, Decl(typesWithDuplicateTypeParameters.ts, 0, 8), Decl(typesWithDuplicateTypeParameters.ts, 0, 10))

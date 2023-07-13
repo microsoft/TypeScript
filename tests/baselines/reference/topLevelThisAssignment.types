@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/topLevelThisAssignment.ts] ////
+
+=== a.js ===
 this.a = 10;
 >this.a = 10 : 10
 >this.a : number
@@ -14,7 +16,7 @@ this.a;
 a;
 >a : number
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 this.a;
 >this.a : number
 >this : typeof globalThis

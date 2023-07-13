@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithParameterInitializers2.ts] ////
+
 //// [callSignaturesWithParameterInitializers2.ts]
 // Optional parameters allow initializers only in implementation signatures
 // All the below declarations are errors

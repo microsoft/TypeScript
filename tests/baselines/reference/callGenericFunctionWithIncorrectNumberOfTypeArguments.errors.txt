@@ -1,20 +1,20 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(5,12): error TS2558: Expected 2 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(6,13): error TS2558: Expected 2 type arguments, but got 3.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(9,13): error TS2558: Expected 2 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(10,14): error TS2558: Expected 2 type arguments, but got 3.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(13,13): error TS2558: Expected 2 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(14,14): error TS2558: Expected 2 type arguments, but got 3.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(21,22): error TS2558: Expected 2 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(22,23): error TS2558: Expected 2 type arguments, but got 3.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(28,14): error TS2558: Expected 2 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(29,15): error TS2558: Expected 2 type arguments, but got 3.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(36,23): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(37,24): error TS2558: Expected 0 type arguments, but got 3.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(43,15): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(44,16): error TS2558: Expected 0 type arguments, but got 3.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(5,12): error TS2558: Expected 2 type arguments, but got 1.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(6,13): error TS2558: Expected 2 type arguments, but got 3.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(9,13): error TS2558: Expected 2 type arguments, but got 1.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(10,14): error TS2558: Expected 2 type arguments, but got 3.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(13,13): error TS2558: Expected 2 type arguments, but got 1.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(14,14): error TS2558: Expected 2 type arguments, but got 3.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(21,22): error TS2558: Expected 2 type arguments, but got 1.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(22,23): error TS2558: Expected 2 type arguments, but got 3.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(28,14): error TS2558: Expected 2 type arguments, but got 1.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(29,15): error TS2558: Expected 2 type arguments, but got 3.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(36,23): error TS2558: Expected 0 type arguments, but got 1.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(37,24): error TS2558: Expected 0 type arguments, but got 3.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(43,15): error TS2558: Expected 0 type arguments, but got 1.
+callGenericFunctionWithIncorrectNumberOfTypeArguments.ts(44,16): error TS2558: Expected 0 type arguments, but got 3.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/callGenericFunctionWithIncorrectNumberOfTypeArguments.ts (14 errors) ====
+==== callGenericFunctionWithIncorrectNumberOfTypeArguments.ts (14 errors) ====
     // type parameter lists must exactly match type argument lists
     // all of these invocations are errors
     

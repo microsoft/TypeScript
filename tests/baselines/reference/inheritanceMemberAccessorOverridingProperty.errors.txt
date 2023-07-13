@@ -1,7 +1,7 @@
-tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts(6,9): error TS2611: 'x' is defined as a property in class 'a', but is overridden here in 'b' as an accessor.
+inheritanceMemberAccessorOverridingProperty.ts(6,9): error TS2611: 'x' is defined as a property in class 'a', but is overridden here in 'b' as an accessor.
 
 
-==== tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts (1 errors) ====
+==== inheritanceMemberAccessorOverridingProperty.ts (1 errors) ====
     class a {
         x: string;
     }

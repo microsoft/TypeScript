@@ -1,18 +1,18 @@
-tests/cases/compiler/reservedWords3.ts(1,13): error TS1390: 'enum' is not allowed as a parameter name.
-tests/cases/compiler/reservedWords3.ts(1,17): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/reservedWords3.ts(1,17): error TS1003: Identifier expected.
-tests/cases/compiler/reservedWords3.ts(2,13): error TS1390: 'class' is not allowed as a parameter name.
-tests/cases/compiler/reservedWords3.ts(2,18): error TS1005: '{' expected.
-tests/cases/compiler/reservedWords3.ts(3,13): error TS1390: 'function' is not allowed as a parameter name.
-tests/cases/compiler/reservedWords3.ts(3,21): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/reservedWords3.ts(3,21): error TS1003: Identifier expected.
-tests/cases/compiler/reservedWords3.ts(4,13): error TS1390: 'while' is not allowed as a parameter name.
-tests/cases/compiler/reservedWords3.ts(4,18): error TS1005: '(' expected.
-tests/cases/compiler/reservedWords3.ts(5,13): error TS1390: 'for' is not allowed as a parameter name.
-tests/cases/compiler/reservedWords3.ts(5,16): error TS1005: '(' expected.
+reservedWords3.ts(1,13): error TS1390: 'enum' is not allowed as a parameter name.
+reservedWords3.ts(1,17): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+reservedWords3.ts(1,17): error TS1003: Identifier expected.
+reservedWords3.ts(2,13): error TS1390: 'class' is not allowed as a parameter name.
+reservedWords3.ts(2,18): error TS1005: '{' expected.
+reservedWords3.ts(3,13): error TS1390: 'function' is not allowed as a parameter name.
+reservedWords3.ts(3,21): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+reservedWords3.ts(3,21): error TS1003: Identifier expected.
+reservedWords3.ts(4,13): error TS1390: 'while' is not allowed as a parameter name.
+reservedWords3.ts(4,18): error TS1005: '(' expected.
+reservedWords3.ts(5,13): error TS1390: 'for' is not allowed as a parameter name.
+reservedWords3.ts(5,16): error TS1005: '(' expected.
 
 
-==== tests/cases/compiler/reservedWords3.ts (12 errors) ====
+==== reservedWords3.ts (12 errors) ====
     function f1(enum) {}
                 ~~~~
 !!! error TS1390: 'enum' is not allowed as a parameter name.

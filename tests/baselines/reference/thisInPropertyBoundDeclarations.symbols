@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInPropertyBoundDeclarations.ts ===
+//// [tests/cases/compiler/thisInPropertyBoundDeclarations.ts] ////
+
+=== thisInPropertyBoundDeclarations.ts ===
 class Bug {
 >Bug : Symbol(Bug, Decl(thisInPropertyBoundDeclarations.ts, 0, 0))
 

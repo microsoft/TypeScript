@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/thisPropertyAssignmentCircular.ts] ////
+
 //// [thisPropertyAssignmentCircular.js]
 export class Foo {
     constructor() {

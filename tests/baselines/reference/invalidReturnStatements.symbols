@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts ===
+//// [tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts] ////
+
+=== invalidReturnStatements.ts ===
 // all the following should be error
 function fn1(): number {  }
 >fn1 : Symbol(fn1, Decl(invalidReturnStatements.ts, 0, 0))

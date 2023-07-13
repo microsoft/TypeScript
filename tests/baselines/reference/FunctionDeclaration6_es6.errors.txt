@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration6_es6.ts(1,18): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+FunctionDeclaration6_es6.ts(1,18): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
 
 
-==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration6_es6.ts (1 errors) ====
+==== FunctionDeclaration6_es6.ts (1 errors) ====
     function*foo(a = yield) {
                      ~~~~~
 !!! error TS2523: 'yield' expressions cannot be used in a parameter initializer.

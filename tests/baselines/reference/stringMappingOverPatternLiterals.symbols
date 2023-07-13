@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts ===
+//// [tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts] ////
+
+=== stringMappingOverPatternLiterals.ts ===
 // non-template
 type A = "aA";
 >A : Symbol(A, Decl(stringMappingOverPatternLiterals.ts, 0, 0))

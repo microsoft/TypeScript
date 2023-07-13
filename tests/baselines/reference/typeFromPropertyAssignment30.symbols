@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/typeFromPropertyAssignment30.ts ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment30.ts] ////
+
+=== typeFromPropertyAssignment30.ts ===
 interface Combo {
 >Combo : Symbol(Combo, Decl(typeFromPropertyAssignment30.ts, 0, 0))
 

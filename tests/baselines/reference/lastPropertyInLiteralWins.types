@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lastPropertyInLiteralWins.ts ===
+//// [tests/cases/compiler/lastPropertyInLiteralWins.ts] ////
+
+=== lastPropertyInLiteralWins.ts ===
 interface Thing {
     thunk: (str: string) => void;
 >thunk : (str: string) => void

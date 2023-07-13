@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodInNonAbstractClass.ts] ////
+
 //// [classAbstractMethodInNonAbstractClass.ts]
 class A {
     abstract foo();

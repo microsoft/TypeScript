@@ -1,12 +1,12 @@
-tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(14,1): error TS2322: Type 'E2.A' is not assignable to type 'E'.
-tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(15,1): error TS2322: Type 'E.A' is not assignable to type 'E2'.
-tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(16,1): error TS2322: Type 'void' is not assignable to type 'E'.
-tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(17,1): error TS2322: Type '{}' is not assignable to type 'E'.
-tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(18,1): error TS2322: Type '""' is not assignable to type 'E'.
-tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(21,5): error TS2322: Type 'T' is not assignable to type 'E'.
+invalidEnumAssignments.ts(14,1): error TS2322: Type 'E2.A' is not assignable to type 'E'.
+invalidEnumAssignments.ts(15,1): error TS2322: Type 'E.A' is not assignable to type 'E2'.
+invalidEnumAssignments.ts(16,1): error TS2322: Type 'void' is not assignable to type 'E'.
+invalidEnumAssignments.ts(17,1): error TS2322: Type '{}' is not assignable to type 'E'.
+invalidEnumAssignments.ts(18,1): error TS2322: Type '""' is not assignable to type 'E'.
+invalidEnumAssignments.ts(21,5): error TS2322: Type 'T' is not assignable to type 'E'.
 
 
-==== tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts (6 errors) ====
+==== invalidEnumAssignments.ts (6 errors) ====
     enum E {
         A,
         B
@@ -40,5 +40,5 @@ tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(21,5): e
         e = a;
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'E'.
-!!! related TS2208 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:20:12: This type parameter might need an `extends E` constraint.
+!!! related TS2208 invalidEnumAssignments.ts:20:12: This type parameter might need an `extends E` constraint.
     }

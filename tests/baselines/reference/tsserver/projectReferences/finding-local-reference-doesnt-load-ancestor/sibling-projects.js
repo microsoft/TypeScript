@@ -120,19 +120,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/solution/compiler/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/solution/compiler/tsconfig.json: *new*
   {}
 /user/username/projects/solution/compiler/types.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/solution/tsconfig.json: *new*
   {}
@@ -363,27 +363,27 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/solution/compiler/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/solution/services/node_modules/@types: *new*
+/user/username/projects/solution/compiler/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/solution/compiler/types.d.ts: *new*
   {"pollingInterval":2000}
+/user/username/projects/solution/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/solution/services/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/solution/compiler/tsconfig.json:
   {}
 /user/username/projects/solution/compiler/types.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/solution/tsconfig.json:
+/user/username/projects/solution/services/services.ts: *new*
   {}
 /user/username/projects/solution/services/tsconfig.json: *new*
   {}
-/user/username/projects/solution/services/services.ts: *new*
+/user/username/projects/solution/tsconfig.json:
   {}

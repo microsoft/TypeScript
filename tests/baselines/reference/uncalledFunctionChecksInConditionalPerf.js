@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncalledFunctionChecksInConditionalPerf.ts] ////
+
 //// [uncalledFunctionChecksInConditionalPerf.ts]
 declare const b: boolean;
 

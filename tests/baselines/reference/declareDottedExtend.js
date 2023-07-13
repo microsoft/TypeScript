@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareDottedExtend.ts] ////
+
 //// [declareDottedExtend.ts]
 declare module A.B
 {

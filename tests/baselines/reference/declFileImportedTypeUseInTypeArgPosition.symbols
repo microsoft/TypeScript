@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileImportedTypeUseInTypeArgPosition.ts ===
+//// [tests/cases/compiler/declFileImportedTypeUseInTypeArgPosition.ts] ////
+
+=== declFileImportedTypeUseInTypeArgPosition.ts ===
 class List<T> { }
 >List : Symbol(List, Decl(declFileImportedTypeUseInTypeArgPosition.ts, 0, 0))
 >T : Symbol(T, Decl(declFileImportedTypeUseInTypeArgPosition.ts, 0, 11))

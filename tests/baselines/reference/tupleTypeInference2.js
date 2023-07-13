@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tupleTypeInference2.ts] ////
+
 //// [tupleTypeInference2.ts]
 // Repro from #22564
 

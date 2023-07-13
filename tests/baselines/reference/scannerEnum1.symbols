@@ -1,4 +1,6 @@
-=== tests/cases/conformance/scanner/ecmascript5/scannerEnum1.ts ===
+//// [tests/cases/conformance/scanner/ecmascript5/scannerEnum1.ts] ////
+
+=== scannerEnum1.ts ===
     export enum CodeGenTarget {
 >CodeGenTarget : Symbol(CodeGenTarget, Decl(scannerEnum1.ts, 0, 0))
 

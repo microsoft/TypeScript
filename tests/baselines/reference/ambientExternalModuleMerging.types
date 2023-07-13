@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/ambientExternalModuleMerging_use.ts ===
+//// [tests/cases/conformance/ambient/ambientExternalModuleMerging.ts] ////
+
+=== ambientExternalModuleMerging_use.ts ===
 import M = require("M");
 >M : typeof M
 
@@ -15,7 +17,7 @@ var y = M.y;
 >M : typeof M
 >y : string
 
-=== tests/cases/conformance/ambient/ambientExternalModuleMerging_declare.ts ===
+=== ambientExternalModuleMerging_declare.ts ===
 declare module "M" {
 >"M" : typeof import("M")
 

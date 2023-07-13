@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/enumTagOnExports.js ===
+//// [tests/cases/conformance/jsdoc/enumTagOnExports.ts] ////
+
+=== enumTagOnExports.js ===
 /** @enum {number} */
 exports.a = {};
 >exports.a : Symbol(a, Decl(enumTagOnExports.js, 0, 0), Decl(enumTagOnExports.js, 1, 8), Decl(enumTagOnExports.js, 0, 4))

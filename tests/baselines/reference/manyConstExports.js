@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/manyConstExports.ts] ////
+
 //// [manyConstExports.ts]
 export const exp0 = "test";
 export const exp1 = "test";

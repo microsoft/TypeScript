@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferSetterParamType.ts ===
+//// [tests/cases/compiler/inferSetterParamType.ts] ////
+
+=== inferSetterParamType.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(inferSetterParamType.ts, 0, 0))
 

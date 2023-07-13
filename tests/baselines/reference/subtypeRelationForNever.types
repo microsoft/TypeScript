@@ -1,4 +1,6 @@
-=== tests/cases/compiler/subtypeRelationForNever.ts ===
+//// [tests/cases/compiler/subtypeRelationForNever.ts] ////
+
+=== subtypeRelationForNever.ts ===
 function fail(message: string) : never { throw new Error(message); }
 >fail : (message: string) => never
 >message : string

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericChainedCalls.ts] ////
+
 //// [genericChainedCalls.ts]
 interface I1<T> {
     func<U>(callback: (value: T) => U): I1<T>;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypeShouldBeLiteral.ts] ////
+
 //// [contextualTypeShouldBeLiteral.ts]
 interface X {
     type: 'x';

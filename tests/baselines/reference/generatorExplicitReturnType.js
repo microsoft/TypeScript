@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorExplicitReturnType.ts] ////
+
 //// [generatorExplicitReturnType.ts]
 function* g1(): Generator<number, boolean, string> {
     yield; // error

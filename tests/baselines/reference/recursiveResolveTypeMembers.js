@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveResolveTypeMembers.ts] ////
+
 //// [recursiveResolveTypeMembers.ts]
 // Repro from #25291
 

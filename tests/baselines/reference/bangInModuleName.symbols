@@ -1,10 +1,12 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/bangInModuleName.ts] ////
+
+=== a.ts ===
 /// <reference path="a.d.ts"/>
 
 import * as http from 'intern/dojo/node!http';
 >http : Symbol(http, Decl(a.ts, 2, 6))
 
-=== tests/cases/compiler/a.d.ts ===
+=== a.d.ts ===
 declare module "http" {
 >"http" : Symbol("http", Decl(a.d.ts, 0, 0))
 }

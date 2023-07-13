@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fieldAndGetterWithSameName.ts ===
+//// [tests/cases/compiler/fieldAndGetterWithSameName.ts] ////
+
+=== fieldAndGetterWithSameName.ts ===
 export class C {
 >C : Symbol(C, Decl(fieldAndGetterWithSameName.ts, 0, 0))
 

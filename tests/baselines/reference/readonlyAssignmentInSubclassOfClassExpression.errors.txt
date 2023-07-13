@@ -1,7 +1,7 @@
-tests/cases/compiler/readonlyAssignmentInSubclassOfClassExpression.ts(4,14): error TS2540: Cannot assign to 'attrib' because it is a read-only property.
+readonlyAssignmentInSubclassOfClassExpression.ts(4,14): error TS2540: Cannot assign to 'attrib' because it is a read-only property.
 
 
-==== tests/cases/compiler/readonlyAssignmentInSubclassOfClassExpression.ts (1 errors) ====
+==== readonlyAssignmentInSubclassOfClassExpression.ts (1 errors) ====
     class C extends (class {} as new () => Readonly<{ attrib: number }>) {
         constructor() {
             super()

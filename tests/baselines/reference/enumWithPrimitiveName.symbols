@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumWithPrimitiveName.ts ===
+//// [tests/cases/compiler/enumWithPrimitiveName.ts] ////
+
+=== enumWithPrimitiveName.ts ===
 enum string { }
 >string : Symbol(string, Decl(enumWithPrimitiveName.ts, 0, 0))
 

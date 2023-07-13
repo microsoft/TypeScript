@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringTypeGuardFlow.ts ===
+//// [tests/cases/compiler/destructuringTypeGuardFlow.ts] ////
+
+=== destructuringTypeGuardFlow.ts ===
 type foo = {
 >foo : Symbol(foo, Decl(destructuringTypeGuardFlow.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyArgumentsListComment.ts] ////
+
 //// [emptyArgumentsListComment.ts]
 declare var a;
 

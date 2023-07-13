@@ -1,16 +1,16 @@
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(21,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(32,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(43,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(54,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(65,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(76,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(87,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(98,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(109,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(21,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(32,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(43,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(54,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(65,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(76,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(87,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(98,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(109,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts (10 errors) ====
+==== logicalOrOperatorWithEveryType.ts (10 errors) ====
     // The || operator permits the operands to be of any type.
     // If the || expression is not contextually typed, the right operand is contextually typed
     // by the type of the left operand and the result is of the best common type of the two

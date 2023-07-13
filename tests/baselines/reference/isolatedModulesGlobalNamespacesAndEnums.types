@@ -1,4 +1,6 @@
-=== tests/cases/compiler/script-namespaces.ts ===
+//// [tests/cases/compiler/isolatedModulesGlobalNamespacesAndEnums.ts] ////
+
+=== script-namespaces.ts ===
 namespace Instantiated {
 >Instantiated : typeof Instantiated
 
@@ -17,7 +19,7 @@ declare namespace Ambient {
 >x : number
 }
 
-=== tests/cases/compiler/module-namespaces.ts ===
+=== module-namespaces.ts ===
 export namespace Instantiated {
 >Instantiated : typeof Instantiated
 
@@ -26,7 +28,7 @@ export namespace Instantiated {
 >1 : 1
 }
 
-=== tests/cases/compiler/enum1.ts ===
+=== enum1.ts ===
 enum Enum { A, B, C }
 >Enum : Enum
 >A : Enum.A
@@ -42,7 +44,7 @@ const d = 'd';
 >d : "d"
 >'d' : "d"
 
-=== tests/cases/compiler/enum2.ts ===
+=== enum2.ts ===
 enum Enum {
 >Enum : Enum
 

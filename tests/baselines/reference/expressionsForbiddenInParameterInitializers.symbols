@@ -1,8 +1,10 @@
-=== tests/cases/compiler/bar.ts ===
+//// [tests/cases/compiler/expressionsForbiddenInParameterInitializers.ts] ////
+
+=== bar.ts ===
 export async function foo({ foo = await import("./bar") }) {
 >foo : Symbol(foo, Decl(bar.ts, 0, 0))
 >foo : Symbol(foo, Decl(bar.ts, 0, 27))
->"./bar" : Symbol("tests/cases/compiler/bar", Decl(bar.ts, 0, 0))
+>"./bar" : Symbol("bar", Decl(bar.ts, 0, 0))
 }
 
 export function* foo2({ foo = yield "a" }) {

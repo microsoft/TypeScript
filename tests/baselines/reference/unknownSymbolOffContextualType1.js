@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unknownSymbolOffContextualType1.ts] ////
+
 //// [unknownSymbolOffContextualType1.ts]
 declare var document: Document;
 interface Document {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ClassTest.ts] ////
+
 //// [es6ClassTest.ts]
 class Bar {
     public goo: number;

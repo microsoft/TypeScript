@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInTypeQuery.ts ===
+//// [tests/cases/compiler/thisInTypeQuery.ts] ////
+
+=== thisInTypeQuery.ts ===
 // Repros from #52672
 
 function assert(condition: unknown): asserts condition {

@@ -1,11 +1,11 @@
-tests/cases/compiler/mergedClassNamespaceRecordCast.ts(3,1): error TS2352: Conversion of type 'C1' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+mergedClassNamespaceRecordCast.ts(3,1): error TS2352: Conversion of type 'C1' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Index signature for type 'string' is missing in type 'C1'.
-tests/cases/compiler/mergedClassNamespaceRecordCast.ts(9,1): error TS2352: Conversion of type 'C2' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+mergedClassNamespaceRecordCast.ts(9,1): error TS2352: Conversion of type 'C2' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Index signature for type 'string' is missing in type 'C2'.
-tests/cases/compiler/mergedClassNamespaceRecordCast.ts(12,10): error TS2339: Property 'unrelated' does not exist on type 'C2'.
+mergedClassNamespaceRecordCast.ts(12,10): error TS2339: Property 'unrelated' does not exist on type 'C2'.
 
 
-==== tests/cases/compiler/mergedClassNamespaceRecordCast.ts (3 errors) ====
+==== mergedClassNamespaceRecordCast.ts (3 errors) ====
     class C1 { foo() {} }
     
     new C1() as Record<string, unknown>;

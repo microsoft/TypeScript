@@ -1,7 +1,7 @@
-tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes2.ts(16,11): error TS2348: Value of type 'new () => string' is not callable. Did you mean to include 'new'?
+arrayTypeOfFunctionTypes2.ts(16,11): error TS2348: Value of type 'new () => string' is not callable. Did you mean to include 'new'?
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfFunctionTypes2.ts (1 errors) ====
+==== arrayTypeOfFunctionTypes2.ts (1 errors) ====
     // valid uses of arrays of function types
     
     var x: new () => string[];

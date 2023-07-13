@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of37.ts] ////
+
 //// [ES5For-of37.ts]
 // https://github.com/microsoft/TypeScript/issues/30083
 

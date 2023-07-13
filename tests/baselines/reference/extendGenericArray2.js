@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendGenericArray2.ts] ////
+
 //// [extendGenericArray2.ts]
 interface IFoo<T> {
     x: T;

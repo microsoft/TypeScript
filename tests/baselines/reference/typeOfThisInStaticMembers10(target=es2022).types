@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers10.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers10.ts] ////
+
+=== typeOfThisInStaticMembers10.ts ===
 declare const foo: any;
 >foo : any
 

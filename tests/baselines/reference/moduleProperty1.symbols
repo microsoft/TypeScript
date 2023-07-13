@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleProperty1.ts ===
+//// [tests/cases/compiler/moduleProperty1.ts] ////
+
+=== moduleProperty1.ts ===
 module M {
 >M : Symbol(M, Decl(moduleProperty1.ts, 0, 0))
 

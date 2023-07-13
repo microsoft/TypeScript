@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/foo.js ===
+//// [tests/cases/conformance/jsdoc/jsdocCatchClauseWithTypeAnnotation.ts] ////
+
+=== foo.js ===
 /**
  * @typedef {any} Any
  */

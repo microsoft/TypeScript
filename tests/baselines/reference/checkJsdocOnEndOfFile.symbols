@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/eof.js ===
+//// [tests/cases/conformance/jsdoc/checkJsdocOnEndOfFile.ts] ////
+
+=== eof.js ===
 
 /**
  * @typedef {Array<bad>} Should have error here

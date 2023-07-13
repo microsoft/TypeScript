@@ -25,7 +25,7 @@
 // zee('');
 //       ^
 // | ----------------------------------------------------------------------
-// | zee(**arg0: any**, arg1: any, arg2: any): any
+// | zee(**arg0: any**, arg1: any): any
 // | ----------------------------------------------------------------------
 
 [
@@ -242,30 +242,6 @@
               "displayParts": [
                 {
                   "text": "arg1",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": ":",
-                  "kind": "punctuation"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "any",
-                  "kind": "keyword"
-                }
-              ],
-              "isOptional": false,
-              "isRest": false
-            },
-            {
-              "name": "arg2",
-              "documentation": [],
-              "displayParts": [
-                {
-                  "text": "arg2",
                   "kind": "parameterName"
                 },
                 {

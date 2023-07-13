@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts] ////
+
 //// [taggedTemplatesWithTypeArguments1.ts]
 declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
 

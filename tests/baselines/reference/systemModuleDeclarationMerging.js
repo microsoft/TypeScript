@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModuleDeclarationMerging.ts] ////
+
 //// [systemModuleDeclarationMerging.ts]
 export function F() {}
 export module F { var x; }

@@ -1,11 +1,13 @@
-=== tests/cases/compiler/mod.cts ===
+//// [tests/cases/compiler/moduleNodeDefaultImports.ts] ////
+
+=== mod.cts ===
 declare function fun(): void;
 >fun : () => void
 
 export default fun;
 >fun : () => void
 
-=== tests/cases/compiler/b.mts ===
+=== b.mts ===
 import a from "./mod.cjs";
 >a : typeof a
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardConstructorClassAndNumber.ts] ////
+
 //// [typeGuardConstructorClassAndNumber.ts]
 // Typical case
 class C1 {

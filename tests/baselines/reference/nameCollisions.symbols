@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nameCollisions.ts ===
+//// [tests/cases/compiler/nameCollisions.ts] ////
+
+=== nameCollisions.ts ===
 module T {
 >T : Symbol(T, Decl(nameCollisions.ts, 0, 0))
 

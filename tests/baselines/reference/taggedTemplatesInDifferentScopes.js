@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplatesInDifferentScopes.ts] ////
+
 //// [taggedTemplatesInDifferentScopes.ts]
 export function tag(parts: TemplateStringsArray, ...values: any[]) {
     return parts[0];

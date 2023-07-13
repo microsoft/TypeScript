@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externModule.ts] ////
+
 //// [externModule.ts]
 declare module {
     export class XDate {

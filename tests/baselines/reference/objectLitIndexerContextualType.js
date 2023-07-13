@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLitIndexerContextualType.ts] ////
+
 //// [objectLitIndexerContextualType.ts]
 interface I {
     [s: string]: (s: string) => number;

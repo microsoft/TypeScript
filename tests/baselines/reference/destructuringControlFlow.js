@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringControlFlow.ts] ////
+
 //// [destructuringControlFlow.ts]
 function f1(obj: { a?: string }) {
     if (obj.a) {

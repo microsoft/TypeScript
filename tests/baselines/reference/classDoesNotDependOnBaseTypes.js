@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/classDoesNotDependOnBaseTypes.ts] ////
+
 //// [classDoesNotDependOnBaseTypes.ts]
 type StringTree = string | StringTreeCollection;
 class StringTreeCollectionBase {

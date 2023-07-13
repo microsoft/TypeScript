@@ -1,12 +1,12 @@
-tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(17,11): error TS2411: Property 'm' of type '{}' is not assignable to 'string' index type '{ a: any; }'.
-tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(23,11): error TS2411: Property '0' of type '{}' is not assignable to 'number' index type '{ a: any; b: any; }'.
-tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(23,11): error TS2411: Property '0' of type '{}' is not assignable to 'string' index type '{ a: any; }'.
-tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2411: Property '0' of type '{}' is not assignable to 'number' index type '{ a: any; b: any; }'.
-tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2411: Property '0' of type '{}' is not assignable to 'string' index type '{ a: any; }'.
-tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2411: Property 'm' of type '{}' is not assignable to 'string' index type '{ a: any; }'.
+inheritedMembersAndIndexSignaturesFromDifferentBases.ts(17,11): error TS2411: Property 'm' of type '{}' is not assignable to 'string' index type '{ a: any; }'.
+inheritedMembersAndIndexSignaturesFromDifferentBases.ts(23,11): error TS2411: Property '0' of type '{}' is not assignable to 'number' index type '{ a: any; b: any; }'.
+inheritedMembersAndIndexSignaturesFromDifferentBases.ts(23,11): error TS2411: Property '0' of type '{}' is not assignable to 'string' index type '{ a: any; }'.
+inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2411: Property '0' of type '{}' is not assignable to 'number' index type '{ a: any; b: any; }'.
+inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2411: Property '0' of type '{}' is not assignable to 'string' index type '{ a: any; }'.
+inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2411: Property 'm' of type '{}' is not assignable to 'string' index type '{ a: any; }'.
 
 
-==== tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts (6 errors) ====
+==== inheritedMembersAndIndexSignaturesFromDifferentBases.ts (6 errors) ====
     // indexer in B is a subtype of indexer in A
     interface A {
         [s: string]: {

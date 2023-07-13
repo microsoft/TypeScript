@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts] ////
+
 //// [invalidMultipleVariableDeclarations.ts]
 interface I {
     id: number;

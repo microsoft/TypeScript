@@ -1,8 +1,10 @@
-=== tests/cases/conformance/salsa/def.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment14.ts] ////
+
+=== def.js ===
 var Outer = {};
 >Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(work.js, 0, 0), Decl(work.js, 0, 28))
 
-=== tests/cases/conformance/salsa/work.js ===
+=== work.js ===
 Outer.Inner = function () {}
 >Outer.Inner : Symbol(Outer.Inner, Decl(work.js, 0, 0), Decl(work.js, 1, 6))
 >Outer : Symbol(Outer, Decl(def.js, 0, 3), Decl(work.js, 0, 0), Decl(work.js, 0, 28))
@@ -22,7 +24,7 @@ Outer.Inner.prototype = {
 >m : Symbol(m, Decl(work.js, 2, 9))
 }
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 /** @type {Outer.Inner} */
 var inner
 >inner : Symbol(inner, Decl(use.js, 1, 3))

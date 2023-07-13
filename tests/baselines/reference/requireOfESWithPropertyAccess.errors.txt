@@ -1,14 +1,14 @@
-tests/cases/conformance/salsa/main.js(4,3): error TS2339: Property 'x' does not exist on type '{ grey: {}; }'.
+main.js(4,3): error TS2339: Property 'x' does not exist on type '{ grey: {}; }'.
 
 
-==== tests/cases/conformance/salsa/main.js (1 errors) ====
+==== main.js (1 errors) ====
     const x = require('./ch').x
     x
     x.grey
     x.x.grey
       ~
 !!! error TS2339: Property 'x' does not exist on type '{ grey: {}; }'.
-==== tests/cases/conformance/salsa/ch.js (0 errors) ====
+==== ch.js (0 errors) ====
     const x = {
       grey: {}
     }

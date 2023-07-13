@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationFileNoCrashOnExtraExportModifier.ts] ////
+
 //// [input.ts]
 export = exports;
 declare class exports {

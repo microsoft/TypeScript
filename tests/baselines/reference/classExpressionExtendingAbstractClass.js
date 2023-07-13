@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExpressionExtendingAbstractClass.ts] ////
+
 //// [classExpressionExtendingAbstractClass.ts]
 abstract class A {
     abstract foo(): void;

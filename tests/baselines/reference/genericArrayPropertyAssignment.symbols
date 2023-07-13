@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericArrayPropertyAssignment.ts ===
+//// [tests/cases/compiler/genericArrayPropertyAssignment.ts] ////
+
+=== genericArrayPropertyAssignment.ts ===
 function isEmpty(list: {length:number;})
 >isEmpty : Symbol(isEmpty, Decl(genericArrayPropertyAssignment.ts, 0, 0))
 >list : Symbol(list, Decl(genericArrayPropertyAssignment.ts, 0, 17))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionThisExpressionAndClassInGlobal.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndClassInGlobal.ts] ////
+
+=== collisionThisExpressionAndClassInGlobal.ts ===
 class _this {
 >_this : Symbol(_this, Decl(collisionThisExpressionAndClassInGlobal.ts, 0, 0))
 }

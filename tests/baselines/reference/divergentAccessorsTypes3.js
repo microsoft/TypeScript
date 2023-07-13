@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/divergentAccessorsTypes3.ts] ////
+
 //// [divergentAccessorsTypes3.ts]
 class One {
   get prop1(): string { return ""; }

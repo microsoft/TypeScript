@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mapOnTupleTypes02.ts] ////
+
 //// [mapOnTupleTypes02.ts]
 export type Point = [number, number];
 

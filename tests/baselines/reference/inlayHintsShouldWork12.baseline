@@ -1,0 +1,17 @@
+    return a(1) + 2
+             ^
+{
+  "text": "b:",
+  "position": 54,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo((c: number) => c + 1);
+    ^
+{
+  "text": "a:",
+  "position": 67,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

@@ -193,19 +193,19 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/product/module2.ts: *new*
   {}
-/user/username/projects/myproject/product/src/module1.ts: *new*
-  {}
 /user/username/projects/myproject/product/src/feature/file2.ts: *new*
+  {}
+/user/username/projects/myproject/product/src/module1.ts: *new*
   {}
 /user/username/projects/myproject/product/test/file4.ts: *new*
   {}
 /user/username/projects/myproject/product/test/src/file3.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitPreservesHasNoDefaultLibDirective.ts ===
+//// [tests/cases/compiler/declarationEmitPreservesHasNoDefaultLibDirective.ts] ////
+
+=== declarationEmitPreservesHasNoDefaultLibDirective.ts ===
 /// <reference no-default-lib="true"/>
 class Foo {
 >Foo : Symbol(Foo, Decl(declarationEmitPreservesHasNoDefaultLibDirective.ts, 0, 0))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataGenericTypeVariableInScope.ts] ////
+
 //// [decoratorMetadataGenericTypeVariableInScope.ts]
 // Unused, but could collide with the named type argument below.
 class TypeVariable {}
@@ -27,7 +29,7 @@ var TypeVariable = /** @class */ (function () {
     }
     return TypeVariable;
 }());
-var C = exports.C = /** @class */ (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     __decorate([
@@ -36,3 +38,4 @@ var C = exports.C = /** @class */ (function () {
     ], C.prototype, "member", void 0);
     return C;
 }());
+exports.C = C;

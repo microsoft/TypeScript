@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportSubAssignments.ts] ////
+
 //// [cls.js]
 const Strings = {
     a: "A",

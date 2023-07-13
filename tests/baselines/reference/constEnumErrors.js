@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumErrors.ts] ////
+
 //// [constEnumErrors.ts]
 const enum E {
     A

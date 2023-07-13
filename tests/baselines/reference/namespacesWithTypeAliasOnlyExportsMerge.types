@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constAndNS.ts ===
+//// [tests/cases/compiler/namespacesWithTypeAliasOnlyExportsMerge.ts] ////
+
+=== constAndNS.ts ===
 type A = number;
 >A : number
 
@@ -46,7 +48,7 @@ declare const try4: Q4.default.A;
 >default : any
 
 export {};
-=== tests/cases/compiler/circular.ts ===
+=== circular.ts ===
 declare namespace NS1 {
     export { NS2 };
 >NS2 : any
@@ -56,7 +58,7 @@ declare namespace NS2 {
 >NS1 : any
 }
 export {};
-=== tests/cases/compiler/circularWithUses.ts ===
+=== circularWithUses.ts ===
 type A = string;
 >A : string
 

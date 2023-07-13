@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumsWithMultipleDeclarations3.ts] ////
+
 //// [enumsWithMultipleDeclarations3.ts]
 module E {
 }

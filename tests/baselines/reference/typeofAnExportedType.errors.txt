@@ -1,9 +1,9 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts(20,12): error TS2323: Cannot redeclare exported variable 'r5'.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts(21,12): error TS2323: Cannot redeclare exported variable 'r5'.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
+typeofAnExportedType.ts(20,12): error TS2323: Cannot redeclare exported variable 'r5'.
+typeofAnExportedType.ts(21,12): error TS2323: Cannot redeclare exported variable 'r5'.
+typeofAnExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts (3 errors) ====
+==== typeofAnExportedType.ts (3 errors) ====
     export var x = 1;
     export var r1: typeof x;
     export var y = { foo: '' };

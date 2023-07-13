@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty4.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty4.ts] ////
+
+=== accessorsOverrideProperty4.ts ===
 declare class Animal {
 >Animal : Symbol(Animal, Decl(accessorsOverrideProperty4.ts, 0, 0))
 

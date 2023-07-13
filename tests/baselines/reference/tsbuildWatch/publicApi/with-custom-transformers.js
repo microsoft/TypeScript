@@ -87,15 +87,15 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/webpack/index.ts (used version)
 
 FsWatches::
-/user/username/projects/myproject/shared/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/shared/index.ts: *new*
   {}
-/user/username/projects/myproject/webpack/tsconfig.json: *new*
+/user/username/projects/myproject/shared/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/webpack/index.ts: *new*
   {}
-/user/username/projects/myproject/tsconfig.json: *new*
+/user/username/projects/myproject/webpack/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

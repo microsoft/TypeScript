@@ -1,4 +1,6 @@
-=== tests/cases/compiler/initializePropertiesWithRenamedLet.ts ===
+//// [tests/cases/compiler/initializePropertiesWithRenamedLet.ts] ////
+
+=== initializePropertiesWithRenamedLet.ts ===
 var x0;
 >x0 : Symbol(x0, Decl(initializePropertiesWithRenamedLet.ts, 0, 3))
 

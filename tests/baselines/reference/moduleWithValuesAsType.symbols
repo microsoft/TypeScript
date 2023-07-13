@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleWithValuesAsType.ts ===
+//// [tests/cases/compiler/moduleWithValuesAsType.ts] ////
+
+=== moduleWithValuesAsType.ts ===
 module A {
 >A : Symbol(A, Decl(moduleWithValuesAsType.ts, 0, 0))
 

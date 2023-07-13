@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadOnConstConstraintChecks4.ts] ////
+
 //// [overloadOnConstConstraintChecks4.ts]
 class Z { }
 class A extends Z { private x = 1 }

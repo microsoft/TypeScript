@@ -1,7 +1,7 @@
-tests/cases/compiler/fixTypeParameterInSignatureWithRestParameters.ts(2,8): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+fixTypeParameterInSignatureWithRestParameters.ts(2,8): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
-==== tests/cases/compiler/fixTypeParameterInSignatureWithRestParameters.ts (1 errors) ====
+==== fixTypeParameterInSignatureWithRestParameters.ts (1 errors) ====
     function bar<T>(item1: T, item2: T) { }
     bar(1, ""); // Should be ok
            ~~

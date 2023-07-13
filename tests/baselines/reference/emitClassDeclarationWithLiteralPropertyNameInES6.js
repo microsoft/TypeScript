@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithLiteralPropertyNameInES6.ts] ////
+
 //// [emitClassDeclarationWithLiteralPropertyNameInES6.ts]
 class B {
     "hello" = 10;

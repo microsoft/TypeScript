@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatability44.ts ===
+//// [tests/cases/compiler/assignmentCompatability44.ts] ////
+
+=== assignmentCompatability44.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(assignmentCompatability44.ts, 0, 0))
 

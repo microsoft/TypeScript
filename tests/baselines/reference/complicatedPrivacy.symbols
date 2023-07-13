@@ -1,4 +1,6 @@
-=== tests/cases/compiler/complicatedPrivacy.ts ===
+//// [tests/cases/compiler/complicatedPrivacy.ts] ////
+
+=== complicatedPrivacy.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(complicatedPrivacy.ts, 0, 0))
 

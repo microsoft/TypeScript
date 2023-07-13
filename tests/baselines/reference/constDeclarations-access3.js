@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-access3.ts] ////
+
 //// [constDeclarations-access3.ts]
 module M {
     export const x = 0;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitUnionPromise.ts] ////
+
 //// [awaitUnionPromise.ts]
 // https://github.com/Microsoft/TypeScript/issues/18186
 

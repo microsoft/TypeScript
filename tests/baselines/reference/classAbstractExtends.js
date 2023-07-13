@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractExtends.ts] ////
+
 //// [classAbstractExtends.ts]
 class A {
     foo() {}

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/discriminatedUnionTypes1.ts ===
+//// [tests/cases/conformance/types/union/discriminatedUnionTypes1.ts] ////
+
+=== discriminatedUnionTypes1.ts ===
 interface Square {
 >Square : Symbol(Square, Decl(discriminatedUnionTypes1.ts, 0, 0))
 

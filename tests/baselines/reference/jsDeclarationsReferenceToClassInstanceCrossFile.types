@@ -1,7 +1,9 @@
-=== tests/cases/conformance/jsdoc/declarations/test.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReferenceToClassInstanceCrossFile.ts] ////
+
+=== test.js ===
 const {Render} = require("./index");
 >Render : typeof Render
->require("./index") : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>require("./index") : typeof import("index")
 >require : any
 >"./index" : "./index"
 
@@ -11,10 +13,10 @@ let render = new Render();
 >Render : typeof Render
 
 render.addRectangle();
->render.addRectangle() : import("tests/cases/conformance/jsdoc/declarations/rectangle").Rectangle
->render.addRectangle : () => import("tests/cases/conformance/jsdoc/declarations/rectangle").Rectangle
+>render.addRectangle() : import("rectangle").Rectangle
+>render.addRectangle : () => import("rectangle").Rectangle
 >render : Render
->addRectangle : () => import("tests/cases/conformance/jsdoc/declarations/rectangle").Rectangle
+>addRectangle : () => import("rectangle").Rectangle
 
 console.log("Objects", render.objects);
 >console.log("Objects", render.objects) : void
@@ -22,11 +24,11 @@ console.log("Objects", render.objects);
 >console : Console
 >log : (...data: any[]) => void
 >"Objects" : "Objects"
->render.objects : import("tests/cases/conformance/jsdoc/declarations/rectangle").Rectangle[]
+>render.objects : import("rectangle").Rectangle[]
 >render : Render
->objects : import("tests/cases/conformance/jsdoc/declarations/rectangle").Rectangle[]
+>objects : import("rectangle").Rectangle[]
 
-=== tests/cases/conformance/jsdoc/declarations/rectangle.js ===
+=== rectangle.js ===
 class Rectangle {
 >Rectangle : Rectangle
 
@@ -48,10 +50,10 @@ module.exports = { Rectangle };
 >{ Rectangle } : { Rectangle: typeof Rectangle; }
 >Rectangle : typeof Rectangle
 
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 const {Rectangle} = require('./rectangle');
 >Rectangle : typeof Rectangle
->require('./rectangle') : typeof import("tests/cases/conformance/jsdoc/declarations/rectangle")
+>require('./rectangle') : typeof import("rectangle")
 >require : any
 >'./rectangle' : "./rectangle"
 

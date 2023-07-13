@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numberAssignableToEnumInsideUnion.ts ===
+//// [tests/cases/compiler/numberAssignableToEnumInsideUnion.ts] ////
+
+=== numberAssignableToEnumInsideUnion.ts ===
 enum E { A, B }
 >E : E
 >A : E.A

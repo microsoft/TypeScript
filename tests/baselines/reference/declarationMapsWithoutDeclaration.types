@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationMapsWithoutDeclaration.ts ===
+//// [tests/cases/compiler/declarationMapsWithoutDeclaration.ts] ////
+
+=== declarationMapsWithoutDeclaration.ts ===
 module m2 {
     export interface connectModule {
         (res, req, next): void;

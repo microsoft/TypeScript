@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/breakStatements/forInBreakStatements.ts] ////
+
 //// [forInBreakStatements.ts]
 for(var x in {}) {
     break;

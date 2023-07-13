@@ -1,13 +1,13 @@
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(11,13): error TS2749: 'Color.Red.toString' refers to a value, but is being used as a type here. Did you mean 'typeof Color.Red.toString'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(13,19): error TS2339: Property 'Red' does not exist on type 'Color'.
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(19,13): error TS2702: 'C1' only refers to a type, but is being used as a namespace here.
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(20,13): error TS2702: 'C1' only refers to a type, but is being used as a namespace here.
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(21,16): error TS2339: Property 'Red' does not exist on type 'Color'.
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(23,13): error TS2713: Cannot access 'C2.Red' because 'C2' is a type, but not a namespace. Did you mean to retrieve the type of the property 'Red' in 'C2' with 'C2["Red"]'?
-tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts(24,13): error TS2713: Cannot access 'C2.Red' because 'C2' is a type, but not a namespace. Did you mean to retrieve the type of the property 'Red' in 'C2' with 'C2["Red"]'?
+errorForUsingPropertyOfTypeAsType03.ts(11,13): error TS2749: 'Color.Red.toString' refers to a value, but is being used as a type here. Did you mean 'typeof Color.Red.toString'?
+errorForUsingPropertyOfTypeAsType03.ts(13,19): error TS2339: Property 'Red' does not exist on type 'Color'.
+errorForUsingPropertyOfTypeAsType03.ts(19,13): error TS2702: 'C1' only refers to a type, but is being used as a namespace here.
+errorForUsingPropertyOfTypeAsType03.ts(20,13): error TS2702: 'C1' only refers to a type, but is being used as a namespace here.
+errorForUsingPropertyOfTypeAsType03.ts(21,16): error TS2339: Property 'Red' does not exist on type 'Color'.
+errorForUsingPropertyOfTypeAsType03.ts(23,13): error TS2713: Cannot access 'C2.Red' because 'C2' is a type, but not a namespace. Did you mean to retrieve the type of the property 'Red' in 'C2' with 'C2["Red"]'?
+errorForUsingPropertyOfTypeAsType03.ts(24,13): error TS2713: Cannot access 'C2.Red' because 'C2' is a type, but not a namespace. Did you mean to retrieve the type of the property 'Red' in 'C2' with 'C2["Red"]'?
 
 
-==== tests/cases/compiler/errorForUsingPropertyOfTypeAsType03.ts (7 errors) ====
+==== errorForUsingPropertyOfTypeAsType03.ts (7 errors) ====
     namespace Test1 {
         enum Color {
             Red,

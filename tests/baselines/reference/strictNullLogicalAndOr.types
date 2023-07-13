@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictNullLogicalAndOr.ts ===
+//// [tests/cases/compiler/strictNullLogicalAndOr.ts] ////
+
+=== strictNullLogicalAndOr.ts ===
 // Repro from #9113
 
 let sinOrCos = Math.random() < .5;

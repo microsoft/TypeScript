@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameterInFunction2.ts] ////
+
 //// [unusedTypeParameterInFunction2.ts]
 function f1<X, Y>() {
     var a: X;

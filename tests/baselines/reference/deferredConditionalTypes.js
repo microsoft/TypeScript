@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deferredConditionalTypes.ts] ////
+
 //// [deferredConditionalTypes.ts]
 type A<T> = { x: T } extends { x: 0 } ? 1 : 0;
 

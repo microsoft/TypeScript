@@ -5,7 +5,7 @@ sourceRoot:
 sources: file.tsx
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/jsx/file.jsx
+emittedFile:file.jsx
 sourceFile:file.tsx
 -------------------------------------------------------------------
 >>>var M;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportDeclaration_moduleSpecifier.ts] ////
+
 === /a.ts ===
 export class A {}
 >A : A

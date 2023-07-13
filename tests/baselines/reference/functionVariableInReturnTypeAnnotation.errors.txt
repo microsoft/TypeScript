@@ -1,7 +1,7 @@
-tests/cases/compiler/functionVariableInReturnTypeAnnotation.ts(1,24): error TS2304: Cannot find name 'b'.
+functionVariableInReturnTypeAnnotation.ts(1,24): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/compiler/functionVariableInReturnTypeAnnotation.ts (1 errors) ====
+==== functionVariableInReturnTypeAnnotation.ts (1 errors) ====
     function bar(): typeof b {
                            ~
 !!! error TS2304: Cannot find name 'b'.

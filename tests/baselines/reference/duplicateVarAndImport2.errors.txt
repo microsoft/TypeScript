@@ -1,7 +1,7 @@
-tests/cases/compiler/duplicateVarAndImport2.ts(4,1): error TS2440: Import declaration conflicts with local declaration of 'a'.
+duplicateVarAndImport2.ts(4,1): error TS2440: Import declaration conflicts with local declaration of 'a'.
 
 
-==== tests/cases/compiler/duplicateVarAndImport2.ts (1 errors) ====
+==== duplicateVarAndImport2.ts (1 errors) ====
     // error since module is instantiated
     var a;
     module M { export var x = 1; }

@@ -1,8 +1,8 @@
-tests/cases/conformance/salsa/chrome-devtools-DOMExtension.js(2,17): error TS2339: Property 'removeChildren' does not exist on type 'Event'.
-tests/cases/conformance/salsa/chrome-devtools-DOMExtension.js(3,10): error TS2339: Property 'textContent' does not exist on type 'Event'.
+chrome-devtools-DOMExtension.js(2,17): error TS2339: Property 'removeChildren' does not exist on type 'Event'.
+chrome-devtools-DOMExtension.js(3,10): error TS2339: Property 'textContent' does not exist on type 'Event'.
 
 
-==== tests/cases/conformance/salsa/chrome-devtools-DOMExtension.js (2 errors) ====
+==== chrome-devtools-DOMExtension.js (2 errors) ====
     // Extend that DOM! (doesn't work, but shouldn't crash)
     Event.prototype.removeChildren = function () {
                     ~~~~~~~~~~~~~~

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unknownTypeArgOnCall.ts] ////
+
 //// [unknownTypeArgOnCall.ts]
 class Foo<T> {
   public clone<U>() {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName3.ts] ////
+
+=== a.ts ===
 export const n = 1;
 >n : 1
 >1 : 1
@@ -16,7 +18,7 @@ export enum E2 { B }
 >E2 : E2
 >B : E2.B
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import * as keys from "./a";
 >keys : typeof keys
 

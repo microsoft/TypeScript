@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementsMethodWIthTupleArgs.ts] ////
+
 //// [classImplementsMethodWIthTupleArgs.ts]
 declare class MySettable implements Settable {
     set(option: Record<string, unknown>): void;

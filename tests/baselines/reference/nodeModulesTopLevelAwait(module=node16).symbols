@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/subfolder/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesTopLevelAwait.ts] ////
+
+=== subfolder/index.ts ===
 // cjs format file
 const x = await 1;
 >x : Symbol(x, Decl(index.ts, 1, 5))
@@ -9,7 +11,7 @@ export {x};
 for await (const y of []) {}
 >y : Symbol(y, Decl(index.ts, 3, 16))
 
-=== tests/cases/conformance/node/index.ts ===
+=== index.ts ===
 // esm format file
 const x = await 1;
 >x : Symbol(x, Decl(index.ts, 1, 5))

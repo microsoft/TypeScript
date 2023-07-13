@@ -1,15 +1,15 @@
-tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(3,3): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(4,3): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(5,7): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(5,7): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
-tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(9,3): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(10,3): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(11,7): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(11,7): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
-tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js(15,10): error TS2339: Property '#z' does not exist on type 'C'.
+privateNameJsPrototype.js(3,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(4,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(5,7): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(5,7): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+privateNameJsPrototype.js(9,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(10,3): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(11,7): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameJsPrototype.js(11,7): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+privateNameJsPrototype.js(15,10): error TS2339: Property '#z' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameJsPrototype.js (9 errors) ====
+==== privateNameJsPrototype.js (9 errors) ====
     function A() { }
     A.prototype = {
       #x: 1,         // Error

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop10_ES6.ts] ////
+
 //// [capturedLetConstInLoop10_ES6.ts]
 class A {
     foo() {

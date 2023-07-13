@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions.ts] ////
+
 //// [thisTypeInFunctions.ts]
 // body checking
 class B {

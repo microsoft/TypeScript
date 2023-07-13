@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty46.ts] ////
+
 //// [symbolProperty46.ts]
 class C {
     get [Symbol.hasInstance]() {

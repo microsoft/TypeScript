@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyGloImport.ts ===
+//// [tests/cases/compiler/privacyGloImport.ts] ////
+
+=== privacyGloImport.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(privacyGloImport.ts, 0, 0))
 

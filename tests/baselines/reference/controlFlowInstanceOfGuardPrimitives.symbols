@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowInstanceOfGuardPrimitives.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowInstanceOfGuardPrimitives.ts] ////
+
+=== controlFlowInstanceOfGuardPrimitives.ts ===
 function distinguish(thing: string | number | Date) {
 >distinguish : Symbol(distinguish, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 0))
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))

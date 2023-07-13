@@ -1,4 +1,6 @@
-=== tests/cases/compiler/requiredInitializedParameter4.ts ===
+//// [tests/cases/compiler/requiredInitializedParameter4.ts] ////
+
+=== requiredInitializedParameter4.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(requiredInitializedParameter4.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportingContainingVisibleType.ts ===
+//// [tests/cases/compiler/exportingContainingVisibleType.ts] ////
+
+=== exportingContainingVisibleType.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(exportingContainingVisibleType.ts, 0, 0))
 

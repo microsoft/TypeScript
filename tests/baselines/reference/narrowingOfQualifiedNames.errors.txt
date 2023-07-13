@@ -1,8 +1,8 @@
-tests/cases/compiler/narrowingOfQualifiedNames.ts(33,25): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/narrowingOfQualifiedNames.ts(38,29): error TS2532: Object is possibly 'undefined'.
+narrowingOfQualifiedNames.ts(33,25): error TS2532: Object is possibly 'undefined'.
+narrowingOfQualifiedNames.ts(38,29): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/compiler/narrowingOfQualifiedNames.ts (2 errors) ====
+==== narrowingOfQualifiedNames.ts (2 errors) ====
     // Repro from #43411
     
     interface IProperties {

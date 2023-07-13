@@ -1,8 +1,8 @@
-tests/cases/conformance/types/members/typesWithProtectedConstructor.ts(5,9): error TS2674: Constructor of class 'C' is protected and only accessible within the class declaration.
-tests/cases/conformance/types/members/typesWithProtectedConstructor.ts(13,10): error TS2674: Constructor of class 'C2' is protected and only accessible within the class declaration.
+typesWithProtectedConstructor.ts(5,9): error TS2674: Constructor of class 'C' is protected and only accessible within the class declaration.
+typesWithProtectedConstructor.ts(13,10): error TS2674: Constructor of class 'C2' is protected and only accessible within the class declaration.
 
 
-==== tests/cases/conformance/types/members/typesWithProtectedConstructor.ts (2 errors) ====
+==== typesWithProtectedConstructor.ts (2 errors) ====
     class C {
         protected constructor() { }
     }

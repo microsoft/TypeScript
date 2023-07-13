@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionType.ts] ////
+
 //// [functionType.ts]
 function salt() {}
 salt.apply("hello", []);

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticsAndStaticMethods.ts] ////
+
 //// [privateNameStaticsAndStaticMethods.ts]
 class A {
     static #foo(a: number) {}

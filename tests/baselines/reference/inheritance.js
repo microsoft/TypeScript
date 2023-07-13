@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritance.ts] ////
+
 //// [inheritance.ts]
 class B1 {
     public x;

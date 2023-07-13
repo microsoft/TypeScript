@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target6.ts ===
+//// [tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target6.ts] ////
+
+=== es6modulekindWithES5Target6.ts ===
 export function f1(d = 0) {
 >f1 : Symbol(f1, Decl(es6modulekindWithES5Target6.ts, 0, 0))
 >d : Symbol(d, Decl(es6modulekindWithES5Target6.ts, 0, 19))

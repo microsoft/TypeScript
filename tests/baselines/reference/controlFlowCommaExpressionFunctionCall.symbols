@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowCommaExpressionFunctionCall.ts ===
+//// [tests/cases/compiler/controlFlowCommaExpressionFunctionCall.ts] ////
+
+=== controlFlowCommaExpressionFunctionCall.ts ===
 const otherValue = () => true;
 >otherValue : Symbol(otherValue, Decl(controlFlowCommaExpressionFunctionCall.ts, 0, 5))
 

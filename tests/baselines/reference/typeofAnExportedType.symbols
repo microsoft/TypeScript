@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts] ////
+
+=== typeofAnExportedType.ts ===
 export var x = 1;
 >x : Symbol(x, Decl(typeofAnExportedType.ts, 0, 10))
 

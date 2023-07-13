@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypeIterableUnions.ts] ////
+
 //// [contextualTypeIterableUnions.ts]
 declare class DMap<K, V>  {
   constructor(iterable: Iterable<[K, V]> | undefined);

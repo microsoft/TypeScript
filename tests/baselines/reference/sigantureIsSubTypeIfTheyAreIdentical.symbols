@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sigantureIsSubTypeIfTheyAreIdentical.ts ===
+//// [tests/cases/compiler/sigantureIsSubTypeIfTheyAreIdentical.ts] ////
+
+=== sigantureIsSubTypeIfTheyAreIdentical.ts ===
 interface ICache {
 >ICache : Symbol(ICache, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 0))
 

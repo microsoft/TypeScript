@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts] ////
+
 //// [compoundArithmeticAssignmentWithInvalidOperands.ts]
 enum E { a, b }
 

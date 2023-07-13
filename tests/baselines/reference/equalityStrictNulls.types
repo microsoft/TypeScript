@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts] ////
+
+=== equalityStrictNulls.ts ===
 function f1(x: string) {
 >f1 : (x: string) => void
 >x : string

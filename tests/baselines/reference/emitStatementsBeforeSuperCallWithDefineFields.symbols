@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/emitStatementsBeforeSuperCallWithDefineFields.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/emitStatementsBeforeSuperCallWithDefineFields.ts] ////
+
+=== emitStatementsBeforeSuperCallWithDefineFields.ts ===
 class Base {
 >Base : Symbol(Base, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 0, 0))
 }

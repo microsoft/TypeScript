@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParametersNotCheckedByNoUnusedLocals.ts] ////
+
 //// [unusedTypeParametersNotCheckedByNoUnusedLocals.ts]
 function f<T>() { }
 

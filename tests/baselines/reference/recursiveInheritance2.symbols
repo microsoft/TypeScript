@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveInheritance2.ts ===
+//// [tests/cases/compiler/recursiveInheritance2.ts] ////
+
+=== recursiveInheritance2.ts ===
 interface A { (): B; };
 >A : Symbol(A, Decl(recursiveInheritance2.ts, 0, 0))
 >B : Symbol(B, Decl(recursiveInheritance2.ts, 2, 12))

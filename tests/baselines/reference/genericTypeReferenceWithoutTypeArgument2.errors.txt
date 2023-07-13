@@ -1,30 +1,30 @@
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(8,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(10,13): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(11,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(11,18): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,11): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,18): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(14,13): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(14,28): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(16,15): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(16,19): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(16,30): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(18,23): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(18,27): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(18,38): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(20,17): error TS2689: Cannot extend an interface 'I'. Did you mean 'implements'?
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(23,21): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(29,18): error TS2708: Cannot use namespace 'M' as a value.
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(30,24): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(31,24): error TS2694: Namespace 'M' has no exported member 'C'.
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(33,22): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(34,22): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(36,10): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(37,10): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(8,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(10,13): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(11,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(11,18): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(12,11): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+genericTypeReferenceWithoutTypeArgument2.ts(12,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(12,18): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(14,13): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(14,28): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(16,15): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(16,19): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(16,30): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(18,23): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(18,27): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(18,38): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(20,17): error TS2689: Cannot extend an interface 'I'. Did you mean 'implements'?
+genericTypeReferenceWithoutTypeArgument2.ts(23,21): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(29,18): error TS2708: Cannot use namespace 'M' as a value.
+genericTypeReferenceWithoutTypeArgument2.ts(30,24): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(31,24): error TS2694: Namespace 'M' has no exported member 'C'.
+genericTypeReferenceWithoutTypeArgument2.ts(33,22): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(34,22): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
+genericTypeReferenceWithoutTypeArgument2.ts(36,10): error TS2304: Cannot find name 'C'.
+genericTypeReferenceWithoutTypeArgument2.ts(37,10): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts (24 errors) ====
+==== genericTypeReferenceWithoutTypeArgument2.ts (24 errors) ====
     // it is an error to use a generic type without type arguments
     // all of these are errors 
     

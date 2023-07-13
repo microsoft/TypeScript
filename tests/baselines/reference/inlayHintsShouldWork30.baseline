@@ -1,0 +1,8 @@
+f(1, a => { })
+      ^
+{
+  "text": ": number",
+  "position": 48,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

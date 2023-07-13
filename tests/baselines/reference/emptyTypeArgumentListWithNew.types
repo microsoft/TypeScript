@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyTypeArgumentListWithNew.ts ===
+//// [tests/cases/compiler/emptyTypeArgumentListWithNew.ts] ////
+
+=== emptyTypeArgumentListWithNew.ts ===
 class foo<T> { }
 >foo : foo<T>
 

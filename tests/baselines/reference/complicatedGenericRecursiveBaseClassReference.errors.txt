@@ -1,9 +1,9 @@
-tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts(1,7): error TS2506: 'S18' is referenced directly or indirectly in its own base expression.
-tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts(4,10): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts(4,16): error TS2339: Property 'S18' does not exist on type 'S18<unknown, unknown, unknown>'.
+complicatedGenericRecursiveBaseClassReference.ts(1,7): error TS2506: 'S18' is referenced directly or indirectly in its own base expression.
+complicatedGenericRecursiveBaseClassReference.ts(4,10): error TS2554: Expected 0 arguments, but got 1.
+complicatedGenericRecursiveBaseClassReference.ts(4,16): error TS2339: Property 'S18' does not exist on type 'S18<unknown, unknown, unknown>'.
 
 
-==== tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts (3 errors) ====
+==== complicatedGenericRecursiveBaseClassReference.ts (3 errors) ====
     class S18<B, A, C> extends S18<A[], { S19: A; (): A }[], C[]>
           ~~~
 !!! error TS2506: 'S18' is referenced directly or indirectly in its own base expression.

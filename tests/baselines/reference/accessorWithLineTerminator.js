@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorWithLineTerminator.ts] ////
+
 //// [accessorWithLineTerminator.ts]
 class C {
     get

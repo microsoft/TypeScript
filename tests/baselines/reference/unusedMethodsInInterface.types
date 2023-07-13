@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedMethodsInInterface.ts ===
+//// [tests/cases/compiler/unusedMethodsInInterface.ts] ////
+
+=== unusedMethodsInInterface.ts ===
 interface I1 {
     f1();
 >f1 : () => any

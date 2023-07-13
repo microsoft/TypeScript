@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts ===
+//// [tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts] ////
+
+=== contextuallyTypedParametersWithInitializers.ts ===
 declare function id1<T>(input: T): T;
 >id1 : Symbol(id1, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 0))
 >T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 21))

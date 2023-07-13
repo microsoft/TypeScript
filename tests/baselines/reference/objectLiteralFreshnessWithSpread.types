@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralFreshnessWithSpread.ts ===
+//// [tests/cases/compiler/objectLiteralFreshnessWithSpread.ts] ////
+
+=== objectLiteralFreshnessWithSpread.ts ===
 let x = { b: 1, extra: 2 }
 >x : { b: number; extra: number; }
 >{ b: 1, extra: 2 } : { b: number; extra: number; }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationAwaitModifier.ts] ////
+
+=== a.js ===
 class Foo {
 >Foo : Symbol(Foo, Decl(a.js, 0, 0))
 

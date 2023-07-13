@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/conditionalTypes1.ts] ////
+
 //// [conditionalTypes1.ts]
 type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
 type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"

@@ -5,7 +5,7 @@ sourceRoot:
 sources: esDecorators-classDeclaration-sourceMap.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-sourceMap.js
+emittedFile:esDecorators-classDeclaration-sourceMap.js
 sourceFile:esDecorators-classDeclaration-sourceMap.ts
 -------------------------------------------------------------------
 >>>@dec
@@ -562,7 +562,7 @@ sourceRoot:
 sources: esDecorators-classDeclaration-sourceMap.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-sourceMap.d.ts
+emittedFile:esDecorators-classDeclaration-sourceMap.d.ts
 sourceFile:esDecorators-classDeclaration-sourceMap.ts
 -------------------------------------------------------------------
 >>>declare var dec: any;

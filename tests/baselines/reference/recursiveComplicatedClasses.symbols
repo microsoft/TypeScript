@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveComplicatedClasses.ts ===
+//// [tests/cases/compiler/recursiveComplicatedClasses.ts] ////
+
+=== recursiveComplicatedClasses.ts ===
 class Signature {
 >Signature : Symbol(Signature, Decl(recursiveComplicatedClasses.ts, 0, 0))
 

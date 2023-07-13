@@ -1,10 +1,10 @@
-tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts(16,32): error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
+contextualTypingOfGenericFunctionTypedArguments1.ts(16,32): error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
   Type 'string' is not assignable to type 'Date'.
-tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts(17,32): error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
+contextualTypingOfGenericFunctionTypedArguments1.ts(17,32): error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
   Type 'string' is not assignable to type 'Date'.
 
 
-==== tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts (2 errors) ====
+==== contextualTypingOfGenericFunctionTypedArguments1.ts (2 errors) ====
     interface Collection<T> {
         length: number;
         add(x: T): void;

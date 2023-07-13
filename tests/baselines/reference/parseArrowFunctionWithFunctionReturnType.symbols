@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseArrowFunctionWithFunctionReturnType.ts ===
+//// [tests/cases/compiler/parseArrowFunctionWithFunctionReturnType.ts] ////
+
+=== parseArrowFunctionWithFunctionReturnType.ts ===
 const fn = <T>(): (() => T) => null as any;
 >fn : Symbol(fn, Decl(parseArrowFunctionWithFunctionReturnType.ts, 0, 5))
 >T : Symbol(T, Decl(parseArrowFunctionWithFunctionReturnType.ts, 0, 12))

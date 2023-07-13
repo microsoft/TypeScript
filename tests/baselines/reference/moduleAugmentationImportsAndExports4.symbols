@@ -1,8 +1,10 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/moduleAugmentationImportsAndExports4.ts] ////
+
+=== f1.ts ===
 export class A {}
 >A : Symbol(A, Decl(f1.ts, 0, 0), Decl(f3.ts, 12, 23))
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 export class B {
 >B : Symbol(B, Decl(f2.ts, 0, 0))
 
@@ -10,7 +12,7 @@ export class B {
 >n : Symbol(B.n, Decl(f2.ts, 0, 16))
 }
 
-=== tests/cases/compiler/f3.ts ===
+=== f3.ts ===
 import {A} from "./f1";
 >A : Symbol(A, Decl(f3.ts, 0, 8))
 
@@ -47,7 +49,7 @@ import C = N.Cls;
 >Cls : Symbol(C, Decl(f3.ts, 6, 39))
 
 declare module "./f1" {
->"./f1" : Symbol("tests/cases/compiler/f1", Decl(f1.ts, 0, 0), Decl(f3.ts, 10, 17))
+>"./f1" : Symbol("f1", Decl(f1.ts, 0, 0), Decl(f3.ts, 10, 17))
 
     interface A {
 >A : Symbol(A, Decl(f1.ts, 0, 0), Decl(f3.ts, 12, 23))
@@ -66,7 +68,7 @@ declare module "./f1" {
     }
 }
 
-=== tests/cases/compiler/f4.ts ===
+=== f4.ts ===
 import {A} from "./f1";
 >A : Symbol(A, Decl(f4.ts, 0, 8))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncFunctionNoReturnType.ts] ////
+
 //// [asyncFunctionNoReturnType.ts]
 async () => {
     if (window)

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionCall13.ts] ////
+
 //// [functionCall13.ts]
 function foo(a:string, ...b:number[]){}
 foo('foo', 1); 

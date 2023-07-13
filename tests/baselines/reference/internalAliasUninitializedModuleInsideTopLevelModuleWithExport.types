@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts ===
+//// [tests/cases/compiler/internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts] ////
+
+=== internalAliasUninitializedModuleInsideTopLevelModuleWithExport.ts ===
 export module a {
     export module b {
         export interface I {

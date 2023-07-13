@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionArgumentsInType.ts ===
+//// [tests/cases/compiler/collisionArgumentsInType.ts] ////
+
+=== collisionArgumentsInType.ts ===
 var v1: (i: number, ...arguments) => void; // no error - no code gen
 >v1 : Symbol(v1, Decl(collisionArgumentsInType.ts, 0, 3))
 >i : Symbol(i, Decl(collisionArgumentsInType.ts, 0, 9))

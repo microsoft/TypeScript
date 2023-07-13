@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInObjectLiteral_main.ts ===
+//// [tests/cases/compiler/aliasUsageInObjectLiteral.ts] ////
+
+=== aliasUsageInObjectLiteral_main.ts ===
 import Backbone = require("./aliasUsageInObjectLiteral_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInObjectLiteral_main.ts, 0, 0))
 
@@ -37,7 +39,7 @@ var c: { y: { z: IHasVisualizationModel } } = { y: { z: moduleA } };
 >z : Symbol(z, Decl(aliasUsageInObjectLiteral_main.ts, 7, 52))
 >moduleA : Symbol(moduleA, Decl(aliasUsageInObjectLiteral_main.ts, 0, 66))
 
-=== tests/cases/compiler/aliasUsageInObjectLiteral_backbone.ts ===
+=== aliasUsageInObjectLiteral_backbone.ts ===
 export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 0))
 
@@ -45,7 +47,7 @@ export class Model {
 >someData : Symbol(Model.someData, Decl(aliasUsageInObjectLiteral_backbone.ts, 0, 20))
 }
 
-=== tests/cases/compiler/aliasUsageInObjectLiteral_moduleA.ts ===
+=== aliasUsageInObjectLiteral_moduleA.ts ===
 import Backbone = require("./aliasUsageInObjectLiteral_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsageInObjectLiteral_moduleA.ts, 0, 0))
 

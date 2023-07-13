@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumNumbering1.ts ===
+//// [tests/cases/compiler/enumNumbering1.ts] ////
+
+=== enumNumbering1.ts ===
 enum Test {
 >Test : Symbol(Test, Decl(enumNumbering1.ts, 0, 0))
 

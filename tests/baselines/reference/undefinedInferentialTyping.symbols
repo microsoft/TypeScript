@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedInferentialTyping.ts ===
+//// [tests/cases/compiler/undefinedInferentialTyping.ts] ////
+
+=== undefinedInferentialTyping.ts ===
 function f<T>(arr: T[], elemnt: T): T {
 >f : Symbol(f, Decl(undefinedInferentialTyping.ts, 0, 0))
 >T : Symbol(T, Decl(undefinedInferentialTyping.ts, 0, 11))

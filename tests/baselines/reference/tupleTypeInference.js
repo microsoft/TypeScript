@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tupleTypeInference.ts] ////
+
 //// [tupleTypeInference.ts]
 declare var $q: IQService;
 

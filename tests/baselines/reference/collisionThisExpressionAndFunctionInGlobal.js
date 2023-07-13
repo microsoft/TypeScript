@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndFunctionInGlobal.ts] ////
+
 //// [collisionThisExpressionAndFunctionInGlobal.ts]
 function _this() { //Error
     return 10;

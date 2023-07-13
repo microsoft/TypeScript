@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientModuleWithClassDeclarationWithExtends.ts ===
+//// [tests/cases/compiler/ambientModuleWithClassDeclarationWithExtends.ts] ////
+
+=== ambientModuleWithClassDeclarationWithExtends.ts ===
 declare module foo {
 >foo : Symbol(foo, Decl(ambientModuleWithClassDeclarationWithExtends.ts, 0, 0))
 

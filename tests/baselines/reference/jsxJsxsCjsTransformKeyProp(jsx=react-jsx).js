@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyProp.tsx] ////
+
 //// [jsxJsxsCjsTransformKeyProp.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 const props = { answer: 42 }

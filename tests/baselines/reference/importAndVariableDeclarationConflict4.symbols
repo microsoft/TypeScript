@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importAndVariableDeclarationConflict4.ts ===
+//// [tests/cases/compiler/importAndVariableDeclarationConflict4.ts] ////
+
+=== importAndVariableDeclarationConflict4.ts ===
 module m {
 >m : Symbol(m, Decl(importAndVariableDeclarationConflict4.ts, 0, 0))
 

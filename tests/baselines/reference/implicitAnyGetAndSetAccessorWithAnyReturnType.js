@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts] ////
+
 //// [implicitAnyGetAndSetAccessorWithAnyReturnType.ts]
 // these should be errors
 class GetAndSet {

@@ -1,8 +1,8 @@
-tests/cases/compiler/exportDefaultClassInNamespace.ts(2,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-tests/cases/compiler/exportDefaultClassInNamespace.ts(6,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+exportDefaultClassInNamespace.ts(2,12): error TS1319: A default export can only be used in an ECMAScript-style module.
+exportDefaultClassInNamespace.ts(6,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 
 
-==== tests/cases/compiler/exportDefaultClassInNamespace.ts (2 errors) ====
+==== exportDefaultClassInNamespace.ts (2 errors) ====
     namespace ns_class {
         export default class {}
                ~~~~~~~

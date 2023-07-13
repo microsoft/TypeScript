@@ -1,9 +1,9 @@
-tests/cases/compiler/classTypeParametersInStatics.ts(12,40): error TS2302: Static members cannot reference class type parameters.
-tests/cases/compiler/classTypeParametersInStatics.ts(13,29): error TS2302: Static members cannot reference class type parameters.
-tests/cases/compiler/classTypeParametersInStatics.ts(13,43): error TS2302: Static members cannot reference class type parameters.
+classTypeParametersInStatics.ts(12,40): error TS2302: Static members cannot reference class type parameters.
+classTypeParametersInStatics.ts(13,29): error TS2302: Static members cannot reference class type parameters.
+classTypeParametersInStatics.ts(13,43): error TS2302: Static members cannot reference class type parameters.
 
 
-==== tests/cases/compiler/classTypeParametersInStatics.ts (3 errors) ====
+==== classTypeParametersInStatics.ts (3 errors) ====
     module Editor {
     
     

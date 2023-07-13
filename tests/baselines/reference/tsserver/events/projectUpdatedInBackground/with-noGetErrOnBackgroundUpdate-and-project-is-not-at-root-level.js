@@ -38,7 +38,15 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/rootfolder/otherfolder/a/b/pro
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json","reason":"Creating possible configured project for /user/username/rootfolder/otherfolder/a/b/project/file1.ts to open"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingStart",
+     "body": {
+      "projectName": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json",
+      "reason": "Creating possible configured project for /user/username/rootfolder/otherfolder/a/b/project/file1.ts to open"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json : {
  "rootNames": [
   "/user/username/rootfolder/otherfolder/a/b/project/file1.ts",
@@ -81,11 +89,68 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectLoadingFinish",
+     "body": {
+      "projectName": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"79b1a0103ed8006f174a1f979cf698219d4ec4ae3a48594da1085f7a1749553c","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":39,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{"typeRoots":[]},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "telemetry",
+     "body": {
+      "telemetryEventName": "projectInfo",
+      "payload": {
+       "projectId": "79b1a0103ed8006f174a1f979cf698219d4ec4ae3a48594da1085f7a1749553c",
+       "fileStats": {
+        "js": 0,
+        "jsSize": 0,
+        "jsx": 0,
+        "jsxSize": 0,
+        "ts": 2,
+        "tsSize": 39,
+        "tsx": 0,
+        "tsxSize": 0,
+        "dts": 1,
+        "dtsSize": 334,
+        "deferred": 0,
+        "deferredSize": 0
+       },
+       "compilerOptions": {
+        "typeRoots": []
+       },
+       "typeAcquisition": {
+        "enable": false,
+        "include": false,
+        "exclude": false
+       },
+       "extends": false,
+       "files": false,
+       "include": false,
+       "exclude": false,
+       "compileOnSave": false,
+       "configFileName": "tsconfig.json",
+       "projectType": "configured",
+       "languageServiceEnabled": true,
+       "version": "FakeVersion"
+      }
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/rootfolder/otherfolder/a/b/project/file1.ts","configFile":"/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json","diagnostics":[]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "configFileDiag",
+     "body": {
+      "triggerFile": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts",
+      "configFile": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json",
+      "diagnostics": []
+     }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -100,23 +165,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/rootfolder/otherfolder/a/b/project/node_modules: *new*
+/user/username/rootfolder/node_modules: *new*
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/b/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/project/node_modules: *new*
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/node_modules: *new*
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules: *new*
   {"pollingInterval":500}
-/user/username/rootfolder/node_modules: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/rootfolder/otherfolder/a/b/project/file3.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -163,7 +228,16 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/pr
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/rootfolder/otherfolder/a/b/project/file1.ts"]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectsUpdatedInBackground",
+     "body": {
+      "openFiles": [
+       "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
+      ]
+     }
+    }
 After running Timeout callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -182,13 +256,13 @@ export class a { }
 
 
 PolledWatches::
+/user/username/rootfolder/node_modules:
+  {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/b/project/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules:
-  {"pollingInterval":500}
-/user/username/rootfolder/node_modules:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -196,17 +270,17 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/rootfolder/otherfolder/a/b/project/file3.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b/project:
-  {}
 /user/username/rootfolder/otherfolder/a/b/node_modules: *new*
+  {}
+/user/username/rootfolder/otherfolder/a/b/project:
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
@@ -268,7 +342,16 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/pr
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/rootfolder/otherfolder/a/b/project/file1.ts"]}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "projectsUpdatedInBackground",
+     "body": {
+      "openFiles": [
+       "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
+      ]
+     }
+    }
 After running Timeout callback:: count: 0
 
 PolledWatches::
@@ -276,23 +359,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
+/user/username/rootfolder/node_modules:
+  {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/node_modules:
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/node_modules:
   {"pollingInterval":500}
-/user/username/rootfolder/node_modules:
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/rootfolder/otherfolder/a/b/project/file3.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/rootfolder/otherfolder/a/b/project:
-  {}
 /user/username/rootfolder/otherfolder/a/b/node_modules:
+  {}
+/user/username/rootfolder/otherfolder/a/b/project:
   {}

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts] ////
+
 //// [privateNameMethodAsync.ts]
 const C = class {
     async #bar() { return await Promise.resolve(42); }

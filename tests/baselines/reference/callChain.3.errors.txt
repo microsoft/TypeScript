@@ -1,10 +1,10 @@
-tests/cases/conformance/expressions/optionalChaining/callChain/callChain.3.ts(3,7): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+callChain.3.ts(3,7): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-tests/cases/conformance/expressions/optionalChaining/callChain/callChain.3.ts(4,7): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+callChain.3.ts(4,7): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/expressions/optionalChaining/callChain/callChain.3.ts (2 errors) ====
+==== callChain.3.ts (2 errors) ====
     declare function absorb<T>(): T;
     declare const a: { m?<T>(obj: {x: T}): T } | undefined;
     const n1: number = a?.m?.({x: 12 }); // should be an error (`undefined` is not assignable to `number`)

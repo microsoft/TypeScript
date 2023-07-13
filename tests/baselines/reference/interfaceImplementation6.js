@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceImplementation6.ts] ////
+
 //// [interfaceImplementation6.ts]
 interface I1 {
     item:number;

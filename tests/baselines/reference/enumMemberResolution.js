@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumMemberResolution.ts] ////
+
 //// [enumMemberResolution.ts]
 enum Position2 {
     IgnoreRulesSpecific = 0

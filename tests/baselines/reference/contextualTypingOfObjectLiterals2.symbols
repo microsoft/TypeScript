@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingOfObjectLiterals2.ts ===
+//// [tests/cases/compiler/contextualTypingOfObjectLiterals2.ts] ////
+
+=== contextualTypingOfObjectLiterals2.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(contextualTypingOfObjectLiterals2.ts, 0, 0))
 

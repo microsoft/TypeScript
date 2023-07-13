@@ -1,9 +1,9 @@
-tests/cases/compiler/instanceofOnInstantiationExpression.ts(10,21): error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
-tests/cases/compiler/instanceofOnInstantiationExpression.ts(11,22): error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
-tests/cases/compiler/instanceofOnInstantiationExpression.ts(12,23): error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
+instanceofOnInstantiationExpression.ts(10,21): error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
+instanceofOnInstantiationExpression.ts(11,22): error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
+instanceofOnInstantiationExpression.ts(12,23): error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
 
 
-==== tests/cases/compiler/instanceofOnInstantiationExpression.ts (3 errors) ====
+==== instanceofOnInstantiationExpression.ts (3 errors) ====
     declare class Box<T> {
         value: T;
     }

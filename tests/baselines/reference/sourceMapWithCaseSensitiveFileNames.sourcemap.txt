@@ -5,7 +5,7 @@ sourceRoot:
 sources: ../testFiles/app.ts,../testFiles/app2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/testfiles/fooResult.js
+emittedFile:testfiles/fooResult.js
 sourceFile:../testFiles/app.ts
 -------------------------------------------------------------------
 >>>// Note in the out result we are using same folder name only different in casing
@@ -74,7 +74,7 @@ sourceFile:../testFiles/app.ts
 4 >Emitted(7, 6) Source(4, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/testfiles/fooResult.js
+emittedFile:testfiles/fooResult.js
 sourceFile:../testFiles/app2.ts
 -------------------------------------------------------------------
 >>>var d = /** @class */ (function () {

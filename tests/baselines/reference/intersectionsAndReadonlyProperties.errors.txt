@@ -1,7 +1,7 @@
-tests/cases/compiler/intersectionsAndReadonlyProperties.ts(17,4): error TS2540: Cannot assign to 'a' because it is a read-only property.
+intersectionsAndReadonlyProperties.ts(17,4): error TS2540: Cannot assign to 'a' because it is a read-only property.
 
 
-==== tests/cases/compiler/intersectionsAndReadonlyProperties.ts (1 errors) ====
+==== intersectionsAndReadonlyProperties.ts (1 errors) ====
     // readonly and non-readonly
     type Intersection1 = { readonly a: number } & { a: number };
     declare let i1: Intersection1;

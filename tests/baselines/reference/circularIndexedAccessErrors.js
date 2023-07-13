@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts] ////
+
 //// [circularIndexedAccessErrors.ts]
 type T1 = {
     x: T1["x"];  // Error

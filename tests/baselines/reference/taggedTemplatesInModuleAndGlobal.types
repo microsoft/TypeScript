@@ -1,4 +1,6 @@
-=== tests/cases/compiler/global.ts ===
+//// [tests/cases/compiler/taggedTemplatesInModuleAndGlobal.ts] ////
+
+=== global.ts ===
 namespace n {
 >n : typeof n
 
@@ -26,7 +28,7 @@ namespace n {
 >templateObjectFactory() : TemplateStringsArray
 >templateObjectFactory : () => TemplateStringsArray
 }
-=== tests/cases/compiler/module.ts ===
+=== module.ts ===
 export { }
 function id<T>(x: T): T {
 >id : <T>(x: T) => T

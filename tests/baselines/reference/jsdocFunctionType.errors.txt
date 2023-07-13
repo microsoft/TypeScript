@@ -1,8 +1,8 @@
-tests/cases/conformance/jsdoc/functions.js(65,14): error TS2345: Argument of type 'typeof E' is not assignable to parameter of type 'new (arg1: number) => { length: number; }'.
+functions.js(65,14): error TS2345: Argument of type 'typeof E' is not assignable to parameter of type 'new (arg1: number) => { length: number; }'.
   Property 'length' is missing in type 'E' but required in type '{ length: number; }'.
 
 
-==== tests/cases/conformance/jsdoc/functions.js (1 errors) ====
+==== functions.js (1 errors) ====
     /**
      * @param {function(this: string, number): number} c is just passing on through
      * @return {function(this: string, number): number}
@@ -71,7 +71,7 @@ tests/cases/conformance/jsdoc/functions.js(65,14): error TS2345: Argument of typ
                  ~
 !!! error TS2345: Argument of type 'typeof E' is not assignable to parameter of type 'new (arg1: number) => { length: number; }'.
 !!! error TS2345:   Property 'length' is missing in type 'E' but required in type '{ length: number; }'.
-!!! related TS2728 tests/cases/conformance/jsdoc/functions.js:12:28: 'length' is declared here.
+!!! related TS2728 functions.js:12:28: 'length' is declared here.
     
     // Repro from #39229
     

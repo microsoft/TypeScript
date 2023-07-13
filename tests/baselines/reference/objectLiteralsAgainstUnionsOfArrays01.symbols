@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts ===
+//// [tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts] ////
+
+=== objectLiteralsAgainstUnionsOfArrays01.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(objectLiteralsAgainstUnionsOfArrays01.ts, 0, 0))
 

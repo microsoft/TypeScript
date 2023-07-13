@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsAfterFunctionExpression1.ts ===
+//// [tests/cases/compiler/commentsAfterFunctionExpression1.ts] ////
+
+=== commentsAfterFunctionExpression1.ts ===
 var v = {
 >v : { f: (a: any) => number; g: (a: any) => number; h: (a: any) => number; }
 >{    f: a => 0 /*t1*/,    g: (a => 0) /*t2*/,    h: (a => 0 /*t3*/)} : { f: (a: any) => number; g: (a: any) => number; h: (a: any) => number; }

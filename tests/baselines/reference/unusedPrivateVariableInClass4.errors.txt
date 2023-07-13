@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedPrivateVariableInClass4.ts(3,13): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateVariableInClass4.ts(3,13): error TS6133: 'y' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedPrivateVariableInClass4.ts (1 errors) ====
+==== unusedPrivateVariableInClass4.ts (1 errors) ====
     class greeter {
         private x: string;
         private y: string;

@@ -1,15 +1,15 @@
-tests/cases/conformance/jsdoc/foo.js(20,54): error TS2339: Property 'foo' does not exist on type 'unknown'.
-tests/cases/conformance/jsdoc/foo.js(21,54): error TS2339: Property 'foo' does not exist on type 'unknown'.
-tests/cases/conformance/jsdoc/foo.js(22,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/jsdoc/foo.js(23,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/jsdoc/foo.js(35,7): error TS2492: Cannot redeclare identifier 'err' in catch clause.
-tests/cases/conformance/jsdoc/foo.js(46,45): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/conformance/jsdoc/foo.js(47,45): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/conformance/jsdoc/foo.js(48,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
-tests/cases/conformance/jsdoc/foo.js(49,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+foo.js(20,54): error TS2339: Property 'foo' does not exist on type 'unknown'.
+foo.js(21,54): error TS2339: Property 'foo' does not exist on type 'unknown'.
+foo.js(22,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+foo.js(23,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+foo.js(35,7): error TS2492: Cannot redeclare identifier 'err' in catch clause.
+foo.js(46,45): error TS2339: Property 'x' does not exist on type '{}'.
+foo.js(47,45): error TS2339: Property 'x' does not exist on type '{}'.
+foo.js(48,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
+foo.js(49,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.
 
 
-==== tests/cases/conformance/jsdoc/foo.js (9 errors) ====
+==== foo.js (9 errors) ====
     /**
      * @typedef {any} Any
      */

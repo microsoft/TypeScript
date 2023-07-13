@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression5.ts] ////
+
+=== parserRegularExpression5.ts ===
 if (a) / (\\ ? | & ) rct = j / .test(c.href);
 >a : any
 >/ (\\ ? | & ) rct = j / .test(c.href) : boolean

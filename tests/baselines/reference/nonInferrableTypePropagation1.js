@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonInferrableTypePropagation1.ts] ////
+
 //// [nonInferrableTypePropagation1.ts]
 type Op<I, O> = (thing: Thing<I>) => Thing<O>;
 type Thing<T> = {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/callbackOnConstructor.ts] ////
+
 //// [callbackOnConstructor.js]
 export class Preferences {
   assignability = "no"

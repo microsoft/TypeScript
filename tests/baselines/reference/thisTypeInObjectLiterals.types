@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInObjectLiterals.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInObjectLiterals.ts] ////
+
+=== thisTypeInObjectLiterals.ts ===
 let o = {
 >o : { d: string; m(): number; f: () => number; }
 >{    d: "bar",    m() {        return this.d.length;    },    f: function() {        return this.d.length;    }} : { d: string; m(): number; f: () => number; }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedBlockScopedBindings8.ts] ////
+
 //// [nestedBlockScopedBindings8.ts]
 var x;
 for (let x; false; ) {

@@ -1,8 +1,10 @@
-=== tests/cases/compiler/funduleSplitAcrossFiles_function.ts ===
+//// [tests/cases/compiler/funduleSplitAcrossFiles.ts] ////
+
+=== funduleSplitAcrossFiles_function.ts ===
 function D() { }
 >D : typeof D
 
-=== tests/cases/compiler/funduleSplitAcrossFiles_module.ts ===
+=== funduleSplitAcrossFiles_module.ts ===
 module D {
 >D : typeof D
 

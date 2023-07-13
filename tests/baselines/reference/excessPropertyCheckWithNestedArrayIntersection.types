@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyCheckWithNestedArrayIntersection.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithNestedArrayIntersection.ts] ////
+
+=== excessPropertyCheckWithNestedArrayIntersection.ts ===
 interface ValueOnlyFields {
     fields: Array<{
 >fields : { value: number | null; }[]

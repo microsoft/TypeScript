@@ -133,9 +133,9 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

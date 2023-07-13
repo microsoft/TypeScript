@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts] ////
+
 //// [privateNameES5Ban.ts]
 class A {
     constructor() {}

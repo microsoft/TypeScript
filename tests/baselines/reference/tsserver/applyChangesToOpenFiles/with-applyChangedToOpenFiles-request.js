@@ -97,13 +97,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/commonfile1.ts: *new*
   {}
 /a/b/commonfile2.ts: *new*
   {}
 /a/b/file3.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -154,11 +154,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/commonfile1.ts:
   {}
 /a/b/commonfile2.ts:
+  {}
+/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -252,11 +252,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
+/a/b/file3.ts: *new*
+  {}
 /a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
-  {}
-/a/b/file3.ts: *new*
   {}
 
 FsWatches *deleted*::

@@ -1,8 +1,10 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/bundledDtsLateExportRenaming.ts] ////
+
+=== index.ts ===
 
 export * from "./nested";
 
-=== tests/cases/compiler/nested/base.ts ===
+=== nested/base.ts ===
 import { B } from "./shared";
 >B : Symbol(B, Decl(base.ts, 0, 8))
 
@@ -13,7 +15,7 @@ export function f() {
 >B : Symbol(B, Decl(base.ts, 0, 8))
 }
 
-=== tests/cases/compiler/nested/derived.ts ===
+=== nested/derived.ts ===
 import { f } from "./base";
 >f : Symbol(f, Decl(derived.ts, 0, 8))
 
@@ -24,14 +26,14 @@ export function g() {
 >f : Symbol(f, Decl(derived.ts, 0, 8))
 }
 
-=== tests/cases/compiler/nested/index.ts ===
+=== nested/index.ts ===
 
 export * from "./base";
 
 export * from "./derived";
 export * from "./shared";
 
-=== tests/cases/compiler/nested/shared.ts ===
+=== nested/shared.ts ===
 export class B {}
 >B : Symbol(B, Decl(shared.ts, 0, 0))
 

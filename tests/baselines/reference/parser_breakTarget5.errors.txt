@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget5.ts(5,7): error TS1107: Jump target cannot cross function boundary.
+parser_breakTarget5.ts(5,7): error TS1107: Jump target cannot cross function boundary.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget5.ts (1 errors) ====
+==== parser_breakTarget5.ts (1 errors) ====
     target:
     while (true) {
       function f() {

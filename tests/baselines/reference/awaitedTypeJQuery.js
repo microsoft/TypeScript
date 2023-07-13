@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitedTypeJQuery.ts] ////
+
 //// [awaitedTypeJQuery.ts]
 /// <reference lib="dom" />
 

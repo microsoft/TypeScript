@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts] ////
+
 //// [destructuringParameterDeclaration5.ts]
 // Parameter Declaration with generic
 

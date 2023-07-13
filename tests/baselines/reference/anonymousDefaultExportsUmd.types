@@ -1,7 +1,9 @@
-=== tests/cases/conformance/es6/moduleExportsUmd/a.ts ===
+//// [tests/cases/conformance/es6/moduleExportsUmd/anonymousDefaultExportsUmd.ts] ////
+
+=== a.ts ===
 
 export default class {}
 
-=== tests/cases/conformance/es6/moduleExportsUmd/b.ts ===
+=== b.ts ===
 
 export default function() {}

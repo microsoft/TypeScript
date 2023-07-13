@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/libMembers.ts] ////
+
 //// [libMembers.ts]
 var s="hello";
 s.substring(0);

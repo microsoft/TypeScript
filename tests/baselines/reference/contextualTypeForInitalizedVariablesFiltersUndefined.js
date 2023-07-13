@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts] ////
+
 //// [contextualTypeForInitalizedVariablesFiltersUndefined.ts]
 const fInferred = ({ a = 0 } = {}) => a;
 // const fInferred: ({ a }?: { a?: number; }) => number

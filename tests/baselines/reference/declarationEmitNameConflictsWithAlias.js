@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNameConflictsWithAlias.ts] ////
+
 //// [declarationEmitNameConflictsWithAlias.ts]
 export module C { export interface I { } }
 export import v = C;
@@ -16,13 +18,13 @@ var M;
 
 
 //// [declarationEmitNameConflictsWithAlias.d.ts]
-export declare module C {
+export declare namespace C {
     interface I {
     }
 }
 export import v = C;
-export declare module M {
-    module C {
+export declare namespace M {
+    namespace C {
         interface I {
         }
     }

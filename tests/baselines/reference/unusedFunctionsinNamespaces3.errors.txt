@@ -1,8 +1,8 @@
-tests/cases/compiler/unusedFunctionsinNamespaces3.ts(2,9): error TS6133: 'function1' is declared but its value is never read.
-tests/cases/compiler/unusedFunctionsinNamespaces3.ts(2,30): error TS6133: 'param1' is declared but its value is never read.
+unusedFunctionsinNamespaces3.ts(2,9): error TS6133: 'function1' is declared but its value is never read.
+unusedFunctionsinNamespaces3.ts(2,30): error TS6133: 'param1' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedFunctionsinNamespaces3.ts (2 errors) ====
+==== unusedFunctionsinNamespaces3.ts (2 errors) ====
     namespace Validation {
         var function1 = function(param1:string) {
             ~~~~~~~~~

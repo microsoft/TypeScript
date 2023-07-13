@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/genericRestParameters3.ts ===
+//// [tests/cases/conformance/types/rest/genericRestParameters3.ts] ////
+
+=== genericRestParameters3.ts ===
 declare let f1: (x: string, ...args: [string] | [number, boolean]) => void;
 >f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
 >x : Symbol(x, Decl(genericRestParameters3.ts, 0, 17))

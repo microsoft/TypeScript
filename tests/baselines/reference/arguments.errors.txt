@@ -1,12 +1,12 @@
-tests/cases/compiler/arguments.ts(6,8): error TS2304: Cannot find name 'arguments'.
-tests/cases/compiler/arguments.ts(9,25): error TS2304: Cannot find name 'arguments'.
-tests/cases/compiler/arguments.ts(10,23): error TS2304: Cannot find name 'arguments'.
-tests/cases/compiler/arguments.ts(11,19): error TS2304: Cannot find name 'arguments'.
-tests/cases/compiler/arguments.ts(12,23): error TS2304: Cannot find name 'arguments'.
-tests/cases/compiler/arguments.ts(13,34): error TS2304: Cannot find name 'arguments'.
+arguments.ts(6,8): error TS2304: Cannot find name 'arguments'.
+arguments.ts(9,25): error TS2304: Cannot find name 'arguments'.
+arguments.ts(10,23): error TS2304: Cannot find name 'arguments'.
+arguments.ts(11,19): error TS2304: Cannot find name 'arguments'.
+arguments.ts(12,23): error TS2304: Cannot find name 'arguments'.
+arguments.ts(13,34): error TS2304: Cannot find name 'arguments'.
 
 
-==== tests/cases/compiler/arguments.ts (6 errors) ====
+==== arguments.ts (6 errors) ====
     function f() {
         var x=arguments[12];
         (() => arguments)();

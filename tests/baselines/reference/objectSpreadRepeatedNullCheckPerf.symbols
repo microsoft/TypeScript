@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpreadRepeatedNullCheckPerf.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadRepeatedNullCheckPerf.ts] ////
+
+=== objectSpreadRepeatedNullCheckPerf.ts ===
 interface Props {
 >Props : Symbol(Props, Decl(objectSpreadRepeatedNullCheckPerf.ts, 0, 0))
 

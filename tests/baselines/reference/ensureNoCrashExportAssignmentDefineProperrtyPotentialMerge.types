@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.ts] ////
+
+=== index.js ===
 const _item = require("./namespacer");
 >_item : typeof _item
 >require("./namespacer") : typeof _item
@@ -23,7 +25,7 @@ Object.defineProperty(module, "exports", { value: "oh no" });
 >value : string
 >"oh no" : "oh no"
 
-=== tests/cases/compiler/namespacey.js ===
+=== namespacey.js ===
 const A = {}
 >A : typeof A
 >{} : {}
@@ -43,7 +45,7 @@ module.exports = A;
 >exports : typeof A
 >A : typeof A
 
-=== tests/cases/compiler/namespacer.js ===
+=== namespacer.js ===
 const B = {}
 >B : typeof B
 >{} : {}

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyCheckWithUnions.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithUnions.ts] ////
+
+=== excessPropertyCheckWithUnions.ts ===
 type ADT = {
 >ADT : Symbol(ADT, Decl(excessPropertyCheckWithUnions.ts, 0, 0))
 

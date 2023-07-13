@@ -1,0 +1,15 @@
+error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+
+!!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+==== node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": "./entrypoint.js"
+    }
+==== node_modules/pkg/entrypoint.d.ts (0 errors) ====
+    export declare function thing(): void;
+==== index.ts (0 errors) ====
+    import * as p from "pkg";
+    p.thing();

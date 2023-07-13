@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts] ////
+
+=== generatedContextualTyping.ts ===
 class Base { private p; }
 >Base : Base
 >p : any

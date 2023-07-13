@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralThisWidenedOnUse.ts ===
+//// [tests/cases/compiler/objectLiteralThisWidenedOnUse.ts] ////
+
+=== objectLiteralThisWidenedOnUse.ts ===
 interface Foo { bar: boolean; }
 >Foo : Symbol(Foo, Decl(objectLiteralThisWidenedOnUse.ts, 0, 0))
 >bar : Symbol(Foo.bar, Decl(objectLiteralThisWidenedOnUse.ts, 0, 15))

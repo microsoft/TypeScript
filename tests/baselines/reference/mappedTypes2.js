@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypes2.ts] ////
+
 //// [mappedTypes2.ts]
 function verifyLibTypes<T, K extends keyof T, U>() {
     var x1: Partial<T>;

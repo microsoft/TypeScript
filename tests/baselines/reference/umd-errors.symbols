@@ -1,9 +1,11 @@
-=== tests/cases/conformance/externalModules/err1.d.ts ===
+//// [tests/cases/conformance/externalModules/umd-errors.ts] ////
+
+=== err1.d.ts ===
 
 // Illegal, can't be in script file
 export as namespace Foo;
 
-=== tests/cases/conformance/externalModules/err2.d.ts ===
+=== err2.d.ts ===
 // Illegal, can't be in external ambient module
 declare module "Foo" {
 >"Foo" : Symbol("Foo", Decl(err2.d.ts, 0, 0))
@@ -11,7 +13,7 @@ declare module "Foo" {
 	export as namespace Bar;
 }
 
-=== tests/cases/conformance/externalModules/err3.d.ts ===
+=== err3.d.ts ===
 // Illegal, can't have modifiers
 export var p;
 >p : Symbol(p, Decl(err3.d.ts, 1, 10))
@@ -28,7 +30,7 @@ public export as namespace oo3;
 const export as namespace oo4;
 >oo4 : Symbol(oo4, Decl(err3.d.ts, 5, 5))
 
-=== tests/cases/conformance/externalModules/err4.d.ts ===
+=== err4.d.ts ===
 // Illegal, must be at top-level
 export namespace B {
 >B : Symbol(B, Decl(err4.d.ts, 0, 0))
@@ -36,7 +38,7 @@ export namespace B {
 	export as namespace C1;
 }
 
-=== tests/cases/conformance/externalModules/err5.ts ===
+=== err5.ts ===
 // Illegal, may not appear in implementation files
 export var v;
 >v : Symbol(v, Decl(err5.ts, 1, 10))

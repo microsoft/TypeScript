@@ -1,4 +1,6 @@
-=== tests/cases/compiler/invalidSplice.ts ===
+//// [tests/cases/compiler/invalidSplice.ts] ////
+
+=== invalidSplice.ts ===
 var arr = [].splice(0,3,4,5);
 >arr : Symbol(arr, Decl(invalidSplice.ts, 0, 3))
 >[].splice : Symbol(Array.splice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

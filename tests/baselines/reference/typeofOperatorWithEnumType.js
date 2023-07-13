@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithEnumType.ts] ////
+
 //// [typeofOperatorWithEnumType.ts]
 // typeof  operator on enum type
 

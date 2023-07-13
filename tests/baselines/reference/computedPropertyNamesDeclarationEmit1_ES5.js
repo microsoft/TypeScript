@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit1_ES5.ts] ////
+
 //// [computedPropertyNamesDeclarationEmit1_ES5.ts]
 class C {
     ["" + ""]() { }

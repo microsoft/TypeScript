@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateWithConstructableTag02.ts] ////
+
 //// [taggedTemplateWithConstructableTag02.ts]
 interface I {
     new (...args: any[]): string;

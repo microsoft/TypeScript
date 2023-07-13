@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithNumberType.ts] ////
+
 //// [typeofOperatorWithNumberType.ts]
 // typeof  operator on number type
 var NUMBER: number;

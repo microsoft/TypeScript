@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts ===
+//// [tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts] ////
+
+=== thisInArrowFunctionInStaticInitializer1.ts ===
 function log(a) { }
 >log : (a: any) => void
 >a : any

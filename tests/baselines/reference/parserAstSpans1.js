@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts] ////
+
 //// [parserAstSpans1.ts]
 /** i1 is interface with properties*/
 interface i1 {

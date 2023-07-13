@@ -1,4 +1,6 @@
-=== tests/cases/compiler/my-component.tsx ===
+//// [tests/cases/compiler/tsxFragmentChildrenCheck.ts] ////
+
+=== my-component.tsx ===
 declare var React: any;
 >React : any
 
@@ -12,7 +14,7 @@ export function MyComponent(props: any) {
 >span : any
 }
 
-=== tests/cases/compiler/file1.tsx ===
+=== file1.tsx ===
 import * as React from 'react'
 >React : typeof React
 

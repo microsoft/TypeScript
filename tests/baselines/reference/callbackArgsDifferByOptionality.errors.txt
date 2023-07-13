@@ -1,7 +1,7 @@
-tests/cases/compiler/callbackArgsDifferByOptionality.ts(4,5): error TS2304: Cannot find name 'cb'.
+callbackArgsDifferByOptionality.ts(4,5): error TS2304: Cannot find name 'cb'.
 
 
-==== tests/cases/compiler/callbackArgsDifferByOptionality.ts (1 errors) ====
+==== callbackArgsDifferByOptionality.ts (1 errors) ====
     function x3(callback: (x?: 'hi') => number);
     function x3(callback: (x: string) => number);
     function x3(callback: (x: any) => number) {

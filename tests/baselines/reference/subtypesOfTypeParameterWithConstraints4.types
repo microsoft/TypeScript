@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts] ////
+
+=== subtypesOfTypeParameterWithConstraints4.ts ===
 // checking whether other types are subtypes of type parameters with constraints
 
 class Foo { foo: number; }

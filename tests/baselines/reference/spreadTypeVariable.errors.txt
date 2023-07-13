@@ -1,9 +1,9 @@
-tests/cases/conformance/types/spread/spreadTypeVariable.ts(2,12): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/spreadTypeVariable.ts(10,12): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/spreadTypeVariable.ts(14,12): error TS2698: Spread types may only be created from object types.
+spreadTypeVariable.ts(2,12): error TS2698: Spread types may only be created from object types.
+spreadTypeVariable.ts(10,12): error TS2698: Spread types may only be created from object types.
+spreadTypeVariable.ts(14,12): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/conformance/types/spread/spreadTypeVariable.ts (3 errors) ====
+==== spreadTypeVariable.ts (3 errors) ====
     function f1<T extends number>(arg: T) {
       return { ...arg };
                ~~~~~~

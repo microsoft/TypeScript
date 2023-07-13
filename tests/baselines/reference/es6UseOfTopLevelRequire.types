@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/es6UseOfTopLevelRequire.ts] ////
+
+=== a.ts ===
 import require from "./b"
 >require : (s: string) => void
 
@@ -16,13 +18,13 @@ var x = exports + 2;
 >exports : 0
 >2 : 2
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export default function require(s: string): void {
 >require : (s: string) => void
 >s : string
 }
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 export const exports = 0;
 >exports : 0
 >0 : 0

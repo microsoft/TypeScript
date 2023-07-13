@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultNamedExportWithType3.ts] ////
+
 //// [defaultNamedExportWithType3.ts]
 interface Foo {}
 export const Foo = {};

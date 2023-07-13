@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/moduleExportsAmd/a.ts ===
+//// [tests/cases/conformance/es6/moduleExportsAmd/decoratedDefaultExportsGetExportedAmd.ts] ////
+
+=== a.ts ===
 var decorator: ClassDecorator;
 >decorator : Symbol(decorator, Decl(a.ts, 0, 3))
 >ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))
@@ -9,7 +11,7 @@ var decorator: ClassDecorator;
 export default class Foo {}
 >Foo : Symbol(Foo, Decl(a.ts, 0, 30))
 
-=== tests/cases/conformance/es6/moduleExportsAmd/b.ts ===
+=== b.ts ===
 var decorator: ClassDecorator;
 >decorator : Symbol(decorator, Decl(b.ts, 0, 3))
 >ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))

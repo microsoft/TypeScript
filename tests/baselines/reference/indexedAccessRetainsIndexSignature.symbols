@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessRetainsIndexSignature.ts ===
+//// [tests/cases/compiler/indexedAccessRetainsIndexSignature.ts] ////
+
+=== indexedAccessRetainsIndexSignature.ts ===
 type Diff<T extends keyof any, U extends keyof any> =
 >Diff : Symbol(Diff, Decl(indexedAccessRetainsIndexSignature.ts, 0, 0))
 >T : Symbol(T, Decl(indexedAccessRetainsIndexSignature.ts, 0, 10))

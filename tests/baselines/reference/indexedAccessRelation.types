@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessRelation.ts ===
+//// [tests/cases/compiler/indexedAccessRelation.ts] ////
+
+=== indexedAccessRelation.ts ===
 // Repro from #14723
 
 class Component<S> {

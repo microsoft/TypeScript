@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadedConstructorFixesInferencesAppropriately.ts] ////
+
 //// [overloadedConstructorFixesInferencesAppropriately.ts]
 interface Box<T> {
     v: T;

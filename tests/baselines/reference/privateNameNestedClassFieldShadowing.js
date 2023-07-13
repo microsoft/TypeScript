@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedClassFieldShadowing.ts] ////
+
 //// [privateNameNestedClassFieldShadowing.ts]
 class Base {
     #x;

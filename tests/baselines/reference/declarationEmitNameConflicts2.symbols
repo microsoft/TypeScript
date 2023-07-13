@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitNameConflicts2.ts ===
+//// [tests/cases/compiler/declarationEmitNameConflicts2.ts] ////
+
+=== declarationEmitNameConflicts2.ts ===
 module X.Y.base {
 >X : Symbol(X, Decl(declarationEmitNameConflicts2.ts, 0, 0), Decl(declarationEmitNameConflicts2.ts, 7, 1))
 >Y : Symbol(Y, Decl(declarationEmitNameConflicts2.ts, 0, 9), Decl(declarationEmitNameConflicts2.ts, 9, 9))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/allowSyntheticDefaultImports10.ts] ////
+
+=== a.ts ===
 import Foo = require("./b");
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
@@ -8,7 +10,7 @@ Foo.default.bar();
 Foo.default.default.foo();
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
-=== tests/cases/compiler/b.d.ts ===
+=== b.d.ts ===
 export function foo();
 >foo : Symbol(foo, Decl(b.d.ts, 0, 0))
 

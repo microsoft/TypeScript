@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shorthandOfExportedEntity01_targetES2015_CommonJS.ts ===
+//// [tests/cases/compiler/shorthandOfExportedEntity01_targetES2015_CommonJS.ts] ////
+
+=== shorthandOfExportedEntity01_targetES2015_CommonJS.ts ===
 export const test = "test";
 >test : Symbol(test, Decl(shorthandOfExportedEntity01_targetES2015_CommonJS.ts, 0, 12))
 

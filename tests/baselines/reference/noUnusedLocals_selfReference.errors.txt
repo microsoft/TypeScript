@@ -1,14 +1,14 @@
-tests/cases/compiler/noUnusedLocals_selfReference.ts(3,10): error TS6133: 'f' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(5,14): error TS6133: 'g' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(9,7): error TS6196: 'C' is declared but never used.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(12,6): error TS6196: 'E' is declared but never used.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(13,11): error TS6196: 'I' is declared but never used.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(14,6): error TS6196: 'T' is declared but never used.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(15,11): error TS6133: 'N' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(22,19): error TS6133: 'm' is declared but its value is never read.
+noUnusedLocals_selfReference.ts(3,10): error TS6133: 'f' is declared but its value is never read.
+noUnusedLocals_selfReference.ts(5,14): error TS6133: 'g' is declared but its value is never read.
+noUnusedLocals_selfReference.ts(9,7): error TS6196: 'C' is declared but never used.
+noUnusedLocals_selfReference.ts(12,6): error TS6196: 'E' is declared but never used.
+noUnusedLocals_selfReference.ts(13,11): error TS6196: 'I' is declared but never used.
+noUnusedLocals_selfReference.ts(14,6): error TS6196: 'T' is declared but never used.
+noUnusedLocals_selfReference.ts(15,11): error TS6133: 'N' is declared but its value is never read.
+noUnusedLocals_selfReference.ts(22,19): error TS6133: 'm' is declared but its value is never read.
 
 
-==== tests/cases/compiler/noUnusedLocals_selfReference.ts (8 errors) ====
+==== noUnusedLocals_selfReference.ts (8 errors) ====
     export {}; // Make this a module scope, so these are local variables.
     
     function f() {

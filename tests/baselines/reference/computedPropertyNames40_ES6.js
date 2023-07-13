@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES6.ts] ////
+
 //// [computedPropertyNames40_ES6.ts]
 class Foo { x }
 class Foo2 { x; y }

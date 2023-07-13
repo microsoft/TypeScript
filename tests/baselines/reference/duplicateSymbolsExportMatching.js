@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateSymbolsExportMatching.ts] ////
+
 //// [duplicateSymbolsExportMatching.ts]
 module M {
     export interface E { }

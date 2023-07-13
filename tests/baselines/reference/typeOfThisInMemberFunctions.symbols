@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/typeOfThisInMemberFunctions.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/typeOfThisInMemberFunctions.ts] ////
+
+=== typeOfThisInMemberFunctions.ts ===
 class C {
 >C : Symbol(C, Decl(typeOfThisInMemberFunctions.ts, 0, 0))
 

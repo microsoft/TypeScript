@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictSubtypeAndNarrowing.ts ===
+//// [tests/cases/compiler/strictSubtypeAndNarrowing.ts] ////
+
+=== strictSubtypeAndNarrowing.ts ===
 // Check that `any` is a strict supertype of `unknown`
 
 declare const x11: { x: unknown };

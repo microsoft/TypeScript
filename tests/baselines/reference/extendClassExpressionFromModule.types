@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classExpressions/foo2.ts ===
+//// [tests/cases/conformance/classes/classExpressions/extendClassExpressionFromModule.ts] ////
+
+=== foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : typeof foo1
 
@@ -10,7 +12,7 @@ class y extends x {}
 >y : y
 >x : foo1
 
-=== tests/cases/conformance/classes/classExpressions/foo1.ts ===
+=== foo1.ts ===
 class x{}
 >x : x
 

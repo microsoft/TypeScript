@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileForInterfaceWithOptionalFunction.ts ===
+//// [tests/cases/compiler/declFileForInterfaceWithOptionalFunction.ts] ////
+
+=== declFileForInterfaceWithOptionalFunction.ts ===
 interface I {
     foo? (x?);
 >foo : (x?: any) => any

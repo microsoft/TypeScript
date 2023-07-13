@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDestructuringParameterProperties.ts] ////
+
 //// [declarationEmitDestructuringParameterProperties.ts]
 class C1 {
     constructor(public [x, y, z]: string[]) {

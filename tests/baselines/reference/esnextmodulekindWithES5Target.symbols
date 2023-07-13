@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target.ts ===
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target.ts] ////
+
+=== esnextmodulekindWithES5Target.ts ===
 export class C {
 >C : Symbol(C, Decl(esnextmodulekindWithES5Target.ts, 0, 0))
 

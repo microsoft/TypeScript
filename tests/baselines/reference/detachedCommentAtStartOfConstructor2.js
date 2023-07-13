@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/detachedCommentAtStartOfConstructor2.ts] ////
+
 //// [detachedCommentAtStartOfConstructor2.ts]
 class TestFile {
     public message: string;

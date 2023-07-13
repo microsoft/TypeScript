@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts ===
+//// [tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts] ////
+
+=== arrayOfSubtypeIsAssignableToReadonlyArray.ts ===
 class A { a }
 >A : A
 >a : any

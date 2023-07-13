@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/a.tsx(5,12): error TS2639: React components cannot include JSX namespace names
+a.tsx(5,12): error TS2639: React components cannot include JSX namespace names
 
 
-==== tests/cases/conformance/jsx/a.tsx (1 errors) ====
+==== a.tsx (1 errors) ====
     declare var React: any;
     
     const a = <svg:path></svg:path>;

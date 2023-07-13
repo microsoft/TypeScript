@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override11.ts] ////
+
 //// [override11.ts]
 class Base {
     foo = 1;

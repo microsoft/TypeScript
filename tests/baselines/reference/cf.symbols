@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cf.ts ===
+//// [tests/cases/compiler/cf.ts] ////
+
+=== cf.ts ===
 function f() {
 >f : Symbol(f, Decl(cf.ts, 0, 0))
 

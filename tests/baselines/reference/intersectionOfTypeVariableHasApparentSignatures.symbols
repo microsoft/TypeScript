@@ -1,4 +1,6 @@
-=== tests/cases/compiler/intersectionOfTypeVariableHasApparentSignatures.ts ===
+//// [tests/cases/compiler/intersectionOfTypeVariableHasApparentSignatures.ts] ////
+
+=== intersectionOfTypeVariableHasApparentSignatures.ts ===
 interface Component<P> {
 >Component : Symbol(Component, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 0))
 >P : Symbol(P, Decl(intersectionOfTypeVariableHasApparentSignatures.ts, 0, 20))

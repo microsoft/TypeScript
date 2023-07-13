@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorsOnImportedSymbol_1.ts ===
+//// [tests/cases/compiler/errorsOnImportedSymbol.ts] ////
+
+=== errorsOnImportedSymbol_1.ts ===
 import Sammy = require("./errorsOnImportedSymbol_0");
 >Sammy : Symbol(Sammy, Decl(errorsOnImportedSymbol_1.ts, 0, 0))
 
@@ -9,7 +11,7 @@ var y = Sammy.Sammy();
 >y : Symbol(y, Decl(errorsOnImportedSymbol_1.ts, 2, 3))
 
 
-=== tests/cases/compiler/errorsOnImportedSymbol_0.ts ===
+=== errorsOnImportedSymbol_0.ts ===
 interface Sammy {
 >Sammy : Symbol(Sammy, Decl(errorsOnImportedSymbol_0.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/setterWithReturn.ts ===
+//// [tests/cases/compiler/setterWithReturn.ts] ////
+
+=== setterWithReturn.ts ===
 class C234 {
 >C234 : Symbol(C234, Decl(setterWithReturn.ts, 0, 0))
 

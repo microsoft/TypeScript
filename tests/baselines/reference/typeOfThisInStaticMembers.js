@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers.ts] ////
+
 //// [typeOfThisInStaticMembers.ts]
 class C {
     constructor(x: number) { }

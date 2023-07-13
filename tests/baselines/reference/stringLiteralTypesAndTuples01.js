@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndTuples01.ts] ////
+
 //// [stringLiteralTypesAndTuples01.ts]
 // Should all be strings.
 let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];

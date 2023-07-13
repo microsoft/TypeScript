@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importAnImport.ts] ////
+
 //// [importAnImport.ts]
 module c.a.b {
     import ma = a;

@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedTypeParameters4.ts(2,13): error TS6133: 'U' is declared but its value is never read.
+unusedTypeParameters4.ts(2,13): error TS6133: 'U' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedTypeParameters4.ts (1 errors) ====
+==== unusedTypeParameters4.ts (1 errors) ====
     var x: {
         new <T, U>(a: T): void;
                 ~

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileConstructSignatures_0.ts ===
+//// [tests/cases/compiler/declFileConstructSignatures.ts] ////
+
+=== declFileConstructSignatures_0.ts ===
 export interface IConstructSignature {
     /** This comment should appear for foo*/
     new (): string;
@@ -39,7 +41,7 @@ export interface IConstructSignatureWithOwnTypeParametes {
 >a : T
 }
 
-=== tests/cases/compiler/declFileConstructSignatures_1.ts ===
+=== declFileConstructSignatures_1.ts ===
 interface IGlobalConstructSignature {
     /** This comment should appear for foo*/
     new (): string;

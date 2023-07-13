@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxInArrowFunction.tsx] ////
+
 //// [tsxInArrowFunction.tsx]
 declare namespace JSX {
     interface Element { }

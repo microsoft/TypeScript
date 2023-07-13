@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowTruthiness.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowTruthiness.ts] ////
+
+=== controlFlowTruthiness.ts ===
 declare function foo(): string | undefined;
 >foo : Symbol(foo, Decl(controlFlowTruthiness.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocReturnTag1.ts] ////
+
 //// [returns.js]
 // @ts-check
 /**

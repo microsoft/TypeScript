@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/augmentedTypeBracketAccessIndexSignature.ts ===
+//// [tests/cases/conformance/types/members/augmentedTypeBracketAccessIndexSignature.ts] ////
+
+=== augmentedTypeBracketAccessIndexSignature.ts ===
 interface Foo { a }
 >Foo : Symbol(Foo, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 0))
 >a : Symbol(Foo.a, Decl(augmentedTypeBracketAccessIndexSignature.ts, 0, 15))

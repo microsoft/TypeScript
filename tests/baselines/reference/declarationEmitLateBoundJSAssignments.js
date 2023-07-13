@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLateBoundJSAssignments.ts] ////
+
 //// [file.js]
 export function foo() {}
 foo.bar = 12;

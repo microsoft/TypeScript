@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/declarationEmitInferredUndefinedPropFromFunctionInArray.ts] ////
+
+=== declarationEmitInferredUndefinedPropFromFunctionInArray.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/53914
+
+export let b = [{ foo: 0, m() {} }, { bar: 1 }];
+>b : Symbol(b, Decl(declarationEmitInferredUndefinedPropFromFunctionInArray.ts, 2, 10))
+>foo : Symbol(foo, Decl(declarationEmitInferredUndefinedPropFromFunctionInArray.ts, 2, 17))
+>m : Symbol(m, Decl(declarationEmitInferredUndefinedPropFromFunctionInArray.ts, 2, 25))
+>bar : Symbol(bar, Decl(declarationEmitInferredUndefinedPropFromFunctionInArray.ts, 2, 37))
+

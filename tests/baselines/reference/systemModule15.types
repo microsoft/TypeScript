@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/systemModule15.ts] ////
+
+=== file1.ts ===
 import * as moduleB from "./file2"
 >moduleB : typeof moduleB
 
@@ -27,7 +29,7 @@ use(moduleB.moduleCStar);
 >moduleB : typeof moduleB
 >moduleCStar : typeof moduleB.moduleCStar
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import * as moduleCStar from "./file3"
 >moduleCStar : typeof moduleCStar
 
@@ -51,7 +53,7 @@ export {
 >value : string
 }
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 export var value = "youpi";
 >value : string
 >"youpi" : "youpi"
@@ -59,7 +61,7 @@ export var value = "youpi";
 export default value;
 >value : string
 
-=== tests/cases/compiler/file4.ts ===
+=== file4.ts ===
 export var value2 = "v";
 >value2 : string
 >"v" : "v"

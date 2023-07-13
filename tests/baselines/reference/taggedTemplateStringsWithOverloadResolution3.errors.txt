@@ -1,24 +1,24 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(9,9): error TS2769: No overload matches this call.
+taggedTemplateStringsWithOverloadResolution3.ts(9,9): error TS2769: No overload matches this call.
   Overload 1 of 2, '(strs: TemplateStringsArray, s: string): string', gave the following error.
     Argument of type '{}' is not assignable to parameter of type 'string'.
   Overload 2 of 2, '(strs: TemplateStringsArray, n: number): number', gave the following error.
     Argument of type '{}' is not assignable to parameter of type 'number'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(18,4): error TS2339: Property 'foo' does not exist on type 'Date'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(44,1): error TS2554: Expected 2-4 arguments, but got 1.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(62,9): error TS2769: No overload matches this call.
+taggedTemplateStringsWithOverloadResolution3.ts(18,4): error TS2339: Property 'foo' does not exist on type 'Date'.
+taggedTemplateStringsWithOverloadResolution3.ts(44,1): error TS2554: Expected 2-4 arguments, but got 1.
+taggedTemplateStringsWithOverloadResolution3.ts(62,9): error TS2769: No overload matches this call.
   Overload 1 of 3, '(strs: TemplateStringsArray, n: string, m: any): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'string'.
   Overload 2 of 3, '(strs: TemplateStringsArray, n: number, m: any): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'number'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(63,18): error TS2769: No overload matches this call.
+taggedTemplateStringsWithOverloadResolution3.ts(63,18): error TS2769: No overload matches this call.
   Overload 1 of 3, '(strs: TemplateStringsArray, n: any, m: number): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(strs: TemplateStringsArray, n: any, m: string): any', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'string'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts(69,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
+taggedTemplateStringsWithOverloadResolution3.ts(69,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts (6 errors) ====
+==== taggedTemplateStringsWithOverloadResolution3.ts (6 errors) ====
     // Ambiguous call picks the first overload in declaration order
     function fn1(strs: TemplateStringsArray, s: string): string;
     function fn1(strs: TemplateStringsArray, n: number): number;
@@ -73,7 +73,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
     fn3 ``; // Error
     ~~~~~~
 !!! error TS2554: Expected 2-4 arguments, but got 1.
-!!! related TS6210 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts:28:45: An argument for 'n' was not provided.
+!!! related TS6210 taggedTemplateStringsWithOverloadResolution3.ts:28:45: An argument for 'n' was not provided.
     
     // Generic overloads with constraints
     function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U);

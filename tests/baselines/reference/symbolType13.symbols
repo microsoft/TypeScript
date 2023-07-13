@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolType13.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType13.ts] ////
+
+=== symbolType13.ts ===
 var s = Symbol();
 >s : Symbol(s, Decl(symbolType13.ts, 0, 3))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveNamedLambdaCall.ts ===
+//// [tests/cases/compiler/recursiveNamedLambdaCall.ts] ////
+
+=== recursiveNamedLambdaCall.ts ===
 var promise = function( obj ) {
 >promise : Symbol(promise, Decl(recursiveNamedLambdaCall.ts, 0, 3))
 >obj : Symbol(obj, Decl(recursiveNamedLambdaCall.ts, 0, 23))

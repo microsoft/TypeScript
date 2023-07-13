@@ -628,97 +628,97 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg22/index.ts (computed .d.ts during emit)
 
 FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/pkg0/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg1/tsconfig.json: *new*
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg2/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg3/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg4/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg4/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg5/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg5/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg6/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg6/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg7/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg7/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg8/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg8/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg9/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg9/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg10/tsconfig.json: *new*
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg10/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg11/tsconfig.json: *new*
+/user/username/projects/myproject/pkg10/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg11/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg12/tsconfig.json: *new*
+/user/username/projects/myproject/pkg11/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg12/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg13/tsconfig.json: *new*
+/user/username/projects/myproject/pkg12/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg13/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg14/tsconfig.json: *new*
+/user/username/projects/myproject/pkg13/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg14/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg15/tsconfig.json: *new*
+/user/username/projects/myproject/pkg14/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg15/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg16/tsconfig.json: *new*
+/user/username/projects/myproject/pkg15/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg16/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg17/tsconfig.json: *new*
+/user/username/projects/myproject/pkg16/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg17/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg18/tsconfig.json: *new*
+/user/username/projects/myproject/pkg17/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg18/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg19/tsconfig.json: *new*
+/user/username/projects/myproject/pkg18/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg19/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg20/tsconfig.json: *new*
+/user/username/projects/myproject/pkg19/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg2/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg20/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg21/tsconfig.json: *new*
+/user/username/projects/myproject/pkg20/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg21/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg22/tsconfig.json: *new*
+/user/username/projects/myproject/pkg21/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg22/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg22/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg3/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg3/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg4/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg4/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg5/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg5/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg6/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg6/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg7/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg7/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg8/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg8/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg9/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg9/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
@@ -727,22 +727,6 @@ FsWatchesRecursive::
 /user/username/projects/myproject/pkg0: *new*
   {}
 /user/username/projects/myproject/pkg1: *new*
-  {}
-/user/username/projects/myproject/pkg2: *new*
-  {}
-/user/username/projects/myproject/pkg3: *new*
-  {}
-/user/username/projects/myproject/pkg4: *new*
-  {}
-/user/username/projects/myproject/pkg5: *new*
-  {}
-/user/username/projects/myproject/pkg6: *new*
-  {}
-/user/username/projects/myproject/pkg7: *new*
-  {}
-/user/username/projects/myproject/pkg8: *new*
-  {}
-/user/username/projects/myproject/pkg9: *new*
   {}
 /user/username/projects/myproject/pkg10: *new*
   {}
@@ -764,11 +748,27 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/pkg19: *new*
   {}
+/user/username/projects/myproject/pkg2: *new*
+  {}
 /user/username/projects/myproject/pkg20: *new*
   {}
 /user/username/projects/myproject/pkg21: *new*
   {}
 /user/username/projects/myproject/pkg22: *new*
+  {}
+/user/username/projects/myproject/pkg3: *new*
+  {}
+/user/username/projects/myproject/pkg4: *new*
+  {}
+/user/username/projects/myproject/pkg5: *new*
+  {}
+/user/username/projects/myproject/pkg6: *new*
+  {}
+/user/username/projects/myproject/pkg7: *new*
+  {}
+/user/username/projects/myproject/pkg8: *new*
+  {}
+/user/username/projects/myproject/pkg9: *new*
   {}
 
 exitCode:: ExitStatus.undefined

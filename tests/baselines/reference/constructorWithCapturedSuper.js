@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorWithCapturedSuper.ts] ////
+
 //// [constructorWithCapturedSuper.ts]
 let oneA: A;
 

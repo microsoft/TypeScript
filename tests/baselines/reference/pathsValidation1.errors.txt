@@ -1,7 +1,7 @@
-tests/cases/compiler/tsconfig.json(5,18): error TS5063: Substitutions for pattern '*' should be an array.
+tsconfig.json(5,18): error TS5063: Substitutions for pattern '*' should be an array.
 
 
-==== tests/cases/compiler/tsconfig.json (1 errors) ====
+==== tsconfig.json (1 errors) ====
     {
         "compilerOptions": {
             "baseUrl": ".",
@@ -12,5 +12,5 @@ tests/cases/compiler/tsconfig.json(5,18): error TS5063: Substitutions for patter
             }
         }
     }
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     let x = 1;

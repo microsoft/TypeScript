@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardConstructorPrimitiveTypes.ts] ////
+
 //// [typeGuardConstructorPrimitiveTypes.ts]
 // Narrow a union of primitive types
 let var1: string | number | boolean | any[] | symbol | bigint;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedSemicolonInClass.ts] ////
+
 //// [unusedSemicolonInClass.ts]
 class Unused {
     ;

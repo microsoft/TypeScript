@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOnObjectLiteral3.ts] ////
+
 //// [commentsOnObjectLiteral3.ts]
 var v = {
  //property

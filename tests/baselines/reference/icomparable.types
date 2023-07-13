@@ -1,4 +1,6 @@
-=== tests/cases/compiler/icomparable.ts ===
+//// [tests/cases/compiler/icomparable.ts] ////
+
+=== icomparable.ts ===
     interface IComparable<T> {
        compareTo(other: T);
 >compareTo : (other: T) => any

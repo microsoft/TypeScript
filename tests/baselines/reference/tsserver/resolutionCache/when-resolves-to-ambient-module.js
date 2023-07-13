@@ -139,29 +139,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/myproject/node_modules: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/somefolder: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/somefolder: *new*
   {"pollingInterval":500}
 /user/username/somefolder: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/src/somefolder/module1.ts: *new*
+  {}
+/user/username/projects/myproject/src/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/src/typings/electron.d.ts: *new*
   {}
 /user/username/projects/myproject/src/typings/node.d.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::

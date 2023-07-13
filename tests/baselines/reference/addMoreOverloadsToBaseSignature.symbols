@@ -1,4 +1,6 @@
-=== tests/cases/compiler/addMoreOverloadsToBaseSignature.ts ===
+//// [tests/cases/compiler/addMoreOverloadsToBaseSignature.ts] ////
+
+=== addMoreOverloadsToBaseSignature.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(addMoreOverloadsToBaseSignature.ts, 0, 0))
 

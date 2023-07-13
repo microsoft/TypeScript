@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadsInDifferentContainersDisagreeOnAmbient.ts ===
+//// [tests/cases/compiler/overloadsInDifferentContainersDisagreeOnAmbient.ts] ////
+
+=== overloadsInDifferentContainersDisagreeOnAmbient.ts ===
 declare module M {
 >M : typeof M
 

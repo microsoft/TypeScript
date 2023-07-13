@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterReferenceInInitializer1.ts] ////
+
 //// [parameterReferenceInInitializer1.ts]
 function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
     return undefined;

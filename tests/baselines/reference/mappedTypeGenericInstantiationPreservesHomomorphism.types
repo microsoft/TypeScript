@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internal.ts ===
+//// [tests/cases/compiler/mappedTypeGenericInstantiationPreservesHomomorphism.ts] ////
+
+=== internal.ts ===
 export declare function usePrivateType<T extends unknown[]>(...args: T): PrivateMapped<T[any]>;
 >usePrivateType : <T extends unknown[]>(...args: T) => PrivateMapped<T[any]>
 >args : T
@@ -6,7 +8,7 @@ export declare function usePrivateType<T extends unknown[]>(...args: T): Private
 type PrivateMapped<Obj> = {[K in keyof Obj]: Obj[K]};
 >PrivateMapped : PrivateMapped<Obj>
 
-=== tests/cases/compiler/api.ts ===
+=== api.ts ===
 import {usePrivateType} from './internal';
 >usePrivateType : <T extends unknown[]>(...args: T) => { [K in keyof T[any]]: T[any][K]; }
 

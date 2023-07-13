@@ -1,4 +1,6 @@
-=== tests/cases/compiler/scopeCheckInsidePublicMethod1.ts ===
+//// [tests/cases/compiler/scopeCheckInsidePublicMethod1.ts] ////
+
+=== scopeCheckInsidePublicMethod1.ts ===
 class C {
 >C : C
 

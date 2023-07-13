@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/VariableStatements/recursiveInitializer.ts ===
+//// [tests/cases/conformance/statements/VariableStatements/recursiveInitializer.ts] ////
+
+=== recursiveInitializer.ts ===
 // number unless otherwise specified
 var n1 = n1++;
 >n1 : Symbol(n1, Decl(recursiveInitializer.ts, 1, 3))

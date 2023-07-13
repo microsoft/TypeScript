@@ -1,4 +1,6 @@
-=== tests/cases/compiler/selfReferencingSpreadInLoop.ts ===
+//// [tests/cases/compiler/selfReferencingSpreadInLoop.ts] ////
+
+=== selfReferencingSpreadInLoop.ts ===
 let additional = [];
 >additional : Symbol(additional, Decl(selfReferencingSpreadInLoop.ts, 0, 3))
 

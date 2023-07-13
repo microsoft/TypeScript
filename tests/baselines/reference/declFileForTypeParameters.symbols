@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileForTypeParameters.ts ===
+//// [tests/cases/compiler/declFileForTypeParameters.ts] ////
+
+=== declFileForTypeParameters.ts ===
 class C<T> {
 >C : Symbol(C, Decl(declFileForTypeParameters.ts, 0, 0))
 >T : Symbol(T, Decl(declFileForTypeParameters.ts, 0, 8))

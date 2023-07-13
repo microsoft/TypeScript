@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLitTargetTypeCallSite.ts ===
+//// [tests/cases/compiler/objectLitTargetTypeCallSite.ts] ////
+
+=== objectLitTargetTypeCallSite.ts ===
 function process( x: {a:number; b:string;}) {
 >process : (x: {    a: number;    b: string;}) => number
 >x : { a: number; b: string; }

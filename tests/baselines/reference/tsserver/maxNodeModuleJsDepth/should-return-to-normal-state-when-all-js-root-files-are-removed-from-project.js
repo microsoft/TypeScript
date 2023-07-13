@@ -137,9 +137,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /a/file2.js: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 maxNodeModuleJsDepth: undefined

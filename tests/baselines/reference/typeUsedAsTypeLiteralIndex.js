@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts] ////
+
 //// [typeUsedAsTypeLiteralIndex.ts]
 type K = number | string;
 type T = {

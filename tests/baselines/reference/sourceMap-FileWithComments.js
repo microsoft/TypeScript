@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMap-FileWithComments.ts] ////
+
 //// [sourceMap-FileWithComments.ts]
 // Interface
 interface IPoint {

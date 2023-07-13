@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anonymousClassExpression2.ts] ////
+
 //// [anonymousClassExpression2.ts]
 // Fixes #14860
 // note: repros with `while (0);` too

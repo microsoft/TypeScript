@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesWithStaticProperty.ts] ////
+
 //// [computedPropertyNamesWithStaticProperty.ts]
 class C {
     static staticProp = 10;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cyclicModuleImport.ts] ////
+
 //// [cyclicModuleImport.ts]
 declare module "SubModule" {
     import MainModule = require('MainModule');

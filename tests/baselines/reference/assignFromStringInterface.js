@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts] ////
+
 //// [assignFromStringInterface.ts]
 var x = '';
 var a: String;

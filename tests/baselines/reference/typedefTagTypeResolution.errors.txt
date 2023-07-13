@@ -1,8 +1,8 @@
-tests/cases/conformance/jsdoc/github20832.js(2,15): error TS2304: Cannot find name 'U'.
-tests/cases/conformance/jsdoc/github20832.js(17,12): error TS2304: Cannot find name 'V'.
+github20832.js(2,15): error TS2304: Cannot find name 'U'.
+github20832.js(17,12): error TS2304: Cannot find name 'V'.
 
 
-==== tests/cases/conformance/jsdoc/github20832.js (2 errors) ====
+==== github20832.js (2 errors) ====
     // #20832
     /** @typedef {U} T - should be "error, can't find type named 'U' */
                   ~

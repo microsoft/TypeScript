@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts] ////
+
+=== excessPropertyCheckWithMultipleDiscriminants.ts ===
 // Repro from #32657
 
 interface Base<T> {

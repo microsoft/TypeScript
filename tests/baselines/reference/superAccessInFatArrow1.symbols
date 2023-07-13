@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superAccessInFatArrow1.ts ===
+//// [tests/cases/compiler/superAccessInFatArrow1.ts] ////
+
+=== superAccessInFatArrow1.ts ===
 module test {
 >test : Symbol(test, Decl(superAccessInFatArrow1.ts, 0, 0))
 

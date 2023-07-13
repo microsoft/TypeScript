@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5ModuleWithModuleGenCommonjs.ts ===
+//// [tests/cases/compiler/es5ModuleWithModuleGenCommonjs.ts] ////
+
+=== es5ModuleWithModuleGenCommonjs.ts ===
 export class A
 >A : Symbol(A, Decl(es5ModuleWithModuleGenCommonjs.ts, 0, 0))
 {

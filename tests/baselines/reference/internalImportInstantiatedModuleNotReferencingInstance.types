@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalImportInstantiatedModuleNotReferencingInstance.ts ===
+//// [tests/cases/compiler/internalImportInstantiatedModuleNotReferencingInstance.ts] ////
+
+=== internalImportInstantiatedModuleNotReferencingInstance.ts ===
 module A {
 >A : typeof A
 

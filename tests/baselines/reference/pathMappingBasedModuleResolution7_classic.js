@@ -1,13 +1,5 @@
 //// [tests/cases/compiler/pathMappingBasedModuleResolution7_classic.ts] ////
 
-//// [file1.ts]
-import {x} from "./project/file2";
-import {y} from "module3";
-
-declare function use(x: string);
-use(x.toFixed());
-use(y.toFixed());
-
 //// [file2.ts]
 import {a} from "module1";
 import {b} from "templates/module2";
@@ -20,12 +12,20 @@ export let a: number
 //// [module2.ts]
 export let b: number;
 
-//// [file3.d.ts]
-export let x: number;
-
 //// [module3.d.ts]
 export let y: number;
 
+
+//// [file1.ts]
+import {x} from "./project/file2";
+import {y} from "module3";
+
+declare function use(x: string);
+use(x.toFixed());
+use(y.toFixed());
+
+//// [file3.d.ts]
+export let x: number;
 
 
 //// [module2.js]

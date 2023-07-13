@@ -1,20 +1,20 @@
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(2,10): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(2,12): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(4,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any) => number'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any, b: any) => number'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a?: number, b?: number) => number'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(8,10): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(8,13): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(9,10): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(9,13): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(9,13): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(9,16): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(10,10): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(10,13): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts(10,20): error TS2304: Cannot find name 'b'.
+parserCastVersusArrowFunction1.ts(2,10): error TS2304: Cannot find name 'T'.
+parserCastVersusArrowFunction1.ts(2,12): error TS2304: Cannot find name 'a'.
+parserCastVersusArrowFunction1.ts(4,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any) => number'.
+parserCastVersusArrowFunction1.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any, b: any) => number'.
+parserCastVersusArrowFunction1.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a?: number, b?: number) => number'.
+parserCastVersusArrowFunction1.ts(8,10): error TS2304: Cannot find name 'T'.
+parserCastVersusArrowFunction1.ts(8,13): error TS2304: Cannot find name 'a'.
+parserCastVersusArrowFunction1.ts(9,10): error TS2304: Cannot find name 'T'.
+parserCastVersusArrowFunction1.ts(9,13): error TS2304: Cannot find name 'a'.
+parserCastVersusArrowFunction1.ts(9,13): error TS2695: Left side of comma operator is unused and has no side effects.
+parserCastVersusArrowFunction1.ts(9,16): error TS2304: Cannot find name 'b'.
+parserCastVersusArrowFunction1.ts(10,10): error TS2304: Cannot find name 'T'.
+parserCastVersusArrowFunction1.ts(10,13): error TS2304: Cannot find name 'a'.
+parserCastVersusArrowFunction1.ts(10,20): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts (14 errors) ====
+==== parserCastVersusArrowFunction1.ts (14 errors) ====
     var v = <T>() => 1;
     var v = <T>a;
              ~
@@ -25,15 +25,15 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunctio
     var v = <T>(a) => 1;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any) => number'.
-!!! related TS6203 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts:1:5: 'v' was also declared here.
+!!! related TS6203 parserCastVersusArrowFunction1.ts:1:5: 'v' was also declared here.
     var v = <T>(a, b) => 1;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any, b: any) => number'.
-!!! related TS6203 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts:1:5: 'v' was also declared here.
+!!! related TS6203 parserCastVersusArrowFunction1.ts:1:5: 'v' was also declared here.
     var v = <T>(a = 1, b = 2) => 1;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a?: number, b?: number) => number'.
-!!! related TS6203 tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts:1:5: 'v' was also declared here.
+!!! related TS6203 parserCastVersusArrowFunction1.ts:1:5: 'v' was also declared here.
     
     var v = <T>(a);
              ~

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
+
 //// [dependentDestructuredVariables.ts]
 type Action =
     | { kind: 'A', payload: number }

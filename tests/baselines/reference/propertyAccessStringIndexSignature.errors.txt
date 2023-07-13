@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignature.ts(10,7): error TS2339: Property 'nope' does not exist on type 'Empty'.
+propertyAccessStringIndexSignature.ts(10,7): error TS2339: Property 'nope' does not exist on type 'Empty'.
 
 
-==== tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignature.ts (1 errors) ====
+==== propertyAccessStringIndexSignature.ts (1 errors) ====
     interface Flags { [name: string]: boolean };
     let flags: Flags;
     flags.b;

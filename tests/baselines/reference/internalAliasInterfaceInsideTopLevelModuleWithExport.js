@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInterfaceInsideTopLevelModuleWithExport.ts] ////
+
 //// [internalAliasInterfaceInsideTopLevelModuleWithExport.ts]
 export module a {
     export interface I {
@@ -15,7 +17,7 @@ exports.x = void 0;
 
 
 //// [internalAliasInterfaceInsideTopLevelModuleWithExport.d.ts]
-export declare module a {
+export declare namespace a {
     interface I {
     }
 }

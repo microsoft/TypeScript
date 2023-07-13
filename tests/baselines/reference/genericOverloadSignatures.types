@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericOverloadSignatures.ts ===
+//// [tests/cases/compiler/genericOverloadSignatures.ts] ////
+
+=== genericOverloadSignatures.ts ===
 interface A {
     <T>(x: T): void;
 >x : T

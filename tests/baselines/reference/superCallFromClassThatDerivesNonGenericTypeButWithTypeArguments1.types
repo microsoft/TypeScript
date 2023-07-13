@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts ===
+//// [tests/cases/compiler/superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts] ////
+
+=== superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts ===
 class A {
 >A : A
 

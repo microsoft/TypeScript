@@ -52,5 +52,5 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
       "declaration": true
     }
 }
-// @link: tests/cases/compiler/monorepo/pkg1 -> tests/cases/compiler/monorepo/pkg2/node_modules/@raymondfeng/pkg1
-// @link: tests/cases/compiler/monorepo/pkg2 -> tests/cases/compiler/monorepo/pkg3/node_modules/@raymondfeng/pkg2
+// @link: monorepo/pkg1 -> monorepo/pkg2/node_modules/@raymondfeng/pkg1
+// @link: monorepo/pkg2 -> monorepo/pkg3/node_modules/@raymondfeng/pkg2

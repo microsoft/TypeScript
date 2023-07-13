@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts] ////
+
 //// [privateNameMethodClassExpression.ts]
 const C = class {
     #field = this.#method();

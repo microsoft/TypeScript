@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList9.ts(2,14): error TS1047: A rest parameter cannot be optional.
+parserParameterList9.ts(2,14): error TS1047: A rest parameter cannot be optional.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList9.ts (1 errors) ====
+==== parserParameterList9.ts (1 errors) ====
     class C {
        foo(...bar?) { }
                  ~

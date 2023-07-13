@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts] ////
+
 //// [derivedClassSuperStatementPosition.ts]
 class DerivedBasic extends Object {
     prop = 1;
@@ -124,8 +126,8 @@ var DerivedBasic = /** @class */ (function (_super) {
 var DerivedAfterParameterDefault = /** @class */ (function (_super) {
     __extends(DerivedAfterParameterDefault, _super);
     function DerivedAfterParameterDefault(x) {
-        if (x === void 0) { x = false; }
         var _this = this;
+        if (x === void 0) { x = false; }
         _this.x1 = x;
         _this = _super.call(this, x) || this;
         _this.x2 = x;
@@ -136,11 +138,11 @@ var DerivedAfterParameterDefault = /** @class */ (function (_super) {
 var DerivedAfterRestParameter = /** @class */ (function (_super) {
     __extends(DerivedAfterRestParameter, _super);
     function DerivedAfterRestParameter() {
+        var _this = this;
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
-        var _this = this;
         _this.x1 = x;
         _this = _super.call(this, x) || this;
         _this.x2 = x;

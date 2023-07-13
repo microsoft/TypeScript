@@ -1,11 +1,11 @@
-tests/cases/compiler/stringIndexerAssignments2.ts(19,1): error TS2322: Type 'C2' is not assignable to type 'C1'.
+stringIndexerAssignments2.ts(19,1): error TS2322: Type 'C2' is not assignable to type 'C1'.
   Index signature for type 'string' is missing in type 'C2'.
-tests/cases/compiler/stringIndexerAssignments2.ts(20,1): error TS2322: Type 'C3' is not assignable to type 'C1'.
+stringIndexerAssignments2.ts(20,1): error TS2322: Type 'C3' is not assignable to type 'C1'.
   Types of property 'one' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/stringIndexerAssignments2.ts (2 errors) ====
+==== stringIndexerAssignments2.ts (2 errors) ====
     class C1 {
         [index: string]: string
         one: string;

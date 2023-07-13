@@ -1,4 +1,6 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ExportClauseWithAssignmentInEs5.ts] ////
+
+=== server.ts ===
 var foo = 2;
 >foo : Symbol(foo, Decl(server.ts, 0, 3))
 

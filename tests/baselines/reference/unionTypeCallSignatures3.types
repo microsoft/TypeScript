@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/union/unionTypeCallSignatures3.ts ===
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures3.ts] ////
+
+=== unionTypeCallSignatures3.ts ===
 function f1(s: string) { }
 >f1 : (s: string) => void
 >s : string

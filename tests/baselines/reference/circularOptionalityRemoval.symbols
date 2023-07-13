@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularOptionalityRemoval.ts ===
+//// [tests/cases/compiler/circularOptionalityRemoval.ts] ////
+
+=== circularOptionalityRemoval.ts ===
 // Constructed repro
 function fn1(x: number | undefined = x > 0 ? x : 0) { }
 >fn1 : Symbol(fn1, Decl(circularOptionalityRemoval.ts, 0, 0))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts] ////
+
+=== generatorTypeCheck20.ts ===
 class Foo { x: number }
 >Foo : Symbol(Foo, Decl(generatorTypeCheck20.ts, 0, 0))
 >x : Symbol(Foo.x, Decl(generatorTypeCheck20.ts, 0, 11))

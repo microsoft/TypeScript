@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ClassTest8.ts] ////
+
 //// [es6ClassTest8.ts]
 function f1(x:any) {return x;}
 

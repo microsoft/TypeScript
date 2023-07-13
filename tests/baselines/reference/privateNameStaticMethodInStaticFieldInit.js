@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodInStaticFieldInit.ts] ////
+
 //// [privateNameStaticMethodInStaticFieldInit.ts]
 class C {
     static s = C.#method();

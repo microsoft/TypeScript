@@ -1,8 +1,8 @@
-tests/cases/compiler/setterWithReturn.ts(4,13): error TS2408: Setters cannot return a value.
-tests/cases/compiler/setterWithReturn.ts(7,13): error TS2408: Setters cannot return a value.
+setterWithReturn.ts(4,13): error TS2408: Setters cannot return a value.
+setterWithReturn.ts(7,13): error TS2408: Setters cannot return a value.
 
 
-==== tests/cases/compiler/setterWithReturn.ts (2 errors) ====
+==== setterWithReturn.ts (2 errors) ====
     class C234 {
         public set p1(arg1) {
             if (true) {

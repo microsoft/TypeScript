@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsTypeParameters.ts ===
+//// [tests/cases/compiler/commentsTypeParameters.ts] ////
+
+=== commentsTypeParameters.ts ===
 class C</**docComment for type parameter*/ T> {
 >C : Symbol(C, Decl(commentsTypeParameters.ts, 0, 0))
 >T : Symbol(T, Decl(commentsTypeParameters.ts, 0, 8))

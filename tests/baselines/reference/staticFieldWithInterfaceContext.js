@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticFieldWithInterfaceContext.ts] ////
+
 //// [staticFieldWithInterfaceContext.ts]
 interface I {
     x: { a: "a" };
@@ -43,26 +45,26 @@ var c = (_a = /** @class */ (function () {
     _a);
 c.x = { a: "a" };
 var ex = "x";
-var c2 = (_c = /** @class */ (function () {
+var c2 = (_b = /** @class */ (function () {
         function class_2() {
         }
         return class_2;
     }()),
-    _b = ex,
-    __setFunctionName(_c, "c2"),
-    _c[_b] = { a: "a" },
-    _c);
+    _c = ex,
+    __setFunctionName(_b, "c2"),
+    _b[_c] = { a: "a" },
+    _b);
 c[ex] = { a: "a" };
 function f(c) {
-    var _a;
-    if (c === void 0) { c = (_a = /** @class */ (function () {
+    var _r;
+    if (c === void 0) { c = (_r = /** @class */ (function () {
             function class_3() {
             }
             return class_3;
         }()),
-        __setFunctionName(_a, "c"),
-        _a.x = { a: "a" },
-        _a); }
+        __setFunctionName(_r, "c"),
+        _r.x = { a: "a" },
+        _r); }
 }
 var c3 = { c: (_d = /** @class */ (function () {
             function class_4() {

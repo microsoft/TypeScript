@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typecheckIfCondition.ts ===
+//// [tests/cases/compiler/typecheckIfCondition.ts] ////
+
+=== typecheckIfCondition.ts ===
 // both uses of module should be an undefined symbol
 function myWrapper()
 >myWrapper : Symbol(myWrapper, Decl(typecheckIfCondition.ts, 0, 0))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureWithOptional.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureWithOptional.ts] ////
+
+=== specializedSignatureWithOptional.ts ===
 declare function f(x?: "hi"): void;
 >f : Symbol(f, Decl(specializedSignatureWithOptional.ts, 0, 0), Decl(specializedSignatureWithOptional.ts, 0, 35))
 >x : Symbol(x, Decl(specializedSignatureWithOptional.ts, 0, 19))

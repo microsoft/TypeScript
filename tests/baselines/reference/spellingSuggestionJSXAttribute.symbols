@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spellingSuggestionJSXAttribute.tsx ===
+//// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
+
+=== spellingSuggestionJSXAttribute.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : Symbol(React, Decl(spellingSuggestionJSXAttribute.tsx, 1, 6))

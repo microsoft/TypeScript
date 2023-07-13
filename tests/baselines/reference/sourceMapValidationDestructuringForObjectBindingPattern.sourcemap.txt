@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringForObjectBindingPattern.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringForObjectBindingPattern.js
+emittedFile:sourceMapValidationDestructuringForObjectBindingPattern.js
 sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 -------------------------------------------------------------------
 >>>var robot = { name: "mower", skill: "mowing" };

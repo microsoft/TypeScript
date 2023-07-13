@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ExportDefaultIdentifier.ts] ////
+
 //// [es5ExportDefaultIdentifier.ts]
 export function f() { }
 

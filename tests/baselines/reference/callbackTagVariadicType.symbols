@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/callbackTagVariadicType.js ===
+//// [tests/cases/conformance/jsdoc/callbackTagVariadicType.ts] ////
+
+=== callbackTagVariadicType.js ===
 /**
  * @callback Foo
  * @param {...string} args

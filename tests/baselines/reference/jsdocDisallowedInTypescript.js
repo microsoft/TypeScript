@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts] ////
+
 //// [jsdocDisallowedInTypescript.ts]
 // grammar error from checker
 var ara: Array.<number> = [1,2,3];

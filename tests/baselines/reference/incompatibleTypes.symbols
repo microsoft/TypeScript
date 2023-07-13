@@ -1,4 +1,6 @@
-=== tests/cases/compiler/incompatibleTypes.ts ===
+//// [tests/cases/compiler/incompatibleTypes.ts] ////
+
+=== incompatibleTypes.ts ===
 interface IFoo1 {
 >IFoo1 : Symbol(IFoo1, Decl(incompatibleTypes.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/app.js ===
+//// [tests/cases/compiler/allowJsClassThisTypeCrash.ts] ////
+
+=== app.js ===
 const f = function() {};
 >f : Symbol(f, Decl(app.js, 0, 5))
 

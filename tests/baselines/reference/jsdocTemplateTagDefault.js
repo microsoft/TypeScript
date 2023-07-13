@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTagDefault.ts] ////
+
 //// [file.js]
 /**
  * @template {string | number} [T=string] - ok: defaults are permitted

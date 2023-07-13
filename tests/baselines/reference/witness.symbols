@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/witness/witness.ts ===
+//// [tests/cases/conformance/types/witness/witness.ts] ////
+
+=== witness.ts ===
 // Initializers
 var varInit = varInit; // any
 >varInit : Symbol(varInit, Decl(witness.ts, 1, 3))

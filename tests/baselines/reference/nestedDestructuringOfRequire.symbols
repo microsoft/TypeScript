@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/main.js ===
+//// [tests/cases/conformance/salsa/nestedDestructuringOfRequire.ts] ////
+
+=== main.js ===
 const {
     chalk: { grey }
 >chalk : Symbol(chalk, Decl(mod1.js, 2, 2))
@@ -6,14 +8,14 @@ const {
 
 } = require('./mod1');
 >require : Symbol(require)
->'./mod1' : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
+>'./mod1' : Symbol("mod1", Decl(mod1.js, 0, 0))
 
 grey
 >grey : Symbol(grey, Decl(main.js, 1, 12))
 
 chalk
 
-=== tests/cases/conformance/salsa/mod1.js ===
+=== mod1.js ===
 const chalk = {
 >chalk : Symbol(chalk, Decl(mod1.js, 0, 5))
 

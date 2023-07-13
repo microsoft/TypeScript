@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indirectSelfReferenceGeneric.ts ===
+//// [tests/cases/compiler/indirectSelfReferenceGeneric.ts] ////
+
+=== indirectSelfReferenceGeneric.ts ===
 class a<T> extends b<T> { }
 >a : a<T>
 >b : typeof b

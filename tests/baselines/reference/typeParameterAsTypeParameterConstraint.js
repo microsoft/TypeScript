@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint.ts] ////
+
 //// [typeParameterAsTypeParameterConstraint.ts]
 // using a type parameter as a constraint for a type parameter is valid
 // no errors expected except illegal constraints

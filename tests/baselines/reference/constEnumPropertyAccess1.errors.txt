@@ -1,7 +1,7 @@
-tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts(25,9): error TS2322: Type 'boolean' is not assignable to type 'number'.
+constEnumPropertyAccess1.ts(25,9): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts (1 errors) ====
+==== constEnumPropertyAccess1.ts (1 errors) ====
     // constant enum declarations are completely erased in the emitted JavaScript code.
     // it is an error to reference a constant enum object in any other context
     // than a property access that selects one of the enum's members

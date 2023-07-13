@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/classExtendsAcrossFiles.ts] ////
+
+=== a.ts ===
 import { b } from './b';
 >b : { f: () => void; }
 
@@ -24,7 +26,7 @@ export const a = {
 >f : () => void
     }
 };
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { a } from './a';
 >a : { f: () => void; }
 

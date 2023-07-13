@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dynamicImportEvaluateSpecifier.ts ===
+//// [tests/cases/compiler/dynamicImportEvaluateSpecifier.ts] ////
+
+=== dynamicImportEvaluateSpecifier.ts ===
 // https://github.com/microsoft/TypeScript/issues/48285
 let i = 0;
 >i : Symbol(i, Decl(dynamicImportEvaluateSpecifier.ts, 1, 3))

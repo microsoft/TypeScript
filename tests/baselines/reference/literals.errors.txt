@@ -1,12 +1,12 @@
-tests/cases/conformance/expressions/literals/literals.ts(8,10): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/literals/literals.ts(8,17): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/literals/literals.ts(9,9): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/literals/literals.ts(9,21): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/literals/literals.ts(19,9): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
-tests/cases/conformance/expressions/literals/literals.ts(24,9): error TS1121: Octal literals are not allowed. Use the syntax '-0o3'.
+literals.ts(8,10): error TS18050: The value 'null' cannot be used here.
+literals.ts(8,17): error TS18050: The value 'null' cannot be used here.
+literals.ts(9,9): error TS18050: The value 'undefined' cannot be used here.
+literals.ts(9,21): error TS18050: The value 'undefined' cannot be used here.
+literals.ts(19,9): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+literals.ts(24,9): error TS1121: Octal literals are not allowed. Use the syntax '-0o3'.
 
 
-==== tests/cases/conformance/expressions/literals/literals.ts (6 errors) ====
+==== literals.ts (6 errors) ====
     //typeof null is Null
     //typeof true is Boolean
     //typeof false is Boolean

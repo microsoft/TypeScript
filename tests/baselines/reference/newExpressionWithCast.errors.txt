@@ -1,10 +1,10 @@
-tests/cases/compiler/newExpressionWithCast.ts(3,12): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
-tests/cases/compiler/newExpressionWithCast.ts(7,13): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'void'.
-tests/cases/compiler/newExpressionWithCast.ts(7,17): error TS1109: Expression expected.
-tests/cases/compiler/newExpressionWithCast.ts(7,18): error TS2693: 'any' only refers to a type, but is being used as a value here.
+newExpressionWithCast.ts(3,12): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+newExpressionWithCast.ts(7,13): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'void'.
+newExpressionWithCast.ts(7,17): error TS1109: Expression expected.
+newExpressionWithCast.ts(7,18): error TS2693: 'any' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/compiler/newExpressionWithCast.ts (4 errors) ====
+==== newExpressionWithCast.ts (4 errors) ====
     function Test() { }
     // valid but error with noImplicitAny
     var test = new Test();

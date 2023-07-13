@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reactTagNameComponentWithPropsNoOOM.tsx ===
+//// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM.tsx] ////
+
+=== reactTagNameComponentWithPropsNoOOM.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";

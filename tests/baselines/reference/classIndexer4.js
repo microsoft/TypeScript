@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classIndexer4.ts] ////
+
 //// [classIndexer4.ts]
 class C123 {
     [s: string]: number;

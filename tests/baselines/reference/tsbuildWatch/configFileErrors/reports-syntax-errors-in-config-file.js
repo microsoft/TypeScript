@@ -58,11 +58,11 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/a.ts: *new*
   {}
 /user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts ===
+//// [tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts] ////
+
+=== shorthandPropertyAssignmentsInDestructuring_ES6.ts ===
 (function() {
 >(function() {	var s0;	for ({ s0 = 5 } of [{ s0: 1 }]) {	}}) : () => void
 >function() {	var s0;	for ({ s0 = 5 } of [{ s0: 1 }]) {	}} : () => void

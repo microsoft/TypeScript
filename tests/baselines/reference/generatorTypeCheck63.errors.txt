@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => Generator<number, State, undefined>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
+generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => Generator<number, State, undefined>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
   Call signature return types 'Generator<number, State, undefined>' and 'IterableIterator<State>' are incompatible.
     The types returned by 'next(...)' are incompatible between these types.
       Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, any>'.
@@ -7,7 +7,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): err
             Type 'number' is not assignable to type 'State'.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts (1 errors) ====
+==== generatorTypeCheck63.ts (1 errors) ====
     export interface StrategicState {
         lastStrategyApplied?: string;
     }

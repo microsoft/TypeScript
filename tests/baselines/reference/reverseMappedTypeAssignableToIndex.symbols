@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedTypeAssignableToIndex.ts ===
+//// [tests/cases/compiler/reverseMappedTypeAssignableToIndex.ts] ////
+
+=== reverseMappedTypeAssignableToIndex.ts ===
 // Simple mapped type and inferrence
 type Mapped<T> = { [K in keyof T]: { name: T[K] } };
 >Mapped : Symbol(Mapped, Decl(reverseMappedTypeAssignableToIndex.ts, 0, 0))

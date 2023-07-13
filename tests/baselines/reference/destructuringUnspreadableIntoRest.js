@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringUnspreadableIntoRest.ts] ////
+
 //// [destructuringUnspreadableIntoRest.ts]
 class A {
     constructor(

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superHasMethodsFromMergedInterface.ts] ////
+
 //// [superHasMethodsFromMergedInterface.ts]
 class C { m1() { } }
 interface C { m2(): void }

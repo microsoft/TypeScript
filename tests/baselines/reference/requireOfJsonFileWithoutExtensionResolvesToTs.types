@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithoutExtensionResolvesToTs.ts] ////
+
+=== file1.ts ===
 import c1 = require('./c'); // resolves to c.ts 
 >c1 : { a: boolean; b: string; }
 
@@ -30,7 +32,7 @@ if (x2) {
 >b : string
 }
 
-=== tests/cases/compiler/c.json ===
+=== c.json ===
 {
 >{    "a": true,    "b": "hello"} : { a: boolean; b: string; }
 
@@ -43,7 +45,7 @@ if (x2) {
 >"hello" : "hello"
 }
 
-=== tests/cases/compiler/c.ts ===
+=== c.ts ===
 export = { a: true, b: "hello" };
 >{ a: true, b: "hello" } : { a: boolean; b: string; }
 >a : boolean

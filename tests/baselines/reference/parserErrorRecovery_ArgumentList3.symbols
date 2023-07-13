@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList3.ts] ////
+
+=== parserErrorRecovery_ArgumentList3.ts ===
 function foo() {
 >foo : Symbol(foo, Decl(parserErrorRecovery_ArgumentList3.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bestCommonTypeWithOptionalProperties.ts ===
+//// [tests/cases/compiler/bestCommonTypeWithOptionalProperties.ts] ////
+
+=== bestCommonTypeWithOptionalProperties.ts ===
 interface X { foo: string }
 >X : Symbol(X, Decl(bestCommonTypeWithOptionalProperties.ts, 0, 0))
 >foo : Symbol(X.foo, Decl(bestCommonTypeWithOptionalProperties.ts, 0, 13))

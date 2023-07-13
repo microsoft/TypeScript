@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericConstraintSatisfaction1.ts ===
+//// [tests/cases/compiler/genericConstraintSatisfaction1.ts] ////
+
+=== genericConstraintSatisfaction1.ts ===
 interface I<S> {
 >I : Symbol(I, Decl(genericConstraintSatisfaction1.ts, 0, 0))
 >S : Symbol(S, Decl(genericConstraintSatisfaction1.ts, 0, 12))

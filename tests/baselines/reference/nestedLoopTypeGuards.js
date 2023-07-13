@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedLoopTypeGuards.ts] ////
+
 //// [nestedLoopTypeGuards.ts]
 // Repros from #10378
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/mod1.js ===
+//// [tests/cases/conformance/jsdoc/callbackCrossModule.ts] ////
+
+=== mod1.js ===
 /** @callback Con - some kind of continuation
  * @param {object | undefined} error
  * @return {any} I don't even know what this should return
@@ -21,11 +23,11 @@ function C() {
 >1 : 1
 }
 
-=== tests/cases/conformance/jsdoc/use.js ===
+=== use.js ===
 /** @param {import('./mod1').Con} k */
 function f(k) {
 >f : (k: import('./mod1').Con) => any
->k : import("tests/cases/conformance/jsdoc/mod1").Con
+>k : import("mod1").Con
 
     if (1 === 2 - 1) {
 >1 === 2 - 1 : boolean
@@ -38,7 +40,7 @@ function f(k) {
     }
     return k({ ok: true})
 >k({ ok: true}) : any
->k : import("tests/cases/conformance/jsdoc/mod1").Con
+>k : import("mod1").Con
 >{ ok: true} : { ok: boolean; }
 >ok : boolean
 >true : true

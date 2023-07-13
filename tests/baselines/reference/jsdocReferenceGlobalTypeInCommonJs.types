@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsdocReferenceGlobalTypeInCommonJs.ts] ////
+
+=== a.js ===
 const other = require('./other');
 >other : () => string
 >require('./other') : () => string
@@ -14,9 +16,9 @@ Puppeteer.connect;
 >Puppeteer : typeof Puppeteer
 >connect : (name: string) => void
 
-=== tests/cases/compiler/puppet.d.ts ===
+=== puppet.d.ts ===
 export as namespace Puppeteer;
->Puppeteer : typeof import("tests/cases/compiler/puppet")
+>Puppeteer : typeof import("puppet")
 
 export interface Keyboard {
     key: string
@@ -26,7 +28,7 @@ export function connect(name: string): void;
 >connect : (name: string) => void
 >name : string
 
-=== tests/cases/compiler/other.d.ts ===
+=== other.d.ts ===
 declare function f(): string;
 >f : () => string
 

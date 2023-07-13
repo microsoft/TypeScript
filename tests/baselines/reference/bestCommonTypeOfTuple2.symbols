@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts ===
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts] ////
+
+=== bestCommonTypeOfTuple2.ts ===
 interface base { }
 >base : Symbol(base, Decl(bestCommonTypeOfTuple2.ts, 0, 0))
 

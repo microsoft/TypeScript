@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitMemberAccessExpression_file3.ts ===
+//// [tests/cases/compiler/emitMemberAccessExpression.ts] ////
+
+=== emitMemberAccessExpression_file3.ts ===
 /// <reference path="emitMemberAccessExpression_file2.ts" />
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 declare var OData: any;
@@ -13,12 +15,12 @@ module Microsoft.PeopleAtWork.Model {
 >KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
     }
 }
-=== tests/cases/compiler/emitMemberAccessExpression_file1.ts ===
+=== emitMemberAccessExpression_file1.ts ===
 
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 
-=== tests/cases/compiler/emitMemberAccessExpression_file2.ts ===
+=== emitMemberAccessExpression_file2.ts ===
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 module Microsoft.PeopleAtWork.Model {

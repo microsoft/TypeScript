@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDefaultForNonInstantiatedModule.ts ===
+//// [tests/cases/compiler/exportDefaultForNonInstantiatedModule.ts] ////
+
+=== exportDefaultForNonInstantiatedModule.ts ===
 module m {
 >m : Symbol(m, Decl(exportDefaultForNonInstantiatedModule.ts, 0, 0))
 

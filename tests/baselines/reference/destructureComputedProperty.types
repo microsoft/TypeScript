@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructureComputedProperty.ts ===
+//// [tests/cases/compiler/destructureComputedProperty.ts] ////
+
+=== destructureComputedProperty.ts ===
 declare const ab: { n: number } | { n: string };
 >ab : { n: number; } | { n: string; }
 >n : number

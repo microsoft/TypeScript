@@ -1,7 +1,7 @@
-tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration9_es2017.ts(2,19): error TS1109: Expression expected.
+asyncFunctionDeclaration9_es2017.ts(2,19): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration9_es2017.ts (1 errors) ====
+==== asyncFunctionDeclaration9_es2017.ts (1 errors) ====
     async function foo(): Promise<void> {
       var v = { [await]: foo }
                       ~

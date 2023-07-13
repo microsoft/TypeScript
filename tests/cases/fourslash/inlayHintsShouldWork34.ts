@@ -2,22 +2,14 @@
 
 //// function foo (v: any) {}
 
-//// foo(/*a*/1);
-//// foo(/*b*/'');
-//// foo(/*c*/true);
+//// foo(1);
+//// foo('');
+//// foo(true);
 
 //// foo(foo);
-//// foo(/*j*/(1));
-//// foo(foo(/*k*/1));
+//// foo((1));
+//// foo(foo(1));
 
-const markers = test.markers();
-
-verify.getInlayHints(
-    markers.map(m => ({
-        text: 'v:',
-        position: m.position,
-        kind: ts.InlayHintKind.Parameter,
-        whitespaceAfter: true
-    })) , undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayParameterNameHints: "literals"
 });

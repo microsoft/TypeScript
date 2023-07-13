@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorssDerivedClasses.ts(4,23): error TS2339: Property '#prop' does not exist on type 'typeof Derived'.
-tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorssDerivedClasses.ts(9,23): error TS2339: Property '#prop' does not exist on type 'typeof Derived'.
+privateNameStaticAccessorssDerivedClasses.ts(4,23): error TS2339: Property '#prop' does not exist on type 'typeof Derived'.
+privateNameStaticAccessorssDerivedClasses.ts(9,23): error TS2339: Property '#prop' does not exist on type 'typeof Derived'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorssDerivedClasses.ts (2 errors) ====
+==== privateNameStaticAccessorssDerivedClasses.ts (2 errors) ====
     class Base {
         static get #prop(): number { return  123; }
         static method(x: typeof Derived) {

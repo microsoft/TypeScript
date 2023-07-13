@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/esModuleInteropEnablesSyntheticDefaultImports.ts] ////
+
+=== a.ts ===
 import Namespace from "./b";
 >Namespace : typeof Namespace
 
@@ -9,7 +11,7 @@ export var x = new Namespace.Foo();
 >Namespace : typeof Namespace
 >Foo : typeof Namespace.Foo
 
-=== tests/cases/compiler/b.d.ts ===
+=== b.d.ts ===
 export class Foo {
 >Foo : Foo
 

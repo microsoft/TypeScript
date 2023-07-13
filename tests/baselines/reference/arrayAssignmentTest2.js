@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayAssignmentTest2.ts] ////
+
 //// [arrayAssignmentTest2.ts]
 interface I1 {
 	IM1():void[];

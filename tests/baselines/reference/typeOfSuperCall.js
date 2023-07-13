@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeOfSuperCall.ts] ////
+
 //// [typeOfSuperCall.ts]
 class C {
 }

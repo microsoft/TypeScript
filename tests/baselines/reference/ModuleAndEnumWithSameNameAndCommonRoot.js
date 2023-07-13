@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ModuleAndEnumWithSameNameAndCommonRoot.ts] ////
+
 //// [ModuleAndEnumWithSameNameAndCommonRoot.ts]
 module enumdule {
 

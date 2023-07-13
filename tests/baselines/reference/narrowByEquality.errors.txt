@@ -1,11 +1,11 @@
-tests/cases/compiler/narrowByEquality.ts(41,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/narrowByEquality.ts(54,15): error TS2322: Type 'string | number' is not assignable to type 'number'.
+narrowByEquality.ts(41,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+narrowByEquality.ts(54,15): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/narrowByEquality.ts(55,9): error TS2322: Type 'string | number' is not assignable to type 'number'.
+narrowByEquality.ts(55,9): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/narrowByEquality.ts (3 errors) ====
+==== narrowByEquality.ts (3 errors) ====
     declare let x: number | string | boolean
     declare let n: number;
     declare let s: string;

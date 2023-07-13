@@ -1,11 +1,13 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/importNonExportedMember8.ts] ////
+
+=== a.ts ===
 class Foo {}
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
 export = Foo;
 >Foo : Symbol(Foo, Decl(a.ts, 0, 0))
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 import { Foo } from './a';
 >Foo : Symbol(Foo, Decl(b.js, 0, 8))
 

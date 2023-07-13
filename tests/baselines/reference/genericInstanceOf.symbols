@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInstanceOf.ts ===
+//// [tests/cases/compiler/genericInstanceOf.ts] ////
+
+=== genericInstanceOf.ts ===
 interface F {
 >F : Symbol(F, Decl(genericInstanceOf.ts, 0, 0))
 

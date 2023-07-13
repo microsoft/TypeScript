@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorDeclarationEmitJs.ts] ////
+
 === /a.js ===
 export const t1 = {
 >t1 : Symbol(t1, Decl(a.js, 0, 12))

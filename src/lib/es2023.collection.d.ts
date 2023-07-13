@@ -1,0 +1,3 @@
+interface WeakKeyTypes {
+    symbol: symbol;
+}

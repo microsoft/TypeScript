@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/a.js(2,11): error TS2304: Cannot find name 'b'.
+a.js(2,11): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/conformance/jsdoc/a.js (1 errors) ====
+==== a.js (1 errors) ====
     /** doc */
     const a = b = () => 0;
               ~

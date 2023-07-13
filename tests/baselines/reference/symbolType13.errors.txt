@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/Symbols/symbolType13.ts(4,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
-tests/cases/conformance/es6/Symbols/symbolType13.ts(5,11): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'symbol'.
-tests/cases/conformance/es6/Symbols/symbolType13.ts(6,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'symbol'.
+symbolType13.ts(4,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+symbolType13.ts(5,11): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'symbol'.
+symbolType13.ts(6,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'symbol'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolType13.ts (3 errors) ====
+==== symbolType13.ts (3 errors) ====
     var s = Symbol();
     var x: any;
     

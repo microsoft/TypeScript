@@ -1,4 +1,6 @@
-=== tests/cases/compiler/namespacesDeclaration2.ts ===
+//// [tests/cases/compiler/namespacesDeclaration2.ts] ////
+
+=== namespacesDeclaration2.ts ===
 namespace N {
 >N : Symbol(N, Decl(namespacesDeclaration2.ts, 0, 0))
 

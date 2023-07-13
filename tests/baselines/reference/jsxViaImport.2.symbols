@@ -1,4 +1,6 @@
-=== tests/cases/compiler/consumer.tsx ===
+//// [tests/cases/compiler/jsxViaImport.2.tsx] ////
+
+=== consumer.tsx ===
 /// <reference path="component.d.ts" />
 import BaseComponent from 'BaseComponent';
 >BaseComponent : Symbol(BaseComponent, Decl(consumer.tsx, 1, 6))
@@ -17,7 +19,7 @@ class TestComponent extends React.Component<any, {}> {
     }
 }
 
-=== tests/cases/compiler/component.d.ts ===
+=== component.d.ts ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(component.d.ts, 0, 0))
 

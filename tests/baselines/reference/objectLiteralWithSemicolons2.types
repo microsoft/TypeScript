@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralWithSemicolons2.ts ===
+//// [tests/cases/compiler/objectLiteralWithSemicolons2.ts] ////
+
+=== objectLiteralWithSemicolons2.ts ===
 var v = {
 >v : { a: any; b: any; c: any; }
 >{  a;  b;  c} : { a: any; b: any; c: any; }

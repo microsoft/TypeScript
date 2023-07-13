@@ -1,0 +1,82 @@
+//// [tests/cases/conformance/jsdoc/templateInsideCallback.ts] ////
+
+=== templateInsideCallback.js ===
+/**
+ * @typedef Oops
+ * @template T
+ * @property {T} a
+ * @property {T} b
+ */
+/**
+ * @callback Call
+ * @template T
+ * @param {T} x
+ * @returns {T}
+ */
+/**
+ * @template T
+ * @type {Call<T>}
+ */
+const identity = x => x;
+>identity : Symbol(identity, Decl(templateInsideCallback.js, 16, 5))
+>x : Symbol(x, Decl(templateInsideCallback.js, 16, 16))
+>x : Symbol(x, Decl(templateInsideCallback.js, 16, 16))
+
+/**
+ * @typedef Nested
+ * @property {Object} oh
+ * @property {number} oh.no
+ * @template T
+ * @property {string} oh.noooooo
+ */
+
+
+/**
+ * @overload
+ * @template T
+ * @template U
+ * @param {T[]} array
+ * @param {(x: T) => U[]} iterable
+ * @returns {U[]}
+ */
+/**
+ * @overload
+ * @template T
+ * @param {T[][]} array
+ * @returns {T[]}
+ */
+/**
+ * @param {unknown[]} array
+ * @param {(x: unknown) => unknown} iterable
+ * @returns {unknown[]}
+ */
+function flatMap(array, iterable = identity) {
+>flatMap : Symbol(flatMap, Decl(templateInsideCallback.js, 16, 24))
+>array : Symbol(array, Decl(templateInsideCallback.js, 46, 17))
+>iterable : Symbol(iterable, Decl(templateInsideCallback.js, 46, 23))
+>identity : Symbol(identity, Decl(templateInsideCallback.js, 16, 5))
+
+  /** @type {unknown[]} */
+  const result = [];
+>result : Symbol(result, Decl(templateInsideCallback.js, 48, 7))
+
+  for (let i = 0; i < array.length; i += 1) {
+>i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
+>i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
+>array.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(templateInsideCallback.js, 46, 17))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
+
+    result.push(.../** @type {unknown[]} */(iterable(array[i])));
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(templateInsideCallback.js, 48, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>iterable : Symbol(iterable, Decl(templateInsideCallback.js, 46, 23))
+>array : Symbol(array, Decl(templateInsideCallback.js, 46, 17))
+>i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
+  }
+  return result;
+>result : Symbol(result, Decl(templateInsideCallback.js, 48, 7))
+}
+

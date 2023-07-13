@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doNotElaborateAssignabilityToTypeParameters.ts ===
+//// [tests/cases/compiler/doNotElaborateAssignabilityToTypeParameters.ts] ////
+
+=== doNotElaborateAssignabilityToTypeParameters.ts ===
 async function foo<T>(x: T): Promise<T> {
 >foo : Symbol(foo, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 0))
 >T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 19))

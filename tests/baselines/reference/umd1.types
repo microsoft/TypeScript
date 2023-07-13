@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd1.ts] ////
+
+=== a.ts ===
 /// <reference path="foo.d.ts" />
 Foo.fn();
 >Foo.fn() : void
@@ -16,7 +18,7 @@ let y: number = x.n;
 >x : Foo.Thing
 >n : number
 
-=== tests/cases/conformance/externalModules/foo.d.ts ===
+=== foo.d.ts ===
 export var x: number;
 >x : number
 
@@ -28,5 +30,5 @@ export interface Thing { n: typeof x }
 >x : number
 
 export as namespace Foo;
->Foo : typeof import("tests/cases/conformance/externalModules/foo")
+>Foo : typeof import("foo")
 

@@ -2,7 +2,7 @@ error TS5107: Option 'target=ES3' is deprecated and will stop functioning in Typ
 
 
 !!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/conformance/salsa/index.js (0 errors) ====
+==== index.js (0 errors) ====
     First.Item = class I {}
     Common.Object = class extends First.Item {}
     
@@ -11,7 +11,7 @@ error TS5107: Option 'target=ES3' is deprecated and will stop functioning in Typ
     /** @type {Workspace.Object} */
     var am;
     
-==== tests/cases/conformance/salsa/roots.js (0 errors) ====
+==== roots.js (0 errors) ====
     var First = {};
     var Common = {};
     var Workspace = {};

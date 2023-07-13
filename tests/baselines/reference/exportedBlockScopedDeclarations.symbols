@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportedBlockScopedDeclarations.ts ===
+//// [tests/cases/compiler/exportedBlockScopedDeclarations.ts] ////
+
+=== exportedBlockScopedDeclarations.ts ===
 const foo = foo; // compile error
 >foo : Symbol(foo, Decl(exportedBlockScopedDeclarations.ts, 0, 5))
 >foo : Symbol(foo, Decl(exportedBlockScopedDeclarations.ts, 0, 5))

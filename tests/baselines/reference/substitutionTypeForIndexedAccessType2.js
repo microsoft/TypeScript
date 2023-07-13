@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/substitutionTypeForIndexedAccessType2.ts] ////
+
 //// [substitutionTypeForIndexedAccessType2.ts]
 interface Foo {
   foo: string|undefined

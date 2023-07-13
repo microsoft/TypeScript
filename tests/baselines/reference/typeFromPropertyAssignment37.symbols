@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment37.ts] ////
+
+=== use.js ===
 const util = require('./mod')
 >util : Symbol(util, Decl(use.js, 0, 5))
 >require : Symbol(require)
@@ -17,10 +19,10 @@ util.existy // no error
 >util : Symbol(util, Decl(use.js, 0, 5))
 >existy : Symbol(util.existy, Decl(mod.js, 1, 14))
 
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 const util = exports = module.exports = {}
 >util : Symbol(util, Decl(mod.js, 0, 5))
->exports : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>exports : Symbol("mod", Decl(mod.js, 0, 0))
 >module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 >module : Symbol(module, Decl(mod.js, 0, 22))
 >exports : Symbol(module.exports, Decl(mod.js, 0, 0))

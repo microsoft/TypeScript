@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames48_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames48_ES5.ts] ////
+
+=== computedPropertyNames48_ES5.ts ===
 declare function extractIndexer<T>(p: { [n: number]: T }): T;
 >extractIndexer : Symbol(extractIndexer, Decl(computedPropertyNames48_ES5.ts, 0, 0))
 >T : Symbol(T, Decl(computedPropertyNames48_ES5.ts, 0, 32))

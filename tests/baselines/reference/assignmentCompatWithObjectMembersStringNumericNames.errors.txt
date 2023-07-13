@@ -1,35 +1,35 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(21,5): error TS2741: Property ''1'' is missing in type 'T' but required in type 'S'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(22,5): error TS2741: Property ''1.'' is missing in type 'S' but required in type 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(24,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(26,5): error TS2741: Property ''1'' is missing in type 'T2' but required in type 'S2'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(27,5): error TS2741: Property ''1.0'' is missing in type 'S2' but required in type 'T2'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(28,5): error TS2741: Property ''1'' is missing in type 'T' but required in type 'S2'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(29,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; baz?: string; }' but required in type 'S2'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(30,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S2'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(32,5): error TS2741: Property ''1.'' is missing in type '{ '1.0': string; baz?: string; }' but required in type '{ '1.': string; bar?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(33,5): error TS2741: Property ''1.0'' is missing in type '{ '1.': string; bar?: string; }' but required in type '{ '1.0': string; baz?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(34,5): error TS2741: Property ''1.'' is missing in type 'S' but required in type '{ '1.': string; bar?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(35,5): error TS2741: Property ''1.'' is missing in type 'S2' but required in type '{ '1.': string; bar?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(36,5): error TS2741: Property ''1.'' is missing in type '{ '1.0': string; }' but required in type '{ '1.': string; bar?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(38,5): error TS2741: Property ''1.0'' is missing in type '{ '1': string; }' but required in type '{ '1.0': string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(39,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type '{ '1': string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(42,5): error TS2741: Property ''1.0'' is missing in type 'T' but required in type '{ '1.0': string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(65,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(71,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S2'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(73,5): error TS2741: Property ''1.'' is missing in type '{ 1: string; baz?: string; }' but required in type '{ '1.': string; bar?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(74,5): error TS2741: Property '1.0' is missing in type '{ '1.': string; bar?: string; }' but required in type '{ 1: string; baz?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(75,5): error TS2741: Property ''1.'' is missing in type 'S' but required in type '{ '1.': string; bar?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(76,5): error TS2741: Property ''1.'' is missing in type 'S2' but required in type '{ '1.': string; bar?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(77,5): error TS2741: Property ''1.'' is missing in type '{ '1.0': string; }' but required in type '{ '1.': string; bar?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(78,5): error TS2741: Property ''1.'' is missing in type '{ 1: string; }' but required in type '{ '1.': string; bar?: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(80,5): error TS2741: Property ''1.0'' is missing in type '{ 1: string; }' but required in type '{ '1.0': string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(81,5): error TS2741: Property '1.' is missing in type '{ '1.0': string; }' but required in type '{ 1: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(82,5): error TS2741: Property ''1.0'' is missing in type '{ 1: string; baz?: string; }' but required in type '{ '1.0': string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(83,5): error TS2741: Property ''1.0'' is missing in type 'T2' but required in type '{ '1.0': string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Property ''1.0'' is missing in type 'T' but required in type '{ '1.0': string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(21,5): error TS2741: Property ''1'' is missing in type 'T' but required in type 'S'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(22,5): error TS2741: Property ''1.'' is missing in type 'S' but required in type 'T'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(24,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(26,5): error TS2741: Property ''1'' is missing in type 'T2' but required in type 'S2'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(27,5): error TS2741: Property ''1.0'' is missing in type 'S2' but required in type 'T2'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(28,5): error TS2741: Property ''1'' is missing in type 'T' but required in type 'S2'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(29,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; baz?: string; }' but required in type 'S2'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(30,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S2'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(32,5): error TS2741: Property ''1.'' is missing in type '{ '1.0': string; baz?: string; }' but required in type '{ '1.': string; bar?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(33,5): error TS2741: Property ''1.0'' is missing in type '{ '1.': string; bar?: string; }' but required in type '{ '1.0': string; baz?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(34,5): error TS2741: Property ''1.'' is missing in type 'S' but required in type '{ '1.': string; bar?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(35,5): error TS2741: Property ''1.'' is missing in type 'S2' but required in type '{ '1.': string; bar?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(36,5): error TS2741: Property ''1.'' is missing in type '{ '1.0': string; }' but required in type '{ '1.': string; bar?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(38,5): error TS2741: Property ''1.0'' is missing in type '{ '1': string; }' but required in type '{ '1.0': string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(39,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type '{ '1': string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(42,5): error TS2741: Property ''1.0'' is missing in type 'T' but required in type '{ '1.0': string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(65,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(71,5): error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S2'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(73,5): error TS2741: Property ''1.'' is missing in type '{ 1: string; baz?: string; }' but required in type '{ '1.': string; bar?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(74,5): error TS2741: Property '1.0' is missing in type '{ '1.': string; bar?: string; }' but required in type '{ 1: string; baz?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(75,5): error TS2741: Property ''1.'' is missing in type 'S' but required in type '{ '1.': string; bar?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(76,5): error TS2741: Property ''1.'' is missing in type 'S2' but required in type '{ '1.': string; bar?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(77,5): error TS2741: Property ''1.'' is missing in type '{ '1.0': string; }' but required in type '{ '1.': string; bar?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(78,5): error TS2741: Property ''1.'' is missing in type '{ 1: string; }' but required in type '{ '1.': string; bar?: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(80,5): error TS2741: Property ''1.0'' is missing in type '{ 1: string; }' but required in type '{ '1.0': string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(81,5): error TS2741: Property '1.' is missing in type '{ '1.0': string; }' but required in type '{ 1: string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(82,5): error TS2741: Property ''1.0'' is missing in type '{ 1: string; baz?: string; }' but required in type '{ '1.0': string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(83,5): error TS2741: Property ''1.0'' is missing in type 'T2' but required in type '{ '1.0': string; }'.
+assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Property ''1.0'' is missing in type 'T' but required in type '{ '1.0': string; }'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts (29 errors) ====
+==== assignmentCompatWithObjectMembersStringNumericNames.ts (29 errors) ====
     // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
     // string named numeric properties work correctly, errors below unless otherwise noted
     
@@ -53,73 +53,73 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         s = t;
         ~
 !!! error TS2741: Property ''1'' is missing in type 'T' but required in type 'S'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:5:15: ''1'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:5:15: ''1'' is declared here.
         t = s;
         ~
 !!! error TS2741: Property ''1.'' is missing in type 'S' but required in type 'T'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:6:15: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:6:15: ''1.'' is declared here.
         s = s2; // ok
         s = a2;
         ~
 !!! error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:5:15: ''1'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:5:15: ''1'' is declared here.
     
         s2 = t2;
         ~~
 !!! error TS2741: Property ''1'' is missing in type 'T2' but required in type 'S2'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:10:20: ''1'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:10:20: ''1'' is declared here.
         t2 = s2;
         ~~
 !!! error TS2741: Property ''1.0'' is missing in type 'S2' but required in type 'T2'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:11:20: ''1.0'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:11:20: ''1.0'' is declared here.
         s2 = t;
         ~~
 !!! error TS2741: Property ''1'' is missing in type 'T' but required in type 'S2'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:10:20: ''1'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:10:20: ''1'' is declared here.
         s2 = b;
         ~~
 !!! error TS2741: Property ''1'' is missing in type '{ '1.0': string; baz?: string; }' but required in type 'S2'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:10:20: ''1'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:10:20: ''1'' is declared here.
         s2 = a2;
         ~~
 !!! error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S2'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:10:20: ''1'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:10:20: ''1'' is declared here.
     
         a = b;
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ '1.0': string; baz?: string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
         b = a;
         ~
 !!! error TS2741: Property ''1.0'' is missing in type '{ '1.': string; bar?: string; }' but required in type '{ '1.0': string; baz?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:16:14: ''1.0'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:16:14: ''1.0'' is declared here.
         a = s;
         ~
 !!! error TS2741: Property ''1.'' is missing in type 'S' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
         a = s2;
         ~
 !!! error TS2741: Property ''1.'' is missing in type 'S2' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
         a = a2;
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ '1.0': string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
     
         a2 = b2;
         ~~
 !!! error TS2741: Property ''1.0'' is missing in type '{ '1': string; }' but required in type '{ '1.0': string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:18:16: ''1.0'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:18:16: ''1.0'' is declared here.
         b2 = a2;
         ~~
 !!! error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type '{ '1': string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:19:16: ''1'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:19:16: ''1'' is declared here.
         a2 = b; // ok
         a2 = t2; // ok
         a2 = t;
         ~~
 !!! error TS2741: Property ''1.0'' is missing in type 'T' but required in type '{ '1.0': string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:18:16: ''1.0'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:18:16: ''1.0'' is declared here.
     }
     
     module NumbersAndStrings {
@@ -145,7 +145,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         s = a2; // error
         ~
 !!! error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:46:15: ''1'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:46:15: ''1'' is declared here.
     
         s2 = t2; // ok
         t2 = s2; // ok
@@ -154,51 +154,51 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         s2 = a2; // error
         ~~
 !!! error TS2741: Property ''1'' is missing in type '{ '1.0': string; }' but required in type 'S2'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:51:20: ''1'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:51:20: ''1'' is declared here.
     
         a = b; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ 1: string; baz?: string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
         b = a; // error
         ~
 !!! error TS2741: Property '1.0' is missing in type '{ '1.': string; bar?: string; }' but required in type '{ 1: string; baz?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:57:14: '1.0' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:57:14: '1.0' is declared here.
         a = s; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type 'S' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
         a = s2; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type 'S2' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
         a = a2; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ '1.0': string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
         a = b2; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ 1: string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
     
         a2 = b2; // error
         ~~
 !!! error TS2741: Property ''1.0'' is missing in type '{ 1: string; }' but required in type '{ '1.0': string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:59:16: ''1.0'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:59:16: ''1.0'' is declared here.
         b2 = a2; // error
         ~~
 !!! error TS2741: Property '1.' is missing in type '{ '1.0': string; }' but required in type '{ 1: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:60:16: '1.' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:60:16: '1.' is declared here.
         a2 = b; // error
         ~~
 !!! error TS2741: Property ''1.0'' is missing in type '{ 1: string; baz?: string; }' but required in type '{ '1.0': string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:59:16: ''1.0'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:59:16: ''1.0'' is declared here.
         a2 = t2; // error
         ~~
 !!! error TS2741: Property ''1.0'' is missing in type 'T2' but required in type '{ '1.0': string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:59:16: ''1.0'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:59:16: ''1.0'' is declared here.
         a2 = t; // error
         ~~
 !!! error TS2741: Property ''1.0'' is missing in type 'T' but required in type '{ '1.0': string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersStringNumericNames.ts:59:16: ''1.0'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:59:16: ''1.0'' is declared here.
     }

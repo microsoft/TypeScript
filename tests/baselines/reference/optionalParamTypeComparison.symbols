@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalParamTypeComparison.ts ===
+//// [tests/cases/compiler/optionalParamTypeComparison.ts] ////
+
+=== optionalParamTypeComparison.ts ===
 var f: (s: string, n?: number) => void;
 >f : Symbol(f, Decl(optionalParamTypeComparison.ts, 0, 3))
 >s : Symbol(s, Decl(optionalParamTypeComparison.ts, 0, 8))

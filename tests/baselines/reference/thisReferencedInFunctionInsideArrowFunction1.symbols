@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisReferencedInFunctionInsideArrowFunction1.ts ===
+//// [tests/cases/compiler/thisReferencedInFunctionInsideArrowFunction1.ts] ////
+
+=== thisReferencedInFunctionInsideArrowFunction1.ts ===
 var foo = (dummy) => { };
 >foo : Symbol(foo, Decl(thisReferencedInFunctionInsideArrowFunction1.ts, 0, 3))
 >dummy : Symbol(dummy, Decl(thisReferencedInFunctionInsideArrowFunction1.ts, 0, 11))

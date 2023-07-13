@@ -1,12 +1,12 @@
-tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(2,7): error TS2537: Type '{ prop: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(13,7): error TS2537: Type '{ [idx: number]: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(21,7): error TS2538: Type 'unique symbol' cannot be used as an index type.
-tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(23,7): error TS2538: Type 'unique symbol' cannot be used as an index type.
-tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(25,7): error TS2538: Type 'symbol' cannot be used as an index type.
-tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(27,7): error TS2538: Type 'symbol' cannot be used as an index type.
+lateBoundDestructuringImplicitAnyError.ts(2,7): error TS2537: Type '{ prop: string; }' has no matching index signature for type 'string'.
+lateBoundDestructuringImplicitAnyError.ts(13,7): error TS2537: Type '{ [idx: number]: string; }' has no matching index signature for type 'string'.
+lateBoundDestructuringImplicitAnyError.ts(21,7): error TS2538: Type 'unique symbol' cannot be used as an index type.
+lateBoundDestructuringImplicitAnyError.ts(23,7): error TS2538: Type 'unique symbol' cannot be used as an index type.
+lateBoundDestructuringImplicitAnyError.ts(25,7): error TS2538: Type 'symbol' cannot be used as an index type.
+lateBoundDestructuringImplicitAnyError.ts(27,7): error TS2538: Type 'symbol' cannot be used as an index type.
 
 
-==== tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts (6 errors) ====
+==== lateBoundDestructuringImplicitAnyError.ts (6 errors) ====
     let named = "foo";
     let {[named]: prop} = {prop: "foo"};
           ~~~~~

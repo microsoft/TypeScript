@@ -1,4 +1,6 @@
-=== tests/cases/compiler/prespecializedGenericMembers1.ts ===
+//// [tests/cases/compiler/prespecializedGenericMembers1.ts] ////
+
+=== prespecializedGenericMembers1.ts ===
 export interface IKitty {
 >IKitty : Symbol(IKitty, Decl(prespecializedGenericMembers1.ts, 0, 0))
 

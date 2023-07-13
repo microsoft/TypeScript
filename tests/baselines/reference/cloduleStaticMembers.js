@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleStaticMembers.ts] ////
+
 //// [cloduleStaticMembers.ts]
 class Clod {
     private static x = 10;

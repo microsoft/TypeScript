@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letShadowedByNameInNestedScope.ts ===
+//// [tests/cases/compiler/letShadowedByNameInNestedScope.ts] ////
+
+=== letShadowedByNameInNestedScope.ts ===
 var x;
 >x : Symbol(x, Decl(letShadowedByNameInNestedScope.ts, 0, 3))
 

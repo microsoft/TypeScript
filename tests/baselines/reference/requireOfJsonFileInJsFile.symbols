@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileInJsFile.ts] ////
+
 === /user.js ===
 const json0 = require("./json.json");
 >json0 : Symbol(json0, Decl(user.js, 0, 5))

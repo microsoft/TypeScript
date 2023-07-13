@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restUnion3.ts ===
+//// [tests/cases/compiler/restUnion3.ts] ////
+
+=== restUnion3.ts ===
 declare const nullAndUndefinedUnion: null | undefined;
 >nullAndUndefinedUnion : Symbol(nullAndUndefinedUnion, Decl(restUnion3.ts, 0, 13))
 

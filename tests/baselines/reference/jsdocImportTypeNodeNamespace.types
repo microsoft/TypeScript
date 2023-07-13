@@ -1,4 +1,6 @@
-=== tests/cases/compiler/GeometryType.d.ts ===
+//// [tests/cases/compiler/jsdocImportTypeNodeNamespace.ts] ////
+
+=== GeometryType.d.ts ===
 // #40767
 
 declare namespace _default {
@@ -10,10 +12,10 @@ declare namespace _default {
 export default _default;
 >_default : typeof _default
 
-=== tests/cases/compiler/Main.js ===
+=== Main.js ===
 export default function () {
   return /** @type {import('./GeometryType.js').default} */ ('Point');
->('Point') : typeof import("tests/cases/compiler/GeometryType").default
+>('Point') : typeof import("GeometryType").default
 >'Point' : "Point"
 }
 

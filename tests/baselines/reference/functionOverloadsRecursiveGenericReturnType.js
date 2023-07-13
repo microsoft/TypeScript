@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloadsRecursiveGenericReturnType.ts] ////
+
 //// [functionOverloadsRecursiveGenericReturnType.ts]
 class B<V>{
     private id: V;

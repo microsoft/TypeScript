@@ -1,8 +1,10 @@
-=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileJs.js ===
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression13.ts] ////
+
+=== fileJs.js ===
 
 a ? () => a() : (): any => null; // Not legal JS; "Unexpected token ')'" at last paren
 
-=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/fileTs.ts ===
+=== fileTs.ts ===
 
 a ? () => a() : (): any => null;
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deepComparisons.ts] ////
+
 //// [deepComparisons.ts]
 function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
     let v1: Extract<T, string> = 0 as any as T;  // Error

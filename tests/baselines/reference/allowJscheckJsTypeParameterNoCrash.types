@@ -1,4 +1,6 @@
-=== tests/cases/compiler/func.ts ===
+//// [tests/cases/compiler/allowJscheckJsTypeParameterNoCrash.ts] ////
+
+=== func.ts ===
 interface ComponentOptions<V> {
     watch: Record<string, WatchHandler<any>>;
 >watch : Record<string, WatchHandler<any>>
@@ -15,7 +17,7 @@ export var vextend = extend;
 >vextend : (options: ComponentOptions<{}>) => void
 >extend : (options: ComponentOptions<{}>) => void
 
-=== tests/cases/compiler/app.js ===
+=== app.js ===
 import {vextend} from './func';
 >vextend : (options: ComponentOptions<{}>) => void
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts ===
+//// [tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts] ////
+
+=== narrowingGenericTypeFromInstanceof01.ts ===
 class A<T> {
 >A : Symbol(A, Decl(narrowingGenericTypeFromInstanceof01.ts, 0, 0))
 >T : Symbol(T, Decl(narrowingGenericTypeFromInstanceof01.ts, 0, 8))

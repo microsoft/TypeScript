@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope2.ts] ////
+
 //// [typeParametersAvailableInNestedScope2.ts]
 function foo<T, U>(x: T, y: U) {
     function bar<V>(z: V) {

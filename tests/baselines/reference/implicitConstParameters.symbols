@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitConstParameters.ts ===
+//// [tests/cases/compiler/implicitConstParameters.ts] ////
+
+=== implicitConstParameters.ts ===
 function doSomething(cb: () => void) {
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
 >cb : Symbol(cb, Decl(implicitConstParameters.ts, 0, 21))

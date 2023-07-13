@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedEnums.ts] ////
+
 //// [ModuleWithExportedAndNonExportedEnums.ts]
 module A {
     export enum Color { Red, Blue }

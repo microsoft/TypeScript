@@ -35,7 +35,8 @@ verify.completions({
     includes: [
         {
             name: "render",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
+            filterText: "render",
             isSnippet: true,
             insertText: "render(): Element {\r\n    $0\r\n}",
             hasAction: true,
@@ -59,7 +60,8 @@ verify.completions({
     includes: [
         {
             name: "render",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
+            filterText: "render",
             isSnippet: true,
             insertText: "render(): Element {\r\n    $0\r\n}",
             hasAction: true,

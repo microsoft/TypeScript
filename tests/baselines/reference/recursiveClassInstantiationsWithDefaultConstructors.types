@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveClassInstantiationsWithDefaultConstructors.ts ===
+//// [tests/cases/compiler/recursiveClassInstantiationsWithDefaultConstructors.ts] ////
+
+=== recursiveClassInstantiationsWithDefaultConstructors.ts ===
 module TypeScript2 {
 >TypeScript2 : typeof TypeScript2
 

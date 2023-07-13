@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticOffOfInstance1.ts] ////
+
 //// [staticOffOfInstance1.ts]
 class List {
   public Blah() {

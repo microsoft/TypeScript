@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propNameConstraining.ts] ////
+
 //// [typeSatisfaction_propNameConstraining.ts]
 type Keys = 'a' | 'b' | 'c' | 'd';
 

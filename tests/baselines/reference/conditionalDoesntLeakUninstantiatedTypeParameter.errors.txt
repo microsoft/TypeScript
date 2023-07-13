@@ -1,7 +1,7 @@
-tests/cases/compiler/conditionalDoesntLeakUninstantiatedTypeParameter.ts(7,7): error TS2322: Type 'string' is not assignable to type 'number'.
+conditionalDoesntLeakUninstantiatedTypeParameter.ts(7,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/conditionalDoesntLeakUninstantiatedTypeParameter.ts (1 errors) ====
+==== conditionalDoesntLeakUninstantiatedTypeParameter.ts (1 errors) ====
     interface Synthetic<A, B extends A> {}
     type SyntheticDestination<T, U> = U extends Synthetic<T, infer V> ? V : never;
     type TestSynthetic = // Resolved to T, should be `number` or an inference failure (`unknown`)

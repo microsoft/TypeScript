@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentIndexedToPrimitives.ts ===
+//// [tests/cases/compiler/assignmentIndexedToPrimitives.ts] ////
+
+=== assignmentIndexedToPrimitives.ts ===
 const n1: number = [0];
 >n1 : Symbol(n1, Decl(assignmentIndexedToPrimitives.ts, 0, 5))
 

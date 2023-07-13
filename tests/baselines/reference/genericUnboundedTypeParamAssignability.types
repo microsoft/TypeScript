@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericUnboundedTypeParamAssignability.ts ===
+//// [tests/cases/compiler/genericUnboundedTypeParamAssignability.ts] ////
+
+=== genericUnboundedTypeParamAssignability.ts ===
 function f1<T>(o: T) {
 >f1 : <T>(o: T) => void
 >o : T

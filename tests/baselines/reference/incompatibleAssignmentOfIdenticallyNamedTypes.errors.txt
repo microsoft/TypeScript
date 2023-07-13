@@ -1,8 +1,8 @@
-tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
-==== tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts (1 errors) ====
+==== incompatibleAssignmentOfIdenticallyNamedTypes.ts (1 errors) ====
     interface T { }
     declare const a: T;
     class Foo<T> {

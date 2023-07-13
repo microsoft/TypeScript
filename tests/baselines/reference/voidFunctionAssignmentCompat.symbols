@@ -1,4 +1,6 @@
-=== tests/cases/compiler/voidFunctionAssignmentCompat.ts ===
+//// [tests/cases/compiler/voidFunctionAssignmentCompat.ts] ////
+
+=== voidFunctionAssignmentCompat.ts ===
 var fa = function(): any { return 3; }
 >fa : Symbol(fa, Decl(voidFunctionAssignmentCompat.ts, 0, 3))
 

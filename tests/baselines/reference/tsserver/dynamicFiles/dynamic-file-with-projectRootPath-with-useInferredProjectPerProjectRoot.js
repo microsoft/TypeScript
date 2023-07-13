@@ -117,15 +117,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /^walkThroughSnippet:/Users/UserName: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/bower_components: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -218,21 +218,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
+/^walkThroughSnippet:: *new*
   {"pollingInterval":500}
 /^walkThroughSnippet:/Users/UserName:
+  {"pollingInterval":500}
+/bower_components: *new*
+  {"pollingInterval":500}
+/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/bower_components:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules:
   {"pollingInterval":500}
-/^walkThroughSnippet:: *new*
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/bower_components: *new*
-  {"pollingInterval":500}
-/node_modules: *new*
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

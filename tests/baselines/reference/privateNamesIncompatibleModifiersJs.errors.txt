@@ -1,18 +1,18 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(3,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(8,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(13,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(18,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(23,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(28,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(33,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(37,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(42,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(46,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(51,7): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js(55,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(3,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(8,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(13,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(18,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(23,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(28,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(33,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(37,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(42,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(46,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(51,7): error TS18010: An accessibility modifier cannot be used with a private identifier.
+privateNamesIncompatibleModifiersJs.js(55,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js (12 errors) ====
+==== privateNamesIncompatibleModifiersJs.js (12 errors) ====
     class A {
         /**
          * @public

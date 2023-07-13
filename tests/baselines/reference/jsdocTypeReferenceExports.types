@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/bug27342.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceExports.ts] ////
+
+=== bug27342.js ===
 module.exports = {}
 >module.exports = {} : typeof module.exports
 >module.exports : typeof module.exports
@@ -10,6 +12,6 @@ module.exports = {}
  * @type {exports}
  */
 var x
->x : typeof import("tests/cases/conformance/jsdoc/bug27342")
+>x : typeof import("bug27342")
 
 

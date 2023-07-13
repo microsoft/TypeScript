@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts] ////
+
 //// [enumWithoutInitializerAfterComputedMember.ts]
 enum E {
     a,

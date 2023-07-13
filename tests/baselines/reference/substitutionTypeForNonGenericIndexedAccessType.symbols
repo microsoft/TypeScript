@@ -1,4 +1,6 @@
-=== tests/cases/compiler/substitutionTypeForNonGenericIndexedAccessType.ts ===
+//// [tests/cases/compiler/substitutionTypeForNonGenericIndexedAccessType.ts] ////
+
+=== substitutionTypeForNonGenericIndexedAccessType.ts ===
 interface A {}
 >A : Symbol(A, Decl(substitutionTypeForNonGenericIndexedAccessType.ts, 0, 0))
 

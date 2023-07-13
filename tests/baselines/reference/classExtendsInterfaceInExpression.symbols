@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsInterfaceInExpression.ts ===
+//// [tests/cases/compiler/classExtendsInterfaceInExpression.ts] ////
+
+=== classExtendsInterfaceInExpression.ts ===
 interface A {}
 >A : Symbol(A, Decl(classExtendsInterfaceInExpression.ts, 0, 0))
 

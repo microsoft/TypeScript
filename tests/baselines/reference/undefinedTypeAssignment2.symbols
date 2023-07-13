@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedTypeAssignment2.ts ===
+//// [tests/cases/compiler/undefinedTypeAssignment2.ts] ////
+
+=== undefinedTypeAssignment2.ts ===
 var undefined = void 0;
 >undefined : Symbol(undefined, Decl(undefinedTypeAssignment2.ts, 0, 3))
 

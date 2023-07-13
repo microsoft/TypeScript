@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.js
+emittedFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.js
 sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.ts
 -------------------------------------------------------------------
 >>>var x = { x: 20 }.x;

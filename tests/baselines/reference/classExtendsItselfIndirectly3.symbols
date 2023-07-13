@@ -1,22 +1,24 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file1.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly3.ts] ////
+
+=== classExtendsItselfIndirectly_file1.ts ===
 class C extends E { foo: string; } // error
 >C : Symbol(C, Decl(classExtendsItselfIndirectly_file1.ts, 0, 0))
 >E : Symbol(E, Decl(classExtendsItselfIndirectly_file3.ts, 0, 0))
 >foo : Symbol(C.foo, Decl(classExtendsItselfIndirectly_file1.ts, 0, 19))
 
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file2.ts ===
+=== classExtendsItselfIndirectly_file2.ts ===
 class D extends C { bar: string; }
 >D : Symbol(D, Decl(classExtendsItselfIndirectly_file2.ts, 0, 0))
 >C : Symbol(C, Decl(classExtendsItselfIndirectly_file1.ts, 0, 0))
 >bar : Symbol(D.bar, Decl(classExtendsItselfIndirectly_file2.ts, 0, 19))
 
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file3.ts ===
+=== classExtendsItselfIndirectly_file3.ts ===
 class E extends D { baz: number; }
 >E : Symbol(E, Decl(classExtendsItselfIndirectly_file3.ts, 0, 0))
 >D : Symbol(D, Decl(classExtendsItselfIndirectly_file2.ts, 0, 0))
 >baz : Symbol(E.baz, Decl(classExtendsItselfIndirectly_file3.ts, 0, 19))
 
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file4.ts ===
+=== classExtendsItselfIndirectly_file4.ts ===
 class C2<T> extends E2<T> { foo: T; } // error
 >C2 : Symbol(C2, Decl(classExtendsItselfIndirectly_file4.ts, 0, 0))
 >T : Symbol(T, Decl(classExtendsItselfIndirectly_file4.ts, 0, 9))
@@ -25,7 +27,7 @@ class C2<T> extends E2<T> { foo: T; } // error
 >foo : Symbol(C2.foo, Decl(classExtendsItselfIndirectly_file4.ts, 0, 27))
 >T : Symbol(T, Decl(classExtendsItselfIndirectly_file4.ts, 0, 9))
 
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file5.ts ===
+=== classExtendsItselfIndirectly_file5.ts ===
 class D2<T> extends C2<T> { bar: T; }
 >D2 : Symbol(D2, Decl(classExtendsItselfIndirectly_file5.ts, 0, 0))
 >T : Symbol(T, Decl(classExtendsItselfIndirectly_file5.ts, 0, 9))
@@ -34,7 +36,7 @@ class D2<T> extends C2<T> { bar: T; }
 >bar : Symbol(D2.bar, Decl(classExtendsItselfIndirectly_file5.ts, 0, 27))
 >T : Symbol(T, Decl(classExtendsItselfIndirectly_file5.ts, 0, 9))
 
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly_file6.ts ===
+=== classExtendsItselfIndirectly_file6.ts ===
 class E2<T> extends D2<T> { baz: T; }
 >E2 : Symbol(E2, Decl(classExtendsItselfIndirectly_file6.ts, 0, 0))
 >T : Symbol(T, Decl(classExtendsItselfIndirectly_file6.ts, 0, 9))

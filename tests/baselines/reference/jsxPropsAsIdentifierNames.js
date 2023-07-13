@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxPropsAsIdentifierNames.tsx] ////
+
 //// [index.tsx]
 declare namespace JSX {
     interface Element { }

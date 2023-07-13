@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitUnknownImport.ts] ////
+
 //// [declarationEmitUnknownImport.ts]
 import Foo = SomeNonExistingName
 export {Foo}

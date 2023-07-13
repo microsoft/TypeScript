@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericSpecializations2.ts] ////
+
 //// [genericSpecializations2.ts]
 class IFoo<T> {
     foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T

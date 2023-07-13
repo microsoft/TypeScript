@@ -1,4 +1,6 @@
-=== tests/cases/compiler/clinterfaces.ts ===
+//// [tests/cases/compiler/clinterfaces.ts] ////
+
+=== clinterfaces.ts ===
 module M {
 >M : Symbol(M, Decl(clinterfaces.ts, 0, 0))
 

@@ -1,30 +1,30 @@
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(4,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(6,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(8,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(10,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(12,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(14,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(17,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(19,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(21,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(23,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(25,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(27,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(30,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(32,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(34,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(36,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(38,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(40,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(43,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(45,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(47,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(49,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(51,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
-tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts(53,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(4,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(6,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(8,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(10,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(12,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(14,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(17,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(19,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(21,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(23,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(25,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(27,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(30,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(32,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(34,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(36,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(38,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(40,5): error TS2839: This condition will always return 'false' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(43,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(45,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(47,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(49,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(51,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
+conditionalEqualityOnLiteralObjects.ts(53,5): error TS2839: This condition will always return 'true' since JavaScript compares objects by reference, not value.
 
 
-==== tests/cases/compiler/conditionalEqualityOnLiteralObjects.ts (24 errors) ====
+==== conditionalEqualityOnLiteralObjects.ts (24 errors) ====
     const a = { a: 1 }
     const b = [1]
     

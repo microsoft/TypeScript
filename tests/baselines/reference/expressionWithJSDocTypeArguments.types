@@ -1,4 +1,6 @@
-=== tests/cases/compiler/expressionWithJSDocTypeArguments.ts ===
+//// [tests/cases/compiler/expressionWithJSDocTypeArguments.ts] ////
+
+=== expressionWithJSDocTypeArguments.ts ===
 // Repro from #51802
 
 function foo<T>(x: T): T { return x }

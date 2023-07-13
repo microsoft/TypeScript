@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decrementAndIncrementOperators.ts] ////
+
 //// [decrementAndIncrementOperators.ts]
 var x = 0;
 

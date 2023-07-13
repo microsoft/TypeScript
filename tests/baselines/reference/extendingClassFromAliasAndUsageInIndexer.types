@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_main.ts ===
+//// [tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer.ts] ////
+
+=== extendingClassFromAliasAndUsageInIndexer_main.ts ===
 import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 >Backbone : typeof Backbone
 
@@ -45,7 +47,7 @@ var visModel = new moduleMap[moduleName].VisualizationModel();
 >moduleName : string
 >VisualizationModel : typeof Backbone.Model
 
-=== tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_backbone.ts ===
+=== extendingClassFromAliasAndUsageInIndexer_backbone.ts ===
 export class Model {
 >Model : Model
 
@@ -53,7 +55,7 @@ export class Model {
 >someData : string
 }
 
-=== tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleA.ts ===
+=== extendingClassFromAliasAndUsageInIndexer_moduleA.ts ===
 import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 >Backbone : typeof Backbone
 
@@ -66,7 +68,7 @@ export class VisualizationModel extends Backbone.Model {
     // interesting stuff here
 }
 
-=== tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleB.ts ===
+=== extendingClassFromAliasAndUsageInIndexer_moduleB.ts ===
 import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 >Backbone : typeof Backbone
 

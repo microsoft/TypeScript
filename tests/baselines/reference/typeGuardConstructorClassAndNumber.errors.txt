@@ -1,22 +1,22 @@
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(66,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+typeGuardConstructorClassAndNumber.ts(66,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(73,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+typeGuardConstructorClassAndNumber.ts(73,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(80,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+typeGuardConstructorClassAndNumber.ts(80,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(87,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+typeGuardConstructorClassAndNumber.ts(87,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(94,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+typeGuardConstructorClassAndNumber.ts(94,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(101,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+typeGuardConstructorClassAndNumber.ts(101,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(108,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+typeGuardConstructorClassAndNumber.ts(108,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
-tests/cases/compiler/typeGuardConstructorClassAndNumber.ts(115,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
+typeGuardConstructorClassAndNumber.ts(115,10): error TS2339: Property 'property1' does not exist on type 'number | C1'.
   Property 'property1' does not exist on type 'number'.
 
 
-==== tests/cases/compiler/typeGuardConstructorClassAndNumber.ts (8 errors) ====
+==== typeGuardConstructorClassAndNumber.ts (8 errors) ====
     // Typical case
     class C1 {
         property1: string;

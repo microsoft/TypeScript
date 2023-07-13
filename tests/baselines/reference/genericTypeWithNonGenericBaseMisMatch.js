@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts] ////
+
 //// [genericTypeWithNonGenericBaseMisMatch.ts]
 interface I {
 	f: (a: { a: number }) => void

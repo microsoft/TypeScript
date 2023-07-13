@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contravariantOnlyInferenceFromAnnotatedFunction.ts ===
+//// [tests/cases/compiler/contravariantOnlyInferenceFromAnnotatedFunction.ts] ////
+
+=== contravariantOnlyInferenceFromAnnotatedFunction.ts ===
 // repro from #52580
 
 type Funcs<A, B extends Record<string, unknown>> = {

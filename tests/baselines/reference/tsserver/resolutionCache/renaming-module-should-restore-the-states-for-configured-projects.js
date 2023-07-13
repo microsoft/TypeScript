@@ -72,15 +72,15 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {}
 /users/username/projects/project/modulefile.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -129,9 +129,9 @@ export function bar() { };
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -188,19 +188,19 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/project/modulefile: *new*
   {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/modulefile1.ts: *new*
   {}
-/users/username/projects/project: *new*
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -270,17 +270,17 @@ export function bar() { };
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/project/modulefile:
   {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /users/username/projects/project:
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -339,9 +339,9 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -349,9 +349,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /users/username/projects/project/modulefile.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::

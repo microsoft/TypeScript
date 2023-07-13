@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericInferenceDefaultTypeParameterJsxReact.tsx] ////
+
 //// [genericInferenceDefaultTypeParameterJsxReact.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

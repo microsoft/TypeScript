@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdModuleConstEnumUsage.ts] ////
+
 === /proj/defs/cc.ts ===
 export const enum CharCode {
 >CharCode : CharCode

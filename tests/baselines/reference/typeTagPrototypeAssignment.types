@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/bug27327.js ===
+//// [tests/cases/conformance/jsdoc/typeTagPrototypeAssignment.ts] ////
+
+=== bug27327.js ===
 function C() {
 >C : typeof C
 }

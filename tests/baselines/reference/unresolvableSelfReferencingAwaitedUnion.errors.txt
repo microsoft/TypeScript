@@ -1,10 +1,10 @@
-tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts(9,32): error TS2322: Type 'SimpleType' is not assignable to type 'T'.
+unresolvableSelfReferencingAwaitedUnion.ts(9,32): error TS2322: Type 'SimpleType' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'SimpleType'.
-tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts(16,19): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
-tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts(29,30): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
+unresolvableSelfReferencingAwaitedUnion.ts(16,19): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
+unresolvableSelfReferencingAwaitedUnion.ts(29,30): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
 
 
-==== tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts (3 errors) ====
+==== unresolvableSelfReferencingAwaitedUnion.ts (3 errors) ====
     // repro #49646
     
     type EnvFunction = <T>() => T;
@@ -17,7 +17,7 @@ tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts(29,30): error TS
                                    ~~~~~~
 !!! error TS2322: Type 'SimpleType' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'SimpleType'.
-!!! related TS6502 tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts:3:20: The expected type comes from the return type of this signature.
+!!! related TS6502 unresolvableSelfReferencingAwaitedUnion.ts:3:20: The expected type comes from the return type of this signature.
     
     // repro #49723
     

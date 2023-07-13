@@ -1,7 +1,7 @@
-tests/cases/compiler/emptyModuleName.ts(1,20): error TS2307: Cannot find module '' or its corresponding type declarations.
+emptyModuleName.ts(1,20): error TS2307: Cannot find module '' or its corresponding type declarations.
 
 
-==== tests/cases/compiler/emptyModuleName.ts (1 errors) ====
+==== emptyModuleName.ts (1 errors) ====
     import * as A from "";
                        ~~
 !!! error TS2307: Cannot find module '' or its corresponding type declarations.

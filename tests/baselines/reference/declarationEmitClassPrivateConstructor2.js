@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitClassPrivateConstructor2.ts] ////
+
 //// [declarationEmitClassPrivateConstructor2.ts]
 interface PrivateInterface {
 }

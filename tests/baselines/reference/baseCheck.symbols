@@ -1,4 +1,6 @@
-=== tests/cases/compiler/baseCheck.ts ===
+//// [tests/cases/compiler/baseCheck.ts] ////
+
+=== baseCheck.ts ===
 class C { constructor(x: number, y: number) { } }
 >C : Symbol(C, Decl(baseCheck.ts, 0, 0))
 >x : Symbol(x, Decl(baseCheck.ts, 0, 22))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/toStringOnPrimitives.ts] ////
+
 //// [toStringOnPrimitives.ts]
 true.toString()
 var aBool = false;

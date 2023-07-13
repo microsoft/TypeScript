@@ -1,13 +1,13 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(11,24): error TS2300: Duplicate identifier 'y'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(18,5): error TS2687: All declarations of 'y' must have identical modifiers.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(19,25): error TS2300: Duplicate identifier 'y'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(19,25): error TS2687: All declarations of 'y' must have identical modifiers.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(26,5): error TS2687: All declarations of 'y' must have identical modifiers.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(27,27): error TS2300: Duplicate identifier 'y'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts(27,27): error TS2687: All declarations of 'y' must have identical modifiers.
+constructorParameterProperties2.ts(11,24): error TS2300: Duplicate identifier 'y'.
+constructorParameterProperties2.ts(18,5): error TS2687: All declarations of 'y' must have identical modifiers.
+constructorParameterProperties2.ts(19,25): error TS2300: Duplicate identifier 'y'.
+constructorParameterProperties2.ts(19,25): error TS2687: All declarations of 'y' must have identical modifiers.
+constructorParameterProperties2.ts(26,5): error TS2687: All declarations of 'y' must have identical modifiers.
+constructorParameterProperties2.ts(27,27): error TS2300: Duplicate identifier 'y'.
+constructorParameterProperties2.ts(27,27): error TS2687: All declarations of 'y' must have identical modifiers.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts (7 errors) ====
+==== constructorParameterProperties2.ts (7 errors) ====
     class C {
         y: number;
         constructor(y: number) { } // ok

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsInForStatement.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInForStatement.ts] ////
+
+=== typeGuardsInForStatement.ts ===
 let cond: boolean;
 >cond : Symbol(cond, Decl(typeGuardsInForStatement.ts, 0, 3))
 

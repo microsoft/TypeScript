@@ -1,7 +1,7 @@
-tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaration.
+circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaration.
 
 
-==== tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts (1 errors) ====
+==== circularImportAlias.ts (1 errors) ====
     // expected no error
     
     module B {
@@ -9,7 +9,7 @@ tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.t
         export class D extends a.C {
                                  ~
 !!! error TS2449: Class 'C' used before its declaration.
-!!! related TS2728 tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts:11:18: 'C' is declared here.
+!!! related TS2728 circularImportAlias.ts:11:18: 'C' is declared here.
             id: number;
         }
     }

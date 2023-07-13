@@ -68,6 +68,7 @@ import {
     ObjectFlags,
     ObjectType,
     RelationComparisonResult,
+    ScriptKind,
     Signature,
     SignatureCheckMode,
     SignatureFlags,
@@ -469,6 +470,11 @@ export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
 /** @internal */
 export function formatSnippetKind(kind: SnippetKind | undefined): string {
     return formatEnum(kind, (ts as any).SnippetKind, /*isFlags*/ false);
+}
+
+/** @internal */
+export function formatScriptKind(kind: ScriptKind | undefined): string {
+    return formatEnum(kind, (ts as any).ScriptKind, /*isFlags*/ false);
 }
 
 /** @internal */

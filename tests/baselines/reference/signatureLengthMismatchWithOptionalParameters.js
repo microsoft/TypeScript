@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/signatureLengthMismatchWithOptionalParameters.ts] ////
+
 //// [signatureLengthMismatchWithOptionalParameters.ts]
 function callee(n: number | undefined, m: string) { }
 

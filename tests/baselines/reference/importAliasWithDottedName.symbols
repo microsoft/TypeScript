@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importAliasWithDottedName.ts ===
+//// [tests/cases/compiler/importAliasWithDottedName.ts] ////
+
+=== importAliasWithDottedName.ts ===
 module M {
 >M : Symbol(M, Decl(importAliasWithDottedName.ts, 0, 0))
 

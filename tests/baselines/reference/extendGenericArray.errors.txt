@@ -1,7 +1,7 @@
-tests/cases/compiler/extendGenericArray.ts(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
+extendGenericArray.ts(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/extendGenericArray.ts (1 errors) ====
+==== extendGenericArray.ts (1 errors) ====
     interface Array<T> {
         foo(): T;
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/tryStatements/tryStatements.ts] ////
+
 //// [tryStatements.ts]
 function fn() {
     try { } catch { }

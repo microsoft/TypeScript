@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTupleTypeInference.ts] ////
+
 //// [recursiveTupleTypeInference.ts]
 // Repro from #37475
 

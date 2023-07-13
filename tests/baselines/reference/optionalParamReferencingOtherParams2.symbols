@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalParamReferencingOtherParams2.ts ===
+//// [tests/cases/compiler/optionalParamReferencingOtherParams2.ts] ////
+
+=== optionalParamReferencingOtherParams2.ts ===
 var a = 1;
 >a : Symbol(a, Decl(optionalParamReferencingOtherParams2.ts, 0, 3))
 

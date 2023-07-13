@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts] ////
+
 //// [typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts]
 class C { private p: string };
 

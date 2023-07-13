@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/asyncAliasReturnType_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncAliasReturnType_es6.ts] ////
+
+=== asyncAliasReturnType_es6.ts ===
 type PromiseAlias<T> = Promise<T>;
 >PromiseAlias : Symbol(PromiseAlias, Decl(asyncAliasReturnType_es6.ts, 0, 0))
 >T : Symbol(T, Decl(asyncAliasReturnType_es6.ts, 0, 18))

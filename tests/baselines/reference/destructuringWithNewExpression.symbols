@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringWithNewExpression.ts ===
+//// [tests/cases/compiler/destructuringWithNewExpression.ts] ////
+
+=== destructuringWithNewExpression.ts ===
 class C {
 >C : Symbol(C, Decl(destructuringWithNewExpression.ts, 0, 0))
 

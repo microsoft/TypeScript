@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts] ////
+
 //// [stringLiteralTypesWithVariousOperators02.ts]
 let abc: "ABC" = "ABC";
 let xyz: "XYZ" = "XYZ";

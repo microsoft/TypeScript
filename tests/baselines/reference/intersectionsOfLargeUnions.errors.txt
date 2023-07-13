@@ -1,8 +1,8 @@
-tests/cases/compiler/intersectionsOfLargeUnions.ts(21,15): error TS2536: Type 'T' cannot be used to index type 'HTMLElementTagNameMap'.
-tests/cases/compiler/intersectionsOfLargeUnions.ts(21,15): error TS2536: Type 'P' cannot be used to index type 'HTMLElementTagNameMap[T]'.
+intersectionsOfLargeUnions.ts(21,15): error TS2536: Type 'T' cannot be used to index type 'HTMLElementTagNameMap'.
+intersectionsOfLargeUnions.ts(21,15): error TS2536: Type 'P' cannot be used to index type 'HTMLElementTagNameMap[T]'.
 
 
-==== tests/cases/compiler/intersectionsOfLargeUnions.ts (2 errors) ====
+==== intersectionsOfLargeUnions.ts (2 errors) ====
     // Repro from #23977
     
     export function assertIsElement(node: Node | null): node is Element {

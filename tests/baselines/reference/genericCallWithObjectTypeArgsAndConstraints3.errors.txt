@@ -1,7 +1,7 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2741: Property 'y' is missing in type 'Derived2' but required in type 'Derived'.
+genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2741: Property 'y' is missing in type 'Derived2' but required in type 'Derived'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts (1 errors) ====
+==== genericCallWithObjectTypeArgsAndConstraints3.ts (1 errors) ====
     // Generic call with constraints infering type parameter from object member properties
     
     class Base {
@@ -22,8 +22,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     var r1 = f({ x: new Derived(), y: new Derived2() }); // error because neither is supertype of the other
                                    ~
 !!! error TS2741: Property 'y' is missing in type 'Derived2' but required in type 'Derived'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts:7:5: 'y' is declared here.
-!!! related TS6500 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts:13:39: The expected type comes from property 'y' which is declared here on type '{ x: Derived; y: Derived; }'
+!!! related TS2728 genericCallWithObjectTypeArgsAndConstraints3.ts:7:5: 'y' is declared here.
+!!! related TS6500 genericCallWithObjectTypeArgsAndConstraints3.ts:13:39: The expected type comes from property 'y' which is declared here on type '{ x: Derived; y: Derived; }'
     
     function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
         var r: T;

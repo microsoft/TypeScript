@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts] ////
+
 //// [privateNameDuplicateField.ts]
 function Field() {
 

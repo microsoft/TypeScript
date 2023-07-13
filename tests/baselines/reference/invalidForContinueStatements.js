@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/continueStatements/invalidForContinueStatements.ts] ////
+
 //// [invalidForContinueStatements.ts]
 // All errors
 

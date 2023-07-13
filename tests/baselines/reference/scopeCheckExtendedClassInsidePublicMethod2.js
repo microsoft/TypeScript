@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/scopeCheckExtendedClassInsidePublicMethod2.ts] ////
+
 //// [scopeCheckExtendedClassInsidePublicMethod2.ts]
 class C { private v; public p; static s; }
 class D extends C {

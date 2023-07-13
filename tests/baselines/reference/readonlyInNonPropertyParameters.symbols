@@ -1,4 +1,6 @@
-=== tests/cases/compiler/readonlyInNonPropertyParameters.ts ===
+//// [tests/cases/compiler/readonlyInNonPropertyParameters.ts] ////
+
+=== readonlyInNonPropertyParameters.ts ===
 // `readonly` won't work outside of property parameters
 class X {
 >X : Symbol(X, Decl(readonlyInNonPropertyParameters.ts, 0, 0))

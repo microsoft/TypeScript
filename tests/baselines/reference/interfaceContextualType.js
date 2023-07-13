@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceContextualType.ts] ////
+
 //// [interfaceContextualType.ts]
 export interface IOptions {
     italic?: boolean;

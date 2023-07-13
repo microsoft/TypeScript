@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/partiallyAmbientClodule.ts] ////
+
 //// [partiallyAmbientClodule.ts]
 declare module foo {
     export function x(): any;

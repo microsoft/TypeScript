@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalsAndParametersOverloadSignatures.ts ===
+//// [tests/cases/compiler/unusedLocalsAndParametersOverloadSignatures.ts] ////
+
+=== unusedLocalsAndParametersOverloadSignatures.ts ===
 export function func(details: number, message: string, ...args: any[]): void;
 >func : (details: number, message: string, ...args: any[]) => void
 >details : number

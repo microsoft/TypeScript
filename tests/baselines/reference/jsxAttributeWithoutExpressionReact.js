@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx] ////
+
 //// [jsxAttributeWithoutExpressionReact.tsx]
 declare var React: any;
 <View>

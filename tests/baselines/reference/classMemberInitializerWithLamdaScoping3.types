@@ -1,8 +1,10 @@
-=== tests/cases/compiler/classMemberInitializerWithLamdaScoping3_0.ts ===
+//// [tests/cases/compiler/classMemberInitializerWithLamdaScoping3.ts] ////
+
+=== classMemberInitializerWithLamdaScoping3_0.ts ===
 var field1: string;
 >field1 : string
 
-=== tests/cases/compiler/classMemberInitializerWithLamdaScoping3_1.ts ===
+=== classMemberInitializerWithLamdaScoping3_1.ts ===
 declare var console: {
 >console : { log(msg?: any): void; }
 

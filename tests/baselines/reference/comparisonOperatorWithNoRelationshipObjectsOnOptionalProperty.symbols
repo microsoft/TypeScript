@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts] ////
+
+=== comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts ===
 interface A1 {
 >A1 : Symbol(A1, Decl(comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts, 0, 0))
 

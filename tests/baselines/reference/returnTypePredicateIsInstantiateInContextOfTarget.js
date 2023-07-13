@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/returnTypePredicateIsInstantiateInContextOfTarget.tsx] ////
+
 //// [returnTypePredicateIsInstantiateInContextOfTarget.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";

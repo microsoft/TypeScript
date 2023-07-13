@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/debugger.ts] ////
+
 //// [debugger.ts]
 debugger;
 

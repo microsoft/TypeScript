@@ -51,19 +51,19 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/file1.ts (used version)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/file1.ts: *new*
   {}
 /users/username/projects/project/modulefile.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -133,23 +133,23 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/modulefile1.ts (computed .d.ts)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/project/modulefile: *new*
   {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
-/users/username/projects/project/file1.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
 /users/username/projects/project: *new*
   {}
+/users/username/projects/project/file1.ts:
+  {}
 /users/username/projects/project/modulefile1.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -214,9 +214,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/file1.ts (computed .d.ts)
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -224,13 +224,13 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /users/username/projects/project/file1.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /users/username/projects/project/modulefile.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::

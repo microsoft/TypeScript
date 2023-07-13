@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undeclaredModuleError.ts] ////
+
 //// [undeclaredModuleError.ts]
 import fs = require('fs');
 function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}

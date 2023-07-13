@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadWithCallbacksWithDifferingOptionalityOnArgs.ts] ////
+
 //// [overloadWithCallbacksWithDifferingOptionalityOnArgs.ts]
 function x2(callback: (x?: number) => number);
 function x2(callback: (x: string) => number);

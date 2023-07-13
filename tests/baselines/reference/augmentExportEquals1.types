@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file3.ts ===
+//// [tests/cases/compiler/augmentExportEquals1.ts] ////
+
+=== file3.ts ===
 import x = require("./file1");
 >x : number
 
@@ -7,7 +9,7 @@ let a: x.A; // should not work
 >a : x.A
 >x : any
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 var x = 1;
 >x : number
 >1 : 1
@@ -15,7 +17,7 @@ var x = 1;
 export = x;
 >x : number
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import x = require("./file1"); 
 >x : number
 

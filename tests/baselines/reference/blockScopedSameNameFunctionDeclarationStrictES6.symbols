@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts ===
+//// [tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts] ////
+
+=== blockScopedSameNameFunctionDeclarationStrictES6.ts ===
 "use strict";
 function foo(a: number) {
 >foo : Symbol(foo, Decl(blockScopedSameNameFunctionDeclarationStrictES6.ts, 0, 13))

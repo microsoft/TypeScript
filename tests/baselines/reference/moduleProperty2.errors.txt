@@ -1,8 +1,8 @@
-tests/cases/compiler/moduleProperty2.ts(7,15): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/moduleProperty2.ts(12,17): error TS2339: Property 'y' does not exist on type 'typeof M'.
+moduleProperty2.ts(7,15): error TS2304: Cannot find name 'x'.
+moduleProperty2.ts(12,17): error TS2339: Property 'y' does not exist on type 'typeof M'.
 
 
-==== tests/cases/compiler/moduleProperty2.ts (2 errors) ====
+==== moduleProperty2.ts (2 errors) ====
     module M {
         function f() {
             var x;

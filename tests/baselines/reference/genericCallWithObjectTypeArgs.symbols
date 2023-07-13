@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts] ////
+
+=== genericCallWithObjectTypeArgs.ts ===
 class C {
 >C : Symbol(C, Decl(genericCallWithObjectTypeArgs.ts, 0, 0))
 

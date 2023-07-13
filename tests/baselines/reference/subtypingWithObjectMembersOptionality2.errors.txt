@@ -1,12 +1,12 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(10,11): error TS2430: Interface 'S' incorrectly extends interface 'T'.
+subtypingWithObjectMembersOptionality2.ts(10,11): error TS2430: Interface 'S' incorrectly extends interface 'T'.
   Property 'Foo' is optional in type 'S' but required in type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(18,11): error TS2430: Interface 'S2' incorrectly extends interface 'T2'.
+subtypingWithObjectMembersOptionality2.ts(18,11): error TS2430: Interface 'S2' incorrectly extends interface 'T2'.
   Property '1' is optional in type 'S2' but required in type 'T2'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts(26,11): error TS2430: Interface 'S3' incorrectly extends interface 'T3'.
+subtypingWithObjectMembersOptionality2.ts(26,11): error TS2430: Interface 'S3' incorrectly extends interface 'T3'.
   Property ''1'' is optional in type 'S3' but required in type 'T3'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts (3 errors) ====
+==== subtypingWithObjectMembersOptionality2.ts (3 errors) ====
     // Derived member is optional but base member is not, should be an error
     
     interface Base { foo: string; }

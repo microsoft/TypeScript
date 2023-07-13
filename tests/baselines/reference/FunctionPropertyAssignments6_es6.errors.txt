@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments6_es6.ts(1,12): error TS1003: Identifier expected.
+FunctionPropertyAssignments6_es6.ts(1,12): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments6_es6.ts (1 errors) ====
+==== FunctionPropertyAssignments6_es6.ts (1 errors) ====
     var v = { *<T>() { } }
                ~
 !!! error TS1003: Identifier expected.

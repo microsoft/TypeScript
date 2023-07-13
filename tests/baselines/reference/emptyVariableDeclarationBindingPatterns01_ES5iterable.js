@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns01_ES5iterable.ts] ////
+
 //// [emptyVariableDeclarationBindingPatterns01_ES5iterable.ts]
 (function () {
     var a: any;

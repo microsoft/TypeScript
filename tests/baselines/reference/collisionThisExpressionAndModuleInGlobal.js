@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionThisExpressionAndModuleInGlobal.ts] ////
+
 //// [collisionThisExpressionAndModuleInGlobal.ts]
 module _this { //Error
     class c {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorWithCapturedSuper.ts ===
+//// [tests/cases/compiler/constructorWithCapturedSuper.ts] ////
+
+=== constructorWithCapturedSuper.ts ===
 let oneA: A;
 >oneA : Symbol(oneA, Decl(constructorWithCapturedSuper.ts, 0, 3))
 >A : Symbol(A, Decl(constructorWithCapturedSuper.ts, 0, 12))

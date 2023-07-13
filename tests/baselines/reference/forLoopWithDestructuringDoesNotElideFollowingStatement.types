@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forLoopWithDestructuringDoesNotElideFollowingStatement.ts ===
+//// [tests/cases/compiler/forLoopWithDestructuringDoesNotElideFollowingStatement.ts] ////
+
+=== forLoopWithDestructuringDoesNotElideFollowingStatement.ts ===
 let array = [{a: 0, b: 1}]
 >array : { a: number; b: number; }[]
 >[{a: 0, b: 1}] : { a: number; b: number; }[]

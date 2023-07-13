@@ -140,9 +140,9 @@ PolledWatches::
 FsWatches::
 /user/username/projects/myproject/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/b/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/b/lib/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -265,13 +265,13 @@ PolledWatches::
 FsWatches::
 /user/username/projects/myproject/a/tsconfig.json:
   {}
-/user/username/projects/myproject/b/tsconfig.json:
+/user/username/projects/myproject/b/index.ts: *new*
   {}
 /user/username/projects/myproject/b/lib/index.d.ts:
   {}
 /user/username/projects/myproject/b/lib/index.d.ts.map: *new*
   {}
-/user/username/projects/myproject/b/index.ts: *new*
+/user/username/projects/myproject/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::

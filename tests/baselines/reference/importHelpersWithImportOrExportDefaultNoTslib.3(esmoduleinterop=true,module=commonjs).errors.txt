@@ -1,10 +1,10 @@
-tests/cases/compiler/b.ts(1,10): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+b.ts(1,10): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
 
 
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     export default class { }
     
-==== tests/cases/compiler/b.ts (1 errors) ====
+==== b.ts (1 errors) ====
     import { default as b } from "./a";
              ~~~~~~~~~~~~
 !!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.

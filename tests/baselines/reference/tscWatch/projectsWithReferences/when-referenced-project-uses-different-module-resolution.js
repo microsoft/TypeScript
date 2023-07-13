@@ -296,27 +296,27 @@ Dependencies for::
   /user/username/projects/transitiveReferences/a.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/transitivereferences/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/transitivereferences/tsconfig.c.json: *new*
-  {}
-/user/username/projects/transitivereferences/tsconfig.b.json: *new*
-  {}
-/user/username/projects/transitivereferences/tsconfig.a.json: *new*
-  {}
-/user/username/projects/transitivereferences/c.ts: *new*
-  {}
-/user/username/projects/transitivereferences/b.d.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/transitivereferences/a.d.ts: *new*
   {}
+/user/username/projects/transitivereferences/b.d.ts: *new*
+  {}
+/user/username/projects/transitivereferences/c.ts: *new*
+  {}
 /user/username/projects/transitivereferences/refs/a.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/transitivereferences/tsconfig.a.json: *new*
+  {}
+/user/username/projects/transitivereferences/tsconfig.b.json: *new*
+  {}
+/user/username/projects/transitivereferences/tsconfig.c.json: *new*
   {}
 
 FsWatchesRecursive::

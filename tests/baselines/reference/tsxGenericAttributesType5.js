@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxGenericAttributesType5.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

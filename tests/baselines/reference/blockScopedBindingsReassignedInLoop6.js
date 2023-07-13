@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedBindingsReassignedInLoop6.ts] ////
+
 //// [blockScopedBindingsReassignedInLoop6.ts]
 function f1() {
     for (let [x, y] = [1, 2]; x < y; ++x, --y) {

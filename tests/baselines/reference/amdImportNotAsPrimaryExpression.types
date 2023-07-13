@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+//// [tests/cases/conformance/externalModules/amdImportNotAsPrimaryExpression.ts] ////
+
+=== foo_1.ts ===
 import foo = require("./foo_0");
 >foo : typeof foo
 
@@ -39,7 +41,7 @@ var e: number = <foo.E1>0;
 >foo : any
 >0 : 0
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 export class C1 {
 >C1 : C1
 

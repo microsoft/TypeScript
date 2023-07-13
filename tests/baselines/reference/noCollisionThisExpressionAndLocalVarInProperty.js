@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInProperty.ts] ////
+
 //// [noCollisionThisExpressionAndLocalVarInProperty.ts]
 class class1 {
     public prop1 = {

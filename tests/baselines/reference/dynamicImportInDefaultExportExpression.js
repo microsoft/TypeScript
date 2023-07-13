@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicImportInDefaultExportExpression.ts] ////
+
 //// [dynamicImportInDefaultExportExpression.ts]
 export default {
     getInstance: function () {

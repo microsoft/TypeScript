@@ -1,4 +1,6 @@
-=== tests/cases/compiler/test.js ===
+//// [tests/cases/compiler/jsdocTypedefBeforeParenthesizedExpression.ts] ////
+
+=== test.js ===
 // @ts-check
 /** @typedef {number} NotADuplicateIdentifier */
 

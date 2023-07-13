@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/t3.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImports4-amd.ts] ////
+
+=== t3.ts ===
 import a = require("./t1");
 >a : typeof a
 
@@ -61,7 +63,7 @@ export { a, b, c, d, e1, e2, f1, f2 };
 >f1 : "hello"
 >f2 : "hello"
 
-=== tests/cases/conformance/es6/modules/t1.ts ===
+=== t1.ts ===
 
 export default "hello";
 

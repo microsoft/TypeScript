@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability46.ts] ////
+
 //// [assignmentCompatability46.ts]
 declare function fn(x: never): void;
 

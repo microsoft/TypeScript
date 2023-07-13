@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritanceStaticAccessorOverridingMethod.ts ===
+//// [tests/cases/compiler/inheritanceStaticAccessorOverridingMethod.ts] ////
+
+=== inheritanceStaticAccessorOverridingMethod.ts ===
 class a {
 >a : Symbol(a, Decl(inheritanceStaticAccessorOverridingMethod.ts, 0, 0))
 

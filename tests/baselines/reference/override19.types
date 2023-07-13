@@ -1,4 +1,6 @@
-=== tests/cases/conformance/override/override19.ts ===
+//// [tests/cases/conformance/override/override19.ts] ////
+
+=== override19.ts ===
 type Foo = abstract new(...args: any) => any;
 >Foo : abstract new (...args: any) => any
 >args : any

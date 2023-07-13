@@ -7,6 +7,7 @@
 //     
 //     ^
 // | ----------------------------------------------------------------------
+// | (property) B.foo: any
 // | abstract
 // | accessor
 // | async
@@ -20,7 +21,6 @@
 // | readonly
 // | set
 // | static
-// | (property) B.foo: any
 // | ----------------------------------------------------------------------
 // }
 
@@ -37,6 +37,57 @@
       "isMemberCompletion": true,
       "isNewIdentifierLocation": true,
       "entries": [
+        {
+          "name": "foo",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "insertText": "get foo(): any {\n}\nset foo(value: any) {\n}",
+          "filterText": "foo",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "B",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "foo",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
         {
           "name": "abstract",
           "kind": "keyword",
@@ -192,56 +243,6 @@
               "kind": "keyword"
             }
           ]
-        },
-        {
-          "name": "foo",
-          "kind": "property",
-          "kindModifiers": "declare",
-          "sortText": "17",
-          "insertText": "get foo(): any {\n}\nset foo(value: any) {\n}",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "B",
-              "kind": "className"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "foo",
-              "kind": "propertyName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": []
         }
       ]
     }

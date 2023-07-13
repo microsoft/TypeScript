@@ -2,7 +2,7 @@ error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
 
 
 !!! error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
-==== tests/cases/conformance/decorators/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     interface Object { }
     interface Array<T> { }
     interface String { }
@@ -12,7 +12,7 @@ error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
     interface RegExp { }
     interface IArguments { }
     
-==== tests/cases/conformance/decorators/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     declare function dec(t, k, d);
     
     class C {

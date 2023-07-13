@@ -1,10 +1,10 @@
-tests/cases/conformance/jsdoc/typedefOnStatements.js(26,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
-tests/cases/conformance/jsdoc/typedefOnStatements.js(31,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
-tests/cases/conformance/jsdoc/typedefOnStatements.js(33,1): error TS1101: 'with' statements are not allowed in strict mode.
-tests/cases/conformance/jsdoc/typedefOnStatements.js(33,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+typedefOnStatements.js(26,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
+typedefOnStatements.js(31,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+typedefOnStatements.js(33,1): error TS1101: 'with' statements are not allowed in strict mode.
+typedefOnStatements.js(33,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== tests/cases/conformance/jsdoc/typedefOnStatements.js (4 errors) ====
+==== typedefOnStatements.js (4 errors) ====
     /** @typedef {{a: string}} A */
     ;
     /** @typedef {{ b: string }} B */

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/parsingDeepParenthensizedExpression.ts] ////
+
+=== a.js ===
 function Y(e, t) {
 >Y : (e: any, t: any) => void
 >e : any

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace05.ts ===
+//// [tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace05.ts] ////
+
+=== asiPreventsParsingAsNamespace05.ts ===
 let namespace = 10;
 >namespace : Symbol(namespace, Decl(asiPreventsParsingAsNamespace05.ts, 0, 3))
 

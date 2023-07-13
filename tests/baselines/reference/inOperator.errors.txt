@@ -1,7 +1,7 @@
-tests/cases/compiler/inOperator.ts(7,15): error TS2322: Type 'number' is not assignable to type 'object'.
+inOperator.ts(7,15): error TS2322: Type 'number' is not assignable to type 'object'.
 
 
-==== tests/cases/compiler/inOperator.ts (1 errors) ====
+==== inOperator.ts (1 errors) ====
     var a=[];
     
     for (var x in a) {}

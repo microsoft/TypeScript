@@ -1,4 +1,6 @@
-=== tests/cases/compiler/awaitedTypeStrictNull.ts ===
+//// [tests/cases/compiler/awaitedTypeStrictNull.ts] ////
+
+=== awaitedTypeStrictNull.ts ===
 type T1 = Awaited<number>;
 >T1 : Symbol(T1, Decl(awaitedTypeStrictNull.ts, 0, 0))
 >Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))

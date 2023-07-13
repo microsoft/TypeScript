@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts] ////
+
 //// [collisionExportsRequireAndInternalModuleAlias.ts]
 export module m {
     export class c {

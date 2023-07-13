@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/divergentAccessorsTypes5.ts] ////
+
 //// [divergentAccessorsTypes5.ts]
 // Not really different from divergentAccessorsTypes4.ts,
 // but goes through the deferred type code

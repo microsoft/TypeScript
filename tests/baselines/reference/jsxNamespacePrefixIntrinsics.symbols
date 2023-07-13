@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxNamespacePrefixIntrinsics.tsx ===
+//// [tests/cases/compiler/jsxNamespacePrefixIntrinsics.tsx] ////
+
+=== jsxNamespacePrefixIntrinsics.tsx ===
 declare namespace JSX {
 >JSX : Symbol(JSX, Decl(jsxNamespacePrefixIntrinsics.tsx, 0, 0))
 

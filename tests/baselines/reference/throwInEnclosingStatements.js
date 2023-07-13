@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts] ////
+
 //// [throwInEnclosingStatements.ts]
 function fn(x) {
     throw x;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/switchComparableCompatForBrands.ts ===
+//// [tests/cases/compiler/switchComparableCompatForBrands.ts] ////
+
+=== switchComparableCompatForBrands.ts ===
 class MyBrand
 >MyBrand : Symbol(MyBrand, Decl(switchComparableCompatForBrands.ts, 0, 0))
 {

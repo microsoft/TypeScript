@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts] ////
+
 //// [checkSuperCallBeforeThisAccessing8.ts]
 class Base {
     constructor(...arg) {

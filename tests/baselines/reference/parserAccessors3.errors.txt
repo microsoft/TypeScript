@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors3.ts(1,15): error TS2378: A 'get' accessor must return a value.
+parserAccessors3.ts(1,15): error TS2378: A 'get' accessor must return a value.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors3.ts (1 errors) ====
+==== parserAccessors3.ts (1 errors) ====
     var v = { get Foo() { } };
                   ~~~
 !!! error TS2378: A 'get' accessor must return a value.

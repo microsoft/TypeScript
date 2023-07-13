@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCrashOnNoLib.ts] ////
+
 //// [noCrashOnNoLib.ts]
 export function f() {
     let e: {}[];

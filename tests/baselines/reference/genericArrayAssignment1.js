@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericArrayAssignment1.ts] ////
+
 //// [genericArrayAssignment1.ts]
 var s: string[];
 var n: number[];

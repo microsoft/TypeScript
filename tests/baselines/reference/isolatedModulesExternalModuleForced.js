@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesExternalModuleForced.ts] ////
+
 //// [file1.ts]
 var x;
 

@@ -1,8 +1,10 @@
-=== tests/cases/compiler/es6ImportNamedImportInExportAssignment_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportInExportAssignment.ts] ////
+
+=== es6ImportNamedImportInExportAssignment_0.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(es6ImportNamedImportInExportAssignment_0.ts, 0, 10))
 
-=== tests/cases/compiler/es6ImportNamedImportInExportAssignment_1.ts ===
+=== es6ImportNamedImportInExportAssignment_1.ts ===
 import { a } from "./es6ImportNamedImportInExportAssignment_0";
 >a : Symbol(a, Decl(es6ImportNamedImportInExportAssignment_1.ts, 0, 8))
 

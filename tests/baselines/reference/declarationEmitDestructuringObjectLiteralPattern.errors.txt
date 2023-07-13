@@ -1,10 +1,10 @@
-tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern.ts(2,23): error TS2353: Object literal may only specify known properties, and 'y4' does not exist in type '{ x4: any; }'.
-tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern.ts(3,16): error TS2353: Object literal may only specify known properties, and 'x5' does not exist in type '{ y5: any; }'.
-tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern.ts(5,27): error TS2353: Object literal may only specify known properties, and 'y7' does not exist in type '{ x7: any; }'.
-tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern.ts(6,20): error TS2353: Object literal may only specify known properties, and 'x8' does not exist in type '{ y8: any; }'.
+declarationEmitDestructuringObjectLiteralPattern.ts(2,23): error TS2353: Object literal may only specify known properties, and 'y4' does not exist in type '{ x4: any; }'.
+declarationEmitDestructuringObjectLiteralPattern.ts(3,16): error TS2353: Object literal may only specify known properties, and 'x5' does not exist in type '{ y5: any; }'.
+declarationEmitDestructuringObjectLiteralPattern.ts(5,27): error TS2353: Object literal may only specify known properties, and 'y7' does not exist in type '{ x7: any; }'.
+declarationEmitDestructuringObjectLiteralPattern.ts(6,20): error TS2353: Object literal may only specify known properties, and 'x8' does not exist in type '{ y8: any; }'.
 
 
-==== tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern.ts (4 errors) ====
+==== declarationEmitDestructuringObjectLiteralPattern.ts (4 errors) ====
     var { } = { x: 5, y: "hello" };
     var { x4 } = { x4: 5, y4: "hello" };
                           ~~

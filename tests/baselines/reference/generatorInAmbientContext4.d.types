@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext4.d.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext4.d.ts] ////
+
+=== generatorInAmbientContext4.d.ts ===
 declare module M {
 >M : typeof M
 

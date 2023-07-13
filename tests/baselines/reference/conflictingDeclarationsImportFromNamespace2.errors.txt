@@ -1,9 +1,9 @@
-tests/cases/compiler/index.ts(1,13): error TS2440: Import declaration conflicts with local declaration of 'pick'.
-tests/cases/compiler/index.ts(1,23): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
-tests/cases/compiler/index.ts(2,14): error TS7023: 'pick' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+index.ts(1,13): error TS2440: Import declaration conflicts with local declaration of 'pick'.
+index.ts(1,23): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
+index.ts(2,14): error TS7023: 'pick' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 
 
-==== tests/cases/compiler/node_modules/@types/lodash/object.d.ts (0 errors) ====
+==== node_modules/@types/lodash/object.d.ts (0 errors) ====
     import _ = require("./index");
     declare module "./index" {
         interface LoDashStatic {
@@ -14,11 +14,11 @@ tests/cases/compiler/index.ts(2,14): error TS7023: 'pick' implicitly has return 
         }
     }
     
-==== tests/cases/compiler/node_modules/@types/lodash/pick.d.ts (0 errors) ====
+==== node_modules/@types/lodash/pick.d.ts (0 errors) ====
     import { pick } from "./index";
     export = pick;
     
-==== tests/cases/compiler/node_modules/@types/lodash/index.d.ts (0 errors) ====
+==== node_modules/@types/lodash/index.d.ts (0 errors) ====
     /// <reference path="./object.d.ts" />
     export = _;
     export as namespace _;
@@ -27,7 +27,7 @@ tests/cases/compiler/index.ts(2,14): error TS7023: 'pick' implicitly has return 
         interface LoDashStatic {}
     }
     
-==== tests/cases/compiler/index.ts (3 errors) ====
+==== index.ts (3 errors) ====
     import * as pick from 'lodash/pick';
                 ~~~~
 !!! error TS2440: Import declaration conflicts with local declaration of 'pick'.

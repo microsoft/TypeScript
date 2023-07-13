@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldCallExpression.ts] ////
+
 //// [privateNameStaticFieldCallExpression.ts]
 class A {
     static #fieldFunc = function () { this.x = 10; };

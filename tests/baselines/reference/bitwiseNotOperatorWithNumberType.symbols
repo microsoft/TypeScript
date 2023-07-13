@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithNumberType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithNumberType.ts] ////
+
+=== bitwiseNotOperatorWithNumberType.ts ===
 // ~ operator on number type
 var NUMBER: number;
 >NUMBER : Symbol(NUMBER, Decl(bitwiseNotOperatorWithNumberType.ts, 1, 3))

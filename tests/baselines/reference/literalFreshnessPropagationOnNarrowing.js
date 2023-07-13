@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts] ////
+
 //// [literalFreshnessPropagationOnNarrowing.ts]
 function f1() {
     let b = true;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping1.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping1.ts] ////
+
+=== taggedTemplateContextualTyping1.ts ===
 type FuncType = (x: <T>(p: T) => T) => typeof x;
 >FuncType : Symbol(FuncType, Decl(taggedTemplateContextualTyping1.ts, 0, 0))
 >x : Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 0, 17))

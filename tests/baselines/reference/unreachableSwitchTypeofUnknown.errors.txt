@@ -1,7 +1,7 @@
-tests/cases/compiler/unreachable.ts(12,5): error TS7027: Unreachable code detected.
+unreachable.ts(12,5): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/unreachable.ts (1 errors) ====
+==== unreachable.ts (1 errors) ====
     const unreachable = (x: unknown): number => {
         switch (typeof x) {
             case 'string': return 0

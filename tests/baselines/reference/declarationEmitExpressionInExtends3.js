@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpressionInExtends3.ts] ////
+
 //// [declarationEmitExpressionInExtends3.ts]
 export class ExportedClass<T> {
 	x: T;

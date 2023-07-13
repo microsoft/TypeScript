@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionParameterArityMismatch.ts ===
+//// [tests/cases/compiler/functionParameterArityMismatch.ts] ////
+
+=== functionParameterArityMismatch.ts ===
 declare function f1(a: number);
 >f1 : Symbol(f1, Decl(functionParameterArityMismatch.ts, 0, 0), Decl(functionParameterArityMismatch.ts, 0, 31))
 >a : Symbol(a, Decl(functionParameterArityMismatch.ts, 0, 20))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceTransitiveConstraints.ts] ////
+
 //// [typeArgumentInferenceTransitiveConstraints.ts]
 function fn<A extends Date, B extends A, C extends B>(a: A, b: B, c: C) {
     return [a, b, c];

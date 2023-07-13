@@ -1,4 +1,6 @@
-=== tests/cases/compiler/illegalGenericWrapping1.ts ===
+//// [tests/cases/compiler/illegalGenericWrapping1.ts] ////
+
+=== illegalGenericWrapping1.ts ===
 interface Sequence<T> {
 >Sequence : Symbol(Sequence, Decl(illegalGenericWrapping1.ts, 0, 0))
 >T : Symbol(T, Decl(illegalGenericWrapping1.ts, 0, 19))

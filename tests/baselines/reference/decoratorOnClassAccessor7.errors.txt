@@ -1,8 +1,8 @@
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor7.ts(26,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor7.ts(31,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
+decoratorOnClassAccessor7.ts(26,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
+decoratorOnClassAccessor7.ts(31,5): error TS1207: Decorators cannot be applied to multiple get/set accessors of the same name.
 
 
-==== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor7.ts (2 errors) ====
+==== decoratorOnClassAccessor7.ts (2 errors) ====
     declare function dec1<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
     declare function dec2<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
     

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts] ////
+
 //// [overrideWithoutNoImplicitOverride1.ts]
 export declare class AmbientClass {
     override yadda(): void;

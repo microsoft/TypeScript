@@ -1,12 +1,14 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/isolatedModulesNoExternalModuleMultiple.ts] ////
+
+=== file1.ts ===
 var x;
 >x : any
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 var y;
 >y : any
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 var z;
 >z : any
 

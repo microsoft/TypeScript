@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileObjectLiteralWithAccessors.ts ===
+//// [tests/cases/compiler/declFileObjectLiteralWithAccessors.ts] ////
+
+=== declFileObjectLiteralWithAccessors.ts ===
 function /*1*/makePoint(x: number) { 
 >makePoint : Symbol(makePoint, Decl(declFileObjectLiteralWithAccessors.ts, 0, 0))
 >x : Symbol(x, Decl(declFileObjectLiteralWithAccessors.ts, 0, 24))

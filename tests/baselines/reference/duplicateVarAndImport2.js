@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateVarAndImport2.ts] ////
+
 //// [duplicateVarAndImport2.ts]
 // error since module is instantiated
 var a;

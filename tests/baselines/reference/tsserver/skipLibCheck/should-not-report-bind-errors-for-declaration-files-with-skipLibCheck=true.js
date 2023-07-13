@@ -73,11 +73,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/jsconfig.json: *new*
-  {}
 /a/dtsfile1.d.ts: *new*
   {}
 /a/dtsfile2.d.ts: *new*
+  {}
+/a/jsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -128,13 +128,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/jsconfig.json:
+/a/data/package.json: *new*
   {}
 /a/dtsfile1.d.ts:
   {}
 /a/dtsfile2.d.ts:
   {}
-/a/data/package.json: *new*
+/a/jsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -176,21 +176,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/bower_components: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /a/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/jsconfig.json:
+/a/data/package.json:
   {}
 /a/dtsfile1.d.ts:
   {}
 /a/dtsfile2.d.ts:
   {}
-/a/data/package.json:
+/a/jsconfig.json:
   {}
 
 FsWatchesRecursive::

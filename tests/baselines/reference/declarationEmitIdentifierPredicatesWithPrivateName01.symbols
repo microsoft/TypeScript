@@ -1,4 +1,6 @@
-=== tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts ===
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts] ////
+
+=== declarationEmitIdentifierPredicatesWithPrivateName01.ts ===
 interface I {
 >I : Symbol(I, Decl(declarationEmitIdentifierPredicatesWithPrivateName01.ts, 0, 0))
 

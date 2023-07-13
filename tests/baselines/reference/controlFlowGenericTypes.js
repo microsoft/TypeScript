@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts] ////
+
 //// [controlFlowGenericTypes.ts]
 function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
     if (x) {

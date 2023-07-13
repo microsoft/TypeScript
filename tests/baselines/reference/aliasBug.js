@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasBug.ts] ////
+
 //// [aliasBug.ts]
 module foo {    
     export class Provide {

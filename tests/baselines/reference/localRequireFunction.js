@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/localRequireFunction.ts] ////
+
 //// [app.js]
 function require(a) {
     return a;

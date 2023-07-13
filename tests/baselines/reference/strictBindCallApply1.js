@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/strictBindCallApply1.ts] ////
+
 //// [strictBindCallApply1.ts]
 declare function foo(a: number, b: string): string;
 

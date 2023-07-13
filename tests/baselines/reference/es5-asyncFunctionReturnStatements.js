@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-asyncFunctionReturnStatements.ts] ////
+
 //// [es5-asyncFunctionReturnStatements.ts]
 declare var x, y, z, a, b, c;
 

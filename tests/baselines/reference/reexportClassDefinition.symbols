@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo3.ts ===
+//// [tests/cases/conformance/externalModules/reexportClassDefinition.ts] ////
+
+=== foo3.ts ===
 import foo2 = require('./foo2')
 >foo2 : Symbol(foo2, Decl(foo3.ts, 0, 0))
 
@@ -9,14 +11,14 @@ class x extends foo2.x {}
 >x : Symbol(x, Decl(foo2.ts, 2, 10))
 
 
-=== tests/cases/conformance/externalModules/foo1.ts ===
+=== foo1.ts ===
 class x{}
 >x : Symbol(x, Decl(foo1.ts, 0, 0))
 
 export = x; 
 >x : Symbol(x, Decl(foo1.ts, 0, 0))
 
-=== tests/cases/conformance/externalModules/foo2.ts ===
+=== foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : Symbol(foo1, Decl(foo2.ts, 0, 0))
 

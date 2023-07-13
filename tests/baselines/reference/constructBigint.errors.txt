@@ -1,10 +1,10 @@
-tests/cases/conformance/es2020/constructBigint.ts(6,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'string | number | bigint | boolean'.
-tests/cases/conformance/es2020/constructBigint.ts(7,8): error TS2345: Argument of type '{ e: number; m: number; }' is not assignable to parameter of type 'string | number | bigint | boolean'.
-tests/cases/conformance/es2020/constructBigint.ts(8,8): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | number | bigint | boolean'.
-tests/cases/conformance/es2020/constructBigint.ts(9,8): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string | number | bigint | boolean'.
+constructBigint.ts(6,8): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'string | number | bigint | boolean'.
+constructBigint.ts(7,8): error TS2345: Argument of type '{ e: number; m: number; }' is not assignable to parameter of type 'string | number | bigint | boolean'.
+constructBigint.ts(8,8): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | number | bigint | boolean'.
+constructBigint.ts(9,8): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string | number | bigint | boolean'.
 
 
-==== tests/cases/conformance/es2020/constructBigint.ts (4 errors) ====
+==== constructBigint.ts (4 errors) ====
     BigInt(1);
     BigInt(1n);
     BigInt("0");

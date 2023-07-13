@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tsxStatelessComponentDefaultProps.tsx ===
+//// [tests/cases/compiler/tsxStatelessComponentDefaultProps.tsx] ////
+
+=== tsxStatelessComponentDefaultProps.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from 'react';

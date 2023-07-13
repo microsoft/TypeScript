@@ -1,4 +1,6 @@
-=== tests/cases/compiler/locale.d.ts ===
+//// [tests/cases/compiler/declarationEmitAliasFromIndirectFile.ts] ////
+
+=== locale.d.ts ===
 export type Locale = {
 >Locale : { weekdays: {    shorthand: [string, string, string, string, string, string, string];    longhand: [string, string, string, string, string, string, string];}; }
 
@@ -30,7 +32,7 @@ export type CustomLocale = {
 export type key = "ar" | "bg";
 >key : "ar" | "bg"
 
-=== tests/cases/compiler/instance.d.ts ===
+=== instance.d.ts ===
 import { Locale, CustomLocale, key as LocaleKey } from "./locale";
 >Locale : any
 >CustomLocale : any
@@ -43,7 +45,7 @@ export interface FlatpickrFn {
 >default : Locale
 }
 
-=== tests/cases/compiler/app.ts ===
+=== app.ts ===
 import { FlatpickrFn } from "./instance";
 >FlatpickrFn : any
 
@@ -55,7 +57,7 @@ const fp = { l10ns: {} } as FlatpickrFn;
 >{} : {}
 
 export default fp.l10ns;
->fp.l10ns : { ar?: import("tests/cases/compiler/locale").CustomLocale; bg?: import("tests/cases/compiler/locale").CustomLocale; } & { default: import("tests/cases/compiler/locale").Locale; }
+>fp.l10ns : { ar?: import("locale").CustomLocale; bg?: import("locale").CustomLocale; } & { default: import("locale").Locale; }
 >fp : FlatpickrFn
->l10ns : { ar?: import("tests/cases/compiler/locale").CustomLocale; bg?: import("tests/cases/compiler/locale").CustomLocale; } & { default: import("tests/cases/compiler/locale").Locale; }
+>l10ns : { ar?: import("locale").CustomLocale; bg?: import("locale").CustomLocale; } & { default: import("locale").Locale; }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts] ////
+
 //// [objectTypesIdentityWithPrivates3.ts]
 interface T1 { }
 interface T2 { z }

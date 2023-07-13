@@ -31,24 +31,27 @@ verify.completions({
     includes: [
         {
             name: "a",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "a: string",
+            filterText: "a"
         },
         {
             name: "b",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText:
 `b(a: string): void {
 }`,
+            filterText: "b"
         },
         {
             name: "c",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText:
 `c(a: string): string
 c(a: number): number
 c(a: unknown): string | number {
 }`,
+            filterText: "c"
         },
     ],
 });

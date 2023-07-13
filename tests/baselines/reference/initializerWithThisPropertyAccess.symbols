@@ -1,4 +1,6 @@
-=== tests/cases/compiler/initializerWithThisPropertyAccess.ts ===
+//// [tests/cases/compiler/initializerWithThisPropertyAccess.ts] ////
+
+=== initializerWithThisPropertyAccess.ts ===
 class A {
 >A : Symbol(A, Decl(initializerWithThisPropertyAccess.ts, 0, 0))
 

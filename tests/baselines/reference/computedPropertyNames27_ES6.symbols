@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames27_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames27_ES6.ts] ////
+
+=== computedPropertyNames27_ES6.ts ===
 class Base {
 >Base : Symbol(Base, Decl(computedPropertyNames27_ES6.ts, 0, 0))
 }

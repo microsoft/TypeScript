@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingConstrainedTypeParameter.ts] ////
+
 //// [narrowingConstrainedTypeParameter.ts]
 // Repro from #10811
 

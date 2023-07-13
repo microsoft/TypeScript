@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatability31.ts ===
+//// [tests/cases/compiler/assignmentCompatability31.ts] ////
+
+=== assignmentCompatability31.ts ===
 module __test1__ {
 >__test1__ : Symbol(__test1__, Decl(assignmentCompatability31.ts, 0, 0))
 

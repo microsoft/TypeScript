@@ -5,7 +5,7 @@ sourceRoot:
 sources: derivedClassConstructorWithExplicitReturns01.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/derivedClassConstructorWithExplicitReturns01.js
+emittedFile:derivedClassConstructorWithExplicitReturns01.js
 sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 -------------------------------------------------------------------
 >>>var __extends = (this && this.__extends) || (function () {

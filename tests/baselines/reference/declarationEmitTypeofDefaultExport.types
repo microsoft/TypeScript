@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeofDefaultExport.ts] ////
+
 === /a.ts ===
 export default class C {};
 >C : C

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingUnionToUnion.ts ===
+//// [tests/cases/compiler/narrowingUnionToUnion.ts] ////
+
+=== narrowingUnionToUnion.ts ===
 type Falsy = false | 0 | 0n | '' | null | undefined;
 >Falsy : Symbol(Falsy, Decl(narrowingUnionToUnion.ts, 0, 0))
 

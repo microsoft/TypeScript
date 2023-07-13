@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionInIfStatementInModule.ts] ////
+
 //// [functionInIfStatementInModule.ts]
  
 module Midori

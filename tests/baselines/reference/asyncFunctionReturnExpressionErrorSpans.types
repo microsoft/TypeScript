@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts ===
+//// [tests/cases/compiler/asyncFunctionReturnExpressionErrorSpans.ts] ////
+
+=== asyncFunctionReturnExpressionErrorSpans.ts ===
 interface Foo {
     bar: {
 >bar : { baz: {    inner: {        thing: string;    };}; }

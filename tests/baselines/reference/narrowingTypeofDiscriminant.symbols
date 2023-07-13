@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingTypeofDiscriminant.ts ===
+//// [tests/cases/compiler/narrowingTypeofDiscriminant.ts] ////
+
+=== narrowingTypeofDiscriminant.ts ===
 function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
 >f1 : Symbol(f1, Decl(narrowingTypeofDiscriminant.ts, 0, 0))
 >obj : Symbol(obj, Decl(narrowingTypeofDiscriminant.ts, 0, 12))

@@ -1,25 +1,25 @@
-tests/cases/conformance/node/subfolder/index.ts(2,9): error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+subfolder/index.ts(2,9): error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 
 
-==== tests/cases/conformance/node/subfolder/index.ts (1 errors) ====
+==== subfolder/index.ts (1 errors) ====
     // cjs format file
     export {default} from "fs";
             ~~~~~~~
 !!! error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
-==== tests/cases/conformance/node/index.ts (0 errors) ====
+==== index.ts (0 errors) ====
     // esm format file
     export {default} from "fs";
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module"
     }
-==== tests/cases/conformance/node/subfolder/package.json (0 errors) ====
+==== subfolder/package.json (0 errors) ====
     {
         "type": "commonjs"
     }
-==== tests/cases/conformance/node/types.d.ts (0 errors) ====
+==== types.d.ts (0 errors) ====
     declare module "fs";
     declare module "tslib" {
         export {};

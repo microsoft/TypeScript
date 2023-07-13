@@ -1,4 +1,6 @@
-=== tests/cases/compiler/escapedReservedCompilerNamedIdentifier.ts ===
+//// [tests/cases/compiler/escapedReservedCompilerNamedIdentifier.ts] ////
+
+=== escapedReservedCompilerNamedIdentifier.ts ===
 // double underscores
 var __proto__ = 10;
 >__proto__ : Symbol(__proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 1, 3))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromJSConstructor.ts] ////
+
+=== a.js ===
 function Installer () {
 >Installer : Symbol(Installer, Decl(a.js, 0, 0))
 

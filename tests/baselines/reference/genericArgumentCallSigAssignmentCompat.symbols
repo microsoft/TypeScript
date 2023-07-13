@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts ===
+//// [tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts] ////
+
+=== genericArgumentCallSigAssignmentCompat.ts ===
 module Underscore {
 >Underscore : Symbol(Underscore, Decl(genericArgumentCallSigAssignmentCompat.ts, 0, 0))
 

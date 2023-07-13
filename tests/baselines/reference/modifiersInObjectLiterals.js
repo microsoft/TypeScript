@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modifiersInObjectLiterals.ts] ////
+
 //// [modifiersInObjectLiterals.ts]
 let data = {
 	public foo: 'hey',

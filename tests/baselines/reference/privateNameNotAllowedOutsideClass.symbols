@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts] ////
+
+=== privateNameNotAllowedOutsideClass.ts ===
 const #foo = 3;
 >#foo : Symbol(#foo, Decl(privateNameNotAllowedOutsideClass.ts, 0, 5))
 

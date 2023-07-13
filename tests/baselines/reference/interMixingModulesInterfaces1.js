@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interMixingModulesInterfaces1.ts] ////
+
 //// [interMixingModulesInterfaces1.ts]
 module A {
 

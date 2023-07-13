@@ -1,8 +1,8 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck11.ts(3,6): error TS2322: Type 'string | number' is not assignable to type 'string'.
+ES5For-ofTypeCheck11.ts(3,6): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck11.ts (1 errors) ====
+==== ES5For-ofTypeCheck11.ts (1 errors) ====
     var union: string | number[];
     var v: string;
     for (v of union) { }

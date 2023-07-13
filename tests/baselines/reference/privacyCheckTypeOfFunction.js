@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyCheckTypeOfFunction.ts] ////
+
 //// [privacyCheckTypeOfFunction.ts]
 function foo() {
 }

@@ -4,18 +4,18 @@ error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript
 
 !!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 !!! error TS5101:   Use 'outFile' instead.
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     export class A {}
     
-==== tests/cases/compiler/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     export class B {x: number;}
     
-==== tests/cases/compiler/c.d.ts (0 errors) ====
+==== c.d.ts (0 errors) ====
     declare module "C" {
         class Cls {y: string; }
     }
     
-==== tests/cases/compiler/d.ts (0 errors) ====
+==== d.ts (0 errors) ====
     /// <reference path="c.d.ts"/>
     
     import {A} from "./a";
@@ -37,7 +37,7 @@ error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript
         }
     }
     
-==== tests/cases/compiler/main.ts (0 errors) ====
+==== main.ts (0 errors) ====
     import {A} from "./a";
     import "d";
     

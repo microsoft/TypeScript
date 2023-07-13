@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement10.ts(1,17): error TS2304: Cannot find name 'X'.
+parserForOfStatement10.ts(1,17): error TS2304: Cannot find name 'X'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement10.ts (1 errors) ====
+==== parserForOfStatement10.ts (1 errors) ====
     for (const v of X) {
                     ~
 !!! error TS2304: Cannot find name 'X'.

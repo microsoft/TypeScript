@@ -1,32 +1,32 @@
-tests/cases/conformance/types/tuple/restTupleElements1.ts(3,22): error TS1257: A required element cannot follow an optional element.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(9,13): error TS2574: A rest element type must be an array type.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(10,13): error TS2574: A rest element type must be an array type.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(10,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-tests/cases/conformance/types/tuple/restTupleElements1.ts(23,31): error TS2344: Type 'number[]' does not satisfy the constraint '[number, ...number[]]'.
+restTupleElements1.ts(3,22): error TS1257: A required element cannot follow an optional element.
+restTupleElements1.ts(9,13): error TS2574: A rest element type must be an array type.
+restTupleElements1.ts(10,13): error TS2574: A rest element type must be an array type.
+restTupleElements1.ts(10,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+restTupleElements1.ts(23,31): error TS2344: Type 'number[]' does not satisfy the constraint '[number, ...number[]]'.
   Source provides no match for required element at position 0 in target.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(24,31): error TS2344: Type '[]' does not satisfy the constraint '[number, ...number[]]'.
+restTupleElements1.ts(24,31): error TS2344: Type '[]' does not satisfy the constraint '[number, ...number[]]'.
   Source has 0 element(s) but target requires 1.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(29,18): error TS2344: Type 'number[]' does not satisfy the constraint '[number]'.
+restTupleElements1.ts(29,18): error TS2344: Type 'number[]' does not satisfy the constraint '[number]'.
   Target requires 1 element(s) but source may have fewer.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(30,18): error TS2344: Type '[number, ...number[]]' does not satisfy the constraint '[number]'.
+restTupleElements1.ts(30,18): error TS2344: Type '[number, ...number[]]' does not satisfy the constraint '[number]'.
   Target allows only 1 element(s) but source may have more.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(32,31): error TS2344: Type '[number, ...string[]]' does not satisfy the constraint '[number, ...number[]]'.
+restTupleElements1.ts(32,31): error TS2344: Type '[number, ...string[]]' does not satisfy the constraint '[number, ...number[]]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(33,31): error TS2344: Type '[string, ...number[]]' does not satisfy the constraint '[number, ...number[]]'.
+restTupleElements1.ts(33,31): error TS2344: Type '[string, ...number[]]' does not satisfy the constraint '[number, ...number[]]'.
   Type at position 0 in source is not compatible with type at position 0 in target.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(34,31): error TS2344: Type '[number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
+restTupleElements1.ts(34,31): error TS2344: Type '[number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(35,31): error TS2344: Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
+restTupleElements1.ts(35,31): error TS2344: Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
   Type at positions 1 through 3 in source is not compatible with type at position 1 in target.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[]]'.
+restTupleElements1.ts(59,4): error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[]]'.
   Source has 0 element(s) but target requires 1.
 
 
-==== tests/cases/conformance/types/tuple/restTupleElements1.ts (13 errors) ====
+==== restTupleElements1.ts (13 errors) ====
     type T00 = [string?];
     type T01 = [string, string?];
     type T02 = [string?, string];  // Error

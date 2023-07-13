@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParameterInLambda3.ts ===
+//// [tests/cases/compiler/unusedTypeParameterInLambda3.ts] ////
+
+=== unusedTypeParameterInLambda3.ts ===
 class A<T> {
 >A : Symbol(A, Decl(unusedTypeParameterInLambda3.ts, 0, 0))
 >T : Symbol(T, Decl(unusedTypeParameterInLambda3.ts, 0, 8))

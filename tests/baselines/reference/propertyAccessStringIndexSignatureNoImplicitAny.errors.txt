@@ -1,9 +1,9 @@
-tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignatureNoImplicitAny.ts(10,7): error TS2339: Property 'nope' does not exist on type 'Empty'.
-tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignatureNoImplicitAny.ts(11,1): error TS7053: Element implicitly has an 'any' type because expression of type '"not allowed either"' can't be used to index type 'Empty'.
+propertyAccessStringIndexSignatureNoImplicitAny.ts(10,7): error TS2339: Property 'nope' does not exist on type 'Empty'.
+propertyAccessStringIndexSignatureNoImplicitAny.ts(11,1): error TS7053: Element implicitly has an 'any' type because expression of type '"not allowed either"' can't be used to index type 'Empty'.
   Property 'not allowed either' does not exist on type 'Empty'.
 
 
-==== tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignatureNoImplicitAny.ts (2 errors) ====
+==== propertyAccessStringIndexSignatureNoImplicitAny.ts (2 errors) ====
     interface Flags { [name: string]: boolean }
     let flags: Flags;
     flags.b;

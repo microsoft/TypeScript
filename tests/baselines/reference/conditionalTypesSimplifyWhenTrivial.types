@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypesSimplifyWhenTrivial.ts ===
+//// [tests/cases/compiler/conditionalTypesSimplifyWhenTrivial.ts] ////
+
+=== conditionalTypesSimplifyWhenTrivial.ts ===
 const fn1 = <Params>(
 >fn1 : <Params>(params: Pick<Params, Exclude<keyof Params, never>>) => Params
 ><Params>(    params: Pick<Params, Exclude<keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, Exclude<keyof Params, never>>) => Params

@@ -1,9 +1,11 @@
-=== tests/cases/compiler/child1.ts ===
+//// [tests/cases/compiler/declarationEmitForModuleImportingModuleAugmentationRetainsImport.ts] ////
+
+=== child1.ts ===
 import { ParentThing } from './parent';
 >ParentThing : typeof ParentThing
 
 declare module './parent' {
->'./parent' : typeof import("tests/cases/compiler/parent")
+>'./parent' : typeof import("parent")
 
     interface ParentThing {
         add: (a: number, b: number) => number;
@@ -30,7 +32,7 @@ export function child1(prototype: ParentThing) {
 >b : number
 }
 
-=== tests/cases/compiler/parent.ts ===
+=== parent.ts ===
 import { child1 } from './child1'; // this import should still exist in some form in the output, since it augments this module
 >child1 : (prototype: ParentThing) => void
 

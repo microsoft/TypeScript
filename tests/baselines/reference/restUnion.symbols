@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restUnion.ts ===
+//// [tests/cases/compiler/restUnion.ts] ////
+
+=== restUnion.ts ===
 var union: { a: number, c: boolean } | { a: string, b: string };
 >union : Symbol(union, Decl(restUnion.ts, 0, 3))
 >a : Symbol(a, Decl(restUnion.ts, 0, 12))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAnyES6.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAnyES6.ts] ////
+
+=== taggedTemplateStringsWithTagsTypedAsAnyES6.ts ===
 var f: any;
 >f : any
 
@@ -106,7 +108,7 @@ f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag : any
 >f : any
 >thisIsNotATag : any
->`abc${1}def${2}ghi` : string
+>`abc${1}def${2}ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 

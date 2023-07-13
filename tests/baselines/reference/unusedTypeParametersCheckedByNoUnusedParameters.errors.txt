@@ -1,12 +1,12 @@
-tests/cases/compiler/unusedTypeParametersCheckedByNoUnusedParameters.ts(1,11): error TS6133: 'T' is declared but its value is never read.
-tests/cases/compiler/unusedTypeParametersCheckedByNoUnusedParameters.ts(3,7): error TS6133: 'T' is declared but its value is never read.
-tests/cases/compiler/unusedTypeParametersCheckedByNoUnusedParameters.ts(5,12): error TS6133: 'T' is declared but its value is never read.
-tests/cases/compiler/unusedTypeParametersCheckedByNoUnusedParameters.ts(7,8): error TS6133: 'T' is declared but its value is never read.
-tests/cases/compiler/unusedTypeParametersCheckedByNoUnusedParameters.ts(8,13): error TS6133: 'V' is declared but its value is never read.
-tests/cases/compiler/unusedTypeParametersCheckedByNoUnusedParameters.ts(11,9): error TS6133: 'T' is declared but its value is never read.
+unusedTypeParametersCheckedByNoUnusedParameters.ts(1,11): error TS6133: 'T' is declared but its value is never read.
+unusedTypeParametersCheckedByNoUnusedParameters.ts(3,7): error TS6133: 'T' is declared but its value is never read.
+unusedTypeParametersCheckedByNoUnusedParameters.ts(5,12): error TS6133: 'T' is declared but its value is never read.
+unusedTypeParametersCheckedByNoUnusedParameters.ts(7,8): error TS6133: 'T' is declared but its value is never read.
+unusedTypeParametersCheckedByNoUnusedParameters.ts(8,13): error TS6133: 'V' is declared but its value is never read.
+unusedTypeParametersCheckedByNoUnusedParameters.ts(11,9): error TS6133: 'T' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedTypeParametersCheckedByNoUnusedParameters.ts (6 errors) ====
+==== unusedTypeParametersCheckedByNoUnusedParameters.ts (6 errors) ====
     function f<T>() { }
               ~~~
 !!! error TS6133: 'T' is declared but its value is never read.

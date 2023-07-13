@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts ===
+//// [tests/cases/compiler/sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts] ////
+
+=== sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts ===
 class AbstractGreeter {
 >AbstractGreeter : Symbol(AbstractGreeter, Decl(sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts, 0, 0))
 }

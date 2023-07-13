@@ -1,4 +1,6 @@
-=== tests/cases/compiler/primitiveMembers.ts ===
+//// [tests/cases/compiler/primitiveMembers.ts] ////
+
+=== primitiveMembers.ts ===
 var x = 5;
 >x : Symbol(x, Decl(primitiveMembers.ts, 0, 3))
 

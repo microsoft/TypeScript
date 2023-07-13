@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumErrors.ts] ////
+
 //// [enumErrors.ts]
 // Enum named with PredefinedTypes
 enum any { }

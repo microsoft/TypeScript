@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decls.d.ts ===
+//// [tests/cases/compiler/genericDefaultsJs.ts] ////
+
+=== decls.d.ts ===
 declare function f0<T>(x?: T): T;
 >f0 : <T>(x?: T) => T
 >x : T
@@ -25,7 +27,7 @@ declare class C1<T, U = number> {
     constructor(x?: T);
 >x : T
 }
-=== tests/cases/compiler/main.js ===
+=== main.js ===
 const f0_v0 = f0();
 >f0_v0 : any
 >f0() : any

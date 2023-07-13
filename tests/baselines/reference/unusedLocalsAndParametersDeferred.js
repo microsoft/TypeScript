@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsAndParametersDeferred.ts] ////
+
 //// [unusedLocalsAndParametersDeferred.ts]
 export { };
 

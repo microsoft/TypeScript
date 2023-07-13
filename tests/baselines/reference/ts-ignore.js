@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/directives/ts-ignore.ts] ////
+
 //// [ts-ignore.ts]
 // @ts-ignore with additional commenting
 var invalidCommentedFancy: number = 'nope';

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitLocalClassDeclarationMixin.ts ===
+//// [tests/cases/compiler/declarationEmitLocalClassDeclarationMixin.ts] ////
+
+=== declarationEmitLocalClassDeclarationMixin.ts ===
 interface Constructor<C> { new (...args: any[]): C; }
 >Constructor : Symbol(Constructor, Decl(declarationEmitLocalClassDeclarationMixin.ts, 0, 0))
 >C : Symbol(C, Decl(declarationEmitLocalClassDeclarationMixin.ts, 0, 22))

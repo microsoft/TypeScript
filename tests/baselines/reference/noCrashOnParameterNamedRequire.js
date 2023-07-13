@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCrashOnParameterNamedRequire.ts] ////
+
 //// [index.js]
 (function(require, module, exports){
     const mod = require("./mod");

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ignoredJsxAttributes.tsx ===
+//// [tests/cases/compiler/ignoredJsxAttributes.tsx] ////
+
+=== ignoredJsxAttributes.tsx ===
 /// <reference path="react16.d.ts" />
 
 // Repro from #44797

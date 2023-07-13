@@ -1,26 +1,26 @@
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(9,21): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(10,20): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(11,21): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(12,23): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(12,24): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(14,28): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(15,27): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(16,28): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(17,30): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(17,31): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(19,21): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(20,20): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(21,21): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(22,23): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(22,24): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(24,28): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(25,27): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(26,28): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(27,30): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-tests/cases/compiler/expressionWithJSDocTypeArguments.ts(27,31): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+expressionWithJSDocTypeArguments.ts(9,21): error TS8020: JSDoc types can only be used inside documentation comments.
+expressionWithJSDocTypeArguments.ts(10,20): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+expressionWithJSDocTypeArguments.ts(11,21): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+expressionWithJSDocTypeArguments.ts(12,23): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+expressionWithJSDocTypeArguments.ts(12,24): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+expressionWithJSDocTypeArguments.ts(14,28): error TS8020: JSDoc types can only be used inside documentation comments.
+expressionWithJSDocTypeArguments.ts(15,27): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+expressionWithJSDocTypeArguments.ts(16,28): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+expressionWithJSDocTypeArguments.ts(17,30): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+expressionWithJSDocTypeArguments.ts(17,31): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+expressionWithJSDocTypeArguments.ts(19,21): error TS8020: JSDoc types can only be used inside documentation comments.
+expressionWithJSDocTypeArguments.ts(20,20): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+expressionWithJSDocTypeArguments.ts(21,21): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+expressionWithJSDocTypeArguments.ts(22,23): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+expressionWithJSDocTypeArguments.ts(22,24): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+expressionWithJSDocTypeArguments.ts(24,28): error TS8020: JSDoc types can only be used inside documentation comments.
+expressionWithJSDocTypeArguments.ts(25,27): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+expressionWithJSDocTypeArguments.ts(26,28): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+expressionWithJSDocTypeArguments.ts(27,30): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+expressionWithJSDocTypeArguments.ts(27,31): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
 
 
-==== tests/cases/compiler/expressionWithJSDocTypeArguments.ts (20 errors) ====
+==== expressionWithJSDocTypeArguments.ts (20 errors) ====
     // Repro from #51802
     
     function foo<T>(x: T): T { return x }

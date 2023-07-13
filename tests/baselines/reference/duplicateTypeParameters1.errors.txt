@@ -1,7 +1,7 @@
-tests/cases/compiler/duplicateTypeParameters1.ts(1,15): error TS2300: Duplicate identifier 'X'.
+duplicateTypeParameters1.ts(1,15): error TS2300: Duplicate identifier 'X'.
 
 
-==== tests/cases/compiler/duplicateTypeParameters1.ts (1 errors) ====
+==== duplicateTypeParameters1.ts (1 errors) ====
     function A<X, X>() { }
                   ~
 !!! error TS2300: Duplicate identifier 'X'.

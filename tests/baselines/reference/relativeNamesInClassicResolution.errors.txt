@@ -1,10 +1,10 @@
-tests/cases/compiler/somefolder/a.ts(1,17): error TS2792: Cannot find module './b'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+somefolder/a.ts(1,17): error TS2792: Cannot find module './b'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/somefolder/a.ts (1 errors) ====
+==== somefolder/a.ts (1 errors) ====
     import {x} from "./b"
                     ~~~~~
 !!! error TS2792: Cannot find module './b'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
-==== tests/cases/compiler/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     export let x = 1;

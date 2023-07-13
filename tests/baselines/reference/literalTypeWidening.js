@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/literalTypeWidening.ts] ////
+
 //// [literalTypeWidening.ts]
 // Widening vs. non-widening literal types
 

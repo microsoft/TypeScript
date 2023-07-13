@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentToFunction.ts] ////
+
 //// [assignmentToFunction.ts]
 function fn() { }
 fn = () => 3;

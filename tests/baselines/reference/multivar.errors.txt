@@ -1,8 +1,8 @@
-tests/cases/compiler/multivar.ts(6,19): error TS2395: Individual declarations in merged declaration 'b2' must be all exported or all local.
-tests/cases/compiler/multivar.ts(22,9): error TS2395: Individual declarations in merged declaration 'b2' must be all exported or all local.
+multivar.ts(6,19): error TS2395: Individual declarations in merged declaration 'b2' must be all exported or all local.
+multivar.ts(22,9): error TS2395: Individual declarations in merged declaration 'b2' must be all exported or all local.
 
 
-==== tests/cases/compiler/multivar.ts (2 errors) ====
+==== multivar.ts (2 errors) ====
     var a,b,c;
     var x=1,y=2,z=3;
     

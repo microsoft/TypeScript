@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactImportUnusedInNewJSXEmit.tsx] ////
+
 //// [index.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

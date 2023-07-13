@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getterSetterNonAccessor.ts] ////
+
 //// [getterSetterNonAccessor.ts]
 function getFunc():any{return 0;}
 function setFunc(v){}          

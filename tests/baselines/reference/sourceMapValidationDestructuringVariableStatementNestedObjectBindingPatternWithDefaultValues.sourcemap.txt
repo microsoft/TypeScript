@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.js
+emittedFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.js
 sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.ts
 -------------------------------------------------------------------
 >>>var robotA = { name: "mower", skills: { primary: "mowing", secondary: "none" } };

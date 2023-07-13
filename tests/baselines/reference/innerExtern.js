@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/innerExtern.ts] ////
+
 //// [innerExtern.ts]
 module A {
     export declare module BB {

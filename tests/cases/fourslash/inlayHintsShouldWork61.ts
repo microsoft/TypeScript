@@ -1,9 +1,9 @@
 /// <reference path="fourslash.ts" />
 
 ////class Foo {
-////    set foo(value: number)/**/ {}
+////    set foo(value: number) {}
 ////}
 
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayFunctionLikeReturnTypeHints: true
 });

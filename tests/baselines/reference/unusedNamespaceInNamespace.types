@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedNamespaceInNamespace.ts ===
+//// [tests/cases/compiler/unusedNamespaceInNamespace.ts] ////
+
+=== unusedNamespaceInNamespace.ts ===
 
 namespace A {
     namespace B { }

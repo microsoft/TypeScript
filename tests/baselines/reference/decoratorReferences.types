@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorReferences.ts ===
+//// [tests/cases/compiler/decoratorReferences.ts] ////
+
+=== decoratorReferences.ts ===
 declare function y(...args: any[]): any;
 >y : (...args: any[]) => any
 >args : any[]

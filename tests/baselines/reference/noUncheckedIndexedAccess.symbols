@@ -1,4 +1,6 @@
-=== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts ===
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts] ////
+
+=== noUncheckedIndexedAccess.ts ===
 type CheckBooleanOnly<T extends boolean> = any;
 >CheckBooleanOnly : Symbol(CheckBooleanOnly, Decl(noUncheckedIndexedAccess.ts, 0, 0))
 >T : Symbol(T, Decl(noUncheckedIndexedAccess.ts, 0, 22))

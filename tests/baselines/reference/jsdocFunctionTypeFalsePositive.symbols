@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocFunctionTypeFalsePositive.ts] ////
+
 === /a.js ===
 /** @param {<} x */
 function f(x) {}

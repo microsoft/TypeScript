@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classImplementsImportedInterface.ts ===
+//// [tests/cases/compiler/classImplementsImportedInterface.ts] ////
+
+=== classImplementsImportedInterface.ts ===
 module M1 {
 >M1 : Symbol(M1, Decl(classImplementsImportedInterface.ts, 0, 0))
 

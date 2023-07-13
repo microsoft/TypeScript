@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/folder/mod1.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsImportTypeBundled.ts] ////
+
+=== folder/mod1.js ===
 /**
  * @typedef {{x: number}} Item
  */
@@ -15,7 +17,7 @@ module.exports = x;
 >exports : Symbol(export=, Decl(mod1.js, 6, 18))
 >x : Symbol(x, Decl(mod1.js, 6, 5))
 
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+=== index.js ===
 /** @type {(typeof import("./folder/mod1"))[]} */
 const items = [{x: 12}];
 >items : Symbol(items, Decl(index.js, 1, 5))

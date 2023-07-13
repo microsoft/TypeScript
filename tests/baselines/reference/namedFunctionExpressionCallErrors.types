@@ -1,4 +1,6 @@
-=== tests/cases/compiler/namedFunctionExpressionCallErrors.ts ===
+//// [tests/cases/compiler/namedFunctionExpressionCallErrors.ts] ////
+
+=== namedFunctionExpressionCallErrors.ts ===
 var recurser = function foo() {
 >recurser : () => void
 >function foo() {} : () => void

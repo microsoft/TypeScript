@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMembers.ts] ////
+
 //// [enumConstantMembers.ts]
 // Constant members allow negatives, but not decimals. Also hex literals are allowed
 enum E1 {

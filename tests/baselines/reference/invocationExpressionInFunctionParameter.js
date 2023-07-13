@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invocationExpressionInFunctionParameter.ts] ////
+
 //// [invocationExpressionInFunctionParameter.ts]
 function foo1(val: string) {
 }

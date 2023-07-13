@@ -29,7 +29,8 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
+            filterText: "foo",
             insertText: "foo(): Other {\n}",
             hasAction: true,
             source: completion.CompletionSource.ClassMemberSnippet,

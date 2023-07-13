@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithStringIndexerHidingBaseTypeIndexer.ts] ////
+
+=== interfaceWithStringIndexerHidingBaseTypeIndexer.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(interfaceWithStringIndexerHidingBaseTypeIndexer.ts, 0, 0))
 

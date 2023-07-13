@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadsWithProvisionalErrors.ts ===
+//// [tests/cases/compiler/overloadsWithProvisionalErrors.ts] ////
+
+=== overloadsWithProvisionalErrors.ts ===
 var func: {
 >func : { (s: string): number; (lambda: (s: string) => {    a: number;    b: number;}): string; }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts ===
+//// [tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts] ////
+
+=== constructorInvocationWithTooFewTypeArgs.ts ===
 class D<T, U> {
 >D : Symbol(D, Decl(constructorInvocationWithTooFewTypeArgs.ts, 0, 0))
 >T : Symbol(T, Decl(constructorInvocationWithTooFewTypeArgs.ts, 0, 8))

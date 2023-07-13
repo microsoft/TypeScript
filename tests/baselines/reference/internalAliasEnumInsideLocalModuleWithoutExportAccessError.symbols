@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts ===
+//// [tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts] ////
+
+=== internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts ===
 export module a {
 >a : Symbol(a, Decl(internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts, 0, 0))
 

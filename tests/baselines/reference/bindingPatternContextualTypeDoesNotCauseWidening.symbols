@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bindingPatternContextualTypeDoesNotCauseWidening.ts ===
+//// [tests/cases/compiler/bindingPatternContextualTypeDoesNotCauseWidening.ts] ////
+
+=== bindingPatternContextualTypeDoesNotCauseWidening.ts ===
 declare function pick<O, T extends keyof O>(keys: T[], obj?: O): Pick<O, T>;
 >pick : Symbol(pick, Decl(bindingPatternContextualTypeDoesNotCauseWidening.ts, 0, 0))
 >O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening.ts, 0, 22))

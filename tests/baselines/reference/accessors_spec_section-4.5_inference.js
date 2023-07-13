@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessors_spec_section-4.5_inference.ts] ////
+
 //// [accessors_spec_section-4.5_inference.ts]
 class A { }
 class B extends A { }

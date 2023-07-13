@@ -202,11 +202,11 @@ PolledWatches::
 FsWatches::
 /a/tsconfig.json:
   {}
-/tsconfig.json:
+/b/index.ts: *new*
   {}
 /b/tsconfig.json: *new*
   {}
-/b/index.ts: *new*
+/tsconfig.json:
   {}
 
 FsWatchesRecursive::

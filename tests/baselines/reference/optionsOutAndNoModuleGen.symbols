@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionsOutAndNoModuleGen.ts ===
+//// [tests/cases/compiler/optionsOutAndNoModuleGen.ts] ////
+
+=== optionsOutAndNoModuleGen.ts ===
 export var x = 10;
 >x : Symbol(x, Decl(optionsOutAndNoModuleGen.ts, 0, 10))
 

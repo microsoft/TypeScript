@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericBaseClassLiteralProperty.ts] ////
+
 //// [genericBaseClassLiteralProperty.ts]
 class BaseClass<T> {
     public _getValue1: { (): T; };

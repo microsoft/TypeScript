@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsSynchronousCallErrors.ts] ////
+
+=== subfolder/index.js ===
 // cjs format file
 import {h} from "../index.js";
 >h : () => Promise<void>
@@ -32,7 +34,7 @@ export async function f() {
 >h() : Promise<void>
 >h : () => Promise<void>
 }
-=== tests/cases/conformance/node/allowJs/index.js ===
+=== index.js ===
 // esm format file
 import {h as _h} from "./index.js";
 >h : () => Promise<void>

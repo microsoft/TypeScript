@@ -1,12 +1,12 @@
-tests/cases/conformance/esDecorators/classDeclaration/accessors/esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(6,5): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/accessors/esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(7,5): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/accessors/esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(8,5): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/accessors/esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(9,5): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/accessors/esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(10,5): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/accessors/esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(11,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(6,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(7,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(8,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(9,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(10,5): error TS1206: Decorators are not valid here.
+esDecorators-classDeclaration-accessors-nonStaticAbstract.ts(11,5): error TS1206: Decorators are not valid here.
 
 
-==== tests/cases/conformance/esDecorators/classDeclaration/accessors/esDecorators-classDeclaration-accessors-nonStaticAbstract.ts (6 errors) ====
+==== esDecorators-classDeclaration-accessors-nonStaticAbstract.ts (6 errors) ====
     declare let dec: any;
     
     const method3 = "method3";

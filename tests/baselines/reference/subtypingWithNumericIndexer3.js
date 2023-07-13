@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts] ////
+
 //// [subtypingWithNumericIndexer3.ts]
 // Derived type indexer must be subtype of base type indexer
 

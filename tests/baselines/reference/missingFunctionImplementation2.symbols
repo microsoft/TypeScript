@@ -1,7 +1,9 @@
-=== tests/cases/compiler/missingFunctionImplementation2_a.ts ===
+//// [tests/cases/compiler/missingFunctionImplementation2.ts] ////
+
+=== missingFunctionImplementation2_a.ts ===
 export {};
 declare module "./missingFunctionImplementation2_b" {
->"./missingFunctionImplementation2_b" : Symbol("tests/cases/compiler/missingFunctionImplementation2_b", Decl(missingFunctionImplementation2_b.ts, 0, 0), Decl(missingFunctionImplementation2_a.ts, 0, 10))
+>"./missingFunctionImplementation2_b" : Symbol("missingFunctionImplementation2_b", Decl(missingFunctionImplementation2_b.ts, 0, 0), Decl(missingFunctionImplementation2_a.ts, 0, 10))
 
   export function f(a, b): void;
 >f : Symbol(f, Decl(missingFunctionImplementation2_b.ts, 0, 0), Decl(missingFunctionImplementation2_a.ts, 1, 53))
@@ -9,7 +11,7 @@ declare module "./missingFunctionImplementation2_b" {
 >b : Symbol(b, Decl(missingFunctionImplementation2_a.ts, 2, 22))
 }
 
-=== tests/cases/compiler/missingFunctionImplementation2_b.ts ===
+=== missingFunctionImplementation2_b.ts ===
 export function f(a?, b?);
 >f : Symbol(f, Decl(missingFunctionImplementation2_b.ts, 0, 0), Decl(missingFunctionImplementation2_a.ts, 1, 53))
 >a : Symbol(a, Decl(missingFunctionImplementation2_b.ts, 0, 18))

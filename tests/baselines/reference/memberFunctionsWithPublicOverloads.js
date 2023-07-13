@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicOverloads.ts] ////
+
 //// [memberFunctionsWithPublicOverloads.ts]
 class C {
     public foo(x: number);

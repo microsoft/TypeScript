@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericArrayPropertyAssignment.ts] ////
+
 //// [genericArrayPropertyAssignment.ts]
 function isEmpty(list: {length:number;})
 {

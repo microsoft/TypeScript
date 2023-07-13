@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierDifferentModifiers.ts] ////
+
 //// [duplicateIdentifierDifferentModifiers.ts]
 // Not OK
 interface B { x; }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/compositeWithNodeModulesSourceFile.ts] ////
+
 === /foo/test.ts ===
 import myModule = require("myModule");
 >myModule : Symbol(myModule, Decl(test.ts, 0, 0))

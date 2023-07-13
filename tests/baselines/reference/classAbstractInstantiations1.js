@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations1.ts] ////
+
 //// [classAbstractInstantiations1.ts]
 //
 // Calling new with (non)abstract classes.

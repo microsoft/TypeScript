@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing4.ts] ////
+
 //// [superCallBeforeThisAccessing4.ts]
 class D extends null {
     private _t;

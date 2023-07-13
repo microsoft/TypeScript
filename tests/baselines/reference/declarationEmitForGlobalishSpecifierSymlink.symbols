@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitForGlobalishSpecifierSymlink.ts] ////
+
 === /p1/node_modules/typescript-fsa/src/impl.d.ts ===
 export function getA(): A;
 >getA : Symbol(getA, Decl(impl.d.ts, 0, 0))

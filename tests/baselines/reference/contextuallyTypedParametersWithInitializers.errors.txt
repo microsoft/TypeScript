@@ -1,8 +1,8 @@
-tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts(24,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts(40,5): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextuallyTypedParametersWithInitializers.ts(24,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
+contextuallyTypedParametersWithInitializers.ts(40,5): error TS7006: Parameter 'x' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts (2 errors) ====
+==== contextuallyTypedParametersWithInitializers.ts (2 errors) ====
     declare function id1<T>(input: T): T;
     declare function id2<T extends (x: any) => any>(input: T): T;
     declare function id3<T extends (x: { foo: any }) => any>(input: T): T;

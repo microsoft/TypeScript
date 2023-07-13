@@ -1,8 +1,8 @@
-tests/cases/compiler/assignmentCompatability42.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithPublicPrivate<number, string>'.
+assignmentCompatability42.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithPublicPrivate<number, string>'.
   Property 'two' is private in type 'classWithPublicPrivate<number, string>' but not in type 'interfaceWithPublicAndOptional<number, string>'.
 
 
-==== tests/cases/compiler/assignmentCompatability42.ts (1 errors) ====
+==== assignmentCompatability42.ts (1 errors) ====
     module __test1__ {
         export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
         export var __val__obj4 = obj4;

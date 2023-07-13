@@ -1,4 +1,6 @@
-=== tests/cases/compiler/initializersInAmbientEnums.ts ===
+//// [tests/cases/compiler/initializersInAmbientEnums.ts] ////
+
+=== initializersInAmbientEnums.ts ===
 declare enum E {
 >E : Symbol(E, Decl(initializersInAmbientEnums.ts, 0, 0))
 

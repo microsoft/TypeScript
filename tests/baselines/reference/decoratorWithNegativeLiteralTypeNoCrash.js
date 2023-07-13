@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorWithNegativeLiteralTypeNoCrash.ts] ////
+
 //// [decoratorWithNegativeLiteralTypeNoCrash.ts]
 class A {
     @decorator

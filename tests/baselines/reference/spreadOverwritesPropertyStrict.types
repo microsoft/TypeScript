@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts ===
+//// [tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts] ////
+
+=== spreadOverwritesPropertyStrict.ts ===
 declare var ab: { a: number, b: number };
 >ab : { a: number; b: number; }
 >a : number

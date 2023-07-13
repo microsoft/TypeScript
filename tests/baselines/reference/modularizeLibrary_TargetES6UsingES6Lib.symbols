@@ -1,4 +1,6 @@
-=== tests/cases/compiler/modularizeLibrary_TargetES6UsingES6Lib.ts ===
+//// [tests/cases/compiler/modularizeLibrary_TargetES6UsingES6Lib.ts] ////
+
+=== modularizeLibrary_TargetES6UsingES6Lib.ts ===
 // Using Es6 array
 function f(x: number, y: number, z: number) {
 >f : Symbol(f, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 0, 0))

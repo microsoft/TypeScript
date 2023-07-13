@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undeclaredModuleError.ts ===
+//// [tests/cases/compiler/undeclaredModuleError.ts] ////
+
+=== undeclaredModuleError.ts ===
 import fs = require('fs');
 >fs : Symbol(fs, Decl(undeclaredModuleError.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithoutAllowJs.ts] ////
+
+=== file1.ts ===
 import b1 = require('./b.json');
 >b1 : Symbol(b1, Decl(file1.ts, 0, 0))
 
@@ -28,7 +30,7 @@ if (x) {
 >b : Symbol(b, Decl(file1.ts, 4, 7))
 }
 
-=== tests/cases/compiler/b.json ===
+=== b.json ===
 {
     "a": true,
 >"a" : Symbol("a", Decl(b.json, 0, 1))

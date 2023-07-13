@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/string/stringPropertyAccess.ts ===
+//// [tests/cases/conformance/types/primitives/string/stringPropertyAccess.ts] ////
+
+=== stringPropertyAccess.ts ===
 var x = '';
 >x : Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
 

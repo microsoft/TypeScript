@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendFromAny.ts ===
+//// [tests/cases/compiler/extendFromAny.ts] ////
+
+=== extendFromAny.ts ===
 declare var Base: any;
 >Base : Symbol(Base, Decl(extendFromAny.ts, 0, 11))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsClauseClassNotReferringConstructor.ts ===
+//// [tests/cases/compiler/classExtendsClauseClassNotReferringConstructor.ts] ////
+
+=== classExtendsClauseClassNotReferringConstructor.ts ===
 class A { a: number; }
 >A : Symbol(A, Decl(classExtendsClauseClassNotReferringConstructor.ts, 0, 0))
 >a : Symbol(A.a, Decl(classExtendsClauseClassNotReferringConstructor.ts, 0, 9))

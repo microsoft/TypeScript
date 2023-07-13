@@ -5,7 +5,7 @@ sourceRoot:
 sources: identifierVariableWithEscape1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/identifierVariableWithEscape1.js
+emittedFile:identifierVariableWithEscape1.js
 sourceFile:identifierVariableWithEscape1.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -54,7 +54,7 @@ sourceRoot:
 sources: identifierVariableWithEscape2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/identifierVariableWithEscape2.js
+emittedFile:identifierVariableWithEscape2.js
 sourceFile:identifierVariableWithEscape2.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -103,7 +103,7 @@ sourceRoot:
 sources: identifierVariableWithExtendedEscape1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/identifierVariableWithExtendedEscape1.js
+emittedFile:identifierVariableWithExtendedEscape1.js
 sourceFile:identifierVariableWithExtendedEscape1.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -152,7 +152,7 @@ sourceRoot:
 sources: identifierVariableWithExtendedEscape2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/identifierVariableWithExtendedEscape2.js
+emittedFile:identifierVariableWithExtendedEscape2.js
 sourceFile:identifierVariableWithExtendedEscape2.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -201,7 +201,7 @@ sourceRoot:
 sources: IdentifierNameWithEscape1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/IdentifierNameWithEscape1.js
+emittedFile:IdentifierNameWithEscape1.js
 sourceFile:IdentifierNameWithEscape1.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -352,7 +352,7 @@ sourceRoot:
 sources: IdentifierNameWithEscape2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/IdentifierNameWithEscape2.js
+emittedFile:IdentifierNameWithEscape2.js
 sourceFile:IdentifierNameWithEscape2.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -503,7 +503,7 @@ sourceRoot:
 sources: IdentifierNameWithExtendedEscape1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/IdentifierNameWithExtendedEscape1.js
+emittedFile:IdentifierNameWithExtendedEscape1.js
 sourceFile:IdentifierNameWithExtendedEscape1.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -654,7 +654,7 @@ sourceRoot:
 sources: IdentifierNameWithExtendedEscape2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/IdentifierNameWithExtendedEscape2.js
+emittedFile:IdentifierNameWithExtendedEscape2.js
 sourceFile:IdentifierNameWithExtendedEscape2.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -805,7 +805,7 @@ sourceRoot:
 sources: PrivateIdentifierNameWithEscape1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/PrivateIdentifierNameWithEscape1.js
+emittedFile:PrivateIdentifierNameWithEscape1.js
 sourceFile:PrivateIdentifierNameWithEscape1.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -976,7 +976,7 @@ sourceRoot:
 sources: PrivateIdentifierNameWithEscape2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/PrivateIdentifierNameWithEscape2.js
+emittedFile:PrivateIdentifierNameWithEscape2.js
 sourceFile:PrivateIdentifierNameWithEscape2.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -1147,7 +1147,7 @@ sourceRoot:
 sources: PrivateIdentifierNameWithExtendedEscape1.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/PrivateIdentifierNameWithExtendedEscape1.js
+emittedFile:PrivateIdentifierNameWithExtendedEscape1.js
 sourceFile:PrivateIdentifierNameWithExtendedEscape1.ts
 -------------------------------------------------------------------
 >>>"use strict";
@@ -1318,7 +1318,7 @@ sourceRoot:
 sources: PrivateIdentifierNameWithExtendedEscape2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/PrivateIdentifierNameWithExtendedEscape2.js
+emittedFile:PrivateIdentifierNameWithExtendedEscape2.js
 sourceFile:PrivateIdentifierNameWithExtendedEscape2.ts
 -------------------------------------------------------------------
 >>>"use strict";

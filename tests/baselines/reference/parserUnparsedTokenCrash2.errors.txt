@@ -1,14 +1,14 @@
-tests/cases/compiler/parserUnparsedTokenCrash2.ts(1,10): error TS1109: Expression expected.
-tests/cases/compiler/parserUnparsedTokenCrash2.ts(1,12): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/parserUnparsedTokenCrash2.ts(1,16): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/compiler/parserUnparsedTokenCrash2.ts(1,18): error TS2304: Cannot find name 'y'.
-tests/cases/compiler/parserUnparsedTokenCrash2.ts(1,22): error TS2304: Cannot find name 'z'.
-tests/cases/compiler/parserUnparsedTokenCrash2.ts(1,27): error TS1109: Expression expected.
-tests/cases/compiler/parserUnparsedTokenCrash2.ts(1,39): error TS1005: ';' expected.
-tests/cases/compiler/parserUnparsedTokenCrash2.ts(2,1): error TS1005: '}' expected.
+parserUnparsedTokenCrash2.ts(1,10): error TS1109: Expression expected.
+parserUnparsedTokenCrash2.ts(1,12): error TS2304: Cannot find name 'x'.
+parserUnparsedTokenCrash2.ts(1,16): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+parserUnparsedTokenCrash2.ts(1,18): error TS2304: Cannot find name 'y'.
+parserUnparsedTokenCrash2.ts(1,22): error TS2304: Cannot find name 'z'.
+parserUnparsedTokenCrash2.ts(1,27): error TS1109: Expression expected.
+parserUnparsedTokenCrash2.ts(1,39): error TS1005: ';' expected.
+parserUnparsedTokenCrash2.ts(2,1): error TS1005: '}' expected.
 
 
-==== tests/cases/compiler/parserUnparsedTokenCrash2.ts (8 errors) ====
+==== parserUnparsedTokenCrash2.ts (8 errors) ====
     export = } x = ( y = z ==== 'function') {
              ~
 !!! error TS1109: Expression expected.
@@ -27,4 +27,4 @@ tests/cases/compiler/parserUnparsedTokenCrash2.ts(2,1): error TS1005: '}' expect
     
     
 !!! error TS1005: '}' expected.
-!!! related TS1007 tests/cases/compiler/parserUnparsedTokenCrash2.ts:1:41: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 parserUnparsedTokenCrash2.ts:1:41: The parser expected to find a '}' to match the '{' token here.

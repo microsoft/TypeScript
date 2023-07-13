@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a/bar.ts ===
+//// [tests/cases/compiler/commonSourceDir6.ts] ////
+
+=== a/bar.ts ===
 import {z} from "./foo";
 >z : number
 
@@ -8,7 +10,7 @@ export var x = z + z;
 >z : number
 >z : number
 
-=== tests/cases/compiler/a/foo.ts ===
+=== a/foo.ts ===
 import {pi} from "../baz";
 >pi : number
 
@@ -27,7 +29,7 @@ export var z = pi * pi;
 >pi : number
 >pi : number
 
-=== tests/cases/compiler/baz.ts ===
+=== baz.ts ===
 import {x} from "a/bar";
 >x : number
 

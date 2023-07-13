@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictModeReservedWordInDestructuring.ts ===
+//// [tests/cases/compiler/strictModeReservedWordInDestructuring.ts] ////
+
+=== strictModeReservedWordInDestructuring.ts ===
 "use strict"
 >"use strict" : "use strict"
 

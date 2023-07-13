@@ -1,14 +1,14 @@
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(15,3): error TS2341: Property 'x' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(16,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(17,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(18,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(20,3): error TS2341: Property 'a' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(21,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(22,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts(23,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(15,3): error TS2341: Property 'x' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(16,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(17,3): error TS2341: Property 'y' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(18,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(20,3): error TS2341: Property 'a' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(21,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(22,3): error TS2341: Property 'b' is private and only accessible within class 'C'.
+classPropertyAsPrivate.ts(23,3): error TS2341: Property 'foo' is private and only accessible within class 'C'.
 
 
-==== tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts (8 errors) ====
+==== classPropertyAsPrivate.ts (8 errors) ====
     class C {
         private x: string;
         private get y() { return null; }

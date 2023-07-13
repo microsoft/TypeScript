@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithEnumType.ts] ////
+
 //// [logicalNotOperatorWithEnumType.ts]
 // ! operator on enum type
 

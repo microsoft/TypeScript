@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/overrideInterfaceProperty.ts] ////
+
 //// [overrideInterfaceProperty.ts]
 interface Mup<K, V> {
     readonly size: number;

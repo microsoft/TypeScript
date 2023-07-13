@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/spreadUnion4.ts ===
+//// [tests/cases/conformance/types/spread/spreadUnion4.ts] ////
+
+=== spreadUnion4.ts ===
 declare const a: { x: () => void }
 >a : Symbol(a, Decl(spreadUnion4.ts, 0, 13))
 >x : Symbol(x, Decl(spreadUnion4.ts, 0, 18))

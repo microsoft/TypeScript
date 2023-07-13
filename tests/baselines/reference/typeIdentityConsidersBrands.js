@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeIdentityConsidersBrands.ts] ////
+
 //// [typeIdentityConsidersBrands.ts]
 class X{
       name: string;

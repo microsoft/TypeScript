@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericWithNoConstraintComparableWithCurlyCurly.ts ===
+//// [tests/cases/compiler/genericWithNoConstraintComparableWithCurlyCurly.ts] ////
+
+=== genericWithNoConstraintComparableWithCurlyCurly.ts ===
 function foo<T>() {
 >foo : Symbol(foo, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 0, 0))
 >T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 0, 13))

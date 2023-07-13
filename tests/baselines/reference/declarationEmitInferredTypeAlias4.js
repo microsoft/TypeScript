@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias4.ts] ////
+
 //// [declarationEmitInferredTypeAlias4.ts]
 function f<A>() {
     type Foo<T> = T | { x: Foo<T> };

@@ -1,15 +1,17 @@
-=== tests/cases/conformance/externalModules/typeOnly/types.ts ===
+//// [tests/cases/conformance/externalModules/typeOnly/implementsClause.ts] ////
+
+=== types.ts ===
 
 export interface Component {}
 
-=== tests/cases/conformance/externalModules/typeOnly/ns.ts ===
+=== ns.ts ===
 import type * as types from './types';
 >types : typeof types
 
 export { types };
 >types : typeof types
 
-=== tests/cases/conformance/externalModules/typeOnly/index.ts ===
+=== index.ts ===
 import type * as types from './types';
 >types : typeof types
 

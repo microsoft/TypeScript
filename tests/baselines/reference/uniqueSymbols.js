@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbols.ts] ////
+
 //// [uniqueSymbols.ts]
 // declarations with call initializer
 const constCall = Symbol();

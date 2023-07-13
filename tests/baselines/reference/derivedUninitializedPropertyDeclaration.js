@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts] ////
+
 //// [derivedUninitializedPropertyDeclaration.ts]
 class A {
     property = 'x';

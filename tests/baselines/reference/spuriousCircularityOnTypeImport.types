@@ -1,4 +1,6 @@
-=== tests/cases/compiler/types.ts ===
+//// [tests/cases/compiler/spuriousCircularityOnTypeImport.ts] ////
+
+=== types.ts ===
 export type SelectorMap<T extends Record<string, (...params: unknown[]) => unknown>> = {
 >SelectorMap : SelectorMap<T>
 >params : unknown[]
@@ -6,7 +8,7 @@ export type SelectorMap<T extends Record<string, (...params: unknown[]) => unkno
     [key in keyof T]: T[key];
 };
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 export type SelectorMap<T extends Record<string, (...params: unknown[]) => unknown>> = {
 >SelectorMap : SelectorMap<T>
 >params : unknown[]
@@ -15,10 +17,10 @@ export type SelectorMap<T extends Record<string, (...params: unknown[]) => unkno
 };
 
 export declare const value2: {
->value2 : { sliceSelectors: <FuncMap extends import("tests/cases/compiler/types").SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]>; }; }
+>value2 : { sliceSelectors: <FuncMap extends import("types").SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]>; }; }
 
     sliceSelectors: <FuncMap extends import('./types').SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]> };
->sliceSelectors : <FuncMap extends import("tests/cases/compiler/types").SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]>; }
+>sliceSelectors : <FuncMap extends import("types").SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]>; }
 >selectorsBySlice : FuncMap
 
 };

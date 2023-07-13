@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cyclicTypeInstantiation.ts ===
+//// [tests/cases/compiler/cyclicTypeInstantiation.ts] ////
+
+=== cyclicTypeInstantiation.ts ===
 function foo<T>() {
 >foo : <T>() => { a: T; b: any; }
 

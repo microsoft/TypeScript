@@ -117,29 +117,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/projects/project1/class1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2: *new*
-  {}
 /user/username/projects/myproject/projects/project1: *new*
+  {}
+/user/username/projects/myproject/projects/project2: *new*
   {}
 
 Before request
@@ -201,23 +201,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project1/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/tsconfig.json:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/projects/project2/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -225,9 +225,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
 /user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
   {}
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
@@ -316,31 +316,31 @@ Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/projects/
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/projects/project1/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/projects/project1/class3.ts: *new*
   {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/projects/project2:
-  {}
 /user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
   {}
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory

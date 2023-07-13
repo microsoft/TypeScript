@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty.ts] ////
+
+=== accessorsOverrideProperty.ts ===
 class A {
 >A : A
 

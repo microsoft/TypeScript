@@ -1,7 +1,7 @@
-tests/cases/compiler/tsconfig.json(5,19): error TS5064: Substitution '1' for pattern '*' has incorrect type, expected 'string', got 'number'.
+tsconfig.json(5,19): error TS5064: Substitution '1' for pattern '*' has incorrect type, expected 'string', got 'number'.
 
 
-==== tests/cases/compiler/tsconfig.json (1 errors) ====
+==== tsconfig.json (1 errors) ====
     {
         "compilerOptions": {
             "baseUrl": ".",
@@ -12,5 +12,5 @@ tests/cases/compiler/tsconfig.json(5,19): error TS5064: Substitution '1' for pat
             }
         }
     }
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     let x = 1;

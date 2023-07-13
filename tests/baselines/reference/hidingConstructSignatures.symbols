@@ -1,4 +1,6 @@
-=== tests/cases/compiler/hidingConstructSignatures.ts ===
+//// [tests/cases/compiler/hidingConstructSignatures.ts] ////
+
+=== hidingConstructSignatures.ts ===
 interface C {
 >C : Symbol(C, Decl(hidingConstructSignatures.ts, 0, 0))
 

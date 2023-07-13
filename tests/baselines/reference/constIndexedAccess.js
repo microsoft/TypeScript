@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constIndexedAccess.ts] ////
+
 //// [constIndexedAccess.ts]
 const enum numbers {
     zero,

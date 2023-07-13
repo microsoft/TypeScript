@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileObjectLiteralWithOnlySetter.ts ===
+//// [tests/cases/compiler/declFileObjectLiteralWithOnlySetter.ts] ////
+
+=== declFileObjectLiteralWithOnlySetter.ts ===
 function /*1*/makePoint(x: number) { 
 >makePoint : Symbol(makePoint, Decl(declFileObjectLiteralWithOnlySetter.ts, 0, 0))
 >x : Symbol(x, Decl(declFileObjectLiteralWithOnlySetter.ts, 0, 24))

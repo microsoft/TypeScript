@@ -1,9 +1,9 @@
-tests/cases/compiler/index.js(2,13): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
-tests/cases/compiler/index.js(2,14): error TS1003: Identifier expected.
-tests/cases/compiler/index.js(2,14): error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.
+index.js(2,13): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
+index.js(2,14): error TS1003: Identifier expected.
+index.js(2,14): error TS2365: Operator '>' cannot be applied to types 'number' and 'string'.
 
 
-==== tests/cases/compiler/index.js (3 errors) ====
+==== index.js (3 errors) ====
     const x = "oops";
     const y = + <1234> x;
                 ~

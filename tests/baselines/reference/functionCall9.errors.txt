@@ -1,8 +1,8 @@
-tests/cases/compiler/functionCall9.ts(4,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/compiler/functionCall9.ts(5,15): error TS2554: Expected 0-2 arguments, but got 3.
+functionCall9.ts(4,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+functionCall9.ts(5,15): error TS2554: Expected 0-2 arguments, but got 3.
 
 
-==== tests/cases/compiler/functionCall9.ts (2 errors) ====
+==== functionCall9.ts (2 errors) ====
     function foo(a?:string, b?:number){};
     foo('foo', 1); 
     foo('foo'); 

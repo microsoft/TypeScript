@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates17_ES5.ts(1,13): error TS1125: Hexadecimal digit expected.
-tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates17_ES5.ts(1,18): error TS1125: Hexadecimal digit expected.
-tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates17_ES5.ts(1,23): error TS1125: Hexadecimal digit expected.
+unicodeExtendedEscapesInTemplates17_ES5.ts(1,13): error TS1125: Hexadecimal digit expected.
+unicodeExtendedEscapesInTemplates17_ES5.ts(1,18): error TS1125: Hexadecimal digit expected.
+unicodeExtendedEscapesInTemplates17_ES5.ts(1,23): error TS1125: Hexadecimal digit expected.
 
 
-==== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates17_ES5.ts (3 errors) ====
+==== unicodeExtendedEscapesInTemplates17_ES5.ts (3 errors) ====
     var x = `\u{r}\u{n}\u{t}`;
                 
 !!! error TS1125: Hexadecimal digit expected.

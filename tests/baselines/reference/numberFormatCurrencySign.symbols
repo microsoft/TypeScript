@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2020/numberFormatCurrencySign.ts ===
+//// [tests/cases/conformance/es2020/numberFormatCurrencySign.ts] ////
+
+=== numberFormatCurrencySign.ts ===
 const str = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format(999999);
 >str : Symbol(str, Decl(numberFormatCurrencySign.ts, 0, 5))
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))

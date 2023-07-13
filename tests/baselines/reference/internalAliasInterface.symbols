@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasInterface.ts ===
+//// [tests/cases/compiler/internalAliasInterface.ts] ////
+
+=== internalAliasInterface.ts ===
 module a {
 >a : Symbol(a, Decl(internalAliasInterface.ts, 0, 0))
 

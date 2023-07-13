@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorWithInitializer.ts ===
+//// [tests/cases/compiler/accessorWithInitializer.ts] ////
+
+=== accessorWithInitializer.ts ===
 class C {
 >C : Symbol(C, Decl(accessorWithInitializer.ts, 0, 0))
 

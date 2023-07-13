@@ -206,6 +206,20 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
     k3 = '2';  // Error
 }
 
+// Constraints of variadic tuple types
+
+function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+    x = y;
+}
+
+function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+    x = y;
+}
+
+function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
+    x = y;
+}
+
 // Inference between variadic tuple types
 
 type First<T extends readonly unknown[]> =
@@ -402,3 +416,8 @@ const data: Unbounded = [false, false];  // Error
 type U1 = [string, ...Numbers, boolean];
 type U2 = [...[string, ...Numbers], boolean];
 type U3 = [...[string, number], boolean];
+
+// Repro from #53563
+
+type ToStringLength1<T extends any[]> = `${T['length']}`;
+type ToStringLength2<T extends any[]> = `${[...T]['length']}`;

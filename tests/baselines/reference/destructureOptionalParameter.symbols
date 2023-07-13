@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructureOptionalParameter.ts ===
+//// [tests/cases/compiler/destructureOptionalParameter.ts] ////
+
+=== destructureOptionalParameter.ts ===
 declare function f1({ a, b }?: { a: number, b: string }): void;
 >f1 : Symbol(f1, Decl(destructureOptionalParameter.ts, 0, 0))
 >a : Symbol(a, Decl(destructureOptionalParameter.ts, 0, 21))

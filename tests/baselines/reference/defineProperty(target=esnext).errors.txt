@@ -1,16 +1,16 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts(3,14): error TS2729: Property 'y' is used before its initialization.
-tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts(10,14): error TS2729: Property 'y' is used before its initialization.
-tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts(18,14): error TS2729: Property 'ka' is used before its initialization.
-tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts(22,15): error TS2729: Property 'ka' is used before its initialization.
+defineProperty.ts(3,14): error TS2729: Property 'y' is used before its initialization.
+defineProperty.ts(10,14): error TS2729: Property 'y' is used before its initialization.
+defineProperty.ts(18,14): error TS2729: Property 'ka' is used before its initialization.
+defineProperty.ts(22,15): error TS2729: Property 'ka' is used before its initialization.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts (4 errors) ====
+==== defineProperty.ts (4 errors) ====
     var x: "p" = "p"
     class A {
         a = this.y
                  ~
 !!! error TS2729: Property 'y' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts:9:17: 'y' is declared here.
+!!! related TS2728 defineProperty.ts:9:17: 'y' is declared here.
         b
         public c;
         ["computed"] = 13
@@ -20,7 +20,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts(22,
         z = this.y
                  ~
 !!! error TS2729: Property 'y' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts:9:17: 'y' is declared here.
+!!! related TS2728 defineProperty.ts:9:17: 'y' is declared here.
         declare notEmitted;
     }
     class B {
@@ -31,13 +31,13 @@ tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts(22,
         z = this.ka
                  ~~
 !!! error TS2729: Property 'ka' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts:19:17: 'ka' is declared here.
+!!! related TS2728 defineProperty.ts:19:17: 'ka' is declared here.
         constructor(public ka: number) {
             super()
         }
         ki = this.ka
                   ~~
 !!! error TS2729: Property 'ka' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/defineProperty.ts:19:17: 'ka' is declared here.
+!!! related TS2728 defineProperty.ts:19:17: 'ka' is declared here.
     }
     

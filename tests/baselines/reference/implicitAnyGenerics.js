@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyGenerics.ts] ////
+
 //// [implicitAnyGenerics.ts]
 class C<T> {
     x: T;

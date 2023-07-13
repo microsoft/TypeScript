@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/localTypes/localTypes5.ts] ////
+
 //// [localTypes5.ts]
 function foo<A>() {
     class X {

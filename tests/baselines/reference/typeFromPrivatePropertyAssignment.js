@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts] ////
+
 //// [typeFromPrivatePropertyAssignment.ts]
 type Foo = { foo?: string };
 

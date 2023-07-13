@@ -149,9 +149,9 @@ PolledWatches::
 FsWatches::
 /a/bin/a.d.ts:
   {}
-/b/bin/b.d.ts:
-  {}
 /a/bin/a.d.ts.map: *new*
+  {}
+/b/bin/b.d.ts:
   {}
 
 Before request
@@ -215,13 +215,13 @@ PolledWatches::
 FsWatches::
 /a/bin/a.d.ts:
   {}
-/b/bin/b.d.ts:
-  {}
 /a/bin/a.d.ts.map:
   {}
-/b/bin/b.d.ts.map: *new*
-  {}
 /b/b.ts: *new*
+  {}
+/b/bin/b.d.ts:
+  {}
+/b/bin/b.d.ts.map: *new*
   {}
 
 Before request
@@ -254,13 +254,13 @@ PolledWatches::
 FsWatches::
 /a/bin/a.d.ts:
   {}
-/b/bin/b.d.ts:
-  {}
 /a/bin/a.d.ts.map:
   {}
-/b/bin/b.d.ts.map:
-  {}
 /b/b.ts:
+  {}
+/b/bin/b.d.ts:
+  {}
+/b/bin/b.d.ts.map:
   {}
 /user/user.ts: *new*
   {}
@@ -333,13 +333,13 @@ PolledWatches::
 FsWatches *deleted*::
 /a/bin/a.d.ts:
   {}
-/b/bin/b.d.ts:
-  {}
 /a/bin/a.d.ts.map:
   {}
-/b/bin/b.d.ts.map:
-  {}
 /b/b.ts:
+  {}
+/b/bin/b.d.ts:
+  {}
+/b/bin/b.d.ts.map:
   {}
 /user/user.ts:
   {}

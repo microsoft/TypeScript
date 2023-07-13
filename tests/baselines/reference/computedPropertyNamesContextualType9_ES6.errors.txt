@@ -1,10 +1,10 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType9_ES6.ts(6,5): error TS2322: Type '{ [x: number]: string | number; }' is not assignable to type 'I'.
+computedPropertyNamesContextualType9_ES6.ts(6,5): error TS2322: Type '{ [x: number]: string | number; }' is not assignable to type 'I'.
   'number' and 'string' index signatures are incompatible.
     Type 'string | number' is not assignable to type 'boolean'.
       Type 'string' is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType9_ES6.ts (1 errors) ====
+==== computedPropertyNamesContextualType9_ES6.ts (1 errors) ====
     interface I {
         [s: string]: boolean;
         [s: number]: boolean;

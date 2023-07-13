@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeAlias.ts] ////
+
 //// [declFileTypeAnnotationVisibilityErrorTypeAlias.ts]
 interface Window {
     someMethod();
@@ -93,29 +95,29 @@ var M2;
 interface Window {
     someMethod(): any;
 }
-declare module M {
+declare namespace M {
     type W = Window | string;
-    export module N {
+    export namespace N {
         class Window {
         }
         var p: W;
     }
     export {};
 }
-declare module M1 {
+declare namespace M1 {
     type W = Window | string;
-    module N {
+    namespace N {
         class Window {
         }
         var p: W;
     }
 }
-declare module M2 {
+declare namespace M2 {
     class private1 {
     }
     class public1 {
     }
-    module m3 {
+    namespace m3 {
         class public1 {
         }
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts ===
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts] ////
+
+=== emitClassExpressionInDeclarationFile2.ts ===
 export var noPrivates = class {
 >noPrivates : Symbol(noPrivates, Decl(emitClassExpressionInDeclarationFile2.ts, 0, 10))
 

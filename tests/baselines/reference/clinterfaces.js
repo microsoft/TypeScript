@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/clinterfaces.ts] ////
+
 //// [clinterfaces.ts]
 module M {
     class C { }

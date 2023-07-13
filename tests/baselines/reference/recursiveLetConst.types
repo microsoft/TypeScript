@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveLetConst.ts ===
+//// [tests/cases/compiler/recursiveLetConst.ts] ////
+
+=== recursiveLetConst.ts ===
 'use strict'
 >'use strict' : "use strict"
 

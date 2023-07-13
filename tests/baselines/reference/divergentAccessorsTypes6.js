@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/divergentAccessorsTypes6.ts] ////
+
 //// [divergentAccessorsTypes6.ts]
 export {};
 

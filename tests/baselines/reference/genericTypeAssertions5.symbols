@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeAssertions5.ts ===
+//// [tests/cases/compiler/genericTypeAssertions5.ts] ////
+
+=== genericTypeAssertions5.ts ===
 interface A {
 >A : Symbol(A, Decl(genericTypeAssertions5.ts, 0, 0))
 

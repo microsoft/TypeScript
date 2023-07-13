@@ -1,9 +1,11 @@
-=== tests/cases/compiler/input.ts ===
+//// [tests/cases/compiler/fixCrashAliasLookupForDefauledImport.ts] ////
+
+=== input.ts ===
 export type Foo<T = string> = {};
 >Foo : Symbol(Foo, Decl(input.ts, 0, 0))
 >T : Symbol(T, Decl(input.ts, 0, 16))
 
-=== tests/cases/compiler/usage.ts ===
+=== usage.ts ===
 import {Foo} from "./input";
 >Foo : Symbol(Foo, Decl(usage.ts, 0, 8))
 

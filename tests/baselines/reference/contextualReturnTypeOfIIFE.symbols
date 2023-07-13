@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualReturnTypeOfIIFE.ts ===
+//// [tests/cases/compiler/contextualReturnTypeOfIIFE.ts] ////
+
+=== contextualReturnTypeOfIIFE.ts ===
 const test1: Promise<[one: number, two: string]> = (async () => {
 >test1 : Symbol(test1, Decl(contextualReturnTypeOfIIFE.ts, 0, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))

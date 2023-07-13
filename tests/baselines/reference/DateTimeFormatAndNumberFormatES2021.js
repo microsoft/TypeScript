@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/DateTimeFormatAndNumberFormatES2021.ts] ////
+
 //// [DateTimeFormatAndNumberFormatES2021.ts]
 Intl.NumberFormat.prototype.formatRange
 Intl.DateTimeFormat.prototype.formatRange

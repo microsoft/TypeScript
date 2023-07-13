@@ -114,17 +114,17 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/packages/a/tsconfig.json: *new*
-  {}
 /packages/a/node_modules/b/tsconfig.json: *new*
   {}
 /packages/a/package.json: *new*
+  {}
+/packages/a/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
 /packages/a: *new*
   {}
-/packages/a/node_modules/b: *new*
-  {}
 /packages/a/node_modules: *new*
+  {}
+/packages/a/node_modules/b: *new*
   {}

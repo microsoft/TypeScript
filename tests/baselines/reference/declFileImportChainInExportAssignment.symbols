@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileImportChainInExportAssignment.ts ===
+//// [tests/cases/compiler/declFileImportChainInExportAssignment.ts] ////
+
+=== declFileImportChainInExportAssignment.ts ===
 module m {
 >m : Symbol(m, Decl(declFileImportChainInExportAssignment.ts, 0, 0))
 

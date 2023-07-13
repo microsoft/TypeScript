@@ -1,8 +1,8 @@
-tests/cases/compiler/limitDeepInstantiations.ts(4,9): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/limitDeepInstantiations.ts(5,13): error TS2344: Type '"false"' does not satisfy the constraint '"true"'.
+limitDeepInstantiations.ts(4,9): error TS2589: Type instantiation is excessively deep and possibly infinite.
+limitDeepInstantiations.ts(5,13): error TS2344: Type '"false"' does not satisfy the constraint '"true"'.
 
 
-==== tests/cases/compiler/limitDeepInstantiations.ts (2 errors) ====
+==== limitDeepInstantiations.ts (2 errors) ====
     // Repro from #14837
     
     type Foo<T extends "true", B> = { "true": Foo<T, Foo<T, B>> }[T];

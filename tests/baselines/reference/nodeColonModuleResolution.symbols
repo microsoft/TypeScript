@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/nodeColonModuleResolution.ts] ////
+
+=== /a/b/node_modules/@types/node/ph.d.ts ===
+declare module 'ph' {
+>'ph' : Symbol("ph", Decl(ph.d.ts, 0, 0))
+
+    namespace constants {
+>constants : Symbol(constants, Decl(ph.d.ts, 0, 21))
+
+        const NODE_PERFORMANCE_GC_MAJOR: number;
+>NODE_PERFORMANCE_GC_MAJOR : Symbol(NODE_PERFORMANCE_GC_MAJOR, Decl(ph.d.ts, 2, 13))
+
+        const NODE_PERFORMANCE_GC_MINOR: number;
+>NODE_PERFORMANCE_GC_MINOR : Symbol(NODE_PERFORMANCE_GC_MINOR, Decl(ph.d.ts, 3, 13))
+
+        const NODE_PERFORMANCE_GC_INCREMENTAL: number;
+>NODE_PERFORMANCE_GC_INCREMENTAL : Symbol(NODE_PERFORMANCE_GC_INCREMENTAL, Decl(ph.d.ts, 4, 13))
+
+        const NODE_PERFORMANCE_GC_WEAKCB: number;
+>NODE_PERFORMANCE_GC_WEAKCB : Symbol(NODE_PERFORMANCE_GC_WEAKCB, Decl(ph.d.ts, 5, 13))
+
+        const NODE_PERFORMANCE_GC_FLAGS_NO: number;
+>NODE_PERFORMANCE_GC_FLAGS_NO : Symbol(NODE_PERFORMANCE_GC_FLAGS_NO, Decl(ph.d.ts, 6, 13))
+
+        const NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED: number;
+>NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED : Symbol(NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED, Decl(ph.d.ts, 7, 13))
+
+        const NODE_PERFORMANCE_GC_FLAGS_FORCED: number;
+>NODE_PERFORMANCE_GC_FLAGS_FORCED : Symbol(NODE_PERFORMANCE_GC_FLAGS_FORCED, Decl(ph.d.ts, 8, 13))
+
+        const NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING: number;
+>NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING : Symbol(NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING, Decl(ph.d.ts, 9, 13))
+
+        const NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE: number;
+>NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(ph.d.ts, 10, 13))
+
+        const NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY: number;
+>NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY : Symbol(NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY, Decl(ph.d.ts, 11, 13))
+
+        const NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE: number;
+>NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE : Symbol(NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE, Decl(ph.d.ts, 12, 13))
+    }
+}
+declare module 'node:ph' {
+>'node:ph' : Symbol("node:ph", Decl(ph.d.ts, 14, 1))
+
+    export * from 'ph';
+}
+=== /a/b/main.ts ===
+import * as ph from 'node:ph'
+>ph : Symbol(ph, Decl(main.ts, 0, 6))
+
+console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(ph.d.ts, 10, 13))
+>ph.constants : Symbol(ph.constants, Decl(ph.d.ts, 0, 21))
+>ph : Symbol(ph, Decl(main.ts, 0, 6))
+>constants : Symbol(ph.constants, Decl(ph.d.ts, 0, 21))
+>NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(ph.d.ts, 10, 13))
+

@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedTypeParameters5.ts(6,16): error TS6133: 'K' is declared but its value is never read.
+unusedTypeParameters5.ts(6,16): error TS6133: 'K' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedTypeParameters5.ts (1 errors) ====
+==== unusedTypeParameters5.ts (1 errors) ====
     class A<Dummy> {
         public x: Dummy;
     }

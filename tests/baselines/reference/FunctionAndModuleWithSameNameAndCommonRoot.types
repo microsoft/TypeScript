@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/function.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/FunctionAndModuleWithSameNameAndCommonRoot.ts] ////
+
+=== function.ts ===
 module A {
 >A : typeof A
 
@@ -14,7 +16,7 @@ module A {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+=== module.ts ===
 module A {
 >A : typeof A
 
@@ -31,7 +33,7 @@ module A {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+=== test.ts ===
 var fn: () => { x: number; y: number };
 >fn : () => {    x: number;    y: number;}
 >x : number
@@ -64,7 +66,7 @@ var cl = A.Point.Origin; // not expected to be an error.
 >Origin : { x: number; y: number; }
 
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts ===
+=== simple.ts ===
 module B {
 >B : typeof B
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution3_node.ts] ////
+
 === c:/root/folder1/file1.ts ===
 // baseUrl set via command line
 

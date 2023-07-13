@@ -1,9 +1,11 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefPropertyAndExportAssignment.ts] ////
+
+=== index.js ===
 const {taskGroups, taskNameToGroup} = require('./module.js');
 >taskGroups : Symbol(taskGroups, Decl(index.js, 0, 7))
 >taskNameToGroup : Symbol(taskNameToGroup, Decl(index.js, 0, 18))
 >require : Symbol(require)
->'./module.js' : Symbol("tests/cases/conformance/jsdoc/declarations/module", Decl(module.js, 0, 0))
+>'./module.js' : Symbol("module", Decl(module.js, 0, 0))
 
 /** @typedef {import('./module.js').TaskGroup} TaskGroup */
 
@@ -33,7 +35,7 @@ module.exports = MainThreadTasks;
 >exports : Symbol(export=, Decl(index.js, 18, 1))
 >MainThreadTasks : Symbol(MainThreadTasks, Decl(index.js, 0, 61))
 
-=== tests/cases/conformance/jsdoc/declarations/module.js ===
+=== module.js ===
 /** @typedef {'parseHTML'|'styleLayout'} TaskGroupIds */
 
 /**

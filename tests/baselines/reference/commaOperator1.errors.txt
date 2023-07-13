@@ -1,14 +1,14 @@
-tests/cases/compiler/commaOperator1.ts(1,11): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperator1.ts(1,11): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperator1.ts(1,11): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperator1.ts(1,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperator1.ts(1,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperator1.ts(1,29): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperator1.ts(4,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/commaOperator1.ts(4,12): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperator1.ts(1,11): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperator1.ts(1,11): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperator1.ts(1,11): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperator1.ts(1,12): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperator1.ts(1,12): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperator1.ts(1,29): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperator1.ts(4,12): error TS2695: Left side of comma operator is unused and has no side effects.
+commaOperator1.ts(4,12): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== tests/cases/compiler/commaOperator1.ts (8 errors) ====
+==== commaOperator1.ts (8 errors) ====
     var v1 = ((1, 2, 3), 4, 5, (6, 7));
               ~~~~~~~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2019/globalThisUnknownNoImplicitAny.ts ===
+//// [tests/cases/conformance/es2019/globalThisUnknownNoImplicitAny.ts] ////
+
+=== globalThisUnknownNoImplicitAny.ts ===
 declare let win: Window & typeof globalThis;
 >win : Symbol(win, Decl(globalThisUnknownNoImplicitAny.ts, 0, 11))
 >Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))

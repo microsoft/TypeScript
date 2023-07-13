@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitNameConflictsWithAlias.ts ===
+//// [tests/cases/compiler/declarationEmitNameConflictsWithAlias.ts] ////
+
+=== declarationEmitNameConflictsWithAlias.ts ===
 export module C { export interface I { } }
 >C : Symbol(C, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 0))
 >I : Symbol(I, Decl(declarationEmitNameConflictsWithAlias.ts, 0, 17))

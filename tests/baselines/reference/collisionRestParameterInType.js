@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionRestParameterInType.ts] ////
+
 //// [collisionRestParameterInType.ts]
 var v1: (_i: number, ...restParameters) => void; // no error - no code gen
 var v2: {

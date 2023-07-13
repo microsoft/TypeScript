@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts] ////
+
 //// [conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts]
 type BigUnion =
     {

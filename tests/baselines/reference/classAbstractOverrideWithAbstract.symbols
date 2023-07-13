@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverrideWithAbstract.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverrideWithAbstract.ts] ////
+
+=== classAbstractOverrideWithAbstract.ts ===
 class A {
 >A : Symbol(A, Decl(classAbstractOverrideWithAbstract.ts, 0, 0))
 

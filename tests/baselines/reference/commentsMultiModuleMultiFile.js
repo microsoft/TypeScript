@@ -100,12 +100,12 @@ define(["require", "exports"], function (require, exports) {
 
 //// [commentsMultiModuleMultiFile_0.d.ts]
 /** this is multi declare module*/
-export declare module multiM {
+export declare namespace multiM {
     class b {
     }
 }
 /** thi is multi module 2*/
-export declare module multiM {
+export declare namespace multiM {
     /** class c comment*/
     class c {
     }
@@ -114,7 +114,7 @@ export declare module multiM {
 }
 //// [commentsMultiModuleMultiFile_1.d.ts]
 /** this is multi module 3 comment*/
-export declare module multiM {
+export declare namespace multiM {
     /** class d comment*/
     class d {
     }

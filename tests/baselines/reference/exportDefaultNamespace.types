@@ -1,4 +1,6 @@
-=== tests/cases/conformance/declarationEmit/exportDefaultNamespace.ts ===
+//// [tests/cases/conformance/declarationEmit/exportDefaultNamespace.ts] ////
+
+=== exportDefaultNamespace.ts ===
 export default function someFunc() {
 >someFunc : typeof someFunc
 

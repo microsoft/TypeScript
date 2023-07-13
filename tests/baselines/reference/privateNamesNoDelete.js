@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesNoDelete.ts] ////
+
 //// [privateNamesNoDelete.ts]
 class A {
     #v = 1;

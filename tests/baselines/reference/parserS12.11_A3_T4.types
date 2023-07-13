@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserS12.11_A3_T4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserS12.11_A3_T4.ts] ////
+
+=== parserS12.11_A3_T4.ts ===
 // Copyright 2009 the Sputnik authors.  All rights reserved.
 // This code is governed by the BSD license found in the LICENSE file.
 

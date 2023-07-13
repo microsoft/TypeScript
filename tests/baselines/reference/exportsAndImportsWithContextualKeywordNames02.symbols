@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/t1.ts ===
+//// [tests/cases/conformance/es6/modules/exportsAndImportsWithContextualKeywordNames02.ts] ////
+
+=== t1.ts ===
 let as = 100;
 >as : Symbol(as, Decl(t1.ts, 0, 3))
 
@@ -7,7 +9,7 @@ export { as as return, as };
 >return : Symbol(return, Decl(t1.ts, 2, 8))
 >as : Symbol(as, Decl(t1.ts, 2, 22))
 
-=== tests/cases/conformance/es6/modules/t2.ts ===
+=== t2.ts ===
 import * as as from "./t1";
 >as : Symbol(as, Decl(t2.ts, 0, 6))
 
@@ -23,12 +25,12 @@ var y = as.return;
 >as : Symbol(as, Decl(t2.ts, 0, 6))
 >return : Symbol(as.return, Decl(t1.ts, 2, 8))
 
-=== tests/cases/conformance/es6/modules/t3.ts ===
+=== t3.ts ===
 import { as as as } from "./t1";
 >as : Symbol(as, Decl(t1.ts, 2, 22))
 >as : Symbol(as, Decl(t3.ts, 0, 8))
 
-=== tests/cases/conformance/es6/modules/t4.ts ===
+=== t4.ts ===
 import { as } from "./t1";
 >as : Symbol(as, Decl(t4.ts, 0, 8))
 

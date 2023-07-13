@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shadowingViaLocalValue.ts] ////
+
 //// [shadowingViaLocalValue.ts]
 {
     let x;

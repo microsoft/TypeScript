@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAssignmentCompat3.ts] ////
+
 //// [moduleAssignmentCompat3.ts]
 module A {
     export var x = 1;

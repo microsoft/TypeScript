@@ -1,4 +1,6 @@
-=== tests/cases/compiler/primitiveConstraints1.ts ===
+//// [tests/cases/compiler/primitiveConstraints1.ts] ////
+
+=== primitiveConstraints1.ts ===
 function foo1<T extends U, U>(t: T, u: U) { }
 >foo1 : Symbol(foo1, Decl(primitiveConstraints1.ts, 0, 0))
 >T : Symbol(T, Decl(primitiveConstraints1.ts, 0, 14))

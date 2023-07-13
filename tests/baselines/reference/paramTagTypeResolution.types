@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/main.js ===
+//// [tests/cases/conformance/jsdoc/paramTagTypeResolution.ts] ////
+
+=== main.js ===
 var f = require('./first');
 >f : <T>(x: T, k: (t: T) => void) => void
 >require('./first') : <T>(x: T, k: (t: T) => void) => void
@@ -12,7 +14,7 @@ f(1, n => { })
 >n => { } : (n: number) => void
 >n : number
 
-=== tests/cases/conformance/jsdoc/first.js ===
+=== first.js ===
 /** @template T
  * @param {T} x
  * @param {(t: T) => void} k

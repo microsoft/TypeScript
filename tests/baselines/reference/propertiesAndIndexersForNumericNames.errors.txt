@@ -1,14 +1,14 @@
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(6,12): error TS2411: Property '"1"' of type 'string' is not assignable to 'number' index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(7,12): error TS2411: Property '"-1"' of type 'string' is not assignable to 'number' index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(8,12): error TS2411: Property '"-2.5"' of type 'string' is not assignable to 'number' index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(9,12): error TS2411: Property '"3.141592"' of type 'string' is not assignable to 'number' index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(10,12): error TS2411: Property '"1.2e-20"' of type 'string' is not assignable to 'number' index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(11,12): error TS2411: Property '"Infinity"' of type 'string' is not assignable to 'number' index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(12,12): error TS2411: Property '"-Infinity"' of type 'string' is not assignable to 'number' index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(13,12): error TS2411: Property '"NaN"' of type 'string' is not assignable to 'number' index type 'number'.
+propertiesAndIndexersForNumericNames.ts(6,12): error TS2411: Property '"1"' of type 'string' is not assignable to 'number' index type 'number'.
+propertiesAndIndexersForNumericNames.ts(7,12): error TS2411: Property '"-1"' of type 'string' is not assignable to 'number' index type 'number'.
+propertiesAndIndexersForNumericNames.ts(8,12): error TS2411: Property '"-2.5"' of type 'string' is not assignable to 'number' index type 'number'.
+propertiesAndIndexersForNumericNames.ts(9,12): error TS2411: Property '"3.141592"' of type 'string' is not assignable to 'number' index type 'number'.
+propertiesAndIndexersForNumericNames.ts(10,12): error TS2411: Property '"1.2e-20"' of type 'string' is not assignable to 'number' index type 'number'.
+propertiesAndIndexersForNumericNames.ts(11,12): error TS2411: Property '"Infinity"' of type 'string' is not assignable to 'number' index type 'number'.
+propertiesAndIndexersForNumericNames.ts(12,12): error TS2411: Property '"-Infinity"' of type 'string' is not assignable to 'number' index type 'number'.
+propertiesAndIndexersForNumericNames.ts(13,12): error TS2411: Property '"NaN"' of type 'string' is not assignable to 'number' index type 'number'.
 
 
-==== tests/cases/compiler/propertiesAndIndexersForNumericNames.ts (8 errors) ====
+==== propertiesAndIndexersForNumericNames.ts (8 errors) ====
     class C {
         [i: number]: number;
     

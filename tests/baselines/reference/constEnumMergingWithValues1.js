@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumMergingWithValues1.ts] ////
+
 //// [m1.ts]
 function foo() {}
 module foo {

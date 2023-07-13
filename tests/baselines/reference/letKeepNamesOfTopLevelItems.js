@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letKeepNamesOfTopLevelItems.ts] ////
+
 //// [letKeepNamesOfTopLevelItems.ts]
 let x;
 function foo() {

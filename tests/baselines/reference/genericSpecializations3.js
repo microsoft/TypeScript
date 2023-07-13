@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericSpecializations3.ts] ////
+
 //// [genericSpecializations3.ts]
 interface IFoo<T> {
     foo(x: T): T;

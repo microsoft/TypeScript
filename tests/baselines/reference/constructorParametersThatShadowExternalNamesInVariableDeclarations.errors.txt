@@ -1,8 +1,8 @@
-tests/cases/compiler/constructorParametersThatShadowExternalNamesInVariableDeclarations.ts(3,17): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
-tests/cases/compiler/constructorParametersThatShadowExternalNamesInVariableDeclarations.ts(9,17): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+constructorParametersThatShadowExternalNamesInVariableDeclarations.ts(3,17): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+constructorParametersThatShadowExternalNamesInVariableDeclarations.ts(9,17): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
 
 
-==== tests/cases/compiler/constructorParametersThatShadowExternalNamesInVariableDeclarations.ts (2 errors) ====
+==== constructorParametersThatShadowExternalNamesInVariableDeclarations.ts (2 errors) ====
     var x = 1;
     class A {
         private a = x;

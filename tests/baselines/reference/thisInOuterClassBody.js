@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInOuterClassBody.ts] ////
+
 //// [thisInOuterClassBody.ts]
 class Foo {
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution9.tsx] ////
+
+=== react.d.ts ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -14,7 +16,7 @@ interface Props {
 >foo : string
 }
 
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 export class MyComponent {  
 >MyComponent : MyComponent
 

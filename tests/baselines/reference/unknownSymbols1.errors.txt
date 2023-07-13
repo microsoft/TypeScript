@@ -1,19 +1,19 @@
-tests/cases/compiler/unknownSymbols1.ts(1,9): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(2,8): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(4,17): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(4,35): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(6,12): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(9,10): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(12,10): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(13,12): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(16,21): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(17,21): error TS2304: Cannot find name 'adsf'.
-tests/cases/compiler/unknownSymbols1.ts(22,15): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(30,14): error TS2339: Property 'asdf' does not exist on type 'C5'.
-tests/cases/compiler/unknownSymbols1.ts(30,21): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(1,9): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(2,8): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(4,17): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(4,35): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(6,12): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(9,10): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(12,10): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(13,12): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(16,21): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(17,21): error TS2304: Cannot find name 'adsf'.
+unknownSymbols1.ts(22,15): error TS2304: Cannot find name 'asdf'.
+unknownSymbols1.ts(30,14): error TS2339: Property 'asdf' does not exist on type 'C5'.
+unknownSymbols1.ts(30,21): error TS2304: Cannot find name 'asdf'.
 
 
-==== tests/cases/compiler/unknownSymbols1.ts (13 errors) ====
+==== unknownSymbols1.ts (13 errors) ====
     var x = asdf;
             ~~~~
 !!! error TS2304: Cannot find name 'asdf'.

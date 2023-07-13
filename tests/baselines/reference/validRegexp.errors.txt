@@ -1,7 +1,7 @@
-tests/cases/compiler/validRegexp.ts(1,24): error TS1005: ',' expected.
+validRegexp.ts(1,24): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/validRegexp.ts (1 errors) ====
+==== validRegexp.ts (1 errors) ====
     var x = / [a - z /]$ / i;
                            ~
 !!! error TS1005: ',' expected.

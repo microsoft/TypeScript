@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDefaultExport7.ts ===
+//// [tests/cases/compiler/declarationEmitDefaultExport7.ts] ////
+
+=== declarationEmitDefaultExport7.ts ===
 class A {}
 >A : Symbol(A, Decl(declarationEmitDefaultExport7.ts, 0, 0))
 

@@ -81,7 +81,7 @@ define("main", ["require", "exports", "d"], function (require, exports) {
 
 
 //// [f.d.ts]
-/// <reference path="tests/cases/compiler/c.d.ts" />
+/// <reference path="c.d.ts" />
 declare module "a" {
     export class A {
     }

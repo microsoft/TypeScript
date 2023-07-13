@@ -1,4 +1,6 @@
-=== tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts ===
+//// [tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts] ////
+
+=== quickinfoTypeAtReturnPositionsInaccurate.ts ===
 class NumClass<T extends number> {
 >NumClass : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
 >T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 15))

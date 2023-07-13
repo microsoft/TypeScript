@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override8.ts] ////
+
 //// [override8.ts]
 class B {
     a: string

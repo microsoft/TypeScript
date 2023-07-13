@@ -42,7 +42,7 @@ exports.Class2 = void 0;
 var Class1_1 = require("./Class1");
 function decorate(target, propertyKey) {
 }
-var Class2 = exports.Class2 = /** @class */ (function () {
+var Class2 = /** @class */ (function () {
     function Class2() {
     }
     Object.defineProperty(Class2.prototype, "prop", {
@@ -59,3 +59,4 @@ var Class2 = exports.Class2 = /** @class */ (function () {
     ], Class2.prototype, "prop", null);
     return Class2;
 }());
+exports.Class2 = Class2;

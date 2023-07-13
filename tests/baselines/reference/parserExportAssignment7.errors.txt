@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment7.ts(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
-tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment7.ts(4,10): error TS2304: Cannot find name 'B'.
+parserExportAssignment7.ts(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+parserExportAssignment7.ts(4,10): error TS2304: Cannot find name 'B'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment7.ts (2 errors) ====
+==== parserExportAssignment7.ts (2 errors) ====
     export class C {
     }
     

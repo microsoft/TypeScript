@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/funcdecl.ts] ////
+
 //// [funcdecl.ts]
 function simpleFunc() {
     return "this is my simple func";
@@ -154,7 +156,7 @@ declare function overload1(n: number): string;
 declare function overload1(s: string): string;
 declare var withOverloadSignature: typeof overload1;
 declare function f(n: () => void): void;
-declare module m2 {
+declare namespace m2 {
     function foo(n: () => void): void;
 }
 declare function fooAmbient(n: number): string;

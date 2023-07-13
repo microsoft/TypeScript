@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParamExtendsOtherTypeParam.ts] ////
+
 //// [typeParamExtendsOtherTypeParam.ts]
 class A<T, U extends T> { }
 class B<T extends Object, U extends T> {

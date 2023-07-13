@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleOuterQualification.ts] ////
+
 //// [moduleOuterQualification.ts]
 declare module outer {
   interface Beta { }
@@ -12,10 +14,10 @@ declare module outer {
 
 
 //// [moduleOuterQualification.d.ts]
-declare module outer {
+declare namespace outer {
     interface Beta {
     }
-    module inner {
+    namespace inner {
         interface Beta extends outer.Beta {
         }
     }

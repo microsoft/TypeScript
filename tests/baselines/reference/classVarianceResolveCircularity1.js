@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classVarianceResolveCircularity1.ts] ////
+
 //// [classVarianceResolveCircularity1.ts]
 // Issue #52813
 

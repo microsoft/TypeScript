@@ -1,4 +1,6 @@
-=== tests/cases/compiler/infiniteExpandingTypeThroughInheritanceInstantiation.ts ===
+//// [tests/cases/compiler/infiniteExpandingTypeThroughInheritanceInstantiation.ts] ////
+
+=== infiniteExpandingTypeThroughInheritanceInstantiation.ts ===
 interface A<T>
 {
    x: A<B<T>>

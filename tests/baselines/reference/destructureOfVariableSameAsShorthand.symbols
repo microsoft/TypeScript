@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructureOfVariableSameAsShorthand.ts ===
+//// [tests/cases/compiler/destructureOfVariableSameAsShorthand.ts] ////
+
+=== destructureOfVariableSameAsShorthand.ts ===
 // https://github.com/microsoft/TypeScript/issues/38969
 interface AxiosResponse<T = never> {
 >AxiosResponse : Symbol(AxiosResponse, Decl(destructureOfVariableSameAsShorthand.ts, 0, 0))

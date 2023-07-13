@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty56.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty56.ts] ////
+
+=== symbolProperty56.ts ===
 var obj = {
 >obj : { [Symbol.iterator]: number; }
 >{    [Symbol.iterator]: 0} : { [Symbol.iterator]: number; }

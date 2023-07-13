@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationTryCatchFinally.ts] ////
+
 //// [sourceMapValidationTryCatchFinally.ts]
 var x = 10;
 try {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classExpression/classSuper/esDecorators-classExpression-classSuper.4.ts] ////
+
 //// [esDecorators-classExpression-classSuper.4.ts]
 declare var dec: any;
 
@@ -27,9 +29,12 @@ const method = "method";
     let _classThis;
     let _classSuper = Base;
     var C = class extends _classSuper {
+        static { _classThis = this; }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
             C = _classThis = _classDescriptor.value;
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
         static a = Reflect.get(_classSuper, "method", _classThis).call(_classThis);
         static b = Reflect.get(_classSuper, "method", _classThis).call(_classThis);

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/webworkerIterable.ts ===
+//// [tests/cases/compiler/webworkerIterable.ts] ////
+
+=== webworkerIterable.ts ===
 // This API is only in webworker
 importScripts("")
 >importScripts : Symbol(importScripts, Decl(lib.webworker.d.ts, --, --))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericSpecializations1.ts] ////
+
 //// [genericSpecializations1.ts]
 interface IFoo<T> {
     foo<T>(x: T): T; // no error on implementors because IFoo's T is different from foo's T

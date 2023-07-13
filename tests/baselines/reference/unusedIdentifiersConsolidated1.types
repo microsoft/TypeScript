@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedIdentifiersConsolidated1.ts ===
+//// [tests/cases/compiler/unusedIdentifiersConsolidated1.ts] ////
+
+=== unusedIdentifiersConsolidated1.ts ===
 function greeter(person: string) {
 >greeter : (person: string) => void
 >person : string

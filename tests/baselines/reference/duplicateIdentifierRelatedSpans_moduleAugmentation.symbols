@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans_moduleAugmentation.ts] ////
+
 === /dir/a.ts ===
 export const x = 0;
 >x : Symbol(x, Decl(a.ts, 0, 12))

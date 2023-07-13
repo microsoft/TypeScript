@@ -1,4 +1,6 @@
-=== tests/cases/compiler/relatedViaDiscriminatedTypeNoError.ts ===
+//// [tests/cases/compiler/relatedViaDiscriminatedTypeNoError.ts] ////
+
+=== relatedViaDiscriminatedTypeNoError.ts ===
 class Model {
 >Model : Symbol(Model, Decl(relatedViaDiscriminatedTypeNoError.ts, 0, 0))
 

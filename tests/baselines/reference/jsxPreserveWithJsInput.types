@@ -1,9 +1,11 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsxPreserveWithJsInput.ts] ////
+
+=== a.js ===
 var elemA = 42;
 >elemA : number
 >42 : 42
 
-=== tests/cases/compiler/b.jsx ===
+=== b.jsx ===
 var elemB = <b>{"test"}</b>;
 >elemB : error
 ><b>{"test"}</b> : error
@@ -11,7 +13,7 @@ var elemB = <b>{"test"}</b>;
 >"test" : "test"
 >b : any
 
-=== tests/cases/compiler/c.js ===
+=== c.js ===
 var elemC = <c>{42}</c>;
 >elemC : error
 ><c>{42}</c> : error
@@ -19,12 +21,12 @@ var elemC = <c>{42}</c>;
 >42 : 42
 >c : any
 
-=== tests/cases/compiler/d.ts ===
+=== d.ts ===
 var elemD = 42;
 >elemD : number
 >42 : 42
 
-=== tests/cases/compiler/e.tsx ===
+=== e.tsx ===
 var elemE = <e>{true}</e>;
 >elemE : error
 ><e>{true}</e> : error

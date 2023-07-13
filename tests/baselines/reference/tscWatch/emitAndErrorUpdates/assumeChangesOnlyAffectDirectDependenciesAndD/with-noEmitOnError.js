@@ -76,13 +76,13 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
 PolledWatches::
-/user/username/projects/noemitonerror/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/noemitonerror/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/noemitonerror/shared/types/db.ts: *new*
   {}
@@ -90,7 +90,7 @@ FsWatches::
   {}
 /user/username/projects/noemitonerror/src/other.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/noemitonerror/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

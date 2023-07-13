@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mergedModuleDeclarationCodeGen3.ts ===
+//// [tests/cases/compiler/mergedModuleDeclarationCodeGen3.ts] ////
+
+=== mergedModuleDeclarationCodeGen3.ts ===
 module my.data {
 >my : typeof my
 >data : typeof data

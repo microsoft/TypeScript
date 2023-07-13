@@ -1,9 +1,9 @@
-tests/cases/compiler/file.tsx(11,2): error TS2786: 'SFC' cannot be used as a JSX component.
+file.tsx(11,2): error TS2786: 'SFC' cannot be used as a JSX component.
   Its return type 'string' is not a valid JSX element.
-tests/cases/compiler/file.tsx(11,14): error TS2322: Type 'number' is not assignable to type 'string'.
+file.tsx(11,14): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/file.tsx (2 errors) ====
+==== file.tsx (2 errors) ====
     declare namespace JSX {
         interface Element {
             render(): Element | string | false;

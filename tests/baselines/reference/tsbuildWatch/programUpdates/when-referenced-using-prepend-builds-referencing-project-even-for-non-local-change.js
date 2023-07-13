@@ -59,13 +59,13 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
 /user/username/projects/sample1/core/index.ts: *new*
   {}
-/user/username/projects/sample1/logic/tsconfig.json: *new*
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/logic/index.ts: *new*
+  {}
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

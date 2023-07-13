@@ -1,19 +1,19 @@
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(7,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(8,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(9,18): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(20,22): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(21,22): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(22,22): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(30,30): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(39,22): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(43,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(44,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(45,18): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(59,27): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(75,27): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(7,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(8,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(9,18): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(20,22): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(21,22): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(22,22): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(30,30): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(39,22): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(43,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(44,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(45,18): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(59,27): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+checkSuperCallBeforeThisAccess.ts(75,27): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/checkSuperCallBeforeThisAccess.ts (13 errors) ====
+==== checkSuperCallBeforeThisAccess.ts (13 errors) ====
     class A {
         x = 1;
     }

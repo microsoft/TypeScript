@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemModule10.ts ===
+//// [tests/cases/compiler/systemModule10.ts] ////
+
+=== systemModule10.ts ===
 import n, {x} from 'file1'
 >n : any
 >x : any

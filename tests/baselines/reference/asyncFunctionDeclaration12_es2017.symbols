@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration12_es2017.ts ===
+//// [tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration12_es2017.ts] ////
+
+=== asyncFunctionDeclaration12_es2017.ts ===
 var v = async function await(): Promise<void> { }
 >v : Symbol(v, Decl(asyncFunctionDeclaration12_es2017.ts, 0, 3))
 >await : Symbol(await, Decl(asyncFunctionDeclaration12_es2017.ts, 0, 7))

@@ -1,7 +1,7 @@
-tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts(10,12): error TS2322: Type 'number' is not assignable to type 'string'.
+objectLiteralsAgainstUnionsOfArrays01.ts(10,12): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts (1 errors) ====
+==== objectLiteralsAgainstUnionsOfArrays01.ts (1 errors) ====
     interface Foo {
       bar: Bar | Bar[];
     }

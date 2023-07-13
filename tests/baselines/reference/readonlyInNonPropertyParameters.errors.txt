@@ -1,9 +1,9 @@
-tests/cases/compiler/readonlyInNonPropertyParameters.ts(3,9): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/readonlyInNonPropertyParameters.ts(4,8): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/readonlyInNonPropertyParameters.ts(6,2): error TS2369: A parameter property is only allowed in a constructor implementation.
+readonlyInNonPropertyParameters.ts(3,9): error TS2369: A parameter property is only allowed in a constructor implementation.
+readonlyInNonPropertyParameters.ts(4,8): error TS2369: A parameter property is only allowed in a constructor implementation.
+readonlyInNonPropertyParameters.ts(6,2): error TS2369: A parameter property is only allowed in a constructor implementation.
 
 
-==== tests/cases/compiler/readonlyInNonPropertyParameters.ts (3 errors) ====
+==== readonlyInNonPropertyParameters.ts (3 errors) ====
     // `readonly` won't work outside of property parameters
     class X {
     	method(readonly x: number) {}

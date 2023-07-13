@@ -141,17 +141,17 @@ configFile updated
 
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /a/b/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json: *new*
+/a/b/file3.ts: *new*
   {}
 /a/b/src/file1.ts: *new*
   {}
-/a/b/file3.ts: *new*
+/a/b/tsconfig.json: *new*
   {}
 
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
@@ -271,17 +271,17 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/a/b/file3.ts:
   {}
 /a/b/src/file1.ts:
   {}
-/a/b/file3.ts:
+/a/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::

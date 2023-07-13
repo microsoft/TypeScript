@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2017/useObjectValuesAndEntries4.ts ===
+//// [tests/cases/conformance/es2017/useObjectValuesAndEntries4.ts] ////
+
+=== useObjectValuesAndEntries4.ts ===
 var o = { a: 1, b: 2 };
 >o : Symbol(o, Decl(useObjectValuesAndEntries4.ts, 0, 3))
 >a : Symbol(a, Decl(useObjectValuesAndEntries4.ts, 0, 9))

@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/typeTagNoErasure.js(7,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+typeTagNoErasure.js(7,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
-==== tests/cases/conformance/jsdoc/typeTagNoErasure.js (1 errors) ====
+==== typeTagNoErasure.js (1 errors) ====
     /** @template T @typedef {<T1 extends T>(data: T1) => T1} Test */
     
     /** @type {Test<number>} */

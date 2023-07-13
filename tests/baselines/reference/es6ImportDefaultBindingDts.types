@@ -1,11 +1,13 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingDts.ts] ////
+
+=== server.ts ===
 class c { }
 >c : c
 
 export default c;
 >c : c
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 import defaultBinding from "./server";
 >defaultBinding : typeof defaultBinding
 

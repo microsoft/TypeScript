@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritanceMemberFuncOverridingAccessor.ts ===
+//// [tests/cases/compiler/inheritanceMemberFuncOverridingAccessor.ts] ////
+
+=== inheritanceMemberFuncOverridingAccessor.ts ===
 class a {
 >a : a
 

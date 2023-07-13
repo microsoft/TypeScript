@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts ===
+//// [tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts] ////
+
+=== functionsMissingReturnStatementsAndExpressions.ts ===
 function f1(): string {
 >f1 : Symbol(f1, Decl(functionsMissingReturnStatementsAndExpressions.ts, 0, 0))
 

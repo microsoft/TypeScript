@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceReturnTypeCallback.ts] ////
+
 //// [typeInferenceReturnTypeCallback.ts]
 interface IList<A> {
     map<B>(f: (t: A) => B): IList<B>;

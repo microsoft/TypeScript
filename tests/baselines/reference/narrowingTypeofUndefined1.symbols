@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingTypeofUndefined1.ts ===
+//// [tests/cases/compiler/narrowingTypeofUndefined1.ts] ////
+
+=== narrowingTypeofUndefined1.ts ===
 declare const a: { error: { prop: string }, result: undefined } | { error: undefined, result: { prop: number } }
 >a : Symbol(a, Decl(narrowingTypeofUndefined1.ts, 0, 13))
 >error : Symbol(error, Decl(narrowingTypeofUndefined1.ts, 0, 18))

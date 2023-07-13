@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFunctionWithPrototypeNoErrorTruncationNoCrash.ts] ////
+
 //// [index.js]
 function Color(obj) {
     this.example = true

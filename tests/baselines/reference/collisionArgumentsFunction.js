@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionArgumentsFunction.ts] ////
+
 //// [collisionArgumentsFunction.ts]
 // Functions
 function f1(arguments: number, ...restParameters) { //arguments is error

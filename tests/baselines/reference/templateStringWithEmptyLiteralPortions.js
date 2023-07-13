@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringWithEmptyLiteralPortions.ts] ////
+
 //// [templateStringWithEmptyLiteralPortions.ts]
 var a = ``;
 

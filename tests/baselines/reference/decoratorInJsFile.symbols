@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/decoratorInJsFile.ts] ////
+
+=== a.js ===
 @SomeDecorator
 class SomeClass {
 >SomeClass : Symbol(SomeClass, Decl(a.js, 0, 0))

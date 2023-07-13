@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface05.ts] ////
+
 //// [asiPreventsParsingAsInterface05.ts]
 "use strict"
 

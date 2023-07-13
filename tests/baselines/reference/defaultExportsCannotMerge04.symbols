@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/defaultExportsCannotMerge04.ts ===
+//// [tests/cases/conformance/es6/modules/defaultExportsCannotMerge04.ts] ////
+
+=== defaultExportsCannotMerge04.ts ===
 export default function Foo() {
 >Foo : Symbol(Foo, Decl(defaultExportsCannotMerge04.ts, 0, 0))
 }

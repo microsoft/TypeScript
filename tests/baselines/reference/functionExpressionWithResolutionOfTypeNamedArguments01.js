@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionExpressionWithResolutionOfTypeNamedArguments01.ts] ////
+
 //// [functionExpressionWithResolutionOfTypeNamedArguments01.ts]
 interface arguments {
 }

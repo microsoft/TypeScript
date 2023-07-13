@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpreadNoTransform.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadNoTransform.ts] ////
+
+=== objectSpreadNoTransform.ts ===
 const y = { a: 'yes', b: 'no' };
 >y : { a: string; b: string; }
 >{ a: 'yes', b: 'no' } : { a: string; b: string; }

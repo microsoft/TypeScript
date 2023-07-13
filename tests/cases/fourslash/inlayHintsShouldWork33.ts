@@ -18,14 +18,6 @@ const start = test.markerByName('c');
 const end = test.markerByName('h');
 const span = { start: start.position, length: end.position - start.position };
 
-verify.getInlayHints(
-    ['c', 'd', 'e', 'f', 'g', 'h'].map(mark => {
-        return {
-            text: `${mark}:`,
-            position: test.markerByName(mark).position,
-            kind: ts.InlayHintKind.Parameter,
-            whitespaceAfter: true
-        }
-    }), span, {
+verify.baselineInlayHints(span, {
     includeInlayParameterNameHints: "literals"
 });

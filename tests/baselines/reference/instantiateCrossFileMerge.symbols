@@ -1,4 +1,6 @@
-=== tests/cases/compiler/first.ts ===
+//// [tests/cases/compiler/instantiateCrossFileMerge.ts] ////
+
+=== first.ts ===
 declare class P<R> {
 >P : Symbol(P, Decl(first.ts, 0, 0), Decl(second.ts, 0, 0))
 >R : Symbol(R, Decl(first.ts, 0, 16), Decl(second.ts, 0, 12))
@@ -10,7 +12,7 @@ declare class P<R> {
 >R : Symbol(R, Decl(first.ts, 0, 16), Decl(second.ts, 0, 12))
 }
 
-=== tests/cases/compiler/second.ts ===
+=== second.ts ===
 interface P<R> { }
 >P : Symbol(P, Decl(first.ts, 0, 0), Decl(second.ts, 0, 0))
 >R : Symbol(R, Decl(first.ts, 0, 16), Decl(second.ts, 0, 12))

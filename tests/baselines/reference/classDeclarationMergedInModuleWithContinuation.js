@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classDeclarationMergedInModuleWithContinuation.ts] ////
+
 //// [classDeclarationMergedInModuleWithContinuation.ts]
 module M {
     export class N { }

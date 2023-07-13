@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxIntrinsicUnions.tsx] ////
+
 //// [jsxIntrinsicUnions.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

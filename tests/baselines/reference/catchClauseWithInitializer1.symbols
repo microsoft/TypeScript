@@ -1,4 +1,6 @@
-=== tests/cases/compiler/catchClauseWithInitializer1.ts ===
+//// [tests/cases/compiler/catchClauseWithInitializer1.ts] ////
+
+=== catchClauseWithInitializer1.ts ===
 try {
 }
 catch (e = 1) {

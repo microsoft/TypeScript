@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts] ////
+
+=== parserUsingConstructorAsIdentifier.ts ===
         function define(constructor, instanceMembers, staticMembers) {
 >define : (constructor: any, instanceMembers: any, staticMembers: any) => any
 >constructor : any

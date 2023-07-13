@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationVarInDownLevelGenerator.ts ===
+//// [tests/cases/compiler/sourceMapValidationVarInDownLevelGenerator.ts] ////
+
+=== sourceMapValidationVarInDownLevelGenerator.ts ===
 function * f() {
 >f : () => Generator<never, void, unknown>
 

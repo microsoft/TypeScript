@@ -1,10 +1,10 @@
-tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts(1,1): error TS2304: Cannot find name 'Foo'.
-tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts(1,5): error TS2304: Cannot find name 'a'.
-tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts(1,7): error TS1110: Type expected.
-tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts(1,8): error TS2304: Cannot find name 'b'.
+callExpressionWithMissingTypeArgument1.ts(1,1): error TS2304: Cannot find name 'Foo'.
+callExpressionWithMissingTypeArgument1.ts(1,5): error TS2304: Cannot find name 'a'.
+callExpressionWithMissingTypeArgument1.ts(1,7): error TS1110: Type expected.
+callExpressionWithMissingTypeArgument1.ts(1,8): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts (4 errors) ====
+==== callExpressionWithMissingTypeArgument1.ts (4 errors) ====
     Foo<a,,b>();
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.

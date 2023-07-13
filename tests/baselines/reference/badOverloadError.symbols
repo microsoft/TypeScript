@@ -1,4 +1,6 @@
-=== tests/cases/compiler/badOverloadError.ts ===
+//// [tests/cases/compiler/badOverloadError.ts] ////
+
+=== badOverloadError.ts ===
 function method() {
 >method : Symbol(method, Decl(badOverloadError.ts, 0, 0))
 

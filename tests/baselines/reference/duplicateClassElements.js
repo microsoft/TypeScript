@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateClassElements.ts] ////
+
 //// [duplicateClassElements.ts]
 class a {
     public a;

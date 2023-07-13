@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing5.ts] ////
+
 //// [checkSuperCallBeforeThisAccessing5.ts]
 class Based { constructor(...arg) { } }
 class Derived extends Based {

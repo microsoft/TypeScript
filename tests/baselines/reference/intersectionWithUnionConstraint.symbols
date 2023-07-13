@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts] ////
+
+=== intersectionWithUnionConstraint.ts ===
 function f1<T extends string | number, U extends string | number>(x: T & U) {
 >f1 : Symbol(f1, Decl(intersectionWithUnionConstraint.ts, 0, 0))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 0, 12))

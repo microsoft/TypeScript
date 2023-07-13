@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/0.tsx ===
+//// [tests/cases/conformance/jsx/correctlyMarkAliasAsReferences2.tsx] ////
+
+=== 0.tsx ===
 ///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';
 >cx : Symbol(cx, Decl(0.tsx, 1, 6))
@@ -24,7 +26,7 @@ let k = <button {...buttonProps}>
         </button>;
 >button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2386, 43))
 
-=== tests/cases/conformance/jsx/declaration.d.ts ===
+=== declaration.d.ts ===
 declare module "classnames";
 >"classnames" : Symbol("classnames", Decl(declaration.d.ts, 0, 0))
 

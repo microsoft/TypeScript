@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithMultipleBases2.ts] ////
+
 //// [mergedInterfacesWithMultipleBases2.ts]
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 // no errors expected

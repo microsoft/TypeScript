@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisCapture1.ts] ////
+
 //// [thisCapture1.ts]
 class X {
     private y = 0;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModules_resolveJsonModule_strict_outDir_commonJs.ts] ////
+
 === /a.ts ===
 import * as j from "./j.json";
 >j : Symbol(j, Decl(a.ts, 0, 6))

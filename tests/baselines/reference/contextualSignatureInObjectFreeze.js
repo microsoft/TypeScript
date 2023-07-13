@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualSignatureInObjectFreeze.ts] ////
+
 //// [contextualSignatureInObjectFreeze.ts]
 // #49101
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts] ////
+
+=== intersectionsAndEmptyObjects.ts ===
 // Empty object type literals are removed from intersections types
 // that contain other object types
 
@@ -226,10 +228,10 @@ declare function mock<M>(_: Promise<M>): {} & M;
 mock(import('./ex'))
 >mock(import('./ex')) : {}
 >mock : <M>(_: Promise<M>) => {} & M
->import('./ex') : Promise<{ default: typeof import("tests/cases/conformance/types/intersection/ex"); }>
+>import('./ex') : Promise<{ default: typeof import("ex"); }>
 >'./ex' : "./ex"
 
-=== tests/cases/conformance/types/intersection/ex.d.ts ===
+=== ex.d.ts ===
 
 export {}
 

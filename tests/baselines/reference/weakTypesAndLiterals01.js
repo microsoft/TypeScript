@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts] ////
+
 //// [weakTypesAndLiterals01.ts]
 type WeakTypes =
     | { optional?: true; }

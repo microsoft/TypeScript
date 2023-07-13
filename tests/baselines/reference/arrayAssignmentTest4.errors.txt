@@ -1,8 +1,8 @@
-tests/cases/compiler/arrayAssignmentTest4.ts(22,1): error TS2322: Type '() => any' is not assignable to type 'any[]'.
-tests/cases/compiler/arrayAssignmentTest4.ts(23,1): error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+arrayAssignmentTest4.ts(22,1): error TS2322: Type '() => any' is not assignable to type 'any[]'.
+arrayAssignmentTest4.ts(23,1): error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
 
 
-==== tests/cases/compiler/arrayAssignmentTest4.ts (2 errors) ====
+==== arrayAssignmentTest4.ts (2 errors) ====
     class C3 {
         CM3M1() { return 3;}
     }

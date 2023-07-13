@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicates02.ts] ////
+
 //// [declarationEmitThisPredicates02.ts]
 export interface Foo {
     a: string;

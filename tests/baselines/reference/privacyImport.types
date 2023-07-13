@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyImport.ts ===
+//// [tests/cases/compiler/privacyImport.ts] ////
+
+=== privacyImport.ts ===
 export module m1 {
 >m1 : typeof m1
 

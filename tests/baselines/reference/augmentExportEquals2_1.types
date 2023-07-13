@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file3.ts ===
+//// [tests/cases/compiler/augmentExportEquals2_1.ts] ////
+
+=== file3.ts ===
 import x = require("file1");
 >x : () => void
 
@@ -7,7 +9,7 @@ let a: x.A; // should not work
 >a : x.A
 >x : any
 
-=== tests/cases/compiler/file1.d.ts ===
+=== file1.d.ts ===
 declare module "file1" {
 >"file1" : typeof import("file1")
 
@@ -18,7 +20,7 @@ declare module "file1" {
 >foo : () => void
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 /// <reference path="file1.d.ts"/> 
 import x = require("file1"); 
 >x : () => void

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts] ////
+
 //// [uniqueSymbolsErrors.ts]
 // declarations
 declare const invalidUniqueType: unique number;

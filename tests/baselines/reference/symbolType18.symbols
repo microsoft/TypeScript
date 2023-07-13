@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolType18.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolType18.ts] ////
+
+=== symbolType18.ts ===
 interface Foo { prop }
 >Foo : Symbol(Foo, Decl(symbolType18.ts, 0, 0))
 >prop : Symbol(Foo.prop, Decl(symbolType18.ts, 0, 15))

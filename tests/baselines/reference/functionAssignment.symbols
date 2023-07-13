@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionAssignment.ts ===
+//// [tests/cases/compiler/functionAssignment.ts] ////
+
+=== functionAssignment.ts ===
 function f(n: Function) { }
 >f : Symbol(f, Decl(functionAssignment.ts, 0, 0))
 >n : Symbol(n, Decl(functionAssignment.ts, 0, 11))

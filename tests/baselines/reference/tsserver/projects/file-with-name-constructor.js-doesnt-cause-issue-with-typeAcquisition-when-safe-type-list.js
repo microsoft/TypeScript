@@ -70,9 +70,9 @@ Timeout callback:: count: 0
 Immedidate callback:: count: 0
 
 FsWatches::
-/a/b/f1.js: *new*
-  {}
 /a/b/constructor.js: *new*
+  {}
+/a/b/f1.js: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

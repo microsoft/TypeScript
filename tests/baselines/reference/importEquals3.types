@@ -1,8 +1,10 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+//// [tests/cases/conformance/externalModules/typeOnly/importEquals3.ts] ////
+
+=== a.ts ===
 export class A {}
 >A : A
 
-=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+=== b.ts ===
 import type * as a from './a';
 >a : typeof a
 
@@ -24,7 +26,7 @@ export { a, A, x };
 >A : typeof a.A
 >x : 0
 
-=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+=== c.ts ===
 import * as b from './b';
 >b : typeof b
 

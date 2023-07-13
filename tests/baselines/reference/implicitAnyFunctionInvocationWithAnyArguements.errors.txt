@@ -1,12 +1,12 @@
-tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(3,5): error TS7005: Variable 'anyArray' implicitly has an 'any[]' type.
-tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(4,13): error TS7008: Member 'v' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(4,16): error TS7008: Member 'w' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(5,13): error TS7006: Parameter 'y2' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(6,16): error TS7006: Parameter 'arg1' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(10,36): error TS7006: Parameter 'y2' implicitly has an 'any' type.
+implicitAnyFunctionInvocationWithAnyArguements.ts(3,5): error TS7005: Variable 'anyArray' implicitly has an 'any[]' type.
+implicitAnyFunctionInvocationWithAnyArguements.ts(4,13): error TS7008: Member 'v' implicitly has an 'any' type.
+implicitAnyFunctionInvocationWithAnyArguements.ts(4,16): error TS7008: Member 'w' implicitly has an 'any' type.
+implicitAnyFunctionInvocationWithAnyArguements.ts(5,13): error TS7006: Parameter 'y2' implicitly has an 'any' type.
+implicitAnyFunctionInvocationWithAnyArguements.ts(6,16): error TS7006: Parameter 'arg1' implicitly has an 'any' type.
+implicitAnyFunctionInvocationWithAnyArguements.ts(10,36): error TS7006: Parameter 'y2' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts (6 errors) ====
+==== implicitAnyFunctionInvocationWithAnyArguements.ts (6 errors) ====
     // this should be errors
     var arg0 = null;  // error at "arg0"
     var anyArray = [null, undefined];  // error at array literal

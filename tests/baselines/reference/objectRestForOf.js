@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/objectRestForOf.ts] ////
+
 //// [objectRestForOf.ts]
 let array: { x: number, y: string }[];
 for (let { x, ...restOf } of array) {

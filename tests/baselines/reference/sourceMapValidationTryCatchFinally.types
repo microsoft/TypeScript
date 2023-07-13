@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationTryCatchFinally.ts ===
+//// [tests/cases/compiler/sourceMapValidationTryCatchFinally.ts] ////
+
+=== sourceMapValidationTryCatchFinally.ts ===
 var x = 10;
 >x : number
 >10 : 10

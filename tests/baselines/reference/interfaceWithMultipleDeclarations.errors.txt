@@ -1,20 +1,20 @@
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(1,11): error TS2428: All declarations of 'I1' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(3,11): error TS2428: All declarations of 'I1' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(5,11): error TS2428: All declarations of 'I1' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(7,11): error TS2428: All declarations of 'I1' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(9,11): error TS2428: All declarations of 'I1' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(11,11): error TS2428: All declarations of 'I1' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(14,11): error TS2428: All declarations of 'I2' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(16,11): error TS2428: All declarations of 'I2' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(18,11): error TS2428: All declarations of 'I2' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(20,11): error TS2428: All declarations of 'I2' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(22,11): error TS2428: All declarations of 'I2' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(24,11): error TS2428: All declarations of 'I2' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(27,11): error TS2428: All declarations of 'I3' must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(29,11): error TS2428: All declarations of 'I3' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(1,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(3,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(5,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(7,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(9,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(11,11): error TS2428: All declarations of 'I1' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(14,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(16,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(18,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(20,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(22,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(24,11): error TS2428: All declarations of 'I2' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(27,11): error TS2428: All declarations of 'I3' must have identical type parameters.
+interfaceWithMultipleDeclarations.ts(29,11): error TS2428: All declarations of 'I3' must have identical type parameters.
 
 
-==== tests/cases/compiler/interfaceWithMultipleDeclarations.ts (14 errors) ====
+==== interfaceWithMultipleDeclarations.ts (14 errors) ====
     interface I1<V> {
               ~~
 !!! error TS2428: All declarations of 'I1' must have identical type parameters.

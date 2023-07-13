@@ -139,11 +139,11 @@ define(["require", "exports", "commentsExternalModules_0"], function (require, e
 
 //// [commentsExternalModules_0.d.ts]
 /** Module comment*/
-export declare module m1 {
+export declare namespace m1 {
     /** b's comment*/
     var b: number;
     /** m2 comments*/
-    module m2 {
+    namespace m2 {
         /** class comment;*/
         class c {
         }
@@ -154,12 +154,12 @@ export declare module m1 {
     function fooExport(): number;
 }
 /** Module comment */
-export declare module m4 {
+export declare namespace m4 {
     /** b's comment */
     var b: number;
     /** m2 comments
     */
-    module m2 {
+    namespace m2 {
         /** class comment; */
         class c {
         }

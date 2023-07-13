@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit2.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit2.ts] ////
+
+=== symbolDeclarationEmit2.ts ===
 class C {
 >C : Symbol(C, Decl(symbolDeclarationEmit2.ts, 0, 0))
 

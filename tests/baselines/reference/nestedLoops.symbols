@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedLoops.ts ===
+//// [tests/cases/compiler/nestedLoops.ts] ////
+
+=== nestedLoops.ts ===
 export class Test  {
 >Test : Symbol(Test, Decl(nestedLoops.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchFallThroughs.ts] ////
+
 //// [switchFallThroughs.ts]
 function R1(index: number) {
     switch (index) {

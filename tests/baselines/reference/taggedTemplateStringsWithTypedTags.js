@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts] ////
+
 //// [taggedTemplateStringsWithTypedTags.ts]
 interface I {
     (stringParts: TemplateStringsArray, ...rest: number[]): I;

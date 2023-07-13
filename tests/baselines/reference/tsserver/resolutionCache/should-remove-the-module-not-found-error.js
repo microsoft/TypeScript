@@ -52,18 +52,18 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {"pollingInterval":2000}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /users/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/modulefile: *new*
   {"pollingInterval":500}
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
+/users/username/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /users/username/projects/project: *new*
@@ -177,16 +177,16 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/username/projects/project/tsconfig.json:
-  {"pollingInterval":2000}
-/users/username/projects/project/jsconfig.json:
-  {"pollingInterval":2000}
 /a/lib/lib.d.ts:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/project/modulefile:

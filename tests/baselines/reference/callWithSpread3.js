@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts] ////
+
 //// [callWithSpread3.ts]
 declare const s2: [string, string];
 declare const s3: [string, string, string];

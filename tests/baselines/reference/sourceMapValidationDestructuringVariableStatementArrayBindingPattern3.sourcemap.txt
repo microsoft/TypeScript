@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js
+emittedFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js
 sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts
 -------------------------------------------------------------------
 >>>var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;

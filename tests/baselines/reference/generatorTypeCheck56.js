@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck56.ts] ////
+
 //// [generatorTypeCheck56.ts]
 function* g() {
     var x = class C {

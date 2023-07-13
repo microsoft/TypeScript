@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/thisInInstanceMemberInitializer.ts] ////
+
 //// [thisInInstanceMemberInitializer.ts]
 class C {
     x = this;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance5.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance5.ts] ////
+
+=== callSignatureAssignabilityInInheritance5.ts ===
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // same as subtypingWithCallSignatures2 just with an extra level of indirection in the inheritance chain
 

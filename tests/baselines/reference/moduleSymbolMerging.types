@@ -1,4 +1,6 @@
-=== tests/cases/compiler/B.ts ===
+//// [tests/cases/compiler/moduleSymbolMerging.ts] ////
+
+=== B.ts ===
 ///<reference path="A.ts" />
 module A { ; }
 >A : typeof A
@@ -12,7 +14,7 @@ module B {
 }
 
 
-=== tests/cases/compiler/A.ts ===
+=== A.ts ===
 
 module A { export interface I {} }
 

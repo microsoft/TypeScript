@@ -1,9 +1,11 @@
-=== tests/cases/compiler/usage.js ===
+//// [tests/cases/compiler/jsEnumTagOnObjectFrozen.ts] ////
+
+=== usage.js ===
 const { Thing, useThing, cbThing } = require("./index");
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
 >useThing : (x: string) => void
 >cbThing : (x: (x: string) => void) => void
->require("./index") : typeof import("tests/cases/compiler/index")
+>require("./index") : typeof import("index")
 >require : any
 >"./index" : "./index"
 
@@ -44,7 +46,7 @@ cbThing(type => {
     };
 });
 
-=== tests/cases/compiler/index.js ===
+=== index.js ===
 /** @enum {string} */
 const Thing = Object.freeze({
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
@@ -67,7 +69,7 @@ const Thing = Object.freeze({
 exports.Thing = Thing;
 >exports.Thing = Thing : Readonly<{ a: "thing"; b: "chill"; }>
 >exports.Thing : Readonly<{ a: "thing"; b: "chill"; }>
->exports : typeof import("tests/cases/compiler/index")
+>exports : typeof import("index")
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
 
@@ -81,7 +83,7 @@ function useThing(x) {}
 exports.useThing = useThing;
 >exports.useThing = useThing : (x: string) => void
 >exports.useThing : (x: string) => void
->exports : typeof import("tests/cases/compiler/index")
+>exports : typeof import("index")
 >useThing : (x: string) => void
 >useThing : (x: string) => void
 
@@ -95,7 +97,7 @@ function cbThing(x) {}
 exports.cbThing = cbThing;
 >exports.cbThing = cbThing : (x: (x: string) => void) => void
 >exports.cbThing : (x: (x: string) => void) => void
->exports : typeof import("tests/cases/compiler/index")
+>exports : typeof import("index")
 >cbThing : (x: (x: string) => void) => void
 >cbThing : (x: (x: string) => void) => void
 

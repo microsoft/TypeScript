@@ -136,21 +136,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/solution/api/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/solution/api/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/solution/shared/tsconfig.json: *new*
+/user/username/projects/solution/api/tsconfig.json: *new*
   {}
 /user/username/projects/solution/shared/src/index.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/solution/shared/tsconfig.json: *new*
   {}
 /user/username/projects/solution/tsconfig.json: *new*
   {}
@@ -158,9 +158,9 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/solution/api/src: *new*
   {}
-/user/username/projects/solution/shared/src: *new*
-  {}
 /user/username/projects/solution/shared: *new*
+  {}
+/user/username/projects/solution/shared/src: *new*
   {}
 
 Before request
@@ -251,23 +251,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/solution/api/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/solution/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/solution/shared/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/solution/api/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
-/user/username/projects/solution/shared/tsconfig.json:
+/user/username/projects/solution/api/tsconfig.json:
   {}
 /user/username/projects/solution/shared/src/index.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/solution/shared/tsconfig.json:
   {}
 /user/username/projects/solution/tsconfig.json:
   {}
@@ -275,7 +275,7 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/solution/api/src:
   {}
-/user/username/projects/solution/shared/src:
-  {}
 /user/username/projects/solution/shared:
+  {}
+/user/username/projects/solution/shared/src:
   {}

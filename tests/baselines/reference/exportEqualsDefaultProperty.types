@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exp.ts ===
+//// [tests/cases/compiler/exportEqualsDefaultProperty.ts] ////
+
+=== exp.ts ===
 var x = {
 >x : { greeting: string; default: number; }
 >{    "greeting": "hello, world",    "default": 42} : { greeting: string; default: number; }
@@ -16,7 +18,7 @@ var x = {
 export = x
 >x : { greeting: string; default: number; }
 
-=== tests/cases/compiler/imp.ts ===
+=== imp.ts ===
 import foo from "./exp";
 >foo : number
 

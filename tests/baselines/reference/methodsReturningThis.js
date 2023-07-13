@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/methodsReturningThis.ts] ////
+
 //// [input.js]
 function Class()
 {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxIntrinsicElementsCompatability.tsx ===
+//// [tests/cases/compiler/jsxIntrinsicElementsCompatability.tsx] ////
+
+=== jsxIntrinsicElementsCompatability.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : Symbol(React, Decl(jsxIntrinsicElementsCompatability.tsx, 1, 6))

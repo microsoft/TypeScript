@@ -1,9 +1,9 @@
-tests/cases/compiler/noMappedGetSet.ts(2,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-tests/cases/compiler/noMappedGetSet.ts(2,10): error TS2304: Cannot find name 'K'.
-tests/cases/compiler/noMappedGetSet.ts(2,15): error TS2304: Cannot find name 'WAT'.
+noMappedGetSet.ts(2,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+noMappedGetSet.ts(2,10): error TS2304: Cannot find name 'K'.
+noMappedGetSet.ts(2,15): error TS2304: Cannot find name 'WAT'.
 
 
-==== tests/cases/compiler/noMappedGetSet.ts (3 errors) ====
+==== noMappedGetSet.ts (3 errors) ====
     type OH_NO = {
         get [K in WAT](): string
             ~~~~~~~~~~

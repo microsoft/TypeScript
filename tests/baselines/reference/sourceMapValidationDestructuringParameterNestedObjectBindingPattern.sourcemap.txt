@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringParameterNestedObjectBindingPattern.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringParameterNestedObjectBindingPattern.js
+emittedFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.js
 sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.ts
 -------------------------------------------------------------------
 >>>var robotA = { name: "mower", skills: { primary: "mowing", secondary: "none" } };

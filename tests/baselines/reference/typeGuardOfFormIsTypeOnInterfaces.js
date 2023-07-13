@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormIsTypeOnInterfaces.ts] ////
+
 //// [typeGuardOfFormIsTypeOnInterfaces.ts]
 interface C1 {
     (): C1;

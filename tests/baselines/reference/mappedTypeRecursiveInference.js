@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeRecursiveInference.ts] ////
+
 //// [mappedTypeRecursiveInference.ts]
 interface A { a: A }
 declare let a: A;

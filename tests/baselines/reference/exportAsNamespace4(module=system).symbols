@@ -1,22 +1,24 @@
-=== tests/cases/conformance/es2020/modules/0.ts ===
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace4.ts] ////
+
+=== 0.ts ===
 export const a = 1;
 >a : Symbol(a, Decl(0.ts, 0, 12))
 
 export const b = 2;
 >b : Symbol(b, Decl(0.ts, 1, 12))
 
-=== tests/cases/conformance/es2020/modules/1.ts ===
+=== 1.ts ===
 export * as default from './0';
 >default : Symbol(default, Decl(1.ts, 0, 6))
 
-=== tests/cases/conformance/es2020/modules/11.ts ===
+=== 11.ts ===
 import * as ns from './0';
 >ns : Symbol(ns, Decl(11.ts, 0, 6))
 
 export default ns;
 >ns : Symbol(ns, Decl(11.ts, 0, 6))
 
-=== tests/cases/conformance/es2020/modules/2.ts ===
+=== 2.ts ===
 import foo from './1'
 >foo : Symbol(foo, Decl(2.ts, 0, 6))
 

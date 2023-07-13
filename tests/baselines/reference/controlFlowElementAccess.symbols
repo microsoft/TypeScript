@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowElementAccess.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowElementAccess.ts] ////
+
+=== controlFlowElementAccess.ts ===
 let x: { o: boolean } = { o: false }
 >x : Symbol(x, Decl(controlFlowElementAccess.ts, 0, 3))
 >o : Symbol(o, Decl(controlFlowElementAccess.ts, 0, 8))

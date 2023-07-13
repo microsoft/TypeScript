@@ -1,4 +1,6 @@
-=== tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty1.ts ===
+//// [tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty1.ts] ////
+
+=== convertClassExpressionToFunctionFromObjectProperty1.ts ===
 const foo: any = {};
 >foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
 

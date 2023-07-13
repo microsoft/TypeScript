@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts] ////
+
 //// [classStaticBlock7.ts]
 class C {
     static {

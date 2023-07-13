@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritance1.ts ===
+//// [tests/cases/compiler/inheritance1.ts] ////
+
+=== inheritance1.ts ===
 class Control {
 >Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
 

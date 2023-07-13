@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base'.
+apparentTypeSupertype.ts(10,5): error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base'.
   Type 'U' is not assignable to type 'string'.
     Type 'String' is not assignable to type 'string'.
       'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 
 
-==== tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts (1 errors) ====
+==== apparentTypeSupertype.ts (1 errors) ====
     // subtype checks use the apparent type of the target type
     // S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
     

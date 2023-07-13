@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts] ////
+
+=== nonPrimitiveInFunction.ts ===
 function takeObject(o: object) {}
 >takeObject : (o: object) => void
 >o : object

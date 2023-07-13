@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName16.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName16.ts] ////
+
+=== parserComputedPropertyName16.ts ===
 enum E {
 >E : Symbol(E, Decl(parserComputedPropertyName16.ts, 0, 0))
 

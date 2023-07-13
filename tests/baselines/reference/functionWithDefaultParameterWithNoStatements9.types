@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements9.ts ===
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements9.ts] ////
+
+=== functionWithDefaultParameterWithNoStatements9.ts ===
 function foo(a = console.log) { }
 >foo : (a?: (...data: any[]) => void) => void
 >a : (...data: any[]) => void

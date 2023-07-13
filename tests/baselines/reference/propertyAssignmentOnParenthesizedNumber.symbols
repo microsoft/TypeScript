@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug38934.js ===
+//// [tests/cases/conformance/salsa/propertyAssignmentOnParenthesizedNumber.ts] ////
+
+=== bug38934.js ===
 var x = {};
 >x : Symbol(x, Decl(bug38934.js, 0, 3))
 

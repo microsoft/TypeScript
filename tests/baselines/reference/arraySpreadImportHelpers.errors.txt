@@ -1,14 +1,14 @@
-tests/cases/conformance/es6/spread/main.ts(3,15): error TS2807: This syntax requires an imported helper named '__spreadArray' with 3 parameters, which is not compatible with the one in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(3,15): error TS2807: This syntax requires an imported helper named '__spreadArray' with 3 parameters, which is not compatible with the one in 'tslib'. Consider upgrading your version of 'tslib'.
 
 
-==== tests/cases/conformance/es6/spread/main.ts (1 errors) ====
+==== main.ts (1 errors) ====
     export {};
     const k = [1, , 2];
     const o = [3, ...k, 4];
                   ~~~~
 !!! error TS2807: This syntax requires an imported helper named '__spreadArray' with 3 parameters, which is not compatible with the one in 'tslib'. Consider upgrading your version of 'tslib'.
     
-==== tests/cases/conformance/es6/spread/tslib.d.ts (0 errors) ====
+==== tslib.d.ts (0 errors) ====
     // this is a pre-TS4.4 versions of emit helper, which always forced array packing
     declare module "tslib" {
         function __spreadArray(to: any[], from: any[]): any[];

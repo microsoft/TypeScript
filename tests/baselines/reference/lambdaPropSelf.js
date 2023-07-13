@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lambdaPropSelf.ts] ////
+
 //// [lambdaPropSelf.ts]
 declare var ko: any;
 

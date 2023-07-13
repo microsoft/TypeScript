@@ -1,7 +1,7 @@
-tests/cases/compiler/spellingSuggestionGlobal4.ts(3,1): error TS2304: Cannot find name 'global'.
+spellingSuggestionGlobal4.ts(3,1): error TS2304: Cannot find name 'global'.
 
 
-==== tests/cases/compiler/spellingSuggestionGlobal4.ts (1 errors) ====
+==== spellingSuggestionGlobal4.ts (1 errors) ====
     export {}
     declare global { var x: any }
     global.x // should not suggest `global` (GH#42209)

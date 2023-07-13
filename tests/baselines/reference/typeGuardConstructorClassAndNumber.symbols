@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardConstructorClassAndNumber.ts ===
+//// [tests/cases/compiler/typeGuardConstructorClassAndNumber.ts] ////
+
+=== typeGuardConstructorClassAndNumber.ts ===
 // Typical case
 class C1 {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))

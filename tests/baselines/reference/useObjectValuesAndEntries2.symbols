@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts ===
+//// [tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts] ////
+
+=== useObjectValuesAndEntries2.ts ===
 var o = { a: 1, b: 2 };
 >o : Symbol(o, Decl(useObjectValuesAndEntries2.ts, 0, 3))
 >a : Symbol(a, Decl(useObjectValuesAndEntries2.ts, 0, 9))

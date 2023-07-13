@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noErrorsInCallback.ts ===
+//// [tests/cases/compiler/noErrorsInCallback.ts] ////
+
+=== noErrorsInCallback.ts ===
 class Bar {
 >Bar : Symbol(Bar, Decl(noErrorsInCallback.ts, 0, 0))
 

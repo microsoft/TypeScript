@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classTypeParametersInStatics.ts] ////
+
 //// [classTypeParametersInStatics.ts]
 module Editor {
 

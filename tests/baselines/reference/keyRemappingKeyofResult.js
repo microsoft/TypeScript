@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/keyRemappingKeyofResult.ts] ////
+
 //// [keyRemappingKeyofResult.ts]
 const sym = Symbol("")
 type Orig = { [k: string]: any, str: any, [sym]: any }

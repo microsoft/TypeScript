@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationVarInDownLevelGenerator.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationVarInDownLevelGenerator.js
+emittedFile:sourceMapValidationVarInDownLevelGenerator.js
 sourceFile:sourceMapValidationVarInDownLevelGenerator.ts
 -------------------------------------------------------------------
 >>>function f() {

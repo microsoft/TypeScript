@@ -1,4 +1,6 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal4.ts] ////
+
+=== f1.ts ===
 declare global {
 >global : any
 
@@ -6,7 +8,7 @@ declare global {
 >x : any
 }
 export {};
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 declare global {
 >global : any
 
@@ -14,7 +16,7 @@ declare global {
 >y : any
 }
 export {};
-=== tests/cases/compiler/f3.ts ===
+=== f3.ts ===
 
 import "./f1";
 import "./f2";

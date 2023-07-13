@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsage1_main.ts ===
+//// [tests/cases/compiler/aliasUsageInAccessorsOfClass.ts] ////
+
+=== aliasUsage1_main.ts ===
 import Backbone = require("./aliasUsage1_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsage1_main.ts, 0, 0))
 
@@ -38,7 +40,7 @@ class C2 {
 >moduleA : Symbol(moduleA, Decl(aliasUsage1_main.ts, 0, 52))
     }
 }
-=== tests/cases/compiler/aliasUsage1_backbone.ts ===
+=== aliasUsage1_backbone.ts ===
 export class Model {
 >Model : Symbol(Model, Decl(aliasUsage1_backbone.ts, 0, 0))
 
@@ -46,7 +48,7 @@ export class Model {
 >someData : Symbol(Model.someData, Decl(aliasUsage1_backbone.ts, 0, 20))
 }
 
-=== tests/cases/compiler/aliasUsage1_moduleA.ts ===
+=== aliasUsage1_moduleA.ts ===
 import Backbone = require("./aliasUsage1_backbone");
 >Backbone : Symbol(Backbone, Decl(aliasUsage1_moduleA.ts, 0, 0))
 

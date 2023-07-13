@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeWithCallableMembers2.ts ===
+//// [tests/cases/compiler/genericTypeWithCallableMembers2.ts] ////
+
+=== genericTypeWithCallableMembers2.ts ===
 function foo1<T extends { (): string; }>(f: T) {
 >foo1 : <T extends () => string>(f: T) => string
 >f : T

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTypeParameterReferenceError1.ts] ////
+
 //// [recursiveTypeParameterReferenceError1.ts]
 class X<T> { }
 interface Foo<T> {

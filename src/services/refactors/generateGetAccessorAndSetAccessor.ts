@@ -3,6 +3,7 @@ import {
     codefix,
     Diagnostics,
     emptyArray,
+    getLocaleSpecificMessage,
     getRenameLocation,
     isIdentifier,
     isParameter,
@@ -16,7 +17,7 @@ import {
 import * as Debug from "../../compiler/debug";
 
 const actionName = "Generate 'get' and 'set' accessors";
-const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
+const actionDescription = getLocaleSpecificMessage(Diagnostics.Generate_get_and_set_accessors);
 
 const generateGetSetAction = {
     name: actionName,

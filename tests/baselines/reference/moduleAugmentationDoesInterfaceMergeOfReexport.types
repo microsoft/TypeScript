@@ -1,12 +1,14 @@
-=== tests/cases/compiler/file.ts ===
+//// [tests/cases/compiler/moduleAugmentationDoesInterfaceMergeOfReexport.ts] ////
+
+=== file.ts ===
 export interface Foo {
     x: number;
 >x : number
 }
-=== tests/cases/compiler/reexport.ts ===
+=== reexport.ts ===
 
 export * from "./file";
-=== tests/cases/compiler/augment.ts ===
+=== augment.ts ===
 import * as ns from "./reexport";
 >ns : typeof ns
 

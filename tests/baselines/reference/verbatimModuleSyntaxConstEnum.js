@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxConstEnum.ts] ////
+
 //// [verbatimModuleSyntaxConstEnum.ts]
 export const enum E {
     A = 1,

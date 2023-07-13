@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/contextualTypeSelfReferencing.ts] ////
+
+=== contextualTypeSelfReferencing.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54048
+
+type narrow<def> = def extends string
+>narrow : Symbol(narrow, Decl(contextualTypeSelfReferencing.ts, 0, 0))
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 2, 12))
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 2, 12))
+
+  ? def
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 2, 12))
+
+  : def extends [unknown, ...unknown[]]
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 2, 12))
+
+  ? def
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 2, 12))
+
+  : {
+      [k in keyof def]: narrow<def[k]>;
+>k : Symbol(k, Decl(contextualTypeSelfReferencing.ts, 7, 7))
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 2, 12))
+>narrow : Symbol(narrow, Decl(contextualTypeSelfReferencing.ts, 0, 0))
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 2, 12))
+>k : Symbol(k, Decl(contextualTypeSelfReferencing.ts, 7, 7))
+
+    };
+
+declare const parse: <def>(def: narrow<def>) => def;
+>parse : Symbol(parse, Decl(contextualTypeSelfReferencing.ts, 10, 13))
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 10, 22), Decl(contextualTypeSelfReferencing.ts, 10, 27))
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 10, 22), Decl(contextualTypeSelfReferencing.ts, 10, 27))
+>narrow : Symbol(narrow, Decl(contextualTypeSelfReferencing.ts, 0, 0))
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 10, 22), Decl(contextualTypeSelfReferencing.ts, 10, 27))
+>def : Symbol(def, Decl(contextualTypeSelfReferencing.ts, 10, 22), Decl(contextualTypeSelfReferencing.ts, 10, 27))
+
+const result = parse([{ a: "foo" }]);
+>result : Symbol(result, Decl(contextualTypeSelfReferencing.ts, 12, 5))
+>parse : Symbol(parse, Decl(contextualTypeSelfReferencing.ts, 10, 13))
+>a : Symbol(a, Decl(contextualTypeSelfReferencing.ts, 12, 23))
+

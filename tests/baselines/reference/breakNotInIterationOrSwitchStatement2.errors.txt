@@ -1,7 +1,7 @@
-tests/cases/compiler/breakNotInIterationOrSwitchStatement2.ts(3,5): error TS1107: Jump target cannot cross function boundary.
+breakNotInIterationOrSwitchStatement2.ts(3,5): error TS1107: Jump target cannot cross function boundary.
 
 
-==== tests/cases/compiler/breakNotInIterationOrSwitchStatement2.ts (1 errors) ====
+==== breakNotInIterationOrSwitchStatement2.ts (1 errors) ====
     while (true) {
       function f() {
         break;

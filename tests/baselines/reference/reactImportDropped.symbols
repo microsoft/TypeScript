@@ -1,4 +1,6 @@
-=== tests/cases/compiler/react.d.ts ===
+//// [tests/cases/compiler/reactImportDropped.ts] ////
+
+=== react.d.ts ===
 export = React;
 >React : Symbol(React, Decl(react.d.ts, 1, 26))
 
@@ -34,7 +36,7 @@ declare global {
 }
 
 
-=== tests/cases/compiler/src/components/TabBar.js ===
+=== src/components/TabBar.js ===
 export default React.createClass({
 >React.createClass : Symbol(React.createClass, Decl(react.d.ts, 3, 25))
 >React : Symbol(React, Decl(react.d.ts, 0, 15))
@@ -49,7 +51,7 @@ export default React.createClass({
   }
 });
 
-=== tests/cases/compiler/src/modules/navigation/NavigationView.js ===
+=== src/modules/navigation/NavigationView.js ===
 import TabBar from '../../components/TabBar';
 >TabBar : Symbol(TabBar, Decl(NavigationView.js, 0, 6))
 

@@ -1,12 +1,12 @@
-tests/cases/compiler/a.ts(2,1): error TS1218: Export assignment is not supported when '--module' flag is 'system'.
+a.ts(2,1): error TS1218: Export assignment is not supported when '--module' flag is 'system'.
 
 
-==== tests/cases/compiler/a.ts (1 errors) ====
+==== a.ts (1 errors) ====
     var a = 10;
     export = a;  // Error: export = not allowed in ES6
     ~~~~~~~~~~~
 !!! error TS1218: Export assignment is not supported when '--module' flag is 'system'.
     
-==== tests/cases/compiler/b.ts (0 errors) ====
+==== b.ts (0 errors) ====
     import * as a from "a";
     

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyAssignmentInSubclassOfClassExpression.ts] ////
+
 //// [readonlyAssignmentInSubclassOfClassExpression.ts]
 class C extends (class {} as new () => Readonly<{ attrib: number }>) {
     constructor() {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexingTypesWithNever.ts ===
+//// [tests/cases/compiler/indexingTypesWithNever.ts] ////
+
+=== indexingTypesWithNever.ts ===
 type TestObj = {
 >TestObj : Symbol(TestObj, Decl(indexingTypesWithNever.ts, 0, 0))
 

@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement4.ts(3,9): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement4.ts(4,3): error TS1109: Expression expected.
+parserErrorRecoveryIfStatement4.ts(3,9): error TS2304: Cannot find name 'a'.
+parserErrorRecoveryIfStatement4.ts(4,3): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement4.ts (2 errors) ====
+==== parserErrorRecoveryIfStatement4.ts (2 errors) ====
     class Foo {
       f1() {
         if (a.b)

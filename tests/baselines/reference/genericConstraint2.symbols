@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericConstraint2.ts ===
+//// [tests/cases/compiler/genericConstraint2.ts] ////
+
+=== genericConstraint2.ts ===
 interface Comparable<T> {
 >Comparable : Symbol(Comparable, Decl(genericConstraint2.ts, 0, 0))
 >T : Symbol(T, Decl(genericConstraint2.ts, 0, 21))

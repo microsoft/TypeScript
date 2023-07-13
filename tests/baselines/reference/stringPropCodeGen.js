@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stringPropCodeGen.ts] ////
+
 //// [stringPropCodeGen.ts]
 var a = {
 

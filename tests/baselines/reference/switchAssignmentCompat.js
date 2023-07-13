@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchAssignmentCompat.ts] ////
+
 //// [switchAssignmentCompat.ts]
 class Foo { }
 

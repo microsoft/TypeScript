@@ -1,16 +1,16 @@
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(2,16): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(3,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+genericCallbackInvokedInsideItsContainingFunction1.ts(2,16): error TS2558: Expected 0 type arguments, but got 1.
+genericCallbackInvokedInsideItsContainingFunction1.ts(3,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(4,16): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(8,17): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(9,17): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(12,17): error TS2345: Argument of type 'U' is not assignable to parameter of type 'T'.
+genericCallbackInvokedInsideItsContainingFunction1.ts(4,16): error TS2558: Expected 0 type arguments, but got 1.
+genericCallbackInvokedInsideItsContainingFunction1.ts(8,17): error TS2558: Expected 0 type arguments, but got 1.
+genericCallbackInvokedInsideItsContainingFunction1.ts(9,17): error TS2558: Expected 0 type arguments, but got 1.
+genericCallbackInvokedInsideItsContainingFunction1.ts(12,17): error TS2345: Argument of type 'U' is not assignable to parameter of type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(13,17): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,17): error TS2558: Expected 0 type arguments, but got 1.
+genericCallbackInvokedInsideItsContainingFunction1.ts(13,17): error TS2558: Expected 0 type arguments, but got 1.
+genericCallbackInvokedInsideItsContainingFunction1.ts(14,17): error TS2558: Expected 0 type arguments, but got 1.
 
 
-==== tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts (8 errors) ====
+==== genericCallbackInvokedInsideItsContainingFunction1.ts (8 errors) ====
     function foo<T, U>(x:T, y:U, f: (v: T) => U) {
         var r1 = f<number>(1);
                    ~~~~~~
@@ -37,7 +37,7 @@ tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts(14,17
                     ~
 !!! error TS2345: Argument of type 'U' is not assignable to parameter of type 'T'.
 !!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts:1:17: This type parameter might need an `extends T` constraint.
+!!! related TS2208 genericCallbackInvokedInsideItsContainingFunction1.ts:1:17: This type parameter might need an `extends T` constraint.
         var r22 = f<number>(y);
                     ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.

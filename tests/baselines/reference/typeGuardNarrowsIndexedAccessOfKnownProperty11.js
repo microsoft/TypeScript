@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty11.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty11.ts]
 enum E { A, B }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleVariableArrayIndexer.ts ===
+//// [tests/cases/compiler/moduleVariableArrayIndexer.ts] ////
+
+=== moduleVariableArrayIndexer.ts ===
 module Bar {
 >Bar : Symbol(Bar, Decl(moduleVariableArrayIndexer.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/typeParameterExtendsUnionConstraintDistributed.ts ===
+//// [tests/cases/conformance/jsdoc/typeParameterExtendsUnionConstraintDistributed.ts] ////
+
+=== typeParameterExtendsUnionConstraintDistributed.ts ===
 type A = 1 | 2;
 >A : Symbol(A, Decl(typeParameterExtendsUnionConstraintDistributed.ts, 0, 0))
 

@@ -1,11 +1,11 @@
-tests/cases/conformance/jsdoc/main.js(2,15): error TS2304: Cannot find name 'Mismatch'.
-tests/cases/conformance/jsdoc/main.js(2,15): error TS8023: JSDoc '@extends Mismatch' does not match the 'extends B' clause.
+main.js(2,15): error TS2304: Cannot find name 'Mismatch'.
+main.js(2,15): error TS8023: JSDoc '@extends Mismatch' does not match the 'extends B' clause.
 
 
-==== tests/cases/conformance/jsdoc/super.js (0 errors) ====
+==== super.js (0 errors) ====
     export class B { }
     
-==== tests/cases/conformance/jsdoc/main.js (2 errors) ====
+==== main.js (2 errors) ====
     import { B } from './super'
     /** @extends {Mismatch} */
                   ~~~~~~~~

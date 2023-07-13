@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowElementAccess2.ts] ////
+
 //// [controlFlowElementAccess2.ts]
 declare const config: {
     [key: string]: boolean | { prop: string };

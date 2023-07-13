@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-commonjs5.ts] ////
+
 //// [es5-commonjs5.ts]
 export default function () {
 	return "test";

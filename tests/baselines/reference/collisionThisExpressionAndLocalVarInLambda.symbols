@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionThisExpressionAndLocalVarInLambda.ts ===
+//// [tests/cases/compiler/collisionThisExpressionAndLocalVarInLambda.ts] ////
+
+=== collisionThisExpressionAndLocalVarInLambda.ts ===
 declare function alert(message?: any): void;
 >alert : Symbol(alert, Decl(lib.dom.d.ts, --, --), Decl(collisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
 >message : Symbol(message, Decl(collisionThisExpressionAndLocalVarInLambda.ts, 0, 23))

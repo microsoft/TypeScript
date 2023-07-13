@@ -1,4 +1,6 @@
-=== tests/cases/compiler/continueLabel.ts ===
+//// [tests/cases/compiler/continueLabel.ts] ////
+
+=== continueLabel.ts ===
 label1: for(var i = 0; i < 1; i++) {
 >i : Symbol(i, Decl(continueLabel.ts, 0, 15))
 >i : Symbol(i, Decl(continueLabel.ts, 0, 15))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errors.d.ts ===
+//// [tests/cases/compiler/importPropertyFromMappedType.ts] ////
+
+=== errors.d.ts ===
 // #42957
 
 export = createHttpError;
@@ -17,7 +19,7 @@ declare namespace createHttpError {
 >P : Symbol(P, Decl(errors.d.ts, 5, 33))
 }
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { NotFound } from './errors'
 >NotFound : Symbol(NotFound, Decl(main.ts, 0, 8))
 

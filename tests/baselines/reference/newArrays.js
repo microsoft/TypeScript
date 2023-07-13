@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newArrays.ts] ////
+
 //// [newArrays.ts]
 module M {
 	class Foo {}

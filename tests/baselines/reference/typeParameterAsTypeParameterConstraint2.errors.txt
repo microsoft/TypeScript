@@ -1,14 +1,14 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(6,8): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(7,8): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(13,17): error TS2345: Argument of type 'NumberVariant' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(16,11): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(17,11): error TS2322: Type '{}' is not assignable to type 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(18,10): error TS2345: Argument of type 'string[]' is not assignable to parameter of type '{ length: any[]; }'.
+typeParameterAsTypeParameterConstraint2.ts(6,8): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+typeParameterAsTypeParameterConstraint2.ts(7,8): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
+typeParameterAsTypeParameterConstraint2.ts(13,17): error TS2345: Argument of type 'NumberVariant' is not assignable to parameter of type 'number'.
+typeParameterAsTypeParameterConstraint2.ts(16,11): error TS2322: Type 'string' is not assignable to type 'number'.
+typeParameterAsTypeParameterConstraint2.ts(17,11): error TS2322: Type '{}' is not assignable to type 'number'.
+typeParameterAsTypeParameterConstraint2.ts(18,10): error TS2345: Argument of type 'string[]' is not assignable to parameter of type '{ length: any[]; }'.
   Types of property 'length' are incompatible.
     Type 'number' is not assignable to type 'any[]'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts (6 errors) ====
+==== typeParameterAsTypeParameterConstraint2.ts (6 errors) ====
     // using a type parameter as a constraint for a type parameter is invalid
     // these should be errors unless otherwise noted
     
@@ -33,11 +33,11 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTy
     foo2(1, { length: '' });
               ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts:15:30: The expected type comes from property 'length' which is declared here on type '{ length: number; }'
+!!! related TS6500 typeParameterAsTypeParameterConstraint2.ts:15:30: The expected type comes from property 'length' which is declared here on type '{ length: number; }'
     foo2(1, { length: {} });
               ~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts:15:30: The expected type comes from property 'length' which is declared here on type '{ length: number; }'
+!!! related TS6500 typeParameterAsTypeParameterConstraint2.ts:15:30: The expected type comes from property 'length' which is declared here on type '{ length: number; }'
     foo2([], ['']);
              ~~~~
 !!! error TS2345: Argument of type 'string[]' is not assignable to parameter of type '{ length: any[]; }'.

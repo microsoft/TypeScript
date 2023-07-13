@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/prefixPostfix.js ===
+//// [tests/cases/conformance/jsdoc/jsdocPrefixPostfixParsing.ts] ////
+
+=== prefixPostfix.js ===
 /**
  * @param {number![]} x - number[]
  * @param {!number[]} y - number[]

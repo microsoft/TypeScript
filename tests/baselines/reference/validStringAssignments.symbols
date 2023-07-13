@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/string/validStringAssignments.ts ===
+//// [tests/cases/conformance/types/primitives/string/validStringAssignments.ts] ////
+
+=== validStringAssignments.ts ===
 var x = '';
 >x : Symbol(x, Decl(validStringAssignments.ts, 0, 3))
 

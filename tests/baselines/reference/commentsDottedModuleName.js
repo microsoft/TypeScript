@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsDottedModuleName.ts] ////
+
 //// [commentsDottedModuleName.ts]
 /** this is multi declare module*/
 export module outerModule.InnerModule {
@@ -30,7 +32,7 @@ define(["require", "exports"], function (require, exports) {
 
 //// [commentsDottedModuleName.d.ts]
 /** this is multi declare module*/
-export declare module outerModule.InnerModule {
+export declare namespace outerModule.InnerModule {
     class b {
     }
 }

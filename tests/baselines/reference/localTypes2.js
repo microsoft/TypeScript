@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/localTypes/localTypes2.ts] ////
+
 //// [localTypes2.ts]
 function f1() {
     function f() {

@@ -1,20 +1,20 @@
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(1,30): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(5,30): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(9,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(10,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(12,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(13,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(15,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(15,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(16,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(16,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(18,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(19,10): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(21,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
-tests/cases/compiler/parseInvalidNonNullableTypes.ts(22,10): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+parseInvalidNonNullableTypes.ts(1,30): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(5,30): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(9,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(10,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+parseInvalidNonNullableTypes.ts(12,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(13,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+parseInvalidNonNullableTypes.ts(15,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+parseInvalidNonNullableTypes.ts(15,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(16,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+parseInvalidNonNullableTypes.ts(16,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(18,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+parseInvalidNonNullableTypes.ts(19,10): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+parseInvalidNonNullableTypes.ts(21,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+parseInvalidNonNullableTypes.ts(22,10): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
 
 
-==== tests/cases/compiler/parseInvalidNonNullableTypes.ts (14 errors) ====
+==== parseInvalidNonNullableTypes.ts (14 errors) ====
     function f1(a: string): a is string! {
                                  ~~~~~~~
 !!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?

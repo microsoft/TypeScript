@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyReadonly.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyReadonly.ts] ////
+
+=== readonlyReadonly.ts ===
 class C {
 >C : Symbol(C, Decl(readonlyReadonly.ts, 0, 0))
 

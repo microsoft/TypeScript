@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/Symbols/symbolType2.ts(2,7): error TS2322: Type 'typeof Symbol.toPrimitive' is not assignable to type 'object'.
+symbolType2.ts(2,7): error TS2322: Type 'typeof Symbol.toPrimitive' is not assignable to type 'object'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolType2.ts (1 errors) ====
+==== symbolType2.ts (1 errors) ====
     Symbol.isConcatSpreadable in {};
     "" in Symbol.toPrimitive;
           ~~~~~~~~~~~~~~~~~~

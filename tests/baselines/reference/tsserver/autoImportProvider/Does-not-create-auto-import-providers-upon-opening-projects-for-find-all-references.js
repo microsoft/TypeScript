@@ -116,19 +116,19 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/packages/b/tsconfig.json: *new*
+/package.json: *new*
   {}
 /packages/b/package.json: *new*
   {}
-/package.json: *new*
+/packages/b/tsconfig.json: *new*
   {}
 /tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/packages/b: *new*
-  {}
 /node_modules: *new*
+  {}
+/packages/b: *new*
   {}
 
 Before request
@@ -294,25 +294,25 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/packages/b/tsconfig.json:
-  {}
-/packages/b/package.json:
-  {}
 /package.json:
-  {}
-/tsconfig.json:
   {}
 /packages/a/index.ts: *new*
   {}
 /packages/a/tsconfig.json: *new*
   {}
+/packages/b/package.json:
+  {}
+/packages/b/tsconfig.json:
+  {}
+/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
-/packages/b:
+/: *new*
   {}
 /node_modules:
   {}
-/: *new*
-  {}
 /packages/a: *new*
+  {}
+/packages/b:
   {}

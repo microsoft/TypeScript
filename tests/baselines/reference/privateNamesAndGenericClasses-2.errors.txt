@@ -1,11 +1,11 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesAndGenericClasses-2.ts(24,3): error TS18013: Property '#foo' is not accessible outside class 'C' because it has a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndGenericClasses-2.ts(25,1): error TS2322: Type 'C<string>' is not assignable to type 'C<number>'.
+privateNamesAndGenericClasses-2.ts(24,3): error TS18013: Property '#foo' is not accessible outside class 'C' because it has a private identifier.
+privateNamesAndGenericClasses-2.ts(25,1): error TS2322: Type 'C<string>' is not assignable to type 'C<number>'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndGenericClasses-2.ts(26,1): error TS2322: Type 'C<number>' is not assignable to type 'C<string>'.
+privateNamesAndGenericClasses-2.ts(26,1): error TS2322: Type 'C<number>' is not assignable to type 'C<string>'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesAndGenericClasses-2.ts (3 errors) ====
+==== privateNamesAndGenericClasses-2.ts (3 errors) ====
     class C<T> {
         #foo: T;
         #bar(): T {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndAmbientModule_externalmodule.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndAmbientModule.ts] ////
+
+=== collisionExportsRequireAndAmbientModule_externalmodule.ts ===
 export declare module require {
 >require : typeof require
 
@@ -77,7 +79,7 @@ module m2 {
 >10 : 10
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndAmbientModule_globalFile.ts ===
+=== collisionExportsRequireAndAmbientModule_globalFile.ts ===
 declare module require {
 >require : typeof require
 

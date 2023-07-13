@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts] ////
+
 //// [NonInitializedExportInInternalModule.ts]
 module Inner {
     var;

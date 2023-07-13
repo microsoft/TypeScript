@@ -1,21 +1,21 @@
-tests/cases/compiler/noImplicitSymbolToString.ts(6,30): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
-tests/cases/compiler/noImplicitSymbolToString.ts(7,30): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/compiler/noImplicitSymbolToString.ts(8,8): error TS2469: The '+=' operator cannot be applied to type 'symbol'.
-tests/cases/compiler/noImplicitSymbolToString.ts(13,47): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
-tests/cases/compiler/noImplicitSymbolToString.ts(13,90): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
-tests/cases/compiler/noImplicitSymbolToString.ts(21,15): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
-tests/cases/compiler/noImplicitSymbolToString.ts(26,8): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
-tests/cases/compiler/noImplicitSymbolToString.ts(27,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/compiler/noImplicitSymbolToString.ts(28,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/compiler/noImplicitSymbolToString.ts(31,8): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
-tests/cases/compiler/noImplicitSymbolToString.ts(32,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/compiler/noImplicitSymbolToString.ts(33,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/compiler/noImplicitSymbolToString.ts(43,8): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
-tests/cases/compiler/noImplicitSymbolToString.ts(44,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
-tests/cases/compiler/noImplicitSymbolToString.ts(45,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(6,30): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(7,30): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(8,8): error TS2469: The '+=' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(13,47): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(13,90): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(21,15): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(26,8): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(27,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(28,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(31,8): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(32,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(33,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(43,8): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+noImplicitSymbolToString.ts(44,5): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+noImplicitSymbolToString.ts(45,6): error TS2469: The '+' operator cannot be applied to type 'symbol'.
 
 
-==== tests/cases/compiler/noImplicitSymbolToString.ts (15 errors) ====
+==== noImplicitSymbolToString.ts (15 errors) ====
     // Fix #19666
     
     let symbol!: symbol;

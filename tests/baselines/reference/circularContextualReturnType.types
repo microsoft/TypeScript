@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularContextualReturnType.ts ===
+//// [tests/cases/compiler/circularContextualReturnType.ts] ////
+
+=== circularContextualReturnType.ts ===
 // Repro from #17711
 
 Object.freeze({

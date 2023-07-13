@@ -1,23 +1,23 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(12,5): error TS2322: Type 'P<A>' is not assignable to type 'P<B>'.
+covariantCallbacks.ts(12,5): error TS2322: Type 'P<A>' is not assignable to type 'P<B>'.
   Property 'b' is missing in type 'A' but required in type 'B'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(17,5): error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
+covariantCallbacks.ts(17,5): error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
   Type 'A' is not assignable to type 'B'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(30,5): error TS2322: Type 'AList1' is not assignable to type 'BList1'.
+covariantCallbacks.ts(30,5): error TS2322: Type 'AList1' is not assignable to type 'BList1'.
   Types of property 'forEach' are incompatible.
     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: B) => void) => void'.
       Types of parameters 'cb' and 'cb' are incompatible.
         Types of parameters 'item' and 'item' are incompatible.
           Type 'A' is not assignable to type 'B'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(43,5): error TS2322: Type 'AList2' is not assignable to type 'BList2'.
+covariantCallbacks.ts(43,5): error TS2322: Type 'AList2' is not assignable to type 'BList2'.
   Types of property 'forEach' are incompatible.
     Types of parameters 'cb' and 'cb' are incompatible.
       Type 'void' is not assignable to type 'boolean'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(56,5): error TS2322: Type 'AList3' is not assignable to type 'BList3'.
+covariantCallbacks.ts(56,5): error TS2322: Type 'AList3' is not assignable to type 'BList3'.
   Types of property 'forEach' are incompatible.
     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: A, context: any) => void) => void'.
       Types of parameters 'cb' and 'cb' are incompatible.
         Target signature provides too few arguments. Expected 2 or more, but got 1.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(69,5): error TS2322: Type 'AList4' is not assignable to type 'BList4'.
+covariantCallbacks.ts(69,5): error TS2322: Type 'AList4' is not assignable to type 'BList4'.
   Types of property 'forEach' are incompatible.
     Type '(cb: (item: A) => A) => void' is not assignable to type '(cb: (item: B) => B) => void'.
       Types of parameters 'cb' and 'cb' are incompatible.
@@ -25,7 +25,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
           Type 'A' is not assignable to type 'B'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts (6 errors) ====
+==== covariantCallbacks.ts (6 errors) ====
     // Test that callback parameters are related covariantly
     
     interface P<T> {
@@ -41,7 +41,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         ~
 !!! error TS2322: Type 'P<A>' is not assignable to type 'P<B>'.
 !!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:25: 'b' is declared here.
+!!! related TS2728 covariantCallbacks.ts:8:25: 'b' is declared here.
     }
     
     function f2(a: Promise<A>, b: Promise<B>) {

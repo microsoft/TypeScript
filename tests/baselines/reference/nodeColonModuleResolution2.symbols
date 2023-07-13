@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/nodeColonModuleResolution2.ts] ////
+
+=== /a/b/main.ts ===
+import * as ph from 'fake:thing'
+>ph : Symbol(ph, Decl(main.ts, 0, 6))
+
+console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
+>ph.constants : Symbol(ph.constants, Decl(index.d.ts, 0, 0))
+>ph : Symbol(ph, Decl(main.ts, 0, 6))
+>constants : Symbol(ph.constants, Decl(index.d.ts, 0, 0))
+>NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
+
+=== /a/b/node_modules/fake/thing/index.d.ts ===
+export namespace constants {
+>constants : Symbol(constants, Decl(index.d.ts, 0, 0))
+
+    const NODE_PERFORMANCE_GC_MAJOR: number;
+>NODE_PERFORMANCE_GC_MAJOR : Symbol(NODE_PERFORMANCE_GC_MAJOR, Decl(index.d.ts, 1, 9))
+
+    const NODE_PERFORMANCE_GC_MINOR: number;
+>NODE_PERFORMANCE_GC_MINOR : Symbol(NODE_PERFORMANCE_GC_MINOR, Decl(index.d.ts, 2, 9))
+
+    const NODE_PERFORMANCE_GC_INCREMENTAL: number;
+>NODE_PERFORMANCE_GC_INCREMENTAL : Symbol(NODE_PERFORMANCE_GC_INCREMENTAL, Decl(index.d.ts, 3, 9))
+
+    const NODE_PERFORMANCE_GC_WEAKCB: number;
+>NODE_PERFORMANCE_GC_WEAKCB : Symbol(NODE_PERFORMANCE_GC_WEAKCB, Decl(index.d.ts, 4, 9))
+
+    const NODE_PERFORMANCE_GC_FLAGS_NO: number;
+>NODE_PERFORMANCE_GC_FLAGS_NO : Symbol(NODE_PERFORMANCE_GC_FLAGS_NO, Decl(index.d.ts, 5, 9))
+
+    const NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED: number;
+>NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED : Symbol(NODE_PERFORMANCE_GC_FLAGS_CONSTRUCT_RETAINED, Decl(index.d.ts, 6, 9))
+
+    const NODE_PERFORMANCE_GC_FLAGS_FORCED: number;
+>NODE_PERFORMANCE_GC_FLAGS_FORCED : Symbol(NODE_PERFORMANCE_GC_FLAGS_FORCED, Decl(index.d.ts, 7, 9))
+
+    const NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING: number;
+>NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING : Symbol(NODE_PERFORMANCE_GC_FLAGS_SYNCHRONOUS_PHANTOM_PROCESSING, Decl(index.d.ts, 8, 9))
+
+    const NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE: number;
+>NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
+
+    const NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY: number;
+>NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY : Symbol(NODE_PERFORMANCE_GC_FLAGS_ALL_EXTERNAL_MEMORY, Decl(index.d.ts, 10, 9))
+
+    const NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE: number;
+>NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE : Symbol(NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE, Decl(index.d.ts, 11, 9))
+}

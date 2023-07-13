@@ -1,11 +1,13 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/defaultIsNotVisibleInLocalScope.ts] ////
+
+=== a.ts ===
 export default function () {
     return true;
 }
 export type X = typeof default;  // expect error
 >X : Symbol(X, Decl(a.ts, 2, 1))
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export default { a: true }
 >a : Symbol(a, Decl(b.ts, 0, 16))
 

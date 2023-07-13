@@ -1,4 +1,6 @@
-=== tests/cases/compiler/normalizedIntersectionTooComplex.ts ===
+//// [tests/cases/compiler/normalizedIntersectionTooComplex.ts] ////
+
+=== normalizedIntersectionTooComplex.ts ===
 // Repro from #30050
 
 interface Obj<T> {

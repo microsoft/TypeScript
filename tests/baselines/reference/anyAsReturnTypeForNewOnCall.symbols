@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyAsReturnTypeForNewOnCall.ts ===
+//// [tests/cases/compiler/anyAsReturnTypeForNewOnCall.ts] ////
+
+=== anyAsReturnTypeForNewOnCall.ts ===
 function Point(x, y) {
 >Point : Symbol(Point, Decl(anyAsReturnTypeForNewOnCall.ts, 0, 0))
 >x : Symbol(x, Decl(anyAsReturnTypeForNewOnCall.ts, 0, 15))

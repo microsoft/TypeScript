@@ -1,31 +1,31 @@
-tests/cases/conformance/classes/mixinAccessModifiers.ts(38,4): error TS2339: Property 'p' does not exist on type 'never'.
+mixinAccessModifiers.ts(38,4): error TS2339: Property 'p' does not exist on type 'never'.
   The intersection 'Private & Private2' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(42,4): error TS2339: Property 'p' does not exist on type 'never'.
+mixinAccessModifiers.ts(42,4): error TS2339: Property 'p' does not exist on type 'never'.
   The intersection 'Private & Protected' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(46,4): error TS2339: Property 'p' does not exist on type 'never'.
+mixinAccessModifiers.ts(46,4): error TS2339: Property 'p' does not exist on type 'never'.
   The intersection 'Private & Public' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(50,4): error TS2445: Property 'p' is protected and only accessible within class 'Protected & Protected2' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(65,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
+mixinAccessModifiers.ts(50,4): error TS2445: Property 'p' is protected and only accessible within class 'Protected & Protected2' and its subclasses.
+mixinAccessModifiers.ts(65,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
   The intersection 'Private & Private2' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(66,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
+mixinAccessModifiers.ts(66,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
   The intersection 'Private & Protected' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(67,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
+mixinAccessModifiers.ts(67,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
   The intersection 'Private & Public' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(84,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(89,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(97,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(102,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(119,4): error TS2341: Property 'privateMethod' is private and only accessible within class 'ProtectedGeneric<T>'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(120,4): error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<T>' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(124,4): error TS2339: Property 'privateMethod' does not exist on type 'never'.
+mixinAccessModifiers.ts(84,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
+mixinAccessModifiers.ts(89,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
+mixinAccessModifiers.ts(97,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
+mixinAccessModifiers.ts(102,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
+mixinAccessModifiers.ts(119,4): error TS2341: Property 'privateMethod' is private and only accessible within class 'ProtectedGeneric<T>'.
+mixinAccessModifiers.ts(120,4): error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<T>' and its subclasses.
+mixinAccessModifiers.ts(124,4): error TS2339: Property 'privateMethod' does not exist on type 'never'.
   The intersection 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>' was reduced to 'never' because property 'privateMethod' exists in multiple constituents and is private in some.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(125,4): error TS2339: Property 'protectedMethod' does not exist on type 'never'.
+mixinAccessModifiers.ts(125,4): error TS2339: Property 'protectedMethod' does not exist on type 'never'.
   The intersection 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>' was reduced to 'never' because property 'privateMethod' exists in multiple constituents and is private in some.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(129,4): error TS2341: Property 'privateMethod' is private and only accessible within class 'ProtectedGeneric<T>'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(130,4): error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<T>' and its subclasses.
+mixinAccessModifiers.ts(129,4): error TS2341: Property 'privateMethod' is private and only accessible within class 'ProtectedGeneric<T>'.
+mixinAccessModifiers.ts(130,4): error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<T>' and its subclasses.
 
 
-==== tests/cases/conformance/classes/mixinAccessModifiers.ts (17 errors) ====
+==== mixinAccessModifiers.ts (17 errors) ====
     type Constructable = new (...args: any[]) => object;
     
     class Private {

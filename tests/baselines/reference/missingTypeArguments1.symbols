@@ -1,4 +1,6 @@
-=== tests/cases/compiler/missingTypeArguments1.ts ===
+//// [tests/cases/compiler/missingTypeArguments1.ts] ////
+
+=== missingTypeArguments1.ts ===
 interface I<T> { }
 >I : Symbol(I, Decl(missingTypeArguments1.ts, 0, 0))
 >T : Symbol(T, Decl(missingTypeArguments1.ts, 0, 12))

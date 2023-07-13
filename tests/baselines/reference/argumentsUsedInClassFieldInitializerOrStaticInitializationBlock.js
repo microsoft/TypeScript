@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts] ////
+
 //// [argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts]
 function A() {
   return class T {

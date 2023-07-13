@@ -1,4 +1,6 @@
-=== tests/cases/compiler/templateLiteralIntersection3.ts ===
+//// [tests/cases/compiler/templateLiteralIntersection3.ts] ////
+
+=== templateLiteralIntersection3.ts ===
 type Path = string & { _pathBrand: any };
 >Path : string & { _pathBrand: any; }
 >_pathBrand : any

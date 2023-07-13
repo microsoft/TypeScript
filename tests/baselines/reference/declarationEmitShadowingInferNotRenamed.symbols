@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitShadowingInferNotRenamed.ts ===
+//// [tests/cases/compiler/declarationEmitShadowingInferNotRenamed.ts] ////
+
+=== declarationEmitShadowingInferNotRenamed.ts ===
 // Any instance type
 type Client = string
 >Client : Symbol(Client, Decl(declarationEmitShadowingInferNotRenamed.ts, 0, 0))

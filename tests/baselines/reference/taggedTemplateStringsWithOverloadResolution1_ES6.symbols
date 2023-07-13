@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts] ////
+
+=== taggedTemplateStringsWithOverloadResolution1_ES6.ts ===
 function foo(strs: TemplateStringsArray): number;
 >foo : Symbol(foo, Decl(taggedTemplateStringsWithOverloadResolution1_ES6.ts, 0, 0), Decl(taggedTemplateStringsWithOverloadResolution1_ES6.ts, 0, 49), Decl(taggedTemplateStringsWithOverloadResolution1_ES6.ts, 1, 60), Decl(taggedTemplateStringsWithOverloadResolution1_ES6.ts, 2, 72), Decl(taggedTemplateStringsWithOverloadResolution1_ES6.ts, 3, 67))
 >strs : Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution1_ES6.ts, 0, 13))

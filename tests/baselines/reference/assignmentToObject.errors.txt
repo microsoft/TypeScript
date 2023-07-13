@@ -1,9 +1,9 @@
-tests/cases/compiler/assignmentToObject.ts(3,5): error TS2322: Type '{ toString: number; }' is not assignable to type 'Object'.
+assignmentToObject.ts(3,5): error TS2322: Type '{ toString: number; }' is not assignable to type 'Object'.
   Types of property 'toString' are incompatible.
     Type 'number' is not assignable to type '() => string'.
 
 
-==== tests/cases/compiler/assignmentToObject.ts (1 errors) ====
+==== assignmentToObject.ts (1 errors) ====
     var a = { toString: 5 };
     var b: {} = a;  // ok
     var c: Object = a;  // should be error

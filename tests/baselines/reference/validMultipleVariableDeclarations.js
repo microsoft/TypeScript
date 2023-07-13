@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/validMultipleVariableDeclarations.ts] ////
+
 //// [validMultipleVariableDeclarations.ts]
 // all expected to be valid
 

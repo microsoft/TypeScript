@@ -1,12 +1,12 @@
-tests/cases/compiler/extension.ts(10,18): error TS2300: Duplicate identifier 'C'.
-tests/cases/compiler/extension.ts(16,5): error TS1128: Declaration or statement expected.
-tests/cases/compiler/extension.ts(16,12): error TS1434: Unexpected keyword or identifier.
-tests/cases/compiler/extension.ts(16,12): error TS2304: Cannot find name 'extension'.
-tests/cases/compiler/extension.ts(16,28): error TS2300: Duplicate identifier 'C'.
-tests/cases/compiler/extension.ts(22,3): error TS2339: Property 'pe' does not exist on type 'C'.
+extension.ts(10,18): error TS2300: Duplicate identifier 'C'.
+extension.ts(16,5): error TS1128: Declaration or statement expected.
+extension.ts(16,12): error TS1434: Unexpected keyword or identifier.
+extension.ts(16,12): error TS2304: Cannot find name 'extension'.
+extension.ts(16,28): error TS2300: Duplicate identifier 'C'.
+extension.ts(22,3): error TS2339: Property 'pe' does not exist on type 'C'.
 
 
-==== tests/cases/compiler/extension.ts (6 errors) ====
+==== extension.ts (6 errors) ====
     interface I {
         x;
     }

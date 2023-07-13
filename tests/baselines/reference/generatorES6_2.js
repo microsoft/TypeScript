@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generatorES6_2.ts] ////
+
 //// [generatorES6_2.ts]
 class C {
     public * foo() {

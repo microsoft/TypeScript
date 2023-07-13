@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorReturnsInvalidType.ts ===
+//// [tests/cases/compiler/constructorReturnsInvalidType.ts] ////
+
+=== constructorReturnsInvalidType.ts ===
 class X {
 >X : Symbol(X, Decl(constructorReturnsInvalidType.ts, 0, 0))
 

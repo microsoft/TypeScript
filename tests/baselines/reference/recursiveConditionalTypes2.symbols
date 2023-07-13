@@ -1,0 +1,209 @@
+//// [tests/cases/compiler/recursiveConditionalTypes2.ts] ////
+
+=== recursiveConditionalTypes2.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/43877
+
+type UnionToIntersection<U> = (
+>UnionToIntersection : Symbol(UnionToIntersection, Decl(recursiveConditionalTypes2.ts, 0, 0))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 2, 25))
+
+  U extends any ? (k: U) => unknown : never
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 2, 25))
+>k : Symbol(k, Decl(recursiveConditionalTypes2.ts, 3, 19))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 2, 25))
+
+) extends (k: infer I) => unknown
+>k : Symbol(k, Decl(recursiveConditionalTypes2.ts, 4, 11))
+>I : Symbol(I, Decl(recursiveConditionalTypes2.ts, 4, 19))
+
+  ? I
+>I : Symbol(I, Decl(recursiveConditionalTypes2.ts, 4, 19))
+
+  : never;
+
+interface ClassSpec {
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+
+  public?: object;
+>public : Symbol(ClassSpec.public, Decl(recursiveConditionalTypes2.ts, 8, 21))
+
+  private?: object;
+>private : Symbol(ClassSpec.private, Decl(recursiveConditionalTypes2.ts, 9, 18))
+
+  publicExtends?: Record<string, ClassSpec>;
+>publicExtends : Symbol(ClassSpec.publicExtends, Decl(recursiveConditionalTypes2.ts, 10, 19))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+
+  privateExtends?: Record<string, ClassSpec>;
+>privateExtends : Symbol(ClassSpec.privateExtends, Decl(recursiveConditionalTypes2.ts, 11, 44))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+}
+
+type MaybeMergePrivateSuperSpec<T> = T extends Record<string, ClassSpec>
+>MaybeMergePrivateSuperSpec : Symbol(MaybeMergePrivateSuperSpec, Decl(recursiveConditionalTypes2.ts, 13, 1))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 15, 32))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 15, 32))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+
+  ? MergePrivateSuperSpec<T>
+>MergePrivateSuperSpec : Symbol(MergePrivateSuperSpec, Decl(recursiveConditionalTypes2.ts, 26, 2))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 15, 32))
+
+  : {};
+
+type MaybeMergePrivateSpecs<T extends ClassSpec, U> = U extends ClassSpec
+>MaybeMergePrivateSpecs : Symbol(MaybeMergePrivateSpecs, Decl(recursiveConditionalTypes2.ts, 17, 7))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 19, 28))
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 19, 48))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 19, 48))
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+
+  ? MergePrivateSpecs<U, T>
+>MergePrivateSpecs : Symbol(MergePrivateSpecs, Decl(recursiveConditionalTypes2.ts, 21, 6))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 19, 48))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 19, 28))
+
+  : T;
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 19, 28))
+
+type MergePrivateSpecs<T extends ClassSpec, U extends ClassSpec> = {
+>MergePrivateSpecs : Symbol(MergePrivateSpecs, Decl(recursiveConditionalTypes2.ts, 21, 6))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 23, 23))
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 23, 43))
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+
+  public: T["public"] & U["public"];
+>public : Symbol(public, Decl(recursiveConditionalTypes2.ts, 23, 68))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 23, 23))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 23, 43))
+
+  private: T["private"] & U["private"];
+>private : Symbol(private, Decl(recursiveConditionalTypes2.ts, 24, 36))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 23, 23))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 23, 43))
+
+};
+
+type MergePrivateSuperSpec<T extends Record<string, ClassSpec>> =
+>MergePrivateSuperSpec : Symbol(MergePrivateSuperSpec, Decl(recursiveConditionalTypes2.ts, 26, 2))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 28, 27))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+
+  UnionToIntersection<
+>UnionToIntersection : Symbol(UnionToIntersection, Decl(recursiveConditionalTypes2.ts, 0, 0))
+    {
+      [P in keyof T]: SimplifyPrivateSpec<T[P]>;
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 31, 7))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 28, 27))
+>SimplifyPrivateSpec : Symbol(SimplifyPrivateSpec, Decl(recursiveConditionalTypes2.ts, 33, 4))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 28, 27))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 31, 7))
+
+    }[keyof T]
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 28, 27))
+
+  >;
+
+export type SimplifyPrivateSpec<T extends ClassSpec> = MaybeMergePrivateSpecs<
+>SimplifyPrivateSpec : Symbol(SimplifyPrivateSpec, Decl(recursiveConditionalTypes2.ts, 33, 4))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 35, 32))
+>ClassSpec : Symbol(ClassSpec, Decl(recursiveConditionalTypes2.ts, 6, 10))
+>MaybeMergePrivateSpecs : Symbol(MaybeMergePrivateSpecs, Decl(recursiveConditionalTypes2.ts, 17, 7))
+
+  MaybeMergePrivateSpecs<T, MaybeMergePrivateSuperSpec<T["publicExtends"]>>,
+>MaybeMergePrivateSpecs : Symbol(MaybeMergePrivateSpecs, Decl(recursiveConditionalTypes2.ts, 17, 7))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 35, 32))
+>MaybeMergePrivateSuperSpec : Symbol(MaybeMergePrivateSuperSpec, Decl(recursiveConditionalTypes2.ts, 13, 1))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 35, 32))
+
+  MaybeMergePrivateSuperSpec<T["privateExtends"]>
+>MaybeMergePrivateSuperSpec : Symbol(MaybeMergePrivateSuperSpec, Decl(recursiveConditionalTypes2.ts, 13, 1))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 35, 32))
+
+>;
+
+// repro from https://github.com/microsoft/TypeScript/issues/43877#issuecomment-866146516
+
+type Converted<T> = {
+>Converted : Symbol(Converted, Decl(recursiveConditionalTypes2.ts, 38, 2))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 42, 15))
+
+  [P in keyof T]: null extends T[P] ? T[P] : T[P];
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 43, 3))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 42, 15))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 42, 15))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 43, 3))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 42, 15))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 43, 3))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 42, 15))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 43, 3))
+
+};
+
+type DefaultsDeep<T, U extends T> = {
+>DefaultsDeep : Symbol(DefaultsDeep, Decl(recursiveConditionalTypes2.ts, 44, 2))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 46, 18))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 46, 20))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 46, 18))
+
+  [P in keyof T]-?: U[P] extends T[P]
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 47, 3))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 46, 18))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 46, 20))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 47, 3))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 46, 18))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 47, 3))
+
+    ? null extends U[P]
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 46, 20))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 47, 3))
+
+      ? Converted<DefaultsDeep<T[P], NonNullable<U[P]>>>
+>Converted : Symbol(Converted, Decl(recursiveConditionalTypes2.ts, 38, 2))
+>DefaultsDeep : Symbol(DefaultsDeep, Decl(recursiveConditionalTypes2.ts, 44, 2))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 46, 18))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 47, 3))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(recursiveConditionalTypes2.ts, 46, 20))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 47, 3))
+
+      : T[P]
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 46, 18))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 47, 3))
+
+    : T[P];
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 46, 18))
+>P : Symbol(P, Decl(recursiveConditionalTypes2.ts, 47, 3))
+
+};
+
+interface _Array<T> {
+>_Array : Symbol(_Array, Decl(recursiveConditionalTypes2.ts, 52, 2))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 54, 17))
+
+  find<S extends T>(predicate: (value: T) => boolean): void;
+>find : Symbol(_Array.find, Decl(recursiveConditionalTypes2.ts, 54, 21))
+>S : Symbol(S, Decl(recursiveConditionalTypes2.ts, 55, 7))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 54, 17))
+>predicate : Symbol(predicate, Decl(recursiveConditionalTypes2.ts, 55, 20))
+>value : Symbol(value, Decl(recursiveConditionalTypes2.ts, 55, 32))
+>T : Symbol(T, Decl(recursiveConditionalTypes2.ts, 54, 17))
+}
+
+const z: _Array<DefaultsDeep<{}, {}>> = [];
+>z : Symbol(z, Decl(recursiveConditionalTypes2.ts, 58, 5))
+>_Array : Symbol(_Array, Decl(recursiveConditionalTypes2.ts, 52, 2))
+>DefaultsDeep : Symbol(DefaultsDeep, Decl(recursiveConditionalTypes2.ts, 44, 2))
+
+z.find((_) => true);
+>z.find : Symbol(_Array.find, Decl(recursiveConditionalTypes2.ts, 54, 21))
+>z : Symbol(z, Decl(recursiveConditionalTypes2.ts, 58, 5))
+>find : Symbol(_Array.find, Decl(recursiveConditionalTypes2.ts, 54, 21))
+>_ : Symbol(_, Decl(recursiveConditionalTypes2.ts, 60, 8))
+

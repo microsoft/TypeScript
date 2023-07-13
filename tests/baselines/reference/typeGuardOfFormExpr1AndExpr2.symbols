@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormExpr1AndExpr2.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormExpr1AndExpr2.ts] ////
+
+=== typeGuardOfFormExpr1AndExpr2.ts ===
 var str: string;
 >str : Symbol(str, Decl(typeGuardOfFormExpr1AndExpr2.ts, 0, 3))
 

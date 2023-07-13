@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment8.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment8.ts] ////
+
+=== destructuringObjectBindingPatternAndAssignment8.ts ===
 const K = {
 >K : { a: string; b: string; }
 >{    a: "a",    b: "b"} : { a: string; b: string; }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncArrowInClassES5.ts] ////
+
 //// [asyncArrowInClassES5.ts]
 // https://github.com/Microsoft/TypeScript/issues/16924
 // Should capture `this`

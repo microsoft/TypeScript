@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualSignatureInObjectFreeze.ts ===
+//// [tests/cases/compiler/contextualSignatureInObjectFreeze.ts] ////
+
+=== contextualSignatureInObjectFreeze.ts ===
 // #49101
 
 Object.freeze({

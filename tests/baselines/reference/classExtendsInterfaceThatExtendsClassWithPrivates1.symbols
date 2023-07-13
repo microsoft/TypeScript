@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsInterfaceThatExtendsClassWithPrivates1.ts ===
+//// [tests/cases/compiler/classExtendsInterfaceThatExtendsClassWithPrivates1.ts] ////
+
+=== classExtendsInterfaceThatExtendsClassWithPrivates1.ts ===
 class C {
 >C : Symbol(C, Decl(classExtendsInterfaceThatExtendsClassWithPrivates1.ts, 0, 0))
 

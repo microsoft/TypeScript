@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/variableDeclaratorResolvedDuringContextualTyping.ts] ////
+
 //// [variableDeclaratorResolvedDuringContextualTyping.ts]
 module WinJS {
     export interface ValueCallback {

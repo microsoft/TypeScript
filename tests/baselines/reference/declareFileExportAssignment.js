@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareFileExportAssignment.ts] ////
+
 //// [declareFileExportAssignment.ts]
 module m2 {
     export interface connectModule {
@@ -25,7 +27,7 @@ module.exports = m2;
 
 
 //// [declareFileExportAssignment.d.ts]
-declare module m2 {
+declare namespace m2 {
     interface connectModule {
         (res: any, req: any, next: any): void;
     }

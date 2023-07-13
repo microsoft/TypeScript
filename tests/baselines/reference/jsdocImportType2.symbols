@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/use.js ===
+//// [tests/cases/conformance/jsdoc/jsdocImportType2.ts] ////
+
+=== use.js ===
 /// <reference path='./types.d.ts'/>
 /** @typedef {import("./mod1")} C
  * @type {C} */
@@ -13,7 +15,7 @@ c.chunk;
 const D = require("./mod1");
 >D : Symbol(D, Decl(use.js, 6, 5))
 >require : Symbol(require, Decl(types.d.ts, 0, 0))
->"./mod1" : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>"./mod1" : Symbol("mod1", Decl(mod1.js, 0, 0))
 
 /** @type {D} */
 var d;
@@ -24,7 +26,7 @@ d.chunk;
 >d : Symbol(d, Decl(use.js, 8, 3))
 >chunk : Symbol(D.chunk, Decl(mod1.js, 2, 19))
 
-=== tests/cases/conformance/jsdoc/types.d.ts ===
+=== types.d.ts ===
 declare function require(name: string): any;
 >require : Symbol(require, Decl(types.d.ts, 0, 0))
 >name : Symbol(name, Decl(types.d.ts, 0, 25))
@@ -36,7 +38,7 @@ declare var module: { exports: any };
 >module : Symbol(module, Decl(types.d.ts, 2, 11))
 >exports : Symbol(exports, Decl(types.d.ts, 2, 21))
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 /// <reference path='./types.d.ts'/>
 module.exports = class Chunk {
 >module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))

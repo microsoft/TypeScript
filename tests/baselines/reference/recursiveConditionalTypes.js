@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveConditionalTypes.ts] ////
+
 //// [recursiveConditionalTypes.ts]
 // Awaiting promises
 

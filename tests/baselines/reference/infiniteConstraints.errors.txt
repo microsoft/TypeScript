@@ -1,10 +1,10 @@
-tests/cases/compiler/infiniteConstraints.ts(4,37): error TS2536: Type '"val"' cannot be used to index type 'B[Exclude<keyof B, K>]'.
-tests/cases/compiler/infiniteConstraints.ts(31,43): error TS2322: Type 'Value<"dup">' is not assignable to type 'never'.
-tests/cases/compiler/infiniteConstraints.ts(31,63): error TS2322: Type 'Value<"dup">' is not assignable to type 'never'.
-tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' cannot be used to index type 'T[keyof T]'.
+infiniteConstraints.ts(4,37): error TS2536: Type '"val"' cannot be used to index type 'B[Exclude<keyof B, K>]'.
+infiniteConstraints.ts(31,43): error TS2322: Type 'Value<"dup">' is not assignable to type 'never'.
+infiniteConstraints.ts(31,63): error TS2322: Type 'Value<"dup">' is not assignable to type 'never'.
+infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' cannot be used to index type 'T[keyof T]'.
 
 
-==== tests/cases/compiler/infiniteConstraints.ts (4 errors) ====
+==== infiniteConstraints.ts (4 errors) ====
     // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
     
     type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;
@@ -40,10 +40,10 @@ tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' c
     const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
                                               ~~~~
 !!! error TS2322: Type 'Value<"dup">' is not assignable to type 'never'.
-!!! related TS6500 tests/cases/compiler/infiniteConstraints.ts:31:43: The expected type comes from property 'main' which is declared here on type '{ main: never; alternate: never; }'
+!!! related TS6500 infiniteConstraints.ts:31:43: The expected type comes from property 'main' which is declared here on type '{ main: never; alternate: never; }'
                                                                   ~~~~~~~~~
 !!! error TS2322: Type 'Value<"dup">' is not assignable to type 'never'.
-!!! related TS6500 tests/cases/compiler/infiniteConstraints.ts:31:63: The expected type comes from property 'alternate' which is declared here on type '{ main: never; alternate: never; }'
+!!! related TS6500 infiniteConstraints.ts:31:63: The expected type comes from property 'alternate' which is declared here on type '{ main: never; alternate: never; }'
     
     // Repro from #26448
     

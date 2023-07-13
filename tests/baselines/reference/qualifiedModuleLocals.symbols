@@ -1,4 +1,6 @@
-=== tests/cases/compiler/qualifiedModuleLocals.ts ===
+//// [tests/cases/compiler/qualifiedModuleLocals.ts] ////
+
+=== qualifiedModuleLocals.ts ===
 module A {
 >A : Symbol(A, Decl(qualifiedModuleLocals.ts, 0, 0))
 

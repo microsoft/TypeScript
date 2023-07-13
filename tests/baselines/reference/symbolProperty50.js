@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty50.ts] ////
+
 //// [symbolProperty50.ts]
 module M {
     interface Symbol { }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisIndexOnExistingReadonlyFieldIsNotNever.ts ===
+//// [tests/cases/compiler/thisIndexOnExistingReadonlyFieldIsNotNever.ts] ////
+
+=== thisIndexOnExistingReadonlyFieldIsNotNever.ts ===
 declare class Component<P, S = {}> {
 >Component : Symbol(Component, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 0))
 >P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 24))

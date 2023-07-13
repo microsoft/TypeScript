@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts ===
+//// [tests/cases/conformance/controlFlow/neverReturningFunctions1.ts] ////
+
+=== neverReturningFunctions1.ts ===
 function fail(message?: string): never {
 >fail : (message?: string) => never
 >message : string | undefined

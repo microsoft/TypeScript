@@ -5,23 +5,23 @@ sourceRoot:
 sources: declarationMaps.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/declarationMaps.d.ts
+emittedFile:declarationMaps.d.ts
 sourceFile:declarationMaps.ts
 -------------------------------------------------------------------
->>>declare module m2 {
+>>>declare namespace m2 {
 1 >
-2 >^^^^^^^^^^^^^^^
-3 >               ^^
-4 >                 ^
-5 >                  ^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^
+3 >                  ^^
+4 >                    ^
+5 >                     ^^^^^^^^^->
 1 >
 2 >module 
-3 >               m2
-4 >                  
+3 >                  m2
+4 >                     
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 16) Source(1, 8) + SourceIndex(0)
-3 >Emitted(1, 18) Source(1, 10) + SourceIndex(0)
-4 >Emitted(1, 19) Source(1, 11) + SourceIndex(0)
+2 >Emitted(1, 19) Source(1, 8) + SourceIndex(0)
+3 >Emitted(1, 21) Source(1, 10) + SourceIndex(0)
+4 >Emitted(1, 22) Source(1, 11) + SourceIndex(0)
 ---
 >>>    interface connectModule {
 1->^^^^

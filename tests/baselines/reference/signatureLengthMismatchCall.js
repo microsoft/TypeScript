@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/signatureLengthMismatchCall.ts] ////
+
 //// [signatureLengthMismatchCall.ts]
 function takesCallback(fn: (a: number) => void) {
   // ...

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/templateLiteralEscapeSequence.ts] ////
+
 //// [templateLiteralEscapeSequence.ts]
 declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
 

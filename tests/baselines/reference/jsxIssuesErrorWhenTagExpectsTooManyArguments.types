@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx ===
+//// [tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx] ////
+
+=== jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from "react";

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classImplementsMethodWIthTupleArgs.ts ===
+//// [tests/cases/compiler/classImplementsMethodWIthTupleArgs.ts] ////
+
+=== classImplementsMethodWIthTupleArgs.ts ===
 declare class MySettable implements Settable {
 >MySettable : Symbol(MySettable, Decl(classImplementsMethodWIthTupleArgs.ts, 0, 0))
 >Settable : Symbol(Settable, Decl(classImplementsMethodWIthTupleArgs.ts, 3, 1))

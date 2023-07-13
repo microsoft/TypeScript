@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads22.ts ===
+//// [tests/cases/compiler/functionOverloads22.ts] ////
+
+=== functionOverloads22.ts ===
 function foo(bar:number):{a:number;}[];
 >foo : { (bar: number): {    a: number;}[]; (bar: string): { a: number; b: string; }[]; }
 >bar : number

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralCheckedInIf01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralCheckedInIf01.ts] ////
+
+=== stringLiteralCheckedInIf01.ts ===
 type S = "a" | "b";
 >S : Symbol(S, Decl(stringLiteralCheckedInIf01.ts, 0, 0))
 

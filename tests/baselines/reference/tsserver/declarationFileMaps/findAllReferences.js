@@ -151,9 +151,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
-  {}
 /a/a.ts: *new*
+  {}
+/a/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -240,9 +240,9 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/tsconfig.json:
-  {}
 /a/a.ts:
+  {}
+/a/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -297,9 +297,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/b/tsconfig.json:
-  {}
 /b/b.ts: *new*
+  {}
+/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -509,15 +509,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/bin/a.d.ts:
+/a/a.ts: *new*
   {}
-/b/bin/b.d.ts:
+/a/bin/a.d.ts:
   {}
 /a/bin/a.d.ts.map: *new*
   {}
-/a/a.ts: *new*
-  {}
 /a/tsconfig.json: *new*
+  {}
+/b/bin/b.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -556,15 +556,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/bin/a.d.ts:
+/a/a.ts:
   {}
-/b/bin/b.d.ts:
+/a/bin/a.d.ts:
   {}
 /a/bin/a.d.ts.map:
   {}
-/a/a.ts:
-  {}
 /a/tsconfig.json:
+  {}
+/b/bin/b.d.ts:
   {}
 /user/user.ts: *new*
   {}
@@ -652,15 +652,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/bin/a.d.ts:
+/a/a.ts:
   {}
-/b/bin/b.d.ts:
+/a/bin/a.d.ts:
   {}
 /a/bin/a.d.ts.map:
   {}
-/a/a.ts:
-  {}
 /a/tsconfig.json:
+  {}
+/b/bin/b.d.ts:
   {}
 /user/user.ts:
   {}

@@ -1,13 +1,13 @@
-tests/cases/compiler/typeParameterArgumentEquivalence.ts(4,5): error TS2322: Type '(item: T) => boolean' is not assignable to type '(item: number) => boolean'.
+typeParameterArgumentEquivalence.ts(4,5): error TS2322: Type '(item: T) => boolean' is not assignable to type '(item: number) => boolean'.
   Types of parameters 'item' and 'item' are incompatible.
     Type 'number' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
-tests/cases/compiler/typeParameterArgumentEquivalence.ts(5,5): error TS2322: Type '(item: number) => boolean' is not assignable to type '(item: T) => boolean'.
+typeParameterArgumentEquivalence.ts(5,5): error TS2322: Type '(item: number) => boolean' is not assignable to type '(item: T) => boolean'.
   Types of parameters 'item' and 'item' are incompatible.
     Type 'T' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/typeParameterArgumentEquivalence.ts (2 errors) ====
+==== typeParameterArgumentEquivalence.ts (2 errors) ====
     function foo<T>() {
         var x: (item: number) => boolean;
         var y: (item: T) => boolean;
@@ -22,6 +22,6 @@ tests/cases/compiler/typeParameterArgumentEquivalence.ts(5,5): error TS2322: Typ
 !!! error TS2322: Type '(item: number) => boolean' is not assignable to type '(item: T) => boolean'.
 !!! error TS2322:   Types of parameters 'item' and 'item' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'number'.
-!!! related TS2208 tests/cases/compiler/typeParameterArgumentEquivalence.ts:1:14: This type parameter might need an `extends number` constraint.
+!!! related TS2208 typeParameterArgumentEquivalence.ts:1:14: This type parameter might need an `extends number` constraint.
     }
     

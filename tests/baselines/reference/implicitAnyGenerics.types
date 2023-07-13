@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyGenerics.ts ===
+//// [tests/cases/compiler/implicitAnyGenerics.ts] ////
+
+=== implicitAnyGenerics.ts ===
 class C<T> {
 >C : C<T>
 

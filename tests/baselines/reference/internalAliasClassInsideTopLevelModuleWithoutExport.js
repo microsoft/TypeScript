@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithoutExport.ts] ////
+
 //// [internalAliasClassInsideTopLevelModuleWithoutExport.ts]
 export module x {
     export class c {
@@ -33,7 +35,7 @@ var cReturnVal = exports.cProp.foo(10);
 
 
 //// [internalAliasClassInsideTopLevelModuleWithoutExport.d.ts]
-export declare module x {
+export declare namespace x {
     class c {
         foo(a: number): number;
     }

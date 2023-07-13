@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAccess.ts] ////
+
 //// [privateNameStaticFieldAccess.ts]
 class A {
     static #myField = "hello world";

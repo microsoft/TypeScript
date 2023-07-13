@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeArgs.ts] ////
+
 //// [targetTypeArgs.ts]
 function foo(callback: (x: string) => void) {
     callback("hello");   

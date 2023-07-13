@@ -244,41 +244,41 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/b/src/bar/foo.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/packages/a/node_modules: *new*
+/user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules: *new*
+/user/username/projects/myproject/packages/a/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/a/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types: *new*
+/user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/myproject/packages/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/packages/a/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/packages/a/src/test.ts: *new*
   {}
-/user/username/projects/myproject/packages/b/src/foo.ts: *new*
-  {}
-/user/username/projects/myproject/packages/b/src/bar/foo.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/packages/a/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/packages/b/package.json: *new*
   {}
+/user/username/projects/myproject/packages/b/src/bar/foo.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/src/foo.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/b/src: *new*
+/user/username/projects/myproject/node_modules: *new*
   {}
 /user/username/projects/myproject/packages/a/src: *new*
   {}
-/user/username/projects/myproject/node_modules: *new*
+/user/username/projects/myproject/packages/b/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined

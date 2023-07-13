@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction5_es5.ts ===
+//// [tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction5_es5.ts] ////
+
+=== asyncArrowFunction5_es5.ts ===
 var foo = async (await): Promise<void> => {
 >foo : Symbol(foo, Decl(asyncArrowFunction5_es5.ts, 0, 3))
 >await : Symbol(await, Decl(asyncArrowFunction5_es5.ts, 0, 17))

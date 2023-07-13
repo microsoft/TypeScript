@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityWithUnionTypes01.ts] ////
+
 //// [equalityWithUnionTypes01.ts]
 interface I1 {
     p1: number

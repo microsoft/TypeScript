@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConstructInvocationWithNoTypeArg.ts] ////
+
 //// [genericConstructInvocationWithNoTypeArg.ts]
 interface Foo<T> {
    new (x: number): Foo<T>;

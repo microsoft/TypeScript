@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block1.ts(3,5): error TS1109: Expression expected.
+parserErrorRecovery_Block1.ts(3,5): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/Blocks/parserErrorRecovery_Block1.ts (1 errors) ====
+==== parserErrorRecovery_Block1.ts (1 errors) ====
     function f() {
         1 + 
         return;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emptyModuleName.ts ===
+//// [tests/cases/compiler/emptyModuleName.ts] ////
+
+=== emptyModuleName.ts ===
 import * as A from "";
 >A : Symbol(A, Decl(emptyModuleName.ts, 0, 6))
 

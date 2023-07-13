@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ParameterList8.ts ===
+//// [tests/cases/compiler/ParameterList8.ts] ////
+
+=== ParameterList8.ts ===
 declare class C2 {
 >C2 : C2
 

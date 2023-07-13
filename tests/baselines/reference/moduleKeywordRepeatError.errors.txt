@@ -1,8 +1,8 @@
-tests/cases/compiler/moduleKeywordRepeatError.ts(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/moduleKeywordRepeatError.ts(3,15): error TS1005: ';' expected.
+moduleKeywordRepeatError.ts(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+moduleKeywordRepeatError.ts(3,15): error TS1005: ';' expected.
 
 
-==== tests/cases/compiler/moduleKeywordRepeatError.ts (2 errors) ====
+==== moduleKeywordRepeatError.ts (2 errors) ====
     // "module.module { }" should raise a syntax error
     
     module.module { }

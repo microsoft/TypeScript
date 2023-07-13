@@ -1,4 +1,6 @@
-=== tests/cases/compiler/usage.ts ===
+//// [tests/cases/compiler/referenceTypesPreferedToPathIfPossible.ts] ////
+
+=== usage.ts ===
 import { parse } from "url";
 >parse : Symbol(parse, Decl(usage.ts, 0, 8))
 

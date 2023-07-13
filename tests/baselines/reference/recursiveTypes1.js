@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTypes1.ts] ////
+
 //// [recursiveTypes1.ts]
 interface Entity<T extends Entity<T>> {
    X: T;

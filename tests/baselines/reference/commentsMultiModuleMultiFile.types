@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsMultiModuleMultiFile_1.ts ===
+//// [tests/cases/compiler/commentsMultiModuleMultiFile.ts] ////
+
+=== commentsMultiModuleMultiFile_1.ts ===
 import m = require('commentsMultiModuleMultiFile_0');
 >m : typeof m
 
@@ -22,7 +24,7 @@ new multiM.d();
 >multiM : typeof multiM
 >d : typeof multiM.d
 
-=== tests/cases/compiler/commentsMultiModuleMultiFile_0.ts ===
+=== commentsMultiModuleMultiFile_0.ts ===
 /** this is multi declare module*/
 export module multiM {
 >multiM : typeof multiM

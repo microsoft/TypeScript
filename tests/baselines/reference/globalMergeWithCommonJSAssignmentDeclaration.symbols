@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug27099.js ===
+//// [tests/cases/conformance/salsa/globalMergeWithCommonJSAssignmentDeclaration.ts] ////
+
+=== bug27099.js ===
 window.name = 1;
 >window.name : Symbol(Window.name, Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --), Decl(bug27099.js, 0, 0))

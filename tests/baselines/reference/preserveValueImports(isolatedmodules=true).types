@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports.ts] ////
+
+=== a.ts ===
 export default {};
 >{} : {}
 
@@ -12,22 +14,22 @@ export const c = 1;
 
 export interface D {}
 
-=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+=== b.ts ===
 import a, { b, c, D } from "./a";
 >a : {}
 >b : 0
 >c : 1
 >D : any
 
-=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+=== c.ts ===
 import * as a from "./a";
 >a : typeof a
 
-=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
+=== d.ts ===
 export = {};
 >{} : {}
 
-=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
+=== e.ts ===
 import D = require("./d");
 >D : {}
 
@@ -37,7 +39,7 @@ import DD = require("./d");
 DD;
 >DD : {}
 
-=== tests/cases/conformance/externalModules/typeOnly/f.ts ===
+=== f.ts ===
 import type a from "./a";
 >a : any
 

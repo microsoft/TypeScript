@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingDestructuring.ts] ////
+
 //// [narrowingDestructuring.ts]
 type X = { kind: "a", a: string } | { kind: "b", b: string }
 

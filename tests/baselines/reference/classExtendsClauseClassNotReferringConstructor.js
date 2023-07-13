@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExtendsClauseClassNotReferringConstructor.ts] ////
+
 //// [classExtendsClauseClassNotReferringConstructor.ts]
 class A { a: number; }
 module Foo {

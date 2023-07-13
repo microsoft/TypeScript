@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCanBeAssigned1.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCanBeAssigned1.ts] ////
+
+=== compoundExponentiationAssignmentLHSCanBeAssigned1.ts ===
 enum E { a, b, c }
 >E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCanBeAssigned1.ts, 0, 0))
 >a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCanBeAssigned1.ts, 0, 8))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionSubtypingOfVarArgs.ts ===
+//// [tests/cases/compiler/functionSubtypingOfVarArgs.ts] ////
+
+=== functionSubtypingOfVarArgs.ts ===
 class EventBase {
 >EventBase : Symbol(EventBase, Decl(functionSubtypingOfVarArgs.ts, 0, 0))
 

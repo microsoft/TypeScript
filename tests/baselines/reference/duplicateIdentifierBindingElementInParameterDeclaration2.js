@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration2.ts] ////
+
 //// [duplicateIdentifierBindingElementInParameterDeclaration2.ts]
 "use strict"
 function f0(a, [a, [b]], {b}) { }

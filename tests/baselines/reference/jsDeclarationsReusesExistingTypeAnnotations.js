@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReusesExistingTypeAnnotations.ts] ////
+
 //// [index.js]
 class С1 {
     /** @type {string=} */

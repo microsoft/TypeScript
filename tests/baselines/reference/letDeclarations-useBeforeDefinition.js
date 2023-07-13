@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-useBeforeDefinition.ts] ////
+
 //// [letDeclarations-useBeforeDefinition.ts]
 {
     l1;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectRestSpread.ts] ////
+
 //// [objectRestSpread.ts]
 let obj = {};
 

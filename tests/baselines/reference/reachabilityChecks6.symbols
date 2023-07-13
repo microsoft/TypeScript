@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reachabilityChecks6.ts ===
+//// [tests/cases/compiler/reachabilityChecks6.ts] ////
+
+=== reachabilityChecks6.ts ===
 function f0(x) {
 >f0 : Symbol(f0, Decl(reachabilityChecks6.ts, 0, 0))
 >x : Symbol(x, Decl(reachabilityChecks6.ts, 0, 12))

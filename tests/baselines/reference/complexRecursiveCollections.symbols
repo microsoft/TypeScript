@@ -1,4 +1,6 @@
-=== tests/cases/compiler/complex.ts ===
+//// [tests/cases/compiler/complexRecursiveCollections.ts] ////
+
+=== complex.ts ===
 interface Ara<T> { t: T }
 >Ara : Symbol(Ara, Decl(complex.ts, 0, 0))
 >T : Symbol(T, Decl(complex.ts, 0, 14))
@@ -156,7 +158,7 @@ interface N2<T> extends N1<T> {
 >N2 : Symbol(N2, Decl(complex.ts, 14, 1))
 >T : Symbol(T, Decl(complex.ts, 15, 13))
 }
-=== tests/cases/compiler/immutable.ts ===
+=== immutable.ts ===
 // Test that complex recursive collections can pass the `extends` assignability check without
 // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
 // started being checked.

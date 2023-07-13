@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extension.ts ===
+//// [tests/cases/compiler/extension.ts] ////
+
+=== extension.ts ===
 interface I {
 >I : Symbol(I, Decl(extension.ts, 0, 0), Decl(extension.ts, 2, 1))
 

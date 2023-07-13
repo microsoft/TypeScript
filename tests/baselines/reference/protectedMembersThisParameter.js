@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/protectedMembersThisParameter.ts] ////
+
 //// [protectedMembersThisParameter.ts]
 class Message {
   protected secret(): void {}

@@ -63,13 +63,13 @@ Shape signatures in builder refreshed for::
 /src/project/main.ts (used version)
 
 FsWatches::
-/src/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /src/project/data.d.json.ts: *new*
   {}
 /src/project/main.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/src/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

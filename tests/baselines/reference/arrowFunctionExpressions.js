@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functions/arrowFunctionExpressions.ts] ////
+
 //// [arrowFunctionExpressions.ts]
 // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 var a = (p: string) => p.length;

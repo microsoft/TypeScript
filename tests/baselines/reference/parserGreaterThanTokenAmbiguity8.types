@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity8.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity8.ts] ////
+
+=== parserGreaterThanTokenAmbiguity8.ts ===
 1 >>/**/> 2;
 >1 >>/**/> 2 : boolean
 >1 >> : number

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts ===
+//// [tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts] ////
+
+=== destructuredLateBoundNameHasCorrectTypes.ts ===
 let { [Symbol.iterator]: destructured } = [];
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor

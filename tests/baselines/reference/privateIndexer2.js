@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts] ////
+
 //// [privateIndexer2.ts]
 // private indexers not allowed
 

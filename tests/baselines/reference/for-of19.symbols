@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of19.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of19.ts] ////
+
+=== for-of19.ts ===
 class Foo { }
 >Foo : Symbol(Foo, Decl(for-of19.ts, 0, 0))
 

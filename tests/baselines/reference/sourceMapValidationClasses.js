@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationClasses.ts] ////
+
 //// [sourceMapValidationClasses.ts]
 module Foo.Bar {
     "use strict";

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
+//// [tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts] ////
+
+=== genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
 type ExtendedService<T> = {
 >ExtendedService : ExtendedService<T>
 

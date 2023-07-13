@@ -1,15 +1,15 @@
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(40,5): error TS2322: Type 'T' is not assignable to type '{ [P in keyof T & string as `p_${P}`]: T[P]; }'.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(45,5): error TS2322: Type '{ [P in B as `p_${P}`]: T; }' is not assignable to type '{ [Q in A as `p_${Q}`]: U; }'.
+templateLiteralTypes1.ts(40,5): error TS2322: Type 'T' is not assignable to type '{ [P in keyof T & string as `p_${P}`]: T[P]; }'.
+templateLiteralTypes1.ts(45,5): error TS2322: Type '{ [P in B as `p_${P}`]: T; }' is not assignable to type '{ [Q in A as `p_${Q}`]: U; }'.
   Type 'A' is not assignable to type 'B'.
     'A' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(165,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(197,16): error TS2590: Expression produces a union type that is too complex to represent.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(201,16): error TS2590: Expression produces a union type that is too complex to represent.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS2590: Expression produces a union type that is too complex to represent.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(252,7): error TS2590: Expression produces a union type that is too complex to represent.
+templateLiteralTypes1.ts(165,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+templateLiteralTypes1.ts(197,16): error TS2590: Expression produces a union type that is too complex to represent.
+templateLiteralTypes1.ts(201,16): error TS2590: Expression produces a union type that is too complex to represent.
+templateLiteralTypes1.ts(205,16): error TS2590: Expression produces a union type that is too complex to represent.
+templateLiteralTypes1.ts(252,7): error TS2590: Expression produces a union type that is too complex to represent.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypes1.ts (7 errors) ====
+==== templateLiteralTypes1.ts (7 errors) ====
     // Template types example from #12754
     
     const createScopedActionType = <S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}`;
@@ -52,7 +52,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(252,7): error TS2
         z = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type '{ [P in keyof T & string as `p_${P}`]: T[P]; }'.
-!!! related TS2208 tests/cases/conformance/types/literal/templateLiteralTypes1.ts:38:14: This type parameter might need an `extends { [P in keyof T & string as `p_${P}`]: T[P]; }` constraint.
+!!! related TS2208 templateLiteralTypes1.ts:38:14: This type parameter might need an `extends { [P in keyof T & string as `p_${P}`]: T[P]; }` constraint.
     }
     
     function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) {

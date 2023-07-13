@@ -1,8 +1,8 @@
-tests/cases/compiler/letConstInCaseClauses.ts(22,14): error TS2678: Type '10' is not comparable to type '1'.
-tests/cases/compiler/letConstInCaseClauses.ts(26,14): error TS2678: Type '10' is not comparable to type '2'.
+letConstInCaseClauses.ts(22,14): error TS2678: Type '10' is not comparable to type '1'.
+letConstInCaseClauses.ts(26,14): error TS2678: Type '10' is not comparable to type '2'.
 
 
-==== tests/cases/compiler/letConstInCaseClauses.ts (2 errors) ====
+==== letConstInCaseClauses.ts (2 errors) ====
     var x = 10;
     var y = 20;
     {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts] ////
+
 //// [excessPropertyCheckWithMultipleDiscriminants.ts]
 // Repro from #32657
 

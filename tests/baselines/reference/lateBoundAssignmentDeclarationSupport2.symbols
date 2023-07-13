@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/usage.js ===
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2.ts] ////
+
+=== usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport2.js");
 >x : Symbol(x, Decl(usage.js, 0, 5))
 >require : Symbol(require)
@@ -15,7 +17,7 @@ const z = x[x.S];
 >x : Symbol(x, Decl(usage.js, 0, 5))
 >S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 
-=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2.js ===
+=== lateBoundAssignmentDeclarationSupport2.js ===
 // currently unsupported
 const _sym = Symbol();
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport2.js, 1, 5))

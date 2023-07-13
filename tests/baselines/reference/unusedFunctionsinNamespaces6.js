@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedFunctionsinNamespaces6.ts] ////
+
 //// [unusedFunctionsinNamespaces6.ts]
 namespace Validation {
     var function1 = function() {

@@ -1,18 +1,18 @@
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(17,5): error TS2322: Type '() => number[]' is not assignable to type '() => Promise<number[]>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(17,5): error TS2322: Type '() => number[]' is not assignable to type '() => Promise<number[]>'.
   Type 'number[]' is missing the following properties from type 'Promise<number[]>': then, catch
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(18,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(19,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(20,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(21,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(22,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(23,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(24,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(25,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(26,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(27,14): error TS2322: Type 'number' is not assignable to type 'Promise<number>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(18,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(19,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(20,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(21,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(22,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(23,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(24,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(25,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(26,14): error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
+errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(27,14): error TS2322: Type 'number' is not assignable to type 'Promise<number>'.
 
 
-==== tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts (11 errors) ====
+==== errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts (11 errors) ====
     interface Stuff {
       a?: () => Promise<number[]>;
       b: () => Promise<string>;
@@ -36,52 +36,52 @@ tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts(27,14): er
         b: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:3:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:18:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:3:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:18:8: Did you mean to mark this function as 'async'?
         c: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:4:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:19:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:4:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:19:8: Did you mean to mark this function as 'async'?
         d: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:5:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:20:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:5:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:20:8: Did you mean to mark this function as 'async'?
         e: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:6:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:21:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:6:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:21:8: Did you mean to mark this function as 'async'?
         f: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:7:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:22:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:7:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:22:8: Did you mean to mark this function as 'async'?
         g: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:8:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:23:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:8:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:23:8: Did you mean to mark this function as 'async'?
         h: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:9:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:24:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:9:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:24:8: Did you mean to mark this function as 'async'?
         i: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:10:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:25:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:10:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:25:8: Did you mean to mark this function as 'async'?
         j: () => "hello",
                  ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'Promise<string>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:11:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:26:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:11:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:26:8: Did you mean to mark this function as 'async'?
         k: () => 123
                  ~~~
 !!! error TS2322: Type 'number' is not assignable to type 'Promise<number>'.
-!!! related TS6502 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:12:6: The expected type comes from the return type of this signature.
-!!! related TS1356 tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:27:8: Did you mean to mark this function as 'async'?
+!!! related TS6502 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:12:6: The expected type comes from the return type of this signature.
+!!! related TS1356 errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts:27:8: Did you mean to mark this function as 'async'?
       }
     }

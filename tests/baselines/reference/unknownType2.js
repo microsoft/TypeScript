@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/unknown/unknownType2.ts] ////
+
 //// [unknownType2.ts]
 type isUnknown<T> = unknown extends T ? true : false;
 type isTrue<T extends true> = T;

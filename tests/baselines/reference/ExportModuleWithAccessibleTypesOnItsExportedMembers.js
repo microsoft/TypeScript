@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportModuleWithAccessibleTypesOnItsExportedMembers.ts] ////
+
 //// [ExportModuleWithAccessibleTypesOnItsExportedMembers.ts]
 module A {
 

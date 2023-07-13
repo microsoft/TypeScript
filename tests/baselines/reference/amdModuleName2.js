@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/amdModuleName2.ts] ////
+
 //// [amdModuleName2.ts]
 ///<amd-module name='FirstModuleName'/>
 ///<amd-module name='SecondModuleName'/>

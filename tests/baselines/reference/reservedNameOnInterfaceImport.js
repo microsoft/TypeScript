@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedNameOnInterfaceImport.ts] ////
+
 //// [reservedNameOnInterfaceImport.ts]
 declare module test {
     interface istring { }

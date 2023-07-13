@@ -181,6 +181,10 @@ export class VerifyNegatable {
         this.state.verifyLinkedEditingRange(map);
     }
 
+    public baselineLinkedEditing(): void {
+        this.state.baselineLinkedEditing();
+    }
+
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
         this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLineDiverges);
     }
@@ -257,8 +261,8 @@ export class Verify extends VerifyNegatable {
         };
     }
 
-    public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {
-        this.state.verifyInlayHints(expected, span, preference);
+    public baselineInlayHints(span: ts.TextSpan, preference?: ts.UserPreferences) {
+        this.state.baselineInlayHints(span, preference);
     }
 
     public quickInfoIs(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
@@ -1164,6 +1168,8 @@ export namespace Completion {
         typeEntry("ParameterDecorator"),
         typeEntry("ClassMemberDecoratorContext"),
         typeEntry("DecoratorContext"),
+        typeEntry("DecoratorMetadata"),
+        typeEntry("DecoratorMetadataObject"),
         interfaceEntry("ClassDecoratorContext"),
         interfaceEntry("ClassMethodDecoratorContext"),
         interfaceEntry("ClassGetterDecoratorContext"),
@@ -1221,6 +1227,8 @@ export namespace Completion {
         varEntry("Float64Array"),
         interfaceEntry("Float64ArrayConstructor"),
         moduleEntry("Intl"),
+        typeEntry("WeakKey"),
+        interfaceEntry("WeakKeyTypes"),
     ];
 
     export const globalThisEntry: ExpectedCompletionEntry = {
@@ -1738,6 +1746,7 @@ export interface ExpectedCompletionEntryObject {
     readonly name: string;
     readonly source?: string;
     readonly insertText?: string;
+    readonly filterText?: string;
     readonly replacementSpan?: FourSlash.Range;
     readonly hasAction?: boolean; // If not specified, will assert that this is false.
     readonly isRecommended?: boolean; // If not specified, will assert that this is false.

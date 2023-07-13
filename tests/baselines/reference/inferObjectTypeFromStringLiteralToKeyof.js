@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferObjectTypeFromStringLiteralToKeyof.ts] ////
+
 //// [inferObjectTypeFromStringLiteralToKeyof.ts]
 declare function inference1<T>(name: keyof T): T;
 declare function inference2<T>(target: T, name: keyof T): T;

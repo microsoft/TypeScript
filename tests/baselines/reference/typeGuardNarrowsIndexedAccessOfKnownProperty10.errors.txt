@@ -1,7 +1,7 @@
-tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty10.ts(5,6): error TS2448: Block-scoped variable 'id' used before its declaration.
+typeGuardNarrowsIndexedAccessOfKnownProperty10.ts(5,6): error TS2448: Block-scoped variable 'id' used before its declaration.
 
 
-==== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty10.ts (1 errors) ====
+==== typeGuardNarrowsIndexedAccessOfKnownProperty10.ts (1 errors) ====
     interface Foo { bar: any; }
     const bar: { [id: string]: number } = {};
     
@@ -9,7 +9,7 @@ tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty10.ts(5,6): err
     	bar[id]++;
     	    ~~
 !!! error TS2448: Block-scoped variable 'id' used before its declaration.
-!!! related TS2728 tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty10.ts:6:8: 'id' is declared here.
+!!! related TS2728 typeGuardNarrowsIndexedAccessOfKnownProperty10.ts:6:8: 'id' is declared here.
     	const id = foo.bar;
     }
     

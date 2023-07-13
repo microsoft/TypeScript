@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts] ////
+
 //// [getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts]
 declare function _<T>(value: Array<T>): _<T>;
 declare function _<T>(value: T): _<T>;

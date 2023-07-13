@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/VariableStatements/everyTypeWithInitializer.ts ===
+//// [tests/cases/conformance/statements/VariableStatements/everyTypeWithInitializer.ts] ////
+
+=== everyTypeWithInitializer.ts ===
 interface I {
 >I : Symbol(I, Decl(everyTypeWithInitializer.ts, 0, 0))
 

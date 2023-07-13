@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multivar.ts ===
+//// [tests/cases/compiler/multivar.ts] ////
+
+=== multivar.ts ===
 var a,b,c;
 >a : Symbol(a, Decl(multivar.ts, 0, 3))
 >b : Symbol(b, Decl(multivar.ts, 0, 6))

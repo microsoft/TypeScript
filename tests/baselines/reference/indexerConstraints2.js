@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexerConstraints2.ts] ////
+
 //// [indexerConstraints2.ts]
 class A { a: number; }
 class B extends A { b: number; }

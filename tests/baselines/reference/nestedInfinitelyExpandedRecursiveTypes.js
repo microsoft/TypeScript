@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedInfinitelyExpandedRecursiveTypes.ts] ////
+
 //// [nestedInfinitelyExpandedRecursiveTypes.ts]
 interface F<T> {
       t: G<F<() => T>>;

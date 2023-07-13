@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance1.ts] ////
+
 //// [typeSatisfaction_propertyValueConformance1.ts]
 type Facts = { [key: string]: boolean };
 declare function checkTruths(x: Facts): void;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instantiatedTypeAliasDisplay.ts] ////
+
 //// [instantiatedTypeAliasDisplay.ts]
 // Repros from #12066
 

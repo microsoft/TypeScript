@@ -1,4 +1,6 @@
-=== tests/cases/compiler/funcdecl.ts ===
+//// [tests/cases/compiler/funcdecl.ts] ////
+
+=== funcdecl.ts ===
 function simpleFunc() {
 >simpleFunc : Symbol(simpleFunc, Decl(funcdecl.ts, 0, 0))
 

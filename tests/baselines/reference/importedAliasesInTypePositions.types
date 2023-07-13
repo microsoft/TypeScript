@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/importedAliasesInTypePositions.ts] ////
+
+=== file2.ts ===
 import RT_ALIAS = require("file1");
 >RT_ALIAS : typeof RT_ALIAS
 
@@ -21,7 +23,7 @@ export module ImportingModule {
 >referred : ReferredTo
     }
 }
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 export module elaborate.nested.mod.name {
 >elaborate : typeof elaborate
 >nested : typeof nested

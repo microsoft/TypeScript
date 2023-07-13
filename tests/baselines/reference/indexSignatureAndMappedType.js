@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexSignatureAndMappedType.ts] ////
+
 //// [indexSignatureAndMappedType.ts]
 // A mapped type { [P in K]: X }, where K is a generic type, is related to
 // { [key: string]: Y } if X is related to Y.

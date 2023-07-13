@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInitializer.ts] ////
+
 //// [everyTypeWithAnnotationAndInitializer.ts]
 interface I {
     id: number;

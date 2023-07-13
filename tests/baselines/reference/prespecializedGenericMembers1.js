@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/prespecializedGenericMembers1.ts] ////
+
 //// [prespecializedGenericMembers1.ts]
 export interface IKitty {
 

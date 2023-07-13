@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts] ////
+
 //// [publicGetterProtectedSetterFromThisParameter.ts]
 class A {
   get x() { return 0; }

@@ -1,58 +1,34 @@
-tests/cases/conformance/node/index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-tests/cases/conformance/node/index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-tests/cases/conformance/node/index.mts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/index.mts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder/index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-tests/cases/conformance/node/subfolder/index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder/index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder/index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-tests/cases/conformance/node/subfolder/index.mts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder/index.mts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder2/another/index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-tests/cases/conformance/node/subfolder2/another/index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder2/another/index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder2/another/index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-tests/cases/conformance/node/subfolder2/another/index.mts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder2/another/index.mts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder2/index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-tests/cases/conformance/node/subfolder2/index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder2/index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder2/index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-tests/cases/conformance/node/subfolder2/index.mts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-tests/cases/conformance/node/subfolder2/index.mts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+index.mts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+index.mts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder/index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+subfolder/index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder/index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder/index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+subfolder/index.mts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder/index.mts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder2/another/index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+subfolder2/another/index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder2/another/index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder2/another/index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+subfolder2/another/index.mts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder2/another/index.mts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder2/index.cts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+subfolder2/index.cts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder2/index.cts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder2/index.mts(2,12): error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+subfolder2/index.mts(2,20): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+subfolder2/index.mts(2,23): error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
 
 
-==== tests/cases/conformance/node/subfolder/index.ts (0 errors) ====
+==== subfolder/index.ts (0 errors) ====
     // cjs format file
     const x = <T>() => <T><any>(void 0);
     export {x};
-==== tests/cases/conformance/node/subfolder/index.cts (3 errors) ====
-    // cjs format file
-    const x = <T>() => <T><any>(void 0);
-               ~
-!!! error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-                       ~~~~~~~~~~~~~~~~
-!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-                          ~~~~~~~~~~~~~
-!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-    export {x};
-==== tests/cases/conformance/node/subfolder/index.mts (3 errors) ====
-    // esm format file
-    const x = <T>() => <T><any>(void 0);
-               ~
-!!! error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-                       ~~~~~~~~~~~~~~~~
-!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-                          ~~~~~~~~~~~~~
-!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-    export {x};
-==== tests/cases/conformance/node/subfolder2/index.ts (0 errors) ====
-    // cjs format file
-    const x = <T>() => <T><any>(void 0);
-    export {x};
-==== tests/cases/conformance/node/subfolder2/index.cts (3 errors) ====
+==== subfolder/index.cts (3 errors) ====
     // cjs format file
     const x = <T>() => <T><any>(void 0);
                ~
@@ -62,7 +38,7 @@ tests/cases/conformance/node/subfolder2/index.mts(2,23): error TS7059: This synt
                           ~~~~~~~~~~~~~
 !!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
     export {x};
-==== tests/cases/conformance/node/subfolder2/index.mts (3 errors) ====
+==== subfolder/index.mts (3 errors) ====
     // esm format file
     const x = <T>() => <T><any>(void 0);
                ~
@@ -72,21 +48,11 @@ tests/cases/conformance/node/subfolder2/index.mts(2,23): error TS7059: This synt
                           ~~~~~~~~~~~~~
 !!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
     export {x};
-==== tests/cases/conformance/node/subfolder2/another/index.ts (0 errors) ====
-    // esm format file
+==== subfolder2/index.ts (0 errors) ====
+    // cjs format file
     const x = <T>() => <T><any>(void 0);
     export {x};
-==== tests/cases/conformance/node/subfolder2/another/index.mts (3 errors) ====
-    // esm format file
-    const x = <T>() => <T><any>(void 0);
-               ~
-!!! error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
-                       ~~~~~~~~~~~~~~~~
-!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-                          ~~~~~~~~~~~~~
-!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
-    export {x};
-==== tests/cases/conformance/node/subfolder2/another/index.cts (3 errors) ====
+==== subfolder2/index.cts (3 errors) ====
     // cjs format file
     const x = <T>() => <T><any>(void 0);
                ~
@@ -96,7 +62,7 @@ tests/cases/conformance/node/subfolder2/index.mts(2,23): error TS7059: This synt
                           ~~~~~~~~~~~~~
 !!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
     export {x};
-==== tests/cases/conformance/node/index.mts (3 errors) ====
+==== subfolder2/index.mts (3 errors) ====
     // esm format file
     const x = <T>() => <T><any>(void 0);
                ~
@@ -106,7 +72,21 @@ tests/cases/conformance/node/subfolder2/index.mts(2,23): error TS7059: This synt
                           ~~~~~~~~~~~~~
 !!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
     export {x};
-==== tests/cases/conformance/node/index.cts (3 errors) ====
+==== subfolder2/another/index.ts (0 errors) ====
+    // esm format file
+    const x = <T>() => <T><any>(void 0);
+    export {x};
+==== subfolder2/another/index.mts (3 errors) ====
+    // esm format file
+    const x = <T>() => <T><any>(void 0);
+               ~
+!!! error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+                       ~~~~~~~~~~~~~~~~
+!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+                          ~~~~~~~~~~~~~
+!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+    export {x};
+==== subfolder2/another/index.cts (3 errors) ====
     // cjs format file
     const x = <T>() => <T><any>(void 0);
                ~
@@ -116,24 +96,44 @@ tests/cases/conformance/node/subfolder2/index.mts(2,23): error TS7059: This synt
                           ~~~~~~~~~~~~~
 !!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
     export {x};
-==== tests/cases/conformance/node/index.ts (0 errors) ====
+==== index.mts (3 errors) ====
+    // esm format file
+    const x = <T>() => <T><any>(void 0);
+               ~
+!!! error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+                       ~~~~~~~~~~~~~~~~
+!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+                          ~~~~~~~~~~~~~
+!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+    export {x};
+==== index.cts (3 errors) ====
+    // cjs format file
+    const x = <T>() => <T><any>(void 0);
+               ~
+!!! error TS7060: This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.
+                       ~~~~~~~~~~~~~~~~
+!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+                          ~~~~~~~~~~~~~
+!!! error TS7059: This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.
+    export {x};
+==== index.ts (0 errors) ====
     // esm format file
     const x = <T>() => <T><any>(void 0);
     export {x};
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module"
     }
-==== tests/cases/conformance/node/subfolder/package.json (0 errors) ====
+==== subfolder/package.json (0 errors) ====
     {
         "type": "commonjs"
     }
-==== tests/cases/conformance/node/subfolder2/package.json (0 errors) ====
+==== subfolder2/package.json (0 errors) ====
     {
     }
-==== tests/cases/conformance/node/subfolder2/another/package.json (0 errors) ====
+==== subfolder2/another/package.json (0 errors) ====
     {
         "type": "module"
     }

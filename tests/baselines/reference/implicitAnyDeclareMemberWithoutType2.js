@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts] ////
+
 //// [implicitAnyDeclareMemberWithoutType2.ts]
 // this should be an error
 class C {

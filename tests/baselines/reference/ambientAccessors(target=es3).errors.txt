@@ -2,7 +2,7 @@ error TS5107: Option 'target=ES3' is deprecated and will stop functioning in Typ
 
 
 !!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/ambientAccessors.ts (0 errors) ====
+==== ambientAccessors.ts (0 errors) ====
     // ok to use accessors in ambient class in ES3
     declare class C {
         static get a(): string;

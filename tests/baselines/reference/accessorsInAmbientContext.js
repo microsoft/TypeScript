@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorsInAmbientContext.ts] ////
+
 //// [accessorsInAmbientContext.ts]
 declare module M {
     class C {

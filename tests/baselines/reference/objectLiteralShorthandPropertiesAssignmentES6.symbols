@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentES6.ts ===
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentES6.ts] ////
+
+=== objectLiteralShorthandPropertiesAssignmentES6.ts ===
 var id: number = 10000;
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 0, 3))
 

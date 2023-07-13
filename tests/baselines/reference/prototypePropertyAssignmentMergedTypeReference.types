@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/prototypePropertyAssignmentMergedTypeReference.js ===
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergedTypeReference.ts] ////
+
+=== prototypePropertyAssignmentMergedTypeReference.js ===
 // https://github.com/microsoft/TypeScript/issues/33993
 var f = function() {
 >f : typeof f

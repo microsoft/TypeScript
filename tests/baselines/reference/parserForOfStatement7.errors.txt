@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement7.ts(1,25): error TS1188: Only a single variable declaration is allowed in a 'for...of' statement.
-tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement7.ts(1,43): error TS2304: Cannot find name 'X'.
+parserForOfStatement7.ts(1,25): error TS1188: Only a single variable declaration is allowed in a 'for...of' statement.
+parserForOfStatement7.ts(1,43): error TS2304: Cannot find name 'X'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement7.ts (2 errors) ====
+==== parserForOfStatement7.ts (2 errors) ====
     for (var a: number = 1, b: string = "" of X) {
                             ~
 !!! error TS1188: Only a single variable declaration is allowed in a 'for...of' statement.

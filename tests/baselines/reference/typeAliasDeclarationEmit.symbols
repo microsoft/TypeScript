@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeAliasDeclarationEmit.ts ===
+//// [tests/cases/compiler/typeAliasDeclarationEmit.ts] ////
+
+=== typeAliasDeclarationEmit.ts ===
 export type callback<T> = () => T;
 >callback : Symbol(callback, Decl(typeAliasDeclarationEmit.ts, 0, 0))
 >T : Symbol(T, Decl(typeAliasDeclarationEmit.ts, 0, 21))

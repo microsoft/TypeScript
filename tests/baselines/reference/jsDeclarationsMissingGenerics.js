@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsMissingGenerics.ts] ////
+
 //// [file.js]
 /**
  * @param {Array} x

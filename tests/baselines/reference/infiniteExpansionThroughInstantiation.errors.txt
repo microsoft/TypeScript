@@ -1,13 +1,13 @@
-tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts(16,1): error TS2322: Type 'OwnerList<string>' is not assignable to type 'List<string>'.
+infiniteExpansionThroughInstantiation.ts(16,1): error TS2322: Type 'OwnerList<string>' is not assignable to type 'List<string>'.
   Types of property 'data' are incompatible.
     Type 'List<string>' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts(21,5): error TS2322: Type 'OwnerList<T>' is not assignable to type 'List<T>'.
+infiniteExpansionThroughInstantiation.ts(21,5): error TS2322: Type 'OwnerList<T>' is not assignable to type 'List<T>'.
   Types of property 'data' are incompatible.
     Type 'List<T>' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'List<T>'.
 
 
-==== tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts (2 errors) ====
+==== infiniteExpansionThroughInstantiation.ts (2 errors) ====
     // instantiating a derived type can cause an infinitely expanding type reference to be generated
     
     interface List<T> {

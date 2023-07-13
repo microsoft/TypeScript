@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interface0.ts ===
+//// [tests/cases/compiler/interface0.ts] ////
+
+=== interface0.ts ===
 interface Generic<T> {
 >Generic : Symbol(Generic, Decl(interface0.ts, 0, 0))
 >T : Symbol(T, Decl(interface0.ts, 0, 18))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceDoesNotAddUndefinedOrNull.ts] ////
+
 //// [inferenceDoesNotAddUndefinedOrNull.ts]
 interface NodeArray<T extends Node> extends ReadonlyArray<T> {}
 

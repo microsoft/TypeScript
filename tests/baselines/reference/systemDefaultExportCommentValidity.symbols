@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemDefaultExportCommentValidity.ts ===
+//// [tests/cases/compiler/systemDefaultExportCommentValidity.ts] ////
+
+=== systemDefaultExportCommentValidity.ts ===
 const Home = {}
 >Home : Symbol(Home, Decl(systemDefaultExportCommentValidity.ts, 0, 5))
 

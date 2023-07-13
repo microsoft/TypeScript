@@ -39,11 +39,11 @@ export declare class c {
 }
 export interface i {
 }
-export declare module m {
+export declare namespace m {
     var x: number;
 }
 export declare var x: number;
-export declare module uninstantiated {
+export declare namespace uninstantiated {
 }
 //// [client.d.ts]
 export { c } from "server";

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts ===
+//// [tests/cases/conformance/statements/forStatements/forStatementsMultipleInvalidDecl.ts] ////
+
+=== forStatementsMultipleInvalidDecl.ts ===
 interface I {
 >I : Symbol(I, Decl(forStatementsMultipleInvalidDecl.ts, 0, 0))
 

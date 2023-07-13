@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayBufferIsViewNarrowsType.ts ===
+//// [tests/cases/compiler/arrayBufferIsViewNarrowsType.ts] ////
+
+=== arrayBufferIsViewNarrowsType.ts ===
 var obj: Object;
 >obj : Object
 

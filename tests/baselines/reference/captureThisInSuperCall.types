@@ -1,4 +1,6 @@
-=== tests/cases/compiler/captureThisInSuperCall.ts ===
+//// [tests/cases/compiler/captureThisInSuperCall.ts] ////
+
+=== captureThisInSuperCall.ts ===
 class A {
 >A : A
 

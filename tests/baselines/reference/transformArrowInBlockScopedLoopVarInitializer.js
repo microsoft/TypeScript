@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/transformArrowInBlockScopedLoopVarInitializer.ts] ////
+
 //// [transformArrowInBlockScopedLoopVarInitializer.ts]
 // https://github.com/Microsoft/TypeScript/issues/11236
 while (true)

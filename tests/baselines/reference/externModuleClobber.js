@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externModuleClobber.ts] ////
+
 //// [externModuleClobber.ts]
 declare module EM {
 	export class Position { }

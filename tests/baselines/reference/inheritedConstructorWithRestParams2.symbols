@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritedConstructorWithRestParams2.ts ===
+//// [tests/cases/compiler/inheritedConstructorWithRestParams2.ts] ////
+
+=== inheritedConstructorWithRestParams2.ts ===
 class IBaseBase<T, U> {
 >IBaseBase : Symbol(IBaseBase, Decl(inheritedConstructorWithRestParams2.ts, 0, 0))
 >T : Symbol(T, Decl(inheritedConstructorWithRestParams2.ts, 0, 16))

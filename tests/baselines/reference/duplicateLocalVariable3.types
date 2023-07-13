@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateLocalVariable3.ts ===
+//// [tests/cases/compiler/duplicateLocalVariable3.ts] ////
+
+=== duplicateLocalVariable3.ts ===
 var x = 1;
 >x : number
 >1 : 1

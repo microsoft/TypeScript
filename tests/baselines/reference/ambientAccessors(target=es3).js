@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/ambientAccessors.ts] ////
+
 //// [ambientAccessors.ts]
 // ok to use accessors in ambient class in ES3
 declare class C {

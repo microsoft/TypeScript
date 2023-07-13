@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/templates/templateStringWithEmbeddedInstanceOf.ts(1,16): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+templateStringWithEmbeddedInstanceOf.ts(1,16): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 
 
-==== tests/cases/conformance/es6/templates/templateStringWithEmbeddedInstanceOf.ts (1 errors) ====
+==== templateStringWithEmbeddedInstanceOf.ts (1 errors) ====
     var x = `abc${ "hello" instanceof String }def`;
                    ~~~~~~~
 !!! error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.

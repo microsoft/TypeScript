@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames14_ES6.ts] ////
+
 //// [computedPropertyNames14_ES6.ts]
 var b: boolean;
 class C {

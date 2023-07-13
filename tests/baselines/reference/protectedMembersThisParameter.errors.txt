@@ -1,22 +1,22 @@
-tests/cases/compiler/protectedMembersThisParameter.ts(9,9): error TS2445: Property 'secret' is protected and only accessible within class 'Message' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(30,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(41,7): error TS2446: Property 'a' is protected and only accessible through an instance of class 'C'. This is an instance of class 'B'.
-tests/cases/compiler/protectedMembersThisParameter.ts(42,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(46,7): error TS2445: Property 'a' is protected and only accessible within class 'A' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(47,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(51,7): error TS2445: Property 'a' is protected and only accessible within class 'A' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(52,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(55,7): error TS2445: Property 'a' is protected and only accessible within class 'A' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(56,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(64,9): error TS2445: Property 'd1' is protected and only accessible within class 'D1' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(68,9): error TS2445: Property 'd1' is protected and only accessible within class 'D1' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(76,9): error TS2445: Property 'd' is protected and only accessible within class 'D2' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(77,9): error TS2445: Property 'd2' is protected and only accessible within class 'D2' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(80,9): error TS2445: Property 'd' is protected and only accessible within class 'D2' and its subclasses.
-tests/cases/compiler/protectedMembersThisParameter.ts(81,9): error TS2445: Property 'd2' is protected and only accessible within class 'D2' and its subclasses.
+protectedMembersThisParameter.ts(9,9): error TS2445: Property 'secret' is protected and only accessible within class 'Message' and its subclasses.
+protectedMembersThisParameter.ts(30,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
+protectedMembersThisParameter.ts(41,7): error TS2446: Property 'a' is protected and only accessible through an instance of class 'C'. This is an instance of class 'B'.
+protectedMembersThisParameter.ts(42,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
+protectedMembersThisParameter.ts(46,7): error TS2445: Property 'a' is protected and only accessible within class 'A' and its subclasses.
+protectedMembersThisParameter.ts(47,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
+protectedMembersThisParameter.ts(51,7): error TS2445: Property 'a' is protected and only accessible within class 'A' and its subclasses.
+protectedMembersThisParameter.ts(52,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
+protectedMembersThisParameter.ts(55,7): error TS2445: Property 'a' is protected and only accessible within class 'A' and its subclasses.
+protectedMembersThisParameter.ts(56,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
+protectedMembersThisParameter.ts(64,9): error TS2445: Property 'd1' is protected and only accessible within class 'D1' and its subclasses.
+protectedMembersThisParameter.ts(68,9): error TS2445: Property 'd1' is protected and only accessible within class 'D1' and its subclasses.
+protectedMembersThisParameter.ts(76,9): error TS2445: Property 'd' is protected and only accessible within class 'D2' and its subclasses.
+protectedMembersThisParameter.ts(77,9): error TS2445: Property 'd2' is protected and only accessible within class 'D2' and its subclasses.
+protectedMembersThisParameter.ts(80,9): error TS2445: Property 'd' is protected and only accessible within class 'D2' and its subclasses.
+protectedMembersThisParameter.ts(81,9): error TS2445: Property 'd2' is protected and only accessible within class 'D2' and its subclasses.
 
 
-==== tests/cases/compiler/protectedMembersThisParameter.ts (16 errors) ====
+==== protectedMembersThisParameter.ts (16 errors) ====
     class Message {
       protected secret(): void {}
     }

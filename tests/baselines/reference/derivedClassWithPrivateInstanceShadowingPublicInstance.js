@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts] ////
+
 //// [derivedClassWithPrivateInstanceShadowingPublicInstance.ts]
 class Base {
     public x: string;

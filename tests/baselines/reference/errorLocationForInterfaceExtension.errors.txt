@@ -1,7 +1,7 @@
-tests/cases/compiler/errorLocationForInterfaceExtension.ts(3,21): error TS2840: An interface cannot extend a primitive type like 'string'; an interface can only extend named types and classes
+errorLocationForInterfaceExtension.ts(3,21): error TS2840: An interface cannot extend a primitive type like 'string'; an interface can only extend named types and classes
 
 
-==== tests/cases/compiler/errorLocationForInterfaceExtension.ts (1 errors) ====
+==== errorLocationForInterfaceExtension.ts (1 errors) ====
     var n = '';
     
     interface x extends string { }

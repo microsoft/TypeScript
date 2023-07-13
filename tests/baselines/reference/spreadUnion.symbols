@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/spreadUnion.ts ===
+//// [tests/cases/conformance/types/spread/spreadUnion.ts] ////
+
+=== spreadUnion.ts ===
 var union: { a: number } | { b: string };
 >union : Symbol(union, Decl(spreadUnion.ts, 0, 3))
 >a : Symbol(a, Decl(spreadUnion.ts, 0, 12))

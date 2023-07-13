@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateIdentifierEnum_A.ts ===
+//// [tests/cases/compiler/duplicateIdentifierEnum.ts] ////
+
+=== duplicateIdentifierEnum_A.ts ===
 // Test the error message when attempting to merge an enum with a class, an interface, or a function.
 enum A {
 >A : Symbol(A, Decl(duplicateIdentifierEnum_A.ts, 0, 0))
@@ -49,7 +51,7 @@ class E {
 >foo : Symbol(E.foo, Decl(duplicateIdentifierEnum_A.ts, 25, 9))
 }
 // also make sure the error appears when trying to merge an enum in a separate file.
-=== tests/cases/compiler/duplicateIdentifierEnum_B.ts ===
+=== duplicateIdentifierEnum_B.ts ===
 function D() {
 >D : Symbol(D, Decl(duplicateIdentifierEnum_B.ts, 0, 0))
 

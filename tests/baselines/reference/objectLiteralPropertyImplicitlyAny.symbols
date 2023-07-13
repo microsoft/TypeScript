@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralPropertyImplicitlyAny.ts ===
+//// [tests/cases/compiler/objectLiteralPropertyImplicitlyAny.ts] ////
+
+=== objectLiteralPropertyImplicitlyAny.ts ===
 const foo = Symbol.for("foo");
 >foo : Symbol(foo, Decl(objectLiteralPropertyImplicitlyAny.ts, 0, 5))
 >Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))

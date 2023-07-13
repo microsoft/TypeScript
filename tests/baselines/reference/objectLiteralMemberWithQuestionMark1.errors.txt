@@ -1,7 +1,7 @@
-tests/cases/compiler/objectLiteralMemberWithQuestionMark1.ts(1,14): error TS1162: An object member cannot be declared optional.
+objectLiteralMemberWithQuestionMark1.ts(1,14): error TS1162: An object member cannot be declared optional.
 
 
-==== tests/cases/compiler/objectLiteralMemberWithQuestionMark1.ts (1 errors) ====
+==== objectLiteralMemberWithQuestionMark1.ts (1 errors) ====
     var v = { foo?() { } }
                  ~
 !!! error TS1162: An object member cannot be declared optional.

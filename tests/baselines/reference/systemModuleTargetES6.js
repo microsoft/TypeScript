@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModuleTargetES6.ts] ////
+
 //// [systemModuleTargetES6.ts]
 export class MyClass { }
 export class MyClass2 {

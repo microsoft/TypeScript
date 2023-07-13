@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexerReturningTypeParameter1.ts] ////
+
 //// [indexerReturningTypeParameter1.ts]
 interface f {
     groupBy<T>(): { [key: string]: T[]; };

@@ -1,2 +1,4 @@
-=== tests/cases/compiler/duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts ===
+//// [tests/cases/compiler/duplicateIdentifierShouldNotShortCircuitBaseTypeBinding.ts] ////
+
+=== duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts ===
 

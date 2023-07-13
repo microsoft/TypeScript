@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedCallbackErrorNotFlattened.ts ===
+//// [tests/cases/compiler/nestedCallbackErrorNotFlattened.ts] ////
+
+=== nestedCallbackErrorNotFlattened.ts ===
 type Cb<T> = {noAlias: () => T}["noAlias"]; // `"noAlias"` here prevents an alias symbol from being made
 >Cb : Symbol(Cb, Decl(nestedCallbackErrorNotFlattened.ts, 0, 0))
 >T : Symbol(T, Decl(nestedCallbackErrorNotFlattened.ts, 0, 8))

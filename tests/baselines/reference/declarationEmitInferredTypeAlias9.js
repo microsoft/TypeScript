@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias9.ts] ////
+
 //// [declarationEmitInferredTypeAlias9.ts]
 type Foo<T> = T | { x: Foo<T> };
 var x: Foo<number[]>;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts ===
+//// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
+
+=== reactReduxLikeDeferredInferenceAllowsAssignment.ts ===
 declare class Component<P> {
 >Component : Symbol(Component, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 0, 0))
 >P : Symbol(P, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 0, 24))

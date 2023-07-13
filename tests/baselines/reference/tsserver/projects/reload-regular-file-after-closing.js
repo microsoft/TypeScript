@@ -219,9 +219,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /a/b/lib.ts: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 Before request

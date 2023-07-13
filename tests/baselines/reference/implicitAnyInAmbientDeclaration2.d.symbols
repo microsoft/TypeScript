@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts ===
+//// [tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts] ////
+
+=== implicitAnyInAmbientDeclaration2.d.ts ===
 declare function foo(x);  // this should be an error
 >foo : Symbol(foo, Decl(implicitAnyInAmbientDeclaration2.d.ts, 0, 0))
 >x : Symbol(x, Decl(implicitAnyInAmbientDeclaration2.d.ts, 0, 21))

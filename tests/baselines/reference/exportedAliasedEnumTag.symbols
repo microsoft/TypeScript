@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js ===
+//// [tests/cases/conformance/jsdoc/exportedAliasedEnumTag.ts] ////
+
+=== exportedAliasedEnumTag.js ===
 var middlewarify = module.exports = {};
 >middlewarify : Symbol(middlewarify, Decl(exportedAliasedEnumTag.js, 0, 3))
 >module.exports : Symbol(module.exports, Decl(exportedAliasedEnumTag.js, 0, 0))

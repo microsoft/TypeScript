@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName1.ts(1,13): error TS1005: ',' expected.
+parservoidInQualifiedName1.ts(1,13): error TS1005: ',' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName1.ts (1 errors) ====
+==== parservoidInQualifiedName1.ts (1 errors) ====
     var v : void.x;
                 ~
 !!! error TS1005: ',' expected.

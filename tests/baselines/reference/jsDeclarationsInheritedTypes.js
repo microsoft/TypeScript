@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsDeclarationsInheritedTypes.ts] ////
+
 //// [a.js]
 /**
  * @typedef A

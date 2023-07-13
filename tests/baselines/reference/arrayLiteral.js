@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayLiteral.ts] ////
+
 //// [arrayLiteral.ts]
 // valid uses of array literals
 

@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts(104,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts(109,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
+enumAssignabilityInInheritance.ts(104,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
+enumAssignabilityInInheritance.ts(109,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts (2 errors) ====
+==== enumAssignabilityInInheritance.ts (2 errors) ====
     // enum is only a subtype of number, no types are subtypes of enum, all of these except the first are errors
     
     
@@ -109,7 +109,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
     var r4 = foo16(E.A);
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
-!!! related TS6203 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts:22:5: 'r4' was also declared here.
+!!! related TS6203 enumAssignabilityInInheritance.ts:22:5: 'r4' was also declared here.
     
     declare function foo17(x: {}): {};
     declare function foo17(x: E): E;
@@ -117,4 +117,4 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
     var r4 = foo16(E.A);
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
-!!! related TS6203 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts:22:5: 'r4' was also declared here.
+!!! related TS6203 enumAssignabilityInInheritance.ts:22:5: 'r4' was also declared here.

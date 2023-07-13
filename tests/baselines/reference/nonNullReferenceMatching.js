@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonNullReferenceMatching.ts] ////
+
 //// [nonNullReferenceMatching.ts]
 type ElementRef = (element: HTMLElement | null) => void;
 

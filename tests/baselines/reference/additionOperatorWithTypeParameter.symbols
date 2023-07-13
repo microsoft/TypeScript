@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts] ////
+
+=== additionOperatorWithTypeParameter.ts ===
 // type parameter type is not a valid operand of addition operator
 enum E { a, b }
 >E : Symbol(E, Decl(additionOperatorWithTypeParameter.ts, 0, 0))

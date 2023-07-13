@@ -1,4 +1,6 @@
-=== tests/cases/compiler/relatedViaDiscriminatedTypeNoError2.ts ===
+//// [tests/cases/compiler/relatedViaDiscriminatedTypeNoError2.ts] ////
+
+=== relatedViaDiscriminatedTypeNoError2.ts ===
 type AObjOrBObj = { name: "A" } | { name: "B" };
 >AObjOrBObj : Symbol(AObjOrBObj, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 0))
 >name : Symbol(name, Decl(relatedViaDiscriminatedTypeNoError2.ts, 0, 19))

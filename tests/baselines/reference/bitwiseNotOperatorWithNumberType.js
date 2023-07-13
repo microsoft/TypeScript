@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithNumberType.ts] ////
+
 //// [bitwiseNotOperatorWithNumberType.ts]
 // ~ operator on number type
 var NUMBER: number;

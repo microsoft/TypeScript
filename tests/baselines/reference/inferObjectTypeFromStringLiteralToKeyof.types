@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferObjectTypeFromStringLiteralToKeyof.ts ===
+//// [tests/cases/compiler/inferObjectTypeFromStringLiteralToKeyof.ts] ////
+
+=== inferObjectTypeFromStringLiteralToKeyof.ts ===
 declare function inference1<T>(name: keyof T): T;
 >inference1 : <T>(name: keyof T) => T
 >name : keyof T

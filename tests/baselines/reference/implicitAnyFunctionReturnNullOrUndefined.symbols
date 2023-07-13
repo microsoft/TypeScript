@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts ===
+//// [tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts] ////
+
+=== implicitAnyFunctionReturnNullOrUndefined.ts ===
 // this should be an error
 function nullWidenFunction() { return null;}             // error at "nullWidenFunction"
 >nullWidenFunction : Symbol(nullWidenFunction, Decl(implicitAnyFunctionReturnNullOrUndefined.ts, 0, 0))

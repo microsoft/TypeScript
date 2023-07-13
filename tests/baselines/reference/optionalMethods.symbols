@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/namedTypes/optionalMethods.ts ===
+//// [tests/cases/conformance/types/namedTypes/optionalMethods.ts] ////
+
+=== optionalMethods.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(optionalMethods.ts, 0, 0))
 

@@ -26,8 +26,8 @@ exports.x = void 0;
 
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts]
 declare module "SubModule" {
-    module m {
-        module m3 {
+    namespace m {
+        namespace m3 {
             interface c {
             }
         }

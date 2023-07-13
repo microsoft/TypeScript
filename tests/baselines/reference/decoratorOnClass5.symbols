@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/decoratorOnClass5.ts ===
+//// [tests/cases/conformance/decorators/class/decoratorOnClass5.ts] ////
+
+=== decoratorOnClass5.ts ===
 declare function dec(): <T>(target: T) => T;
 >dec : Symbol(dec, Decl(decoratorOnClass5.ts, 0, 0))
 >T : Symbol(T, Decl(decoratorOnClass5.ts, 0, 25))

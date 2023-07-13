@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitClassMemberNameConflict.ts] ////
+
 //// [declarationEmitClassMemberNameConflict.ts]
 export class C1 {
     C1() { } // has to be the same as the class name

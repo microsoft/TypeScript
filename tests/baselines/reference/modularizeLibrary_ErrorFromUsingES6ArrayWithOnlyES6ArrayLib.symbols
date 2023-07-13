@@ -1,4 +1,6 @@
-=== tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts ===
+//// [tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts] ////
+
+=== modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts ===
 // Error missing basic JavaScript objects
 function f(x: number, y: number, z: number) {
 >f : Symbol(f, Decl(modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts, 0, 0))

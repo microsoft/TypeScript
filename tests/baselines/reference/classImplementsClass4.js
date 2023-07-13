@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementsClass4.ts] ////
+
 //// [classImplementsClass4.ts]
 class A {
     private x = 1;

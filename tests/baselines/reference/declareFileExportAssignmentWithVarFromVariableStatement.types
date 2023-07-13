@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declareFileExportAssignmentWithVarFromVariableStatement.ts ===
+//// [tests/cases/compiler/declareFileExportAssignmentWithVarFromVariableStatement.ts] ////
+
+=== declareFileExportAssignmentWithVarFromVariableStatement.ts ===
 module m2 {
     export interface connectModule {
         (res, req, next): void;

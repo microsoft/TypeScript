@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/restTupleElements1.ts] ////
+
 //// [restTupleElements1.ts]
 type T00 = [string?];
 type T01 = [string, string?];

@@ -43,6 +43,6 @@ export * as fs from "fs";
 export * from "fs";
 export * as fs from "fs";
 //// [index.d.ts]
-/// <reference path="../tests/cases/conformance/node/allowJs/types.d.ts" />
+/// <reference path="../types.d.ts" />
 export * from "fs";
 export * as fs from "fs";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofObjectInference.ts] ////
+
 //// [typeofObjectInference.ts]
 let val = 1
 

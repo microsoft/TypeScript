@@ -1,8 +1,8 @@
-tests/cases/compiler/defaultKeywordWithoutExport2.ts(1,1): error TS1005: 'export' expected.
-tests/cases/compiler/defaultKeywordWithoutExport2.ts(1,18): error TS1003: Identifier expected.
+defaultKeywordWithoutExport2.ts(1,1): error TS1005: 'export' expected.
+defaultKeywordWithoutExport2.ts(1,18): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/defaultKeywordWithoutExport2.ts (2 errors) ====
+==== defaultKeywordWithoutExport2.ts (2 errors) ====
     default function () {
     ~~~~~~~
 !!! error TS1005: 'export' expected.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts] ////
+
 //// [undefinedAssignableToGenericMappedIntersection.ts]
 type Errors<T> = { [P in keyof T]: string | undefined } & {all: string | undefined};
 function foo<T>() {

@@ -1,8 +1,8 @@
-tests/cases/compiler/es5-oldStyleOctalLiteralInEnums.ts(2,7): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
-tests/cases/compiler/es5-oldStyleOctalLiteralInEnums.ts(3,7): error TS1121: Octal literals are not allowed. Use the syntax '0o2'.
+es5-oldStyleOctalLiteralInEnums.ts(2,7): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
+es5-oldStyleOctalLiteralInEnums.ts(3,7): error TS1121: Octal literals are not allowed. Use the syntax '0o2'.
 
 
-==== tests/cases/compiler/es5-oldStyleOctalLiteralInEnums.ts (2 errors) ====
+==== es5-oldStyleOctalLiteralInEnums.ts (2 errors) ====
     enum E {
       x = -01,
           ~~~

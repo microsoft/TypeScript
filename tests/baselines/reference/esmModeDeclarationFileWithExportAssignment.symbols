@@ -1,11 +1,13 @@
-=== tests/cases/compiler/other.d.mts ===
+//// [tests/cases/compiler/esmModeDeclarationFileWithExportAssignment.ts] ////
+
+=== other.d.mts ===
 declare function example(): 5;
 >example : Symbol(example, Decl(other.d.mts, 0, 0))
 
 export = example;
 >example : Symbol(example, Decl(other.d.mts, 0, 0))
 
-=== tests/cases/compiler/main.mts ===
+=== main.mts ===
 import example from "./other.mjs";
 >example : Symbol(example, Decl(main.mts, 0, 6))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/InterfaceDeclaration8.ts ===
+//// [tests/cases/compiler/InterfaceDeclaration8.ts] ////
+
+=== InterfaceDeclaration8.ts ===
 interface string {
 >string : Symbol(string, Decl(InterfaceDeclaration8.ts, 0, 0))
 }

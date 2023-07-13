@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowedImports_assumeInitialized.ts] ////
+
 === /b.ts ===
 import a = require("./a");
 >a : typeof a

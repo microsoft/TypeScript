@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/wideningTuples7.ts] ////
+
 //// [wideningTuples7.ts]
 var foo = function bar() {
     let intermediate: [string];

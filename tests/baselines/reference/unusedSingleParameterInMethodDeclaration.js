@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts] ////
+
 //// [unusedSingleParameterInMethodDeclaration.ts]
 class Dummy {
     public greeter(person: string) {

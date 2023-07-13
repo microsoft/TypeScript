@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationDestructuringVariableStatement.ts] ////
+
 //// [sourceMapValidationDestructuringVariableStatement.ts]
 interface Robot {
     name: string;

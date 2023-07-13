@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClasses3.ts] ////
+
 //// [genericClasses3.ts]
 class B<T> {
     a: T;

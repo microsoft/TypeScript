@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInWhileStatement.ts] ////
+
 //// [typeGuardsInWhileStatement.ts]
 let cond: boolean;
 function a(x: string | number) {

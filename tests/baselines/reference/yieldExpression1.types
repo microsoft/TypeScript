@@ -1,4 +1,6 @@
-=== tests/cases/compiler/yieldExpression1.ts ===
+//// [tests/cases/compiler/yieldExpression1.ts] ////
+
+=== yieldExpression1.ts ===
 function* a() {
 >a : () => Generator<0 | undefined, void, unknown>
 

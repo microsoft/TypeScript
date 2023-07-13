@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superInLambdas.ts ===
+//// [tests/cases/compiler/superInLambdas.ts] ////
+
+=== superInLambdas.ts ===
 class User {
 >User : User
 

@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.js
+emittedFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.js
 sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts
 -------------------------------------------------------------------
 >>>var multiRobotA = ["mower", ["mowing", ""]];

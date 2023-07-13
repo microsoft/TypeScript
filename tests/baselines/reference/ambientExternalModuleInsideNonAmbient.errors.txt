@@ -1,8 +1,8 @@
-tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbient.ts(2,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
-tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbient.ts(2,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+ambientExternalModuleInsideNonAmbient.ts(2,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+ambientExternalModuleInsideNonAmbient.ts(2,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 
 
-==== tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbient.ts (2 errors) ====
+==== ambientExternalModuleInsideNonAmbient.ts (2 errors) ====
     module M {
         export declare module "M" { }
         ~~~~~~

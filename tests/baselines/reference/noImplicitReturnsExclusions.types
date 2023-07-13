@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitReturnsExclusions.ts ===
+//// [tests/cases/compiler/noImplicitReturnsExclusions.ts] ////
+
+=== noImplicitReturnsExclusions.ts ===
 // Functions with a return type of any, undefined, or a type that includes void are excluded
 // from --noImplicitReturns checks.
 

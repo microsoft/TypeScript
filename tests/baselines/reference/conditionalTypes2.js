@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/conditionalTypes2.ts] ////
+
 //// [conditionalTypes2.ts]
 interface Covariant<T> {
     foo: T extends string ? T : number;

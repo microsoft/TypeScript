@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts] ////
+
 //// [declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts]
 export interface Foo {
     item: Bar;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateStaticNameShadowing.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateStaticNameShadowing.ts] ////
+
+=== privateStaticNameShadowing.ts ===
 class X {
 >X : Symbol(X, Decl(privateStaticNameShadowing.ts, 0, 0))
 

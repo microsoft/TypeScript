@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum2.ts] ////
+
 //// [parserEnum2.ts]
     export enum SignatureFlags {
         None = 0,

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override2.ts] ////
+
 //// [override2.ts]
 abstract class AB {
     abstract foo(v: string): void;

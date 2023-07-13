@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numericIndexerTyping1.ts ===
+//// [tests/cases/compiler/numericIndexerTyping1.ts] ////
+
+=== numericIndexerTyping1.ts ===
 interface I {
 >I : Symbol(I, Decl(numericIndexerTyping1.ts, 0, 0))
 

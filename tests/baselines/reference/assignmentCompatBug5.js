@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatBug5.ts] ////
+
 //// [assignmentCompatBug5.ts]
 function foo1(x: { a: number; }) { }
 foo1({ b: 5 });

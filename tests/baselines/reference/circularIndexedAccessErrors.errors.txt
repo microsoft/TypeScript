@@ -1,12 +1,12 @@
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(2,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(11,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(18,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(22,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(37,24): error TS2313: Type parameter 'T' has a circular constraint.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(37,30): error TS2536: Type '"hello"' cannot be used to index type 'T'.
+circularIndexedAccessErrors.ts(2,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+circularIndexedAccessErrors.ts(11,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+circularIndexedAccessErrors.ts(18,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+circularIndexedAccessErrors.ts(22,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+circularIndexedAccessErrors.ts(37,24): error TS2313: Type parameter 'T' has a circular constraint.
+circularIndexedAccessErrors.ts(37,30): error TS2536: Type '"hello"' cannot be used to index type 'T'.
 
 
-==== tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts (6 errors) ====
+==== circularIndexedAccessErrors.ts (6 errors) ====
     type T1 = {
         x: T1["x"];  // Error
         ~

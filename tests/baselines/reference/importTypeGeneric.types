@@ -1,14 +1,16 @@
-=== tests/cases/conformance/types/import/a.d.ts ===
+//// [tests/cases/conformance/types/import/importTypeGeneric.ts] ////
+
+=== a.d.ts ===
 export interface Foo {
     a: string;
 >a : string
 }
-=== tests/cases/conformance/types/import/b.d.ts ===
+=== b.d.ts ===
 export interface Foo {
     a: number;
 >a : number
 }
-=== tests/cases/conformance/types/import/usage.ts ===
+=== usage.ts ===
 export function getFooFrom<T extends "./a" | "./b">(v: T): import(T).Foo {
 >getFooFrom : <T extends "./a" | "./b">(v: T) => any
 >v : T

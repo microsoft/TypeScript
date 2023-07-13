@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bigintWithLib.ts] ////
+
 //// [bigintWithLib.ts]
 // Test BigInt functions
 let bigintVal: bigint = BigInt(123);

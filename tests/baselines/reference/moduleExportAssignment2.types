@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/npm.js ===
+//// [tests/cases/conformance/salsa/moduleExportAssignment2.ts] ////
+
+=== npm.js ===
 var npm = module.exports = function (tree) {
 >npm : { (tree: any): void; asReadInstalled: (tree: any) => void; }
 >module.exports = function (tree) {} : { (tree: any): void; asReadInstalled: (tree: any) => void; }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classAttributeInferenceTemplate.ts ===
+//// [tests/cases/compiler/classAttributeInferenceTemplate.ts] ////
+
+=== classAttributeInferenceTemplate.ts ===
 class MyClass {
 >MyClass : Symbol(MyClass, Decl(classAttributeInferenceTemplate.ts, 0, 0))
 

@@ -1,19 +1,19 @@
-tests/cases/compiler/decrementAndIncrementOperators.ts(4,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(6,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(7,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(9,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(10,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(12,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(13,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(15,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(16,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(18,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(19,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(21,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
-tests/cases/compiler/decrementAndIncrementOperators.ts(22,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(4,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(6,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(7,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(9,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(10,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(12,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(13,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(15,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(16,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(18,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(19,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(21,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
+decrementAndIncrementOperators.ts(22,3): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
 
 
-==== tests/cases/compiler/decrementAndIncrementOperators.ts (13 errors) ====
+==== decrementAndIncrementOperators.ts (13 errors) ====
     var x = 0;
     
     // errors

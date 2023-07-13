@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeObjectLiteral.ts] ////
+
 //// [targetTypeObjectLiteral.ts]
 var z: { x: number; y: (w:string)=>number;} = {
 

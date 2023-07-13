@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatarrowfunctionsInFunctions.ts] ////
+
 //// [fatarrowfunctionsInFunctions.ts]
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
 

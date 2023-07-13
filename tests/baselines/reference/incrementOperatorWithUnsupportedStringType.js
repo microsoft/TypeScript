@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithUnsupportedStringType.ts] ////
+
 //// [incrementOperatorWithUnsupportedStringType.ts]
 // ++ operator on string type
 var STRING: string;

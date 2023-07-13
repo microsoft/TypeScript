@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isLiteral2.ts] ////
+
 //// [isLiteral2.ts]
 var x: number = 02343
 

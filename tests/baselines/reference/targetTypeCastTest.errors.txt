@@ -1,8 +1,8 @@
-tests/cases/compiler/targetTypeCastTest.ts(1,13): error TS2300: Duplicate identifier 'Point'.
-tests/cases/compiler/targetTypeCastTest.ts(3,10): error TS2300: Duplicate identifier 'Point'.
+targetTypeCastTest.ts(1,13): error TS2300: Duplicate identifier 'Point'.
+targetTypeCastTest.ts(3,10): error TS2300: Duplicate identifier 'Point'.
 
 
-==== tests/cases/compiler/targetTypeCastTest.ts (2 errors) ====
+==== targetTypeCastTest.ts (2 errors) ====
     declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
                 ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.

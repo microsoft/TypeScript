@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries_file0.ts ===
+//// [tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries2.ts] ////
+
+=== overloadBindingAcrossDeclarationBoundaries_file0.ts ===
 interface Opt1 {
     p?: any;
 >p : any
@@ -38,7 +40,7 @@ interface A {
 >o : Opt2
 }
 
-=== tests/cases/compiler/overloadBindingAcrossDeclarationBoundaries_file1.ts ===
+=== overloadBindingAcrossDeclarationBoundaries_file1.ts ===
 interface A {
     a(o: Opt3): Opt3;
 >a : { (o: Opt1): Opt1; (o: Opt2): Opt2; (o: Opt3): Opt3; (o: Opt4): Opt4; }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/thisAndSuperInStaticMembers2.ts] ////
+
 //// [thisAndSuperInStaticMembers2.ts]
 declare class B {
     static a: any;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anyDeclare.ts] ////
+
 //// [anyDeclare.ts]
 declare var x: any;
 module myMod {

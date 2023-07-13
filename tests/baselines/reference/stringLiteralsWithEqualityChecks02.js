@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts] ////
+
 //// [stringLiteralsWithEqualityChecks02.ts]
 let x: "foo";
 let y: "foo" | "bar";

@@ -20,6 +20,6 @@
 ////const k = { a: 1, b: 1 };
 ////const l = ((({ a: 1, b: 1 })));
 
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayVariableTypeHints: true
 });

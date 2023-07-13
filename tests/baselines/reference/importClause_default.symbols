@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importClause_default.ts] ////
+
 === /a.ts ===
 export default class A { a!: string }
 >A : Symbol(A, Decl(a.ts, 0, 0))

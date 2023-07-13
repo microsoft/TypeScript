@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceDeclaration6.ts ===
+//// [tests/cases/compiler/interfaceDeclaration6.ts] ////
+
+=== interfaceDeclaration6.ts ===
 interface i1 { foo: number; };
 >foo : number
 

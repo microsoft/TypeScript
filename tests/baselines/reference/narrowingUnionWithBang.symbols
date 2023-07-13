@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingUnionWithBang.ts ===
+//// [tests/cases/compiler/narrowingUnionWithBang.ts] ////
+
+=== narrowingUnionWithBang.ts ===
 type WorkingType = {
 >WorkingType : Symbol(WorkingType, Decl(narrowingUnionWithBang.ts, 0, 0))
 

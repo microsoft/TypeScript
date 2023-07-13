@@ -1,10 +1,10 @@
-tests/cases/compiler/recursiveTupleTypeInference.ts(23,5): error TS2345: Argument of type '{ b: A; }' is not assignable to parameter of type 'G<{ b: unknown; }>'.
+recursiveTupleTypeInference.ts(23,5): error TS2345: Argument of type '{ b: A; }' is not assignable to parameter of type 'G<{ b: unknown; }>'.
   Types of property 'b' are incompatible.
     Type 'A' is not assignable to type '[never, "null"]'.
       Type 'string' is not assignable to type '[never, "null"]'.
 
 
-==== tests/cases/compiler/recursiveTupleTypeInference.ts (1 errors) ====
+==== recursiveTupleTypeInference.ts (1 errors) ====
     // Repro from #37475
     
     export type A = "number" | "null" | A[];

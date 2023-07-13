@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientStatement1.ts] ////
+
 //// [ambientStatement1.ts]
     declare module M1 {
     	while(true);

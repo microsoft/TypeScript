@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedModuleDeclarationCodeGen.ts] ////
+
 //// [mergedModuleDeclarationCodeGen.ts]
 export module X {
     export module Y {

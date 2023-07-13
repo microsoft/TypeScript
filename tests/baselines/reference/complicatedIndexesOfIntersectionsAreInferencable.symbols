@@ -1,4 +1,6 @@
-=== tests/cases/compiler/complicatedIndexesOfIntersectionsAreInferencable.ts ===
+//// [tests/cases/compiler/complicatedIndexesOfIntersectionsAreInferencable.ts] ////
+
+=== complicatedIndexesOfIntersectionsAreInferencable.ts ===
 interface FormikConfig<Values> {
 >FormikConfig : Symbol(FormikConfig, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 0))
 >Values : Symbol(Values, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 23))

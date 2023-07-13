@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts] ////
+
+=== emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts ===
 var object = {
 >object : Symbol(object, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 0, 3))
 

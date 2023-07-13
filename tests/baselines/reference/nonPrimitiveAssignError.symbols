@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts] ////
+
+=== nonPrimitiveAssignError.ts ===
 var x = {};
 >x : Symbol(x, Decl(nonPrimitiveAssignError.ts, 0, 3))
 

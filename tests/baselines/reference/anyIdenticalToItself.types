@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyIdenticalToItself.ts ===
+//// [tests/cases/compiler/anyIdenticalToItself.ts] ////
+
+=== anyIdenticalToItself.ts ===
 function foo(x: any);
 >foo : { (x: any): any; (x: any): any; }
 >x : any

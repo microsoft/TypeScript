@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doubleUnderStringLiteralAssignability.ts] ////
+
 //// [doubleUnderStringLiteralAssignability.ts]
 var shouldBeOk: '__dunder' = '__dunder';
 var bad: '__dunder' = 'no_dunder';

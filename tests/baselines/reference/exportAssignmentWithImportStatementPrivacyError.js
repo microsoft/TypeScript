@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAssignmentWithImportStatementPrivacyError.ts] ////
+
 //// [exportAssignmentWithImportStatementPrivacyError.ts]
 module m2 {
     export interface connectModule {

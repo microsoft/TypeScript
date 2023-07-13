@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts] ////
+
+=== subtypingWithObjectMembers.ts ===
 class Base { foo: string; }
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
 >foo : Symbol(Base.foo, Decl(subtypingWithObjectMembers.ts, 0, 12))

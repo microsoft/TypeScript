@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts] ////
+
 //// [privateNameCircularReference.ts]
 class A {
     #foo = this.#bar;

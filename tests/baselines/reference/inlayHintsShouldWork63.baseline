@@ -1,0 +1,35 @@
+foo(1, +1, -1, +"1");
+    ^
+{
+  "text": "a:",
+  "position": 64,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, +1, -1, +"1");
+       ^
+{
+  "text": "b:",
+  "position": 67,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, +1, -1, +"1");
+           ^
+{
+  "text": "c:",
+  "position": 71,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+foo(1, +1, -1, +"1");
+               ^
+{
+  "text": "d:",
+  "position": 75,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

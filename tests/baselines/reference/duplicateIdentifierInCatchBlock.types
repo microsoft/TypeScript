@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateIdentifierInCatchBlock.ts ===
+//// [tests/cases/compiler/duplicateIdentifierInCatchBlock.ts] ////
+
+=== duplicateIdentifierInCatchBlock.ts ===
 var v;
 >v : any
 

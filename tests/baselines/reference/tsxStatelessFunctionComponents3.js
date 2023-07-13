@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponents3.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

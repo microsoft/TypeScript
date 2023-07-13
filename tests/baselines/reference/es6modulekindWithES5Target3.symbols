@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target3.ts ===
+//// [tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target3.ts] ////
+
+=== es6modulekindWithES5Target3.ts ===
 declare function foo(...args: any[]): any;
 >foo : Symbol(foo, Decl(es6modulekindWithES5Target3.ts, 0, 0))
 >args : Symbol(args, Decl(es6modulekindWithES5Target3.ts, 0, 21))

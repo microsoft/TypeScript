@@ -1,13 +1,13 @@
-tests/cases/conformance/externalModules/index.ts(2,10): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+index.ts(2,10): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 
 
-==== tests/cases/conformance/externalModules/index.ts (1 errors) ====
+==== index.ts (1 errors) ====
     // await disallowed in un-alised named import
     import { await } from "./other";
              ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     
-==== tests/cases/conformance/externalModules/other.ts (0 errors) ====
+==== other.ts (0 errors) ====
     declare const _await: any;
     export { _await as await };
     

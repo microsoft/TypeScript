@@ -1,10 +1,12 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/unusedImportWithSpread.ts] ////
+
+=== a.ts ===
 export default { a: 1 };
 >{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
 
-=== tests/cases/compiler/b1.ts ===
+=== b1.ts ===
 import a from "./a";
 >a : { a: number; }
 
@@ -26,7 +28,7 @@ const b1 = {} as unknown;
 
 })
 
-=== tests/cases/compiler/b2.ts ===
+=== b2.ts ===
 import a from "./a";
 >a : { a: number; }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringArrayPattern1.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringArrayPattern1.ts] ////
+
+=== declarationEmitDestructuringArrayPattern1.ts ===
 var [] = [1, "hello"]; // Dont emit anything
 var [x] = [1, "hello"]; // emit x: number
 >x : Symbol(x, Decl(declarationEmitDestructuringArrayPattern1.ts, 1, 5))

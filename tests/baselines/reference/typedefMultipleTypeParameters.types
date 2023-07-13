@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/typedefMultipleTypeParameters.ts] ////
+
+=== a.js ===
 /**
  * @template {{ a: number, b: string }} T,U A Comment
  * @template {{ c: boolean }} V uh ... are comments even supported??
@@ -19,7 +21,7 @@ var wrong;
 var insufficient;
 >insufficient : any
 
-=== tests/cases/conformance/jsdoc/test.ts ===
+=== test.ts ===
 declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
 >actually : Everything<{ a: number; }, undefined, { c: 1; d: 1; }, number, string>
 >a : number

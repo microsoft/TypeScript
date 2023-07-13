@@ -1,23 +1,23 @@
-tests/cases/conformance/es6/modules/main.ts(1,8): error TS1192: Module '"tests/cases/conformance/es6/modules/t4"' has no default export.
-tests/cases/conformance/es6/modules/t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'x'. Consider explicitly re-exporting to resolve the ambiguity.
-tests/cases/conformance/es6/modules/t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'y'. Consider explicitly re-exporting to resolve the ambiguity.
+main.ts(1,8): error TS1192: Module '"t4"' has no default export.
+t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'x'. Consider explicitly re-exporting to resolve the ambiguity.
+t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'y'. Consider explicitly re-exporting to resolve the ambiguity.
 
 
-==== tests/cases/conformance/es6/modules/t1.ts (0 errors) ====
+==== t1.ts (0 errors) ====
     export var x = 1;
     export var y = 2;
     
-==== tests/cases/conformance/es6/modules/t2.ts (0 errors) ====
+==== t2.ts (0 errors) ====
     export default "hello";
     export function foo() { }
     
-==== tests/cases/conformance/es6/modules/t3.ts (0 errors) ====
+==== t3.ts (0 errors) ====
     var x = "x";
     var y = "y";
     var z = "z";
     export { x, y, z };
     
-==== tests/cases/conformance/es6/modules/t4.ts (2 errors) ====
+==== t4.ts (2 errors) ====
     export * from "./t1";
     export * from "./t2";
     export * from "./t3";
@@ -26,11 +26,11 @@ tests/cases/conformance/es6/modules/t4.ts(3,1): error TS2308: Module "./t1" has 
     ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2308: Module "./t1" has already exported a member named 'y'. Consider explicitly re-exporting to resolve the ambiguity.
     
-==== tests/cases/conformance/es6/modules/main.ts (1 errors) ====
+==== main.ts (1 errors) ====
     import hello, { x, y, z, foo } from "./t4";
            ~~~~~
-!!! error TS1192: Module '"tests/cases/conformance/es6/modules/t4"' has no default export.
-!!! related TS1195 tests/cases/conformance/es6/modules/t4.ts:2:1: 'export *' does not re-export a default.
+!!! error TS1192: Module '"t4"' has no default export.
+!!! related TS1195 t4.ts:2:1: 'export *' does not re-export a default.
     hello;
     x;
     y;

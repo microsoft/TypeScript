@@ -93,9 +93,9 @@ TI:: [hh:mm:ss:mss] #1 with arguments'["@types/commander@tsFakeMajor.Minor"]':: 
 TI:: Before installWorker
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/bower_components: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /a/node_modules: *new*
   {"pollingInterval":500}

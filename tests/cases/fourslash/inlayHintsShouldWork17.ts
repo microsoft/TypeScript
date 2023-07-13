@@ -2,6 +2,6 @@
 
 //// const a = { a: 123 };
 
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayVariableTypeHints: true
 });

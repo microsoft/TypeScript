@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/user.ts ===
+//// [tests/cases/conformance/ambient/ambientShorthand.ts] ////
+
+=== user.ts ===
 ///<reference path="declarations.d.ts"/>
 import foo, {bar} from "jquery";
 >foo : Symbol(foo, Decl(user.ts, 1, 6))
@@ -16,7 +18,7 @@ foo(bar, baz, boom);
 >baz : Symbol(baz, Decl(user.ts, 2, 6))
 >boom : Symbol(boom, Decl(user.ts, 2, 26))
 
-=== tests/cases/conformance/ambient/declarations.d.ts ===
+=== declarations.d.ts ===
 declare module "jquery"
 >"jquery" : Symbol("jquery", Decl(declarations.d.ts, 0, 0))
 

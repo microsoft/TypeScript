@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxUnionSFXContextualTypeInferredCorrectly.tsx] ////
+
 //// [checkJsxUnionSFXContextualTypeInferredCorrectly.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

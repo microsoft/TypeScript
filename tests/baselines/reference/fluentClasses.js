@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/fluentClasses.ts] ////
+
 //// [fluentClasses.ts]
 class A {
     foo() {

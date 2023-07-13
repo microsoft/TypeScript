@@ -1,7 +1,7 @@
-tests/cases/conformance/decorators/invalid/decoratorOnInterface.ts(3,1): error TS1206: Decorators are not valid here.
+decoratorOnInterface.ts(3,1): error TS1206: Decorators are not valid here.
 
 
-==== tests/cases/conformance/decorators/invalid/decoratorOnInterface.ts (1 errors) ====
+==== decoratorOnInterface.ts (1 errors) ====
     declare function dec<T>(target: T): T;
     
     @dec

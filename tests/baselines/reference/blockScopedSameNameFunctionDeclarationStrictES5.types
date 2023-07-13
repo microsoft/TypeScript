@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts ===
+//// [tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES5.ts] ////
+
+=== blockScopedSameNameFunctionDeclarationStrictES5.ts ===
 "use strict";
 >"use strict" : "use strict"
 

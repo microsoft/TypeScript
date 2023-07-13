@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts ===
+//// [tests/cases/compiler/conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts] ////
+
+=== conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts ===
 type BigUnion =
 >BigUnion : Symbol(BigUnion, Decl(conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts, 0, 0))
     {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExpressionWithStaticProperties1.ts ===
+//// [tests/cases/compiler/classExpressionWithStaticProperties1.ts] ////
+
+=== classExpressionWithStaticProperties1.ts ===
 var v = class C {
 >v : typeof C
 >class C {    static a = 1;    static b = 2;    static c = C.a + C.b;} : typeof C

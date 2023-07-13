@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures3.ts] ////
+
 //// [assignmentCompatWithCallSignatures3.ts]
 // these are all permitted with the current rules, since we do not do contextual signature instantiation
 

@@ -1,8 +1,8 @@
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(16,24): error TS7006: Parameter 'arg' implicitly has an 'any' type.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts(19,24): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextuallyTypedClassExpressionMethodDeclaration01.ts(16,24): error TS7006: Parameter 'arg' implicitly has an 'any' type.
+contextuallyTypedClassExpressionMethodDeclaration01.ts(19,24): error TS7006: Parameter 'arg' implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration01.ts (2 errors) ====
+==== contextuallyTypedClassExpressionMethodDeclaration01.ts (2 errors) ====
     interface A {
         numProp: number;
     }

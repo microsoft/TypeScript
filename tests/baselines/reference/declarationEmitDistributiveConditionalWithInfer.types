@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDistributiveConditionalWithInfer.ts ===
+//// [tests/cases/compiler/declarationEmitDistributiveConditionalWithInfer.ts] ////
+
+=== declarationEmitDistributiveConditionalWithInfer.ts ===
 // This function's type is changed on declaration
 export const fun = (
 >fun : (subFun: <Collection, Field extends keyof Collection>() => (Collection[Field] extends readonly (infer InnerArr)[] ? InnerArr : Collection[Field])[]) => void

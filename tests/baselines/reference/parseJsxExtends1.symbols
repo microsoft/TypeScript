@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/parseJsxExtends1.ts] ////
+
+=== index.tsx ===
 declare const React: any;
 >React : Symbol(React, Decl(index.tsx, 0, 13))
 

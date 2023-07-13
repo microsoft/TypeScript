@@ -1,4 +1,6 @@
-=== tests/cases/compiler/customEventDetail.ts ===
+//// [tests/cases/compiler/customEventDetail.ts] ////
+
+=== customEventDetail.ts ===
 var x: CustomEvent;
 >x : Symbol(x, Decl(customEventDetail.ts, 0, 3))
 >CustomEvent : Symbol(CustomEvent, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/invalidStaticField.ts ===
+//// [tests/cases/compiler/invalidStaticField.ts] ////
+
+=== invalidStaticField.ts ===
 class A { foo() { return B.NULL; } }
 >A : A
 >foo : () => any

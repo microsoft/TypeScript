@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts] ////
+
 //// [assignmentCompatWithObjectMembersOptionality.ts]
 // Derived member is not optional but base member is, should be ok
 

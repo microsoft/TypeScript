@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithBooleanType.ts] ////
+
 //// [negateOperatorWithBooleanType.ts]
 // - operator on boolean type
 var BOOLEAN: boolean;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.js ===
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.ts] ////
+
+=== prototypePropertyAssignmentMergeAcrossFiles2.js ===
 var Ns = {}
 >Ns : typeof Ns
 >{} : {}
@@ -40,7 +42,7 @@ Ns.Two.prototype = {
 >{} : {}
 }
 
-=== tests/cases/conformance/salsa/other.js ===
+=== other.js ===
 /**
  * @type {Ns.One}
  */

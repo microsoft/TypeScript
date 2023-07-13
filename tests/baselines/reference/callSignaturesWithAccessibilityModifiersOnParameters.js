@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts] ////
+
 //// [callSignaturesWithAccessibilityModifiersOnParameters.ts]
 // Call signature parameters do not allow accessibility modifiers
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportClassWithoutName.ts ===
+//// [tests/cases/compiler/exportClassWithoutName.ts] ////
+
+=== exportClassWithoutName.ts ===
 
 export class {
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentInEmptyParameterList1.ts] ////
+
 //// [commentInEmptyParameterList1.ts]
 function foo(/** nothing */) {
 }

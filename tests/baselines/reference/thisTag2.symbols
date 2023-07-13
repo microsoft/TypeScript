@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/thisTag2.ts] ////
+
+=== a.js ===
 /** @this {string} */
 export function f1() {}
 >f1 : Symbol(f1, Decl(a.js, 0, 0))

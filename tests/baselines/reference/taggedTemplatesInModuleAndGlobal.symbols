@@ -1,4 +1,6 @@
-=== tests/cases/compiler/global.ts ===
+//// [tests/cases/compiler/taggedTemplatesInModuleAndGlobal.ts] ////
+
+=== global.ts ===
 namespace n {
 >n : Symbol(n, Decl(global.ts, 0, 0))
 
@@ -24,7 +26,7 @@ namespace n {
 >templateObjectFactory : Symbol(templateObjectFactory, Decl(global.ts, 3, 5))
 >templateObjectFactory : Symbol(templateObjectFactory, Decl(global.ts, 3, 5))
 }
-=== tests/cases/compiler/module.ts ===
+=== module.ts ===
 export { }
 function id<T>(x: T): T {
 >id : Symbol(id, Decl(module.ts, 0, 10))

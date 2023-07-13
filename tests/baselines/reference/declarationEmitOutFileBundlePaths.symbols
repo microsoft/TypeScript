@@ -1,4 +1,6 @@
-=== tests/cases/compiler/js/versions.static.js ===
+//// [tests/cases/compiler/declarationEmitOutFileBundlePaths.ts] ////
+
+=== js/versions.static.js ===
 export default {
     "@a/b": "1.0.0",
 >"@a/b" : Symbol("@a/b", Decl(versions.static.js, 0, 16))
@@ -7,7 +9,7 @@ export default {
 >"@a/c" : Symbol("@a/c", Decl(versions.static.js, 1, 20))
 
 };
-=== tests/cases/compiler/js/index.js ===
+=== js/index.js ===
 import versions from './versions.static.js';
 >versions : Symbol(versions, Decl(index.js, 0, 6))
 

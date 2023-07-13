@@ -1,3 +1,5 @@
-=== tests/cases/compiler/arrowFunctionInExpressionStatement1.ts ===
+//// [tests/cases/compiler/arrowFunctionInExpressionStatement1.ts] ////
+
+=== arrowFunctionInExpressionStatement1.ts ===
 
 () => 0;

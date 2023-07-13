@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noAsConstNameLookup.ts] ////
+
 //// [noAsConstNameLookup.ts]
 // Repros from #44292
 

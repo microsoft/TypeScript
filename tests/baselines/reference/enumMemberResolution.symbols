@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumMemberResolution.ts ===
+//// [tests/cases/compiler/enumMemberResolution.ts] ////
+
+=== enumMemberResolution.ts ===
 enum Position2 {
 >Position2 : Symbol(Position2, Decl(enumMemberResolution.ts, 0, 0))
 

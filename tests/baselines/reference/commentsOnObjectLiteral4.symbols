@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsOnObjectLiteral4.ts ===
+//// [tests/cases/compiler/commentsOnObjectLiteral4.ts] ////
+
+=== commentsOnObjectLiteral4.ts ===
 var v = {
 >v : Symbol(v, Decl(commentsOnObjectLiteral4.ts, 0, 3))
 

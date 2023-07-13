@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithRHSIsSubtypeOfFunction.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithRHSIsSubtypeOfFunction.ts] ////
+
+=== instanceofOperatorWithRHSIsSubtypeOfFunction.ts ===
 interface I extends Function { }
 >I : Symbol(I, Decl(instanceofOperatorWithRHSIsSubtypeOfFunction.ts, 0, 0))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

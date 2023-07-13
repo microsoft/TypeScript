@@ -1,4 +1,6 @@
-=== tests/cases/compiler/funduleUsedAcrossFileBoundary_file1.ts ===
+//// [tests/cases/compiler/funduleUsedAcrossFileBoundary.ts] ////
+
+=== funduleUsedAcrossFileBoundary_file1.ts ===
 declare function Q<T>(value: T): string;
 >Q : typeof Q
 >value : T
@@ -14,7 +16,7 @@ declare module Q {
 >defer : <T>() => string
 }
 
-=== tests/cases/compiler/funduleUsedAcrossFileBoundary_file2.ts ===
+=== funduleUsedAcrossFileBoundary_file2.ts ===
 function promiseWithCancellation<T>(promise: Q.Promise<T>) {
 >promiseWithCancellation : <T>(promise: Q.Promise<T>) => void
 >promise : Q.Promise<T>

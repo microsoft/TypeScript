@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitExpressionInExtends4.ts] ////
+
 //// [declarationEmitExpressionInExtends4.ts]
 function getSomething() {
     return class D { }

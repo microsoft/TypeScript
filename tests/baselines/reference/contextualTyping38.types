@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTyping38.ts ===
+//// [tests/cases/compiler/contextualTyping38.ts] ////
+
+=== contextualTyping38.ts ===
 var foo = <{ (): number; }> function(a) { return a };
 >foo : () => number
 ><{ (): number; }> function(a) { return a } : () => number

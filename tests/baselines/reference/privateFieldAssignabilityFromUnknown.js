@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts] ////
+
 //// [privateFieldAssignabilityFromUnknown.ts]
 export class Class {
   #field: any

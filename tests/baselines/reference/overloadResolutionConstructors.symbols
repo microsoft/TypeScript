@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts] ////
+
+=== overloadResolutionConstructors.ts ===
 class SomeBase {
 >SomeBase : Symbol(SomeBase, Decl(overloadResolutionConstructors.ts, 0, 0))
 

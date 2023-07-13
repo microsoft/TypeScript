@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeRootsFromMultipleNodeModulesDirectories.ts] ////
+
 === /foo/bar/a.ts ===
 import { x } from "xyz";
 >x : Symbol(x, Decl(a.ts, 0, 8))

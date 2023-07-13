@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es2018ObjectAssign.ts ===
+//// [tests/cases/compiler/es2018ObjectAssign.ts] ////
+
+=== es2018ObjectAssign.ts ===
 const test = Object.assign({}, { test: true });
 >test : Symbol(test, Decl(es2018ObjectAssign.ts, 0, 5))
 >Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))

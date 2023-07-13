@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts ===
+//// [tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts] ////
+
+=== typeUsedAsTypeLiteralIndex.ts ===
 type K = number | string;
 >K : Symbol(K, Decl(typeUsedAsTypeLiteralIndex.ts, 0, 0))
 

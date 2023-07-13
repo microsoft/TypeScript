@@ -1,12 +1,12 @@
-tests/cases/compiler/optionalParamTypeComparison.ts(4,1): error TS2322: Type '(s: string, b?: boolean) => void' is not assignable to type '(s: string, n?: number) => void'.
+optionalParamTypeComparison.ts(4,1): error TS2322: Type '(s: string, b?: boolean) => void' is not assignable to type '(s: string, n?: number) => void'.
   Types of parameters 'b' and 'n' are incompatible.
     Type 'number' is not assignable to type 'boolean'.
-tests/cases/compiler/optionalParamTypeComparison.ts(5,1): error TS2322: Type '(s: string, n?: number) => void' is not assignable to type '(s: string, b?: boolean) => void'.
+optionalParamTypeComparison.ts(5,1): error TS2322: Type '(s: string, n?: number) => void' is not assignable to type '(s: string, b?: boolean) => void'.
   Types of parameters 'n' and 'b' are incompatible.
     Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/optionalParamTypeComparison.ts (2 errors) ====
+==== optionalParamTypeComparison.ts (2 errors) ====
     var f: (s: string, n?: number) => void;
     var g: (s: string, b?: boolean) => void;
     

@@ -1,7 +1,7 @@
-tests/cases/compiler/invokingNonGenericMethodWithTypeArguments2.ts(5,9): error TS2347: Untyped function calls may not accept type arguments.
+invokingNonGenericMethodWithTypeArguments2.ts(5,9): error TS2347: Untyped function calls may not accept type arguments.
 
 
-==== tests/cases/compiler/invokingNonGenericMethodWithTypeArguments2.ts (1 errors) ====
+==== invokingNonGenericMethodWithTypeArguments2.ts (1 errors) ====
     class Foo {
         private foo: any;
     

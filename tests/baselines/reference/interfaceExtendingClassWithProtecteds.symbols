@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds.ts ===
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds.ts] ////
+
+=== interfaceExtendingClassWithProtecteds.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(interfaceExtendingClassWithProtecteds.ts, 0, 0))
 

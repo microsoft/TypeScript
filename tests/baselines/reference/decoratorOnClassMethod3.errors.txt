@@ -1,7 +1,7 @@
-tests/cases/conformance/decorators/class/method/decoratorOnClassMethod3.ts(4,12): error TS1436: Decorators must precede the name and all keywords of property declarations.
+decoratorOnClassMethod3.ts(4,12): error TS1436: Decorators must precede the name and all keywords of property declarations.
 
 
-==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod3.ts (1 errors) ====
+==== decoratorOnClassMethod3.ts (1 errors) ====
     declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
     
     class C {

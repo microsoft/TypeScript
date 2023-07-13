@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unqualifiedCallToClassStatic1.ts] ////
+
 //// [unqualifiedCallToClassStatic1.ts]
 class Vector {
  static foo = () => {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/comparableRelationBidirectional.ts ===
+//// [tests/cases/compiler/comparableRelationBidirectional.ts] ////
+
+=== comparableRelationBidirectional.ts ===
 enum AutomationMode {
 >AutomationMode : Symbol(AutomationMode, Decl(comparableRelationBidirectional.ts, 0, 0))
 

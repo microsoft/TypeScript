@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment9.ts] ////
+
 //// [parserExportAssignment9.ts]
 namespace Foo {
   export default foo;

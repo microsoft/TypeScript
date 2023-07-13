@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts] ////
+
+=== mappedTypeConstraints2.ts ===
 type Mapped1<K extends string> = { [P in K]: { a: P } };
 >Mapped1 : Mapped1<K>
 >a : P

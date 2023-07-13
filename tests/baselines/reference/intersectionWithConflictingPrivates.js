@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionWithConflictingPrivates.ts] ////
+
 //// [intersectionWithConflictingPrivates.ts]
 class A { private x: unknown; y?: string; }
 class B { private x: unknown; y?: string; }

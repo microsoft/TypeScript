@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varianceCallbacksAndIndexedAccesses.ts ===
+//// [tests/cases/compiler/varianceCallbacksAndIndexedAccesses.ts] ////
+
+=== varianceCallbacksAndIndexedAccesses.ts ===
 type Source = {
 >Source : Symbol(Source, Decl(varianceCallbacksAndIndexedAccesses.ts, 0, 0))
 

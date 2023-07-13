@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalSetterParam.ts ===
+//// [tests/cases/compiler/optionalSetterParam.ts] ////
+
+=== optionalSetterParam.ts ===
 class foo {
 >foo : Symbol(foo, Decl(optionalSetterParam.ts, 0, 0))
 

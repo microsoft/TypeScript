@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx] ////
+
 //// [jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

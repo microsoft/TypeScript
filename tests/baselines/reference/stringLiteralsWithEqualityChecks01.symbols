@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts ===
+//// [tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts] ////
+
+=== stringLiteralsWithEqualityChecks01.ts ===
 let x: "foo";
 >x : Symbol(x, Decl(stringLiteralsWithEqualityChecks01.ts, 0, 3))
 

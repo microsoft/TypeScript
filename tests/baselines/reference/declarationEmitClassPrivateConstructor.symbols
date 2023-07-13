@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitClassPrivateConstructor.ts ===
+//// [tests/cases/compiler/declarationEmitClassPrivateConstructor.ts] ////
+
+=== declarationEmitClassPrivateConstructor.ts ===
 interface PrivateInterface {
 >PrivateInterface : Symbol(PrivateInterface, Decl(declarationEmitClassPrivateConstructor.ts, 0, 0))
 }

@@ -1,15 +1,15 @@
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(2,6): error TS2457: Type alias name cannot be 'any'.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(3,6): error TS2457: Type alias name cannot be 'number'.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(4,6): error TS2457: Type alias name cannot be 'boolean'.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(5,6): error TS2457: Type alias name cannot be 'string'.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,1): error TS2304: Cannot find name 'type'.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,6): error TS2457: Type alias name cannot be 'void'.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,11): error TS1109: Expression expected.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,13): error TS2693: 'I' only refers to a type, but is being used as a value here.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(7,6): error TS2457: Type alias name cannot be 'object'.
+reservedNamesInAliases.ts(2,6): error TS2457: Type alias name cannot be 'any'.
+reservedNamesInAliases.ts(3,6): error TS2457: Type alias name cannot be 'number'.
+reservedNamesInAliases.ts(4,6): error TS2457: Type alias name cannot be 'boolean'.
+reservedNamesInAliases.ts(5,6): error TS2457: Type alias name cannot be 'string'.
+reservedNamesInAliases.ts(6,1): error TS2304: Cannot find name 'type'.
+reservedNamesInAliases.ts(6,6): error TS2457: Type alias name cannot be 'void'.
+reservedNamesInAliases.ts(6,11): error TS1109: Expression expected.
+reservedNamesInAliases.ts(6,13): error TS2693: 'I' only refers to a type, but is being used as a value here.
+reservedNamesInAliases.ts(7,6): error TS2457: Type alias name cannot be 'object'.
 
 
-==== tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts (9 errors) ====
+==== reservedNamesInAliases.ts (9 errors) ====
     interface I {}
     type any = I;
          ~~~

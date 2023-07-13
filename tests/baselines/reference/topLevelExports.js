@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/topLevelExports.ts] ////
+
 //// [topLevelExports.ts]
 export var foo = 3;
 

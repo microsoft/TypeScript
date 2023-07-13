@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferenceDoesNotAddUndefinedOrNull.ts ===
+//// [tests/cases/compiler/inferenceDoesNotAddUndefinedOrNull.ts] ////
+
+=== inferenceDoesNotAddUndefinedOrNull.ts ===
 interface NodeArray<T extends Node> extends ReadonlyArray<T> {}
 >NodeArray : Symbol(NodeArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 0))
 >T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 20))

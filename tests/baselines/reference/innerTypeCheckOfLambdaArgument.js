@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/innerTypeCheckOfLambdaArgument.ts] ////
+
 //// [innerTypeCheckOfLambdaArgument.ts]
 function takesCallback(callback: (n) =>any) {
 

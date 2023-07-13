@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.ts ===
+//// [tests/cases/conformance/salsa/inferingFromAny.ts] ////
+
+=== a.ts ===
 var a: any;
 >a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
 
@@ -182,7 +184,7 @@ declare function f19<T, K extends keyof T>(k: K, x: T[K]): T;
 >K : Symbol(K, Decl(a.ts, 21, 23))
 >T : Symbol(T, Decl(a.ts, 21, 21))
 
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 var a = f1(a);
 >a : Symbol(a, Decl(a.ts, 0, 3), Decl(a.js, 0, 3), Decl(a.js, 1, 3), Decl(a.js, 3, 3), Decl(a.js, 4, 3) ... and 11 more)
 >f1 : Symbol(f1, Decl(a.ts, 1, 18))

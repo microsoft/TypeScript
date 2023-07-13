@@ -1,11 +1,11 @@
-tests/cases/conformance/classes/members/privateNames/privateNameMethodAssignment.ts(4,14): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
-tests/cases/conformance/classes/members/privateNames/privateNameMethodAssignment.ts(5,11): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
-tests/cases/conformance/classes/members/privateNames/privateNameMethodAssignment.ts(6,11): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
-tests/cases/conformance/classes/members/privateNames/privateNameMethodAssignment.ts(7,20): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
-tests/cases/conformance/classes/members/privateNames/privateNameMethodAssignment.ts(9,11): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
+privateNameMethodAssignment.ts(4,14): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
+privateNameMethodAssignment.ts(5,11): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
+privateNameMethodAssignment.ts(6,11): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
+privateNameMethodAssignment.ts(7,20): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
+privateNameMethodAssignment.ts(9,11): error TS2803: Cannot assign to private method '#method'. Private methods are not writable.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameMethodAssignment.ts (5 errors) ====
+==== privateNameMethodAssignment.ts (5 errors) ====
     class A3 {
         #method() { };
         constructor(a: A3, b: any) {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of9.ts] ////
+
 //// [for-of9.ts]
 var v: string;
 for (v of ["hello"]) { }

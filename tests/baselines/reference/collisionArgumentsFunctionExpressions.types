@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionArgumentsFunctionExpressions.ts ===
+//// [tests/cases/compiler/collisionArgumentsFunctionExpressions.ts] ////
+
+=== collisionArgumentsFunctionExpressions.ts ===
 function foo() {
 >foo : () => void
 

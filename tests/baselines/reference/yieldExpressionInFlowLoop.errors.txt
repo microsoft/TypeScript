@@ -1,7 +1,7 @@
-tests/cases/compiler/yieldExpressionInFlowLoop.ts(4,18): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
+yieldExpressionInFlowLoop.ts(4,18): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
 
 
-==== tests/cases/compiler/yieldExpressionInFlowLoop.ts (1 errors) ====
+==== yieldExpressionInFlowLoop.ts (1 errors) ====
     function* f() {
         let result;
         while (1) {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeofEnum.ts ===
+//// [tests/cases/compiler/declFileTypeofEnum.ts] ////
+
+=== declFileTypeofEnum.ts ===
 enum days {
 >days : Symbol(days, Decl(declFileTypeofEnum.ts, 0, 0))
 

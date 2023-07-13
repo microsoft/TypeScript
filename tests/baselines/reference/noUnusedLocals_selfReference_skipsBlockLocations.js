@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_selfReference_skipsBlockLocations.ts] ////
+
 //// [noUnusedLocals_selfReference_skipsBlockLocations.ts]
 namespace n {
     function f() {

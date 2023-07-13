@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionWithNoBestCommonType2.ts] ////
+
 //// [functionWithNoBestCommonType2.ts]
 var v = function () {
    return true;

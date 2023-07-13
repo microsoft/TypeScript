@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodParameter3.ts] ////
+
 //// [decoratorOnClassMethodParameter3.ts]
 // https://github.com/microsoft/TypeScript/issues/48509
 declare function dec(a: any): any;

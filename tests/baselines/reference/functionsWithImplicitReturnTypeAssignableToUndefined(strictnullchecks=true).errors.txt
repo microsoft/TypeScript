@@ -1,10 +1,10 @@
-tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(22,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(28,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(35,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts(41,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+functionsWithImplicitReturnTypeAssignableToUndefined.ts(22,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+functionsWithImplicitReturnTypeAssignableToUndefined.ts(28,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+functionsWithImplicitReturnTypeAssignableToUndefined.ts(35,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+functionsWithImplicitReturnTypeAssignableToUndefined.ts(41,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 
 
-==== tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts (4 errors) ====
+==== functionsWithImplicitReturnTypeAssignableToUndefined.ts (4 errors) ====
     function f1(): unknown {
         if (Math.random() < 0.5) return true;
     

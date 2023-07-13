@@ -1,9 +1,11 @@
-=== tests/cases/compiler/es6ImportNameSpaceImportAmd_0.ts ===
+//// [tests/cases/compiler/es6ImportNameSpaceImportAmd.ts] ////
+
+=== es6ImportNameSpaceImportAmd_0.ts ===
 export var a = 10;
 >a : number
 >10 : 10
 
-=== tests/cases/compiler/es6ImportNameSpaceImportAmd_1.ts ===
+=== es6ImportNameSpaceImportAmd_1.ts ===
 import * as nameSpaceBinding from "es6ImportNameSpaceImportAmd_0";
 >nameSpaceBinding : typeof nameSpaceBinding
 

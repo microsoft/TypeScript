@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithNumericProperty.ts] ////
+
 //// [objectTypeWithNumericProperty.ts]
 // no errors here
 

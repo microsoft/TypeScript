@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference1.ts] ////
+
 //// [unionAndIntersectionInference1.ts]
 // Repro from #2264
 

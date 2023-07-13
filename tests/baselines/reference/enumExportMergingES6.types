@@ -1,4 +1,6 @@
-=== tests/cases/conformance/enums/enumExportMergingES6.ts ===
+//// [tests/cases/conformance/enums/enumExportMergingES6.ts] ////
+
+=== enumExportMergingES6.ts ===
 export enum Animals {
 >Animals : Animals
 

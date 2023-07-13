@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTyping24.ts ===
+//// [tests/cases/compiler/contextualTyping24.ts] ////
+
+=== contextualTyping24.ts ===
 var foo:(a:{():number; (i:number):number; })=>number; foo = function(this: void, a:string){return 5};
 >foo : Symbol(foo, Decl(contextualTyping24.ts, 0, 3))
 >a : Symbol(a, Decl(contextualTyping24.ts, 0, 9))

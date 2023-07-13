@@ -1,8 +1,10 @@
-=== tests/cases/conformance/salsa/def.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment6.ts] ////
+
+=== def.js ===
 class Outer {}
 >Outer : Outer
 
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 Outer.Inner = class I {
 >Outer.Inner = class I {    messages() { return [] }} : typeof I
 >Outer.Inner : typeof I
@@ -21,7 +23,7 @@ Outer.i
 >Outer : typeof Outer
 >i : I
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 var msgs = Outer.i.messages()
 >msgs : any[]
 >Outer.i.messages() : any[]

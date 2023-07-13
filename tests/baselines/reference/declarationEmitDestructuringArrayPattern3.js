@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDestructuringArrayPattern3.ts] ////
+
 //// [declarationEmitDestructuringArrayPattern3.ts]
 module M {
     export var [a, b] = [1, 2];
@@ -12,6 +14,6 @@ var M;
 
 
 //// [declarationEmitDestructuringArrayPattern3.d.ts]
-declare module M {
+declare namespace M {
     var a: number, b: number;
 }

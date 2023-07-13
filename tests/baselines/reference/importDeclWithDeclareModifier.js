@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclWithDeclareModifier.ts] ////
+
 //// [importDeclWithDeclareModifier.ts]
 module x {
     interface c {

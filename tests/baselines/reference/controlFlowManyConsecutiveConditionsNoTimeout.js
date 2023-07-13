@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowManyConsecutiveConditionsNoTimeout.ts] ////
+
 //// [controlFlowManyConsecutiveConditionsNoTimeout.ts]
 export enum Choice {
     One,

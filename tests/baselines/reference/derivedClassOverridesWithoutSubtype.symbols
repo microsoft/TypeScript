@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesWithoutSubtype.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesWithoutSubtype.ts] ////
+
+=== derivedClassOverridesWithoutSubtype.ts ===
 class Base {
 >Base : Symbol(Base, Decl(derivedClassOverridesWithoutSubtype.ts, 0, 0))
 

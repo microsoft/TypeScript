@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyVarDeclFile_externalModule.ts ===
+//// [tests/cases/compiler/privacyVarDeclFile.ts] ////
+
+=== privacyVarDeclFile_externalModule.ts ===
 class privateClass {
 >privateClass : privateClass
 }
@@ -499,7 +501,7 @@ module privateModule {
 >privateModule : any
 }
 
-=== tests/cases/compiler/privacyVarDeclFile_GlobalFile.ts ===
+=== privacyVarDeclFile_GlobalFile.ts ===
 class publicClassInGlobal {
 >publicClassInGlobal : publicClassInGlobal
 }

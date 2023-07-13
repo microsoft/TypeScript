@@ -1,11 +1,13 @@
-=== tests/cases/conformance/externalModules/typeOnly/framework-hooks.ts ===
+//// [tests/cases/conformance/externalModules/typeOnly/computedPropertyName.ts] ////
+
+=== framework-hooks.ts ===
 export const onInit = Symbol("onInit");
 >onInit : unique symbol
 >Symbol("onInit") : unique symbol
 >Symbol : SymbolConstructor
 >"onInit" : "onInit"
 
-=== tests/cases/conformance/externalModules/typeOnly/component.ts ===
+=== component.ts ===
 import type { onInit } from "./framework-hooks";
 >onInit : any
 

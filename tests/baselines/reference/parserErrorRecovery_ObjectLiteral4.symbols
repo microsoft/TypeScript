@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts] ////
+
+=== parserErrorRecovery_ObjectLiteral4.ts ===
 var v = { a: 1
 >v : Symbol(v, Decl(parserErrorRecovery_ObjectLiteral4.ts, 0, 3))
 >a : Symbol(a, Decl(parserErrorRecovery_ObjectLiteral4.ts, 0, 9))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxPreserveEmit2.tsx] ////
+
+=== test.tsx ===
 var Route: any;
 >Route : any
 

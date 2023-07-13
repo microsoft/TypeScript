@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleWithPriorInstantiatedModule.ts] ////
+
 //// [cloduleWithPriorInstantiatedModule.ts]
 // Non-ambient & instantiated module.
 module Moclodule {

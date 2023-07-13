@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayAssignmentTest6.ts] ////
+
 //// [arrayAssignmentTest6.ts]
 module Test {
     interface IState {

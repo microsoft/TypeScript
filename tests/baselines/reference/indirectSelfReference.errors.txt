@@ -1,15 +1,15 @@
-tests/cases/compiler/indirectSelfReference.ts(1,7): error TS2506: 'a' is referenced directly or indirectly in its own base expression.
-tests/cases/compiler/indirectSelfReference.ts(1,17): error TS2449: Class 'b' used before its declaration.
-tests/cases/compiler/indirectSelfReference.ts(2,7): error TS2506: 'b' is referenced directly or indirectly in its own base expression.
+indirectSelfReference.ts(1,7): error TS2506: 'a' is referenced directly or indirectly in its own base expression.
+indirectSelfReference.ts(1,17): error TS2449: Class 'b' used before its declaration.
+indirectSelfReference.ts(2,7): error TS2506: 'b' is referenced directly or indirectly in its own base expression.
 
 
-==== tests/cases/compiler/indirectSelfReference.ts (3 errors) ====
+==== indirectSelfReference.ts (3 errors) ====
     class a extends b{ }
           ~
 !!! error TS2506: 'a' is referenced directly or indirectly in its own base expression.
                     ~
 !!! error TS2449: Class 'b' used before its declaration.
-!!! related TS2728 tests/cases/compiler/indirectSelfReference.ts:2:7: 'b' is declared here.
+!!! related TS2728 indirectSelfReference.ts:2:7: 'b' is declared here.
     class b extends a{ }
           ~
 !!! error TS2506: 'b' is referenced directly or indirectly in its own base expression.

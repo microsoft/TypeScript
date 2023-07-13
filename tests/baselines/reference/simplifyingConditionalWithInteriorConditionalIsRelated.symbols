@@ -1,4 +1,6 @@
-=== tests/cases/compiler/simplifyingConditionalWithInteriorConditionalIsRelated.ts ===
+//// [tests/cases/compiler/simplifyingConditionalWithInteriorConditionalIsRelated.ts] ////
+
+=== simplifyingConditionalWithInteriorConditionalIsRelated.ts ===
 // from https://github.com/microsoft/TypeScript/issues/30706
 type ConditionalType<T> = T extends string ? string : number;
 >ConditionalType : Symbol(ConditionalType, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 0, 0))

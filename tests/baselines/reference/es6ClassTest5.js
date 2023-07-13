@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ClassTest5.ts] ////
+
 //// [es6ClassTest5.ts]
 class C1T5 {
     foo: (i: number, s: string) => number = 

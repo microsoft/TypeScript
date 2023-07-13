@@ -86,21 +86,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/src/main.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src: *new*
-  {}
 /user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined

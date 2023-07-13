@@ -1,4 +1,6 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/commentOnAmbientModule.ts] ////
+
+=== b.ts ===
 ///<reference path="a.ts"/>
 declare module E {
 >E : Symbol(E, Decl(b.ts, 0, 0))
@@ -13,7 +15,7 @@ declare module E {
 >foo : Symbol(foobar.foo, Decl(b.ts, 2, 32))
     }
 }
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 /*!=========
     Keep this pinned comment
    =========

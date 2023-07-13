@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override12.ts] ////
+
 //// [override12.ts]
 class A {
     public m1(): number {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesinBlocks2.ts] ////
+
 //// [unusedVariablesinBlocks2.ts]
 function f1 () {
     let x = 10;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/constructorNameInObjectLiteralAccessor.ts ===
+//// [tests/cases/conformance/salsa/constructorNameInObjectLiteralAccessor.ts] ////
+
+=== constructorNameInObjectLiteralAccessor.ts ===
 const c1 = {
 >c1 : Symbol(c1, Decl(constructorNameInObjectLiteralAccessor.ts, 0, 5))
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration4.ts(1,6): error TS1359: Identifier expected. 'void' is a reserved word that cannot be used here.
+parserEnumDeclaration4.ts(1,6): error TS1359: Identifier expected. 'void' is a reserved word that cannot be used here.
 
 
-==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration4.ts (1 errors) ====
+==== parserEnumDeclaration4.ts (1 errors) ====
     enum void {
          ~~~~
 !!! error TS1359: Identifier expected. 'void' is a reserved word that cannot be used here.

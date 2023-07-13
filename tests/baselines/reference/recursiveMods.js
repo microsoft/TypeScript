@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveMods.ts] ////
+
 //// [recursiveMods.ts]
 export module Foo {
 	export class C {}

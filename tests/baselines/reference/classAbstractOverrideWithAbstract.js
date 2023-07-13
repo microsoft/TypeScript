@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverrideWithAbstract.ts] ////
+
 //// [classAbstractOverrideWithAbstract.ts]
 class A {
     foo() {}

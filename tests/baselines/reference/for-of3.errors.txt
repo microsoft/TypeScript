@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/for-ofStatements/for-of3.ts(2,6): error TS2487: The left-hand side of a 'for...of' statement must be a variable or a property access.
+for-of3.ts(2,6): error TS2487: The left-hand side of a 'for...of' statement must be a variable or a property access.
 
 
-==== tests/cases/conformance/es6/for-ofStatements/for-of3.ts (1 errors) ====
+==== for-of3.ts (1 errors) ====
     var v: any;
     for (v++ of []) { }
          ~~~

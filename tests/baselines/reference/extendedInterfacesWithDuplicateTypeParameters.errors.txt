@@ -1,10 +1,10 @@
-tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts(1,42): error TS2300: Duplicate identifier 'A'.
-tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts(5,11): error TS2428: All declarations of 'InterfaceWithSomeTypars' must have identical type parameters.
-tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts(9,11): error TS2428: All declarations of 'InterfaceWithSomeTypars' must have identical type parameters.
-tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts(9,38): error TS2300: Duplicate identifier 'C'.
+extendedInterfacesWithDuplicateTypeParameters.ts(1,42): error TS2300: Duplicate identifier 'A'.
+extendedInterfacesWithDuplicateTypeParameters.ts(5,11): error TS2428: All declarations of 'InterfaceWithSomeTypars' must have identical type parameters.
+extendedInterfacesWithDuplicateTypeParameters.ts(9,11): error TS2428: All declarations of 'InterfaceWithSomeTypars' must have identical type parameters.
+extendedInterfacesWithDuplicateTypeParameters.ts(9,38): error TS2300: Duplicate identifier 'C'.
 
 
-==== tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts (4 errors) ====
+==== extendedInterfacesWithDuplicateTypeParameters.ts (4 errors) ====
     interface InterfaceWithMultipleTypars<A, A> { // should error
                                              ~
 !!! error TS2300: Duplicate identifier 'A'.

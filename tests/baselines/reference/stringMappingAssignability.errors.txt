@@ -1,8 +1,8 @@
-tests/cases/compiler/stringMappingAssignability.ts(1,7): error TS2322: Type 'number' is not assignable to type 'Uppercase<string>'.
-tests/cases/compiler/stringMappingAssignability.ts(2,7): error TS2322: Type '{ foo: string; }' is not assignable to type 'Uppercase<string>'.
+stringMappingAssignability.ts(1,7): error TS2322: Type 'number' is not assignable to type 'Uppercase<string>'.
+stringMappingAssignability.ts(2,7): error TS2322: Type '{ foo: string; }' is not assignable to type 'Uppercase<string>'.
 
 
-==== tests/cases/compiler/stringMappingAssignability.ts (2 errors) ====
+==== stringMappingAssignability.ts (2 errors) ====
     const x: Uppercase<string> = 42;
           ~
 !!! error TS2322: Type 'number' is not assignable to type 'Uppercase<string>'.

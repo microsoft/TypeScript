@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modularizeLibrary_TargetES6UsingES6Lib.ts] ////
+
 //// [modularizeLibrary_TargetES6UsingES6Lib.ts]
 // Using Es6 array
 function f(x: number, y: number, z: number) {

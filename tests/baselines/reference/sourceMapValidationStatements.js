@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationStatements.ts] ////
+
 //// [sourceMapValidationStatements.ts]
 function f() {
     var y;

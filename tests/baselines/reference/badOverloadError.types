@@ -1,4 +1,6 @@
-=== tests/cases/compiler/badOverloadError.ts ===
+//// [tests/cases/compiler/badOverloadError.ts] ////
+
+=== badOverloadError.ts ===
 function method() {
 >method : () => void
 

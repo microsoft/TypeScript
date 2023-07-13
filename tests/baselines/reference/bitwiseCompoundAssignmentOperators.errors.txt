@@ -1,14 +1,14 @@
-tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts(3,1): error TS2447: The '^=' operator is not allowed for boolean types. Consider using '!==' instead.
-tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts(9,6): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts(14,1): error TS2447: The '&=' operator is not allowed for boolean types. Consider using '&&' instead.
-tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts(18,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts(20,6): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts(24,1): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
-tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts(28,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+bitwiseCompoundAssignmentOperators.ts(3,1): error TS2447: The '^=' operator is not allowed for boolean types. Consider using '!==' instead.
+bitwiseCompoundAssignmentOperators.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+bitwiseCompoundAssignmentOperators.ts(9,6): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+bitwiseCompoundAssignmentOperators.ts(14,1): error TS2447: The '&=' operator is not allowed for boolean types. Consider using '&&' instead.
+bitwiseCompoundAssignmentOperators.ts(18,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+bitwiseCompoundAssignmentOperators.ts(20,6): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+bitwiseCompoundAssignmentOperators.ts(24,1): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
+bitwiseCompoundAssignmentOperators.ts(28,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/compiler/bitwiseCompoundAssignmentOperators.ts (8 errors) ====
+==== bitwiseCompoundAssignmentOperators.ts (8 errors) ====
     var a = true;
     var b = 1;
     a ^= a;

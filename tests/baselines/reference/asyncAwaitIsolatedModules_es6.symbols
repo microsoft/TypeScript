@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/asyncAwaitIsolatedModules_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncAwaitIsolatedModules_es6.ts] ////
+
+=== asyncAwaitIsolatedModules_es6.ts ===
 import { MyPromise } from "missing";
 >MyPromise : Symbol(MyPromise, Decl(asyncAwaitIsolatedModules_es6.ts, 0, 8))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames43_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames43_ES6.ts] ////
+
+=== computedPropertyNames43_ES6.ts ===
 class Foo { x }
 >Foo : Symbol(Foo, Decl(computedPropertyNames43_ES6.ts, 0, 0))
 >x : Symbol(Foo.x, Decl(computedPropertyNames43_ES6.ts, 0, 11))

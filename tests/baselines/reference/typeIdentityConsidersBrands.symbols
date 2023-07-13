@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeIdentityConsidersBrands.ts ===
+//// [tests/cases/compiler/typeIdentityConsidersBrands.ts] ////
+
+=== typeIdentityConsidersBrands.ts ===
 class X{
 >X : Symbol(X, Decl(typeIdentityConsidersBrands.ts, 0, 0))
 

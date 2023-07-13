@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deleteExpressionMustBeOptional.ts ===
+//// [tests/cases/compiler/deleteExpressionMustBeOptional.ts] ////
+
+=== deleteExpressionMustBeOptional.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(deleteExpressionMustBeOptional.ts, 0, 0))
 

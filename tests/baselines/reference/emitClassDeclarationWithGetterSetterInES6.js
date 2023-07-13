@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts] ////
+
 //// [emitClassDeclarationWithGetterSetterInES6.ts]
 class C {
     _name: string;

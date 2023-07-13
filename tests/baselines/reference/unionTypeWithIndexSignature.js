@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts] ////
+
 //// [unionTypeWithIndexSignature.ts]
 type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
 declare var u: Two

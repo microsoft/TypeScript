@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/rest/objectRestNegative.ts ===
+//// [tests/cases/conformance/types/rest/objectRestNegative.ts] ////
+
+=== objectRestNegative.ts ===
 let o = { a: 1, b: 'no' };
 >o : Symbol(o, Decl(objectRestNegative.ts, 0, 3))
 >a : Symbol(a, Decl(objectRestNegative.ts, 0, 9))
