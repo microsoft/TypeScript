@@ -59,6 +59,7 @@ import {
     ParameterDeclaration,
     PrefixUnaryExpression,
     PropertyDeclaration,
+    Signature,
     skipParentheses,
     some,
     Symbol,
@@ -237,8 +238,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        const signature = checker.getResolvedSignatureForSignatureHelp(expr);
-        if (!signature) {
+        const candidates: Signature[] = [];
+        const signature = checker.getResolvedSignatureForSignatureHelp(expr, candidates);
+        if (!signature || !candidates.length) {
             return;
         }
 
