@@ -29,24 +29,6 @@ function sortDiagnostics(a: ts.Diagnostic, b: ts.Diagnostic) {
     return 1;
 }
 
-function isVarConst(node: ts.VariableDeclaration | ts.VariableDeclarationList): boolean {
-    return !!(ts.getCombinedNodeFlags(node) & ts.NodeFlags.Const);
-}
-
-function isDeclarationReadonly(declaration: ts.Declaration): boolean {
-    return !!(ts.getCombinedModifierFlags(declaration) & ts.ModifierFlags.Readonly && !ts.isParameterPropertyDeclaration(declaration, declaration.parent));
-}
-
-function isLiteralConstDeclaration(node: ts.VariableDeclaration | ts.PropertyDeclaration | ts.PropertySignature | ts.ParameterDeclaration): boolean {
-    if (isDeclarationReadonly(node) || ts.isVariableDeclaration(node) && isVarConst(node)) {
-        // TODO: Make sure this is a valid approximation for literal types
-        return !node.type && hasProperty(node, "initializer") && !!node.initializer && ts.isLiteralExpression(node.initializer);
-        // Original TS version
-        // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
-    }
-    return false;
-}
-
 function tryGetReturnType(typeChecker: ts.TypeChecker, node: ts.SignatureDeclaration): ts.Type | undefined {
     const signature = typeChecker.getSignatureFromDeclaration(node);
     if (signature) {
@@ -147,7 +129,7 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                     break;
                 case ts.SyntaxKind.VariableDeclaration:
                     const variableDeclaration = node as ts.VariableDeclaration;
-                    if (!variableDeclaration.type && !isLiteralConstDeclaration(variableDeclaration)) {
+                    if (!variableDeclaration.type) {
                         const type = typeChecker.getTypeAtLocation(variableDeclaration);
                         const typeNode = typeToTypeNode(type, variableDeclaration);
                         return ts.factory.updateVariableDeclaration(
@@ -180,7 +162,7 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                     break;
                 case ts.SyntaxKind.PropertySignature:
                     const propertySignature = node as ts.PropertySignature;
-                    if(!propertySignature.type && !isLiteralConstDeclaration(propertySignature)) {
+                    if(!propertySignature.type) {
                         const type = typeChecker.getTypeAtLocation(node);
                         const typeNode = typeToTypeNode(type, node);
                         return ts.factory.updatePropertySignature(
@@ -194,7 +176,7 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                     break;
                 case ts.SyntaxKind.PropertyDeclaration:
                     const propDecl = node as ts.PropertyDeclaration;
-                    if(!propDecl.type && !isLiteralConstDeclaration(propDecl)) {
+                    if(!propDecl.type) {
                         const type = typeChecker.getTypeAtLocation(node);
                         const typeNode = typeToTypeNode(type, propDecl);
                         return ts.factory.updatePropertyDeclaration(
@@ -204,37 +186,6 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                             propDecl.questionToken ?? propDecl.exclamationToken,
                             typeNode,
                             propDecl.initializer
-                        );
-                    }
-                    break;
-                case ts.SyntaxKind.MethodSignature:
-                    const methodSignature = node as ts.MethodSignature;
-                    if(!methodSignature.type) {
-                        const type = tryGetReturnType(typeChecker, methodSignature);
-                        if(type) {
-                            const typeNode = typeToTypeNode(type, node);
-                            return ts.factory.updateMethodSignature(
-                                methodSignature,
-                                methodSignature.modifiers,
-                                methodSignature.name,
-                                methodSignature.questionToken,
-                                updateTypesInNodeArray(methodSignature.typeParameters),
-                                updateTypesInNodeArray(methodSignature.parameters),
-                                typeNode,
-                            );
-                        }
-                    }
-                    break;
-                case ts.SyntaxKind.CallSignature:
-                    const callSignature = node as ts.CallSignatureDeclaration;
-                    const type = tryGetReturnType(typeChecker, callSignature);
-                    if(type) {
-                        const typeNode = typeToTypeNode(type, node);
-                        return ts.factory.updateCallSignature(
-                            callSignature,
-                            updateTypesInNodeArray(callSignature.typeParameters),
-                            updateTypesInNodeArray(callSignature.parameters),
-                            typeNode,
                         );
                     }
                     break;
@@ -272,55 +223,6 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                                 typeNode,
                                 getAccessor.body,
                             );
-                        }
-                    }
-                    break;
-                case ts.SyntaxKind.SetAccessor:
-                    const setAccessor = node as ts.SetAccessorDeclaration;
-                    if(!setAccessor.parameters[0]?.type) {
-                        return ts.factory.updateSetAccessorDeclaration(
-                            setAccessor,
-                            setAccessor.modifiers,
-                            setAccessor.name,
-                            updateTypesInNodeArray(setAccessor.parameters),
-                            setAccessor.body,
-                        );
-                    }
-                    break;
-                case ts.SyntaxKind.Constructor:
-                    const constructor = node as ts.ConstructorDeclaration;
-                    return ts.factory.updateConstructorDeclaration(
-                        constructor,
-                        constructor.modifiers,
-                        updateTypesInNodeArray(constructor.parameters),
-                        constructor.body,
-                    );
-                case ts.SyntaxKind.ConstructSignature:
-                    const constructorSignature = node as ts.ConstructSignatureDeclaration;
-                    const typeConstructor = tryGetReturnType(typeChecker, constructorSignature);
-                    if(typeConstructor) {
-                        const typeNode = typeToTypeNode(typeConstructor, constructorSignature);
-                        return ts.factory.updateConstructSignature(
-                            constructorSignature,
-                            updateTypesInNodeArray(constructorSignature.typeParameters),
-                            updateTypesInNodeArray(constructorSignature.parameters),
-                            typeNode,
-                        );
-                    }
-                    break;
-                case ts.SyntaxKind.ExportAssignment:
-                    const exportAssignment = node as ts.ExportAssignment;
-                    if(exportAssignment.expression.kind !== ts.SyntaxKind.Identifier) {
-                        const type = typeChecker.getTypeAtLocation(exportAssignment.expression);
-                        if(type) {
-                            const typeNode = typeToTypeNode(type, exportAssignment);
-                            const newId = ts.factory.createIdentifier("_default");
-                            const varDecl = ts.factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, typeNode, /*initializer*/ undefined);
-                            const statement = ts.factory.createVariableStatement(
-                                [],
-                                ts.factory.createVariableDeclarationList([varDecl], ts.NodeFlags.Const)
-                            );
-                            return [statement, ts.factory.updateExportAssignment(exportAssignment, exportAssignment.modifiers, newId)];
                         }
                     }
                     break;
