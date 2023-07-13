@@ -1,0 +1,42 @@
+/a.tsx(5,13): error TS2304: Cannot find name 'Comp'.
+/a.tsx(9,13): error TS2304: Cannot find name 'Comp'.
+/a.tsx(13,13): error TS2304: Cannot find name 'Comp'.
+/a.tsx(17,13): error TS2304: Cannot find name 'Comp'.
+/a.tsx(19,15): error TS1049: A 'set' accessor must have exactly one parameter.
+/a.tsx(19,25): error TS2408: Setters cannot return a value.
+
+
+==== /a.tsx (6 errors) ====
+    declare const React: any;
+    
+    const t1 = <div {...<span />} />;
+    const t2 = <div {...<span className="foo" />} />;
+    const t3 = <Comp
+                ~~~~
+!!! error TS2304: Cannot find name 'Comp'.
+        right={<div>x</div>}
+        {...{ wrong: <div>x</div>}}
+    />;
+    const t4 = <Comp
+                ~~~~
+!!! error TS2304: Cannot find name 'Comp'.
+        right={<div>x</div>}
+        {...{ wrong() { return <div>x</div>; }}}
+    />;
+    const t5 = <Comp
+                ~~~~
+!!! error TS2304: Cannot find name 'Comp'.
+        right={<div>x</div>}
+        {...{ get wrong() { return <div>x</div>; }}}
+    />;
+    const t6 = <Comp
+                ~~~~
+!!! error TS2304: Cannot find name 'Comp'.
+        right={<div>x</div>}
+        {...{ set wrong() { return <div>x</div>; }}}
+                  ~~~~~
+!!! error TS1049: A 'set' accessor must have exactly one parameter.
+                            ~~~~~~
+!!! error TS2408: Setters cannot return a value.
+    />;
+    
