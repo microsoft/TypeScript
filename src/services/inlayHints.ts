@@ -270,7 +270,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             const identifierInfo = checker.getParameterIdentifierInfoAtPosition(signature, signatureParamPos);
             signatureParamPos = signatureParamPos + (spreadArgs || 1);
             if (identifierInfo) {
-                const [parameter, parameterName, isFirstVariadicArgument] = identifierInfo;
+                const { parameter, parameterName, isRestParameter: isFirstVariadicArgument } = identifierInfo;
                 const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);
                 if (!isParameterNameNotSameAsArgument && !isFirstVariadicArgument) {
                     continue;

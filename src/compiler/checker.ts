@@ -34845,7 +34845,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return restParameter.escapedName;
     }
 
-    function getParameterIdentifierInfoAtPosition(signature: Signature, pos: number): [parameter: Identifier, parameterName: __String, isRestParameter: boolean] | undefined {
+    function getParameterIdentifierInfoAtPosition(signature: Signature, pos: number): { parameter: Identifier, parameterName: __String, isRestParameter: boolean } | undefined {
         if (signature.declaration?.kind === SyntaxKind.JSDocFunctionType) {
             return undefined;
         }
@@ -34853,7 +34853,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (pos < paramCount) {
             const param = signature.parameters[pos];
             const paramIdent = getParameterDeclarationIdentifier(param);
-            return paramIdent ? [paramIdent, param.escapedName, false] : undefined;
+            return paramIdent ? {
+                parameter: paramIdent,
+                parameterName: param.escapedName,
+                isRestParameter: false
+            } : undefined;
         }
 
         const restParameter = signature.parameters[paramCount] || unknownSymbol;
@@ -34871,14 +34875,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (associatedName) {
                 Debug.assert(isIdentifier(associatedName.name));
-                return [associatedName.name, associatedName.name.escapedText, isRestTupleElement];
+                return { parameter: associatedName.name, parameterName: associatedName.name.escapedText, isRestParameter: isRestTupleElement };
             }
 
             return undefined;
         }
 
         if (pos === paramCount) {
-            return [restIdent, restParameter.escapedName, true];
+            return { parameter: restIdent, parameterName: restParameter.escapedName, isRestParameter: true };
         }
         return undefined;
     }
