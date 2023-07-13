@@ -52,7 +52,6 @@ import {
     isTypeNode,
     isVarConst,
     isVariableDeclaration,
-    LiteralTypeNode,
     MethodDeclaration,
     NewExpression,
     Node,
@@ -69,12 +68,13 @@ import {
     TupleTypeReference,
     Type,
     TypeFormatFlags,
-    TypeNode,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
     VariableDeclaration,
 } from "./_namespaces/ts";
+
+const maxTypeHintLength = 30;
 
 const leadingParameterNameCommentRegexFactory = (name: string) => {
     return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
@@ -173,10 +173,9 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         });
     }
 
-    function addTypeHints(hintText: string | InlayHintDisplayPart[], position: number) {
-        const text = typeof hintText === "string" ? `: ${hintText}` : [{ text: ": " }, ...hintText];
+    function addTypeHints(text: string, position: number) {
         result.push({
-            text,
+            text: `: ${text.length > maxTypeHintLength ? text.substr(0, maxTypeHintLength - "...".length) + "..." : text}`,
             position,
             kind: InlayHintKind.Type,
             whitespaceBefore: true,
@@ -219,12 +218,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
         const declarationType = checker.getTypeAtLocation(decl);
         if (isModuleReferenceType(declarationType)) {
-            return;
-        }
-
-        const displayParts = typeToInlayHintDisplayParts(declarationType);
-        if (displayParts) {
-            addTypeHints(displayParts, decl.name.end);
             return;
         }
 
@@ -422,37 +415,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             Debug.assertIsDefined(typeNode, "should always get typenode");
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ file, writer);
         });
-    }
-
-    function typeToInlayHintDisplayParts(type: Type): InlayHintDisplayPart[] | undefined {
-        if (!shouldUseInteractiveInlayHints(preferences)) {
-            return undefined;
-        }
-
-        const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
-        const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
-        Debug.assertIsDefined(typeNode, "should always get typenode");
-
-        const parts: InlayHintDisplayPart[] = [];
-        visitor(typeNode);
-        function visitor(node: TypeNode): true | undefined {
-            if (!node) {
-                return;
-            }
-
-            switch (node.kind) {
-                case SyntaxKind.LiteralType:
-                    const literal = (node as LiteralTypeNode).literal;
-                    if (isLiteralExpression(literal)) {
-                        parts.push({ text: literal.text });
-                    }
-                    break;
-                default:
-                    return undefined;
-            }
-        }
-
-        return parts;
     }
 
     function isUndefined(name: __String) {
