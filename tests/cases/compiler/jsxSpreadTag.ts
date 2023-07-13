@@ -20,5 +20,5 @@ const t5 = <Comp
 />;
 const t6 = <Comp
     right={<div>x</div>}
-    {...{ set wrong() { return <div>x</div>; }}}
+    {...{ set wrong(s) { let a = <div>x</div>; }}}
 />;

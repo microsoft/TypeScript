@@ -19,7 +19,7 @@ const t5 = <Comp
 />;
 const t6 = <Comp
     right={<div>x</div>}
-    {...{ set wrong() { return <div>x</div>; }}}
+    {...{ set wrong(s) { let a = <div>x</div>; }}}
 />;
 
 
@@ -29,4 +29,4 @@ const t2 = React.createElement("div", Object.assign({}, React.createElement("spa
 const t3 = React.createElement(Comp, { right: React.createElement("div", null, "x"), wrong: React.createElement("div", null, "x") });
 const t4 = React.createElement(Comp, { right: React.createElement("div", null, "x"), wrong() { return React.createElement("div", null, "x"); } });
 const t5 = React.createElement(Comp, { right: React.createElement("div", null, "x"), get wrong() { return React.createElement("div", null, "x"); } });
-const t6 = React.createElement(Comp, { right: React.createElement("div", null, "x"), set wrong() { return React.createElement("div", null, "x"); } });
+const t6 = React.createElement(Comp, { right: React.createElement("div", null, "x"), set wrong(s) { let a = React.createElement("div", null, "x"); } });

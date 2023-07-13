@@ -47,8 +47,10 @@ const t6 = <Comp
     right={<div>x</div>}
 >right : Symbol(right, Decl(a.tsx, 16, 16))
 
-    {...{ set wrong() { return <div>x</div>; }}}
+    {...{ set wrong(s) { let a = <div>x</div>; }}}
 >wrong : Symbol(wrong, Decl(a.tsx, 18, 9))
+>s : Symbol(s, Decl(a.tsx, 18, 20))
+>a : Symbol(a, Decl(a.tsx, 18, 28))
 
 />;
 

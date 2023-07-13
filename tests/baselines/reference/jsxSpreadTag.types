@@ -78,7 +78,7 @@ const t5 = <Comp
 />;
 const t6 = <Comp
 >t6 : any
-><Comp    right={<div>x</div>}    {...{ set wrong() { return <div>x</div>; }}}/> : any
+><Comp    right={<div>x</div>}    {...{ set wrong(s) { let a = <div>x</div>; }}}/> : any
 >Comp : any
 
     right={<div>x</div>}
@@ -87,9 +87,11 @@ const t6 = <Comp
 >div : any
 >div : any
 
-    {...{ set wrong() { return <div>x</div>; }}}
->{ set wrong() { return <div>x</div>; }} : { wrong: any; }
+    {...{ set wrong(s) { let a = <div>x</div>; }}}
+>{ set wrong(s) { let a = <div>x</div>; }} : { wrong: any; }
 >wrong : any
+>s : any
+>a : any
 ><div>x</div> : any
 >div : any
 >div : any
