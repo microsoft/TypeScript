@@ -109,15 +109,12 @@
         "no-null/no-null": "error",
 
         // eslint
-        "constructor-super": "error",
         "curly": ["error", "multi-line"],
         "dot-notation": "error",
         "eqeqeq": "error",
         "linebreak-style": ["error", "windows"],
         "new-parens": "error",
         "no-caller": "error",
-        "no-duplicate-case": "error",
-        "no-empty": "error",
         "no-eval": "error",
         "no-extra-bind": "error",
         "no-fallthrough": "error",
