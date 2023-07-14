@@ -16,7 +16,7 @@
         "plugin:@typescript-eslint/stylistic"
     ],
     "plugins": [
-        "@typescript-eslint", "no-null", "import", "eslint-plugin-local", "simple-import-sort"
+        "@typescript-eslint", "no-null", "eslint-plugin-local", "simple-import-sort"
     ],
     "ignorePatterns": [
         "**/node_modules/**",
@@ -101,9 +101,6 @@
         "local/debug-assert": "error",
         "local/no-keywords": "error",
         "local/jsdoc-format": "error",
-
-        // eslint-plugin-import
-        "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
