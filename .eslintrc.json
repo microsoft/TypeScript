@@ -11,6 +11,7 @@
         "es6": true
     },
     "extends": [
+        "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/stylistic"
     ],
@@ -56,10 +57,18 @@
             "named": "never"
         }],
 
-        // Todo: enable these soon ✨
+        // Todo: For each of these, investigate whether we want to enable them ✨
+        "@typescript-eslint/ban-types": "off",
+        "no-case-declarations": "off",
+        "no-cond-assign": "off",
+        "no-constant-condition": "off",
+        "no-control-regex": "off",
+        "no-debugger": "off",
+        "no-extra-boolean-cast": "off",
+        "no-inner-declarations": "off",
+        "no-useless-escape": "off",
         "prefer-rest-params": "off",
         "prefer-spread": "off",
-        "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-explicit-any": "off",
