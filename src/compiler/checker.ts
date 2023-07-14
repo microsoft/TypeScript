@@ -2068,7 +2068,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /** Key is "/path/to/a.ts|/path/to/b.ts". */
     var amalgamatedDuplicates: Map<string, DuplicateInfoForFiles> | undefined;
     var reverseMappedCache = new Map<string, Type | undefined>();
-    var inInferTypeForHomomorphicMappedType = false;
+    var homomorphicMappedTypeInferenceStack: string[] = [];
     var ambientModulesCache: Symbol[] | undefined;
     /**
      * List of every ambient module with a "*" wildcard.
@@ -5744,7 +5744,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
     }
 
-    function getAccessibleSymbolChain(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean, visitedSymbolTablesMap: Map<SymbolId, SymbolTable[]> = new Map()): Symbol[] | undefined {
+    function getAccessibleSymbolChain(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean, visitedSymbolTablesMap = new Map<SymbolId, SymbolTable[]>()): Symbol[] | undefined {
         if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
             return undefined;
         }
@@ -7439,6 +7439,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (typeArguments) {
                 node.typeArguments = factory.createNodeArray(typeArguments);
+            }
+            if (signature.declaration?.kind === SyntaxKind.JSDocSignature && signature.declaration.parent.kind === SyntaxKind.JSDocOverloadTag) {
+                const comment = getTextOfNode(signature.declaration.parent.parent, /*includeTrivia*/ true).slice(2, -2).split(/\r\n|\n|\r/).map(line => line.replace(/^\s+/, " ")).join("\n");
+                addSyntheticLeadingComment(node, SyntaxKind.MultiLineCommentTrivia, comment, /*hasTrailingNewLine*/ true);
             }
 
             cleanup?.();
@@ -16795,7 +16799,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
     // for intersections of types with signatures can be deterministic.
     function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], noSupertypeReduction?: boolean): Type {
-        const typeMembershipMap: Map<string, Type> = new Map();
+        const typeMembershipMap = new Map<string, Type>();
         const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
         const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
         // An intersection type is considered empty if it contains
@@ -23303,7 +23307,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTupleLikeType(type: Type): boolean {
-        return isTupleType(type) || !!getPropertyOfType(type, "0" as __String);
+        let lengthType;
+        return isTupleType(type) ||
+            !!getPropertyOfType(type, "0" as __String) ||
+            isArrayLikeType(type) && !!(lengthType = getTypeOfPropertyOfType(type, "length" as __String)) && everyType(lengthType, t => !!(t.flags & TypeFlags.NumberLiteral));
     }
 
     function isArrayOrTupleLikeType(type: Type): boolean {
@@ -24119,17 +24126,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
      */
     function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
-        if (inInferTypeForHomomorphicMappedType) {
+        const cacheKey = source.id + "," + target.id + "," + constraint.id;
+        if (reverseMappedCache.has(cacheKey)) {
+            return reverseMappedCache.get(cacheKey);
+        }
+        const recursionKey = source.id + "," + (target.target || target).id;
+        if (contains(homomorphicMappedTypeInferenceStack, recursionKey)) {
             return undefined;
         }
-        const key = source.id + "," + target.id + "," + constraint.id;
-        if (reverseMappedCache.has(key)) {
-            return reverseMappedCache.get(key);
-        }
-        inInferTypeForHomomorphicMappedType = true;
+        homomorphicMappedTypeInferenceStack.push(recursionKey);
         const type = createReverseMappedType(source, target, constraint);
-        inInferTypeForHomomorphicMappedType = false;
-        reverseMappedCache.set(key, type);
+        homomorphicMappedTypeInferenceStack.pop();
+        reverseMappedCache.set(cacheKey, type);
         return type;
     }
 
@@ -40187,6 +40195,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     for (const parameter of containingSignature.parameters) {
                         markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                     }
+                    markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(containingSignature));
                     break;
             }
         }

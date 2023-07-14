@@ -1,0 +1,53 @@
+function foo (aParameter: number, bParameter: number, cParameter: number) { }
+                                                                         ^
+{
+  "text": ": void",
+  "position": 73,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+    2,
+    ^
+{
+  "text": "bParameter:",
+  "position": 134,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    3
+    ^
+{
+  "text": "cParameter:",
+  "position": 338,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    1,
+    ^
+{
+  "text": "aParameter:",
+  "position": 373,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    2,
+    ^
+{
+  "text": "bParameter:",
+  "position": 380,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+    3
+    ^
+{
+  "text": "cParameter:",
+  "position": 440,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
