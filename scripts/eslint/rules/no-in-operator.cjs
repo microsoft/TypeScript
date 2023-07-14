@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: ``,
-            recommended: "error",
         },
         messages: {
             noInOperatorError: `Don't use the 'in' keyword - use 'hasProperty' to check for key presence instead`,

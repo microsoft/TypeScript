@@ -910,7 +910,7 @@ export class ProjectService {
      */
     readonly openFiles: Map<string, NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
     /** @internal */
-    readonly configFileForOpenFiles: Map<Path, NormalizedPath | false> = new Map();
+    readonly configFileForOpenFiles = new Map<Path, NormalizedPath | false>();
     /**
      * Map of open files that are opened without complete path but have projectRoot as current directory
      */
