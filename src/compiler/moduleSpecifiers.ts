@@ -819,6 +819,10 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
                 }
                 break;
             case MatchingMode.Directory:
+                if (extensionSwappedTarget && containsPath(pathOrPattern, extensionSwappedTarget)) {
+                    const fragment = getRelativePathFromDirectory(pathOrPattern, extensionSwappedTarget, /*ignoreCase*/ false);
+                    return { moduleFileToTry: getNormalizedAbsolutePath(combinePaths(combinePaths(packageName, exports), fragment), /*currentDirectory*/ undefined) };
+                }
                 if (containsPath(pathOrPattern, targetFilePath)) {
                     const fragment = getRelativePathFromDirectory(pathOrPattern, targetFilePath, /*ignoreCase*/ false);
                     return { moduleFileToTry: getNormalizedAbsolutePath(combinePaths(combinePaths(packageName, exports), fragment), /*currentDirectory*/ undefined) };
@@ -828,12 +832,12 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
                 const starPos = pathOrPattern.indexOf("*");
                 const leadingSlice = pathOrPattern.slice(0, starPos);
                 const trailingSlice = pathOrPattern.slice(starPos + 1);
-                if (startsWith(targetFilePath, leadingSlice) && endsWith(targetFilePath, trailingSlice)) {
-                    const starReplacement = targetFilePath.slice(leadingSlice.length, targetFilePath.length - trailingSlice.length);
-                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
-                }
                 if (extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice) && endsWith(extensionSwappedTarget, trailingSlice)) {
                     const starReplacement = extensionSwappedTarget.slice(leadingSlice.length, extensionSwappedTarget.length - trailingSlice.length);
+                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                }
+                if (startsWith(targetFilePath, leadingSlice) && endsWith(targetFilePath, trailingSlice)) {
+                    const starReplacement = targetFilePath.slice(leadingSlice.length, targetFilePath.length - trailingSlice.length);
                     return { moduleFileToTry: packageName.replace("*", starReplacement) };
                 }
                 break;
@@ -973,10 +977,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
                     ? tryGetModuleNameFromExports(options, path, packageRootPath, packageName, packageJsonContent.exports, conditions)
                     : undefined;
                 if (fromExports) {
-                    const withJsExtension = !hasTSFileExtension(fromExports.moduleFileToTry)
-                        ? fromExports
-                        : { moduleFileToTry: removeFileExtension(fromExports.moduleFileToTry) + tryGetJSExtensionForFile(fromExports.moduleFileToTry, options) };
-                    return { ...withJsExtension, verbatimFromExports: true };
+                    return { ...fromExports, verbatimFromExports: true };
                 }
                 if (packageJsonContent.exports) {
                     return { moduleFileToTry: path, blockedByExports: true };
