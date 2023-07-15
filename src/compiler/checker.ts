@@ -18760,7 +18760,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
         const links = getSymbolLinks(symbol);
-        if (links.type && !couldContainTypeVariables(links.type)) {
+        if (links.type && !couldContainTypeVariables(links.type) && !(getDeclarationOfKind(symbol, SyntaxKind.SetAccessor) && couldContainTypeVariables(getWriteTypeOfSymbol(symbol)))) {
             // If the type of the symbol is already resolved, and if that type could not possibly
             // be affected by instantiation, simply return the symbol itself.
             return symbol;
