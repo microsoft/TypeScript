@@ -254,7 +254,7 @@ function getNewStatementsAndRemoveFromOldFile(
         }
     }
     if (importAdder) {
-        importAdder.writeFixes(changes);
+        importAdder.writeFixes(changes, quotePreference);
     }
     if (imports.length && body.length) {
         return [
