@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/commentsOnObjectLiteralAccessors.ts] ////
+
+=== commentsOnObjectLiteralAccessors.ts ===
+var v = {
+>v : Symbol(v, Decl(commentsOnObjectLiteralAccessors.ts, 0, 3))
+
+    /**
+     * Get accessor
+     */
+    get bar(): number {
+>bar : Symbol(bar, Decl(commentsOnObjectLiteralAccessors.ts, 0, 9), Decl(commentsOnObjectLiteralAccessors.ts, 6, 6))
+
+     return 12;
+    },
+
+    /**
+     * Set accessor
+     */
+    set bar(v: number) {}
+>bar : Symbol(bar, Decl(commentsOnObjectLiteralAccessors.ts, 0, 9), Decl(commentsOnObjectLiteralAccessors.ts, 6, 6))
+>v : Symbol(v, Decl(commentsOnObjectLiteralAccessors.ts, 11, 12))
+   }
+   
