@@ -2782,8 +2782,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ false);
             }
             else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
-                // foo = this.bar is illegal in esnext+useDefineForClassFields when bar is a parameter property
-                return !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields
+                // foo = this.bar is illegal in es2022+useDefineForClassFields when bar is a parameter property
+                return !(getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 && useDefineForClassFields
                          && getContainingClass(declaration) === getContainingClass(usage)
                          && isUsedInFunctionOrInstanceProperty(usage, declaration));
             }
