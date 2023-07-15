@@ -7164,13 +7164,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (propertySymbol.flags & SymbolFlags.Accessor) {
-                debugger;
-                const modifierFlags = getDeclarationModifierFlagsFromSymbol(propertySymbol);
-                const flags = modifierFlags & ~(ModifierFlags.Async | ModifierFlags.Static | ModifierFlags.Accessor);
                 if (propertySymbol.flags & SymbolFlags.GetAccessor) {
                     const getAccessorDecl = find(propertySymbol.declarations, decl => decl.kind === SyntaxKind.GetAccessor) as GetAccessorDeclaration;
                     const getAccessorSignature = factory.createGetAccessorDeclaration(
-                        factory.createModifiersFromModifierFlags(flags),
+                        /*modifiers*/ undefined,
                         propertyName,
                         [],
                         propertyTypeNode,
@@ -7182,7 +7179,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const setAccessorDecl = find(propertySymbol.declarations, decl => decl.kind === SyntaxKind.SetAccessor) as SetAccessorDeclaration;
                     const parameterName = setAccessorDecl?.parameters?.length > 0 ? setAccessorDecl.parameters[0].name : "arg";
                     const setAccessorSignature = factory.createSetAccessorDeclaration(
-                        factory.createModifiersFromModifierFlags(flags),
+                        /*modifiers*/ undefined,
                         propertyName,
                         [factory.createParameterDeclaration(
                             /*modifiers*/ undefined,
