@@ -102,6 +102,29 @@ const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) 
 
 const tMapped = thingMapped({ foo: '' });  // { foo: "" }
 
+// repro from https://github.com/microsoft/TypeScript/issues/55033
+
+function factory_55033_minimal<const T extends readonly unknown[]>(cb: (...args: T) => void) {
+    return {} as T
+}
+
+const test_55033_minimal = factory_55033_minimal((b: string) => {})
+
+function factory_55033<const T extends readonly unknown[]>(cb: (...args: T) => void) {
+    return function call<const K extends T>(...args: K): K {
+        return {} as K;
+    };
+}
+
+const t1_55033 = factory_55033((a: { test: number }, b: string) => {})(
+    { test: 123 },
+    "some string"
+);
+
+const t2_55033 = factory_55033((a: { test: number }, b: string) => {})(
+    { test: 123 } as const,
+    "some string"
+);
 
 //// [typeParameterConstModifiers.js]
 "use strict";
@@ -154,3 +177,19 @@ var thing = function (o) { return o; };
 var t = thing({ foo: '' }); // readonly { foo: "" }
 var thingMapped = function (o) { return o; };
 var tMapped = thingMapped({ foo: '' }); // { foo: "" }
+// repro from https://github.com/microsoft/TypeScript/issues/55033
+function factory_55033_minimal(cb) {
+    return {};
+}
+var test_55033_minimal = factory_55033_minimal(function (b) { });
+function factory_55033(cb) {
+    return function call() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return {};
+    };
+}
+var t1_55033 = factory_55033(function (a, b) { })({ test: 123 }, "some string");
+var t2_55033 = factory_55033(function (a, b) { })({ test: 123 }, "some string");
