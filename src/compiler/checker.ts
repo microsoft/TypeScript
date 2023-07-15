@@ -475,6 +475,7 @@ import {
     isClassDeclaration,
     isClassElement,
     isClassExpression,
+    isClassFieldAndNotAutoAccessor,
     isClassLike,
     isClassStaticBlockDeclaration,
     isCommaSequence,
@@ -31179,6 +31180,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression,
                         symbolToString(prop),
                         typeToString(getDeclaringClass(prop)!));
+                }
+                return false;
+            }
+            // A class field cannot be accessed via super.* from a derived class.
+            // This is true for both [[Set]] (old) and [[Define]] (ES spec) semantics.
+            if (!(flags & ModifierFlags.Static) && prop.declarations?.some(isClassFieldAndNotAutoAccessor)) {
+                if (errorNode) {
+                    error(errorNode,
+                        Diagnostics.Class_field_0_defined_by_the_parent_class_is_not_accessible_in_the_child_class_via_super,
+                        symbolToString(prop)
+                    );
                 }
                 return false;
             }
