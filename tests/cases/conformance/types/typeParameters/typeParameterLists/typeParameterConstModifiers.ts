@@ -100,3 +100,27 @@ type NotEmptyMapped<T extends Record<string, any>> = keyof T extends never ? nev
 const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o;
 
 const tMapped = thingMapped({ foo: '' });  // { foo: "" }
+
+// repro from https://github.com/microsoft/TypeScript/issues/55033
+
+function factory_55033_minimal<const T extends readonly unknown[]>(cb: (...args: T) => void) {
+    return {} as T
+}
+
+const test_55033_minimal = factory_55033_minimal((b: string) => {})
+
+function factory_55033<const T extends readonly unknown[]>(cb: (...args: T) => void) {
+    return function call<const K extends T>(...args: K): K {
+        return {} as K;
+    };
+}
+
+const t1_55033 = factory_55033((a: { test: number }, b: string) => {})(
+    { test: 123 },
+    "some string"
+);
+
+const t2_55033 = factory_55033((a: { test: number }, b: string) => {})(
+    { test: 123 } as const,
+    "some string"
+);
