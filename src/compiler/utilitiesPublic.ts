@@ -1978,6 +1978,7 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.MetaProperty:
         case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
         case SyntaxKind.MissingDeclaration:
+        case SyntaxKind.SyntheticExpression: // synthetic expressions are only used by the checker to substitute specific types for expression positions, so their precedence does not matter.
             return true;
         default:
             return false;

@@ -704,6 +704,7 @@ import {
     isStringOrNumericLiteralLike,
     isSuperCall,
     isSuperProperty,
+    isSyntheticExpression,
     isTaggedTemplateExpression,
     isTemplateSpan,
     isThisContainerOrFunctionBlock,
@@ -27463,6 +27464,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return type;
             }
             const rightType = getTypeOfExpression(expr.right);
+            // if rightType is an object type with a custom `[Symbol.hasInstance]` method, and that method has a type
+            // predicate, use the type predicate to perform narrowing. This allows normal `object` types to participate
+            // in `instanceof`, as per Step 2 of https://tc39.es/ecma262/#sec-instanceofoperator.
+            const customHasInstanceMethodType = getCustomSymbolHasInstanceMethodOfObjectType(rightType);
+            if (customHasInstanceMethodType) {
+                const syntheticCall = createSyntheticHasInstanceMethodCall(left, expr.right, type, customHasInstanceMethodType);
+                const signature = getEffectsSignature(syntheticCall);
+                const predicate = signature && getTypePredicateOfSignature(signature);
+                if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
+                    return narrowTypeByTypePredicate(type, predicate, syntheticCall, assumeTrue);
+                }
+            }
             if (!isTypeDerivedFrom(rightType, globalFunctionType)) {
                 return type;
             }
@@ -27560,8 +27573,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function narrowTypeByTypePredicate(type: Type, predicate: TypePredicate, callExpression: CallExpression, assumeTrue: boolean): Type {
             // Don't narrow from 'any' if the predicate type is exactly 'Object' or 'Function'
             if (predicate.type && !(isTypeAny(type) && (predicate.type === globalObjectType || predicate.type === globalFunctionType))) {
-                const predicateArgument = getTypePredicateArgument(predicate, callExpression);
+                let predicateArgument = getTypePredicateArgument(predicate, callExpression);
                 if (predicateArgument) {
+                    // If the predicate argument is synthetic and is the first argument of a synthetic call to
+                    // `[Symbol.hasInstance]`, replace the synthetic predicate argument with the actual argument from
+                    // the original `instanceof` expression which is stored as the synthetic argument's `parent`.
+                    if (isSyntheticExpression(predicateArgument) &&
+                        predicate.parameterIndex === 0 &&
+                        isSyntheticHasInstanceMethodCall(callExpression)) {
+                        Debug.assertNode(predicateArgument.parent, isExpression);
+                        predicateArgument = predicateArgument.parent;
+                    }
                     if (isMatchingReference(reference, predicateArgument)) {
                         return getNarrowedType(type, predicate.type, assumeTrue, /*checkDerived*/ false);
                     }
@@ -33153,7 +33175,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
     }
 
-    function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessage?: DiagnosticMessage): Signature {
+    function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessageCallback?: () => DiagnosticMessage | undefined): Signature {
         const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
         const isDecorator = node.kind === SyntaxKind.Decorator;
         const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -33266,6 +33288,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
                         chain = chainDiagnosticMessages(chain, Diagnostics.No_overload_matches_this_call);
                     }
+                    const headMessage = headMessageCallback?.();
                     if (headMessage) {
                         chain = chainDiagnosticMessages(chain, headMessage);
                     }
@@ -33311,6 +33334,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let chain = chainDiagnosticMessages(
                         map(diags, createDiagnosticMessageChainFromDiagnostic),
                         Diagnostics.No_overload_matches_this_call);
+                    const headMessage = headMessageCallback?.();
                     if (headMessage) {
                         chain = chainDiagnosticMessages(chain, headMessage);
                     }
@@ -33330,18 +33354,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (candidateForArgumentArityError) {
-                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, headMessage));
+                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, headMessageCallback?.()));
             }
             else if (candidateForTypeArgumentError) {
-                checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, headMessage);
+                checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, headMessageCallback?.());
             }
             else {
                 const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
                 if (signaturesWithCorrectTypeArgumentArity.length === 0) {
-                    diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!, headMessage));
+                    diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!, headMessageCallback?.()));
                 }
                 else {
-                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args, headMessage));
+                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args, headMessageCallback?.()));
                 }
             }
         }
@@ -33689,7 +33713,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return resolveErrorCall(node);
         }
 
-        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags);
+        // If the call expression is a synthetic call to a `[Symbol.hasInstance]` method then we will produce a head
+        // message when reporting diagnostics that explains how we got to `right[Symbol.hasInstance](left)` from
+        // `left instanceof right`, as it pertains to "Argument" related messages reported for the call.
+        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags, () => isSyntheticHasInstanceMethodCall(node) ?
+            Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method :
+            undefined);
     }
 
     function isGenericFunctionReturningFunction(signature: Signature) {
@@ -34072,7 +34101,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return resolveErrorCall(node);
         }
 
-        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None, headMessage);
+        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None, () => headMessage);
     }
 
     function createSignatureForJSXIntrinsic(node: JsxOpeningLikeElement, result: Type): Signature {
@@ -36445,6 +36474,52 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return (symbol.flags & SymbolFlags.ConstEnum) !== 0;
     }
 
+    /**
+     * Get the type of the `[Symbol.hasInstance]` method of an object type, but only if it is not the
+     * `[Symbol.hasInstance]` method inherited from the global `Function` type.
+     */
+    function getCustomSymbolHasInstanceMethodOfObjectType(type: Type) {
+        const hasInstancePropertyName = getPropertyNameForKnownSymbolName("hasInstance");
+        const hasInstanceProperty = getPropertyOfObjectType(type, hasInstancePropertyName);
+        if (hasInstanceProperty && hasInstanceProperty !== getPropertyOfObjectType(globalFunctionType, hasInstancePropertyName)) {
+            const hasInstancePropertyType = getTypeOfSymbol(hasInstanceProperty);
+            if (hasInstancePropertyType && getSignaturesOfType(hasInstancePropertyType, SignatureKind.Call).length !== 0) {
+                return hasInstancePropertyType;
+            }
+        }
+    }
+
+    /**
+     * Creates a synthetic `CallExpression` that reinterprets `left instanceof right` as `right[Symbol.hasInstance](left)`
+     * per the `InstanceofOperator` algorithm in the ECMAScript specification.
+     * @param left The left-hand expression of `instanceof`
+     * @param right The right-hand expression of `instanceof`
+     * @param leftType The type of the left-hand expression of `instanceof`.
+     * @param hasInstanceMethodType The type of the `[Symbol.hasInstance]` method of the right-hand expression of `instanceof`.
+     */
+    function createSyntheticHasInstanceMethodCall(left: Expression, right: Expression, leftType: Type, hasInstanceMethodType: Type) {
+        const syntheticExpression = createSyntheticExpression(right, hasInstanceMethodType);
+        const syntheticArgument = createSyntheticExpression(left, leftType);
+        const syntheticCall = parseNodeFactory.createCallExpression(syntheticExpression, /*typeArguments*/ undefined, [syntheticArgument]);
+        setParent(syntheticCall, left.parent);
+        setTextRange(syntheticCall, left.parent);
+        return syntheticCall;
+    }
+
+    /**
+     * Tests whether a `CallExpression` is a synthetic call to a `[Symbol.hasInstance]` method as would be produced by
+     * {@link createSyntheticHasInstanceMethodCall}.
+     */
+    function isSyntheticHasInstanceMethodCall(node: CallExpression) {
+        return isSyntheticExpression(node.expression) &&
+            node.arguments.length === 1 &&
+            isSyntheticExpression(node.arguments[0]) &&
+            isBinaryExpression(node.parent) &&
+            node.parent.operatorToken.kind === SyntaxKind.InstanceOfKeyword &&
+            node.parent.right === node.expression.parent &&
+            node.parent.left === node.arguments[0].parent;
+    }
+
     function checkInstanceOfExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
         if (leftType === silentNeverType || rightType === silentNeverType) {
             return silentNeverType;
@@ -36458,9 +36533,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             allTypesAssignableToKind(leftType, TypeFlags.Primitive)) {
             error(left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
         }
-        // NOTE: do not raise error if right is unknown as related error was already reported
-        if (!(isTypeAny(rightType) || typeHasCallOrConstructSignatures(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
-            error(right, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type);
+        if (!isTypeAny(rightType)) {
+            // if rightType is an object type with a custom `[Symbol.hasInstance]` method, then it is potentially
+            // valid on the right-hand side of the `instanceof` operator. This allows normal `object` types to
+            // participate in `instanceof`, as per Step 2 of https://tc39.es/ecma262/#sec-instanceofoperator.
+            const customHasInstanceMethodType = getCustomSymbolHasInstanceMethodOfObjectType(rightType);
+            if (customHasInstanceMethodType) {
+                // If rightType has a `[Symbol.hasInstance]` method that is not the default [Symbol.hasInstance]() method on `Function`, check
+                // that left is assignable to the first parameter.
+                const syntheticCall = createSyntheticHasInstanceMethodCall(left, right, leftType, customHasInstanceMethodType);
+                const returnType = getReturnTypeOfSignature(getResolvedSignature(syntheticCall));
+
+                // Also verify that the return type of the `[Symbol.hasInstance]` method is assignable to `boolean`. The spec
+                // will perform `ToBoolean` on the result, but this is more type-safe.
+                checkTypeAssignableTo(returnType, booleanType, right, Diagnostics.An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression);
+            }
+            // NOTE: do not raise error if right is unknown as related error was already reported
+            if (!(customHasInstanceMethodType || typeHasCallOrConstructSignatures(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
+                // Do not indicate that `[Symbol.hasInstance]` is a valid option if it's not known to be present on `SymbolConstructor`.
+                const globalESSymbolConstructorSymbol = getGlobalESSymbolConstructorTypeSymbol(/*reportErrors*/ false);
+                const hasInstanceProp = globalESSymbolConstructorSymbol && getMembersOfSymbol(globalESSymbolConstructorSymbol).get(getPropertyNameForKnownSymbolName("hasInstance"));
+                const message = hasInstanceProp ?
+                    Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_either_of_type_any_of_an_object_type_with_a_Symbol_hasInstance_method_or_of_a_type_assignable_to_the_Function_interface_type :
+                    Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type;
+                error(right, message);
+            }
         }
         return booleanType;
     }

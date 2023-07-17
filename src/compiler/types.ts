@@ -2485,7 +2485,7 @@ export interface YieldExpression extends Expression {
     readonly expression?: Expression;
 }
 
-export interface SyntheticExpression extends Expression {
+export interface SyntheticExpression extends LeftHandSideExpression {
     readonly kind: SyntaxKind.SyntheticExpression;
     readonly isSpread: boolean;
     readonly type: Type;
