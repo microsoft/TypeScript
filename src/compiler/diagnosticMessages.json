@@ -3667,7 +3667,7 @@
         "category": "Error",
         "code": 2856
     },
-    "The right-hand side of an 'instanceof' expression must be either of type 'any', of an object type with a '[Symbol.hasInstance]()' method, or of a type assignable to the 'Function' interface type.": {
+    "The right-hand side of an 'instanceof' expression must be either of type 'any', an object type with a '[Symbol.hasInstance]()' method, or a type assignable to the 'Function' interface type.": {
         "category": "Error",
         "code": 2857
     },

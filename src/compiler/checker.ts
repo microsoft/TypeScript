@@ -381,6 +381,7 @@ import {
     HasIllegalModifiers,
     HasInitializer,
     hasInitializer,
+    HasInstanceMethodType,
     hasJSDocNodes,
     hasJSDocParameterTags,
     hasJsonModuleEmitEnabled,
@@ -2186,6 +2187,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var potentialReflectCollisions: Node[] = [];
     var potentialUnusedRenamedBindingElementsInTypes: BindingElement[] = [];
     var awaitedTypeStack: number[] = [];
+    var hasGlobalSymbolHasInstanceProperty: boolean | undefined;
 
     var diagnostics = createDiagnosticCollection();
     var suggestionDiagnostics = createDiagnosticCollection();
@@ -27467,9 +27469,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // if rightType is an object type with a custom `[Symbol.hasInstance]` method, and that method has a type
             // predicate, use the type predicate to perform narrowing. This allows normal `object` types to participate
             // in `instanceof`, as per Step 2 of https://tc39.es/ecma262/#sec-instanceofoperator.
-            const customHasInstanceMethodType = getCustomSymbolHasInstanceMethodOfObjectType(rightType);
-            if (customHasInstanceMethodType) {
-                const syntheticCall = createSyntheticHasInstanceMethodCall(left, expr.right, type, customHasInstanceMethodType);
+            const hasInstanceMethodType = getSymbolHasInstanceMethodOfObjectType(rightType);
+            if (hasInstanceMethodType) {
+                const syntheticCall = createSyntheticHasInstanceMethodCall(left, expr.right, type, hasInstanceMethodType);
                 const signature = getEffectsSignature(syntheticCall);
                 const predicate = signature && getTypePredicateOfSignature(signature);
                 if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
@@ -36475,13 +36477,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * Get the type of the `[Symbol.hasInstance]` method of an object type, but only if it is not the
-     * `[Symbol.hasInstance]` method inherited from the global `Function` type.
+     * Get the type of the `[Symbol.hasInstance]` method of an object type.
      */
-    function getCustomSymbolHasInstanceMethodOfObjectType(type: Type) {
+    function getSymbolHasInstanceMethodOfObjectType(type: Type) {
         const hasInstancePropertyName = getPropertyNameForKnownSymbolName("hasInstance");
         const hasInstanceProperty = getPropertyOfObjectType(type, hasInstancePropertyName);
-        if (hasInstanceProperty && hasInstanceProperty !== getPropertyOfObjectType(globalFunctionType, hasInstancePropertyName)) {
+        if (hasInstanceProperty) {
             const hasInstancePropertyType = getTypeOfSymbol(hasInstanceProperty);
             if (hasInstancePropertyType && getSignaturesOfType(hasInstancePropertyType, SignatureKind.Call).length !== 0) {
                 return hasInstancePropertyType;
@@ -36537,24 +36538,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // if rightType is an object type with a custom `[Symbol.hasInstance]` method, then it is potentially
             // valid on the right-hand side of the `instanceof` operator. This allows normal `object` types to
             // participate in `instanceof`, as per Step 2 of https://tc39.es/ecma262/#sec-instanceofoperator.
-            const customHasInstanceMethodType = getCustomSymbolHasInstanceMethodOfObjectType(rightType);
-            if (customHasInstanceMethodType) {
-                // If rightType has a `[Symbol.hasInstance]` method that is not the default [Symbol.hasInstance]() method on `Function`, check
-                // that left is assignable to the first parameter.
-                const syntheticCall = createSyntheticHasInstanceMethodCall(left, right, leftType, customHasInstanceMethodType);
-                const returnType = getReturnTypeOfSignature(getResolvedSignature(syntheticCall));
-
-                // Also verify that the return type of the `[Symbol.hasInstance]` method is assignable to `boolean`. The spec
-                // will perform `ToBoolean` on the result, but this is more type-safe.
-                checkTypeAssignableTo(returnType, booleanType, right, Diagnostics.An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression);
+            const hasInstanceMethodType = getSymbolHasInstanceMethodOfObjectType(rightType);
+            if (hasInstanceMethodType) {
+                // avoid a complex check for every `instanceof` when the `[Symbol.hasInstance]` method has a single
+                // call signature that neither restricts nor narrows (via type predicate) the LHS value, e.g. 
+                // `(value: unknown) => boolean`.
+                const cache = hasInstanceMethodType as HasInstanceMethodType;
+                if (cache.hasSimpleUnrestrictedSingleCallSignature === undefined) {
+                    const signature = getSingleCallSignature(hasInstanceMethodType);
+                    cache.hasSimpleUnrestrictedSingleCallSignature = !!signature && signature.parameters.length === 1 &&
+                        !!(getTypeOfSymbol(signature.parameters[0]).flags & TypeFlags.AnyOrUnknown) &&
+                        !!signature.resolvedReturnType &&
+                        !!(signature.resolvedReturnType.flags & TypeFlags.Boolean);
+                }
+                if (!cache.hasSimpleUnrestrictedSingleCallSignature) {
+                    // If rightType has a `[Symbol.hasInstance]` method that is not `(value: unknown) => boolean`, we
+                    // must check the expression as if it were a call to `right[Symbol.hasInstance](left)1. The call to
+                    // `getResolvedSignature`, below, will check that leftType is assignable to the type of the first
+                    // parameter.
+                    const syntheticCall = createSyntheticHasInstanceMethodCall(left, right, leftType, hasInstanceMethodType);
+                    const returnType = getReturnTypeOfSignature(getResolvedSignature(syntheticCall));
+    
+                    // We also verify that the return type of the `[Symbol.hasInstance]` method is assignable to
+                    // `boolean`. According to the spec, the runtime will actually perform `ToBoolean` on the result,
+                    // but this is more type-safe.
+                    checkTypeAssignableTo(returnType, booleanType, right, Diagnostics.An_object_s_Symbol_hasInstance_method_must_return_a_boolean_value_for_it_to_be_used_on_the_right_hand_side_of_an_instanceof_expression);
+                }
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
-            if (!(customHasInstanceMethodType || typeHasCallOrConstructSignatures(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
+            if (!(hasInstanceMethodType || typeHasCallOrConstructSignatures(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
                 // Do not indicate that `[Symbol.hasInstance]` is a valid option if it's not known to be present on `SymbolConstructor`.
-                const globalESSymbolConstructorSymbol = getGlobalESSymbolConstructorTypeSymbol(/*reportErrors*/ false);
-                const hasInstanceProp = globalESSymbolConstructorSymbol && getMembersOfSymbol(globalESSymbolConstructorSymbol).get(getPropertyNameForKnownSymbolName("hasInstance"));
-                const message = hasInstanceProp ?
-                    Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_either_of_type_any_of_an_object_type_with_a_Symbol_hasInstance_method_or_of_a_type_assignable_to_the_Function_interface_type :
+                if (hasGlobalSymbolHasInstanceProperty === undefined) {
+                    const globalESSymbolConstructorSymbol = getGlobalESSymbolConstructorTypeSymbol(/*reportErrors*/ false);
+                    hasGlobalSymbolHasInstanceProperty = !!globalESSymbolConstructorSymbol && getMembersOfSymbol(globalESSymbolConstructorSymbol).has("hasInstance" as __String);
+                }
+
+                const message = hasGlobalSymbolHasInstanceProperty ?
+                    Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_either_of_type_any_an_object_type_with_a_Symbol_hasInstance_method_or_a_type_assignable_to_the_Function_interface_type :
                     Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type;
                 error(right, message);
             }

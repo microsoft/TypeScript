@@ -1086,7 +1086,7 @@ declare namespace ts {
         readonly asteriskToken?: AsteriskToken;
         readonly expression?: Expression;
     }
-    interface SyntheticExpression extends Expression {
+    interface SyntheticExpression extends LeftHandSideExpression {
         readonly kind: SyntaxKind.SyntheticExpression;
         readonly isSpread: boolean;
         readonly type: Type;

@@ -6565,6 +6565,11 @@ export interface PromiseOrAwaitableType extends ObjectType, UnionType {
 }
 
 /** @internal */
+export interface HasInstanceMethodType extends Type {
+    hasSimpleUnrestrictedSingleCallSignature?: boolean;
+}
+
+/** @internal */
 export interface SyntheticDefaultModuleType extends Type {
     syntheticType?: Type;
     defaultOnlyType?: Type;
