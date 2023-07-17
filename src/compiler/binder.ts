@@ -194,6 +194,7 @@ import {
     isOmittedExpression,
     isOptionalChain,
     isOptionalChainRoot,
+    isOuterExpression,
     isOutermostOptionalChain,
     isParameterDeclaration,
     isParameterPropertyDeclaration,
@@ -1981,7 +1982,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (!isConditionalExpression(n)) {
                 return false;
             }
-            n = skipParentheses(n.parent);
+            n = n.parent;
+            while (isOuterExpression(n)) {
+                n = n.parent;
+            }
         }
         return true;
     }
