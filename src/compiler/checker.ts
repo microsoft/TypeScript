@@ -36541,7 +36541,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const hasInstanceMethodType = getSymbolHasInstanceMethodOfObjectType(rightType);
             if (hasInstanceMethodType) {
                 // avoid a complex check for every `instanceof` when the `[Symbol.hasInstance]` method has a single
-                // call signature that neither restricts nor narrows (via type predicate) the LHS value, e.g. 
+                // call signature that neither restricts nor narrows (via type predicate) the LHS value, e.g.
                 // `(value: unknown) => boolean`.
                 const cache = hasInstanceMethodType as HasInstanceMethodType;
                 if (cache.hasSimpleUnrestrictedSingleCallSignature === undefined) {
@@ -36558,7 +36558,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // parameter.
                     const syntheticCall = createSyntheticHasInstanceMethodCall(left, right, leftType, hasInstanceMethodType);
                     const returnType = getReturnTypeOfSignature(getResolvedSignature(syntheticCall));
-    
+
                     // We also verify that the return type of the `[Symbol.hasInstance]` method is assignable to
                     // `boolean`. According to the spec, the runtime will actually perform `ToBoolean` on the result,
                     // but this is more type-safe.
