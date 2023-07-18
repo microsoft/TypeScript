@@ -110,7 +110,6 @@ import {
     isNamedExportBindings,
     isNamedImportBindings,
     isNamespaceExport,
-    isNumericLiteral,
     isObjectLiteralElementLike,
     isParameterPropertyDeclaration,
     isPrivateIdentifier,
@@ -120,7 +119,6 @@ import {
     isSimpleInlineableExpression,
     isSourceFile,
     isStatement,
-    isStringLiteral,
     isTemplateLiteral,
     isTryStatement,
     JsxOpeningElement,
@@ -2671,19 +2669,18 @@ export function transformTypeScript(context: TransformationContext) {
     function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression): LeftHandSideExpression {
         const constantValue = tryGetConstEnumValue(node);
         if (constantValue !== undefined) {
-            const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
-                resolver.shouldParenthesizeConstantValue(node) ? factory.createParenthesizedExpression(factory.createNumericLiteral(constantValue)) : factory.createNumericLiteral(constantValue);
-
             // track the constant value on the node for the printer in needsDotDotForPropertyAccess
-            if (isStringLiteral(substitute) || isNumericLiteral(substitute)) {
-                setConstantValue(node, constantValue);
-            }
+            setConstantValue(node, constantValue);
+
+            const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) : factory.createNumericLiteral(constantValue);
             if (!compilerOptions.removeComments) {
                 const originalNode = getOriginalNode(node, isAccessExpression);
+
                 addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${safeMultiLineComment(getTextOfNode(originalNode))} `);
             }
             return substitute;
         }
+
         return node;
     }
 

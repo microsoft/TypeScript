@@ -46483,14 +46483,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function shouldParenthesizeConstantValue(node: AccessExpression) {
-        if (isAccessExpression(node.parent) && node.parent.expression === node) {
-            const value = getConstantValue(node);
-            return typeof value === "number" && value < 0;
-        }
-        return false;
-    }
-
     function isFunctionType(type: Type): boolean {
         return !!(type.flags & TypeFlags.Object) && getSignaturesOfType(type, SignatureKind.Call).length > 0;
     }
@@ -46812,10 +46804,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getConstantValue: nodeIn => {
                 const node = getParseTreeNode(nodeIn, canHaveConstantValue);
                 return node ? getConstantValue(node) : undefined;
-            },
-            shouldParenthesizeConstantValue: nodeIn => {
-                const node = getParseTreeNode(nodeIn, isAccessExpression);
-                return !!node && shouldParenthesizeConstantValue(node);
             },
             collectLinkedAliases,
             getReferencedValueDeclaration,
