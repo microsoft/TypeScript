@@ -3196,9 +3196,7 @@ function getCompletionData(
             importStatementCompletion = importStatementCompletionInfo;
             isNewIdentifierLocation = importStatementCompletionInfo.isNewIdentifierLocation;
         }
-
         // Bail out if this is a known invalid completion location
-
         if (!importStatementCompletionInfo.replacementSpan && isCompletionListBlocker(contextToken)) {
             log("Returning an empty list because completion was requested in an invalid position.");
             return keywordFilters
@@ -4069,7 +4067,6 @@ function getCompletionData(
     }
     function isCompletionListBlocker(contextToken: Node): boolean {
         const start = timestamp();
-        // const isCurrentInNewLine = ;
         const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
             // GH#54729 ignore this case when current position is in a newline
             (isSolelyIdentifierDefinitionLocation(contextToken) && !isInDifferentLineWithContextToken(contextToken, position) ) ||
