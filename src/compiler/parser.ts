@@ -8617,8 +8617,19 @@ namespace Parser {
 
         // Parses out a JSDoc type expression.
         export function parseJSDocTypeExpression(mayOmitBraces?: boolean): JSDocTypeExpression {
-            const pos = getNodePos();
+            let pos = getNodePos();
             const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
+            if (token() === SyntaxKind.AtToken) {
+                    // skip @link since it's a common mistake
+                    if(tokenIsIdentifierOrKeyword(nextTokenJSDoc())) {
+                        const kind = scanner.getTokenValue();
+                        if (isJSDocLinkTag(kind)) {
+                            nextTokenJSDoc();
+                            skipWhitespace();
+                        }
+                        pos = getNodePos();
+                    }
+            }
             const type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
             if (!mayOmitBraces || hasBrace) {
                 parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
@@ -8849,30 +8860,6 @@ namespace Parser {
                     else {
                         break;
                     }
-                }
-            }
-
-            function isNextNonwhitespaceTokenEndOfFile(): boolean {
-                // We must use infinite lookahead, as there could be any number of newlines :(
-                while (true) {
-                    nextTokenJSDoc();
-                    if (token() === SyntaxKind.EndOfFileToken) {
-                        return true;
-                    }
-                    if (!(token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia)) {
-                        return false;
-                    }
-                }
-            }
-
-            function skipWhitespace(): void {
-                if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
-                    if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
-                        return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
-                    }
-                }
-                while (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
-                    nextTokenJSDoc();
                 }
             }
 
@@ -9149,10 +9136,6 @@ namespace Parser {
                     const kind = scanner.getTokenValue();
                     if (isJSDocLinkTag(kind)) return kind;
                 }
-            }
-
-            function isJSDocLinkTag(kind: string) {
-                return kind === "link" || kind === "linkcode" || kind === "linkplain";
             }
 
             function parseUnknownTag(start: number, tagName: Identifier, indent: number, indentText: string) {
@@ -9694,6 +9677,34 @@ namespace Parser {
                 return result;
             }
         }
+    }
+
+    function isNextNonwhitespaceTokenEndOfFile(): boolean {
+        // We must use infinite lookahead, as there could be any number of newlines :(
+        while (true) {
+            nextTokenJSDoc();
+            if (token() === SyntaxKind.EndOfFileToken) {
+                return true;
+            }
+            if (!(token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia)) {
+                return false;
+            }
+        }
+    }
+
+    function skipWhitespace(): void {
+        if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+            if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
+                return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
+            }
+        }
+        while (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+            nextTokenJSDoc();
+        }
+    }
+
+    function isJSDocLinkTag(kind: string) {
+        return kind === "link" || kind === "linkcode" || kind === "linkplain";
     }
 }
 

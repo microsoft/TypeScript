@@ -1,0 +1,112 @@
+=== /tests/cases/fourslash/jsdocLink6.ts ===
+// class FooError extends Error {}
+// class BarError extends Error {}
+// /**
+//  * Performs blubber.
+//  * 
+//  * @throws {@link FooError} if foo happens.
+//  * @throws {@link BarError} if bar happens.
+//  */
+// function blubber() {}
+// blubber();
+// ^^^^^^^
+// | ----------------------------------------------------------------------
+// | function blubber(): void
+// | Performs blubber.
+// | @throws {@link FooError} if foo happens.
+// | @throws {@link BarError} if bar happens.
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsdocLink6.ts",
+      "position": 214,
+      "name": "3"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 207,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "blubber",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Performs blubber.",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "throws",
+          "text": [
+            {
+              "text": "{@link FooError}",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "if foo happens.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "throws",
+          "text": [
+            {
+              "text": "{@link BarError}",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "if bar happens.",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

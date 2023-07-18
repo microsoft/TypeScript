@@ -1,0 +1,53 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/jsdocLink7.ts ===
+// <|class [|FooError|] extends Error {}|>
+// class BarError extends Error {}
+// /**
+//  * Performs blubber.
+//  * 
+//  * @throws {@link FooError/*GOTO DEF*/} if foo happens.
+//  * @throws {@link BarError} if bar happens.
+//  */
+// function blubber() {}
+// blubber();
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "FooError",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/jsdocLink7.ts ===
+// class FooError extends Error {}
+// <|class [|BarError|] extends Error {}|>
+// /**
+//  * Performs blubber.
+//  * 
+//  * @throws {@link FooError} if foo happens.
+//  * @throws {@link BarError/*GOTO DEF*/} if bar happens.
+//  */
+// function blubber() {}
+// blubber();
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "BarError",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
