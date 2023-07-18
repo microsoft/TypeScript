@@ -19,7 +19,7 @@
 >"../hamsters.jpg" : "../hamsters.jpg"
 >import.meta.url : string
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >url : string
 >toString : () => string
 
@@ -38,7 +38,7 @@
 >import.meta.scriptElement.dataset : any
 >import.meta.scriptElement : any
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >scriptElement : any
 >dataset : any
 >size : any
@@ -86,7 +86,7 @@
 export let x = import.meta;
 >x : ImportMeta
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 
 export let y = import.metal;
 >y : any
@@ -106,7 +106,7 @@ export let z = import.import.import.malkovich;
 let globalA = import.meta;
 >globalA : ImportMeta
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 
 let globalB = import.metal;
 >globalB : any
@@ -128,20 +128,20 @@ export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta
 >import.meta.blah = import.meta.blue = import.meta : ImportMeta
 >import.meta.blah : any
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >blah : any
 >import.meta.blue = import.meta : ImportMeta
 >import.meta.blue : any
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >blue : any
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 
 import.meta = foo;
 >import.meta = foo : ImportMeta
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >foo : ImportMeta
 
 // @Filename augmentations.ts
@@ -163,6 +163,6 @@ const { a, b, c } = import.meta.wellKnownProperty;
 >c : boolean
 >import.meta.wellKnownProperty : { a: number; b: string; c: boolean; }
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >wellKnownProperty : { a: number; b: string; c: boolean; }
 
