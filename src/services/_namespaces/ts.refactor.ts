@@ -4,6 +4,7 @@ export * from "../refactorProvider";
 export * from "../refactors/convertExport";
 export * from "../refactors/convertImport";
 export * from "../refactors/extractType";
+export * from "../refactors/flipOperator";
 export * from "../refactors/helpers";
 export * from "../refactors/inlineVariable";
 export * from "../refactors/moveToNewFile";

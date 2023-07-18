@@ -7864,5 +7864,9 @@
     "'await using' statements cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18054
+    },
+    "Flip operator": {
+        "category": "Message",
+        "code": 18055
     }
 }
