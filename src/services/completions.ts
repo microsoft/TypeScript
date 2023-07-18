@@ -3196,8 +3196,14 @@ function getCompletionData(
             importStatementCompletion = importStatementCompletionInfo;
             isNewIdentifierLocation = importStatementCompletionInfo.isNewIdentifierLocation;
         }
+
         // Bail out if this is a known invalid completion location
-        if (!importStatementCompletionInfo.replacementSpan && isCompletionListBlocker(contextToken)) {
+
+        // GH#54729 skip invalid completion location check if in newline
+        const contentTokenLineEnd = sourceFile.getLineEndOfPosition(contextToken.getEnd());
+        const isCurrentInNewLine = contentTokenLineEnd < position;
+
+        if (!importStatementCompletionInfo.replacementSpan && !isCurrentInNewLine && isCompletionListBlocker(contextToken)) {
             log("Returning an empty list because completion was requested in an invalid position.");
             return keywordFilters
                 ? keywordCompletionData(keywordFilters, isJsOnlyLocation, isNewIdentifierDefinitionLocation())
