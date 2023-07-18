@@ -1,29 +1,33 @@
+
 /// <reference path='fourslash.ts' />
 
 // @Filename: /bar.ts
-//////
+////export const tt = 2;
 
 // @Filename: /a.ts
 ////import { b } from './other';
-////const p = 0;
-////[|const y: Date = p + b;|]
+////
+////const a = 1;
+////[|const c = a + b + 2;|]
 
 // @Filename: /other.ts
 ////export const b = 1;
 
+
 verify.moveToFile({
     newFileContents: {
         "/a.ts":
-`export const p = 0;
+`
+export const a = 1;
 `,
 
         "/bar.ts":
-`//
-import { p } from './a';
+`import { a } from './a';
 import { b } from './other';
 
-const y: Date = p + b;
+export const tt = 2;
+const c = a + b + 2;
 `,
     },
-    interactiveRefactorArguments: {targetFile: "/bar.ts"},
+    interactiveRefactorArguments: { targetFile: "/bar.ts" },
 });
