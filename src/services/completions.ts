@@ -4069,7 +4069,7 @@ function getCompletionData(
         const start = timestamp();
         const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
             // GH#54729 ignore this case when current position is in a newline
-            (isSolelyIdentifierDefinitionLocation(contextToken) && !isInDifferentLineWithContextToken(contextToken, position) ) ||
+            (isSolelyIdentifierDefinitionLocation(contextToken) && !isInDifferentLineWithContextToken(contextToken, position)) ||
             isDotOfNumericLiteral(contextToken) ||
             isInJsxText(contextToken) ||
             isBigIntLiteral(contextToken);
