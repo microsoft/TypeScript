@@ -3199,11 +3199,7 @@ function getCompletionData(
 
         // Bail out if this is a known invalid completion location
 
-        // GH#54729 skip invalid completion location check if in newline
-        const contentTokenLineEnd = sourceFile.getLineEndOfPosition(contextToken.getEnd());
-        const isCurrentInNewLine = contentTokenLineEnd < position;
-
-        if (!importStatementCompletionInfo.replacementSpan && !isCurrentInNewLine && isCompletionListBlocker(contextToken)) {
+        if (!importStatementCompletionInfo.replacementSpan && isCompletionListBlocker(contextToken)) {
             log("Returning an empty list because completion was requested in an invalid position.");
             return keywordFilters
                 ? keywordCompletionData(keywordFilters, isJsOnlyLocation, isNewIdentifierDefinitionLocation())
@@ -4068,10 +4064,15 @@ function getCompletionData(
         return scope;
     }
 
+    function isInDifferentLineWithContextToken(contextToken: Node, position: number): boolean {
+        return sourceFile.getLineEndOfPosition(contextToken.getEnd()) < position;
+    }
     function isCompletionListBlocker(contextToken: Node): boolean {
         const start = timestamp();
+        // const isCurrentInNewLine = ;
         const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
-            isSolelyIdentifierDefinitionLocation(contextToken) ||
+            // GH#54729 ignore this case when current position is in a newline
+            (isSolelyIdentifierDefinitionLocation(contextToken) && !isInDifferentLineWithContextToken(contextToken, position) ) ||
             isDotOfNumericLiteral(contextToken) ||
             isInJsxText(contextToken) ||
             isBigIntLiteral(contextToken);
