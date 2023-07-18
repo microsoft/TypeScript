@@ -7,7 +7,7 @@
 /////*2*/
 
 verify.completions(
-  { marker: ["1"], exact: undefined },
+  { marker: "1", exact: undefined },
   {
     marker: "2",
     exact: completion.globalsPlus([
