@@ -12472,7 +12472,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            const assignments = symbol.assignmentDeclarationMembers;
+            const assignments = (symbol.valueDeclaration?.kind === SyntaxKind.ArrowFunction || symbol.valueDeclaration?.kind === SyntaxKind.FunctionExpression) &&
+                getSymbolOfNode(symbol.valueDeclaration.parent)?.assignmentDeclarationMembers ||
+                symbol.assignmentDeclarationMembers;
+
             if (assignments) {
                 const decls = arrayFrom(assignments.values());
                 for (const member of decls) {
