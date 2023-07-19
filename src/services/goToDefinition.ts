@@ -5,7 +5,6 @@ import {
     AssignmentOperatorToken,
     CallLikeExpression,
     canHaveSymbol, CheckFlags, concatenate,
-    createTextRangeFromNode,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -16,7 +15,6 @@ import {
     DefinitionInfoAndBoundSpan,
     emptyArray,
     every,
-    factory,
     FileReference,
     filter,
     find,
@@ -36,8 +34,6 @@ import {
     getNameOfDeclaration,
     getObjectFlags,
     getPropertySymbolsFromContextualType,
-    getSymbolId,
-    getSynthesizedDeepClone,
     getTargetLabel,
     getTextOfPropertyName,
     getTouchingPropertyName,
@@ -66,15 +62,11 @@ import {
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
-    isLiteralExpression,
-    isLiteralKind,
-    isLiteralTypeLiteral,
     isLiteralTypeNode,
     isModuleSpecifierLike,
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
     isObjectBindingPattern,
-    isPropertyAccessChain,
     isPropertyAccessExpression,
     isPropertyName,
     isRightSideOfPropertyAccess,
@@ -82,7 +74,6 @@ import {
     isStringLiteral,
     isTransientSymbol,
     isTypeAliasDeclaration,
-    isTypeLiteralNode,
     isTypeReferenceNode,
     isVariableDeclaration,
     last,
@@ -90,7 +81,6 @@ import {
     mapDefined,
     MappedSymbolLinks,
     MappedType,
-    MappedTypeNode,
     ModifierFlags,
     moveRangePastModifiers,
     Node,
@@ -114,7 +104,6 @@ import {
     tryCast,
     tryGetModuleSpecifierFromDeclaration,
     Type,
-    TypeAliasDeclaration,
     TypeChecker,
     TypeFlags,
     TypeReference,
@@ -668,7 +657,7 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
         if (isPropertyAccessExpression(node.parent)) {
             const exp = node.parent.expression;
             if (isIdentifier(exp)) {
-                const sym = getSymbol(exp, typeChecker, true);
+                const sym = getSymbol(exp, typeChecker, /*stopAtAlias*/ true);
                 if (sym.symbol) {
                     for (const i of sym.symbol.declarations ?? []) {
                         if (isVariableDeclaration(i)) {
@@ -693,8 +682,8 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
                                                         .aliasTypeArguments?.[0];
                                                 if (firstTypeArgument && firstTypeArgument.isLiteral()) {
                                                     if (arg.literal.text === firstTypeArgument.value) {
-                                                        const sourceFile = arg.getSourceFile()
-                                                        const textSpan = createTextSpanFromNode(arg, sourceFile)
+                                                        const sourceFile = arg.getSourceFile();
+                                                        const textSpan = createTextSpanFromNode(arg, sourceFile);
                                                         const def: DefinitionInfo = {
                                                             kind: ScriptElementKind.typeElement,
                                                             name: "test",
@@ -718,7 +707,8 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
                                         }
                                     }
                                 }
-                            } else {
+                            }
+ else {
                                 // may be as expression
                             }
                         }
