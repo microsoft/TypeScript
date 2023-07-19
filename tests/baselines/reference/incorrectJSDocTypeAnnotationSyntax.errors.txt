@@ -1,0 +1,27 @@
+incorrectJSDocTypeAnnotationSyntax.js(5,13): error TS1110: Type expected.
+incorrectJSDocTypeAnnotationSyntax.js(6,13): error TS1110: Type expected.
+incorrectJSDocTypeAnnotationSyntax.js(6,23): error TS1110: Type expected.
+
+
+==== incorrectJSDocTypeAnnotationSyntax.js (3 errors) ====
+    class Bad { message = "doom" }
+    class Worse { message = "doooooom" }
+    /**
+     * @throws {@link Bad} it's real bad
+     * @throws {@type Worse} definitely don't want to see this one!
+                ~
+!!! error TS1110: Type expected.
+     * @throws {@TotalType} didn't even mean to put the @ there
+                ~
+!!! error TS1110: Type expected.
+                          ~
+!!! error TS1110: Type expected.
+     * @return {void}
+     */
+    function can(b) {
+        if (b)
+            throw new Bad()
+        else
+            throw new Worse()
+    }
+    

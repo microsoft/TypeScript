@@ -10,4 +10,5 @@
 //// function blubber() {}
 //// blubber/*3*/();
 
+verify.noErrors()
 verify.baselineQuickInfo();

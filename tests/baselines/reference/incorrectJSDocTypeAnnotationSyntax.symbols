@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/jsdoc/incorrectJSDocTypeAnnotationSyntax.ts] ////
+
+=== incorrectJSDocTypeAnnotationSyntax.js ===
+class Bad { message = "doom" }
+>Bad : Symbol(Bad, Decl(incorrectJSDocTypeAnnotationSyntax.js, 0, 0))
+>message : Symbol(Bad.message, Decl(incorrectJSDocTypeAnnotationSyntax.js, 0, 11))
+
+class Worse { message = "doooooom" }
+>Worse : Symbol(Worse, Decl(incorrectJSDocTypeAnnotationSyntax.js, 0, 30))
+>message : Symbol(Worse.message, Decl(incorrectJSDocTypeAnnotationSyntax.js, 1, 13))
+
+/**
+ * @throws {@link Bad} it's real bad
+ * @throws {@type Worse} definitely don't want to see this one!
+ * @throws {@TotalType} didn't even mean to put the @ there
+ * @return {void}
+ */
+function can(b) {
+>can : Symbol(can, Decl(incorrectJSDocTypeAnnotationSyntax.js, 1, 36))
+>b : Symbol(b, Decl(incorrectJSDocTypeAnnotationSyntax.js, 8, 13))
+
+    if (b)
+>b : Symbol(b, Decl(incorrectJSDocTypeAnnotationSyntax.js, 8, 13))
+
+        throw new Bad()
+>Bad : Symbol(Bad, Decl(incorrectJSDocTypeAnnotationSyntax.js, 0, 0))
+
+    else
+        throw new Worse()
+>Worse : Symbol(Worse, Decl(incorrectJSDocTypeAnnotationSyntax.js, 0, 30))
+}
+

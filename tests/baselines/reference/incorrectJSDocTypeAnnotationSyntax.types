@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/jsdoc/incorrectJSDocTypeAnnotationSyntax.ts] ////
+
+=== incorrectJSDocTypeAnnotationSyntax.js ===
+class Bad { message = "doom" }
+>Bad : Bad
+>message : string
+>"doom" : "doom"
+
+class Worse { message = "doooooom" }
+>Worse : Worse
+>message : string
+>"doooooom" : "doooooom"
+
+/**
+ * @throws {@link Bad} it's real bad
+ * @throws {@type Worse} definitely don't want to see this one!
+ * @throws {@TotalType} didn't even mean to put the @ there
+ * @return {void}
+ */
+function can(b) {
+>can : (b: any) => void
+>b : any
+
+    if (b)
+>b : any
+
+        throw new Bad()
+>new Bad() : Bad
+>Bad : typeof Bad
+
+    else
+        throw new Worse()
+>new Worse() : Worse
+>Worse : typeof Worse
+}
+

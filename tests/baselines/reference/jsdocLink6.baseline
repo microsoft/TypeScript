@@ -13,8 +13,8 @@
 // | ----------------------------------------------------------------------
 // | function blubber(): void
 // | Performs blubber.
-// | @throws {@link FooError} if foo happens.
-// | @throws {@link BarError} if bar happens.
+// | @throws FooError} if foo happens.
+// | @throws BarError} if bar happens.
 // | ----------------------------------------------------------------------
 
 [
@@ -76,7 +76,7 @@
           "name": "throws",
           "text": [
             {
-              "text": "{@link FooError}",
+              "text": "FooError}",
               "kind": "text"
             },
             {
@@ -93,7 +93,7 @@
           "name": "throws",
           "text": [
             {
-              "text": "{@link BarError}",
+              "text": "BarError}",
               "kind": "text"
             },
             {

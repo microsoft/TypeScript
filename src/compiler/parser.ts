@@ -8620,15 +8620,17 @@ namespace Parser {
             let pos = getNodePos();
             const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
             if (token() === SyntaxKind.AtToken) {
-                    // skip @link since it's a common mistake
-                    if(tokenIsIdentifierOrKeyword(nextTokenJSDoc())) {
-                        const kind = scanner.getTokenValue();
-                        if (isJSDocLinkTag(kind)) {
-                            nextTokenJSDoc();
-                            skipWhitespace();
-                        }
-                        pos = getNodePos();
+                // skip @link since it's a common mistake -- other tags will still error
+                const atStart = scanner.getTokenStart()
+                const atEnd = scanner.getTokenEnd()
+                if (tokenIsIdentifierOrKeyword(nextTokenJSDoc())) {
+                    if (!isJSDocLinkTag(scanner.getTokenValue())) {
+                        parseErrorAt(atStart, atEnd, Diagnostics.Type_expected);
                     }
+                    nextTokenJSDoc();
+                    skipWhitespace();
+                    pos = getNodePos();
+                }
             }
             const type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
             if (!mayOmitBraces || hasBrace) {
