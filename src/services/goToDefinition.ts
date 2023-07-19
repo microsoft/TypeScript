@@ -1,9 +1,11 @@
 import {
+    __String,
     AssignmentDeclarationKind,
     AssignmentExpression,
     AssignmentOperatorToken,
     CallLikeExpression,
-    canHaveSymbol, concatenate,
+    canHaveSymbol, CheckFlags, concatenate,
+    createTextRangeFromNode,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -14,6 +16,7 @@ import {
     DefinitionInfoAndBoundSpan,
     emptyArray,
     every,
+    factory,
     FileReference,
     filter,
     find,
@@ -33,6 +36,8 @@ import {
     getNameOfDeclaration,
     getObjectFlags,
     getPropertySymbolsFromContextualType,
+    getSymbolId,
+    getSynthesizedDeepClone,
     getTargetLabel,
     getTextOfPropertyName,
     getTouchingPropertyName,
@@ -61,20 +66,31 @@ import {
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
+    isLiteralExpression,
+    isLiteralKind,
+    isLiteralTypeLiteral,
+    isLiteralTypeNode,
     isModuleSpecifierLike,
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
     isObjectBindingPattern,
+    isPropertyAccessChain,
+    isPropertyAccessExpression,
     isPropertyName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
+    isStringLiteral,
+    isTransientSymbol,
     isTypeAliasDeclaration,
+    isTypeLiteralNode,
     isTypeReferenceNode,
     isVariableDeclaration,
     last,
     map,
     mapDefined,
+    MappedSymbolLinks,
     MappedType,
+    MappedTypeNode,
     ModifierFlags,
     moveRangePastModifiers,
     Node,
@@ -98,6 +114,7 @@ import {
     tryCast,
     tryGetModuleSpecifierFromDeclaration,
     Type,
+    TypeAliasDeclaration,
     TypeChecker,
     TypeFlags,
     TypeReference,
@@ -556,39 +573,162 @@ function isExpandoDeclaration(node: Declaration): boolean {
 }
 
 function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, excludeDeclaration?: Node): DefinitionInfo[] | undefined {
-    const filteredDeclarations = filter(symbol.declarations, d => d !== excludeDeclaration);
-    const withoutExpandos = filter(filteredDeclarations, d => !isExpandoDeclaration(d));
-    const results = some(withoutExpandos) ? withoutExpandos : filteredDeclarations;
-    return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
+    const filteredDeclarations = filter(
+        symbol.declarations,
+        (d) => d !== excludeDeclaration
+    );
+    const withoutExpandos = filter(
+        filteredDeclarations,
+        (d) => !isExpandoDeclaration(d)
+    );
+    const results = some(withoutExpandos)
+        ? withoutExpandos
+        : filteredDeclarations;
+    return (
+        getConstructSignatureDefinition() ||
+        getCallSignatureDefinition() ||
+        getRecordKeyDefinition() ||
+        map(results, (declaration) =>
+            createDefinitionInfo(
+                declaration,
+                typeChecker,
+                symbol,
+                node,
+                /*unverified*/ false,
+                failedAliasResolution
+            )
+        )
+    );
 
     function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
         // Applicable only if we are in a new expression, or we are on a constructor declaration
         // and in either case the symbol has a construct signature definition, i.e. class
-        if (symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
-            const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
-            return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
+        if (
+            symbol.flags & SymbolFlags.Class &&
+            !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) &&
+            (isNewExpressionTarget(node) ||
+                node.kind === SyntaxKind.ConstructorKeyword)
+        ) {
+            const cls =
+                find(filteredDeclarations, isClassLike) ||
+                Debug.fail(
+                    "Expected declaration to have at least one class-like declaration"
+                );
+            return getSignatureDefinition(
+                cls.members,
+                /*selectConstructors*/ true
+            );
         }
     }
 
     function getCallSignatureDefinition(): DefinitionInfo[] | undefined {
-        return isCallOrNewExpressionTarget(node) || isNameOfFunctionDeclaration(node)
-            ? getSignatureDefinition(filteredDeclarations, /*selectConstructors*/ false)
+        return isCallOrNewExpressionTarget(node) ||
+            isNameOfFunctionDeclaration(node)
+            ? getSignatureDefinition(
+                  filteredDeclarations,
+                  /*selectConstructors*/ false
+              )
             : undefined;
     }
 
-    function getSignatureDefinition(signatureDeclarations: readonly Declaration[] | undefined, selectConstructors: boolean): DefinitionInfo[] | undefined {
+    function getSignatureDefinition(
+        signatureDeclarations: readonly Declaration[] | undefined,
+        selectConstructors: boolean
+    ): DefinitionInfo[] | undefined {
         if (!signatureDeclarations) {
             return undefined;
         }
-        const declarations = signatureDeclarations.filter(selectConstructors ? isConstructorDeclaration : isFunctionLike);
-        const declarationsWithBody = declarations.filter(d => !!(d as FunctionLikeDeclaration).body);
+        const declarations = signatureDeclarations.filter(
+            selectConstructors ? isConstructorDeclaration : isFunctionLike
+        );
+        const declarationsWithBody = declarations.filter(
+            (d) => !!(d as FunctionLikeDeclaration).body
+        );
 
         // declarations defined on the global scope can be defined on multiple files. Get all of them.
         return declarations.length
             ? declarationsWithBody.length !== 0
-                ? declarationsWithBody.map(x => createDefinitionInfo(x, typeChecker, symbol, node))
-                : [createDefinitionInfo(last(declarations), typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution)]
+                ? declarationsWithBody.map((x) =>
+                      createDefinitionInfo(x, typeChecker, symbol, node)
+                  )
+                : [
+                      createDefinitionInfo(
+                          last(declarations),
+                          typeChecker,
+                          symbol,
+                          node,
+                          /*unverified*/ false,
+                          failedAliasResolution
+                      ),
+                  ]
             : undefined;
+    }
+
+    function getRecordKeyDefinition(): DefinitionInfo[] | undefined {
+        if (isPropertyAccessExpression(node.parent)) {
+            const exp = node.parent.expression;
+            if (isIdentifier(exp)) {
+                const sym = getSymbol(exp, typeChecker, true);
+                if (sym.symbol) {
+                    for (const i of sym.symbol.declarations ?? []) {
+                        if (isVariableDeclaration(i)) {
+                            if (i.type) {
+                                // i.type
+                                if (isTypeReferenceNode(i.type)) {
+                                    const arg = i.type.typeArguments?.[0];
+                                    if (arg && isLiteralTypeNode(arg) && isStringLiteral(arg.literal)) {
+
+                                        // ref `resolveStructuredTypeMembers` in checker.ts to narrow
+                                        // may this work for the mapped type
+                                        if (isTransientSymbol(symbol)) {
+                                            const links = symbol.links;
+                                            if (
+                                                links.checkFlags &
+                                                CheckFlags.Mapped
+                                            ) {
+                                                const mappedSymbolLinks =
+                                                    links as MappedSymbolLinks;
+                                                const firstTypeArgument =
+                                                    mappedSymbolLinks.mappedType
+                                                        .aliasTypeArguments?.[0];
+                                                if (firstTypeArgument && firstTypeArgument.isLiteral()) {
+                                                    if (arg.literal.text === firstTypeArgument.value) {
+                                                        const sourceFile = arg.getSourceFile()
+                                                        const textSpan = createTextSpanFromNode(arg, sourceFile)
+                                                        const def: DefinitionInfo = {
+                                                            kind: ScriptElementKind.typeElement,
+                                                            name: "test",
+                                                            containerKind: ScriptElementKind.typeElement,
+                                                            containerName: "test-container",
+                                                            textSpan,
+                                                            fileName: arg.getSourceFile().fileName
+                                                        };
+                                                        return [def];
+                                                    }
+                                                }
+                                                // this will lead to the ambient Record declaration
+                                                // const haha = definitionFromType(
+                                                //     mappedSymbolLinks.mappedType,
+                                                //     typeChecker,
+                                                //     node,
+                                                //     undefined
+                                                // ).slice();
+                                                // return haha;
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                // may be as expression
+                            }
+                        }
+                    }
+                }
+                return undefined;
+            }
+        }
+
+        return undefined;
     }
 }
 
