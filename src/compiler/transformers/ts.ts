@@ -2674,7 +2674,7 @@ export function transformTypeScript(context: TransformationContext) {
                 constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(constantValue))) :
                 factory.createNumericLiteral(constantValue);
 
-                if (!compilerOptions.removeComments) {
+            if (!compilerOptions.removeComments) {
                 const originalNode = getOriginalNode(node, isAccessExpression);
                 addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${safeMultiLineComment(getTextOfNode(originalNode))} `);
             }
