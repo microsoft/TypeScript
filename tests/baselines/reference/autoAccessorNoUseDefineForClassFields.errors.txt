@@ -1,0 +1,49 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/file3-2.ts(1,7): error TS2300: Duplicate identifier 'C3'.
+tests/cases/conformance/classes/propertyMemberDeclarations/file3.ts(1,7): error TS2300: Duplicate identifier 'C3'.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/file1.ts (0 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/51528
+    class C1 {
+        static accessor x = 0;
+    }
+    
+==== tests/cases/conformance/classes/propertyMemberDeclarations/file2.ts (0 errors) ====
+    class C2 {
+        static accessor #x = 0;
+    }
+    
+==== tests/cases/conformance/classes/propertyMemberDeclarations/file3.ts (1 errors) ====
+    class C3 {
+          ~~
+!!! error TS2300: Duplicate identifier 'C3'.
+!!! related TS6203 tests/cases/conformance/classes/propertyMemberDeclarations/file3-2.ts:1:7: 'C3' was also declared here.
+        static accessor #x = 0;
+        accessor #y = 0;
+    }
+    
+==== tests/cases/conformance/classes/propertyMemberDeclarations/file3-2.ts (1 errors) ====
+    class C3 {
+          ~~
+!!! error TS2300: Duplicate identifier 'C3'.
+!!! related TS6203 tests/cases/conformance/classes/propertyMemberDeclarations/file3.ts:1:7: 'C3' was also declared here.
+        accessor x = 0;
+    }
+    
+==== tests/cases/conformance/classes/propertyMemberDeclarations/file4.ts (0 errors) ====
+    class C4 {
+        accessor #x = 0;
+    }
+    
+==== tests/cases/conformance/classes/propertyMemberDeclarations/file5.ts (0 errors) ====
+    class C5 {
+        x = 0;
+        accessor #x = 1;
+    }
+    
+==== tests/cases/conformance/classes/propertyMemberDeclarations/file6.ts (0 errors) ====
+    class C6 {
+        accessor #x = 0;
+        x = 1;
+    }
+    
