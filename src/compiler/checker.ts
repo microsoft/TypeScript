@@ -335,6 +335,7 @@ import {
     getParseTreeNode,
     getPropertyAssignmentAliasLikeExpression,
     getPropertyNameForPropertyNameNode,
+    getPropertyNameFromType,
     getResolutionDiagnostic,
     getResolutionModeOverrideForClause,
     getResolvedExternalModuleName,
@@ -729,6 +730,7 @@ import {
     isTypeQueryNode,
     isTypeReferenceNode,
     isTypeReferenceType,
+    isTypeUsableAsPropertyName,
     isUMDExportSymbol,
     isValidBigIntString,
     isValidESSymbolDeclaration,
@@ -12287,13 +12289,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * Indicates whether a type can be used as a property name.
-     */
-    function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType {
-        return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
-    }
-
-    /**
      * Indicates whether a declaration name is definitely late-bindable.
      * A declaration name is only late-bindable if:
      * - It is a `ComputedPropertyName`.
@@ -12336,19 +12331,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function isNonBindableDynamicName(node: DeclarationName) {
         return isDynamicName(node) && !isLateBindableName(node);
-    }
-
-    /**
-     * Gets the symbolic name for a member from its type.
-     */
-    function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
-        if (type.flags & TypeFlags.UniqueESSymbol) {
-            return (type as UniqueESSymbolType).escapedName;
-        }
-        if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
-            return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
-        }
-        return Debug.fail();
     }
 
     /**
