@@ -1,7 +1,19 @@
 call(1);
      ^
 {
-  "text": "a:",
+  "text": [
+    {
+      "text": "a",
+      "span": {
+        "start": 22,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork7.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 105,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -10,7 +22,19 @@ call(1);
 call(1, 2);
      ^
 {
-  "text": "b:",
+  "text": [
+    {
+      "text": "b",
+      "span": {
+        "start": 44,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork7.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 114,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -19,7 +43,19 @@ call(1, 2);
 call(1, 2);
         ^
 {
-  "text": "c:",
+  "text": [
+    {
+      "text": "c",
+      "span": {
+        "start": 55,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork7.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 117,
   "kind": "Parameter",
   "whitespaceAfter": true

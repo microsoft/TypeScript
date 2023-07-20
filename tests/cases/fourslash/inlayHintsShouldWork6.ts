@@ -5,5 +5,6 @@
 //// foo(1, 2, 3)
 
 verify.baselineInlayHints(undefined, {
-    includeInlayParameterNameHints: "literals"
+    includeInlayParameterNameHints: "literals",
+    interactiveInlayHints: true
 });

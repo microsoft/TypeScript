@@ -1,7 +1,19 @@
 foo(a, 2);
     ^
 {
-  "text": "a:",
+  "text": [
+    {
+      "text": "a",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork36.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 63,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -10,7 +22,19 @@ foo(a, 2);
 foo(a, 2);
        ^
 {
-  "text": "b:",
+  "text": [
+    {
+      "text": "b",
+      "span": {
+        "start": 25,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork36.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 66,
   "kind": "Parameter",
   "whitespaceAfter": true

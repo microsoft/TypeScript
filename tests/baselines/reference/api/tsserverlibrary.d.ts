@@ -2124,11 +2124,15 @@ declare namespace ts {
                 arguments: InlayHintsRequestArgs;
             }
             interface InlayHintItem {
-                text: string;
+                text: string | InlayHintItemDisplayPart[];
                 position: Location;
                 kind: InlayHintKind;
                 whitespaceBefore?: boolean;
                 whitespaceAfter?: boolean;
+            }
+            interface InlayHintItemDisplayPart {
+                text: string;
+                span?: FileSpan;
             }
             interface InlayHintsResponse extends Response {
                 body?: InlayHintItem[];
@@ -2832,6 +2836,7 @@ declare namespace ts {
                 readonly includeInlayPropertyDeclarationTypeHints?: boolean;
                 readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
                 readonly includeInlayEnumMemberValueHints?: boolean;
+                readonly interactiveInlayHints?: boolean;
                 readonly autoImportFileExcludePatterns?: string[];
                 /**
                  * Indicates whether imports should be organized in a case-insensitive manner.
@@ -8400,6 +8405,7 @@ declare namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly interactiveInlayHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
@@ -10382,11 +10388,16 @@ declare namespace ts {
         Enum = "Enum"
     }
     interface InlayHint {
-        text: string;
+        text: string | InlayHintDisplayPart[];
         position: number;
         kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
+    }
+    interface InlayHintDisplayPart {
+        text: string;
+        span?: TextSpan;
+        file?: string;
     }
     interface TodoCommentDescriptor {
         text: string;

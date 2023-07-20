@@ -1,7 +1,19 @@
 function c2 () { foo2(1, 2); }
                       ^
 {
-  "text": "c:",
+  "text": [
+    {
+      "text": "c",
+      "span": {
+        "start": 55,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork32.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 293,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -10,7 +22,19 @@ function c2 () { foo2(1, 2); }
 function c2 () { foo2(1, 2); }
                          ^
 {
-  "text": "d:",
+  "text": [
+    {
+      "text": "d",
+      "span": {
+        "start": 66,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork32.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 296,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -19,7 +43,19 @@ function c2 () { foo2(1, 2); }
 function c3 () { foo3(1, 2); }
                       ^
 {
-  "text": "e:",
+  "text": [
+    {
+      "text": "e",
+      "span": {
+        "start": 95,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork32.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 324,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -28,7 +64,19 @@ function c3 () { foo3(1, 2); }
 function c3 () { foo3(1, 2); }
                          ^
 {
-  "text": "f:",
+  "text": [
+    {
+      "text": "f",
+      "span": {
+        "start": 106,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork32.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 327,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -37,7 +85,19 @@ function c3 () { foo3(1, 2); }
 function c4 () { foo4(1, 2); }
                       ^
 {
-  "text": "g:",
+  "text": [
+    {
+      "text": "g",
+      "span": {
+        "start": 135,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork32.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 355,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -46,7 +106,19 @@ function c4 () { foo4(1, 2); }
 function c4 () { foo4(1, 2); }
                          ^
 {
-  "text": "h:",
+  "text": [
+    {
+      "text": "h",
+      "span": {
+        "start": 146,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork32.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 358,
   "kind": "Parameter",
   "whitespaceAfter": true
