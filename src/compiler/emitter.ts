@@ -1158,7 +1158,6 @@ export const notImplementedResolver: EmitResolver = {
     isEntityNameVisible: notImplemented,
     // Returns the constant value this property access resolves to: notImplemented, or 'undefined' for a non-constant
     getConstantValue: notImplemented,
-    shouldParenthesizeConstantValue: notImplemented,
     getReferencedValueDeclaration: notImplemented,
     getReferencedValueDeclarations: notImplemented,
     getTypeReferenceSerializationKind: notImplemented,

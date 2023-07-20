@@ -22,12 +22,12 @@ E["E"].toString();
 
 
 //// [constEnumPropertyAccess3.js]
-(-2) /* E.A */.toString();
-(-1) /* E.B */.toString();
-(-3) /* E.C */.toString();
-(-3) /* E.D */.toString();
-(-2) /* E["A"] */.toString();
-(-1) /* E["B"] */.toString();
-(-3) /* E["C"] */.toString();
-(-3) /* E["D"] */.toString();
-(-9) /* E["E"] */.toString();
+(-2 /* E.A */).toString();
+(-1 /* E.B */).toString();
+(-3 /* E.C */).toString();
+(-3 /* E.D */).toString();
+(-2 /* E["A"] */).toString();
+(-1 /* E["B"] */).toString();
+(-3 /* E["C"] */).toString();
+(-3 /* E["D"] */).toString();
+(-9 /* E["E"] */).toString();

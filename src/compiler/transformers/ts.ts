@@ -125,7 +125,6 @@ import {
     isTryStatement,
     JsxOpeningElement,
     JsxSelfClosingElement,
-    LeftHandSideExpression,
     map,
     mapDefined,
     MethodDeclaration,
@@ -2668,11 +2667,12 @@ export function transformTypeScript(context: TransformationContext) {
         return value.replace(/\*\//g, "*_/");
     }
 
-    function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression): LeftHandSideExpression {
+    function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression) {
         const constantValue = tryGetConstEnumValue(node);
         if (constantValue !== undefined) {
             const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
-                resolver.shouldParenthesizeConstantValue(node) ? factory.createParenthesizedExpression(factory.createNumericLiteral(constantValue)) : factory.createNumericLiteral(constantValue);
+                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(constantValue))) :
+                factory.createNumericLiteral(constantValue);
 
             // track the constant value on the node for the printer in needsDotDotForPropertyAccess
             if (isStringLiteral(substitute) || isNumericLiteral(substitute)) {
