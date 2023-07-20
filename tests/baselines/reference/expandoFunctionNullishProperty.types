@@ -25,6 +25,28 @@ export function testNull(): TestNull {
 >inner : { (): void; prop: null; }
 }
 
+interface TestNull2 {
+  (): void;
+  prop: string | null;
+>prop : string | null
+}
+
+export function testNull2(): TestNull2 {
+>testNull2 : () => TestNull2
+
+  function inner() {}
+>inner : { (): void; prop: null; }
+
+  inner.prop = null;
+>inner.prop = null : null
+>inner.prop : null
+>inner : { (): void; prop: null; }
+>prop : null
+
+  return inner;
+>inner : { (): void; prop: null; }
+}
+
 interface TestUndefined {
   (): void;
   readonly prop: undefined;
