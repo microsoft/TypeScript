@@ -2782,8 +2782,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ false);
             }
             else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
-                // foo = this.bar is illegal in es2022+useDefineForClassFields when bar is a parameter property
-                return !(getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 && useDefineForClassFields
+                // foo = this.bar is illegal in useDefineForClassFields when bar is a parameter property
+                return !(useDefineForClassFields
                          && getContainingClass(declaration) === getContainingClass(usage)
                          && isUsedInFunctionOrInstanceProperty(usage, declaration));
             }
@@ -2814,7 +2814,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
         if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
-            if (getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 && useDefineForClassFields
+            if (useDefineForClassFields
                 && getContainingClass(declaration)
                 && (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent))) {
                 return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
@@ -2971,7 +2971,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.PropertyDeclaration:
                     // static properties in classes introduce temporary variables
                     if (hasStaticModifier(node)) {
-                        return target < ScriptTarget.ESNext || !useDefineForClassFields;
+                        return !useDefineForClassFields;
                     }
                     return requiresScopeChangeWorker((node as PropertyDeclaration).name);
                 default:
@@ -3389,10 +3389,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // 1. When result is undefined, after checking for a missing "this."
         // 2. When result is defined
         function checkAndReportErrorForInvalidInitializer() {
-            if (propertyWithInvalidInitializer && !(useDefineForClassFields && getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022)) {
+            if (propertyWithInvalidInitializer && !useDefineForClassFields) {
                 // We have a match, but the reference occurred within a property initializer and the identifier also binds
                 // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
-                // with ESNext+useDefineForClassFields because the scope semantics are different.
+                // with useDefineForClassFields because the scope semantics are different.
                 error(errorLocation,
                     errorLocation && propertyWithInvalidInitializer.type && textRangeContainsPositionInclusive(propertyWithInvalidInitializer.type, errorLocation.pos)
                         ? Diagnostics.Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor
@@ -31739,7 +31739,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             && !(isAccessExpression(node) && isAccessExpression(node.expression))
             && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
             && !(isMethodDeclaration(valueDeclaration) && getCombinedModifierFlagsCached(valueDeclaration) & ModifierFlags.Static)
-            && (compilerOptions.useDefineForClassFields || !isPropertyDeclaredInAncestorClass(prop))) {
+            && (useDefineForClassFields || !isPropertyDeclaredInAncestorClass(prop))) {
             diagnosticMessage = error(right, Diagnostics.Property_0_is_used_before_its_initialization, declarationName);
         }
         else if (valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
@@ -38429,7 +38429,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case "length":
                     case "caller":
                     case "arguments":
-                        if (compilerOptions.useDefineForClassFields) {
+                        if (useDefineForClassFields) {
                             break;
                         }
                         // fall through
@@ -38634,7 +38634,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     //   or the containing class declares instance member variables with initializers.
 
                     const superCallShouldBeRootLevel =
-                        (getEmitScriptTarget(compilerOptions) !== ScriptTarget.ESNext || !useDefineForClassFields) &&
+                        (!useDefineForClassFields) &&
                         (some((node.parent as ClassDeclaration).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
                         some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier)));
 
@@ -42900,7 +42900,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             !legacyDecorators && languageVersion < ScriptTarget.ESNext &&
             classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, node);
         const willTransformPrivateElementsOrClassStaticBlocks = languageVersion <= ScriptTarget.ES2022;
-        const willTransformInitializers = !useDefineForClassFields || languageVersion < ScriptTarget.ES2022;
+        const willTransformInitializers = !useDefineForClassFields;
         if (willTransformStaticElementsOfDecoratedClass || willTransformPrivateElementsOrClassStaticBlocks) {
             for (const member of node.members) {
                 if (willTransformStaticElementsOfDecoratedClass && classElementOrClassElementParameterIsDecorated(/*useLegacyDecorators*/ false, member, node)) {
