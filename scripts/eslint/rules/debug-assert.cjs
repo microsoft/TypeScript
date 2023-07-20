@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: ``,
-            recommended: "error",
         },
         messages: {
             secondArgumentDebugAssertError: `Second argument to 'Debug.assert' should be a string literal`,

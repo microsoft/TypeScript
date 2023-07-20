@@ -8,26 +8,12 @@
 
 // @Filename: /b.js
 //// function foo () { return require('./a'); }
-//// function bar ()/*a*/ { return require('./a').a; }
+//// function bar () { return require('./a').a; }
 //// const c = foo()
-//// const d/*b*/ = bar()
+//// const d = bar()
 
 goTo.file('/b.js')
-const markers = test.markers();
-verify.getInlayHints([
-    {
-        text: ': 1',
-        position: markers[0].position,
-        kind: ts.InlayHintKind.Type,
-        whitespaceBefore: true
-    },
-    {
-        text: ': 1',
-        position: markers[1].position,
-        kind: ts.InlayHintKind.Type,
-        whitespaceBefore: true
-    },
-], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayVariableTypeHints: true,
     includeInlayFunctionLikeReturnTypeHints: true
 });

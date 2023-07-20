@@ -1165,7 +1165,7 @@ export interface eI {
     p7(pa1: any, pa2: any): void;
     p7?(pa1: any, pa2: any): void;
 }
-export declare module eM {
+export declare namespace eM {
     var eV: any;
     function eF(): void;
     class eC {
@@ -1217,19 +1217,19 @@ export declare module eM {
         p7(pa1: any, pa2: any): void;
         p7?(pa1: any, pa2: any): void;
     }
-    module eM {
+    namespace eM {
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM { }
+        namespace eM { }
         var eaV: any;
         function eaF(): void;
         class eaC {
         }
-        module eaM { }
+        namespace eaM { }
     }
     var eaV: any;
     function eaF(): void;
@@ -1254,21 +1254,21 @@ export declare module eM {
         static tgF(): void;
         static get tgF(): any;
     }
-    module eaM {
+    namespace eaM {
         var V: any;
         function F(): void;
         class C {
         }
         interface I {
         }
-        module M { }
+        namespace M { }
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM { }
+        namespace eM { }
     }
 }
 export declare var eaV: any;
@@ -1294,7 +1294,7 @@ export declare class eaC {
     static tgF(): void;
     static get tgF(): any;
 }
-export declare module eaM {
+export declare namespace eaM {
     var V: any;
     function F(): void;
     class C {
@@ -1332,26 +1332,26 @@ export declare module eaM {
         p7(pa1: any, pa2: any): void;
         p7?(pa1: any, pa2: any): void;
     }
-    module M {
+    namespace M {
         var V: any;
         function F(): void;
         class C {
         }
         interface I {
         }
-        module M { }
+        namespace M { }
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM { }
+        namespace eM { }
         var eaV: any;
         function eaF(): void;
         class eaC {
         }
-        module eaM { }
+        namespace eaM { }
     }
     var eV: any;
     function eF(): void;
@@ -1391,18 +1391,18 @@ export declare module eaM {
         p7(pa1: any, pa2: any): void;
         p7?(pa1: any, pa2: any): void;
     }
-    module eM {
+    namespace eM {
         var V: any;
         function F(): void;
         class C {
         }
-        module M { }
+        namespace M { }
         var eV: any;
         function eF(): void;
         class eC {
         }
         interface eI {
         }
-        module eM { }
+        namespace eM { }
     }
 }

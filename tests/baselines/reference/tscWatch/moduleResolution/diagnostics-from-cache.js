@@ -54,7 +54,9 @@ File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
-[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
+[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+[[90m12:00:40 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -159,7 +161,9 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
-[[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
+[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+[[90m12:00:50 AM[0m] Found 2 errors. Watching for file changes.
 
 
 

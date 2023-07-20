@@ -59,17 +59,17 @@ var X;
 
 
 //// [declarationEmitNameConflicts2.d.ts]
-declare module X.Y.base {
+declare namespace X.Y.base {
     function f(): void;
     class C {
     }
-    module M {
+    namespace M {
         var v: any;
     }
     enum E {
     }
 }
-declare module X.Y.base.Z {
+declare namespace X.Y.base.Z {
     var f: typeof base.f;
     var C: typeof base.C;
     var M: typeof base.M;
