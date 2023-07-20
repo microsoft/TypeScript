@@ -3,7 +3,6 @@ import {
     BinaryExpression,
     BinaryOperator,
     cast,
-    CharacterCodes,
     compareValues,
     Comparison,
     ConciseBody,
@@ -29,7 +28,6 @@ import {
     isLiteralKind,
     isNamedTupleMember,
     isNodeArray,
-    isNumericLiteralTextSafeForPropertyAccess,
     isOptionalChain,
     isTypeOperatorNode,
     isUnaryExpression,
@@ -40,7 +38,6 @@ import {
     NewExpression,
     NodeArray,
     NodeFactory,
-    NumericLiteral,
     OperatorPrecedence,
     OuterExpressionKinds,
     ParenthesizerRules,
@@ -383,23 +380,9 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         //       new C.x        -> not the same as (new C).x
         //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
-        if (isLeftHandSideExpression(emittedExpression) && (optionalChain || !isOptionalChain(emittedExpression))) {
-            switch (emittedExpression.kind) {
-                case SyntaxKind.NewExpression:
-                    if ((emittedExpression as NewExpression).arguments) {
-                        break;
-                    }
-                    // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-                    return setTextRange(factory.createParenthesizedExpression(expression), expression);
-                case SyntaxKind.NumericLiteral: {
-                    const literal = emittedExpression as NumericLiteral;
-                    if (literal.text.charCodeAt(0) !== CharacterCodes.minus && isNumericLiteralTextSafeForPropertyAccess(literal)) {
-                        break;
-                    }
-                    // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-                    return setTextRange(factory.createParenthesizedExpression(expression), expression);
-                }
-            }
+        if (isLeftHandSideExpression(emittedExpression)
+            && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as NewExpression).arguments)
+            && (optionalChain || !isOptionalChain(emittedExpression))) {
             // TODO(rbuckton): Verify whether this assertion holds.
             return expression as LeftHandSideExpression;
         }

@@ -10311,11 +10311,3 @@ export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
 export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
     return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
 }
-
-/** @internal */
-export function isNumericLiteralTextSafeForPropertyAccess(numericLiteral: NumericLiteral, text = numericLiteral.text) {
-    return numericLiteral.numericLiteralFlags & TokenFlags.WithSpecifier
-        || stringContains(text, tokenToString(SyntaxKind.DotToken)!)
-        || stringContains(text, String.fromCharCode(CharacterCodes.E))
-        || stringContains(text, String.fromCharCode(CharacterCodes.e));
-}

@@ -137,6 +137,7 @@ import {
     getBaseFileName,
     GetCanonicalFileName,
     getCommentRange,
+    getConstantValue,
     getContainingNodeArray,
     getDeclarationEmitExtensionForPath,
     getDeclarationEmitOutputFilePath,
@@ -202,6 +203,7 @@ import {
     InterfaceDeclaration,
     InternalEmitFlags,
     IntersectionTypeNode,
+    isAccessExpression,
     isArray,
     isArrowFunction,
     isBinaryExpression,
@@ -237,7 +239,6 @@ import {
     isModuleDeclaration,
     isNodeDescendantOf,
     isNumericLiteral,
-    isNumericLiteralTextSafeForPropertyAccess,
     isParenthesizedExpression,
     isPartiallyEmittedExpression,
     isPinnedComment,
@@ -406,6 +407,7 @@ import {
     SpreadElement,
     stableSort,
     Statement,
+    stringContains,
     StringLiteral,
     supportedJSExtensionsFlat,
     SwitchStatement,
@@ -422,6 +424,7 @@ import {
     TemplateSpan,
     TextRange,
     ThrowStatement,
+    TokenFlags,
     tokenToString,
     tracing,
     TransformationResult,
@@ -1155,6 +1158,7 @@ export const notImplementedResolver: EmitResolver = {
     isEntityNameVisible: notImplemented,
     // Returns the constant value this property access resolves to: notImplemented, or 'undefined' for a non-constant
     getConstantValue: notImplemented,
+    shouldParenthesizeConstantValue: notImplemented,
     getReferencedValueDeclaration: notImplemented,
     getReferencedValueDeclarations: notImplemented,
     getTypeReferenceSerializationKind: notImplemented,
@@ -3052,7 +3056,17 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
             // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
-            return !isNumericLiteralTextSafeForPropertyAccess(expression, text);
+            return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
+                && !stringContains(text, tokenToString(SyntaxKind.DotToken)!)
+                && !stringContains(text, String.fromCharCode(CharacterCodes.E))
+                && !stringContains(text, String.fromCharCode(CharacterCodes.e));
+        }
+        else if (isAccessExpression(expression)) {
+            // check if constant enum value is integer
+            const constantValue = getConstantValue(expression);
+            // isFinite handles cases when constantValue is undefined
+            return typeof constantValue === "number" && isFinite(constantValue)
+                && Math.floor(constantValue) === constantValue;
         }
     }
 

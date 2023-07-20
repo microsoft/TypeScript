@@ -76,9 +76,9 @@ a;
 a[0];
 a.b["0"];
 a().x;
-(1).foo;
-(1.).foo;
-(1.0).foo;
+1..foo;
+1..foo;
+1.0.foo;
 12e+34.foo;
 0xff.foo;
 // should keep the parentheses in emit
