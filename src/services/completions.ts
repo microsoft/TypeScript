@@ -3585,7 +3585,8 @@ function getCompletionData(
             const nameSymbol = leftMostName && typeChecker.getSymbolAtLocation(leftMostName);
             // If this is nested like for `namespace N { export const sym = Symbol(); }`, we'll add the completion for `N`.
             const firstAccessibleSymbol = nameSymbol && getFirstSymbolInChain(nameSymbol, contextToken, typeChecker);
-            if (firstAccessibleSymbol && addToSeen(seenPropertySymbols, getSymbolId(firstAccessibleSymbol))) {
+            const firstAccessibleSymbolId = firstAccessibleSymbol && getSymbolId(firstAccessibleSymbol);
+            if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
                 const moduleSymbol = firstAccessibleSymbol.parent;
@@ -3621,6 +3622,9 @@ function getCompletionData(
                 }
             }
             else if (preferences.includeCompletionsWithInsertText) {
+                if (firstAccessibleSymbolId && seenPropertySymbols.has(firstAccessibleSymbolId)) {
+                    return;
+                }
                 addSymbolOriginInfo(symbol);
                 addSymbolSortInfo(symbol);
                 symbols.push(symbol);
@@ -4193,7 +4197,7 @@ function getCompletionData(
         const members = getPropertiesForCompletion(containerExpectedType, typeChecker);
         const existingMembers = getPropertiesForCompletion(containerActualType, typeChecker);
 
-        const existingMemberEscapedNames: Set<__String> = new Set();
+        const existingMemberEscapedNames = new Set<__String>();
         existingMembers.forEach(s => existingMemberEscapedNames.add(s.escapedName));
 
         symbols = concatenate(symbols, filter(members, s => !existingMemberEscapedNames.has(s.escapedName)));

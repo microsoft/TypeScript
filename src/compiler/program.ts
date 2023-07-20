@@ -1337,7 +1337,7 @@ export function getImpliedNodeFormatForFileWorker(
 }
 
 /** @internal */
-export const plainJSErrors: Set<number> = new Set([
+export const plainJSErrors = new Set<number>([
     // binder errors
     Diagnostics.Cannot_redeclare_block_scoped_variable_0.code,
     Diagnostics.A_module_cannot_have_multiple_default_exports.code,
@@ -5168,18 +5168,10 @@ export function filterSemanticDiagnostics(diagnostic: readonly Diagnostic[], opt
 }
 
 /** @internal */
-export interface CompilerHostLike {
-    useCaseSensitiveFileNames(): boolean;
-    getCurrentDirectory(): string;
-    fileExists(fileName: string): boolean;
-    readFile(fileName: string): string | undefined;
-    readDirectory?(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): string[];
-    trace?(s: string): void;
-    onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter;
-}
-
-/** @internal */
-export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, directoryStructureHost: DirectoryStructureHost = host): ParseConfigFileHost {
+export function parseConfigHostFromCompilerHostLike<T extends BuilderProgram>(
+    host: (CompilerHost | ProgramHost<T>) & { onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter },
+    directoryStructureHost: DirectoryStructureHost = host,
+): ParseConfigFileHost {
     return {
         fileExists: f => directoryStructureHost.fileExists(f),
         readDirectory(root, extensions, excludes, includes, depth) {
@@ -5187,10 +5179,13 @@ export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, dire
             return directoryStructureHost.readDirectory(root, extensions, excludes, includes, depth);
         },
         readFile: f => directoryStructureHost.readFile(f),
+        directoryExists: maybeBind(directoryStructureHost, directoryStructureHost.directoryExists),
+        getDirectories: maybeBind(directoryStructureHost, directoryStructureHost.getDirectories),
+        realpath: maybeBind(directoryStructureHost, directoryStructureHost.realpath),
         useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
         getCurrentDirectory: () => host.getCurrentDirectory(),
         onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic || returnUndefined,
-        trace: host.trace ? (s) => host.trace!(s) : undefined
+        trace: host.trace ? (s) => host.trace!(s) : undefined,
     };
 }
 

@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: ``,
-            recommended: "error",
         },
         messages: {
             internalCommentInNonJSDocError: `@internal should not appear in non-JSDoc comment for declaration.`,

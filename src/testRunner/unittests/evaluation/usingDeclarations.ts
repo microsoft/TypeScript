@@ -1658,4 +1658,29 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "after block"
         ]);
     });
+
+    it("'using' for 'function' disposable resource ", () => {
+        const { main, output } = evaluator.evaluateTypeScript(`
+        export const output: any[] = [];
+
+        function disposable() {
+            const f = () => output.push("enter");
+            const d = () => output.push("exit");
+            return Object.assign(f, { [Symbol.dispose]: d });
+        }
+
+        export function main() {
+            using run = disposable();
+            run();
+        }
+
+        `, { target: ts.ScriptTarget.ES2018 });
+
+        main();
+
+        assert.deepEqual(output, [
+            "enter",
+            "exit",
+        ]);
+    });
 });

@@ -60,6 +60,7 @@ import {
     getEntrypointsFromPackageJsonInfo,
     getNormalizedAbsolutePath,
     getOrUpdate,
+    GetPackageJsonEntrypointsHost,
     getStringComparer,
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
@@ -2093,7 +2094,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    getModuleResolutionHostForAutoImportProvider(): ModuleResolutionHost {
+    getHostForAutoImportProvider(): GetPackageJsonEntrypointsHost {
         if (this.program) {
             return {
                 fileExists: this.program.fileExists,
@@ -2104,6 +2105,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
                 trace: this.projectService.host.trace?.bind(this.projectService.host),
                 useCaseSensitiveFileNames: this.program.useCaseSensitiveFileNames(),
+                readDirectory: this.projectService.host.readDirectory.bind(this.projectService.host),
             };
         }
         return this.projectService.host;
@@ -2132,7 +2134,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (dependencySelection) {
             tracing?.push(tracing.Phase.Session, "getPackageJsonAutoImportProvider");
             const start = timestamp();
-            this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getModuleResolutionHostForAutoImportProvider(), this.documentRegistry);
+            this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getHostForAutoImportProvider(), this.documentRegistry);
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
                 this.sendPerformanceEvent("CreatePackageJsonAutoImportProvider", timestamp() - start);
@@ -2384,7 +2386,7 @@ export class AutoImportProviderProject extends Project {
     private static readonly maxDependencies = 10;
 
     /** @internal */
-    static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, compilerOptions: CompilerOptions): string[] {
+    static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, host: GetPackageJsonEntrypointsHost, compilerOptions: CompilerOptions): string[] {
         if (!dependencySelection) {
             return ts.emptyArray;
         }
@@ -2422,7 +2424,7 @@ export class AutoImportProviderProject extends Project {
                     name,
                     hostProject.currentDirectory,
                     compilerOptions,
-                    moduleResolutionHost,
+                    host,
                     program.getModuleResolutionCache());
                 if (packageJson) {
                     const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache);
@@ -2441,7 +2443,7 @@ export class AutoImportProviderProject extends Project {
                             `@types/${name}`,
                             directory,
                             compilerOptions,
-                            moduleResolutionHost,
+                            host,
                             program.getModuleResolutionCache());
                         if (typesPackageJson) {
                             const entrypoints = getRootNamesFromPackageJson(typesPackageJson, program, symlinkCache);
@@ -2480,11 +2482,11 @@ export class AutoImportProviderProject extends Project {
             const entrypoints = getEntrypointsFromPackageJsonInfo(
                 packageJson,
                 compilerOptions,
-                moduleResolutionHost,
+                host,
                 program.getModuleResolutionCache(),
                 resolveJs);
             if (entrypoints) {
-                const real = moduleResolutionHost.realpath?.(packageJson.packageDirectory);
+                const real = host.realpath?.(packageJson.packageDirectory);
                 const isSymlink = real && real !== packageJson.packageDirectory;
                 if (isSymlink) {
                     symlinkCache.setSymlinkedDirectory(packageJson.packageDirectory, {
@@ -2514,7 +2516,7 @@ export class AutoImportProviderProject extends Project {
     };
 
     /** @internal */
-    static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
+    static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, host: GetPackageJsonEntrypointsHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
         if (dependencySelection === PackageJsonAutoImportPreference.Off) {
             return undefined;
         }
@@ -2524,7 +2526,7 @@ export class AutoImportProviderProject extends Project {
             ...this.compilerOptionsOverrides,
         };
 
-        const rootNames = this.getRootFileNames(dependencySelection, hostProject, moduleResolutionHost, compilerOptions);
+        const rootNames = this.getRootFileNames(dependencySelection, hostProject, host, compilerOptions);
         if (!rootNames.length) {
             return undefined;
         }
@@ -2573,7 +2575,7 @@ export class AutoImportProviderProject extends Project {
             rootFileNames = AutoImportProviderProject.getRootFileNames(
                 this.hostProject.includePackageJsonAutoImports(),
                 this.hostProject,
-                this.hostProject.getModuleResolutionHostForAutoImportProvider(),
+                this.hostProject.getHostForAutoImportProvider(),
                 this.getCompilationSettings());
         }
 
@@ -2620,7 +2622,7 @@ export class AutoImportProviderProject extends Project {
         throw new Error("package.json changes should be notified on an AutoImportProvider's host project");
     }
 
-    override getModuleResolutionHostForAutoImportProvider(): never {
+    override getHostForAutoImportProvider(): never {
         throw new Error("AutoImportProviderProject cannot provide its own host; use `hostProject.getModuleResolutionHostForAutomImportProvider()` instead.");
     }
 
