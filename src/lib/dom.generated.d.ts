@@ -2640,7 +2640,7 @@ interface AudioContext extends BaseAudioContext {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/outputLatency) */
     readonly outputLatency: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/close) */
-    close(): Promise<void>;
+    close(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/createMediaElementSource) */
     createMediaElementSource(mediaElement: HTMLMediaElement): MediaElementAudioSourceNode;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/createMediaStreamDestination) */
@@ -2650,9 +2650,9 @@ interface AudioContext extends BaseAudioContext {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/getOutputTimestamp) */
     getOutputTimestamp(): AudioTimestamp;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/resume) */
-    resume(): Promise<void>;
+    resume(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioContext/suspend) */
-    suspend(): Promise<void>;
+    suspend(): Promise<undefined>;
     addEventListener<K extends keyof BaseAudioContextEventMap>(type: K, listener: (this: AudioContext, ev: BaseAudioContextEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof BaseAudioContextEventMap>(type: K, listener: (this: AudioContext, ev: BaseAudioContextEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -5209,9 +5209,9 @@ declare var CSSVariableReferenceValue: {
  */
 interface Cache {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/add) */
-    add(request: RequestInfo | URL): Promise<void>;
+    add(request: RequestInfo | URL): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/addAll) */
-    addAll(requests: RequestInfo[]): Promise<void>;
+    addAll(requests: RequestInfo[]): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/delete) */
     delete(request: RequestInfo | URL, options?: CacheQueryOptions): Promise<boolean>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/keys) */
@@ -5221,7 +5221,7 @@ interface Cache {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/matchAll) */
     matchAll(request?: RequestInfo | URL, options?: CacheQueryOptions): Promise<ReadonlyArray<Response>>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/put) */
-    put(request: RequestInfo | URL, response: Response): Promise<void>;
+    put(request: RequestInfo | URL, response: Response): Promise<undefined>;
 }
 
 declare var Cache: {
@@ -5616,9 +5616,9 @@ interface Clipboard extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clipboard/readText) */
     readText(): Promise<string>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clipboard/write) */
-    write(data: ClipboardItems): Promise<void>;
+    write(data: ClipboardItems): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clipboard/writeText) */
-    writeText(data: string): Promise<void>;
+    writeText(data: string): Promise<undefined>;
 }
 
 declare var Clipboard: {
@@ -5809,7 +5809,7 @@ interface CredentialsContainer {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CredentialsContainer/get) */
     get(options?: CredentialRequestOptions): Promise<Credential | null>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CredentialsContainer/preventSilentAccess) */
-    preventSilentAccess(): Promise<void>;
+    preventSilentAccess(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CredentialsContainer/store) */
     store(credential: Credential): Promise<Credential>;
 }
@@ -7201,9 +7201,9 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/exitFullscreen)
      */
-    exitFullscreen(): Promise<void>;
+    exitFullscreen(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/exitPictureInPicture) */
-    exitPictureInPicture(): Promise<void>;
+    exitPictureInPicture(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/exitPointerLock) */
     exitPointerLock(): void;
     /**
@@ -7331,7 +7331,7 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
      */
     releaseEvents(): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/requestStorageAccess) */
-    requestStorageAccess(): Promise<void>;
+    requestStorageAccess(): Promise<undefined>;
     /**
      * Writes one or more HTML expressions to a document in the specified window.
      * @param content Specifies the text and HTML tags to write.
@@ -7774,7 +7774,7 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, Non
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/requestFullscreen)
      */
-    requestFullscreen(options?: FullscreenOptions): Promise<void>;
+    requestFullscreen(options?: FullscreenOptions): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/requestPointerLock) */
     requestPointerLock(): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Element/scroll) */
@@ -8371,7 +8371,7 @@ interface FileSystemDirectoryHandle extends FileSystemHandle {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/getFileHandle) */
     getFileHandle(name: string, options?: FileSystemGetFileOptions): Promise<FileSystemFileHandle>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/removeEntry) */
-    removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<void>;
+    removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/resolve) */
     resolve(possibleDescendant: FileSystemHandle): Promise<string[] | null>;
 }
@@ -8468,11 +8468,11 @@ declare var FileSystemHandle: {
  */
 interface FileSystemWritableFileStream extends WritableStream {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/seek) */
-    seek(position: number): Promise<void>;
+    seek(position: number): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/truncate) */
-    truncate(size: number): Promise<void>;
+    truncate(size: number): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/write) */
-    write(data: FileSystemWriteChunkType): Promise<void>;
+    write(data: FileSystemWriteChunkType): Promise<undefined>;
 }
 
 declare var FileSystemWritableFileStream: {
@@ -10902,7 +10902,7 @@ interface HTMLImageElement extends HTMLElement {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/y) */
     readonly y: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/decode) */
-    decode(): Promise<void>;
+    decode(): Promise<undefined>;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLImageElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLImageElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -11542,13 +11542,13 @@ interface HTMLMediaElement extends HTMLElement {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/play)
      */
-    play(): Promise<void>;
+    play(): Promise<undefined>;
     /**
      * Available only in secure contexts.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLMediaElement/setMediaKeys)
      */
-    setMediaKeys(mediaKeys: MediaKeys | null): Promise<void>;
+    setMediaKeys(mediaKeys: MediaKeys | null): Promise<undefined>;
     readonly NETWORK_EMPTY: 0;
     readonly NETWORK_IDLE: 1;
     readonly NETWORK_LOADING: 2;
@@ -14928,15 +14928,15 @@ interface MediaKeySession extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/sessionId) */
     readonly sessionId: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/close) */
-    close(): Promise<void>;
+    close(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/generateRequest) */
-    generateRequest(initDataType: string, initData: BufferSource): Promise<void>;
+    generateRequest(initDataType: string, initData: BufferSource): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/load) */
     load(sessionId: string): Promise<boolean>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/remove) */
-    remove(): Promise<void>;
+    remove(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaKeySession/update) */
-    update(response: BufferSource): Promise<void>;
+    update(response: BufferSource): Promise<undefined>;
     addEventListener<K extends keyof MediaKeySessionEventMap>(type: K, listener: (this: MediaKeySession, ev: MediaKeySessionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof MediaKeySessionEventMap>(type: K, listener: (this: MediaKeySession, ev: MediaKeySessionEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -15324,7 +15324,7 @@ interface MediaStreamTrack extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/readyState) */
     readonly readyState: MediaStreamTrackState;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/applyConstraints) */
-    applyConstraints(constraints?: MediaTrackConstraints): Promise<void>;
+    applyConstraints(constraints?: MediaTrackConstraints): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/clone) */
     clone(): MediaStreamTrack;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/MediaStreamTrack/getCapabilities) */
@@ -15812,13 +15812,13 @@ declare var NamedNodeMap: {
  */
 interface NavigationPreloadManager {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/disable) */
-    disable(): Promise<void>;
+    disable(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/enable) */
-    enable(): Promise<void>;
+    enable(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/getState) */
     getState(): Promise<NavigationPreloadState>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/setHeaderValue) */
-    setHeaderValue(value: string): Promise<void>;
+    setHeaderValue(value: string): Promise<undefined>;
 }
 
 declare var NavigationPreloadManager: {
@@ -15898,7 +15898,7 @@ interface Navigator extends NavigatorAutomationInformation, NavigatorBadge, Navi
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/share)
      */
-    share(data?: ShareData): Promise<void>;
+    share(data?: ShareData): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/vibrate) */
     vibrate(pattern: VibratePattern): boolean;
 }
@@ -15916,9 +15916,9 @@ interface NavigatorAutomationInformation {
 /** Available only in secure contexts. */
 interface NavigatorBadge {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/clearAppBadge) */
-    clearAppBadge(): Promise<void>;
+    clearAppBadge(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/setAppBadge) */
-    setAppBadge(contents?: number): Promise<void>;
+    setAppBadge(contents?: number): Promise<undefined>;
 }
 
 interface NavigatorConcurrentHardware {
@@ -16528,11 +16528,11 @@ interface OfflineAudioContext extends BaseAudioContext {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext/complete_event) */
     oncomplete: ((this: OfflineAudioContext, ev: OfflineAudioCompletionEvent) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext/resume) */
-    resume(): Promise<void>;
+    resume(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext/startRendering) */
     startRendering(): Promise<AudioBuffer>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/OfflineAudioContext/suspend) */
-    suspend(suspendTime: number): Promise<void>;
+    suspend(suspendTime: number): Promise<undefined>;
     addEventListener<K extends keyof OfflineAudioContextEventMap>(type: K, listener: (this: OfflineAudioContext, ev: OfflineAudioContextEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof OfflineAudioContextEventMap>(type: K, listener: (this: OfflineAudioContext, ev: OfflineAudioContextEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -16859,7 +16859,7 @@ interface PaymentRequest extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/paymentmethodchange_event) */
     onpaymentmethodchange: ((this: PaymentRequest, ev: Event) => any) | null;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/abort) */
-    abort(): Promise<void>;
+    abort(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/canMakePayment) */
     canMakePayment(): Promise<boolean>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentRequest/show) */
@@ -16905,9 +16905,9 @@ interface PaymentResponse extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/requestId) */
     readonly requestId: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/complete) */
-    complete(result?: PaymentComplete): Promise<void>;
+    complete(result?: PaymentComplete): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/retry) */
-    retry(errorFields?: PaymentValidationErrors): Promise<void>;
+    retry(errorFields?: PaymentValidationErrors): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/PaymentResponse/toJSON) */
     toJSON(): any;
 }
@@ -18107,9 +18107,9 @@ interface RTCPeerConnection extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/signalingState) */
     readonly signalingState: RTCSignalingState;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/addIceCandidate) */
-    addIceCandidate(candidate?: RTCIceCandidateInit): Promise<void>;
+    addIceCandidate(candidate?: RTCIceCandidateInit): Promise<undefined>;
     /** @deprecated */
-    addIceCandidate(candidate: RTCIceCandidateInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+    addIceCandidate(candidate: RTCIceCandidateInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/addTrack) */
     addTrack(track: MediaStreamTrack, ...streams: MediaStream[]): RTCRtpSender;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/addTransceiver) */
@@ -18119,13 +18119,13 @@ interface RTCPeerConnection extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/createAnswer) */
     createAnswer(options?: RTCAnswerOptions): Promise<RTCSessionDescriptionInit>;
     /** @deprecated */
-    createAnswer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+    createAnswer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/createDataChannel) */
     createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit): RTCDataChannel;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/createOffer) */
     createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit>;
     /** @deprecated */
-    createOffer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): Promise<void>;
+    createOffer(successCallback: RTCSessionDescriptionCallback, failureCallback: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/getConfiguration) */
     getConfiguration(): RTCConfiguration;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/getReceivers) */
@@ -18143,13 +18143,13 @@ interface RTCPeerConnection extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/setConfiguration) */
     setConfiguration(configuration?: RTCConfiguration): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/setLocalDescription) */
-    setLocalDescription(description?: RTCLocalSessionDescriptionInit): Promise<void>;
+    setLocalDescription(description?: RTCLocalSessionDescriptionInit): Promise<undefined>;
     /** @deprecated */
-    setLocalDescription(description: RTCLocalSessionDescriptionInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+    setLocalDescription(description: RTCLocalSessionDescriptionInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCPeerConnection/setRemoteDescription) */
-    setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void>;
+    setRemoteDescription(description: RTCSessionDescriptionInit): Promise<undefined>;
     /** @deprecated */
-    setRemoteDescription(description: RTCSessionDescriptionInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<void>;
+    setRemoteDescription(description: RTCSessionDescriptionInit, successCallback: VoidFunction, failureCallback: RTCPeerConnectionErrorCallback): Promise<undefined>;
     addEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -18240,9 +18240,9 @@ interface RTCRtpSender {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpSender/getStats) */
     getStats(): Promise<RTCStatsReport>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpSender/replaceTrack) */
-    replaceTrack(withTrack: MediaStreamTrack | null): Promise<void>;
+    replaceTrack(withTrack: MediaStreamTrack | null): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpSender/setParameters) */
-    setParameters(parameters: RTCRtpSendParameters): Promise<void>;
+    setParameters(parameters: RTCRtpSendParameters): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpSender/setStreams) */
     setStreams(...streams: MediaStream[]): void;
 }
@@ -18470,7 +18470,7 @@ interface ReadableStream<R = any> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked) */
     readonly locked: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/cancel) */
-    cancel(reason?: any): Promise<void>;
+    cancel(reason?: any): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/getReader) */
     getReader(options: { mode: "byob" }): ReadableStreamBYOBReader;
     getReader(): ReadableStreamDefaultReader<R>;
@@ -18478,7 +18478,7 @@ interface ReadableStream<R = any> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/pipeThrough) */
     pipeThrough<T>(transform: ReadableWritablePair<T, R>, options?: StreamPipeOptions): ReadableStream<T>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/pipeTo) */
-    pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<void>;
+    pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/tee) */
     tee(): [ReadableStream<R>, ReadableStream<R>];
 }
@@ -18552,7 +18552,7 @@ interface ReadableStreamGenericReader {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/closed) */
     readonly closed: Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/cancel) */
-    cancel(reason?: any): Promise<void>;
+    cancel(reason?: any): Promise<undefined>;
 }
 
 interface RemotePlaybackEventMap {
@@ -18572,9 +18572,9 @@ interface RemotePlayback extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RemotePlayback/state) */
     readonly state: RemotePlaybackState;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RemotePlayback/cancelWatchAvailability) */
-    cancelWatchAvailability(id?: number): Promise<void>;
+    cancelWatchAvailability(id?: number): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RemotePlayback/prompt) */
-    prompt(): Promise<void>;
+    prompt(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RemotePlayback/watchAvailability) */
     watchAvailability(callback: RemotePlaybackAvailabilityCallback): Promise<number>;
     addEventListener<K extends keyof RemotePlaybackEventMap>(type: K, listener: (this: RemotePlayback, ev: RemotePlaybackEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -21209,11 +21209,11 @@ interface ServiceWorkerRegistration extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/getNotifications) */
     getNotifications(filter?: GetNotificationOptions): Promise<Notification[]>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/showNotification) */
-    showNotification(title: string, options?: NotificationOptions): Promise<void>;
+    showNotification(title: string, options?: NotificationOptions): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/unregister) */
     unregister(): Promise<boolean>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/update) */
-    update(): Promise<void>;
+    update(): Promise<undefined>;
     addEventListener<K extends keyof ServiceWorkerRegistrationEventMap>(type: K, listener: (this: ServiceWorkerRegistration, ev: ServiceWorkerRegistrationEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ServiceWorkerRegistrationEventMap>(type: K, listener: (this: ServiceWorkerRegistration, ev: ServiceWorkerRegistrationEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -22752,7 +22752,7 @@ interface VideoDecoder extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/decode) */
     decode(chunk: EncodedVideoChunk): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/flush) */
-    flush(): Promise<void>;
+    flush(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/reset) */
     reset(): void;
     addEventListener<K extends keyof VideoDecoderEventMap>(type: K, listener: (this: VideoDecoder, ev: VideoDecoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -22788,7 +22788,7 @@ interface VideoEncoder extends EventTarget {
     configure(config: VideoEncoderConfig): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/encode) */
     encode(frame: VideoFrame, options?: VideoEncoderEncodeOptions): void;
-    flush(): Promise<void>;
+    flush(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/reset) */
     reset(): void;
     addEventListener<K extends keyof VideoEncoderEventMap>(type: K, listener: (this: VideoEncoder, ev: VideoEncoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -23106,7 +23106,7 @@ interface WakeLockSentinel extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WakeLockSentinel/type) */
     readonly type: WakeLockType;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WakeLockSentinel/release) */
-    release(): Promise<void>;
+    release(): Promise<undefined>;
     addEventListener<K extends keyof WakeLockSentinelEventMap>(type: K, listener: (this: WakeLockSentinel, ev: WakeLockSentinelEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof WakeLockSentinelEventMap>(type: K, listener: (this: WakeLockSentinel, ev: WakeLockSentinelEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -25986,7 +25986,7 @@ interface Worklet {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Worklet/addModule)
      */
-    addModule(moduleURL: string | URL, options?: WorkletOptions): Promise<void>;
+    addModule(moduleURL: string | URL, options?: WorkletOptions): Promise<undefined>;
 }
 
 declare var Worklet: {
@@ -26003,9 +26003,9 @@ interface WritableStream<W = any> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/locked) */
     readonly locked: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/abort) */
-    abort(reason?: any): Promise<void>;
+    abort(reason?: any): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/close) */
-    close(): Promise<void>;
+    close(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/getWriter) */
     getWriter(): WritableStreamDefaultWriter<W>;
 }
@@ -26045,13 +26045,13 @@ interface WritableStreamDefaultWriter<W = any> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/ready) */
     readonly ready: Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/abort) */
-    abort(reason?: any): Promise<void>;
+    abort(reason?: any): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/close) */
-    close(): Promise<void>;
+    close(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/releaseLock) */
     releaseLock(): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/write) */
-    write(chunk?: W): Promise<void>;
+    write(chunk?: W): Promise<undefined>;
 }
 
 declare var WritableStreamDefaultWriter: {

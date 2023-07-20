@@ -45,7 +45,7 @@ interface PromiseConstructor {
      * Creates a new resolved promise.
      * @returns A resolved promise.
      */
-    resolve(): Promise<void>;
+    resolve(): Promise<undefined>;
     /**
      * Creates a new resolved promise for the provided value.
      * @param value A promise.

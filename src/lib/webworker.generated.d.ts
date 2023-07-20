@@ -1423,9 +1423,9 @@ declare var CSSVariableReferenceValue: {
  */
 interface Cache {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/add) */
-    add(request: RequestInfo | URL): Promise<void>;
+    add(request: RequestInfo | URL): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/addAll) */
-    addAll(requests: RequestInfo[]): Promise<void>;
+    addAll(requests: RequestInfo[]): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/delete) */
     delete(request: RequestInfo | URL, options?: CacheQueryOptions): Promise<boolean>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/keys) */
@@ -1435,7 +1435,7 @@ interface Cache {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/matchAll) */
     matchAll(request?: RequestInfo | URL, options?: CacheQueryOptions): Promise<ReadonlyArray<Response>>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/put) */
-    put(request: RequestInfo | URL, response: Response): Promise<void>;
+    put(request: RequestInfo | URL, response: Response): Promise<undefined>;
 }
 
 declare var Cache: {
@@ -1719,7 +1719,7 @@ declare var Client: {
  */
 interface Clients {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/claim) */
-    claim(): Promise<void>;
+    claim(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/get) */
     get(id: string): Promise<Client | undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Clients/matchAll) */
@@ -2825,7 +2825,7 @@ interface FileSystemDirectoryHandle extends FileSystemHandle {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/getFileHandle) */
     getFileHandle(name: string, options?: FileSystemGetFileOptions): Promise<FileSystemFileHandle>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/removeEntry) */
-    removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<void>;
+    removeEntry(name: string, options?: FileSystemRemoveOptions): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/resolve) */
     resolve(possibleDescendant: FileSystemHandle): Promise<string[] | null>;
 }
@@ -2906,11 +2906,11 @@ declare var FileSystemSyncAccessHandle: {
  */
 interface FileSystemWritableFileStream extends WritableStream {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/seek) */
-    seek(position: number): Promise<void>;
+    seek(position: number): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/truncate) */
-    truncate(size: number): Promise<void>;
+    truncate(size: number): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/FileSystemWritableFileStream/write) */
-    write(data: FileSystemWriteChunkType): Promise<void>;
+    write(data: FileSystemWriteChunkType): Promise<undefined>;
 }
 
 declare var FileSystemWritableFileStream: {
@@ -4005,13 +4005,13 @@ declare var MessagePort: {
  */
 interface NavigationPreloadManager {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/disable) */
-    disable(): Promise<void>;
+    disable(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/enable) */
-    enable(): Promise<void>;
+    enable(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/getState) */
     getState(): Promise<NavigationPreloadState>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/NavigationPreloadManager/setHeaderValue) */
-    setHeaderValue(value: string): Promise<void>;
+    setHeaderValue(value: string): Promise<undefined>;
 }
 
 declare var NavigationPreloadManager: {
@@ -4022,9 +4022,9 @@ declare var NavigationPreloadManager: {
 /** Available only in secure contexts. */
 interface NavigatorBadge {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/clearAppBadge) */
-    clearAppBadge(): Promise<void>;
+    clearAppBadge(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Navigator/setAppBadge) */
-    setAppBadge(contents?: number): Promise<void>;
+    setAppBadge(contents?: number): Promise<undefined>;
 }
 
 interface NavigatorConcurrentHardware {
@@ -4771,7 +4771,7 @@ interface ReadableStream<R = any> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/locked) */
     readonly locked: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/cancel) */
-    cancel(reason?: any): Promise<void>;
+    cancel(reason?: any): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/getReader) */
     getReader(options: { mode: "byob" }): ReadableStreamBYOBReader;
     getReader(): ReadableStreamDefaultReader<R>;
@@ -4779,7 +4779,7 @@ interface ReadableStream<R = any> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/pipeThrough) */
     pipeThrough<T>(transform: ReadableWritablePair<T, R>, options?: StreamPipeOptions): ReadableStream<T>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/pipeTo) */
-    pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<void>;
+    pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStream/tee) */
     tee(): [ReadableStream<R>, ReadableStream<R>];
 }
@@ -4853,7 +4853,7 @@ interface ReadableStreamGenericReader {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/closed) */
     readonly closed: Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamBYOBReader/cancel) */
-    cancel(reason?: any): Promise<void>;
+    cancel(reason?: any): Promise<undefined>;
 }
 
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Report) */
@@ -5176,7 +5176,7 @@ interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
     readonly registration: ServiceWorkerRegistration;
     readonly serviceWorker: ServiceWorker;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerGlobalScope/skipWaiting) */
-    skipWaiting(): Promise<void>;
+    skipWaiting(): Promise<undefined>;
     addEventListener<K extends keyof ServiceWorkerGlobalScopeEventMap>(type: K, listener: (this: ServiceWorkerGlobalScope, ev: ServiceWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ServiceWorkerGlobalScopeEventMap>(type: K, listener: (this: ServiceWorkerGlobalScope, ev: ServiceWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -5218,11 +5218,11 @@ interface ServiceWorkerRegistration extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/getNotifications) */
     getNotifications(filter?: GetNotificationOptions): Promise<Notification[]>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/showNotification) */
-    showNotification(title: string, options?: NotificationOptions): Promise<void>;
+    showNotification(title: string, options?: NotificationOptions): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/unregister) */
     unregister(): Promise<boolean>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerRegistration/update) */
-    update(): Promise<void>;
+    update(): Promise<undefined>;
     addEventListener<K extends keyof ServiceWorkerRegistrationEventMap>(type: K, listener: (this: ServiceWorkerRegistration, ev: ServiceWorkerRegistrationEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ServiceWorkerRegistrationEventMap>(type: K, listener: (this: ServiceWorkerRegistration, ev: ServiceWorkerRegistrationEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -5674,7 +5674,7 @@ interface VideoDecoder extends EventTarget {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/decode) */
     decode(chunk: EncodedVideoChunk): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/flush) */
-    flush(): Promise<void>;
+    flush(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoDecoder/reset) */
     reset(): void;
     addEventListener<K extends keyof VideoDecoderEventMap>(type: K, listener: (this: VideoDecoder, ev: VideoDecoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -5710,7 +5710,7 @@ interface VideoEncoder extends EventTarget {
     configure(config: VideoEncoderConfig): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/encode) */
     encode(frame: VideoFrame, options?: VideoEncoderEncodeOptions): void;
-    flush(): Promise<void>;
+    flush(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/VideoEncoder/reset) */
     reset(): void;
     addEventListener<K extends keyof VideoEncoderEventMap>(type: K, listener: (this: VideoEncoder, ev: VideoEncoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -8527,9 +8527,9 @@ interface WritableStream<W = any> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/locked) */
     readonly locked: boolean;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/abort) */
-    abort(reason?: any): Promise<void>;
+    abort(reason?: any): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/close) */
-    close(): Promise<void>;
+    close(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStream/getWriter) */
     getWriter(): WritableStreamDefaultWriter<W>;
 }
@@ -8569,13 +8569,13 @@ interface WritableStreamDefaultWriter<W = any> {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/ready) */
     readonly ready: Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/abort) */
-    abort(reason?: any): Promise<void>;
+    abort(reason?: any): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/close) */
-    close(): Promise<void>;
+    close(): Promise<undefined>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/releaseLock) */
     releaseLock(): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WritableStreamDefaultWriter/write) */
-    write(chunk?: W): Promise<void>;
+    write(chunk?: W): Promise<undefined>;
 }
 
 declare var WritableStreamDefaultWriter: {

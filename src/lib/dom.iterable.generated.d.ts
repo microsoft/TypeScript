@@ -52,7 +52,7 @@ interface CSSUnparsedValue {
 
 interface Cache {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Cache/addAll) */
-    addAll(requests: Iterable<RequestInfo>): Promise<void>;
+    addAll(requests: Iterable<RequestInfo>): Promise<undefined>;
 }
 
 interface CanvasPath {
