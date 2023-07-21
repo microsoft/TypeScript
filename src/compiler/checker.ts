@@ -2785,7 +2785,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
                 // foo = this.bar is illegal in emitStandardClassFields when bar is a parameter property
-                return !(getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 && emitStandardClassFields
+                return !(emitStandardClassFields
                          && getContainingClass(declaration) === getContainingClass(usage)
                          && isUsedInFunctionOrInstanceProperty(usage, declaration));
             }
