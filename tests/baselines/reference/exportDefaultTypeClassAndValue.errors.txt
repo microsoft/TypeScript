@@ -3,9 +3,10 @@ exportDefaultTypeClassAndValue.ts(2,16): error TS2528: A module cannot have mult
 exportDefaultTypeClassAndValue.ts(3,22): error TS2323: Cannot redeclare exported variable 'default'.
 exportDefaultTypeClassAndValue.ts(3,22): error TS2528: A module cannot have multiple default exports.
 exportDefaultTypeClassAndValue.ts(5,16): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeClassAndValue.ts(5,16): error TS2693: 'Bar' only refers to a type, but is being used as a value here.
 
 
-==== exportDefaultTypeClassAndValue.ts (5 errors) ====
+==== exportDefaultTypeClassAndValue.ts (6 errors) ====
     const foo = 1
     export default foo
     ~~~~~~~~~~~~~~~~~~
@@ -25,4 +26,6 @@ exportDefaultTypeClassAndValue.ts(5,16): error TS2528: A module cannot have mult
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2752 exportDefaultTypeClassAndValue.ts:2:16: The first export default is here.
 !!! related TS2752 exportDefaultTypeClassAndValue.ts:3:22: The first export default is here.
+                   ~~~
+!!! error TS2693: 'Bar' only refers to a type, but is being used as a value here.
     

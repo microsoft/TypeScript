@@ -1,0 +1,12 @@
+exportDefaultForNonInstantiatedModule.ts(6,16): error TS2693: 'm' only refers to a type, but is being used as a value here.
+
+
+==== exportDefaultForNonInstantiatedModule.ts (1 errors) ====
+    module m {
+        export interface foo {
+        }
+    }
+    // Should not be emitted
+    export default m;
+                   ~
+!!! error TS2693: 'm' only refers to a type, but is being used as a value here.

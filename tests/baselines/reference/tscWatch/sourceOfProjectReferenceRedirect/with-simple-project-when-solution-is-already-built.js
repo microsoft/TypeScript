@@ -182,61 +182,8 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
   "size": 1372
 }
 
-//// [/user/username/projects/demo/lib/animals/animal.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/user/username/projects/demo/lib/animals/animal.d.ts]
-export type Size = "small" | "medium" | "large";
-export default interface Animal {
-    size: Size;
-}
-
-
-//// [/user/username/projects/demo/lib/animals/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDog = void 0;
-var dog_1 = require("./dog");
-Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
-
-
-//// [/user/username/projects/demo/lib/animals/index.d.ts]
-import Animal from './animal';
-export default Animal;
-import { createDog, Dog } from './dog';
-export { createDog, Dog };
-
-
-//// [/user/username/projects/demo/lib/animals/dog.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDog = void 0;
-var utilities_1 = require("../core/utilities");
-function createDog() {
-    return ({
-        size: "medium",
-        woof: function () {
-            console.log("".concat(this.name, " says \"Woof\"!"));
-        },
-        name: (0, utilities_1.makeRandomName)()
-    });
-}
-exports.createDog = createDog;
-
-
-//// [/user/username/projects/demo/lib/animals/dog.d.ts]
-import Animal from '.';
-export interface Dog extends Animal {
-    woof(): void;
-    name: string;
-}
-export declare function createDog(): Dog;
-
-
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../core/utilities.d.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","signature":"-9289341318-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n"},{"version":"-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","signature":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"},"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n",{"version":"-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n","signature":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"}],"root":[2,3,5],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"fileIdsList":[[3,4],[2,5],[3]],"referencedMap":[[5,1],[3,2]],"exportedModulesMap":[[5,3],[3,2]],"semanticDiagnosticsPerFile":[1,2,5,3,4],"latestChangedDtsFile":"./dog.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../core/utilities.d.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n","-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n"],"root":[2,3,5],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"fileIdsList":[[3,4],[2,5]],"referencedMap":[[5,1],[3,2]],"exportedModulesMap":[[5,1],[3,2]],"semanticDiagnosticsPerFile":[1,2,5,[3,[{"file":"../../animals/index.ts","start":49,"length":6,"messageText":"'Animal' only refers to a type, but is being used as a value here.","category":1,"code":2693}]],4],"affectedFilesPendingEmit":[2,5,3],"emitSignatures":[2,3,5]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -256,9 +203,6 @@ export declare function createDog(): Dog;
       [
         "../../animals/animal.ts",
         "../../animals/dog.ts"
-      ],
-      [
-        "../../animals/index.ts"
       ]
     ],
     "fileInfos": {
@@ -272,32 +216,20 @@ export declare function createDog(): Dog;
         "affectsGlobalScope": true
       },
       "../../animals/animal.ts": {
-        "original": {
-          "version": "-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n",
-          "signature": "-9289341318-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n"
-        },
         "version": "-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n",
-        "signature": "-9289341318-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n"
+        "signature": "-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n"
       },
       "../../animals/index.ts": {
-        "original": {
-          "version": "-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n",
-          "signature": "1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"
-        },
         "version": "-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n",
-        "signature": "1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"
+        "signature": "-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n"
       },
       "../core/utilities.d.ts": {
         "version": "-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n",
         "signature": "-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"
       },
       "../../animals/dog.ts": {
-        "original": {
-          "version": "-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n",
-          "signature": "6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"
-        },
         "version": "-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n",
-        "signature": "6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"
+        "signature": "-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n"
       }
     },
     "root": [
@@ -339,7 +271,8 @@ export declare function createDog(): Dog;
     },
     "exportedModulesMap": {
       "../../animals/dog.ts": [
-        "../../animals/index.ts"
+        "../../animals/index.ts",
+        "../core/utilities.d.ts"
       ],
       "../../animals/index.ts": [
         "../../animals/animal.ts",
@@ -350,22 +283,57 @@ export declare function createDog(): Dog;
       "../../../../../../a/lib/lib.d.ts",
       "../../animals/animal.ts",
       "../../animals/dog.ts",
-      "../../animals/index.ts",
+      [
+        "../../animals/index.ts",
+        [
+          {
+            "file": "../../animals/index.ts",
+            "start": 49,
+            "length": 6,
+            "messageText": "'Animal' only refers to a type, but is being used as a value here.",
+            "category": 1,
+            "code": 2693
+          }
+        ]
+      ],
       "../core/utilities.d.ts"
     ],
-    "latestChangedDtsFile": "./dog.d.ts"
+    "affectedFilesPendingEmit": [
+      [
+        "../../animals/animal.ts",
+        "Js | Dts"
+      ],
+      [
+        "../../animals/dog.ts",
+        "Js | Dts"
+      ],
+      [
+        "../../animals/index.ts",
+        "Js | Dts"
+      ]
+    ],
+    "emitSignatures": [
+      "../../animals/animal.ts",
+      "../../animals/index.ts",
+      "../../animals/dog.ts"
+    ]
   },
   "version": "FakeTSVersion",
-  "size": 2465
+  "size": 2154
 }
 
 
 /a/lib/tsc.js --w --p /user/username/projects/demo/animals/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:01:09 AM[0m] Starting compilation in watch mode...
+[[90m12:00:57 AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
+[96muser/username/projects/demo/animals/index.ts[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS2693: [0m'Animal' only refers to a type, but is being used as a value here.
+
+[7m3[0m export default Animal;
+[7m [0m [91m               ~~~~~~[0m
+
+[[90m12:01:13 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -380,12 +348,14 @@ Program files::
 /user/username/projects/demo/animals/dog.ts
 
 Semantic diagnostics in builder refreshed for::
+/user/username/projects/demo/animals/index.ts
 /user/username/projects/demo/core/utilities.ts
 /user/username/projects/demo/animals/dog.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/demo/core/utilities.ts (computed .d.ts)
 /user/username/projects/demo/animals/dog.ts (computed .d.ts)
+/user/username/projects/demo/animals/index.ts (computed .d.ts)
 
 PolledWatches::
 /user/username/projects/demo/animals/node_modules/@types: *new*
@@ -423,9 +393,8 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/demo/lib/animals/dog.js] file written with same contents
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../../core/utilities.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","signature":"-9289341318-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n"},{"version":"-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","signature":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"},{"version":"25274411612-\r\nexport function makeRandomName() {\r\n    return \"Bob!?! \";\r\n}\r\n\r\nexport function lastElementOf<T>(arr: T[]): T | undefined {\r\n    if (arr.length === 0) return undefined;\r\n    return arr[arr.length - 1];\r\n}\r\n\r\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"},{"version":"-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n","signature":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"}],"root":[2,3,5],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"fileIdsList":[[3,4],[2,5],[3]],"referencedMap":[[5,1],[3,2]],"exportedModulesMap":[[5,3],[3,2]],"semanticDiagnosticsPerFile":[1,2,5,3,4],"latestChangedDtsFile":"./dog.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../../core/utilities.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","signature":"-9289341318-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n"},{"version":"-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","signature":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"},{"version":"25274411612-\r\nexport function makeRandomName() {\r\n    return \"Bob!?! \";\r\n}\r\n\r\nexport function lastElementOf<T>(arr: T[]): T | undefined {\r\n    if (arr.length === 0) return undefined;\r\n    return arr[arr.length - 1];\r\n}\r\n\r\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"},{"version":"-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n","signature":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"}],"root":[2,3,5],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"fileIdsList":[[3,4],[2,5],[3]],"referencedMap":[[5,1],[3,2]],"exportedModulesMap":[[5,3],[3,2]],"semanticDiagnosticsPerFile":[1,2,5,[3,[{"file":"../../animals/index.ts","start":49,"length":6,"messageText":"'Animal' only refers to a type, but is being used as a value here.","category":1,"code":2693}]],4],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -543,12 +512,77 @@ exitCode:: ExitStatus.undefined
       "../../../../../../a/lib/lib.d.ts",
       "../../animals/animal.ts",
       "../../animals/dog.ts",
-      "../../animals/index.ts",
+      [
+        "../../animals/index.ts",
+        [
+          {
+            "file": "../../animals/index.ts",
+            "start": 49,
+            "length": 6,
+            "messageText": "'Animal' only refers to a type, but is being used as a value here.",
+            "category": 1,
+            "code": 2693
+          }
+        ]
+      ],
       "../../core/utilities.ts"
     ],
-    "latestChangedDtsFile": "./dog.d.ts"
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2737
+  "size": 2907
 }
+
+//// [/user/username/projects/demo/lib/animals/animal.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/user/username/projects/demo/lib/animals/animal.d.ts]
+export type Size = "small" | "medium" | "large";
+export default interface Animal {
+    size: Size;
+}
+
+
+//// [/user/username/projects/demo/lib/animals/dog.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
+var utilities_1 = require("../core/utilities");
+function createDog() {
+    return ({
+        size: "medium",
+        woof: function () {
+            console.log("".concat(this.name, " says \"Woof\"!"));
+        },
+        name: (0, utilities_1.makeRandomName)()
+    });
+}
+exports.createDog = createDog;
+
+
+//// [/user/username/projects/demo/lib/animals/dog.d.ts]
+import Animal from '.';
+export interface Dog extends Animal {
+    woof(): void;
+    name: string;
+}
+export declare function createDog(): Dog;
+
+
+//// [/user/username/projects/demo/lib/animals/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDog = void 0;
+var dog_1 = require("./dog");
+Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
+
+
+//// [/user/username/projects/demo/lib/animals/index.d.ts]
+import Animal from './animal';
+export default Animal;
+import { createDog, Dog } from './dog';
+export { createDog, Dog };
+
 

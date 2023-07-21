@@ -1,8 +1,9 @@
 exportDefaultAlias_excludesEverything.ts(1,26): error TS2528: A module cannot have multiple default exports.
 exportDefaultAlias_excludesEverything.ts(3,16): error TS2528: A module cannot have multiple default exports.
+exportDefaultAlias_excludesEverything.ts(3,16): error TS2693: 'B' only refers to a type, but is being used as a value here.
 
 
-==== exportDefaultAlias_excludesEverything.ts (2 errors) ====
+==== exportDefaultAlias_excludesEverything.ts (3 errors) ====
     export default interface A {}
                              ~
 !!! error TS2528: A module cannot have multiple default exports.
@@ -12,4 +13,6 @@ exportDefaultAlias_excludesEverything.ts(3,16): error TS2528: A module cannot ha
                    ~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2752 exportDefaultAlias_excludesEverything.ts:1:26: The first export default is here.
+                   ~
+!!! error TS2693: 'B' only refers to a type, but is being used as a value here.
     

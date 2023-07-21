@@ -1,0 +1,16 @@
+/foo/test.ts(4,16): error TS2693: 'Foo' only refers to a type, but is being used as a value here.
+
+
+==== /foo/tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": { "composite": true, "outDir": "out" }
+    }
+    
+==== /foo/test.ts (1 errors) ====
+    interface Foo {
+        x: number;
+    }
+    export default Foo;
+                   ~~~
+!!! error TS2693: 'Foo' only refers to a type, but is being used as a value here.
+    

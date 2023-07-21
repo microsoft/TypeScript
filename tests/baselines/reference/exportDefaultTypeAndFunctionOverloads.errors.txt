@@ -2,9 +2,10 @@ exportDefaultTypeAndFunctionOverloads.ts(1,25): error TS2528: A module cannot ha
 exportDefaultTypeAndFunctionOverloads.ts(2,25): error TS2528: A module cannot have multiple default exports.
 exportDefaultTypeAndFunctionOverloads.ts(3,25): error TS2528: A module cannot have multiple default exports.
 exportDefaultTypeAndFunctionOverloads.ts(7,16): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeAndFunctionOverloads.ts(7,16): error TS2693: 'Foo' only refers to a type, but is being used as a value here.
 
 
-==== exportDefaultTypeAndFunctionOverloads.ts (4 errors) ====
+==== exportDefaultTypeAndFunctionOverloads.ts (5 errors) ====
     export default function foo(value: number): number
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
@@ -26,4 +27,6 @@ exportDefaultTypeAndFunctionOverloads.ts(7,16): error TS2528: A module cannot ha
 !!! related TS2752 exportDefaultTypeAndFunctionOverloads.ts:1:25: The first export default is here.
 !!! related TS2752 exportDefaultTypeAndFunctionOverloads.ts:2:25: The first export default is here.
 !!! related TS2752 exportDefaultTypeAndFunctionOverloads.ts:3:25: The first export default is here.
+                   ~~~
+!!! error TS2693: 'Foo' only refers to a type, but is being used as a value here.
     

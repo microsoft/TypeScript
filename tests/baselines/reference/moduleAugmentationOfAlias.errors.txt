@@ -1,0 +1,21 @@
+/a.ts(2,16): error TS2693: 'I' only refers to a type, but is being used as a value here.
+
+
+==== /a.ts (1 errors) ====
+    interface I {}
+    export default I;
+                   ~
+!!! error TS2693: 'I' only refers to a type, but is being used as a value here.
+    
+==== /b.ts (0 errors) ====
+    export {};
+    declare module './a' {
+        export default interface I { x: number; }
+    }
+    
+==== /c.ts (0 errors) ====
+    import I from "./a";
+    function f(i: I) {
+        i.x;
+    }
+    
