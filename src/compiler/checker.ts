@@ -7180,6 +7180,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (propertySymbol.flags & SymbolFlags.SetAccessor) {
                     const setAccessorDecl = find(propertySymbol.declarations, decl => decl.kind === SyntaxKind.SetAccessor) as SetAccessorDeclaration;
                     const parameterName = setAccessorDecl?.parameters?.length > 0 ? setAccessorDecl.parameters[0].name : "arg";
+                    const writePropertyTypeNode = serializeTypeForDeclaration(context, getNonMissingWriteTypeOfSymbol(propertySymbol), propertySymbol, saveEnclosingDeclaration);
                     const setAccessorSignature = factory.createSetAccessorDeclaration(
                         /*modifiers*/ undefined,
                         propertyName,
@@ -7188,7 +7189,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             /*dotDotDotToken*/ undefined,
                             parameterName,
                             /*questionToken*/ undefined,
-                            propertyTypeNode
+                            writePropertyTypeNode
                         )],
                         /*body*/ undefined);
                     setCommentRange(setAccessorSignature, setAccessorDecl);
@@ -11566,6 +11567,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getNonMissingTypeOfSymbol(symbol: Symbol) {
         return removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
+    }
+
+    function getNonMissingWriteTypeOfSymbol(symbol: Symbol) {
+        return removeMissingType(getWriteTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
     }
 
     function isReferenceToType(type: Type, target: Type) {
