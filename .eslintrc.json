@@ -55,6 +55,7 @@
         "object-shorthand": "error",
         "prefer-const": "error",
         "prefer-object-spread": "error",
+        "unicode-bom": ["error", "never"],
 
         // @typescript-eslint/eslint-plugin
         "@typescript-eslint/naming-convention": [
