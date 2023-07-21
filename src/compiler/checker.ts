@@ -44682,7 +44682,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             : Diagnostics.An_export_default_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type,
                         idText(id));
                 }
-                else if (!node.isExportEquals && !(node.flags & NodeFlags.Ambient) && (getTypeOnlyAliasDeclaration(sym, /* SymbolFlags */ undefined) || ((getAllSymbolFlags(sym) & SymbolFlags.Value) === 0))) {
+                else if (!node.isExportEquals && !(node.flags & NodeFlags.Ambient) && (getTypeOnlyAliasDeclaration(sym, /*include*/ undefined) || ((getAllSymbolFlags(sym) & SymbolFlags.Value) === 0))) {
                     error(id, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, idText(id));
                 }
             }
