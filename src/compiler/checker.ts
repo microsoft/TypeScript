@@ -274,6 +274,7 @@ import {
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
+    getEmitStandardClassFields,
     getEnclosingBlockScopeContainer,
     getEnclosingContainer,
     getEntityNameFromTypeNode,
@@ -1434,6 +1435,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var moduleKind = getEmitModuleKind(compilerOptions);
     var legacyDecorators = !!compilerOptions.experimentalDecorators;
     var useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
+    var emitStandardClassFields = getEmitStandardClassFields(compilerOptions);
     var allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
     var strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
     var strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
@@ -2782,8 +2784,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ false);
             }
             else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
-                // foo = this.bar is illegal in useDefineForClassFields when bar is a parameter property
-                return !(useDefineForClassFields
+                // foo = this.bar is illegal in emitStandardClassFields when bar is a parameter property
+                return !(getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 && emitStandardClassFields
                          && getContainingClass(declaration) === getContainingClass(usage)
                          && isUsedInFunctionOrInstanceProperty(usage, declaration));
             }
@@ -2795,7 +2797,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // 1. inside an export specifier
         // 2. inside a function
         // 3. inside an instance property initializer, a reference to a non-instance property
-        //    (except when target: "esnext" and useDefineForClassFields: true and the reference is to a parameter property)
+        //    (except when emitStandardClassFields: true and the reference is to a parameter property)
         // 4. inside a static property initializer, a reference to a static method in the same class
         // 5. inside a TS export= declaration (since we will move the export statement during emit to avoid TDZ)
         // or if usage is in a type context:
@@ -2814,7 +2816,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
         if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
-            if (useDefineForClassFields
+            if (emitStandardClassFields
                 && getContainingClass(declaration)
                 && (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent))) {
                 return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
@@ -2971,7 +2973,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.PropertyDeclaration:
                     // static properties in classes introduce temporary variables
                     if (hasStaticModifier(node)) {
-                        return !useDefineForClassFields;
+                        return !emitStandardClassFields;
                     }
                     return requiresScopeChangeWorker((node as PropertyDeclaration).name);
                 default:
@@ -3389,10 +3391,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // 1. When result is undefined, after checking for a missing "this."
         // 2. When result is defined
         function checkAndReportErrorForInvalidInitializer() {
-            if (propertyWithInvalidInitializer && !useDefineForClassFields) {
+            if (propertyWithInvalidInitializer && !(emitStandardClassFields)) {
                 // We have a match, but the reference occurred within a property initializer and the identifier also binds
                 // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
-                // with useDefineForClassFields because the scope semantics are different.
+                // with emitStandardClassFields because the scope semantics are different.
                 error(errorLocation,
                     errorLocation && propertyWithInvalidInitializer.type && textRangeContainsPositionInclusive(propertyWithInvalidInitializer.type, errorLocation.pos)
                         ? Diagnostics.Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor
@@ -38634,7 +38636,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     //   or the containing class declares instance member variables with initializers.
 
                     const superCallShouldBeRootLevel =
-                        (!useDefineForClassFields) &&
+                        !emitStandardClassFields &&
                         (some((node.parent as ClassDeclaration).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
                         some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier)));
 
@@ -42900,7 +42902,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             !legacyDecorators && languageVersion < ScriptTarget.ESNext &&
             classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, node);
         const willTransformPrivateElementsOrClassStaticBlocks = languageVersion <= ScriptTarget.ES2022;
-        const willTransformInitializers = !useDefineForClassFields;
+        const willTransformInitializers = !emitStandardClassFields;
         if (willTransformStaticElementsOfDecoratedClass || willTransformPrivateElementsOrClassStaticBlocks) {
             for (const member of node.members) {
                 if (willTransformStaticElementsOfDecoratedClass && classElementOrClassElementParameterIsDecorated(/*useLegacyDecorators*/ false, member, node)) {

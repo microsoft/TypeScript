@@ -9,8 +9,8 @@ class C {
 >C : C
 
     p = x
->p : number
->x : 1
+>p : any
+>x : any
 
     constructor(x: string) { }
 >x : string
