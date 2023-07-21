@@ -1,7 +1,19 @@
 foo(1);
     ^
 {
-  "text": "v:",
+  "text": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork34.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 29,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -10,7 +22,19 @@ foo(1);
 foo('');
     ^
 {
-  "text": "v:",
+  "text": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork34.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 37,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -19,7 +43,19 @@ foo('');
 foo(true);
     ^
 {
-  "text": "v:",
+  "text": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork34.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 46,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -28,7 +64,19 @@ foo(true);
 foo((1));
     ^
 {
-  "text": "v:",
+  "text": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork34.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 67,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -37,7 +85,19 @@ foo((1));
 foo(foo(1));
         ^
 {
-  "text": "v:",
+  "text": [
+    {
+      "text": "v",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork34.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 81,
   "kind": "Parameter",
   "whitespaceAfter": true

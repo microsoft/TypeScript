@@ -1,7 +1,19 @@
 fn(/* nobody knows exactly what this param is */ 42);
                                                  ^
 {
-  "text": "x:",
+  "text": [
+    {
+      "text": "x",
+      "span": {
+        "start": 12,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork53.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 76,
   "kind": "Parameter",
   "whitespaceAfter": true

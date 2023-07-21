@@ -1,7 +1,19 @@
 foo2(1, 2);
      ^
 {
-  "text": "c:",
+  "text": [
+    {
+      "text": "c",
+      "span": {
+        "start": 55,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork33.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 257,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -10,7 +22,19 @@ foo2(1, 2);
 foo2(1, 2);
         ^
 {
-  "text": "d:",
+  "text": [
+    {
+      "text": "d",
+      "span": {
+        "start": 66,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork33.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 260,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -19,7 +43,19 @@ foo2(1, 2);
 foo3(1, 2);
      ^
 {
-  "text": "e:",
+  "text": [
+    {
+      "text": "e",
+      "span": {
+        "start": 95,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork33.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 269,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -28,7 +64,19 @@ foo3(1, 2);
 foo3(1, 2);
         ^
 {
-  "text": "f:",
+  "text": [
+    {
+      "text": "f",
+      "span": {
+        "start": 106,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork33.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 272,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -37,7 +85,19 @@ foo3(1, 2);
 foo4(1, 2);
      ^
 {
-  "text": "g:",
+  "text": [
+    {
+      "text": "g",
+      "span": {
+        "start": 135,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork33.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 281,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -46,7 +106,19 @@ foo4(1, 2);
 foo4(1, 2);
         ^
 {
-  "text": "h:",
+  "text": [
+    {
+      "text": "h",
+      "span": {
+        "start": 146,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork33.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 284,
   "kind": "Parameter",
   "whitespaceAfter": true

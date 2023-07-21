@@ -1,7 +1,19 @@
     "hello",
     ^
 {
-  "text": "a:",
+  "text": [
+    {
+      "text": "a",
+      "span": {
+        "start": 18,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 183,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -10,7 +22,19 @@
     undefined,
     ^
 {
-  "text": "b:",
+  "text": [
+    {
+      "text": "b",
+      "span": {
+        "start": 33,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 196,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -19,7 +43,19 @@
     null,
     ^
 {
-  "text": "c:",
+  "text": [
+    {
+      "text": "c",
+      "span": {
+        "start": 51,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 211,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -28,7 +64,19 @@
     true,
     ^
 {
-  "text": "d:",
+  "text": [
+    {
+      "text": "d",
+      "span": {
+        "start": 64,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 221,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -37,7 +85,19 @@
     false,
     ^
 {
-  "text": "e:",
+  "text": [
+    {
+      "text": "e",
+      "span": {
+        "start": 80,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 231,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -46,7 +106,19 @@
     Infinity,
     ^
 {
-  "text": "f:",
+  "text": [
+    {
+      "text": "f",
+      "span": {
+        "start": 96,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 242,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -55,7 +127,19 @@
     -Infinity,
     ^
 {
-  "text": "g:",
+  "text": [
+    {
+      "text": "g",
+      "span": {
+        "start": 111,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 256,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -64,7 +148,19 @@
     NaN,
     ^
 {
-  "text": "h:",
+  "text": [
+    {
+      "text": "h",
+      "span": {
+        "start": 126,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 271,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -73,7 +169,19 @@
     /hello/g,
     ^
 {
-  "text": "i:",
+  "text": [
+    {
+      "text": "i",
+      "span": {
+        "start": 141,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 280,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -82,7 +190,19 @@
     123n,
     ^
 {
-  "text": "j:",
+  "text": [
+    {
+      "text": "j",
+      "span": {
+        "start": 156,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork64.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 294,
   "kind": "Parameter",
   "whitespaceAfter": true
