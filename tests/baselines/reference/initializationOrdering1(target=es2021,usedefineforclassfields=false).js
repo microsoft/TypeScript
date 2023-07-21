@@ -1,6 +1,6 @@
-//// [tests/cases/conformance/classes/propertyMemberDeclarations/initializationOrdering2.ts] ////
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/initializationOrdering1.ts] ////
 
-//// [initializationOrdering2.ts]
+//// [initializationOrdering1.ts]
 class Helper {
     create(): boolean {
         return true
@@ -17,7 +17,7 @@ export class Broken {
 
 new Broken(new Helper)
 
-//// [initializationOrdering2.js]
+//// [initializationOrdering1.js]
 class Helper {
     create() {
         return true;

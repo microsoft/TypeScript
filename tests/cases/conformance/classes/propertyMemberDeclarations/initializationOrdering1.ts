@@ -1,5 +1,5 @@
 // @target: esnext, es2021, es2022
-// @useDefineForClassFields: true
+// @useDefineForClassFields: true, false
 
 class Helper {
     create(): boolean {
