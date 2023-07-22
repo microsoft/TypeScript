@@ -218,10 +218,7 @@ export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, wo
  * @param {string} path
  */
 function removeIfExits(path) {
-    return fs.promises.rm(path, { recursive: true }).catch(err => {
-        // ignore file not found errors.
-        if (err.code !== "ENOENT") { throw err; }
-    });
+    return fs.promises.rm(path, { recursive: true, force: true });
 }
 
 /**
