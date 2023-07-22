@@ -1898,9 +1898,11 @@ export function transformTypeScript(context: TransformationContext) {
                     : factory.createBinaryExpression(factory.createNumericLiteral(0), SyntaxKind.SlashToken, factory.createNumericLiteral(0));
             }
             if (!isFinite(value)) {
-                return resolver.isNameReferencingGlobalValueAtLocation("Infinity", member)
-                    ? factory.createIdentifier("Infinity")
-                    : factory.createBinaryExpression(value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(1)) : factory.createNumericLiteral(1), SyntaxKind.SlashToken, factory.createNumericLiteral(0));
+                if (resolver.isNameReferencingGlobalValueAtLocation("Infinity", member)) {
+                    return value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createIdentifier("Infinity")) : factory.createIdentifier("Infinity");
+                }
+                const dividend = value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(1)) : factory.createNumericLiteral(1);
+                return factory.createBinaryExpression(dividend, SyntaxKind.SlashToken, factory.createNumericLiteral(0));
             }
             return factory.createNumericLiteral(value);
         }
