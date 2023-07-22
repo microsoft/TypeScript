@@ -18,3 +18,11 @@ const target: Test2 = { ...source };
 >{ ...source } : { toString: "string" | null; }
 >source : Test1
 
+const toString = target.toString;
+>toString : "string" | null
+>target.toString : "string" | null
+>target : Test2
+>toString : "string" | null
+
+export {}
+

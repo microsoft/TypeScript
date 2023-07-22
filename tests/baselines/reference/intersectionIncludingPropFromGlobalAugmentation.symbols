@@ -21,3 +21,11 @@ const target: Test2 = { ...source };
 >Test2 : Symbol(Test2, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 2, 46))
 >source : Symbol(source, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 4, 13))
 
+const toString = target.toString;
+>toString : Symbol(toString, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 7, 5))
+>target.toString : Symbol(Test1.toString, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 2, 17))
+>target : Symbol(target, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 5, 5))
+>toString : Symbol(Test1.toString, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 2, 17))
+
+export {}
+

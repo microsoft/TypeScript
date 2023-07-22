@@ -7,3 +7,7 @@ interface Test1 { toString: null | 'string'; }
 type Test2 = Test1 & { optional?: unknown };
 declare const source: Test1;
 const target: Test2 = { ...source };
+
+const toString = target.toString;
+
+export {}
