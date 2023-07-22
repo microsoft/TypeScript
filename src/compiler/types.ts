@@ -5717,6 +5717,7 @@ export interface EmitResolver {
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
+    isNameReferencingGlobalValueAtLocation(name: string, location: Node): boolean;
 }
 
 export const enum SymbolFlags {

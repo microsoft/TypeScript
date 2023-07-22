@@ -1889,7 +1889,23 @@ export function transformTypeScript(context: TransformationContext) {
     function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
         const value = resolver.getConstantValue(member);
         if (value !== undefined) {
-            return typeof value === "string" ? factory.createStringLiteral(value) : factory.createNumericLiteral(value);
+            if (typeof value === "string") {
+                return factory.createStringLiteral(value);
+            }
+            if (Number.isNaN(value)) {
+                return resolver.isNameReferencingGlobalValueAtLocation("NaN", member)
+                    ? factory.createIdentifier("NaN")
+                    : factory.createBinaryExpression(factory.createNumericLiteral(0), SyntaxKind.SlashToken, factory.createNumericLiteral(0));
+            }
+            if (!isFinite(value)) {
+                const infinity = resolver.isNameReferencingGlobalValueAtLocation("Infinity", member)
+                    ? factory.createIdentifier("Infinity")
+                    : factory.createBinaryExpression(factory.createNumericLiteral(1), SyntaxKind.SlashToken, factory.createNumericLiteral(0));
+                return value < 0
+                    ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, infinity)
+                    : infinity;
+            }
+            return factory.createNumericLiteral(value);
         }
         else {
             enableSubstitutionForNonQualifiedEnumMembers();
