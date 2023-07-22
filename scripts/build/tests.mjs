@@ -1,6 +1,5 @@
 import { CancelError } from "@esfx/canceltoken";
 import chalk from "chalk";
-import del from "del";
 import fs from "fs";
 import os from "os";
 import path from "path";
@@ -155,8 +154,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         process.env.NODE_ENV = savedNodeEnv;
     }
 
-    await del("test.config");
-    await deleteTemporaryProjectOutput();
+    await removeIfExits("test.config");
+    await removeIfExits(path.join(localBaseline, "projectOutput/"));
 
     if (error !== undefined) {
         if (error instanceof CancelError) {
@@ -174,13 +173,14 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 }
 
 export async function cleanTestDirs() {
-    await del([localBaseline, localRwcBaseline]);
+    await removeIfExits(localBaseline);
+    await removeIfExits(localRwcBaseline);
     await fs.promises.mkdir(localRwcBaseline, { recursive: true });
     await fs.promises.mkdir(localBaseline, { recursive: true });
 }
 
 async function cleanCoverageDir() {
-    await del([coverageDir]);
+    await removeIfExits(coverageDir);
 }
 
 /**
@@ -214,8 +214,14 @@ export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, wo
     fs.writeFileSync("test.config", testConfigContents);
 }
 
-function deleteTemporaryProjectOutput() {
-    return del(path.join(localBaseline, "projectOutput/"));
+/**
+ * @param {string} path
+ */
+function removeIfExits(path) {
+    return fs.promises.rm(path, { recursive: true }).catch(err => {
+        // ignore file not found errors.
+        if (err.code !== "ENOENT") { throw err; }
+    });
 }
 
 /**

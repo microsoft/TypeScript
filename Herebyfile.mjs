@@ -2,7 +2,6 @@
 import { CancelToken } from "@esfx/canceltoken";
 import chalk from "chalk";
 import chokidar from "chokidar";
-import del from "del";
 import esbuild from "esbuild";
 import { EventEmitter } from "events";
 import fs from "fs";
@@ -84,7 +83,10 @@ const cleanDiagnostics = task({
     name: "clean-diagnostics",
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     hiddenFromTaskList: true,
-    run: () => del([diagnosticInformationMapTs, diagnosticMessagesGeneratedJson]),
+    run: async () => {
+        await fs.promises.rm(diagnosticInformationMapTs, { recursive: true });
+        await fs.promises.rm(diagnosticMessagesGeneratedJson, { recursive: true });
+    },
 });
 
 
@@ -847,7 +849,7 @@ export const lkg = task({
 export const cleanBuilt = task({
     name: "clean-built",
     hiddenFromTaskList: true,
-    run: () => del("built"),
+    run: () => fs.promises.rm("built", { recursive: true }),
 });
 
 export const clean = task({
