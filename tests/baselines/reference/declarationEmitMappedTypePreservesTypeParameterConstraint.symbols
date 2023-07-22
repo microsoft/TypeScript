@@ -127,3 +127,55 @@ export const buildSchema = <V extends string>(
 
 }> => ({} as any);
 
+// repro from https://github.com/microsoft/TypeScript/issues/55049
+
+type evaluate<t> = { [k in keyof t]: t[k] } & unknown
+>evaluate : Symbol(evaluate, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 41, 18))
+>t : Symbol(t, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 14))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 22))
+>t : Symbol(t, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 14))
+>t : Symbol(t, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 14))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 22))
+
+export type entryOf<o> = evaluate<
+>entryOf : Symbol(entryOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 53))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+>evaluate : Symbol(evaluate, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 41, 18))
+
+    { [k in keyof o]-?: [k, o[k] & ({} | null)] }[o extends readonly unknown[]
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 48, 7))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 48, 7))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+>k : Symbol(k, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 48, 7))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+
+        ? keyof o & number
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+
+        : keyof o]
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 47, 20))
+
+>
+
+export type entriesOf<o extends object> = evaluate<entryOf<o>[]>
+>entriesOf : Symbol(entriesOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 51, 1), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 12))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 53, 22))
+>evaluate : Symbol(evaluate, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 41, 18))
+>entryOf : Symbol(entryOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 45, 53))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 53, 22))
+
+export const entriesOf = <o extends object>(o: o) =>
+>entriesOf : Symbol(entriesOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 51, 1), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 12))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+
+    Object.entries(o) as entriesOf<o>
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+>entriesOf : Symbol(entriesOf, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 51, 1), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 12))
+>o : Symbol(o, Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 26), Decl(declarationEmitMappedTypePreservesTypeParameterConstraint.ts, 55, 44))
+

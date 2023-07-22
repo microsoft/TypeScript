@@ -44,14 +44,33 @@ export const buildSchema = <V extends string>(
   version: ZodLiteral<V>;
 }> => ({} as any);
 
+// repro from https://github.com/microsoft/TypeScript/issues/55049
+
+type evaluate<t> = { [k in keyof t]: t[k] } & unknown
+
+export type entryOf<o> = evaluate<
+    { [k in keyof o]-?: [k, o[k] & ({} | null)] }[o extends readonly unknown[]
+        ? keyof o & number
+        : keyof o]
+>
+
+export type entriesOf<o extends object> = evaluate<entryOf<o>[]>
+
+export const entriesOf = <o extends object>(o: o) =>
+    Object.entries(o) as entriesOf<o>
+
 
 //// [declarationEmitMappedTypePreservesTypeParameterConstraint.js]
 "use strict";
 // repro from https://github.com/microsoft/TypeScript/issues/54560
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildSchema = void 0;
+exports.entriesOf = exports.buildSchema = void 0;
 var buildSchema = function (version) { return ({}); };
 exports.buildSchema = buildSchema;
+var entriesOf = function (o) {
+    return Object.entries(o);
+};
+exports.entriesOf = entriesOf;
 
 
 //// [declarationEmitMappedTypePreservesTypeParameterConstraint.d.ts]
@@ -79,4 +98,12 @@ export declare type ZodRawShape = {
 export declare const buildSchema: <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{
     version: ZodLiteral<V>;
 }>, undefined extends V ? never : "version"> extends infer T ? { [K in keyof T]: T[K]; } : never;
+type evaluate<t> = {
+    [k in keyof t]: t[k];
+} & unknown;
+export type entryOf<o> = evaluate<{
+    [k in keyof o]-?: [k, o[k] & ({} | null)];
+}[o extends readonly unknown[] ? keyof o & number : keyof o]>;
+export type entriesOf<o extends object> = evaluate<entryOf<o>[]>;
+export declare const entriesOf: <o extends object>(o: o) => ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [K in keyof T]: T[K]; } : never)[];
 export {};

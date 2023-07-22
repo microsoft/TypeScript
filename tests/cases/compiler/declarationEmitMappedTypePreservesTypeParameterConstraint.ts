@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @lib: esnext
 
 // repro from https://github.com/microsoft/TypeScript/issues/54560
 
@@ -43,3 +44,18 @@ export const buildSchema = <V extends string>(
 ): objectOutputType<{
   version: ZodLiteral<V>;
 }> => ({} as any);
+
+// repro from https://github.com/microsoft/TypeScript/issues/55049
+
+type evaluate<t> = { [k in keyof t]: t[k] } & unknown
+
+export type entryOf<o> = evaluate<
+    { [k in keyof o]-?: [k, o[k] & ({} | null)] }[o extends readonly unknown[]
+        ? keyof o & number
+        : keyof o]
+>
+
+export type entriesOf<o extends object> = evaluate<entryOf<o>[]>
+
+export const entriesOf = <o extends object>(o: o) =>
+    Object.entries(o) as entriesOf<o>

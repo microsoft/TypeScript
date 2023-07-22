@@ -75,3 +75,32 @@ export const buildSchema = <V extends string>(
 >{} as any : any
 >{} : {}
 
+// repro from https://github.com/microsoft/TypeScript/issues/55049
+
+type evaluate<t> = { [k in keyof t]: t[k] } & unknown
+>evaluate : { [k in keyof t]: t[k]; }
+
+export type entryOf<o> = evaluate<
+>entryOf : { [k in keyof { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o]]: { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; }
+
+    { [k in keyof o]-?: [k, o[k] & ({} | null)] }[o extends readonly unknown[]
+        ? keyof o & number
+        : keyof o]
+>
+
+export type entriesOf<o extends object> = evaluate<entryOf<o>[]>
+>entriesOf : { [k in keyof { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o]]: { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; }[]
+
+export const entriesOf = <o extends object>(o: o) =>
+>entriesOf : <o extends object>(o: o) => { [k in keyof { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o]]: { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; }[]
+><o extends object>(o: o) =>    Object.entries(o) as entriesOf<o> : <o extends object>(o: o) => { [k in keyof { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o]]: { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; }[]
+>o : o
+
+    Object.entries(o) as entriesOf<o>
+>Object.entries(o) as entriesOf<o> : { [k in keyof { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o]]: { [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o][k]; }[]
+>Object.entries(o) : [string, any][]
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>o : o
+
