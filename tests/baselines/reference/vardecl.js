@@ -194,7 +194,7 @@ declare var n1: {
     [s: string]: number;
 };
 declare var c: {
-    new?(): any;
+    "new"?(): any;
 };
 declare var d: {
     foo?(): {
