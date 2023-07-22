@@ -23,6 +23,6 @@ var NaN = 5;
 var A;
 (function (A) {
     A[A["X"] = 1 / 0] = "X";
-    A[A["Y"] = -(1 / 0)] = "Y";
+    A[A["Y"] = -1 / 0] = "Y";
     A[A["B"] = 0 / 0] = "B";
 })(A || (exports.A = A = {}));

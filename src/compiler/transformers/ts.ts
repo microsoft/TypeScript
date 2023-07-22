@@ -1898,12 +1898,9 @@ export function transformTypeScript(context: TransformationContext) {
                     : factory.createBinaryExpression(factory.createNumericLiteral(0), SyntaxKind.SlashToken, factory.createNumericLiteral(0));
             }
             if (!isFinite(value)) {
-                const infinity = resolver.isNameReferencingGlobalValueAtLocation("Infinity", member)
+                return resolver.isNameReferencingGlobalValueAtLocation("Infinity", member)
                     ? factory.createIdentifier("Infinity")
-                    : factory.createBinaryExpression(factory.createNumericLiteral(1), SyntaxKind.SlashToken, factory.createNumericLiteral(0));
-                return value < 0
-                    ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, infinity)
-                    : infinity;
+                    : factory.createBinaryExpression(value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(1)) : factory.createNumericLiteral(1), SyntaxKind.SlashToken, factory.createNumericLiteral(0));
             }
             return factory.createNumericLiteral(value);
         }
