@@ -1,0 +1,106 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergeTwoInterfaces3.ts] ////
+
+=== mergeTwoInterfaces3.ts ===
+interface Chainable<Subject = any> {
+    within(fn: (prevSubject: Subject) => Chainable<Subject>): Chainable<Subject>;
+>within : { (fn: (prevSubject: Subject) => Chainable<Subject>): Chainable<Subject>; (fn: (prevSubject: Subject, extra: ExtraType) => Chainable<Subject, undefined>): Chainable<Subject, ExtraType>; }
+>fn : (prevSubject: Subject) => Chainable<Subject>
+>prevSubject : Subject
+}
+
+interface Chainable<Subject = any, ExtraType = undefined> {
+    within(fn: (prevSubject: Subject, extra: ExtraType) => Chainable<Subject>): Chainable<Subject, ExtraType>;
+>within : { (fn: (prevSubject: Subject) => Chainable<Subject, undefined>): Chainable<Subject, undefined>; (fn: (prevSubject: Subject, extra: ExtraType) => Chainable<Subject>): Chainable<Subject, ExtraType>; }
+>fn : (prevSubject: Subject, extra: ExtraType) => Chainable<Subject>
+>prevSubject : Subject
+>extra : ExtraType
+}
+
+interface ChainableLike<Subject = any, ExtraType = undefined> {
+    within(fn: (prevSubject: Subject) => Chainable<Subject>): Chainable<Subject>;
+>within : { (fn: (prevSubject: Subject) => Chainable<Subject>): Chainable<Subject>; (fn: (prevSubject: Subject, extra: ExtraType) => Chainable<Subject, undefined>): Chainable<Subject, ExtraType>; }
+>fn : (prevSubject: Subject) => Chainable<Subject>
+>prevSubject : Subject
+
+    within(fn: (prevSubject: Subject, extra: ExtraType) => Chainable<Subject>): Chainable<Subject, ExtraType>;
+>within : { (fn: (prevSubject: Subject) => Chainable<Subject, undefined>): Chainable<Subject, undefined>; (fn: (prevSubject: Subject, extra: ExtraType) => Chainable<Subject>): Chainable<Subject, ExtraType>; }
+>fn : (prevSubject: Subject, extra: ExtraType) => Chainable<Subject>
+>prevSubject : Subject
+>extra : ExtraType
+}
+
+type ChainableWithSecondType = Chainable<string, string>;
+>ChainableWithSecondType : Chainable<string, string>
+
+type Merged = ChainableWithSecondType['within'];
+>Merged : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+
+type Ordinary = ChainableLike<string, string>['within'];
+>Ordinary : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+
+declare let m: Merged;
+>m : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+
+m((p: string) => null!);
+>m((p: string) => null!) : Chainable<string, string>
+>m : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+>(p: string) => null! : (p: string) => any
+>p : string
+>null! : null
+
+m((p: string, e: string) => null!);
+>m((p: string, e: string) => null!) : Chainable<string, string>
+>m : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+>(p: string, e: string) => null! : (p: string, e: string) => any
+>p : string
+>e : string
+>null! : null
+
+m((p) => null!);
+>m((p) => null!) : Chainable<string, string>
+>m : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+>(p) => null! : (p: string) => any
+>p : string
+>null! : null
+
+m((p, e) => null!);
+>m((p, e) => null!) : Chainable<string, string>
+>m : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+>(p, e) => null! : (p: string, e: string) => any
+>p : string
+>e : string
+>null! : null
+
+declare let o: Ordinary;
+>o : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+
+o((p: string) => null!);
+>o((p: string) => null!) : Chainable<string, undefined>
+>o : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+>(p: string) => null! : (p: string) => any
+>p : string
+>null! : null
+
+o((p: string, e: string) => null!);
+>o((p: string, e: string) => null!) : Chainable<string, string>
+>o : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+>(p: string, e: string) => null! : (p: string, e: string) => any
+>p : string
+>e : string
+>null! : null
+
+o((p) => null!);
+>o((p) => null!) : Chainable<string, undefined>
+>o : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+>(p) => null! : (p: string) => any
+>p : string
+>null! : null
+
+o((p, e) => null!);
+>o((p, e) => null!) : Chainable<string, string>
+>o : { (fn: (prevSubject: string) => Chainable<string, undefined>): Chainable<string, undefined>; (fn: (prevSubject: string, extra: string) => Chainable<string, undefined>): Chainable<string, string>; }
+>(p, e) => null! : (p: any, e: any) => any
+>p : any
+>e : any
+>null! : null
+
