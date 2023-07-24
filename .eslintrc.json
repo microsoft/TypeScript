@@ -89,7 +89,6 @@
         "no-debugger": "off",
         "no-extra-boolean-cast": "off",
         "no-inner-declarations": "off",
-        "no-useless-escape": "off",
         "prefer-rest-params": "off",
         "prefer-spread": "off",
         "@typescript-eslint/no-empty-function": "off",

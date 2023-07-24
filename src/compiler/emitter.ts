@@ -2493,9 +2493,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitPlaceholder(hint: EmitHint, node: Node, snippet: Placeholder) {
-        nonEscapingWrite(`\$\{${snippet.order}:`); // `${2:`
+        nonEscapingWrite(`$\{${snippet.order}:`); // `${2:`
         pipelineEmitWithHintWorker(hint, node, /*allowSnippets*/ false); // `...`
-        nonEscapingWrite(`\}`); // `}`
+        nonEscapingWrite(`}`); // `}`
         // `${2:...}`
     }
 
@@ -2505,7 +2505,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             `A tab stop cannot be attached to a node of kind ${Debug.formatSyntaxKind(node.kind)}.`);
         Debug.assert(hint !== EmitHint.EmbeddedStatement,
             `A tab stop cannot be attached to an embedded statement.`);
-        nonEscapingWrite(`\$${snippet.order}`);
+        nonEscapingWrite(`$${snippet.order}`);
     }
 
     //

@@ -5813,10 +5813,10 @@ export function hasInvalidEscape(template: TemplateLiteral): boolean {
 // the language service. These characters should be escaped when printing, and if any characters are added,
 // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
 // There is no reason for this other than that JSON.stringify does not handle it either.
-const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+const doubleQuoteEscapedCharsRegExp = /[\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+const singleQuoteEscapedCharsRegExp = /[\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
-const backtickQuoteEscapedCharsRegExp = /\r\n|[\\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
+const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
 const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
@@ -5826,8 +5826,8 @@ const escapedCharsMap = new Map(Object.entries({
     "\n": "\\n",
     "\\": "\\\\",
     "\"": "\\\"",
-    "\'": "\\\'",
-    "\`": "\\\`",
+    "'": "\\'",
+    "`": "\\`",
     "\u2028": "\\u2028", // lineSeparator
     "\u2029": "\\u2029", // paragraphSeparator
     "\u0085": "\\u0085", // nextLine
@@ -5883,11 +5883,11 @@ export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubl
 // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
 // the language service. These characters should be escaped when printing, and if any characters are added,
 // the map below must be updated.
-const jsxDoubleQuoteEscapedCharsRegExp = /[\"\u0000-\u001f\u2028\u2029\u0085]/g;
-const jsxSingleQuoteEscapedCharsRegExp = /[\'\u0000-\u001f\u2028\u2029\u0085]/g;
+const jsxDoubleQuoteEscapedCharsRegExp = /["\u0000-\u001f\u2028\u2029\u0085]/g;
+const jsxSingleQuoteEscapedCharsRegExp = /['\u0000-\u001f\u2028\u2029\u0085]/g;
 const jsxEscapedCharsMap = new Map(Object.entries({
     "\"": "&quot;",
-    "\'": "&apos;"
+    "'": "&apos;"
 }));
 
 function encodeJsxCharacterEntity(charCode: number): string {
@@ -8833,7 +8833,7 @@ export function tryRemoveDirectoryPrefix(path: string, dirPath: string, getCanon
 // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
 // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
 // proof.
-const reservedCharacterPattern = /[^\w\s\/]/g;
+const reservedCharacterPattern = /[^\w\s/]/g;
 
 /** @internal */
 export function regExpEscape(text: string) {

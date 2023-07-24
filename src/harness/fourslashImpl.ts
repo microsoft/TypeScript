@@ -4912,7 +4912,7 @@ function toArray<T>(x: ArrayOrSingle<T>): readonly T[] {
 }
 
 function makeWhitespaceVisible(text: string) {
-    return text.replace(/ /g, "\u00B7").replace(/\r/g, "\u00B6").replace(/\n/g, "\u2193\n").replace(/\t/g, "\u2192\   ");
+    return text.replace(/ /g, "\u00B7").replace(/\r/g, "\u00B6").replace(/\n/g, "\u2193\n").replace(/\t/g, "\u2192   ");
 }
 
 function showTextDiff(expected: string, actual: string): string {

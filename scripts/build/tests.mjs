@@ -222,5 +222,5 @@ function deleteTemporaryProjectOutput() {
  * @param {string} text
  */
 function regExpEscape(text) {
-    return text.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
+    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

@@ -3111,7 +3111,7 @@ function getCompletionData(
                 //    *         |c|
                 //    */
                 const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                if (!/[^\*|\s(/)]/.test(sourceFile.text.substring(lineStart, position))) {
+                if (!/[^*|\s(/)]/.test(sourceFile.text.substring(lineStart, position))) {
                     return { kind: CompletionDataKind.JsDocTag };
                 }
             }
