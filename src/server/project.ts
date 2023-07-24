@@ -2915,7 +2915,7 @@ export class ConfiguredProject extends Project {
      * @internal
      */
     hasOpenRef() {
-        if (!!this.externalProjectRefCount) {
+        if (this.externalProjectRefCount) {
             return true;
         }
 

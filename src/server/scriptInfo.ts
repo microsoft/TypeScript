@@ -206,11 +206,11 @@ export class TextStorage {
      * telemetry falsely indicating size 0 would be counter-productive.
      */
     public getTelemetryFileSize(): number {
-        return !!this.fileSize
+        return this.fileSize
             ? this.fileSize
-            : !!this.text // Check text before svc because its length is cheaper
+            : this.text // Check text before svc because its length is cheaper
                 ? this.text.length // Could be wrong if this.pendingReloadFromDisk
-                : !!this.svc
+                : this.svc
                     ? this.svc.getSnapshot().getLength() // Could be wrong if this.pendingReloadFromDisk
                     : this.getSnapshot().getLength(); // Should be strictly correct
     }

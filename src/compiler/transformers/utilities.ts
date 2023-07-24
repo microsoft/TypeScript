@@ -136,7 +136,7 @@ export function getExportNeedsImportStarHelper(node: ExportDeclaration): boolean
 
 /** @internal */
 export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean {
-    if (!!getNamespaceDeclarationNode(node)) {
+    if (getNamespaceDeclarationNode(node)) {
         return true;
     }
     const bindings = node.importClause && node.importClause.namedBindings;

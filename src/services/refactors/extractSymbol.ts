@@ -1476,7 +1476,7 @@ function extractConstantInScope(
         // If no function signature, maybe there was an error, do nothing
         if (!functionSignature) return { variableType, initializer };
         // If the function signature has generic type parameters we don't attempt to move the parameters
-        if (!!functionSignature.getTypeParameters()) return { variableType, initializer };
+        if (functionSignature.getTypeParameters()) return { variableType, initializer };
 
         // We add parameter types if needed
         const parameters: ParameterDeclaration[] = [];

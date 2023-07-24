@@ -881,7 +881,7 @@ export function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): b
  */
 function declarationIsWriteAccess(decl: Declaration): boolean {
     // Consider anything in an ambient declaration to be a write access since it may be coming from JS.
-    if (!!(decl.flags & NodeFlags.Ambient)) return true;
+    if (decl.flags & NodeFlags.Ambient) return true;
 
     switch (decl.kind) {
         case SyntaxKind.BinaryExpression:
@@ -2664,7 +2664,7 @@ export namespace Core {
     }
 
     function isImplementation(node: Node): boolean {
-        return !!(node.flags & NodeFlags.Ambient) ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node)) :
+        return node.flags & NodeFlags.Ambient ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node)) :
             (isVariableLike(node) ? hasInitializer(node) :
             isFunctionLikeDeclaration(node) ? !!node.body :
             isClassLike(node) || isModuleOrEnumDeclaration(node));

@@ -2027,7 +2027,7 @@ function updateOutputTimestampsWorker<T extends BuilderProgram>(
         // For incremental projects, only buildinfo needs to be upto date with timestamp check
         // as we dont check output files for up-to-date ness
         if (!skipOutputs?.has(toPath(state, buildInfoPath))) {
-            if (!!state.options.verbose) reportStatus(state, verboseMessage, proj.options.configFilePath!);
+            if (state.options.verbose) reportStatus(state, verboseMessage, proj.options.configFilePath!);
             state.host.setModifiedTime(buildInfoPath, now = getCurrentTime(state.host));
             getBuildInfoCacheEntry(state, buildInfoPath, projectPath)!.modifiedTime = now;
         }

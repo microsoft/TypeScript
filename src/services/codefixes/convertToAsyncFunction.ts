@@ -759,7 +759,7 @@ function transformCallbackArgument(func: Expression, hasContinuation: boolean, c
 
 function getPossiblyAwaitedRightHandSide(checker: TypeChecker, type: Type, expr: Expression): AwaitExpression | Expression {
     const rightHandSide = getSynthesizedDeepClone(expr);
-    return !!checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(rightHandSide) : rightHandSide;
+    return checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(rightHandSide) : rightHandSide;
 }
 
 function getLastCallSignature(type: Type, checker: TypeChecker): Signature | undefined {

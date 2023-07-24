@@ -87,7 +87,6 @@
         "no-constant-condition": "off",
         "no-control-regex": "off",
         "no-debugger": "off",
-        "no-extra-boolean-cast": "off",
         "no-inner-declarations": "off",
         "no-useless-escape": "off",
         "prefer-rest-params": "off",

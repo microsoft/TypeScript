@@ -24852,7 +24852,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (constraintType.flags & TypeFlags.TypeParameter) {
                 // We're inferring from some source type S to a mapped type { [P in K]: X }, where K is a type
                 // parameter. First infer from 'keyof S' to K.
-                inferWithPriority(getIndexType(source, /*indexFlags*/ !!source.pattern ? IndexFlags.NoIndexSignatures : IndexFlags.None), constraintType, InferencePriority.MappedTypeConstraint);
+                inferWithPriority(getIndexType(source, /*indexFlags*/ source.pattern ? IndexFlags.NoIndexSignatures : IndexFlags.None), constraintType, InferencePriority.MappedTypeConstraint);
                 // If K is constrained to a type C, also infer to C. Thus, for a mapped type { [P in K]: X },
                 // where K extends keyof T, we make the same inferences as for a homomorphic mapped type
                 // { [P in keyof T]: X }. This enables us to make meaningful inferences when the target is a
@@ -31394,7 +31394,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Lookup the private identifier lexically.
     function lookupSymbolForPrivateIdentifierDeclaration(propName: __String, location: Node): Symbol | undefined {
-        for (let containingClass = getContainingClassExcludingClassDecorators(location); !!containingClass; containingClass = getContainingClass(containingClass)) {
+        for (let containingClass = getContainingClassExcludingClassDecorators(location); containingClass; containingClass = getContainingClass(containingClass)) {
             const { symbol } = containingClass;
             const name = getSymbolNameForPrivateIdentifier(symbol, propName);
             const prop = (symbol.members && symbol.members.get(name)) || (symbol.exports && symbol.exports.get(name));
@@ -38551,7 +38551,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function setNodeLinksForPrivateIdentifierScope(node: PropertyDeclaration | PropertySignature | MethodDeclaration | MethodSignature | AccessorDeclaration) {
         if (isPrivateIdentifier(node.name) && languageVersion < ScriptTarget.ESNext) {
-            for (let lexicalScope = getEnclosingBlockScopeContainer(node); !!lexicalScope; lexicalScope = getEnclosingBlockScopeContainer(lexicalScope)) {
+            for (let lexicalScope = getEnclosingBlockScopeContainer(node); lexicalScope; lexicalScope = getEnclosingBlockScopeContainer(lexicalScope)) {
                 getNodeLinks(lexicalScope).flags |= NodeCheckFlags.ContainsClassWithPrivateIdentifiers;
             }
 
@@ -49175,7 +49175,7 @@ export function signatureHasLiteralTypes(s: Signature) {
 
 function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHost): ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string } {
     return {
-        getCommonSourceDirectory: !!(host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
+        getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
         getCurrentDirectory: () => host.getCurrentDirectory(),
         getSymlinkCache: maybeBind(host, host.getSymlinkCache),
         getPackageJsonInfoCache: () => host.getPackageJsonInfoCache?.(),

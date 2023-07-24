@@ -1153,7 +1153,7 @@ export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: 
  *
  * @internal
  */
-export const elementAt: <T>(array: readonly T[] | undefined, offset: number) => T | undefined = !!Array.prototype.at
+export const elementAt: <T>(array: readonly T[] | undefined, offset: number) => T | undefined = Array.prototype.at
     ? (array, offset) => array?.at(offset)
     : (array, offset) => {
         if (array) {
@@ -2058,7 +2058,7 @@ export function memoizeCached<A extends any[], T>(callback: (...args: A) => T, c
 export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
 /** @internal */
 export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
-    if (!!e) {
+    if (e) {
         const args: ((t: T) => T)[] = [];
         for (let i = 0; i < arguments.length; i++) {
             args[i] = arguments[i];
@@ -2838,21 +2838,21 @@ export function skipWhile<T, U extends T>(array: readonly T[] | undefined, predi
  *
  * @internal
  */
-export const trimString = !!String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(trimStringStart(s));
+export const trimString = String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(trimStringStart(s));
 
 /**
  * Returns a copy with trailing whitespace removed.
  *
  * @internal
  */
-export const trimStringEnd = !!String.prototype.trimEnd ? ((s: string) => s.trimEnd()) : trimEndImpl;
+export const trimStringEnd = String.prototype.trimEnd ? ((s: string) => s.trimEnd()) : trimEndImpl;
 
 /**
  * Returns a copy with leading whitespace removed.
  *
  * @internal
  */
-export const trimStringStart = !!String.prototype.trimStart ? ((s: string) => s.trimStart()) : (s: string) => s.replace(/^\s+/g, "");
+export const trimStringStart = String.prototype.trimStart ? ((s: string) => s.trimStart()) : (s: string) => s.replace(/^\s+/g, "");
 
 /**
  * https://jsbench.me/gjkoxld4au/1

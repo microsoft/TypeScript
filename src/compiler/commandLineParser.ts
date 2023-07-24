@@ -2494,7 +2494,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
             include: filterSameAsDefaultInclude(configParseResult.options.configFile.configFileSpecs.validatedIncludeSpecs),
             exclude: configParseResult.options.configFile.configFileSpecs.validatedExcludeSpecs
         } : {}),
-        compileOnSave: !!configParseResult.compileOnSave ? true : undefined
+        compileOnSave: configParseResult.compileOnSave ? true : undefined
     };
     return config;
 }
