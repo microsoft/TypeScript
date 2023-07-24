@@ -38310,7 +38310,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (isInJSFile(node)) {
                 const typeTag = getJSDocTypeTag(node);
-                if (typeTag && typeTag.typeExpression) {
+                if (typeTag && typeTag.typeExpression && isTypeReferenceNode(typeTag.typeExpression.type)) {
                     const signature = getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
                     if (signature && signature.declaration) {
                         returnTypeNode = getEffectiveReturnTypeNode(signature.declaration);
