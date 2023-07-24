@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: "Enforce consistent indentation",
-            recommended: "error",
         },
         messages: {
             simpleIndentError: "4 space indentation expected",

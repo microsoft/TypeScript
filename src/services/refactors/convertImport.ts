@@ -212,7 +212,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
     const importDecl = toConvert.parent.parent;
     const { moduleSpecifier } = importDecl;
 
-    const toConvertSymbols: Set<Symbol> = new Set();
+    const toConvertSymbols = new Set<Symbol>();
     toConvert.elements.forEach(namedImport => {
         const symbol = checker.getSymbolAtLocation(namedImport.name);
         if (symbol) {
@@ -241,7 +241,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
 
     // Imports that need to be kept as named imports in the refactored code, to avoid changing the semantics.
     // More specifically, those are named imports that appear in named exports in the original code, e.g. `a` in `import { a } from "m"; export { a }`.
-    const neededNamedImports: Set<ImportSpecifier> = new Set();
+    const neededNamedImports = new Set<ImportSpecifier>();
 
     for (const element of toConvert.elements) {
         const propertyName = (element.propertyName || element.name).text;

@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: ``,
-            recommended: "error",
         },
         messages: {
             typeOperatorSpacingError: `The '|' and '&' operators must be surrounded by spaces`,

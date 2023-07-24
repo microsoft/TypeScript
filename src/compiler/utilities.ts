@@ -52,6 +52,7 @@ import {
     ClassDeclaration,
     ClassElement,
     ClassExpression,
+    classHasDeclaredOrExplicitlyAssignedName,
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
     combinePaths,
@@ -73,6 +74,7 @@ import {
     ConditionalExpression,
     ConstructorDeclaration,
     ConstructSignatureDeclaration,
+    ContainerFlags,
     contains,
     containsPath,
     createGetCanonicalFileName,
@@ -162,6 +164,7 @@ import {
     GetCanonicalFileName,
     getCombinedModifierFlags,
     getCombinedNodeFlags,
+    getContainerFlags,
     getDirectoryPath,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
@@ -384,6 +387,7 @@ import {
     mapDefined,
     MapLike,
     MemberName,
+    MetaProperty,
     MethodDeclaration,
     MethodSignature,
     ModeAwareCache,
@@ -412,6 +416,7 @@ import {
     noop,
     normalizePath,
     NoSubstitutionTemplateLiteral,
+    NumberLiteralType,
     NumericLiteral,
     ObjectFlags,
     ObjectFlagsType,
@@ -490,6 +495,7 @@ import {
     stringContains,
     StringLiteral,
     StringLiteralLike,
+    StringLiteralType,
     stringToToken,
     SuperCall,
     SuperExpression,
@@ -540,6 +546,7 @@ import {
     TypeReferenceNode,
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
+    UniqueESSymbolType,
     UserPreferences,
     ValidImportTypeNode,
     VariableDeclaration,
@@ -2022,6 +2029,11 @@ export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
     return isAnyImportSyntax(node) || isExportDeclaration(node);
 }
 
+/** @internal */
+export function getEnclosingContainer(node: Node): Node | undefined {
+    return findAncestor(node.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer));
+}
+
 // Gets the nearest enclosing block scope container that has the provided node
 // as a descendant, that is not the provided node.
 /** @internal */
@@ -2328,14 +2340,36 @@ export function isDeclarationReadonly(declaration: Declaration): boolean {
     return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration, declaration.parent));
 }
 
-/** @internal */
-export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
-    return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of an `await using` declaration.
+ * @internal
+ */
+export function isVarAwaitUsing(node: VariableDeclaration | VariableDeclarationList): boolean {
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.AwaitUsing;
 }
 
-/** @internal */
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `using` declaration.
+ * @internal
+ */
+export function isVarUsing(node: VariableDeclaration | VariableDeclarationList): boolean {
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Using;
+}
+
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `const` declaration.
+ * @internal
+ */
+export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Const;
+}
+
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `let` declaration.
+ * @internal
+ */
 export function isLet(node: Node): boolean {
-    return !!(getCombinedNodeFlags(node) & NodeFlags.Let);
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Let;
 }
 
 /** @internal */
@@ -2806,6 +2840,12 @@ export function getContainingClassStaticBlock(node: Node): Node | undefined {
 /** @internal */
 export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDeclaration | ClassStaticBlockDeclaration | undefined {
     return findAncestor(node.parent, isFunctionLikeOrClassStaticBlockDeclaration);
+}
+
+/** @internal */
+export function getContainingClassExcludingClassDecorators(node: Node): ClassLikeDeclaration | undefined {
+    const decorator = findAncestor(node.parent, n => isClassLike(n) ? "quit" : isDecorator(n));
+    return decorator && isClassLike(decorator.parent) ? getContainingClass(decorator.parent) : getContainingClass(decorator ?? node);
 }
 
 /** @internal */
@@ -5097,8 +5137,12 @@ export function isAnonymousFunctionDefinition(node: Expression, cb?: (node: Anon
     node = skipOuterExpressions(node);
     switch (node.kind) {
         case SyntaxKind.ClassExpression:
+            if (classHasDeclaredOrExplicitlyAssignedName(node as ClassExpression)) {
+                return false;
+            }
+            break;
         case SyntaxKind.FunctionExpression:
-            if ((node as ClassExpression | FunctionExpression).name) {
+            if ((node as FunctionExpression).name) {
                 return false;
             }
             break;
@@ -5164,7 +5208,8 @@ export type NamedEvaluation =
     | ParameterDeclaration & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
     | BindingElement & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
     | PropertyDeclaration & { readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
-    | AssignmentExpression<EqualsToken | AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<EqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
     | ExportAssignment & { readonly expression: WrappedExpression<AnonymousFunctionDefinition> }
     ;
 
@@ -7092,7 +7137,8 @@ export function isPrototypeAccess(node: Node): node is BindableStaticAccessExpre
 /** @internal */
 export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
     return (node.parent.kind === SyntaxKind.QualifiedName && (node.parent as QualifiedName).right === node) ||
-        (node.parent.kind === SyntaxKind.PropertyAccessExpression && (node.parent as PropertyAccessExpression).name === node);
+        (node.parent.kind === SyntaxKind.PropertyAccessExpression && (node.parent as PropertyAccessExpression).name === node) ||
+        (node.parent.kind === SyntaxKind.MetaProperty && (node.parent as MetaProperty).name === node);
 }
 
 /** @internal */
@@ -10269,4 +10315,26 @@ export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
 /** @internal */
 export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
     return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
+}
+
+/**
+ * Indicates whether a type can be used as a property name.
+ * @internal
+ */
+export function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType {
+    return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
+}
+
+/**
+ * Gets the symbolic name for a member from its type.
+ * @internal
+ */
+export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
+    if (type.flags & TypeFlags.UniqueESSymbol) {
+        return (type as UniqueESSymbolType).escapedName;
+    }
+    if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+        return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
+    }
+    return Debug.fail();
 }
