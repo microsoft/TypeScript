@@ -4908,8 +4908,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (resolvedModule.resolvedUsingTsExtension && !shouldAllowImportingTsExtension(compilerOptions, currentSourceFile.fileName)) {
-                const tsExtension = Debug.checkDefined(tryExtractTSExtension(moduleReference));
-                error(errorNode, Diagnostics.An_import_path_can_only_end_with_a_0_extension_when_allowImportingTsExtensions_is_enabled, tsExtension);
+                const importOrExport =
+                    findAncestor(location, isImportDeclaration)?.importClause ||
+                    findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
+                if (!(importOrExport?.isTypeOnly || findAncestor(location, isImportTypeNode))) {
+                    const tsExtension = Debug.checkDefined(tryExtractTSExtension(moduleReference));
+                    error(errorNode, Diagnostics.An_import_path_can_only_end_with_a_0_extension_when_allowImportingTsExtensions_is_enabled, tsExtension);
+                }
             }
 
             if (sourceFile.symbol) {
