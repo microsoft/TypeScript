@@ -416,6 +416,7 @@ import {
     noop,
     normalizePath,
     NoSubstitutionTemplateLiteral,
+    NumberLiteralType,
     NumericLiteral,
     ObjectFlags,
     ObjectFlagsType,
@@ -494,6 +495,7 @@ import {
     stringContains,
     StringLiteral,
     StringLiteralLike,
+    StringLiteralType,
     stringToToken,
     SuperCall,
     SuperExpression,
@@ -544,6 +546,7 @@ import {
     TypeReferenceNode,
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
+    UniqueESSymbolType,
     UserPreferences,
     ValidImportTypeNode,
     VariableDeclaration,
@@ -10312,4 +10315,26 @@ export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
 /** @internal */
 export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
     return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
+}
+
+/**
+ * Indicates whether a type can be used as a property name.
+ * @internal
+ */
+export function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType {
+    return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
+}
+
+/**
+ * Gets the symbolic name for a member from its type.
+ * @internal
+ */
+export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
+    if (type.flags & TypeFlags.UniqueESSymbol) {
+        return (type as UniqueESSymbolType).escapedName;
+    }
+    if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+        return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
+    }
+    return Debug.fail();
 }

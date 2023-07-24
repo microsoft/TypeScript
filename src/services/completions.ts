@@ -3585,7 +3585,8 @@ function getCompletionData(
             const nameSymbol = leftMostName && typeChecker.getSymbolAtLocation(leftMostName);
             // If this is nested like for `namespace N { export const sym = Symbol(); }`, we'll add the completion for `N`.
             const firstAccessibleSymbol = nameSymbol && getFirstSymbolInChain(nameSymbol, contextToken, typeChecker);
-            if (firstAccessibleSymbol && addToSeen(seenPropertySymbols, getSymbolId(firstAccessibleSymbol))) {
+            const firstAccessibleSymbolId = firstAccessibleSymbol && getSymbolId(firstAccessibleSymbol);
+            if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
                 const moduleSymbol = firstAccessibleSymbol.parent;
@@ -3621,6 +3622,9 @@ function getCompletionData(
                 }
             }
             else if (preferences.includeCompletionsWithInsertText) {
+                if (firstAccessibleSymbolId && seenPropertySymbols.has(firstAccessibleSymbolId)) {
+                    return;
+                }
                 addSymbolOriginInfo(symbol);
                 addSymbolSortInfo(symbol);
                 symbols.push(symbol);

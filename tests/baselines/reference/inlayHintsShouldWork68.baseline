@@ -1,7 +1,19 @@
 const C1 = class extends foo(1) { }
                              ^
 {
-  "text": "a:",
+  "text": [
+    {
+      "text": "a",
+      "span": {
+        "start": 13,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork68.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 63,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -10,7 +22,19 @@ const C1 = class extends foo(1) { }
 class C2 extends foo(1) { }
                      ^
 {
-  "text": "a:",
+  "text": [
+    {
+      "text": "a",
+      "span": {
+        "start": 13,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork68.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 91,
   "kind": "Parameter",
   "whitespaceAfter": true

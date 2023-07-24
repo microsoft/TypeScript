@@ -7,4 +7,5 @@
 verify.baselineInlayHints(undefined, {
     includeInlayParameterNameHints: "all",
     includeInlayParameterNameHintsWhenArgumentMatchesName: true,
+    interactiveInlayHints: true
 });

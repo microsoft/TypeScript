@@ -19,5 +19,6 @@ const end = test.markerByName('h');
 const span = { start: start.position, length: end.position - start.position };
 
 verify.baselineInlayHints(span, {
-    includeInlayParameterNameHints: "literals"
+    includeInlayParameterNameHints: "literals",
+    interactiveInlayHints: true
 });

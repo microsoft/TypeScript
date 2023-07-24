@@ -132,7 +132,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
     // If triggered in a variable declaration, make sure it's not in a catch clause or for-loop
     // and that it has a value.
-    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
+    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent) && isIdentifier(parent.name)) {
         // Don't inline the variable if it has multiple declarations.
         if (checker.getMergedSymbol(parent.symbol).declarations?.length !== 1) {
             return { error: getLocaleSpecificMessage(Diagnostics.Variables_with_multiple_declarations_cannot_be_inlined) };
