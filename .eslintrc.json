@@ -84,7 +84,9 @@
             {
                 "extendDefaults": true,
                 "types": {
-                    "Symbol": false, // This is theoretically good, but ts-eslint appears to mistake our declaration of Symbol for the global Symbol type.
+                    // This is theoretically good, but ts-eslint appears to mistake our declaration of Symbol for the global Symbol type.
+                    // See: https://github.com/typescript-eslint/typescript-eslint/issues/7306
+                    "Symbol": false,
                     "{}": false // {} is a totally useful and valid type.
                 }
             }
