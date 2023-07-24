@@ -16025,7 +16025,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     URL: URL;
     alert(message?: any): void;
     blur(): void;
-    cancelAnimationFrame(handle: number): void;
+    cancelAnimationFrame(requestId: number): void;
     captureEvents(): void;
     close(): void;
     confirm(message?: string): boolean;
@@ -16858,7 +16858,7 @@ declare var window: Window;
 declare var URL: URL;
 declare function alert(message?: any): void;
 declare function blur(): void;
-declare function cancelAnimationFrame(handle: number): void;
+declare function cancelAnimationFrame(requestId: number): void;
 declare function captureEvents(): void;
 declare function close(): void;
 declare function confirm(message?: string): boolean;

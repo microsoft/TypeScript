@@ -977,7 +977,7 @@ interface AbstractWorker {
 }
 
 interface AnimationFrameProvider {
-    cancelAnimationFrame(handle: number): void;
+    cancelAnimationFrame(requestId: number): void;
     requestAnimationFrame(callback: FrameRequestCallback): number;
 }
 
@@ -9168,7 +9168,7 @@ declare function setInterval(handler: TimerHandler, timeout?: number, ...argumen
 declare function setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/structuredClone) */
 declare function structuredClone<T = any>(value: T, options?: StructuredSerializeOptions): T;
-declare function cancelAnimationFrame(handle: number): void;
+declare function cancelAnimationFrame(requestId: number): void;
 declare function requestAnimationFrame(callback: FrameRequestCallback): number;
 declare function addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;

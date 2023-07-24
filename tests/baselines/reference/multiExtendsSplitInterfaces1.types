@@ -3,8 +3,8 @@
 === multiExtendsSplitInterfaces1.ts ===
 self.cancelAnimationFrame(0);
 >self.cancelAnimationFrame(0) : void
->self.cancelAnimationFrame : ((handle: number) => void) & ((handle: number) => void)
+>self.cancelAnimationFrame : ((requestId: number) => void) & ((requestId: number) => void)
 >self : Window & typeof globalThis
->cancelAnimationFrame : ((handle: number) => void) & ((handle: number) => void)
+>cancelAnimationFrame : ((requestId: number) => void) & ((requestId: number) => void)
 >0 : 0
 

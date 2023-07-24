@@ -2511,7 +2511,7 @@ declare var AnimationEvent: {
 };
 
 interface AnimationFrameProvider {
-    cancelAnimationFrame(handle: number): void;
+    cancelAnimationFrame(requestId: number): void;
     requestAnimationFrame(callback: FrameRequestCallback): number;
 }
 
@@ -27414,7 +27414,7 @@ declare function toString(): string;
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/EventTarget/dispatchEvent)
  */
 declare function dispatchEvent(event: Event): boolean;
-declare function cancelAnimationFrame(handle: number): void;
+declare function cancelAnimationFrame(requestId: number): void;
 declare function requestAnimationFrame(callback: FrameRequestCallback): number;
 /**
  * Fires when the user aborts the download.
