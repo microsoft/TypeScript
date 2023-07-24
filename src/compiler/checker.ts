@@ -6641,6 +6641,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const questionToken = type.declaration.questionToken ? factory.createToken(type.declaration.questionToken.kind) as QuestionToken | PlusToken | MinusToken : undefined;
                 let appropriateConstraintTypeNode: TypeNode;
                 let newTypeVariable: TypeReferenceNode | undefined;
+                // If the mapped type isn't `keyof` constraint-declared, _but_ still has modifiers preserved, and its naive instantiation won't preserve modifiers because its constraint isn't `keyof` constrained, we have work to do
+                const needsModifierPreservingWrapper = !isMappedTypeWithKeyofConstraintDeclaration(type)
+                    && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.Unknown)
+                    && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams
+                    && !(getConstraintTypeFromMappedType(type).flags & TypeFlags.TypeParameter && getConstraintOfTypeParameter(getConstraintTypeFromMappedType(type))?.flags! & TypeFlags.Index);
                 if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                     // We have a { [P in keyof T]: X }
                     // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
@@ -6650,6 +6655,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         newTypeVariable = factory.createTypeReferenceNode(name);
                     }
                     appropriateConstraintTypeNode = factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, newTypeVariable || typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
+                }
+                else if (needsModifierPreservingWrapper) {
+                    // So, step 1: new type variable
+                    const newParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
+                    const name = typeParameterToName(newParam, context);
+                    newTypeVariable = factory.createTypeReferenceNode(name);
+                    // step 2: make that new type variable itself the constraint node, making the mapped type `{[K in T_1]: Template}`
+                    appropriateConstraintTypeNode = newTypeVariable;
                 }
                 else {
                     appropriateConstraintTypeNode = typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context);
@@ -6668,6 +6681,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return factory.createConditionalTypeNode(
                         typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context),
                         factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable!.typeName) as Identifier, originalConstraint.flags & TypeFlags.Unknown ? undefined : typeToTypeNodeHelper(originalConstraint, context))),
+                        result,
+                        factory.createKeywordTypeNode(SyntaxKind.NeverKeyword)
+                    );
+                }
+                else if (needsModifierPreservingWrapper) {
+                    // and step 3: once the mapped type is reconstructed, create a `ConstraintType extends infer T_1 extends keyof ModifiersType ? {[K in T_1]: Template} : never`
+                    // subtly different from the `keyof` constraint case, by including the `keyof` constraint on the `infer` type parameter, it doesn't rely on the constraint type being itself
+                    // constrained to a `keyof` type to preserve its modifier-preserving behavior. This is all basically because we preserve modifiers for a wider set of mapped types than
+                    // just homomorphic ones.
+                    return factory.createConditionalTypeNode(
+                        typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context),
+                        factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable!.typeName) as Identifier, factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context)))),
                         result,
                         factory.createKeywordTypeNode(SyntaxKind.NeverKeyword)
                     );
