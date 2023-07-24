@@ -64,6 +64,7 @@
         "esbuild": "^0.18.1",
         "eslint": "^8.22.0",
         "eslint-formatter-autolinkable-stylish": "^1.2.0",
+        "eslint-plugin-jsdoc": "^46.4.4",
         "eslint-plugin-local": "^1.0.0",
         "eslint-plugin-no-null": "^1.0.2",
         "eslint-plugin-simple-import-sort": "^10.0.0",

@@ -477,6 +477,7 @@ export function convertScriptKindName(scriptKindName: protocol.ScriptKindName) {
 
 /** @internal */
 export function convertUserPreferences(preferences: protocol.UserPreferences): UserPreferences {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { lazyConfiguredProjectsFromExternalProject, ...userPreferences } = preferences;
     return userPreferences;
 }

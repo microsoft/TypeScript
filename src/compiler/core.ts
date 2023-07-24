@@ -288,7 +288,7 @@ export function filter<T>(array: T[], f: (x: T) => boolean): T[];
 /** @internal */
 export function filter<T, U extends T>(array: readonly T[], f: (x: T) => x is U): readonly U[];
 /** @internal */
-export function filter<T, U extends T>(array: readonly T[], f: (x: T) => boolean): readonly T[];
+export function filter<T>(array: readonly T[], f: (x: T) => boolean): readonly T[];
 /** @internal */
 export function filter<T, U extends T>(array: T[] | undefined, f: (x: T) => x is U): U[] | undefined;
 /** @internal */
@@ -296,7 +296,7 @@ export function filter<T>(array: T[] | undefined, f: (x: T) => boolean): T[] | u
 /** @internal */
 export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T) => x is U): readonly U[] | undefined;
 /** @internal */
-export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined;
+export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined;
 /** @internal */
 export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined {
     if (array) {
@@ -835,7 +835,7 @@ export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Compa
 }
 
 /** @internal */
-export function sortAndDeduplicate<T>(array: readonly string[]): SortedReadonlyArray<string>;
+export function sortAndDeduplicate(array: readonly string[]): SortedReadonlyArray<string>;
 /** @internal */
 export function sortAndDeduplicate<T>(array: readonly T[], comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
 /** @internal */

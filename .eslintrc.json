@@ -16,7 +16,7 @@
         "plugin:@typescript-eslint/stylistic"
     ],
     "plugins": [
-        "@typescript-eslint", "no-null", "eslint-plugin-local", "simple-import-sort"
+        "@typescript-eslint", "no-null", "eslint-plugin-local", "simple-import-sort", "jsdoc"
     ],
     "ignorePatterns": [
         "**/node_modules/**",
@@ -70,6 +70,7 @@
             { "selector": "enumMember", "format": ["camelCase", "PascalCase"], "leadingUnderscore": "allow", "filter": { "regex": "^[A-Za-z]+_[A-Za-z]+$", "match": false } },
             { "selector": "property", "format": null }
         ],
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
 
         // Rules enabled in typescript-eslint configs that are not applicable here
         "@typescript-eslint/ban-ts-comment": "off",
@@ -79,6 +80,9 @@
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
         "@typescript-eslint/no-var-requires": "off",
+
+        // Solely for marking things as used for the purposes of the no-unused-vars rule.
+        "jsdoc/no-undefined-types": ["error", { "disableReporting": true }],
 
         // Todo: For each of these, investigate whether we want to enable them ✨
         "@typescript-eslint/ban-types": "off",
@@ -95,7 +99,6 @@
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unused-vars": "off",
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
         "@typescript-eslint/prefer-optional-chain": "off",

@@ -249,18 +249,18 @@ export interface ProgramHost<T extends BuilderProgram> {
      * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
-}
-/**
- * Internal interface used to wire emit through same host
- *
- * @internal
- */
-export interface ProgramHost<T extends BuilderProgram> {
+
+    // Internal interface used to wire emit through same host
+
     // TODO: GH#18217 Optional methods are frequently asserted
+    /** @internal */
     createDirectory?(path: string): void;
+    /** @internal */
     writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
     // For testing
+    /** @internal */
     storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */
     now?(): Date;
 }
 
