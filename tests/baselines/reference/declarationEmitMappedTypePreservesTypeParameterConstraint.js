@@ -97,7 +97,7 @@ export declare type ZodRawShape = {
 };
 export declare const buildSchema: <V extends string>(version: V) => addQuestionMarks<baseObjectOutputType<{
     version: ZodLiteral<V>;
-}>, undefined extends V ? never : "version"> extends infer T ? { [K in keyof T]: T[K]; } : never;
+}>, undefined extends V ? never : "version"> extends infer T ? { [k in keyof T]: T[k]; } : never;
 type evaluate<t> = {
     [k in keyof t]: t[k];
 } & unknown;
@@ -105,5 +105,5 @@ export type entryOf<o> = evaluate<{
     [k in keyof o]-?: [k, o[k] & ({} | null)];
 }[o extends readonly unknown[] ? keyof o & number : keyof o]>;
 export type entriesOf<o extends object> = evaluate<entryOf<o>[]>;
-export declare const entriesOf: <o extends object>(o: o) => ({ [k in keyof o]-?: [k, o[k] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [K in keyof T]: T[K]; } : never)[];
+export declare const entriesOf: <o extends object>(o: o) => ({ [k_1 in keyof o]-?: [k_1, o[k_1] & ({} | null)]; }[o extends readonly unknown[] ? keyof o & number : keyof o] extends infer T ? { [k in keyof T]: T[k]; } : never)[];
 export {};
