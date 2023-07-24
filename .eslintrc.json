@@ -58,6 +58,7 @@
         "unicode-bom": ["error", "never"],
 
         // Enabled in eslint:recommended, but not applicable here
+        "no-extra-boolean-cast": "off",
         "no-case-declarations": "off",
         "no-cond-assign": "off",
         "no-constant-condition": ["error", { "checkLoops": false }],
@@ -91,7 +92,6 @@
 
         // Todo: For each of these, investigate whether we want to enable them ✨
         "@typescript-eslint/ban-types": "off",
-        "no-extra-boolean-cast": "off",
         "no-useless-escape": "off",
         "prefer-rest-params": "off",
         "prefer-spread": "off",
