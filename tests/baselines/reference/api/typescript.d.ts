@@ -2221,7 +2221,7 @@ declare namespace ts {
         getSourceFileByPath(path: Path): SourceFile | undefined;
         getCurrentDirectory(): string;
     }
-    interface ParseConfigHost {
+    interface ParseConfigHost extends ModuleResolutionHost {
         useCaseSensitiveFileNames: boolean;
         readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
         /**
@@ -2898,7 +2898,7 @@ declare namespace ts {
         hasRestElement: boolean;
         combinedFlags: ElementFlags;
         readonly: boolean;
-        labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
+        labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration | undefined)[];
     }
     interface TupleTypeReference extends TypeReference {
         target: TupleType;
@@ -4347,6 +4347,7 @@ declare namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly interactiveInlayHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
@@ -6413,11 +6414,16 @@ declare namespace ts {
         Enum = "Enum"
     }
     interface InlayHint {
-        text: string;
+        text: string | InlayHintDisplayPart[];
         position: number;
         kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
+    }
+    interface InlayHintDisplayPart {
+        text: string;
+        span?: TextSpan;
+        file?: string;
     }
     interface TodoCommentDescriptor {
         text: string;
@@ -7009,6 +7015,10 @@ declare namespace ts {
         variableElement = "var",
         /** Inside function */
         localVariableElement = "local var",
+        /** using foo = ... */
+        variableUsingElement = "using",
+        /** await using foo = ... */
+        variableAwaitUsingElement = "await using",
         /**
          * Inside module and script only
          * function f() { }

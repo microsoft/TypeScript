@@ -223,6 +223,7 @@ const libEntries: [string, string][] = [
     ["esnext.string", "lib.es2022.string.d.ts"],
     ["esnext.promise", "lib.es2021.promise.d.ts"],
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
+    ["esnext.decorators", "lib.esnext.decorators.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
@@ -656,6 +657,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "checkJs",
         type: "boolean",
+        affectsModuleResolution: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Enable_error_reporting_in_type_checked_JavaScript_files,

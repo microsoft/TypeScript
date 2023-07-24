@@ -4562,7 +4562,7 @@ export interface ScriptReferenceHost {
     getCurrentDirectory(): string;
 }
 
-export interface ParseConfigHost {
+export interface ParseConfigHost extends ModuleResolutionHost {
     useCaseSensitiveFileNames: boolean;
 
     readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
@@ -4992,7 +4992,7 @@ export interface TypeChecker {
      * @internal
      */
     getParameterType(signature: Signature, parameterIndex: number): Type;
-    /** @internal */ getParameterIdentifierNameAtPosition(signature: Signature, parameterIndex: number): [parameterName: __String, isRestParameter: boolean] | undefined;
+    /** @internal */ getParameterIdentifierInfoAtPosition(signature: Signature, parameterIndex: number): { parameter: Identifier, parameterName: __String, isRestParameter: boolean } | undefined;
     getNullableType(type: Type, flags: TypeFlags): Type;
     getNonNullableType(type: Type): Type;
     /** @internal */ getNonOptionalType(type: Type): Type;
@@ -6434,7 +6434,7 @@ export interface TupleType extends GenericType {
     hasRestElement: boolean;
     combinedFlags: ElementFlags;
     readonly: boolean;
-    labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
+    labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration | undefined)[];
 }
 
 export interface TupleTypeReference extends TypeReference {
@@ -6724,11 +6724,12 @@ export const enum SignatureFlags {
     IsOuterCallChain = 1 << 4,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
     IsUntypedSignatureInJSFile = 1 << 5, // Indicates signature is from a js file and has no types
     IsNonInferrable = 1 << 6,           // Indicates signature comes from a non-inferrable type
+    IsSignatureCandidateForOverloadFailure = 1 << 7,
 
     // We do not propagate `IsInnerCallChain` or `IsOuterCallChain` to instantiated signatures, as that would result in us
     // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
     // instantiating the return type.
-    PropagatingFlags = HasRestParameter | HasLiteralTypes | Abstract | IsUntypedSignatureInJSFile,
+    PropagatingFlags = HasRestParameter | HasLiteralTypes | Abstract | IsUntypedSignatureInJSFile | IsSignatureCandidateForOverloadFailure,
 
     CallChainFlags = IsInnerCallChain | IsOuterCallChain,
 }
@@ -9985,6 +9986,7 @@ export interface UserPreferences {
     readonly includeInlayPropertyDeclarationTypeHints?: boolean;
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
     readonly includeInlayEnumMemberValueHints?: boolean;
+    readonly interactiveInlayHints?: boolean;
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
     readonly organizeImportsIgnoreCase?: "auto" | boolean;

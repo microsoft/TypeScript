@@ -315,6 +315,10 @@
         "category": "Error",
         "code": 1110
     },
+    "Private field '{0}' must be declared in an enclosing class.": {
+        "category": "Error",
+        "code": 1111
+    },
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
         "code": 1113
@@ -1855,10 +1859,6 @@
     "Argument of type '{0}' is not assignable to parameter of type '{1}'.": {
         "category": "Error",
         "code": 2345
-    },
-    "Call target does not contain any signatures.": {
-        "category": "Error",
-        "code": 2346
     },
     "Untyped function calls may not accept type arguments.": {
         "category": "Error",
@@ -4273,10 +4273,6 @@
         "category": "Error",
         "code": 5083
     },
-    "Tuple members must all have names or all not have names.": {
-        "category": "Error",
-        "code": 5084
-    },
     "A tuple member cannot be both optional and rest.": {
         "category": "Error",
         "code": 5085
@@ -6560,6 +6556,10 @@
         "category": "Error",
         "code": 8016
     },
+    "Signature declarations can only be used in TypeScript files.": {
+        "category": "Error",
+        "code": 8017
+    },
     "Report errors in .js files.": {
         "category": "Message",
         "code": 8019
@@ -7687,6 +7687,10 @@
     "Variables with multiple declarations cannot be inlined.": {
         "category": "Message",
         "code": 95186
+    },
+    "Add missing comma for object member completion '{0}'.": {
+        "category": "Message",
+        "code": 95187
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

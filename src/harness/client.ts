@@ -759,11 +759,24 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.InlayHintsRequest>(protocol.CommandTypes.ProvideInlayHints, args);
         const response = this.processResponse<protocol.InlayHintsResponse>(request);
 
-        return response.body!.map(item => ({ // TODO: GH#18217
-            ...item,
-            kind: item.kind as InlayHintKind,
-            position: this.lineOffsetToPosition(file, item.position),
-        }));
+        return response.body!.map(item => {
+            const { text, position } = item;
+            const hint = typeof text === "string" ? text : text.map(({ text, span }) => ({
+                text,
+                span: span && {
+                    start: this.lineOffsetToPosition(span.file, span.start),
+                    length: this.lineOffsetToPosition(span.file, span.end) - this.lineOffsetToPosition(span.file, span.start),
+                },
+                file: span && span.file
+            }));
+
+            return ({
+                ...item,
+                position: this.lineOffsetToPosition(file, position),
+                text: hint,
+                kind: item.kind as InlayHintKind
+            });
+        });
     }
 
     private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {

@@ -1337,7 +1337,7 @@ export function getImpliedNodeFormatForFileWorker(
 }
 
 /** @internal */
-export const plainJSErrors: Set<number> = new Set([
+export const plainJSErrors = new Set<number>([
     // binder errors
     Diagnostics.Cannot_redeclare_block_scoped_variable_0.code,
     Diagnostics.A_module_cannot_have_multiple_default_exports.code,
@@ -1430,6 +1430,7 @@ export const plainJSErrors: Set<number> = new Set([
     Diagnostics.Class_constructor_may_not_be_an_accessor.code,
     Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
     Diagnostics.await_using_statements_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
+    Diagnostics.Private_field_0_must_be_declared_in_an_enclosing_class.code,
     // Type errors
     Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value.code,
 ]);
@@ -3021,6 +3022,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.TypeAliasDeclaration:
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files));
                         return "skip";
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        if (!(node as FunctionLikeDeclaration).body) {
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.Signature_declarations_can_only_be_used_in_TypeScript_files));
+                            return "skip";
+                        }
+                        return;
                     case SyntaxKind.EnumDeclaration:
                         const enumKeyword = Debug.checkDefined(tokenToString(SyntaxKind.EnumKeyword));
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, enumKeyword));
@@ -5159,18 +5168,10 @@ export function filterSemanticDiagnostics(diagnostic: readonly Diagnostic[], opt
 }
 
 /** @internal */
-export interface CompilerHostLike {
-    useCaseSensitiveFileNames(): boolean;
-    getCurrentDirectory(): string;
-    fileExists(fileName: string): boolean;
-    readFile(fileName: string): string | undefined;
-    readDirectory?(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): string[];
-    trace?(s: string): void;
-    onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter;
-}
-
-/** @internal */
-export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, directoryStructureHost: DirectoryStructureHost = host): ParseConfigFileHost {
+export function parseConfigHostFromCompilerHostLike<T extends BuilderProgram>(
+    host: (CompilerHost | ProgramHost<T>) & { onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter },
+    directoryStructureHost: DirectoryStructureHost = host,
+): ParseConfigFileHost {
     return {
         fileExists: f => directoryStructureHost.fileExists(f),
         readDirectory(root, extensions, excludes, includes, depth) {
@@ -5178,10 +5179,13 @@ export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, dire
             return directoryStructureHost.readDirectory(root, extensions, excludes, includes, depth);
         },
         readFile: f => directoryStructureHost.readFile(f),
+        directoryExists: maybeBind(directoryStructureHost, directoryStructureHost.directoryExists),
+        getDirectories: maybeBind(directoryStructureHost, directoryStructureHost.getDirectories),
+        realpath: maybeBind(directoryStructureHost, directoryStructureHost.realpath),
         useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
         getCurrentDirectory: () => host.getCurrentDirectory(),
         onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic || returnUndefined,
-        trace: host.trace ? (s) => host.trace!(s) : undefined
+        trace: host.trace ? (s) => host.trace!(s) : undefined,
     };
 }
 
