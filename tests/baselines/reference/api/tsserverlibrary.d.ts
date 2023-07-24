@@ -6983,6 +6983,7 @@ declare namespace ts {
         constraint?: Type;
         simplifiedForReading?: Type;
         simplifiedForWriting?: Type;
+        simplifiedForReadingD?: Type;
     }
     type TypeVariable = TypeParameter | IndexedAccessType;
     interface IndexType extends InstantiableType {

@@ -302,6 +302,34 @@ function getValueConcrete<K extends keyof Foo1>(
   return o[k];
 }
 
+// https://github.com/microsoft/TypeScript/issues/54892
+type TableToRecord = {
+  a: { a: number };
+  b: { b: string };
+  c: { c: string[] };
+};
+type Table = keyof TableToRecord;
+type Pointer<T extends Table = Table> = {
+  [K in T]: { table: K; id: string };
+}[T];
+declare function something(pointer: Pointer): void;
+function run<T extends Table>(pointer: Pointer<T>) {
+  const x = something(pointer);
+}
+function run2<T extends Table>(pointer: Pointer<T & Table>) {
+  const x = something(pointer);
+}
+function run3<T extends Exclude<Table, 'c'>>(pointer: Pointer<T>) {
+  const x = something(pointer);
+}
+type Table2 = keyof TableToRecord | 'd';
+type Pointer2<T extends Table2 = Table2> = {
+  [K in T]: { table: K; id: string };
+}[T];
+function run4<T extends Table2>(pointer: Pointer2<T>) {
+  const x = something(pointer); // error
+}
+
 
 //// [correlatedUnions.js]
 "use strict";
@@ -432,6 +460,18 @@ function getConfigOrDefault(userConfig, key, defaultValue) {
 }
 function getValueConcrete(o, k) {
     return o[k];
+}
+function run(pointer) {
+    var x = something(pointer);
+}
+function run2(pointer) {
+    var x = something(pointer);
+}
+function run3(pointer) {
+    var x = something(pointer);
+}
+function run4(pointer) {
+    var x = something(pointer); // error
 }
 
 
@@ -613,3 +653,33 @@ type Foo1 = {
     y: string;
 };
 declare function getValueConcrete<K extends keyof Foo1>(o: Partial<Foo1>, k: K): Foo1[K] | undefined;
+type TableToRecord = {
+    a: {
+        a: number;
+    };
+    b: {
+        b: string;
+    };
+    c: {
+        c: string[];
+    };
+};
+type Table = keyof TableToRecord;
+type Pointer<T extends Table = Table> = {
+    [K in T]: {
+        table: K;
+        id: string;
+    };
+}[T];
+declare function something(pointer: Pointer): void;
+declare function run<T extends Table>(pointer: Pointer<T>): void;
+declare function run2<T extends Table>(pointer: Pointer<T & Table>): void;
+declare function run3<T extends Exclude<Table, 'c'>>(pointer: Pointer<T>): void;
+type Table2 = keyof TableToRecord | 'd';
+type Pointer2<T extends Table2 = Table2> = {
+    [K in T]: {
+        table: K;
+        id: string;
+    };
+}[T];
+declare function run4<T extends Table2>(pointer: Pointer2<T>): void;

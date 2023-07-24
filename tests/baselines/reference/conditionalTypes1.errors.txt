@@ -8,7 +8,7 @@ conditionalTypes1.ts(17,5): error TS2322: Type 'T' is not assignable to type 'No
           Type 'T' is not assignable to type '{}'.
             Type 'string | undefined' is not assignable to type '{}'.
               Type 'undefined' is not assignable to type '{}'.
-conditionalTypes1.ts(24,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
+conditionalTypes1.ts(24,5): error TS2322: Type 'T[keyof T & string] | T[keyof T & number] | T[keyof T & symbol] | undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
   Type 'undefined' is not assignable to type 'T[keyof T] & {}'.
     Type 'undefined' is not assignable to type 'T[keyof T]'.
       'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
@@ -25,32 +25,28 @@ conditionalTypes1.ts(104,5): error TS2322: Type 'NonFunctionProperties<T>' is no
   'T' could be instantiated with an arbitrary type which could be unrelated to 'NonFunctionProperties<T>'.
 conditionalTypes1.ts(106,5): error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'FunctionProperties<T>'.
   Type 'FunctionPropertyNames<T>' is not assignable to type 'NonFunctionPropertyNames<T>'.
-    Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-      Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-        Type 'string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-          Type 'keyof T' is not assignable to type 'never'.
-            Type 'string | number | symbol' is not assignable to type 'never'.
-              Type 'string' is not assignable to type 'never'.
+    Type 'T[keyof T & string] extends Function ? keyof T & string : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+      Type 'keyof T & string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+        Type 'keyof T & string' is not assignable to type 'never'.
 conditionalTypes1.ts(108,5): error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'NonFunctionProperties<T>'.
   Type 'NonFunctionPropertyNames<T>' is not assignable to type 'FunctionPropertyNames<T>'.
-    Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-      Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-        Type 'string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-          Type 'keyof T' is not assignable to type 'never'.
+    Type 'T[keyof T & string] extends Function ? never : keyof T & string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+      Type 'keyof T & string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+        Type 'keyof T & string' is not assignable to type 'never'.
 conditionalTypes1.ts(114,5): error TS2322: Type 'keyof T' is not assignable to type 'FunctionPropertyNames<T>'.
   Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
     Type 'string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
 conditionalTypes1.ts(115,5): error TS2322: Type 'NonFunctionPropertyNames<T>' is not assignable to type 'FunctionPropertyNames<T>'.
-  Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-    Type 'keyof T' is not assignable to type 'never'.
-      Type 'string | number | symbol' is not assignable to type 'never'.
-        Type 'string' is not assignable to type 'never'.
+  Type 'T[keyof T & string] extends Function ? never : keyof T & string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+    Type 'keyof T & string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+      Type 'keyof T & string' is not assignable to type 'never'.
 conditionalTypes1.ts(116,5): error TS2322: Type 'keyof T' is not assignable to type 'NonFunctionPropertyNames<T>'.
   Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
     Type 'string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
 conditionalTypes1.ts(117,5): error TS2322: Type 'FunctionPropertyNames<T>' is not assignable to type 'NonFunctionPropertyNames<T>'.
-  Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-    Type 'keyof T' is not assignable to type 'never'.
+  Type 'T[keyof T & string] extends Function ? keyof T & string : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+    Type 'keyof T & string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+      Type 'keyof T & string' is not assignable to type 'never'.
 conditionalTypes1.ts(134,10): error TS2540: Cannot assign to 'id' because it is a read-only property.
 conditionalTypes1.ts(135,5): error TS2542: Index signature in type 'DeepReadonlyArray<Part>' only permits reading.
 conditionalTypes1.ts(136,22): error TS2540: Cannot assign to 'id' because it is a read-only property.
@@ -108,7 +104,7 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
+!!! error TS2322: Type 'T[keyof T & string] | T[keyof T & number] | T[keyof T & symbol] | undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'T[keyof T] & {}'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'T[keyof T]'.
 !!! error TS2322:       'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
@@ -211,21 +207,17 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
         ~
 !!! error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'FunctionProperties<T>'.
 !!! error TS2322:   Type 'FunctionPropertyNames<T>' is not assignable to type 'NonFunctionPropertyNames<T>'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:         Type 'string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:           Type 'keyof T' is not assignable to type 'never'.
-!!! error TS2322:             Type 'string | number | symbol' is not assignable to type 'never'.
-!!! error TS2322:               Type 'string' is not assignable to type 'never'.
+!!! error TS2322:     Type 'T[keyof T & string] extends Function ? keyof T & string : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:       Type 'keyof T & string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:         Type 'keyof T & string' is not assignable to type 'never'.
         z = x;
         z = y;  // Error
         ~
 !!! error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'NonFunctionProperties<T>'.
 !!! error TS2322:   Type 'NonFunctionPropertyNames<T>' is not assignable to type 'FunctionPropertyNames<T>'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:         Type 'string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:           Type 'keyof T' is not assignable to type 'never'.
+!!! error TS2322:     Type 'T[keyof T & string] extends Function ? never : keyof T & string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:       Type 'keyof T & string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:         Type 'keyof T & string' is not assignable to type 'never'.
     }
     
     function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {
@@ -239,10 +231,9 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
         y = z;  // Error
         ~
 !!! error TS2322: Type 'NonFunctionPropertyNames<T>' is not assignable to type 'FunctionPropertyNames<T>'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'never'.
-!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'never'.
-!!! error TS2322:         Type 'string' is not assignable to type 'never'.
+!!! error TS2322:   Type 'T[keyof T & string] extends Function ? never : keyof T & string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:     Type 'keyof T & string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:       Type 'keyof T & string' is not assignable to type 'never'.
         z = x;  // Error
         ~
 !!! error TS2322: Type 'keyof T' is not assignable to type 'NonFunctionPropertyNames<T>'.
@@ -251,8 +242,9 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
         z = y;  // Error
         ~
 !!! error TS2322: Type 'FunctionPropertyNames<T>' is not assignable to type 'NonFunctionPropertyNames<T>'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'never'.
+!!! error TS2322:   Type 'T[keyof T & string] extends Function ? keyof T & string : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:     Type 'keyof T & string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:       Type 'keyof T & string' is not assignable to type 'never'.
     }
     
     type DeepReadonly<T> =

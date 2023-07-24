@@ -6624,6 +6624,7 @@ export interface IndexedAccessType extends InstantiableType {
     constraint?: Type;
     simplifiedForReading?: Type;
     simplifiedForWriting?: Type;
+    simplifiedForReadingD?: Type;
 }
 
 export type TypeVariable = TypeParameter | IndexedAccessType;

@@ -1016,3 +1016,120 @@ function getValueConcrete<K extends keyof Foo1>(
 >k : Symbol(k, Decl(correlatedUnions.ts, 295, 19))
 }
 
+// https://github.com/microsoft/TypeScript/issues/54892
+type TableToRecord = {
+>TableToRecord : Symbol(TableToRecord, Decl(correlatedUnions.ts, 299, 1))
+
+  a: { a: number };
+>a : Symbol(a, Decl(correlatedUnions.ts, 302, 22))
+>a : Symbol(a, Decl(correlatedUnions.ts, 303, 6))
+
+  b: { b: string };
+>b : Symbol(b, Decl(correlatedUnions.ts, 303, 19))
+>b : Symbol(b, Decl(correlatedUnions.ts, 304, 6))
+
+  c: { c: string[] };
+>c : Symbol(c, Decl(correlatedUnions.ts, 304, 19))
+>c : Symbol(c, Decl(correlatedUnions.ts, 305, 6))
+
+};
+type Table = keyof TableToRecord;
+>Table : Symbol(Table, Decl(correlatedUnions.ts, 306, 2))
+>TableToRecord : Symbol(TableToRecord, Decl(correlatedUnions.ts, 299, 1))
+
+type Pointer<T extends Table = Table> = {
+>Pointer : Symbol(Pointer, Decl(correlatedUnions.ts, 307, 33))
+>T : Symbol(T, Decl(correlatedUnions.ts, 308, 13))
+>Table : Symbol(Table, Decl(correlatedUnions.ts, 306, 2))
+>Table : Symbol(Table, Decl(correlatedUnions.ts, 306, 2))
+
+  [K in T]: { table: K; id: string };
+>K : Symbol(K, Decl(correlatedUnions.ts, 309, 3))
+>T : Symbol(T, Decl(correlatedUnions.ts, 308, 13))
+>table : Symbol(table, Decl(correlatedUnions.ts, 309, 13))
+>K : Symbol(K, Decl(correlatedUnions.ts, 309, 3))
+>id : Symbol(id, Decl(correlatedUnions.ts, 309, 23))
+
+}[T];
+>T : Symbol(T, Decl(correlatedUnions.ts, 308, 13))
+
+declare function something(pointer: Pointer): void;
+>something : Symbol(something, Decl(correlatedUnions.ts, 310, 5))
+>pointer : Symbol(pointer, Decl(correlatedUnions.ts, 311, 27))
+>Pointer : Symbol(Pointer, Decl(correlatedUnions.ts, 307, 33))
+
+function run<T extends Table>(pointer: Pointer<T>) {
+>run : Symbol(run, Decl(correlatedUnions.ts, 311, 51))
+>T : Symbol(T, Decl(correlatedUnions.ts, 312, 13))
+>Table : Symbol(Table, Decl(correlatedUnions.ts, 306, 2))
+>pointer : Symbol(pointer, Decl(correlatedUnions.ts, 312, 30))
+>Pointer : Symbol(Pointer, Decl(correlatedUnions.ts, 307, 33))
+>T : Symbol(T, Decl(correlatedUnions.ts, 312, 13))
+
+  const x = something(pointer);
+>x : Symbol(x, Decl(correlatedUnions.ts, 313, 7))
+>something : Symbol(something, Decl(correlatedUnions.ts, 310, 5))
+>pointer : Symbol(pointer, Decl(correlatedUnions.ts, 312, 30))
+}
+function run2<T extends Table>(pointer: Pointer<T & Table>) {
+>run2 : Symbol(run2, Decl(correlatedUnions.ts, 314, 1))
+>T : Symbol(T, Decl(correlatedUnions.ts, 315, 14))
+>Table : Symbol(Table, Decl(correlatedUnions.ts, 306, 2))
+>pointer : Symbol(pointer, Decl(correlatedUnions.ts, 315, 31))
+>Pointer : Symbol(Pointer, Decl(correlatedUnions.ts, 307, 33))
+>T : Symbol(T, Decl(correlatedUnions.ts, 315, 14))
+>Table : Symbol(Table, Decl(correlatedUnions.ts, 306, 2))
+
+  const x = something(pointer);
+>x : Symbol(x, Decl(correlatedUnions.ts, 316, 7))
+>something : Symbol(something, Decl(correlatedUnions.ts, 310, 5))
+>pointer : Symbol(pointer, Decl(correlatedUnions.ts, 315, 31))
+}
+function run3<T extends Exclude<Table, 'c'>>(pointer: Pointer<T>) {
+>run3 : Symbol(run3, Decl(correlatedUnions.ts, 317, 1))
+>T : Symbol(T, Decl(correlatedUnions.ts, 318, 14))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Table : Symbol(Table, Decl(correlatedUnions.ts, 306, 2))
+>pointer : Symbol(pointer, Decl(correlatedUnions.ts, 318, 45))
+>Pointer : Symbol(Pointer, Decl(correlatedUnions.ts, 307, 33))
+>T : Symbol(T, Decl(correlatedUnions.ts, 318, 14))
+
+  const x = something(pointer);
+>x : Symbol(x, Decl(correlatedUnions.ts, 319, 7))
+>something : Symbol(something, Decl(correlatedUnions.ts, 310, 5))
+>pointer : Symbol(pointer, Decl(correlatedUnions.ts, 318, 45))
+}
+type Table2 = keyof TableToRecord | 'd';
+>Table2 : Symbol(Table2, Decl(correlatedUnions.ts, 320, 1))
+>TableToRecord : Symbol(TableToRecord, Decl(correlatedUnions.ts, 299, 1))
+
+type Pointer2<T extends Table2 = Table2> = {
+>Pointer2 : Symbol(Pointer2, Decl(correlatedUnions.ts, 321, 40))
+>T : Symbol(T, Decl(correlatedUnions.ts, 322, 14))
+>Table2 : Symbol(Table2, Decl(correlatedUnions.ts, 320, 1))
+>Table2 : Symbol(Table2, Decl(correlatedUnions.ts, 320, 1))
+
+  [K in T]: { table: K; id: string };
+>K : Symbol(K, Decl(correlatedUnions.ts, 323, 3))
+>T : Symbol(T, Decl(correlatedUnions.ts, 322, 14))
+>table : Symbol(table, Decl(correlatedUnions.ts, 323, 13))
+>K : Symbol(K, Decl(correlatedUnions.ts, 323, 3))
+>id : Symbol(id, Decl(correlatedUnions.ts, 323, 23))
+
+}[T];
+>T : Symbol(T, Decl(correlatedUnions.ts, 322, 14))
+
+function run4<T extends Table2>(pointer: Pointer2<T>) {
+>run4 : Symbol(run4, Decl(correlatedUnions.ts, 324, 5))
+>T : Symbol(T, Decl(correlatedUnions.ts, 325, 14))
+>Table2 : Symbol(Table2, Decl(correlatedUnions.ts, 320, 1))
+>pointer : Symbol(pointer, Decl(correlatedUnions.ts, 325, 32))
+>Pointer2 : Symbol(Pointer2, Decl(correlatedUnions.ts, 321, 40))
+>T : Symbol(T, Decl(correlatedUnions.ts, 325, 14))
+
+  const x = something(pointer); // error
+>x : Symbol(x, Decl(correlatedUnions.ts, 326, 7))
+>something : Symbol(something, Decl(correlatedUnions.ts, 310, 5))
+>pointer : Symbol(pointer, Decl(correlatedUnions.ts, 325, 32))
+}
+
