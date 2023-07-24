@@ -1295,6 +1295,12 @@ const enum MappedTypeModifiers {
     ExcludeOptional = 1 << 3,
 }
 
+const enum MappedTypeNameTypeKind {
+    None = 0,
+    Filtering = 1 << 0,
+    Remapping = 1 << 1,
+}
+
 const enum ExpandingFlags {
     None = 0,
     Source = 1,
@@ -13224,7 +13230,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const constraintType = getConstraintTypeFromMappedType(type);
         const mappedType = (type.target as MappedType) || type;
         const nameType = getNameTypeFromMappedType(mappedType);
-        const shouldLinkPropDeclarations = !nameType || isFilteringMappedType(mappedType);
+        const shouldLinkPropDeclarations = !(getMappedTypeNameTypeKind(mappedType) & MappedTypeNameTypeKind.Remapping);
         const templateType = getTemplateTypeFromMappedType(mappedType);
         const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
         const templateModifiers = getMappedTypeModifiers(type);
@@ -13404,9 +13410,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function isFilteringMappedType(type: MappedType): boolean {
+    function getMappedTypeNameTypeKind(type: MappedType): MappedTypeNameTypeKind {
         const nameType = getNameTypeFromMappedType(type);
-        return !!nameType && isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type));
+        if (!nameType) {
+            return MappedTypeNameTypeKind.None;
+        }
+        return isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type)) ? MappedTypeNameTypeKind.Filtering : MappedTypeNameTypeKind.Remapping;
     }
 
     function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
@@ -17075,7 +17084,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function shouldDeferIndexType(type: Type, indexFlags = IndexFlags.None) {
         return !!(type.flags & TypeFlags.InstantiableNonPrimitive ||
             isGenericTupleType(type) ||
-            isGenericMappedType(type) && (!hasDistributiveNameType(type) || !(indexFlags & IndexFlags.NoRemappingMappedTypeDeferral) && getNameTypeFromMappedType(type) && !isFilteringMappedType(type)) ||
+            isGenericMappedType(type) && (!hasDistributiveNameType(type) || !(indexFlags & IndexFlags.NoRemappingMappedTypeDeferral) && getMappedTypeNameTypeKind(type) & MappedTypeNameTypeKind.Remapping) ||
             type.flags & TypeFlags.Union && !(indexFlags & IndexFlags.NoReducibleCheck) && isGenericReducibleType(type) ||
             type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable) && some((type as IntersectionType).types, isEmptyAnonymousObjectType));
     }
@@ -17632,7 +17641,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // K is generic and N is assignable to P, instantiate E using a mapper that substitutes the index type for P.
         // For example, for an index access { [P in K]: Box<T[P]> }[X], we construct the type Box<T[X]>.
         if (isGenericMappedType(objectType)) {
-            if (!getNameTypeFromMappedType(objectType) || isFilteringMappedType(objectType)) {
+            if (!(getMappedTypeNameTypeKind(objectType) & MappedTypeNameTypeKind.Remapping)) {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
         }
