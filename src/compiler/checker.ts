@@ -38221,7 +38221,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function checkSignatureDeclarationDiagnostics() {
             checkCollisionWithArgumentsInGeneratedCode(node);
-            const { returnTypeNode, returnTypeErrorLocation } = getReturnInfoOfSignatureDeclaration(node);
+
+            let returnTypeNode = getEffectiveReturnTypeNode(node);
+            let returnTypeErrorLocation = returnTypeNode;
+
+            if (isInJSFile(node)) {
+                const typeTag = getJSDocTypeTag(node);
+                if (typeTag && typeTag.typeExpression) {
+                    const signature = getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
+                    if (signature && signature.declaration) {
+                        returnTypeNode = getEffectiveReturnTypeNode(signature.declaration);
+                        returnTypeErrorLocation = typeTag.typeExpression.type;
+                    }
+                }
+            }
+
             if (noImplicitAny && !returnTypeNode) {
                 switch (node.kind) {
                     case SyntaxKind.ConstructSignature:
@@ -38233,7 +38247,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            if (returnTypeNode) {
+            if (returnTypeNode && returnTypeErrorLocation) {
                 const functionFlags = getFunctionFlags(node as FunctionDeclaration);
                 if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Generator)) === FunctionFlags.Generator) {
                     const returnType = getTypeFromTypeNode(returnTypeNode);
@@ -38261,23 +38275,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.JSDocFunctionType) {
                 registerForUnusedIdentifiersCheck(node);
             }
-        }
-
-        function getReturnInfoOfSignatureDeclaration(node: SignatureDeclaration) {
-            const returnTypeNode = getEffectiveReturnTypeNode(node);
-            if (returnTypeNode) {
-                return { returnTypeNode, returnTypeErrorLocation: returnTypeNode };
-            }
-            if (isInJSFile(node)) {
-                const typeTag = getJSDocTypeTag(node);
-                if (typeTag && typeTag.typeExpression) {
-                    const signature = getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
-                    if (signature && signature.declaration) {
-                        return { returnTypeNode: getEffectiveReturnTypeNode(signature.declaration), returnTypeErrorLocation: typeTag.typeExpression.type };
-                    }
-                }
-            }
-            return { returnTypeNode: undefined, returnTypeErrorLocation: undefined };
         }
     }
 
