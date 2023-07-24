@@ -34,6 +34,7 @@
         "dot-notation": "error",
         "eqeqeq": "error",
         "no-caller": "error",
+        "no-constant-condition": ["error", { "checkLoops": false }],
         "no-eval": "error",
         "no-extra-bind": "error",
         "no-new-func": "error",
@@ -61,7 +62,6 @@
         "no-extra-boolean-cast": "off",
         "no-case-declarations": "off",
         "no-cond-assign": "off",
-        "no-constant-condition": ["error", { "checkLoops": false }],
         "no-control-regex": "off",
         "no-inner-declarations": "off",
 
