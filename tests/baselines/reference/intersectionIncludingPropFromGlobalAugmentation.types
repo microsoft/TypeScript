@@ -24,5 +24,11 @@ const toString = target.toString;
 >target : Test2
 >toString : "string" | null
 
+const hasOwn = target.hasOwnProperty; // not an own member but it should still be accessible
+>hasOwn : (v: PropertyKey) => boolean
+>target.hasOwnProperty : (v: PropertyKey) => boolean
+>target : Test2
+>hasOwnProperty : (v: PropertyKey) => boolean
+
 export {}
 

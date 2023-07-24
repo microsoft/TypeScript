@@ -27,5 +27,11 @@ const toString = target.toString;
 >target : Symbol(target, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 5, 5))
 >toString : Symbol(Test1.toString, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 2, 17))
 
+const hasOwn = target.hasOwnProperty; // not an own member but it should still be accessible
+>hasOwn : Symbol(hasOwn, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 8, 5))
+>target.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>target : Symbol(target, Decl(intersectionIncludingPropFromGlobalAugmentation.ts, 5, 5))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
 export {}
 

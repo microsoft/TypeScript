@@ -9,5 +9,6 @@ declare const source: Test1;
 const target: Test2 = { ...source };
 
 const toString = target.toString;
+const hasOwn = target.hasOwnProperty; // not an own member but it should still be accessible
 
 export {}
