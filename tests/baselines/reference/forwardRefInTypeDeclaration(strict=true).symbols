@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/forwardRefInTypeDeclaration.ts] ////
+
+=== forwardRefInTypeDeclaration.ts ===
+// forward ref ignored in a typeof
+declare let s: typeof s1;
+>s : Symbol(s, Decl(forwardRefInTypeDeclaration.ts, 1, 11))
+>s1 : Symbol(s1, Decl(forwardRefInTypeDeclaration.ts, 2, 5))
+
+const s1 = "x";
+>s1 : Symbol(s1, Decl(forwardRefInTypeDeclaration.ts, 2, 5))
+
+// ignored anywhere in an interface (#35947)
+interface Foo2 { [s2]: number; }
+>Foo2 : Symbol(Foo2, Decl(forwardRefInTypeDeclaration.ts, 2, 15))
+>[s2] : Symbol(Foo2[s2], Decl(forwardRefInTypeDeclaration.ts, 5, 16))
+>s2 : Symbol(s2, Decl(forwardRefInTypeDeclaration.ts, 6, 5))
+
+const s2 = "x";
+>s2 : Symbol(s2, Decl(forwardRefInTypeDeclaration.ts, 6, 5))
+
+// or in a type definition
+type Foo3 = { [s3]: number; }
+>Foo3 : Symbol(Foo3, Decl(forwardRefInTypeDeclaration.ts, 6, 15))
+>[s3] : Symbol([s3], Decl(forwardRefInTypeDeclaration.ts, 9, 13))
+>s3 : Symbol(s3, Decl(forwardRefInTypeDeclaration.ts, 10, 5))
+
+const s3 = "x";
+>s3 : Symbol(s3, Decl(forwardRefInTypeDeclaration.ts, 10, 5))
+
+// or in a type literal
+declare const foo4: { [s4]: number; }
+>foo4 : Symbol(foo4, Decl(forwardRefInTypeDeclaration.ts, 13, 13))
+>[s4] : Symbol([s4], Decl(forwardRefInTypeDeclaration.ts, 13, 21))
+>s4 : Symbol(s4, Decl(forwardRefInTypeDeclaration.ts, 14, 5))
+
+const s4 = "x";
+>s4 : Symbol(s4, Decl(forwardRefInTypeDeclaration.ts, 14, 5))
+
+// or in a declared class
+declare class Foo5 { [s5]: number; }
+>Foo5 : Symbol(Foo5, Decl(forwardRefInTypeDeclaration.ts, 14, 15))
+>[s5] : Symbol(Foo5[s5], Decl(forwardRefInTypeDeclaration.ts, 17, 20))
+>s5 : Symbol(s5, Decl(forwardRefInTypeDeclaration.ts, 18, 5))
+
+const s5 = "x";
+>s5 : Symbol(s5, Decl(forwardRefInTypeDeclaration.ts, 18, 5))
+
+// or with qualified names
+interface Foo6 { [Cls1.a]: number; [Cls2.b]: number; [obj1.c]: number; [obj2.d]: number }
+>Foo6 : Symbol(Foo6, Decl(forwardRefInTypeDeclaration.ts, 18, 15))
+>[Cls1.a] : Symbol(Foo6[Cls1.a], Decl(forwardRefInTypeDeclaration.ts, 21, 16))
+>Cls1.a : Symbol(Cls1.a, Decl(forwardRefInTypeDeclaration.ts, 22, 20))
+>Cls1 : Symbol(Cls1, Decl(forwardRefInTypeDeclaration.ts, 21, 89))
+>a : Symbol(Cls1.a, Decl(forwardRefInTypeDeclaration.ts, 22, 20))
+>[Cls2.b] : Symbol(Foo6[Cls2.b], Decl(forwardRefInTypeDeclaration.ts, 21, 34))
+>Cls2.b : Symbol(Cls2.b, Decl(forwardRefInTypeDeclaration.ts, 23, 12))
+>Cls2 : Symbol(Cls2, Decl(forwardRefInTypeDeclaration.ts, 22, 37))
+>b : Symbol(Cls2.b, Decl(forwardRefInTypeDeclaration.ts, 23, 12))
+>[obj1.c] : Symbol(Foo6[obj1.c], Decl(forwardRefInTypeDeclaration.ts, 21, 52))
+>obj1.c : Symbol(c, Decl(forwardRefInTypeDeclaration.ts, 24, 21))
+>obj1 : Symbol(obj1, Decl(forwardRefInTypeDeclaration.ts, 24, 13))
+>c : Symbol(c, Decl(forwardRefInTypeDeclaration.ts, 24, 21))
+>[obj2.d] : Symbol(Foo6[obj2.d], Decl(forwardRefInTypeDeclaration.ts, 21, 70))
+>obj2.d : Symbol(d, Decl(forwardRefInTypeDeclaration.ts, 25, 14))
+>obj2 : Symbol(obj2, Decl(forwardRefInTypeDeclaration.ts, 25, 5))
+>d : Symbol(d, Decl(forwardRefInTypeDeclaration.ts, 25, 14))
+
+declare class Cls1 { static a: "a"; }
+>Cls1 : Symbol(Cls1, Decl(forwardRefInTypeDeclaration.ts, 21, 89))
+>a : Symbol(Cls1.a, Decl(forwardRefInTypeDeclaration.ts, 22, 20))
+
+class Cls2 { static b = "b" as const; }
+>Cls2 : Symbol(Cls2, Decl(forwardRefInTypeDeclaration.ts, 22, 37))
+>b : Symbol(Cls2.b, Decl(forwardRefInTypeDeclaration.ts, 23, 12))
+>const : Symbol(const)
+
+declare const obj1: { c: 'c' }
+>obj1 : Symbol(obj1, Decl(forwardRefInTypeDeclaration.ts, 24, 13))
+>c : Symbol(c, Decl(forwardRefInTypeDeclaration.ts, 24, 21))
+
+const obj2 = { d: 'd' } as const
+>obj2 : Symbol(obj2, Decl(forwardRefInTypeDeclaration.ts, 25, 5))
+>d : Symbol(d, Decl(forwardRefInTypeDeclaration.ts, 25, 14))
+>const : Symbol(const)
+

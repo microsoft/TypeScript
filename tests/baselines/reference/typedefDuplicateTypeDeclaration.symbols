@@ -1,7 +1,9 @@
-=== tests/cases/conformance/jsdoc/typedefDuplicateTypeDeclaration.js ===
+//// [tests/cases/conformance/jsdoc/typedefDuplicateTypeDeclaration.ts] ////
+
+=== typedefDuplicateTypeDeclaration.js ===
+
 /**
-No type information for this code. * @typedef Name
-No type information for this code. * @type {string}
-No type information for this code. * @type {Oops}
-No type information for this code. */
-No type information for this code.
+ * @typedef Name
+ * @type {string}
+ * @type {Oops}
+ */

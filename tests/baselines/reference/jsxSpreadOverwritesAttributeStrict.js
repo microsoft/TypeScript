@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxSpreadOverwritesAttributeStrict.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 
@@ -25,7 +27,7 @@ const b4 = <Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo>;
 
 //// [file.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var props = { a: 1, b: 1 };
 var Foo = function (props) { return <div>{props.a}</div>; };

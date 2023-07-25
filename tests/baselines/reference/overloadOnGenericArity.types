@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnGenericArity.ts ===
+//// [tests/cases/compiler/overloadOnGenericArity.ts] ////
+
+=== overloadOnGenericArity.ts ===
 interface Test {
     then<U>(p: string): string;
 >then : { <U>(p: string): string; (p: string): Date; }

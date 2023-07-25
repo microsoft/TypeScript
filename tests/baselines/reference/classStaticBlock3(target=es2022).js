@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock3.ts] ////
+
 //// [classStaticBlock3.ts]
 const a = 1;
 

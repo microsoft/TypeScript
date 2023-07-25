@@ -113,7 +113,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicClassExtendingFromPrivateModuleClass = exports.publicClassExtendingPrivateClass = exports.publicClassExtendingPublicClass = exports.publicClass = exports.publicModule = void 0;
 var publicModule;
 (function (publicModule) {
@@ -175,7 +175,7 @@ var publicModule;
         return publicClassExtendingFromPrivateModuleClass;
     }(privateModule.publicClassInPrivateModule));
     publicModule.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var publicClassInPrivateModule = /** @class */ (function () {
@@ -372,7 +372,7 @@ var publicClassExtendingPublicClassInGlobal = /** @class */ (function (_super) {
 
 
 //// [privacyClassExtendsClauseDeclFile_externalModule.d.ts]
-export declare module publicModule {
+export declare namespace publicModule {
     export class publicClassInPublicModule {
         private f1;
     }
@@ -386,7 +386,7 @@ export declare module publicModule {
     }
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     export class publicClassInPrivateModule {
         private f1;
     }
@@ -413,7 +413,7 @@ export declare class publicClassExtendingFromPrivateModuleClass extends privateM
 }
 export {};
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.d.ts]
-declare module publicModuleInGlobal {
+declare namespace publicModuleInGlobal {
     export class publicClassInPublicModule {
         private f1;
     }

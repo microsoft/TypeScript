@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2019/importMeta/importMetaNarrowing.ts ===
+//// [tests/cases/conformance/es2019/importMeta/importMetaNarrowing.ts] ////
+
+=== importMetaNarrowing.ts ===
 declare global { interface ImportMeta {foo?: () => void} };
 >global : any
 >foo : (() => void) | undefined
@@ -6,14 +8,14 @@ declare global { interface ImportMeta {foo?: () => void} };
 if (import.meta.foo) {
 >import.meta.foo : (() => void) | undefined
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >foo : (() => void) | undefined
 
   import.meta.foo();
 >import.meta.foo() : void
 >import.meta.foo : () => void
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >foo : () => void
 }
 

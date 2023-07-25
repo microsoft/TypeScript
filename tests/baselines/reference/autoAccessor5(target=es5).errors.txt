@@ -1,0 +1,29 @@
+autoAccessor5.ts(2,14): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+autoAccessor5.ts(3,14): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+autoAccessor5.ts(4,21): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+autoAccessor5.ts(5,21): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+autoAccessor5.ts(10,14): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+
+
+==== autoAccessor5.ts (5 errors) ====
+    class C1 {
+        accessor ["w"]: any;
+                 ~~~~~
+!!! error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+        accessor ["x"] = 1;
+                 ~~~~~
+!!! error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+        static accessor ["y"]: any;
+                        ~~~~~
+!!! error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+        static accessor ["z"] = 2;
+                        ~~~~~
+!!! error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
+    }
+    
+    declare var f: any;
+    class C2 {
+        accessor [f()] = 1;
+                 ~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+    }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classSideInheritance2.ts ===
+//// [tests/cases/compiler/classSideInheritance2.ts] ////
+
+=== classSideInheritance2.ts ===
 interface IText {
 >IText : Symbol(IText, Decl(classSideInheritance2.ts, 0, 0))
 

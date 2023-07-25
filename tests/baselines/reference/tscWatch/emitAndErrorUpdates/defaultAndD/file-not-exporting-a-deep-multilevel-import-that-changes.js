@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 export interface Point {
@@ -59,7 +60,7 @@ Output::
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
 [7m6[0m             x: 1,
-[7m [0m [91m            ~~~~[0m
+[7m [0m [91m            ~[0m
 
   [96ma.ts[0m:[93m3[0m:[93m5[0m
     [7m3[0m     c: Coords;
@@ -102,35 +103,37 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
 /user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/c.ts:
-  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
-/user/username/projects/myproject/d.ts:
-  {"fileName":"/user/username/projects/myproject/d.ts","pollingInterval":250}
-/user/username/projects/myproject/e.ts:
-  {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/c.ts: *new*
+  {}
+/user/username/projects/myproject/d.ts: *new*
+  {}
+/user/username/projects/myproject/e.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+/user/username/projects/myproject: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/a.d.ts]
@@ -146,7 +149,7 @@ export interface Coords {
 
 //// [/user/username/projects/myproject/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/b.d.ts]
@@ -157,7 +160,7 @@ export interface PointWrapper extends Point {
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPoint = void 0;
 function getPoint() {
     return {
@@ -179,7 +182,7 @@ export declare function getPoint(): PointWrapper;
 
 //// [/user/username/projects/myproject/d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var c_1 = require("./c");
 (0, c_1.getPoint)().c.x;
 
@@ -190,7 +193,7 @@ export {};
 
 //// [/user/username/projects/myproject/e.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("./d");
 
 
@@ -213,6 +216,9 @@ export interface Coords {
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
@@ -243,30 +249,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (computed .d.ts)
 /user/username/projects/myproject/c.ts (computed .d.ts during emit)
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/c.ts:
-  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
-/user/username/projects/myproject/d.ts:
-  {"fileName":"/user/username/projects/myproject/d.ts","pollingInterval":250}
-/user/username/projects/myproject/e.ts:
-  {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 
@@ -301,6 +283,9 @@ export interface Coords {
 }
 
 
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
@@ -309,7 +294,7 @@ Output::
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
 [7m6[0m             x: 1,
-[7m [0m [91m            ~~~~[0m
+[7m [0m [91m            ~[0m
 
   [96ma.ts[0m:[93m3[0m:[93m5[0m
     [7m3[0m     c: Coords;
@@ -348,30 +333,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.ts (computed .d.ts during emit)
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/c.ts:
-  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
-/user/username/projects/myproject/d.ts:
-  {"fileName":"/user/username/projects/myproject/d.ts","pollingInterval":250}
-/user/username/projects/myproject/e.ts:
-  {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
@@ -405,6 +366,9 @@ export interface Coords {
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
@@ -435,30 +399,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (computed .d.ts)
 /user/username/projects/myproject/c.ts (computed .d.ts during emit)
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/c.ts:
-  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
-/user/username/projects/myproject/d.ts:
-  {"fileName":"/user/username/projects/myproject/d.ts","pollingInterval":250}
-/user/username/projects/myproject/e.ts:
-  {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 

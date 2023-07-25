@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyMissingSetAccessor.ts ===
+//// [tests/cases/compiler/noImplicitAnyMissingSetAccessor.ts] ////
+
+=== noImplicitAnyMissingSetAccessor.ts ===
 abstract class Parent
 >Parent : Symbol(Parent, Decl(noImplicitAnyMissingSetAccessor.ts, 0, 0))
 {

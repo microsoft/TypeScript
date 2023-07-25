@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypesArraysTuples.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypesArraysTuples.ts] ////
+
+=== mappedTypesArraysTuples.ts ===
 type Box<T> = { value: T };
 >Box : Box<T>
 >value : T
@@ -7,7 +9,7 @@ type Boxified<T> = { [P in keyof T]: Box<T[P]> };
 >Boxified : Boxified<T>
 
 type T00 = Boxified<[number, string?, ...boolean[]]>;
->T00 : [Box<number>, Box<string | undefined>?, ...Box<boolean>[]]
+>T00 : [Box<number>, (Box<string | undefined> | undefined)?, ...Box<boolean>[]]
 
 type T01 = Partial<[number, string?, ...boolean[]]>;
 >T01 : [(number | undefined)?, (string | undefined)?, ...(boolean | undefined)[]]

@@ -1,0 +1,60 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper2.ts ===
+// --- (line: 32) skipped ---
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return [|{| kind: "reference" |}super|].superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return [|{| kind: "reference" |}super|].superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+// --- (line: 47) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper2.ts ===
+// --- (line: 32) skipped ---
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = [|{| kind: "reference" |}super|].superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return [|{| kind: "reference" |}super|].superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+// --- (line: 47) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSuper2.ts ===
+// --- (line: 32) skipped ---
+//     }
+// 
+//     // Bad but still gets highlighted.
+//     public static statProp1 = [|{| kind: "reference" |}super|].superStaticMethod;
+// 
+//     public static staticMethod1() {
+//         return [|{| kind: "reference" |}super|].superStaticMethod();
+//     }
+// 
+//     private static staticMethod2() {
+//         return /*HIGHLIGHTS*/[|{| kind: "reference" |}super|].superStaticMethod();
+//     }
+// 
+//     // Are not actually 'super' keywords.
+// --- (line: 47) skipped ---

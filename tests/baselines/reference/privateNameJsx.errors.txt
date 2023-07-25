@@ -1,7 +1,7 @@
-tests/cases/compiler/privateNameJsx.tsx(4,27): error TS1003: Identifier expected.
+privateNameJsx.tsx(4,27): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/privateNameJsx.tsx (1 errors) ====
+==== privateNameJsx.tsx (1 errors) ====
     class Test {
         #prop = () => <div />;
         render() {

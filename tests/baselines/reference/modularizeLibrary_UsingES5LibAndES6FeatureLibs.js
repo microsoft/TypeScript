@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts] ////
+
 //// [modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts]
 var s = Symbol();
 var t = {};

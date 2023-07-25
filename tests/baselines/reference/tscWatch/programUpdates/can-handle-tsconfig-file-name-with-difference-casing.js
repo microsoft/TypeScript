@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/app.ts]
 let x = 1
@@ -43,19 +44,13 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/app.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/A/B/tsconfig.json","pollingInterval":250}
-/a/b/app.ts:
-  {"fileName":"/A/B/app.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/A/B/node_modules/@types","pollingInterval":500}
-
 FsWatches::
-
-FsWatchesRecursive::
+/a/b/app.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -211,3 +211,11 @@ function update<T extends Control, K extends keyof T>(control : T | undefined, k
         control[key] = value;
     }
 }
+
+// Repro from #50465
+
+type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) & { title?: string; }
+
+function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
+  return column[key];
+}

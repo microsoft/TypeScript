@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts] ////
+
 //// [comparisonOperatorWithNoRelationshipObjectsOnProperty.ts]
 class A1 {
     public a: number;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts ===
+//// [tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts] ////
+
+=== circularlySimplifyingConditionalTypesNoCrash.ts ===
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >Omit : Omit<T, K>
 
@@ -36,14 +38,12 @@ interface Connect { // Then strictly compared with another signature in its cont
     <TDispatchProps, TOwnProps>(
         mapStateToProps: null | undefined,
 >mapStateToProps : null | undefined
->null : null
 
         mapDispatchToProps: unknown,
 >mapDispatchToProps : unknown
 
         mergeProps: null | undefined,
 >mergeProps : null | undefined
->null : null
 
         options: unknown
 >options : unknown

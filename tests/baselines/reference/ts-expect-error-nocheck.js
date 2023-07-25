@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/directives/ts-expect-error-nocheck.ts] ////
+
 //// [ts-expect-error-nocheck.ts]
 // @ts-nocheck
 

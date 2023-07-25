@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/moduleResolutionAsTypeReferenceDirectiveScoped.ts] ////
+
+=== /a.ts ===
+import { typesCache } from "@scoped/typescache";
+>typesCache : Symbol(typesCache, Decl(a.ts, 0, 8))
+
+import { mangledTypes } from "@mangled/typescache";
+>mangledTypes : Symbol(mangledTypes, Decl(a.ts, 1, 8))
+
+import { nodeModulesCache } from "@scoped/nodemodulescache";
+>nodeModulesCache : Symbol(nodeModulesCache, Decl(a.ts, 2, 8))
+
+import { mangledNodeModules } from "@mangled/nodemodulescache";
+>mangledNodeModules : Symbol(mangledNodeModules, Decl(a.ts, 3, 8))
+
+import { atTypesCache } from "@scoped/attypescache";
+>atTypesCache : Symbol(atTypesCache, Decl(a.ts, 4, 8))
+
+import { mangledAtTypesCache } from "@mangled/attypescache";
+>mangledAtTypesCache : Symbol(mangledAtTypesCache, Decl(a.ts, 5, 8))
+
+=== /a/types/dummy/index.d.ts ===
+export const dummy: number;
+>dummy : Symbol(dummy, Decl(index.d.ts, 0, 12))
+
+=== /a/types/@scoped/typescache/index.d.ts ===
+export const typesCache: number;
+>typesCache : Symbol(typesCache, Decl(index.d.ts, 0, 12))
+
+=== /a/node_modules/@scoped/nodemodulescache/index.d.ts ===
+export const nodeModulesCache: number;
+>nodeModulesCache : Symbol(nodeModulesCache, Decl(index.d.ts, 0, 12))
+
+=== /a/node_modules/@types/mangled__attypescache/index.d.ts ===
+export const mangledAtTypesCache: number;
+>mangledAtTypesCache : Symbol(mangledAtTypesCache, Decl(index.d.ts, 0, 12))
+
+

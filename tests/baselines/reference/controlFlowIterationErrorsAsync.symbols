@@ -1,0 +1,323 @@
+//// [tests/cases/conformance/controlFlow/controlFlowIterationErrorsAsync.ts] ////
+
+=== controlFlowIterationErrorsAsync.ts ===
+let cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
+
+async function len(s: string) {
+>len : Symbol(len, Decl(controlFlowIterationErrorsAsync.ts, 0, 18))
+>s : Symbol(s, Decl(controlFlowIterationErrorsAsync.ts, 2, 19))
+
+    return s.length;
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(controlFlowIterationErrorsAsync.ts, 2, 19))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+async function f1() {
+>f1 : Symbol(f1, Decl(controlFlowIterationErrorsAsync.ts, 4, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 7, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 7, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
+
+        x = await len(x);
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 7, 7))
+>len : Symbol(len, Decl(controlFlowIterationErrorsAsync.ts, 0, 18))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 7, 7))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 7, 7))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 7, 7))
+}
+
+async function f2() {
+>f2 : Symbol(f2, Decl(controlFlowIterationErrorsAsync.ts, 14, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 17, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 17, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 17, 7))
+
+        x = await len(x);
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 17, 7))
+>len : Symbol(len, Decl(controlFlowIterationErrorsAsync.ts, 0, 18))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 17, 7))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 17, 7))
+}
+
+declare function foo(x: string): Promise<number>;
+>foo : Symbol(foo, Decl(controlFlowIterationErrorsAsync.ts, 24, 1), Decl(controlFlowIterationErrorsAsync.ts, 26, 49))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 26, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+declare function foo(x: number): Promise<string>;
+>foo : Symbol(foo, Decl(controlFlowIterationErrorsAsync.ts, 24, 1), Decl(controlFlowIterationErrorsAsync.ts, 26, 49))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 27, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+async function g1() {
+>g1 : Symbol(g1, Decl(controlFlowIterationErrorsAsync.ts, 27, 49))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 30, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 30, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
+
+        x = await foo(x);
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 30, 7))
+>foo : Symbol(foo, Decl(controlFlowIterationErrorsAsync.ts, 24, 1), Decl(controlFlowIterationErrorsAsync.ts, 26, 49))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 30, 7))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 30, 7))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 30, 7))
+}
+
+async function g2() {
+>g2 : Symbol(g2, Decl(controlFlowIterationErrorsAsync.ts, 37, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 40, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 40, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 40, 7))
+
+        x = await foo(x);
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 40, 7))
+>foo : Symbol(foo, Decl(controlFlowIterationErrorsAsync.ts, 24, 1), Decl(controlFlowIterationErrorsAsync.ts, 26, 49))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 40, 7))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 40, 7))
+}
+
+async function asNumber(x: string | number): Promise<number> {
+>asNumber : Symbol(asNumber, Decl(controlFlowIterationErrorsAsync.ts, 47, 1))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 49, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    return +x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 49, 24))
+}
+
+async function h1() {
+>h1 : Symbol(h1, Decl(controlFlowIterationErrorsAsync.ts, 51, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 54, 7))
+
+    x = "0";
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 54, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
+
+        x = +x + 1;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 54, 7))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 54, 7))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 54, 7))
+    }
+}
+
+async function h2() {
+>h2 : Symbol(h2, Decl(controlFlowIterationErrorsAsync.ts, 60, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 63, 7))
+
+    x = "0";
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 63, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
+
+        x = await asNumber(x) + 1;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 63, 7))
+>asNumber : Symbol(asNumber, Decl(controlFlowIterationErrorsAsync.ts, 47, 1))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 63, 7))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 63, 7))
+    }
+}
+
+async function h3() {
+>h3 : Symbol(h3, Decl(controlFlowIterationErrorsAsync.ts, 69, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 72, 7))
+
+    x = "0";
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 72, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
+
+        let y = await asNumber(x);
+>y : Symbol(y, Decl(controlFlowIterationErrorsAsync.ts, 75, 11))
+>asNumber : Symbol(asNumber, Decl(controlFlowIterationErrorsAsync.ts, 47, 1))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 72, 7))
+
+        x = y + 1;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 72, 7))
+>y : Symbol(y, Decl(controlFlowIterationErrorsAsync.ts, 75, 11))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 72, 7))
+    }
+}
+
+async function h4() {
+>h4 : Symbol(h4, Decl(controlFlowIterationErrorsAsync.ts, 79, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 82, 7))
+
+    x = "0";
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 82, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowIterationErrorsAsync.ts, 0, 3))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 82, 7))
+
+        let y = await asNumber(x);
+>y : Symbol(y, Decl(controlFlowIterationErrorsAsync.ts, 86, 11))
+>asNumber : Symbol(asNumber, Decl(controlFlowIterationErrorsAsync.ts, 47, 1))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 82, 7))
+
+        x = y + 1;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 82, 7))
+>y : Symbol(y, Decl(controlFlowIterationErrorsAsync.ts, 86, 11))
+
+        x;
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 82, 7))
+    }
+}
+
+// repro #51115
+
+async function get_things(_: number | undefined) {
+>get_things : Symbol(get_things, Decl(controlFlowIterationErrorsAsync.ts, 90, 1))
+>_ : Symbol(_, Decl(controlFlowIterationErrorsAsync.ts, 94, 26))
+
+    return [0];
+}
+
+async function foobar() {
+>foobar : Symbol(foobar, Decl(controlFlowIterationErrorsAsync.ts, 96, 1))
+
+    let before: number | undefined = undefined;
+>before : Symbol(before, Decl(controlFlowIterationErrorsAsync.ts, 99, 7))
+>undefined : Symbol(undefined)
+
+    for (let i = 0; i < 2; i++) {
+>i : Symbol(i, Decl(controlFlowIterationErrorsAsync.ts, 100, 12))
+>i : Symbol(i, Decl(controlFlowIterationErrorsAsync.ts, 100, 12))
+>i : Symbol(i, Decl(controlFlowIterationErrorsAsync.ts, 100, 12))
+
+        const results = await get_things(before);
+>results : Symbol(results, Decl(controlFlowIterationErrorsAsync.ts, 101, 13))
+>get_things : Symbol(get_things, Decl(controlFlowIterationErrorsAsync.ts, 90, 1))
+>before : Symbol(before, Decl(controlFlowIterationErrorsAsync.ts, 99, 7))
+
+        before = results[0];
+>before : Symbol(before, Decl(controlFlowIterationErrorsAsync.ts, 99, 7))
+>results : Symbol(results, Decl(controlFlowIterationErrorsAsync.ts, 101, 13))
+    }
+}
+
+// repro #43047#issuecomment-821453073
+
+declare function foox(x: string | undefined): Promise<string>
+>foox : Symbol(foox, Decl(controlFlowIterationErrorsAsync.ts, 104, 1))
+>x : Symbol(x, Decl(controlFlowIterationErrorsAsync.ts, 108, 22))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+async () => {
+  let bar: string | undefined = undefined;
+>bar : Symbol(bar, Decl(controlFlowIterationErrorsAsync.ts, 111, 5))
+>undefined : Symbol(undefined)
+
+  do {
+    const baz = await foox(bar);
+>baz : Symbol(baz, Decl(controlFlowIterationErrorsAsync.ts, 113, 9))
+>foox : Symbol(foox, Decl(controlFlowIterationErrorsAsync.ts, 104, 1))
+>bar : Symbol(bar, Decl(controlFlowIterationErrorsAsync.ts, 111, 5))
+
+    bar = baz
+>bar : Symbol(bar, Decl(controlFlowIterationErrorsAsync.ts, 111, 5))
+>baz : Symbol(baz, Decl(controlFlowIterationErrorsAsync.ts, 113, 9))
+
+  } while (bar)
+>bar : Symbol(bar, Decl(controlFlowIterationErrorsAsync.ts, 111, 5))
+}
+
+// repro #43047#issuecomment-874221939
+
+declare function myQuery(input: { lastId: number | undefined }): Promise<{ entities: number[] }>;
+>myQuery : Symbol(myQuery, Decl(controlFlowIterationErrorsAsync.ts, 116, 1))
+>input : Symbol(input, Decl(controlFlowIterationErrorsAsync.ts, 120, 25))
+>lastId : Symbol(lastId, Decl(controlFlowIterationErrorsAsync.ts, 120, 33))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>entities : Symbol(entities, Decl(controlFlowIterationErrorsAsync.ts, 120, 74))
+
+async function myFunc(): Promise<void> {
+>myFunc : Symbol(myFunc, Decl(controlFlowIterationErrorsAsync.ts, 120, 97))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+  let lastId: number | undefined = undefined;
+>lastId : Symbol(lastId, Decl(controlFlowIterationErrorsAsync.ts, 123, 5))
+>undefined : Symbol(undefined)
+
+  while (true) {
+    const { entities } = await myQuery({
+>entities : Symbol(entities, Decl(controlFlowIterationErrorsAsync.ts, 126, 11))
+>myQuery : Symbol(myQuery, Decl(controlFlowIterationErrorsAsync.ts, 116, 1))
+
+        lastId,
+>lastId : Symbol(lastId, Decl(controlFlowIterationErrorsAsync.ts, 126, 40))
+
+    });
+
+    lastId = entities[entities.length - 1];
+>lastId : Symbol(lastId, Decl(controlFlowIterationErrorsAsync.ts, 123, 5))
+>entities : Symbol(entities, Decl(controlFlowIterationErrorsAsync.ts, 126, 11))
+>entities.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>entities : Symbol(entities, Decl(controlFlowIterationErrorsAsync.ts, 126, 11))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+  } 
+}
+

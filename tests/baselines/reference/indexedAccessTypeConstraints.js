@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessTypeConstraints.ts] ////
+
 //// [indexedAccessTypeConstraints.ts]
 // Repro from #14557
 
@@ -53,7 +55,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = exports.Foo = void 0;
 var Parent = /** @class */ (function () {
     function Parent(data) {

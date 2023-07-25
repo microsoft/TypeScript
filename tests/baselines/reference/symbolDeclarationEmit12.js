@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts] ////
+
 //// [symbolDeclarationEmit12.ts]
 module M {
     interface I { }
@@ -28,7 +30,7 @@ var M;
 
 
 //// [symbolDeclarationEmit12.d.ts]
-declare module M {
+declare namespace M {
     interface I {
     }
     export class C {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsFunction.ts] ////
+
 //// [commentsFunction.ts]
 /** This comment should appear for foo*/
 function foo() {

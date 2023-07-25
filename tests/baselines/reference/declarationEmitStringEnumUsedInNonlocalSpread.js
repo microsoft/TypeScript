@@ -33,7 +33,7 @@ export class B extends A {
 
 //// [class.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -76,7 +76,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 var class_1 = require("./class");
 var B = /** @class */ (function (_super) {

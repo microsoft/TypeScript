@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxStatelessComponentDefaultProps.tsx] ////
+
 //// [tsxStatelessComponentDefaultProps.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -21,12 +23,12 @@ let a = <BackButton />
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
 function BackButton(_props) {
-    return react_1["default"].createElement("div", null);
+    return react_1.default.createElement("div", null);
 }
 BackButton.defaultProps = {
-    text: 'Go Back'
+    text: 'Go Back',
 };
-var a = react_1["default"].createElement(BackButton, null);
+var a = react_1.default.createElement(BackButton, null);

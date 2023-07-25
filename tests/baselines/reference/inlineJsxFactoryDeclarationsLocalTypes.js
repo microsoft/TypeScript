@@ -99,7 +99,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 var _this = this;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.tree = exports.MyClass = exports.MySFC = void 0;
 /** @jsx predom */
 var renderer2_1 = require("./renderer2");
@@ -126,7 +126,7 @@ exports.MyClass = MyClass;
 exports.tree = (0, renderer2_1.predom)(exports.MySFC, { x: 1, y: 2 },
     (0, renderer2_1.predom)(MyClass, { x: 3, y: 4 }),
     (0, renderer2_1.predom)(MyClass, { x: 5, y: 6 }));
-exports["default"] = (0, renderer2_1.predom)("h", null);
+exports.default = (0, renderer2_1.predom)("h", null);
 //// [index.js]
 "use strict";
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
@@ -138,11 +138,11 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx dom */
 var renderer_1 = require("./renderer");
 var component_1 = require("./component");
-var elem = component_1["default"];
+var elem = component_1.default;
 elem = (0, renderer_1.dom)("h", null); // Expect assignability error here
 var DOMSFC = function (props) { return (0, renderer_1.dom)("p", null,
     props.x,

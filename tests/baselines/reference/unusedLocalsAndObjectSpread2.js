@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsAndObjectSpread2.ts] ////
+
 //// [unusedLocalsAndObjectSpread2.ts]
 declare let props: any;
 const {
@@ -29,7 +31,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.asdf = void 0;
 var children = props.children, // here!
 _a = props.active, // here!

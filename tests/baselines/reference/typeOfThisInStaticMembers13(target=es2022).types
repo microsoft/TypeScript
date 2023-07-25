@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers13.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers13.ts] ////
+
+=== typeOfThisInStaticMembers13.ts ===
 class C {
 >C : C
 
@@ -14,14 +16,14 @@ class C {
         static [this.c] = 123;
 >[this.c] : number
 >this.c : any
->this : any
+>this : typeof Inner
 >c : any
 >123 : 123
 
         [this.c] = 123;
 >[this.c] : number
 >this.c : any
->this : any
+>this : this
 >c : any
 >123 : 123
     }

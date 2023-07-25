@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts] ////
+
 //// [privacyTypeParametersOfInterfaceDeclFile.ts]
 class privateClass {
 }
@@ -192,7 +194,7 @@ module privateModule {
 
 //// [privacyTypeParametersOfInterfaceDeclFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicModule = exports.publicClassT = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {
@@ -240,7 +242,7 @@ var publicModule;
         return publicClassInPublicModuleT;
     }());
     publicModule.publicClassInPublicModuleT = publicClassInPublicModuleT;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClassInPrivateModule = /** @class */ (function () {
@@ -299,7 +301,7 @@ export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
 }
 export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
 }
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClassInPublicModule {
     }
     export class publicClassInPublicModule {
@@ -332,7 +334,7 @@ export declare module publicModule {
     }
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClassInPrivateModule {
     }
     export class publicClassInPrivateModule {

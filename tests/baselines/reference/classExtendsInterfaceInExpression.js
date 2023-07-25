@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExtendsInterfaceInExpression.ts] ////
+
 //// [classExtendsInterfaceInExpression.ts]
 interface A {}
 

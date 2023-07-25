@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts] ////
+
 //// [isomorphicMappedTypeInference.ts]
 type Box<T> = {
     value: T;
@@ -298,10 +300,10 @@ var o2 = getProps(myAny, ['foo', 'bar']);
 
 
 //// [isomorphicMappedTypeInference.d.ts]
-declare type Box<T> = {
+type Box<T> = {
     value: T;
 };
-declare type Boxified<T> = {
+type Boxified<T> = {
     [P in keyof T]: Box<T[P]>;
 };
 declare function box<T>(x: T): Box<T>;
@@ -332,13 +334,13 @@ declare function clone<T>(obj: {
 declare function validateAndClone<T>(obj: {
     readonly [P in keyof T]?: T[P];
 }): T;
-declare type Foo = {
+type Foo = {
     a?: number;
     readonly b: string;
 };
 declare function f10(foo: Foo): void;
-declare type Func<T> = (...args: any[]) => T;
-declare type Spec<T> = {
+type Func<T> = (...args: any[]) => T;
+type Spec<T> = {
     [P in keyof T]: Func<T[P]> | Spec<T[P]>;
 };
 /**

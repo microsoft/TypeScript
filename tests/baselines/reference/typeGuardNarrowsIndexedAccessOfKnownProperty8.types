@@ -1,9 +1,11 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty8.ts] ////
+
+=== ./a.ts ===
 export const key = "a";
 >key : "a"
 >"a" : "a"
 
-=== tests/cases/compiler/b.ts ===
+=== ./b.ts ===
 import * as a from "./a";
 >a : typeof a
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsReference.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsReference.ts] ////
+
+=== compoundAssignmentLHSIsReference.ts ===
 var value;
 >value : Symbol(value, Decl(compoundAssignmentLHSIsReference.ts, 0, 3))
 

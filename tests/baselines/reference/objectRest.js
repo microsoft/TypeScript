@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/objectRest.ts] ////
+
 //// [objectRest.ts]
 var o = { a: 1, b: 'no' }
 var { ...clone } = o;

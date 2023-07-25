@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxCallbackWithDestructuring.tsx] ////
+
 //// [jsxCallbackWithDestructuring.tsx]
 // minimal component
 interface Component<P = {}, S = {}> { }
@@ -43,7 +45,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = void 0;
 var MyComponent = /** @class */ (function (_super) {
     __extends(MyComponent, _super);

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts] ////
+
+=== privateNamesUnique-3.ts ===
 class A {
 >A : Symbol(A, Decl(privateNamesUnique-3.ts, 0, 0))
 

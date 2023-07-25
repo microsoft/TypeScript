@@ -1,7 +1,9 @@
-=== tests/cases/compiler/numericUnderscoredSeparator.ts ===
+//// [tests/cases/compiler/numericUnderscoredSeparator.ts] ////
+
+=== numericUnderscoredSeparator.ts ===
+
 1_000_000_000_000
-No type information for this code.0b1010_0001_1000_0101
-No type information for this code.0b1010_0001_1000_0101
-No type information for this code.0xA0_B0_C0
-No type information for this code.
-No type information for this code.
+0b1010_0001_1000_0101
+0b1010_0001_1000_0101
+0xA0_B0_C0
+

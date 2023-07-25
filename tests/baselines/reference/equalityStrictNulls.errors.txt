@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(59,13): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(61,13): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(63,14): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(65,14): error TS2532: Object is possibly 'undefined'.
+equalityStrictNulls.ts(59,13): error TS18050: The value 'undefined' cannot be used here.
+equalityStrictNulls.ts(61,13): error TS18050: The value 'undefined' cannot be used here.
+equalityStrictNulls.ts(63,14): error TS18050: The value 'undefined' cannot be used here.
+equalityStrictNulls.ts(65,14): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts (4 errors) ====
+==== equalityStrictNulls.ts (4 errors) ====
     function f1(x: string) {
         if (x == undefined) {
         }
@@ -65,19 +65,19 @@ tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.t
     function f4(x: number) {
         if (x > undefined) {
                 ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
         }
         if (x < undefined) {
                 ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
         }
         if (x >= undefined) {
                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
         }
         if (x <= undefined) {
                  ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
         }
     }
     function f5(x: string) {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts] ////
+
+=== NonInitializedExportInInternalModule.ts ===
 module Inner {
 >Inner : Symbol(Inner, Decl(NonInitializedExportInInternalModule.ts, 0, 0))
 

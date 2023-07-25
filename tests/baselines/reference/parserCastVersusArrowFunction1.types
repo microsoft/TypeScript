@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts] ////
+
+=== parserCastVersusArrowFunction1.ts ===
 var v = <T>() => 1;
 >v : <T>() => number
 ><T>() => 1 : <T>() => number

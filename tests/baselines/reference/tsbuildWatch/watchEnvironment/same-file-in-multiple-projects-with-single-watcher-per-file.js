@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -147,66 +148,64 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg3/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
 FsWatches::
+/user/username/projects/myproject/pkg0/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg2/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg3/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg3/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+/user/username/projects/myproject/pkg0: *new*
+  {}
+/user/username/projects/myproject/pkg1: *new*
+  {}
+/user/username/projects/myproject/pkg2: *new*
+  {}
+/user/username/projects/myproject/pkg3: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg0 = void 0;
 exports.pkg0 = 0;
 
 
 //// [/user/username/projects/myproject/pkg1/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg1 = void 0;
 exports.pkg1 = 1;
 
 
 //// [/user/username/projects/myproject/pkg2/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg2 = void 0;
 exports.pkg2 = 2;
 
 
 //// [/user/username/projects/myproject/pkg3/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg3 = void 0;
 exports.pkg3 = 3;
 
@@ -219,6 +218,13 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
@@ -307,40 +313,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
-/user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
@@ -355,6 +327,9 @@ Input::
 {"files":[],"include":[],"references":[{"path":"./pkg0"},{"path":"./pkg1"},{"path":"./pkg2"}]}
 
 
+Before running Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
@@ -363,33 +338,41 @@ Output::
 
 
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
 FsWatches::
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/pkg3/index.ts:
+  {}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/pkg3:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -401,6 +384,13 @@ Input::
 export const typing = 10;
 
 
+Before running Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
@@ -469,34 +459,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"fileName":"/user/username/projects/myproject/typings/xterm.d.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
-/user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
-/user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
@@ -510,6 +472,9 @@ Input::
 {"files":[],"include":[],"references":[]}
 
 
+Before running Timeout callback:: count: 1
+11: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:57 AM[0m] File change detected. Starting incremental compilation...
@@ -523,13 +488,33 @@ Output::
 
 
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
-FsWatchesRecursive::
+FsWatches *deleted*::
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/pkg0:
+  {}
+/user/username/projects/myproject/pkg1:
+  {}
+/user/username/projects/myproject/pkg2:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -541,15 +526,9 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
+Timeout callback:: count: 0
+Immedidate callback:: count: 0
 Output::
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 

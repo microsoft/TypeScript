@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringParametertArrayBindingPattern.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringParametertArrayBindingPattern.ts] ////
+
+=== sourceMapValidationDestructuringParametertArrayBindingPattern.ts ===
 declare var console: {
 >console : { log(msg: any): void; }
 

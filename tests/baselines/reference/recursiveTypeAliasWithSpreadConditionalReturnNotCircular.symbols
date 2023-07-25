@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts] ////
+
+=== recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts ===
+export {}
+export interface Option<T> {
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 24))
+
+	zip1<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray1<O>]>;
+>zip1 : Symbol(Option.zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
+>O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 6))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>others : Symbol(others, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 36))
+>O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 6))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 24))
+>UnzipOptionArray1 : Symbol(UnzipOptionArray1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 9, 60))
+>O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 6))
+
+	zip2<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray2<O>]>;
+>zip2 : Symbol(Option.zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
+>O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 6))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>others : Symbol(others, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 36))
+>O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 6))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 24))
+>UnzipOptionArray2 : Symbol(UnzipOptionArray2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 12, 101))
+>O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 6))
+
+	zip3<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray3<O>]>;
+>zip3 : Symbol(Option.zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
+>O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 6, 6))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>others : Symbol(others, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 6, 36))
+>O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 6, 6))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 24))
+>UnzipOptionArray3 : Symbol(UnzipOptionArray3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 15, 66))
+>O : Symbol(O, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 6, 6))
+}
+
+type UnzipOption<T> = T extends Option<infer V> ? V : never;
+>UnzipOption : Symbol(UnzipOption, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 7, 1))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 9, 17))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 9, 17))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>V : Symbol(V, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 9, 44))
+>V : Symbol(V, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 9, 44))
+
+/// This doesn't work
+type UnzipOptionArray1<T> = { [k in keyof T]: T[k] extends Option<any> ? UnzipOption<T[k]> : never };
+>UnzipOptionArray1 : Symbol(UnzipOptionArray1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 9, 60))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 12, 23))
+>k : Symbol(k, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 12, 31))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 12, 23))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 12, 23))
+>k : Symbol(k, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 12, 31))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>UnzipOption : Symbol(UnzipOption, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 7, 1))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 12, 23))
+>k : Symbol(k, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 12, 31))
+
+/// But these work
+type UnzipOptionArray2<T> = { [k in keyof T]: UnzipOption<T[k]> };
+>UnzipOptionArray2 : Symbol(UnzipOptionArray2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 12, 101))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 15, 23))
+>k : Symbol(k, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 15, 31))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 15, 23))
+>UnzipOption : Symbol(UnzipOption, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 7, 1))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 15, 23))
+>k : Symbol(k, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 15, 31))
+
+type UnzipOptionArray3<T> = { [k in keyof T]: T[k] extends Option<infer V> ? V : never };
+>UnzipOptionArray3 : Symbol(UnzipOptionArray3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 15, 66))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 16, 23))
+>k : Symbol(k, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 16, 31))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 16, 23))
+>T : Symbol(T, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 16, 23))
+>k : Symbol(k, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 16, 31))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+>V : Symbol(V, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 16, 71))
+>V : Symbol(V, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 16, 71))
+
+declare const opt1: Option<number>;
+>opt1 : Symbol(opt1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 18, 13))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+
+declare const opt2: Option<string>;
+>opt2 : Symbol(opt2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 19, 13))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+
+declare const opt3: Option<boolean>;
+>opt3 : Symbol(opt3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 20, 13))
+>Option : Symbol(Option, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 0, 9))
+
+const zipped1 = opt1.zip1(opt2, opt3);
+>zipped1 : Symbol(zipped1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 22, 5))
+>opt1.zip1 : Symbol(Option.zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
+>opt1 : Symbol(opt1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 18, 13))
+>zip1 : Symbol(Option.zip1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 1, 28))
+>opt2 : Symbol(opt2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 19, 13))
+>opt3 : Symbol(opt3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 20, 13))
+
+const zipped2 = opt1.zip2(opt2, opt3);
+>zipped2 : Symbol(zipped2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 23, 5))
+>opt1.zip2 : Symbol(Option.zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
+>opt1 : Symbol(opt1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 18, 13))
+>zip2 : Symbol(Option.zip2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 2, 88))
+>opt2 : Symbol(opt2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 19, 13))
+>opt3 : Symbol(opt3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 20, 13))
+
+const zipped3 = opt1.zip3(opt2, opt3);
+>zipped3 : Symbol(zipped3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 24, 5))
+>opt1.zip3 : Symbol(Option.zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
+>opt1 : Symbol(opt1, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 18, 13))
+>zip3 : Symbol(Option.zip3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 4, 88))
+>opt2 : Symbol(opt2, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 19, 13))
+>opt3 : Symbol(opt3, Decl(recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts, 20, 13))
+

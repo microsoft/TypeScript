@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNameWithoutTypeAnnotation.ts] ////
+
 //// [propertyNameWithoutTypeAnnotation.ts]
 class C {
     foo;

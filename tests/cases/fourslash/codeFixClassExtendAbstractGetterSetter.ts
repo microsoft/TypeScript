@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @noImplicitOverride: true
 ////abstract class A {
 ////    abstract get a(): number | string;
 ////    abstract get b(): this;
@@ -38,28 +39,28 @@ verify.codeFix({
 abstract class B extends A {}
 
 class C extends A {
-    get a(): string | number {
+    override get a(): string | number {
         throw new Error("Method not implemented.");
     }
-    get b(): this {
+    override get b(): this {
         throw new Error("Method not implemented.");
     }
-    get c(): A {
+    override get c(): A {
         throw new Error("Method not implemented.");
     }
-    set d(arg: string | number) {
+    override set d(arg: string | number) {
         throw new Error("Method not implemented.");
     }
-    set e(arg: this) {
+    override set e(arg: this) {
         throw new Error("Method not implemented.");
     }
-    set f(arg: A) {
+    override set f(arg: A) {
         throw new Error("Method not implemented.");
     }
-    get g(): string {
+    override get g(): string {
         throw new Error("Method not implemented.");
     }
-    set g(newName: string) {
+    override set g(newName: string) {
         throw new Error("Method not implemented.");
     }
 }`

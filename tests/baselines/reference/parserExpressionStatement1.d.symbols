@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserExpressionStatement1.d.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserExpressionStatement1.d.ts] ////
+
+=== parserExpressionStatement1.d.ts ===
+
 Foo();
-No type information for this code.

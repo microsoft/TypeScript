@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/declarations/index.js(4,3): error TS2339: Property 'prototype' does not exist on type '{}'.
+index.js(4,3): error TS2339: Property 'prototype' does not exist on type '{}'.
 
 
-==== tests/cases/conformance/jsdoc/declarations/index.js (1 errors) ====
+==== index.js (1 errors) ====
     // https://github.com/microsoft/TypeScript/issues/35801
     let A;
     A = {};

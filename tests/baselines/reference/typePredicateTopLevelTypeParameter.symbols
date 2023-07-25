@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/typePredicateTopLevelTypeParameter.ts] ////
+
+=== typePredicateTopLevelTypeParameter.ts ===
+// Repro from #51980
+
+function getPermissions(user: string) {
+>getPermissions : Symbol(getPermissions, Decl(typePredicateTopLevelTypeParameter.ts, 0, 0))
+>user : Symbol(user, Decl(typePredicateTopLevelTypeParameter.ts, 2, 24))
+
+    if (user === 'Jack') return 'admin';
+>user : Symbol(user, Decl(typePredicateTopLevelTypeParameter.ts, 2, 24))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+const admins = ['Mike', 'Joe'].map(e => getPermissions(e));
+>admins : Symbol(admins, Decl(typePredicateTopLevelTypeParameter.ts, 7, 5))
+>['Mike', 'Joe'].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(typePredicateTopLevelTypeParameter.ts, 7, 35))
+>getPermissions : Symbol(getPermissions, Decl(typePredicateTopLevelTypeParameter.ts, 0, 0))
+>e : Symbol(e, Decl(typePredicateTopLevelTypeParameter.ts, 7, 35))
+
+function isDefined<T>(a: T | undefined): a is T {
+>isDefined : Symbol(isDefined, Decl(typePredicateTopLevelTypeParameter.ts, 7, 59))
+>T : Symbol(T, Decl(typePredicateTopLevelTypeParameter.ts, 9, 19))
+>a : Symbol(a, Decl(typePredicateTopLevelTypeParameter.ts, 9, 22))
+>T : Symbol(T, Decl(typePredicateTopLevelTypeParameter.ts, 9, 19))
+>a : Symbol(a, Decl(typePredicateTopLevelTypeParameter.ts, 9, 22))
+>T : Symbol(T, Decl(typePredicateTopLevelTypeParameter.ts, 9, 19))
+
+    return a !== undefined;
+>a : Symbol(a, Decl(typePredicateTopLevelTypeParameter.ts, 9, 22))
+>undefined : Symbol(undefined)
+}
+
+const foundAdmins = admins.filter(isDefined);  // "admin"[]
+>foundAdmins : Symbol(foundAdmins, Decl(typePredicateTopLevelTypeParameter.ts, 13, 5))
+>admins.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>admins : Symbol(admins, Decl(typePredicateTopLevelTypeParameter.ts, 7, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isDefined : Symbol(isDefined, Decl(typePredicateTopLevelTypeParameter.ts, 7, 59))
+

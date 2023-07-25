@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/multipleDefaultExports05.ts ===
+//// [tests/cases/conformance/es6/modules/multipleDefaultExports05.ts] ////
+
+=== multipleDefaultExports05.ts ===
 export default class AA1 {}
 >AA1 : Symbol(AA1, Decl(multipleDefaultExports05.ts, 0, 0))
 

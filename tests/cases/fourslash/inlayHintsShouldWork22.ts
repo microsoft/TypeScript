@@ -2,6 +2,6 @@
 
 ////const a = "I'm very very very very very very very very very long";
 
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayVariableTypeHints: true
 });

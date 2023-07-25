@@ -1,0 +1,67 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationLocal_02.ts ===
+// const x = { <|[|hello|]: () => {}|> };
+// 
+// x.he/*GOTO IMPL*/llo();
+// 
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "hello",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ],
+    "kind": "property"
+   }
+  ]

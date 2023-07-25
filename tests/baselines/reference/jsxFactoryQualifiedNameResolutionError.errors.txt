@@ -1,7 +1,7 @@
-tests/cases/compiler/test.tsx(9,17): error TS2552: Cannot find name 'MyElement'. Did you mean 'Element'?
+test.tsx(9,17): error TS2552: Cannot find name 'MyElement'. Did you mean 'Element'?
 
 
-==== tests/cases/compiler/test.tsx (1 errors) ====
+==== test.tsx (1 errors) ====
     declare module JSX {
         interface IntrinsicElements {
             [s: string]: any;
@@ -13,6 +13,6 @@ tests/cases/compiler/test.tsx(9,17): error TS2552: Cannot find name 'MyElement'.
             return <div />;
                     ~~~
 !!! error TS2552: Cannot find name 'MyElement'. Did you mean 'Element'?
-!!! related TS2728 /.ts/lib.dom.d.ts:4969:13: 'Element' is declared here.
+!!! related TS2728 lib.dom.d.ts:--:--: 'Element' is declared here.
         }
     }

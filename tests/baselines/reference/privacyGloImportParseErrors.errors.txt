@@ -1,22 +1,22 @@
-tests/cases/compiler/privacyGloImportParseErrors.ts(22,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
-tests/cases/compiler/privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/compiler/privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS2307: Cannot find module 'm1_M3_public' or its corresponding type declarations.
-tests/cases/compiler/privacyGloImportParseErrors.ts(69,37): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(69,37): error TS2307: Cannot find module 'm1_M4_private' or its corresponding type declarations.
-tests/cases/compiler/privacyGloImportParseErrors.ts(81,43): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(82,43): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(121,38): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(125,45): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(133,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/privacyGloImportParseErrors.ts(133,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/compiler/privacyGloImportParseErrors.ts(138,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/compiler/privacyGloImportParseErrors.ts(146,25): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(22,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
+privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+privacyGloImportParseErrors.ts(59,37): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(59,37): error TS2307: Cannot find module 'm1_M3_public' or its corresponding type declarations.
+privacyGloImportParseErrors.ts(69,37): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(69,37): error TS2307: Cannot find module 'm1_M4_private' or its corresponding type declarations.
+privacyGloImportParseErrors.ts(81,43): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(82,43): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(121,38): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(125,45): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(133,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+privacyGloImportParseErrors.ts(133,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+privacyGloImportParseErrors.ts(138,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+privacyGloImportParseErrors.ts(146,25): error TS1147: Import declarations in a namespace cannot reference a module.
+privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a namespace cannot reference a module.
 
 
-==== tests/cases/compiler/privacyGloImportParseErrors.ts (16 errors) ====
+==== privacyGloImportParseErrors.ts (16 errors) ====
     module m1 {
         export module m1_M1_public {
             export class c1 {

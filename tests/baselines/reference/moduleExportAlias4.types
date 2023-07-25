@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug24024.js ===
+//// [tests/cases/conformance/salsa/moduleExportAlias4.ts] ////
+
+=== bug24024.js ===
 // #24024
 var wat = require('./bug24024')
 >wat : typeof wat

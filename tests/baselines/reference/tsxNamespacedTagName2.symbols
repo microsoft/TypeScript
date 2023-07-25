@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/jsx/tsxNamespacedTagName2.tsx] ////
+
+=== a.tsx ===
+declare var React: any;
+>React : Symbol(React, Decl(a.tsx, 0, 11))
+
+const a = <svg:path></svg:path>;
+>a : Symbol(a, Decl(a.tsx, 2, 5))
+
+const b = <svg : path></svg : path>;
+>b : Symbol(b, Decl(a.tsx, 3, 5))
+
+const c = <A:foo></A:foo>;
+>c : Symbol(c, Decl(a.tsx, 4, 5))
+
+const d = <a:foo></a:foo>;
+>d : Symbol(d, Decl(a.tsx, 5, 5))
+

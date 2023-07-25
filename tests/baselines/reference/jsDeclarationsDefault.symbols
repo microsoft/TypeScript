@@ -1,7 +1,10 @@
-=== tests/cases/conformance/jsdoc/declarations/index1.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsDefault.ts] ////
+
+=== index1.js ===
+
 export default 12;
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsdoc/declarations/index2.js ===
+
+=== index2.js ===
 export default function foo() {
 >foo : Symbol(foo, Decl(index2.js, 0, 0))
 
@@ -16,7 +19,7 @@ export { foo as bar };
 >foo : Symbol(foo, Decl(index2.js, 0, 0))
 >bar : Symbol(bar, Decl(index2.js, 4, 8))
 
-=== tests/cases/conformance/jsdoc/declarations/index3.js ===
+=== index3.js ===
 export default class Foo {
 >Foo : Symbol(Foo, Decl(index3.js, 0, 0))
 
@@ -32,7 +35,7 @@ export { Foo as Bar };
 >Foo : Symbol(Foo, Decl(index3.js, 0, 0))
 >Bar : Symbol(Bar, Decl(index3.js, 4, 8))
 
-=== tests/cases/conformance/jsdoc/declarations/index4.js ===
+=== index4.js ===
 import Fab from "./index3";
 >Fab : Symbol(Fab, Decl(index4.js, 0, 6))
 
@@ -46,14 +49,15 @@ class Bar extends Fab {
 export default Bar;
 >Bar : Symbol(Bar, Decl(index4.js, 0, 27))
 
-=== tests/cases/conformance/jsdoc/declarations/index5.js ===
+=== index5.js ===
+
 // merge type alias and const (OK)
-No type information for this code.export default 12;
-No type information for this code./**
-No type information for this code. * @typedef {string | number} default
-No type information for this code. */
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsdoc/declarations/index6.js ===
+export default 12;
+/**
+ * @typedef {string | number} default
+ */
+
+=== index6.js ===
 // merge type alias and function (OK)
 export default function func() {};
 >func : Symbol(func, Decl(index6.js, 0, 0), Decl(index6.js, 3, 3))

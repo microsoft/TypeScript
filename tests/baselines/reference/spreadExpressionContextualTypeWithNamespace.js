@@ -37,7 +37,7 @@ getStuff().exportedDirectly;
 //// [spreadExpressionContextualTypeWithNamespace_0.js]
 "use strict";
 // Repro from #44179 with some modification
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.exportedDirectly = exports.obj = exports.klass = exports.func = void 0;
 function func() { }
 exports.func = func;
@@ -64,7 +64,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var stuff = require("./spreadExpressionContextualTypeWithNamespace_0");
 stuff.func;
 stuff.klass;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/variadicTuples1.ts ===
+//// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
+
+=== variadicTuples1.ts ===
 // Variadics in tuple types
 
 type TV0<T extends unknown[]> = [string, ...T];
@@ -409,7 +411,7 @@ type Arrayify<T> = { [P in keyof T]: T[P][] };
 >Arrayify : Arrayify<T>
 
 type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>;  // [string[], (number | undefined)[]?, Arrayify<U>, ...boolean[][]]
->TM1 : readonly [string[], (number | undefined)[]?, ...Arrayify<U>, ...boolean[][]]
+>TM1 : readonly [string[], ((number | undefined)[] | undefined)?, ...Arrayify<U>, ...boolean[][]]
 
 type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;  // [string?, Partial<T>, number?]
 >TP1 : [(string | undefined)?, ...Partial<T>, (number | undefined)?]
@@ -768,6 +770,41 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 >k3 = '2' : "2"
 >k3 : keyof [1, 2, ...T]
 >'2' : "2"
+}
+
+// Constraints of variadic tuple types
+
+function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+>ft16 : <T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
+>x : [unknown, unknown]
+>y : [...T, ...T]
+
+    x = y;
+>x = y : [...T, ...T]
+>x : [unknown, unknown]
+>y : [...T, ...T]
+}
+
+function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+>ft17 : <T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
+>x : [unknown, unknown]
+>y : [...T, ...T]
+
+    x = y;
+>x = y : [...T, ...T]
+>x : [unknown, unknown]
+>y : [...T, ...T]
+}
+
+function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
+>ft18 : <T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) => void
+>x : [unknown, unknown]
+>y : [...T, ...T]
+
+    x = y;
+>x = y : [...T, ...T]
+>x : [unknown, unknown]
+>y : [...T, ...T]
 }
 
 // Inference between variadic tuple types
@@ -1397,7 +1434,7 @@ type Unbounded = [...Numbers, boolean];
 
 const data: Unbounded = [false, false];  // Error
 >data : [...number[], boolean]
->[false, false] : [false, false]
+>[false, false] : [boolean, false]
 >false : false
 >false : false
 
@@ -1409,4 +1446,12 @@ type U2 = [...[string, ...Numbers], boolean];
 
 type U3 = [...[string, number], boolean];
 >U3 : [string, number, boolean]
+
+// Repro from #53563
+
+type ToStringLength1<T extends any[]> = `${T['length']}`;
+>ToStringLength1 : `${T["length"]}`
+
+type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+>ToStringLength2 : `${[...T]["length"]}`
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationTypeReference.ts] ////
+
 //// [declFileTypeAnnotationTypeReference.ts]
 class c {
 }
@@ -101,7 +103,7 @@ function foo8() {
 //// [declFileTypeAnnotationTypeReference.d.ts]
 declare class c {
 }
-declare module m {
+declare namespace m {
     class c {
     }
     class g<T> {

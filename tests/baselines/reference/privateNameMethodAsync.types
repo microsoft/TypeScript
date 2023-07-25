@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts] ////
+
+=== privateNameMethodAsync.ts ===
 const C = class {
 >C : typeof C
 >class {    async #bar() { return await Promise.resolve(42); }    async foo() {        const b = await this.#bar();        return b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0);    }    *#baz() { yield 42; }    async *#qux() {        yield (await Promise.resolve(42));    }} : typeof C
@@ -7,9 +9,9 @@ const C = class {
 >#bar : () => Promise<number>
 >await Promise.resolve(42) : number
 >Promise.resolve(42) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >42 : 42
 
     async foo() {
@@ -64,9 +66,9 @@ const C = class {
 >(await Promise.resolve(42)) : number
 >await Promise.resolve(42) : number
 >Promise.resolve(42) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >42 : 42
     }
 }

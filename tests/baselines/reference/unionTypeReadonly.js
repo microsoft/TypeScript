@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeReadonly.ts] ////
+
 //// [unionTypeReadonly.ts]
 interface Base {
     readonly value: number;
