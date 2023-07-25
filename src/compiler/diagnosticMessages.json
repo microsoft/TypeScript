@@ -199,7 +199,7 @@
         "category": "Error",
         "code": 1064
     },
-    "The return type of an async function is invalid.": {
+    "The return type of an async function or method must be the global Promise<T> type.": {
         "category": "Error",
         "code": 1065
     },

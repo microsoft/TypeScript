@@ -39932,7 +39932,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const headMessage = Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value;
-            const errorInfo = () => returnTypeNode === returnTypeErrorLocation ? undefined : chainDiagnosticMessages(/*details*/ undefined, Diagnostics.The_return_type_of_an_async_function_is_invalid);
+            const errorInfo = () => returnTypeNode === returnTypeErrorLocation ? undefined : chainDiagnosticMessages(/*details*/ undefined, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
             if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, returnTypeErrorLocation, headMessage, errorInfo)) {
                 return;
             }
@@ -39955,7 +39955,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(returnTypeErrorLocation, message, typeName);
             }
             else {
-                const diag = error(returnTypeErrorLocation, Diagnostics.The_return_type_of_an_async_function_is_invalid);
+                const diag = error(returnTypeErrorLocation, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
                 addRelatedInfo(diag, createDiagnosticForNode(returnTypeNode, message, typeName));
             }
         }
