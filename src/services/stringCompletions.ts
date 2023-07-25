@@ -7,6 +7,7 @@ import {
     CaseClause,
     changeExtension,
     CharacterCodes,
+    CheckMode,
     combinePaths,
     comparePaths,
     comparePatternKeys,
@@ -46,6 +47,7 @@ import {
     getBaseFileName,
     getConditions,
     getContextualTypeFromParent,
+    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     getEffectiveTypeRoots,
     getEmitModuleResolutionKind,
@@ -388,7 +390,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
-                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType(ContextFlags.None);
+                return argumentInfo && (getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker, CheckMode.Normal)) || fromContextualType(ContextFlags.None);
             }
             // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -479,12 +481,12 @@ function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: 
         type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
 }
 
-function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes | undefined {
+function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker, checkMode = CheckMode.IsForStringLiteralArgumentCompletions): StringLiteralCompletionsFromTypes | undefined {
     let isNewIdentifier = false;
     const uniques = new Map<string, true>();
     const candidates: Signature[] = [];
     const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
-    checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates);
+    checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates, checkMode);
     const types = flatMap(candidates, candidate => {
         if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
         let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
@@ -597,7 +599,7 @@ function getCompletionEntriesForRelativeModules(literalValue: string, scriptDire
             compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
     }
     else {
-        return arrayFrom(getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, scriptPath).values());
+        return arrayFrom(getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, scriptPath).values());
     }
 }
 
@@ -1022,6 +1024,8 @@ function getModulesForPathsPattern(
     const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + fragmentDirectory) : normalizedPrefixDirectory;
 
     const normalizedSuffix = normalizePath(parsed.suffix);
+    const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
+    const matchingSuffixes = declarationExtension ? [changeExtension(normalizedSuffix, declarationExtension), normalizedSuffix] : [normalizedSuffix];
     // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
     const baseDirectory = normalizePath(combinePaths(packageDirectory, expandedPrefixDirectory));
     const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
@@ -1034,9 +1038,11 @@ function getModulesForPathsPattern(
     // interpreted as "any character" can only return *too many* results as compared to the literal
     // interpretation, so we can filter those superfluous results out via `trimPrefixAndSuffix` as we've always
     // done.
-    const includeGlob = normalizedSuffix ? "**/*" + normalizedSuffix : "./*";
+    const includeGlobs = normalizedSuffix
+        ? matchingSuffixes.map(suffix => "**/*" + suffix)
+        : ["./*"];
 
-    const matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, [includeGlob]), match => {
+    const matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, includeGlobs), match => {
         const trimmedWithPattern = trimPrefixAndSuffix(match);
         if (trimmedWithPattern) {
             if (containsSlash(trimmedWithPattern)) {
@@ -1056,8 +1062,10 @@ function getModulesForPathsPattern(
     return [...matches, ...directories];
 
     function trimPrefixAndSuffix(path: string): string | undefined {
-        const inner = withoutStartAndEnd(normalizePath(path), completePrefix, normalizedSuffix);
-        return inner === undefined ? undefined : removeLeadingDirectorySeparator(inner);
+        return firstDefined(matchingSuffixes, suffix => {
+            const inner = withoutStartAndEnd(normalizePath(path), completePrefix, suffix);
+            return inner === undefined ? undefined : removeLeadingDirectorySeparator(inner);
+        });
     }
 }
 

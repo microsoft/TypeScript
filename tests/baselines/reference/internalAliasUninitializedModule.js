@@ -23,14 +23,14 @@ var c;
 
 
 //// [internalAliasUninitializedModule.d.ts]
-declare module a {
-    module b {
+declare namespace a {
+    namespace b {
         interface I {
             foo(): any;
         }
     }
 }
-declare module c {
+declare namespace c {
     import b = a.b;
     var x: b.I;
 }
