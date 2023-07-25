@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx] ////
+
+=== contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : typeof React
+
+// repro from https://github.com/microsoft/TypeScript/issues/54841
+type AllOrNone<T> = T | { [K in keyof T]?: never };
+>AllOrNone : AllOrNone<T>
+
+type OrderRow = {
+>OrderRow : { name: string; }
+
+    name: string;
+>name : string
+}
+
+type OrderHistoryTableProps = {
+>OrderHistoryTableProps : { data: OrderRow[]; noDataText?: string | undefined; } & SearchParams
+
+  data: OrderRow[];
+>data : OrderRow[]
+
+  noDataText?: string;
+>noDataText : string | undefined
+
+} &
+  SearchParams;
+
+
+type SearchParams = AllOrNone<{
+>SearchParams : { search: string; onSearchChange: (value: string) => void; } | { search?: undefined; onSearchChange?: undefined; }
+
+  search: string;
+>search : string
+
+  onSearchChange: (value: string) => void;
+>onSearchChange : (value: string) => void
+>value : string
+
+}>;
+
+function OrderHistoryTable(props: OrderHistoryTableProps) {
+>OrderHistoryTable : (props: OrderHistoryTableProps) => null
+>props : OrderHistoryTableProps
+
+    return null;
+}
+
+declare const rowData: OrderRow[];
+>rowData : OrderRow[]
+
+<OrderHistoryTable
+><OrderHistoryTable  data={rowData}  {...{ search: '' }}  onSearchChange={(value) => {}} /> : JSX.Element
+>OrderHistoryTable : (props: OrderHistoryTableProps) => null
+
+  data={rowData}
+>data : OrderRow[]
+>rowData : OrderRow[]
+
+  {...{ search: '' }}
+>{ search: '' } : { search: string; }
+>search : string
+>'' : ""
+
+  onSearchChange={(value) => {}} 
+>onSearchChange : (value: string) => void
+>(value) => {} : (value: string) => void
+>value : string
+
+/>;
+
+<OrderHistoryTable
+><OrderHistoryTable  data={rowData}  {...{ search: '', onSearchChange: (value) => {} }}/> : JSX.Element
+>OrderHistoryTable : (props: OrderHistoryTableProps) => null
+
+  data={rowData}
+>data : OrderRow[]
+>rowData : OrderRow[]
+
+  {...{ search: '', onSearchChange: (value) => {} }}
+>{ search: '', onSearchChange: (value) => {} } : { search: string; onSearchChange: (value: string) => void; }
+>search : string
+>'' : ""
+>onSearchChange : (value: string) => void
+>(value) => {} : (value: string) => void
+>value : string
+
+/>;
+

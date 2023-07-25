@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx] ////
+
+=== contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : Symbol(React, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 2, 6))
+
+// repro from https://github.com/microsoft/TypeScript/issues/54841
+type AllOrNone<T> = T | { [K in keyof T]?: never };
+>AllOrNone : Symbol(AllOrNone, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 2, 26))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 5, 15))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 5, 15))
+>K : Symbol(K, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 5, 27))
+>T : Symbol(T, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 5, 15))
+
+type OrderRow = {
+>OrderRow : Symbol(OrderRow, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 5, 51))
+
+    name: string;
+>name : Symbol(name, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 7, 17))
+}
+
+type OrderHistoryTableProps = {
+>OrderHistoryTableProps : Symbol(OrderHistoryTableProps, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 9, 1))
+
+  data: OrderRow[];
+>data : Symbol(data, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 11, 31))
+>OrderRow : Symbol(OrderRow, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 5, 51))
+
+  noDataText?: string;
+>noDataText : Symbol(noDataText, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 12, 19))
+
+} &
+  SearchParams;
+>SearchParams : Symbol(SearchParams, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 15, 15))
+
+
+type SearchParams = AllOrNone<{
+>SearchParams : Symbol(SearchParams, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 15, 15))
+>AllOrNone : Symbol(AllOrNone, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 2, 26))
+
+  search: string;
+>search : Symbol(search, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 18, 31))
+
+  onSearchChange: (value: string) => void;
+>onSearchChange : Symbol(onSearchChange, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 19, 17))
+>value : Symbol(value, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 20, 19))
+
+}>;
+
+function OrderHistoryTable(props: OrderHistoryTableProps) {
+>OrderHistoryTable : Symbol(OrderHistoryTable, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 21, 3))
+>props : Symbol(props, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 23, 27))
+>OrderHistoryTableProps : Symbol(OrderHistoryTableProps, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 9, 1))
+
+    return null;
+}
+
+declare const rowData: OrderRow[];
+>rowData : Symbol(rowData, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 27, 13))
+>OrderRow : Symbol(OrderRow, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 5, 51))
+
+<OrderHistoryTable
+>OrderHistoryTable : Symbol(OrderHistoryTable, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 21, 3))
+
+  data={rowData}
+>data : Symbol(data, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 29, 18))
+>rowData : Symbol(rowData, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 27, 13))
+
+  {...{ search: '' }}
+>search : Symbol(search, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 31, 7))
+
+  onSearchChange={(value) => {}} 
+>onSearchChange : Symbol(onSearchChange, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 31, 21))
+>value : Symbol(value, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 32, 19))
+
+/>;
+
+<OrderHistoryTable
+>OrderHistoryTable : Symbol(OrderHistoryTable, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 21, 3))
+
+  data={rowData}
+>data : Symbol(data, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 35, 18))
+>rowData : Symbol(rowData, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 27, 13))
+
+  {...{ search: '', onSearchChange: (value) => {} }}
+>search : Symbol(search, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 37, 7))
+>onSearchChange : Symbol(onSearchChange, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 37, 19))
+>value : Symbol(value, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 37, 37))
+
+/>;
+
