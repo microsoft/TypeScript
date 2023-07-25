@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: `Disallows traditional (non-arrow) function expressions.`,
-            recommended: "error",
         },
         messages: {
             onlyArrowFunctionsError: "non-arrow functions are forbidden",

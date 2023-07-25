@@ -219,6 +219,7 @@ function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number,
         case Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code:
             if (!declaration || !isCallExpression(declaration.parent) || !declaration.body) return undefined;
             const pos = declaration.parent.arguments.indexOf(declaration as Expression);
+            if (pos === -1) return undefined;
             const type = checker.getContextualTypeForArgumentAtIndex(declaration.parent, pos);
             if (!type) return undefined;
             return getFixInfo(checker, declaration, type, /*isFunctionType*/ true);

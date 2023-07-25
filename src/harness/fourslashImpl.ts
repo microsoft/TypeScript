@@ -2411,7 +2411,7 @@ export class TestState {
             q1.marker.fileName === q1.marker.fileName
             ? (q1.marker.position > q2.marker.position ? -1 : 1)
             : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
-        const files: Map<string, string[]> = new Map();
+        const files = new Map<string, string[]>();
         let previous: T | undefined;
         for (const { marker, item } of sorted) {
             const span = (item ? getSpan(item) : undefined) ?? { start: marker.position, length: 1 };

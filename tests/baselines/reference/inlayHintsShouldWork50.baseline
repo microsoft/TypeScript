@@ -1,7 +1,19 @@
 foo(1, '', false, 1, 2)
     ^
 {
-  "text": "f:",
+  "text": [
+    {
+      "text": "f",
+      "span": {
+        "start": 70,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork50.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 161,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -10,7 +22,19 @@ foo(1, '', false, 1, 2)
 foo(1, '', false, 1, 2)
        ^
 {
-  "text": "a:",
+  "text": [
+    {
+      "text": "a",
+      "span": {
+        "start": 10,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork50.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 164,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -19,7 +43,19 @@ foo(1, '', false, 1, 2)
 foo(1, '', false, 1, 2)
            ^
 {
-  "text": "b:",
+  "text": [
+    {
+      "text": "b",
+      "span": {
+        "start": 21,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork50.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 168,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -28,7 +64,19 @@ foo(1, '', false, 1, 2)
 foo(1, '', false, 1, 2)
                   ^
 {
-  "text": "...c:",
+  "text": [
+    {
+      "text": "...c",
+      "span": {
+        "start": 36,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork50.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 175,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -37,7 +85,19 @@ foo(1, '', false, 1, 2)
 foo1(1, "", "")
      ^
 {
-  "text": "f1:",
+  "text": [
+    {
+      "text": "f1",
+      "span": {
+        "start": 120,
+        "length": 2
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork50.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 186,
   "kind": "Parameter",
   "whitespaceAfter": true
@@ -46,7 +106,19 @@ foo1(1, "", "")
 foo1(1, "", "")
         ^
 {
-  "text": "...args:",
+  "text": [
+    {
+      "text": "...args",
+      "span": {
+        "start": 135,
+        "length": 4
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork50.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 189,
   "kind": "Parameter",
   "whitespaceAfter": true

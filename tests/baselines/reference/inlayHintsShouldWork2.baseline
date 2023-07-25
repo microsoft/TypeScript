@@ -1,7 +1,19 @@
-foo(1, { c: 1});
+foo(1, { c: 1 });
     ^
 {
-  "text": "a:",
+  "text": [
+    {
+      "text": "a",
+      "span": {
+        "start": 14,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsShouldWork2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ],
   "position": 44,
   "kind": "Parameter",
   "whitespaceAfter": true

@@ -3,4 +3,4 @@
 //// function foo (a: number, b: number) {}
 //// foo(1, 2);
 
-verify.baselineInlayHints(undefined, { includeInlayParameterNameHints: "literals" });
+verify.baselineInlayHints(undefined, { includeInlayParameterNameHints: "literals", interactiveInlayHints: true });

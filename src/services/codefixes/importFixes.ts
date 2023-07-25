@@ -5,6 +5,7 @@ import {
     arrayFrom,
     CancellationToken,
     cast,
+    changeAnyExtension,
     CodeAction,
     CodeFixAction,
     CodeFixContextBase,
@@ -42,10 +43,13 @@ import {
     getExportInfoMap,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
+    getModeForUsageLocation,
     getNameForExportedSymbol,
     getNodeId,
+    getOutputExtension,
     getQuoteFromPreference,
     getQuotePreference,
+    getResolvedModule,
     getSourceFileOfNode,
     getSymbolId,
     getTokenAtPosition,
@@ -1356,6 +1360,15 @@ function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaratio
 
     function promoteImportClause(importClause: ImportClause) {
         changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(importClause, sourceFile));
+        // Change .ts extension to .js if necessary
+        if (!compilerOptions.allowImportingTsExtensions) {
+            const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
+            const resolvedModule = moduleSpecifier && getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
+            if (resolvedModule?.resolvedUsingTsExtension) {
+                const changedExtension = changeAnyExtension(moduleSpecifier!.text, getOutputExtension(moduleSpecifier!.text, compilerOptions));
+                changes.replaceNode(sourceFile, moduleSpecifier!, factory.createStringLiteral(changedExtension));
+            }
+        }
         if (convertExistingToTypeOnly) {
             const namedImports = tryCast(importClause.namedBindings, isNamedImports);
             if (namedImports && namedImports.elements.length > 1) {

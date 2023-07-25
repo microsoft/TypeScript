@@ -866,11 +866,17 @@ export const enum InlayHintKind {
 }
 
 export interface InlayHint {
-    text: string;
+    text: string | InlayHintDisplayPart[];
     position: number;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+}
+
+export interface InlayHintDisplayPart {
+    text: string;
+    span?: TextSpan;
+    file?: string;
 }
 
 export interface TodoCommentDescriptor {

@@ -7,5 +7,6 @@
 //// foo((c: number) => c + 1);
 
 verify.baselineInlayHints(undefined, {
-    includeInlayParameterNameHints: "all"
+    includeInlayParameterNameHints: "all",
+    interactiveInlayHints: true
 });
