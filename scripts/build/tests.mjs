@@ -8,6 +8,7 @@ import { findUpFile, findUpRoot } from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
 import { exec, ExecError } from "./utils.mjs";
 
+const rf = { recursive: true, force: true };
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
@@ -41,7 +42,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
         }
         await cleanTestDirs();
-        await cleanCoverageDir();
+        await fs.promises.rm(coverageDir, rf);
 
         if (options.token?.signaled) {
             return;
@@ -154,8 +155,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         process.env.NODE_ENV = savedNodeEnv;
     }
 
-    await removeIfExits("test.config");
-    await removeIfExits(path.join(localBaseline, "projectOutput/"));
+    await fs.promises.rm("test.config", rf);
+    await fs.promises.rm(path.join(localBaseline, "projectOutput/"), rf);
 
     if (error !== undefined) {
         if (error instanceof CancelError) {
@@ -173,14 +174,10 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 }
 
 export async function cleanTestDirs() {
-    await removeIfExits(localBaseline);
-    await removeIfExits(localRwcBaseline);
+    await fs.promises.rm(localBaseline, rf);
+    await fs.promises.rm(localRwcBaseline, rf);
     await fs.promises.mkdir(localRwcBaseline, { recursive: true });
     await fs.promises.mkdir(localBaseline, { recursive: true });
-}
-
-async function cleanCoverageDir() {
-    await removeIfExits(coverageDir);
 }
 
 /**
@@ -212,13 +209,6 @@ export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, wo
     });
     console.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
-}
-
-/**
- * @param {string} path
- */
-function removeIfExits(path) {
-    return fs.promises.rm(path, { recursive: true, force: true });
 }
 
 /**

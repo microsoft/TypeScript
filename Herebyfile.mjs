@@ -84,8 +84,8 @@ const cleanDiagnostics = task({
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     hiddenFromTaskList: true,
     run: async () => {
-        await fs.promises.rm(diagnosticInformationMapTs, { recursive: true });
-        await fs.promises.rm(diagnosticMessagesGeneratedJson, { recursive: true });
+        await fs.promises.rm(diagnosticInformationMapTs, { recursive: true, force: true });
+        await fs.promises.rm(diagnosticMessagesGeneratedJson, { recursive: true, force: true });
     },
 });
 
@@ -771,7 +771,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
             const out = localPathToRefPath(p).replace(/\.delete$/, "");
-            await fs.promises.rm(out);
+            await fs.promises.rm(out, { force: true });
         }
     };
 }
@@ -849,7 +849,7 @@ export const lkg = task({
 export const cleanBuilt = task({
     name: "clean-built",
     hiddenFromTaskList: true,
-    run: () => fs.promises.rm("built", { recursive: true }),
+    run: () => fs.promises.rm("built", { recursive: true, force: true }),
 });
 
 export const clean = task({
