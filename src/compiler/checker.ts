@@ -31683,9 +31683,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (file) {
             if (compilerOptions.checkJs === undefined && file.checkJsDirective === undefined && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
                 const declarationFile = forEach(suggestion?.declarations, getSourceFileOfNode);
+                const suggestionHasNoExtends = !suggestion?.valueDeclaration || !isClassLike(suggestion.valueDeclaration) || suggestion.valueDeclaration.heritageClauses?.length
                 return !(file !== declarationFile && !!declarationFile && isGlobalSourceFile(declarationFile))
-                    && !(excludeClasses && suggestion && suggestion.flags & SymbolFlags.Class)
-                    && !(!!node && excludeClasses && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword);
+                    && !(excludeClasses && suggestion && suggestion.flags & SymbolFlags.Class && suggestionHasNoExtends)
+                    && !(!!node && excludeClasses && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword && suggestionHasNoExtends);
             }
         }
         return false;
