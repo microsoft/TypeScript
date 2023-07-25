@@ -38309,7 +38309,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function checkSignatureDeclarationDiagnostics() {
             checkCollisionWithArgumentsInGeneratedCode(node);
-            const returnTypeNode = getEffectiveReturnTypeNode(node);
+
+            let returnTypeNode = getEffectiveReturnTypeNode(node);
+            let returnTypeErrorLocation = returnTypeNode;
+
+            if (isInJSFile(node)) {
+                const typeTag = getJSDocTypeTag(node);
+                if (typeTag && typeTag.typeExpression && isTypeReferenceNode(typeTag.typeExpression.type)) {
+                    const signature = getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
+                    if (signature && signature.declaration) {
+                        returnTypeNode = getEffectiveReturnTypeNode(signature.declaration);
+                        returnTypeErrorLocation = typeTag.typeExpression.type;
+                    }
+                }
+            }
+
             if (noImplicitAny && !returnTypeNode) {
                 switch (node.kind) {
                     case SyntaxKind.ConstructSignature:
@@ -38321,12 +38335,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            if (returnTypeNode) {
+            if (returnTypeNode && returnTypeErrorLocation) {
                 const functionFlags = getFunctionFlags(node as FunctionDeclaration);
                 if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Generator)) === FunctionFlags.Generator) {
                     const returnType = getTypeFromTypeNode(returnTypeNode);
                     if (returnType === voidType) {
-                        error(returnTypeNode, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
+                        error(returnTypeErrorLocation, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                     }
                     else {
                         // Naively, one could check that Generator<any, any, any> is assignable to the return type annotation.
@@ -38339,11 +38353,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const generatorReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, (functionFlags & FunctionFlags.Async) !== 0) || generatorYieldType;
                         const generatorNextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, (functionFlags & FunctionFlags.Async) !== 0) || unknownType;
                         const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
-                        checkTypeAssignableTo(generatorInstantiation, returnType, returnTypeNode);
+                        checkTypeAssignableTo(generatorInstantiation, returnType, returnTypeErrorLocation);
                     }
                 }
                 else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
-                    checkAsyncFunctionReturnType(node as FunctionLikeDeclaration, returnTypeNode);
+                    checkAsyncFunctionReturnType(node as FunctionLikeDeclaration, returnTypeNode, returnTypeErrorLocation);
                 }
             }
             if (node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.JSDocFunctionType) {
@@ -39850,7 +39864,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      *
      * @param node The signature to check
      */
-    function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature, returnTypeNode: TypeNode) {
+    function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration | MethodSignature, returnTypeNode: TypeNode, returnTypeErrorLocation: TypeNode) {
         // As part of our emit for an async function, we will need to emit the entity name of
         // the return type annotation as an expression. To meet the necessary runtime semantics
         // for __awaiter, we must also check that the type of the declaration (e.g. the static
@@ -39876,7 +39890,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //  }
         //
         const returnType = getTypeFromTypeNode(returnTypeNode);
-
         if (languageVersion >= ScriptTarget.ES2015) {
             if (isErrorType(returnType)) {
                 return;
@@ -39885,7 +39898,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (globalPromiseType !== emptyGenericType && !isReferenceToType(returnType, globalPromiseType)) {
                 // The promise type was not a valid type reference to the global promise type, so we
                 // report an error and return the unknown type.
-                error(returnTypeNode, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0, typeToString(getAwaitedTypeNoAlias(returnType) || voidType));
+                reportErrorForInvalidReturnType(Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0, returnTypeNode, returnTypeErrorLocation, typeToString(getAwaitedTypeNoAlias(returnType) || voidType));
                 return;
             }
         }
@@ -39899,7 +39912,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const promiseConstructorName = getEntityNameFromTypeNode(returnTypeNode);
             if (promiseConstructorName === undefined) {
-                error(returnTypeNode, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, typeToString(returnType));
+                reportErrorForInvalidReturnType(Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, returnTypeNode, returnTypeErrorLocation, typeToString(returnType));
                 return;
             }
 
@@ -39907,10 +39920,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const promiseConstructorType = promiseConstructorSymbol ? getTypeOfSymbol(promiseConstructorSymbol) : errorType;
             if (isErrorType(promiseConstructorType)) {
                 if (promiseConstructorName.kind === SyntaxKind.Identifier && promiseConstructorName.escapedText === "Promise" && getTargetType(returnType) === getGlobalPromiseType(/*reportErrors*/ false)) {
-                    error(returnTypeNode, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
+                    error(returnTypeErrorLocation, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
                 }
                 else {
-                    error(returnTypeNode, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                    reportErrorForInvalidReturnType(Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, returnTypeNode, returnTypeErrorLocation, entityNameToString(promiseConstructorName));
                 }
                 return;
             }
@@ -39919,12 +39932,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (globalPromiseConstructorLikeType === emptyObjectType) {
                 // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
                 // compatibility with __awaiter.
-                error(returnTypeNode, Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, entityNameToString(promiseConstructorName));
+                reportErrorForInvalidReturnType(Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value, returnTypeNode, returnTypeErrorLocation, entityNameToString(promiseConstructorName));
                 return;
             }
 
-            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, returnTypeNode,
-                Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value)) {
+            const headMessage = Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value;
+            const errorInfo = () => returnTypeNode === returnTypeErrorLocation ? undefined : chainDiagnosticMessages(/*details*/ undefined, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
+            if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, returnTypeErrorLocation, headMessage, errorInfo)) {
                 return;
             }
 
@@ -39938,7 +39952,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             }
         }
+
         checkAwaitedType(returnType, /*withAlias*/ false, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+
+        function reportErrorForInvalidReturnType(message: DiagnosticMessage, returnTypeNode: TypeNode, returnTypeErrorLocation: TypeNode, typeName: string) {
+            if (returnTypeNode === returnTypeErrorLocation) {
+                error(returnTypeErrorLocation, message, typeName);
+            }
+            else {
+                const diag = error(returnTypeErrorLocation, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
+                addRelatedInfo(diag, createDiagnosticForNode(returnTypeNode, message, typeName));
+            }
+        }
     }
 
     /** Check a decorator */

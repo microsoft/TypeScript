@@ -199,6 +199,10 @@
         "category": "Error",
         "code": 1064
     },
+    "The return type of an async function or method must be the global Promise<T> type.": {
+        "category": "Error",
+        "code": 1065
+    },
     "In ambient enum declarations member initializer must be constant expression.": {
         "category": "Error",
         "code": 1066
