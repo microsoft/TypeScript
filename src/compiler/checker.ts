@@ -22733,7 +22733,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             findMostOverlappyType(source, target);
     }
 
-    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary) {
+    function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: (readonly [() => Type, __String])[], related: (source: Type, target: Type) => boolean | Ternary) {
         const types = target.types;
         const include: Ternary[] = types.map(t => t.flags & TypeFlags.Primitive ? Ternary.False : Ternary.True);
         for (const [getDiscriminatingType, propertyName] of discriminators) {
@@ -29415,12 +29415,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getMatchingUnionConstituentForObjectLiteral(contextualType, node) || discriminateTypeByDiscriminableItems(contextualType,
             concatenate(
                 map(
-                    filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.PropertyAssignment && isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName)),
-                    prop => ([() => getContextFreeTypeOfExpression((prop as PropertyAssignment).initializer), prop.symbol.escapedName] as [() => Type, __String])
+                    filter(node.properties, (p): p is PropertyAssignment | ShorthandPropertyAssignment => {
+                        if (!p.symbol) {
+                            return false;
+                        }
+                        if (p.kind === SyntaxKind.PropertyAssignment) {
+                            return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName);
+                        }
+                        if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                            return isDiscriminantProperty(contextualType, p.symbol.escapedName);
+                        }
+                        return false;
+                    }),
+                    prop => ([() => getContextFreeTypeOfExpression(prop.kind === SyntaxKind.PropertyAssignment ? prop.initializer : prop.name), prop.symbol.escapedName] as const)
                 ),
                 map(
                     filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
-                    s => [() => undefinedType, s.escapedName] as [() => Type, __String]
+                    s => [() => undefinedType, s.escapedName] as const
                 )
             ),
             isTypeAssignableTo
@@ -29433,7 +29444,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             concatenate(
                 map(
                     filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.JsxAttribute && isDiscriminantProperty(contextualType, p.symbol.escapedName) && (!p.initializer || isPossiblyDiscriminantValue(p.initializer))),
-                    prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as [() => Type, __String])
+                    prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as const)
                 ),
                 map(
                     filter(getPropertiesOfType(contextualType), s => {
@@ -29446,7 +29457,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName);
                     }),
-                    s => [() => undefinedType, s.escapedName] as [() => Type, __String]
+                    s => [() => undefinedType, s.escapedName] as const
                 )
             ),
             isTypeAssignableTo
