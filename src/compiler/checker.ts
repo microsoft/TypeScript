@@ -20342,6 +20342,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
         let lastSkippedInfo: [Type, Type] | undefined;
         let incompatibleStack: DiagnosticAndArguments[] | undefined;
+        let skipParentCounter = 0;
 
         Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -20532,7 +20533,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             Debug.assert(!!errorNode);
             if (incompatibleStack) reportIncompatibleStack();
             if (message.elidedInCompatabilityPyramid) return;
-            errorInfo = chainDiagnosticMessages(errorInfo, message, ...args);
+            if (skipParentCounter === 0) {
+                errorInfo = chainDiagnosticMessages(errorInfo, message, ...args);
+            }
+            else {
+                skipParentCounter--;
+            }
+        }
+
+        function reportParentSkippedError(message: DiagnosticMessage, ...args: DiagnosticArguments): void {
+            reportError(message, ...args);
+            skipParentCounter++;
         }
 
         function associateRelatedInfo(info: DiagnosticRelatedInformation) {
@@ -20929,11 +20940,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     }
                                 }
                                 if (suggestion !== undefined) {
-                                    reportError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
+                                    reportParentSkippedError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
                                         symbolToString(prop), typeToString(errorTarget), suggestion);
                                 }
                                 else {
-                                    reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                    reportParentSkippedError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                         symbolToString(prop), typeToString(errorTarget));
                                 }
                             }
