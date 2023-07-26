@@ -14124,6 +14124,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     type.propertyCacheWithoutObjectFunctionPropertyAugment ||= createSymbolTable() :
                     type.propertyCache ||= createSymbolTable();
                 properties.set(name, property);
+                if (skipObjectFunctionPropertyAugment && !type.propertyCache?.get(name)) {
+                    const properties = type.propertyCache ||= createSymbolTable();
+                    properties.set(name, property);
+                }
             }
         }
         return property;
