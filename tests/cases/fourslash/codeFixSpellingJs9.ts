@@ -23,6 +23,17 @@
 //// const person = new Person();
 //// person.[|getFavoriteColour|]();
 //// person.[|getFavoriteColoxr|]();
+//// function deco() { }
+//// @deco
+//// class Art {
+////   style = true
+//// }
+//// const a = new Art()
+//// a.[|stylo|]
+//// @deco
+//// class Double extends Art { }
+//// const db = new Double()
+//// db.[|stylo|]
 verify.codeFixAll({
     fixId: "fixSpelling",
     fixAllDescription: "Fix all detected spelling errors",
@@ -48,5 +59,16 @@ class Person {
 
 const person = new Person();
 person.getFavoriteColor();
-person.getFavoriteColor();`,
+person.getFavoriteColor();
+function deco() { }
+@deco
+class Art {
+  style = true
+}
+const a = new Art()
+a.stylo
+@deco
+class Double extends Art { }
+const db = new Double()
+db.stylo`,
 });
