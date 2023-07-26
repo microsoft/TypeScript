@@ -21714,17 +21714,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && constraint !== unknownType && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
                         return result;
                     }
-                    if (sourceFlags & TypeFlags.IndexedAccess) {
-                        const indexType = (source as IndexedAccessType).indexType;
-                        if (indexType.flags & TypeFlags.Index) {
-                            const unresolvedIndexConstraint = getBaseConstraintOfType((indexType as IndexType).type);
-                            const indexConstraint = unresolvedIndexConstraint && unresolvedIndexConstraint !== noConstraintType ? getIndexType(unresolvedIndexConstraint) : keyofConstraintType;
-                            const constraint = getIndexedAccessType((source as IndexedAccessType).objectType, indexConstraint);
-                            if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
-                                return result;
-                            }
-                        }
-                    }
                     if (isMappedTypeGenericIndexedAccess(source)) {
                         // For an indexed access type { [P in K]: E}[X], above we have already explored an instantiation of E with X
                         // substituted for P. We also want to explore type { [P in K]: E }[C], where C is the constraint of X.
