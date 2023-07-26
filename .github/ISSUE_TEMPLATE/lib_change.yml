@@ -1,6 +1,5 @@
 name: "Library change"
 description: "Fix or improve issues with built-in type definitions like `lib.dom.d.ts`, `lib.es6.d.ts`, etc."
-title: "[LIB CHANGE] <description>"
 body:
   - type: markdown
     attributes:
@@ -33,7 +32,7 @@ body:
           Replace the text below with the proper data.
       value: "My compilation *target* is `ES2015` and my *lib* is `the default`."
       render: Markdown
-  - type: input
+  - type: textarea
     id: incorrect_definition
     attributes:
       label: "Missing / Incorrect Definition"
@@ -48,7 +47,7 @@ body:
       render: TypeScript
     validations:
       required: true
-  - type: input
+  - type: textarea
     id: documentation_link
     attributes:
       label: "Documentation Link"

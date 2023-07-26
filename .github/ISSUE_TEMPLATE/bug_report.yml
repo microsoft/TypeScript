@@ -1,6 +1,5 @@
 name: "Bug report"
 description: "Create a report to help us improve TypeScript"
-title: "[BUG] <description>"
 body:
   - type: markdown
     attributes:
@@ -9,17 +8,17 @@ body:
     id: search_terms
     attributes:
       label: "🔎 Search Terms"
-      description:
-        "What search terms did you use when trying to find an existing bug report?
+      description: |
+        What search terms did you use when trying to find an existing bug report?
 
-        List them here so people in the future can find this one more easily."
+        List them here so people in the future can find this one more easily.
     validations:
       required: true
   - type: textarea
     id: version_info
     attributes:
       label: "🕗 Version & Regression Information"
-      description: "
+      description: |
         When did you start seeing this bug occur?
 
         \"Bugs\" that have existed in TS for a long time are very likely to be FAQs; refer to
@@ -34,7 +33,6 @@ body:
         Note: The TypeScript Playground can be used to try older versions of TypeScript.
 
         Please keep and fill in the line that best applies.
-        "
       value: |
         - This is a crash
         - This changed between versions ______ and _______
@@ -47,14 +45,13 @@ body:
     id: playground_link
     attributes:
       label: ⏯ Playground Link
-      description: "
+      description: |
         A link to a TypeScript Playground \"Share\" link which shows this behavior.
 
         This should have the same code as the code snippet below, and use whichever settings are relevant to your report.
 
 
         As a last resort, you can link to a repo, but these will be slower for us to investigate.
-       "
       placeholder: "Playground link with relevant code: https://www.typescriptlang.org/play?#code/PTAEFkE9QYwewCYFNQHM5IM6gBZIE5JA"
     validations:
       required: false
