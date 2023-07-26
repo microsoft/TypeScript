@@ -926,7 +926,7 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
        function add(x: string, y: string): string;
        |]const a = 1;
      */
-    if (overloadRangeToMove && (statements[overloadRangeToMove.end].end >= range.end || range.end === statements[overloadRangeToMove.end].end + 1)) {
+    if (overloadRangeToMove && (statements[overloadRangeToMove.end].end >= range.end || overloadRangeToMove.end === statements.length - 1 || range.end <= statements[overloadRangeToMove.end + 1].getStart())) {
         return { toMove: overloadRangeToMove.toMove, afterLast: statements[overloadRangeToMove.end + 1] };
     }
 
@@ -934,7 +934,7 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     /**[|const a = 1;
        |]const b = 2;
      */
-    if (afterEndNodeIndex !== -1 && range.end === statements[afterEndNodeIndex].pos + 1) {
+    if (afterEndNodeIndex !== -1 && range.end <= statements[afterEndNodeIndex].getStart()) {
         afterEndNodeIndex = afterEndNodeIndex - 1;
     }
 
@@ -963,10 +963,10 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
        function foo() { }
        |]
                         or
-       function add(x: number, y: number): number;
+       [|function add(x: number, y: number): number;
        function add(x: string, y: string): string;
        function foo() { }
-       |]const a = 1; or
+       |]const a = 1;
      */
     if (overloadRangeToMove) {
         return {

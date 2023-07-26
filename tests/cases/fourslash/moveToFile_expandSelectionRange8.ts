@@ -6,7 +6,7 @@
 
 // @Filename: /a.ts
 ////[|const a = 1;
-////|]const b = 2;
+//// |]const b = 2;
 
 // @Filename: /other.ts
 ////export const b = 2;
@@ -14,7 +14,7 @@
 verify.moveToFile({
     newFileContents: {
         "/a.ts":
-`const b = 2;`,
+` const b = 2;`,
 
         "/bar.ts":
 `import { b } from './other';

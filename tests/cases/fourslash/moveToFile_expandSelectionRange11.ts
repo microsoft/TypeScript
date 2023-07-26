@@ -10,14 +10,15 @@
 ////function add(x: any, y: any) {
 ////    return x + y;
 ////}
-////|]const b = 2;
+//// 
+//// |]const b = 2;
 ////const c = 3;
 
 verify.moveToFile({
     newFileContents: {
         "/a.ts":
 `const a = 1;
-const b = 2;
+ const b = 2;
 const c = 3;`,
 
         "/bar.ts":
