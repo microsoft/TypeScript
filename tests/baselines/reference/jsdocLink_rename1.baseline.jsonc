@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsdocLink_rename1.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/jsdocLink_rename1.ts ===
 // <|interface [|ARENAME|]/*RENAME*/ {}|>

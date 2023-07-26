@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofInternalModules.ts] ////
+
 typeofInternalModules.ts(15,16): error TS2708: Cannot use namespace 'importUninst' as a value.
 typeofInternalModules.ts(17,9): error TS2709: Cannot use namespace 'Outer' as a type.
 typeofInternalModules.ts(19,1): error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.

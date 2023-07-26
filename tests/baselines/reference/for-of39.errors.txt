@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of39.ts] ////
+
 for-of39.ts(1,11): error TS2769: No overload matches this call.
   Overload 1 of 4, '(iterable?: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
     Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'Iterable<readonly [string, boolean]>'.

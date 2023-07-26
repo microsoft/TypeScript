@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts] ////
+
 staticPropertyNotInClassType.ts(16,16): error TS2576: Property 'foo' does not exist on type 'C'. Did you mean to access the static member 'C.foo' instead?
 staticPropertyNotInClassType.ts(17,16): error TS2339: Property 'bar' does not exist on type 'C'.
 staticPropertyNotInClassType.ts(18,16): error TS2576: Property 'x' does not exist on type 'C'. Did you mean to access the static member 'C.x' instead?

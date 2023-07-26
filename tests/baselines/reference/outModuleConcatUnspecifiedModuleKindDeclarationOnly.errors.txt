@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/outModuleConcatUnspecifiedModuleKindDeclarationOnly.ts] ////
+
 error TS5069: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration' or option 'composite'.
 
 

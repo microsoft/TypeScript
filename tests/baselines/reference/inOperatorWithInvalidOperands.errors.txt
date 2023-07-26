@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts] ////
+
 inOperatorWithInvalidOperands.ts(15,11): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
 inOperatorWithInvalidOperands.ts(16,11): error TS2322: Type 'void' is not assignable to type 'string | number | symbol'.
 inOperatorWithInvalidOperands.ts(17,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.

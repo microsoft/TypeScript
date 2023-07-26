@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deleteReadonly.ts] ////
+
 deleteReadonly.ts(8,8): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
 deleteReadonly.ts(18,8): error TS2542: Index signature in type 'B' only permits reading.
 deleteReadonly.ts(20,12): error TS2542: Index signature in type 'B' only permits reading.

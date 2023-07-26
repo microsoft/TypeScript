@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @BaselineFile: getBreakpointStatementAtPosition.baseline
+// @BaselineFile: getBreakpointStatementAtPosition-pp.baseline
 // @Filename: getBreakpointStatementAtPosition.ts
 ////while (true) {
 ////    break;

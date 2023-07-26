@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters.ts] ////
+
 constructSignatureWithAccessibilityModifiersOnParameters.ts(16,10): error TS2369: A parameter property is only allowed in a constructor implementation.
 constructSignatureWithAccessibilityModifiersOnParameters.ts(20,10): error TS2369: A parameter property is only allowed in a constructor implementation.
 constructSignatureWithAccessibilityModifiersOnParameters.ts(24,10): error TS2369: A parameter property is only allowed in a constructor implementation.

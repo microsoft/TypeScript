@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override1.ts] ////
+
 override1.ts(9,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
 override1.ts(11,14): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
 override1.ts(15,14): error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.

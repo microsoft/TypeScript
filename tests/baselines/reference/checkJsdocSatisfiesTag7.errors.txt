@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag7.ts] ////
+
 /a.js(6,5): error TS1360: Type '{ a: number; b: string; x: number; }' does not satisfy the expected type 'Record<Keys, unknown>'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Record<Keys, unknown>'.
 /a.js(14,11): error TS2339: Property 'd' does not exist on type '{ a: number; b: string; x: number; }'.

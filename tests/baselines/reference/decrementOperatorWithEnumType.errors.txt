@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts] ////
+
 decrementOperatorWithEnumType.ts(6,31): error TS2540: Cannot assign to 'A' because it is a read-only property.
 decrementOperatorWithEnumType.ts(7,29): error TS2540: Cannot assign to 'A' because it is a read-only property.
 decrementOperatorWithEnumType.ts(10,9): error TS2540: Cannot assign to 'A' because it is a read-only property.

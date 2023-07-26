@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts] ////
+
 instantiateNonGenericTypeWithTypeArguments.ts(8,15): error TS2558: Expected 0 type arguments, but got 1.
 instantiateNonGenericTypeWithTypeArguments.ts(11,17): error TS2558: Expected 0 type arguments, but got 1.
 instantiateNonGenericTypeWithTypeArguments.ts(14,16): error TS2558: Expected 0 type arguments, but got 1.

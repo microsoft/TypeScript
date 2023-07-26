@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override2.ts] ////
+
 override2.ts(13,14): error TS4116: This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class 'AB'.
 override2.ts(18,14): error TS4116: This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class 'AB'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Expressions/parserObjectCreation2.ts] ////
+
 parserObjectCreation2.ts(1,9): error TS2304: Cannot find name 'Foo'.
 
 

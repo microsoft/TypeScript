@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures3.ts] ////
+
 assignmentCompatWithCallSignatures3.ts(47,1): error TS2322: Type '(x: number) => number[]' is not assignable to type '<T>(x: T) => T[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'number'.

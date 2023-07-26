@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unmetTypeConstraintInImportCall.ts] ////
+
 file2.ts(1,37): error TS2344: Type 'T' does not satisfy the constraint 'string'.
 
 

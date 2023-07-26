@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement13.ts] ////
+
 parserForOfStatement13.ts(1,20): error TS2304: Cannot find name 'X'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidAsNonAmbiguousReturnType.ts] ////
+
 voidAsNonAmbiguousReturnType_0.ts(1,17): error TS2394: This overload signature is not compatible with its implementation signature.
 
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_bindingPatterns.ts] ////
+
 const { /**/x, y: a, ...zs = {} } = {};
 
         x                          

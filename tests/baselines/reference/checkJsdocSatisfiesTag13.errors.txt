@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag13.ts] ////
+
 /a.js(5,14): error TS1360: Type '{ g: string; }' does not satisfy the expected type '{ f: (x: string) => string; }'.
   Object literal may only specify known properties, and 'g' does not exist in type '{ f: (x: string) => string; }'.
 

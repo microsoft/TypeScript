@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadUnion2.ts] ////
+
 spreadUnion2.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o1' must be of type '{} | { a: number; }', but here has type '{ a?: number | undefined; }'.
 spreadUnion2.ts(8,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o2' must be of type '{} | { b: number; }', but here has type '{ b?: number | undefined; }'.
 spreadUnion2.ts(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o3' must be of type '{} | { a: number; } | { b: number; } | { a: number; b: number; }', but here has type '{ b?: number | undefined; a?: number | undefined; }'.

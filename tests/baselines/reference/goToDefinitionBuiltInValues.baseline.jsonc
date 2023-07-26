@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionBuiltInValues.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionBuiltInValues.ts ===
 // var u = /*GOTO DEF*/undefined;

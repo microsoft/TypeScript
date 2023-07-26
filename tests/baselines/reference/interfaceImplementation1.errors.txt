@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceImplementation1.ts] ////
+
 interfaceImplementation1.ts(12,7): error TS2420: Class 'C1' incorrectly implements interface 'I1'.
   Property 'iObj' is private in type 'C1' but not in type 'I1'.
 interfaceImplementation1.ts(12,7): error TS2420: Class 'C1' incorrectly implements interface 'I2'.

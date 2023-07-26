@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts] ////
+
 mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts(9,9): error TS2322: Type 'HomomorphicMappedType<T>' is not assignable to type 'any[]'.
 
 

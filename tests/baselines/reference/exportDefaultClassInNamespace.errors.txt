@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultClassInNamespace.ts] ////
+
 exportDefaultClassInNamespace.ts(2,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 exportDefaultClassInNamespace.ts(6,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 

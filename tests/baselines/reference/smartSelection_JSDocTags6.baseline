@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_JSDocTags6.ts] ////
+
 /**
  * @template T
  * @param {/**/T} x

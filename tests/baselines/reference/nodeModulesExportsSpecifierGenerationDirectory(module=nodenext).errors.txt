@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesExportsSpecifierGenerationDirectory.ts] ////
+
 error TS2468: Cannot find global value 'Promise'.
 index.ts(2,23): error TS2307: Cannot find module 'inner/other' or its corresponding type declarations.
 index.ts(3,19): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.

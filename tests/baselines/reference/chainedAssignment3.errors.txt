@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/chainedAssignment3.ts] ////
+
 chainedAssignment3.ts(18,1): error TS2741: Property 'value' is missing in type 'A' but required in type 'B'.
 chainedAssignment3.ts(19,5): error TS2322: Type 'A' is not assignable to type 'B'.
 

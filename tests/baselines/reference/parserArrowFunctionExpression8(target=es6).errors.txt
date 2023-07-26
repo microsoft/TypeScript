@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression8.ts] ////
+
 fileJs.js(1,1): error TS2304: Cannot find name 'x'.
 fileTs.ts(1,1): error TS2304: Cannot find name 'x'.
 

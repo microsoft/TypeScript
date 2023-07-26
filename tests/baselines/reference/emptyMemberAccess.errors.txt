@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyMemberAccess.ts] ////
+
 emptyMemberAccess.ts(3,5): error TS1109: Expression expected.
 
 

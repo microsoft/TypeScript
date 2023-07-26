@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incompatibleTypes.ts] ////
+
 incompatibleTypes.ts(6,12): error TS2416: Property 'p1' in type 'C1' is not assignable to the same property in base type 'IFoo1'.
   Type '() => string' is not assignable to type '() => number'.
     Type 'string' is not assignable to type 'number'.

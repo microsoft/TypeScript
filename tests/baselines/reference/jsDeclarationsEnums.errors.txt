@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsEnums.ts] ////
+
 index.js(4,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
 index.js(6,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
 index.js(10,6): error TS8006: 'enum' declarations can only be used in TypeScript files.

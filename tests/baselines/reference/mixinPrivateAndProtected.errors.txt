@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mixinPrivateAndProtected.ts] ////
+
 mixinPrivateAndProtected.ts(46,3): error TS2445: Property 'ptd' is protected and only accessible within class 'A' and its subclasses.
 mixinPrivateAndProtected.ts(47,3): error TS2341: Property 'pvt' is private and only accessible within class 'A'.
 mixinPrivateAndProtected.ts(49,4): error TS2339: Property 'pb' does not exist on type 'never'.

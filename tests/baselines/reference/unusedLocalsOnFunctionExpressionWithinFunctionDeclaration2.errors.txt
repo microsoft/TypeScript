@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts] ////
+
 unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(1,18): error TS6133: 'person' is declared but its value is never read.
 unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
 unusedLocalsOnFunctionExpressionWithinFunctionDeclaration2.ts(3,9): error TS6133: 'maker' is declared but its value is never read.

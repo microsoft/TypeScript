@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externalModuleImmutableBindings.ts] ////
+
 f2.ts(6,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
 f2.ts(7,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
 f2.ts(8,7): error TS2339: Property 'blah' does not exist on type 'typeof import("f1")'.

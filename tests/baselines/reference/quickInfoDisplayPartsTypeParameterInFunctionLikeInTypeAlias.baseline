@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunctionLikeInTypeAlias.ts] ////
+
 === /tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInFunctionLikeInTypeAlias.ts ===
 // type MixinCtor<A> = new () => A & { constructor: MixinCtor<A> };
 //                               ^

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/invalid/decoratorOnImportEquals1.ts] ////
+
 decoratorOnImportEquals1.ts(8,5): error TS1206: Decorators are not valid here.
 
 

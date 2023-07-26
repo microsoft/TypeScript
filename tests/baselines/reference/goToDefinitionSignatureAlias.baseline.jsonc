@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionSignatureAlias.ts] ////
+
 // === goToDefinition ===
 // === /a.tsx ===
 // <|function [|f|]() {}|>

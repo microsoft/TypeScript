@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasDeclarationEmit.ts] ////
+
 typeAliasDeclarationEmit.ts(3,37): error TS2314: Generic type 'callback' requires 1 type argument(s).
 
 

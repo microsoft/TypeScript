@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers2.ts] ////
+
 subtypingWithObjectMembers2.ts(17,15): error TS2430: Interface 'B' incorrectly extends interface 'A'.
   Types of property 'bar' are incompatible.
     Type 'string' is not assignable to type 'Base'.

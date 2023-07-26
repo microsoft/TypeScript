@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/breakStatements/invalidForBreakStatements.ts] ////
+
 invalidForBreakStatements.ts(4,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
 invalidForBreakStatements.ts(8,9): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 invalidForBreakStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.

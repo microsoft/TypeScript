@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts] ////
+
 typeOfThisInStaticMembers12.ts(4,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 typeOfThisInStaticMembers12.ts(4,17): error TS2465: 'this' cannot be referenced in a computed property name.
 typeOfThisInStaticMembers12.ts(4,22): error TS2339: Property 'c' does not exist on type 'typeof Inner'.

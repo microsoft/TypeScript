@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsExportMemberMergedWithModuleAugmentation2.ts] ////
+
 /index.ts(4,16): error TS2300: Duplicate identifier 'a'.
 /index.ts(7,3): error TS2339: Property 'toFixed' does not exist on type 'string'.
 /test.js(2,3): error TS2300: Duplicate identifier 'a'.

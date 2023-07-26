@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultStripsFreshness.ts] ////
+
 index.ts(10,6): error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
   Property 'foo' is missing in type '{ foob: string; }' but required in type 'IFoo'.
 index.ts(12,6): error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.

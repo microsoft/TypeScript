@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass2.ts] ////
+
 protectedClassPropertyAccessibleWithinSubclass2.ts(13,12): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
 protectedClassPropertyAccessibleWithinSubclass2.ts(26,11): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'. This is an instance of class 'Base'.
 protectedClassPropertyAccessibleWithinSubclass2.ts(28,12): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'. This is an instance of class 'Derived2'.

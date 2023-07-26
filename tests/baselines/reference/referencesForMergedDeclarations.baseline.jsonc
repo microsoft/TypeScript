@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForMergedDeclarations.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
 // /*FIND ALL REFS*/<|interface [|{| isWriteAccess: true, isDefinition: true |}Foo|] {

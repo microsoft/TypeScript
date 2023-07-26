@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesEnum.ts] ////
+
 augmentedTypesEnum.ts(2,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 augmentedTypesEnum.ts(3,5): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 augmentedTypesEnum.ts(6,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.

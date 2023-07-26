@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds2.ts] ////
+
 interfaceExtendingClassWithProtecteds2.ts(9,11): error TS2320: Interface 'I3' cannot simultaneously extend types 'Foo' and 'Bar'.
   Named property 'x' of types 'Foo' and 'Bar' are not identical.
 interfaceExtendingClassWithProtecteds2.ts(12,11): error TS2430: Interface 'I4' incorrectly extends interface 'Bar'.

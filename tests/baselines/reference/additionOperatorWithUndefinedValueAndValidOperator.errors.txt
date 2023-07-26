@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts] ////
+
 additionOperatorWithUndefinedValueAndValidOperator.ts(15,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'number'.
 additionOperatorWithUndefinedValueAndValidOperator.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and '1'.
 additionOperatorWithUndefinedValueAndValidOperator.ts(17,10): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'E'.

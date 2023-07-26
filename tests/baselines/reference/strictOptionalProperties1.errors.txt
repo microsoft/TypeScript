@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictOptionalProperties1.ts] ////
+
 strictOptionalProperties1.ts(6,5): error TS2412: Type 'undefined' is not assignable to type 'string' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
 strictOptionalProperties1.ts(12,5): error TS2412: Type 'string | undefined' is not assignable to type 'string' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
   Type 'undefined' is not assignable to type 'string'.

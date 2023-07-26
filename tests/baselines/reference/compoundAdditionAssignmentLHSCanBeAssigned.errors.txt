@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCanBeAssigned.ts] ////
+
 compoundAdditionAssignmentLHSCanBeAssigned.ts(32,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'null'.
 compoundAdditionAssignmentLHSCanBeAssigned.ts(33,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'undefined'.
 compoundAdditionAssignmentLHSCanBeAssigned.ts(39,1): error TS2365: Operator '+=' cannot be applied to types 'E' and 'null'.

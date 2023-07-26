@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts] ////
+
 strictPropertyInitialization.ts(4,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 strictPropertyInitialization.ts(6,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
 strictPropertyInitialization.ts(8,5): error TS2564: Property '#f' has no initializer and is not definitely assigned in the constructor.

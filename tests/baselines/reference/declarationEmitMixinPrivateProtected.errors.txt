@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitMixinPrivateProtected.ts] ////
+
 another.ts(11,1): error TS4094: Property '_assertIsStripped' of exported class expression may not be private or protected.
 another.ts(11,1): error TS4094: Property '_onDispose' of exported class expression may not be private or protected.
 first.ts(12,1): error TS4094: Property '_assertIsStripped' of exported class expression may not be private or protected.

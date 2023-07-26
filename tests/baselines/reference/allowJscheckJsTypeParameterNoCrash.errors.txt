@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/allowJscheckJsTypeParameterNoCrash.ts] ////
+
 app.js(6,7): error TS2322: Type 'number' is not assignable to type 'WatchHandler<any>'.
 
 

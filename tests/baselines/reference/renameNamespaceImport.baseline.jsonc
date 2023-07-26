@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/renameNamespaceImport.ts] ////
+
 // === findRenameLocations ===
 // === /src/index.ts ===
 // <|import * as /*RENAME*/[|libRENAME|] from '../lib/index';|>

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccessWidening.ts] ////
+
 propertyAccessWidening.ts(18,21): error TS2339: Property 'a' does not exist on type '{ a: string; b: number; } | {}'.
   Property 'a' does not exist on type '{}'.
 propertyAccessWidening.ts(19,5): error TS7053: Element implicitly has an 'any' type because expression of type '"a"' can't be used to index type '{}'.

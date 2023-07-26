@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/privateIdentifierChain/privateIdentifierChain.1.ts] ////
+
 privateIdentifierChain.1.ts(8,15): error TS18030: An optional chain cannot contain private identifiers.
 privateIdentifierChain.1.ts(9,9): error TS2532: Object is possibly 'undefined'.
 privateIdentifierChain.1.ts(9,17): error TS18030: An optional chain cannot contain private identifiers.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override3.ts] ////
+
 override3.ts(22,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'D'.
 
 

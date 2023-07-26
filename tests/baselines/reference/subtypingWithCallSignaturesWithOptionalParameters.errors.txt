@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts] ////
+
 subtypingWithCallSignaturesWithOptionalParameters.ts(19,11): error TS2430: Interface 'I3' incorrectly extends interface 'Base'.
   Types of property 'a' are incompatible.
     Type '(x: number) => number' is not assignable to type '() => number'.

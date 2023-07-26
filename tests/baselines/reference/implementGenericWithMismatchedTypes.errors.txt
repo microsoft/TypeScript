@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implementGenericWithMismatchedTypes.ts] ////
+
 implementGenericWithMismatchedTypes.ts(8,5): error TS2416: Property 'foo' in type 'C<T>' is not assignable to the same property in base type 'IFoo<T>'.
   Type '(x: string) => number' is not assignable to type '(x: T) => T'.
     Types of parameters 'x' and 'x' are incompatible.

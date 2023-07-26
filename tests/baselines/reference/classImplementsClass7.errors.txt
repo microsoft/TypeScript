@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementsClass7.ts] ////
+
 classImplementsClass7.ts(5,7): error TS2720: Class 'B' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
   Property 'x' is missing in type 'B' but required in type 'A'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionWithConflictingPrivates.ts] ////
+
 intersectionWithConflictingPrivates.ts(5,4): error TS2339: Property 'y' does not exist on type 'never'.
   The intersection 'A & B' was reduced to 'never' because property 'x' exists in multiple constituents and is private in some.
 intersectionWithConflictingPrivates.ts(6,1): error TS2322: Type '{}' is not assignable to type 'never'.

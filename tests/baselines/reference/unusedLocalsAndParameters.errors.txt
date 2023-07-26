@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsAndParameters.ts] ////
+
 unusedLocalsAndParameters.ts(4,12): error TS6133: 'a' is declared but its value is never read.
 unusedLocalsAndParameters.ts(9,22): error TS6133: 'a' is declared but its value is never read.
 unusedLocalsAndParameters.ts(15,5): error TS6133: 'farrow' is declared but its value is never read.

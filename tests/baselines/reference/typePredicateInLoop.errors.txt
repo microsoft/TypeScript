@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateInLoop.ts] ////
+
 typePredicateInLoop.ts(17,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 
 

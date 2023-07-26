@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typedArraysCrossAssignability01.ts] ////
+
 typedArraysCrossAssignability01.ts(13,5): error TS2322: Type 'Uint8Array' is not assignable to type 'Int8Array'.
   Types of property '[Symbol.toStringTag]' are incompatible.
     Type '"Uint8Array"' is not assignable to type '"Int8Array"'.

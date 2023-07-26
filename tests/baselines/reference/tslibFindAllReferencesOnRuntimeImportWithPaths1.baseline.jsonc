@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/tslibFindAllReferencesOnRuntimeImportWithPaths1.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/project/src/foo.ts ===
 // [|<|import * as x from /*FIND ALL REFS*/"[|tslib|]";|]|>

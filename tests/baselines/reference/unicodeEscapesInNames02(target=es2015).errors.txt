@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unicodeEscapesInNames02.ts] ////
+
 astralAsSurrogatePair.ts(1,17): error TS1127: Invalid character.
 astralAsSurrogatePair.ts(1,18): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
 astralAsSurrogatePair.ts(1,23): error TS1127: Invalid character.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsEnumMember.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsEnumMember.ts ===
 // enum E { /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}A|], B }

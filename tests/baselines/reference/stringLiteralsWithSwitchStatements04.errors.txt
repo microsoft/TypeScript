@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements04.ts] ////
+
 stringLiteralsWithSwitchStatements04.ts(7,10): error TS2695: Left side of comma operator is unused and has no side effects.
 stringLiteralsWithSwitchStatements04.ts(9,10): error TS2695: Left side of comma operator is unused and has no side effects.
 stringLiteralsWithSwitchStatements04.ts(11,10): error TS2695: Left side of comma operator is unused and has no side effects.

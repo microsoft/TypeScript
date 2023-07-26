@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritance1.ts] ////
+
 inheritance1.ts(14,7): error TS2420: Class 'ImageBase' incorrectly implements interface 'SelectableControl'.
   Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
 inheritance1.ts(18,7): error TS2420: Class 'Locations' incorrectly implements interface 'SelectableControl'.

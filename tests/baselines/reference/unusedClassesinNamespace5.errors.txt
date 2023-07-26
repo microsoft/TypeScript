@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedClassesinNamespace5.ts] ////
+
 unusedClassesinNamespace5.ts(10,11): error TS6196: 'c3' is declared but never used.
 
 

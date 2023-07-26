@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts] ////
+
 privateInstanceMemberAccessibility.ts(5,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
   Property 'foo' is private in type 'Base' but not in type 'Derived'.
 privateInstanceMemberAccessibility.ts(6,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.

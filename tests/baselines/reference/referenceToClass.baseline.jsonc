@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referenceToClass.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referenceToClass_1.ts ===
 // <|class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|] {

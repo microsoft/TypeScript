@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesinForLoop4.ts] ////
+
 unusedVariablesinForLoop4.ts(4,13): error TS6133: 'x' is declared but its value is never read.
 
 

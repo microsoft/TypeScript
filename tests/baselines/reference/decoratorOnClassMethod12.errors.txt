@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts] ////
+
 decoratorOnClassMethod12.ts(6,10): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 
 

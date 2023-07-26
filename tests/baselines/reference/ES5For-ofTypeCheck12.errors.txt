@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck12.ts] ////
+
 ES5For-ofTypeCheck12.ts(1,17): error TS2495: Type '0' is not an array type or a string type.
 
 

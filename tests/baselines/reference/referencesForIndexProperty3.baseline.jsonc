@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForIndexProperty3.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIndexProperty3.ts ===
 // interface Object {

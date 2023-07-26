@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts] ////
+
 arrayOfSubtypeIsAssignableToReadonlyArray.ts(13,1): error TS2322: Type 'A[]' is not assignable to type 'readonly B[]'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error TS2322: Type 'C<A>' is not assignable to type 'readonly B[]'.

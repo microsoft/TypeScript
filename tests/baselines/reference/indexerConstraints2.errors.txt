@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexerConstraints2.ts] ////
+
 indexerConstraints2.ts(9,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
 indexerConstraints2.ts(17,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
 indexerConstraints2.ts(26,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.

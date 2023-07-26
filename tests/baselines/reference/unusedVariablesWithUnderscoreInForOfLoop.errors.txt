@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts] ////
+
 unusedVariablesWithUnderscoreInForOfLoop.ts(15,21): error TS6133: 'b' is declared but its value is never read.
 unusedVariablesWithUnderscoreInForOfLoop.ts(17,17): error TS6133: 'a' is declared but its value is never read.
 unusedVariablesWithUnderscoreInForOfLoop.ts(19,17): error TS6133: 'a' is declared but its value is never read.

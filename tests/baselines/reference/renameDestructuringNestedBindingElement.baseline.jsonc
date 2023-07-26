@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameDestructuringNestedBindingElement.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringNestedBindingElement.ts ===
 // interface MultiRobot {

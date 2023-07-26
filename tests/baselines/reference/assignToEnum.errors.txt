@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignToEnum.ts] ////
+
 assignToEnum.ts(2,1): error TS2628: Cannot assign to 'A' because it is an enum.
 assignToEnum.ts(3,1): error TS2628: Cannot assign to 'A' because it is an enum.
 assignToEnum.ts(4,3): error TS2540: Cannot assign to 'foo' because it is a read-only property.

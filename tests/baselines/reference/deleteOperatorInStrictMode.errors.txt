@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deleteOperatorInStrictMode.ts] ////
+
 deleteOperatorInStrictMode.ts(3,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorInStrictMode.ts(3,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationDo.ts] ////
+
 
 1  >var i = 0;
 

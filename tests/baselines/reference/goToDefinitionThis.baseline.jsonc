@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionThis.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionThis.ts ===
 // function f(<|[|this|]: number|>) {

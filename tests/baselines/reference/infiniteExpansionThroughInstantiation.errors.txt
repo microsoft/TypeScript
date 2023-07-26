@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts] ////
+
 infiniteExpansionThroughInstantiation.ts(16,1): error TS2322: Type 'OwnerList<string>' is not assignable to type 'List<string>'.
   Types of property 'data' are incompatible.
     Type 'List<string>' is not assignable to type 'string'.

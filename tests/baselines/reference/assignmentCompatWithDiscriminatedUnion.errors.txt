@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts] ////
+
 assignmentCompatWithDiscriminatedUnion.ts(44,5): error TS2322: Type 'S' is not assignable to type 'T'.
   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 1; b: 2 | 4; }'.
     Type 'S' is not assignable to type '{ a: 1; b: 2 | 4; }'.

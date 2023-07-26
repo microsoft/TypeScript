@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/baseConstraintOfDecorator.ts] ////
+
 baseConstraintOfDecorator.ts(2,5): error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
   'TFunction' could be instantiated with an arbitrary type which could be unrelated to 'typeof decoratorFunc'.
 baseConstraintOfDecorator.ts(2,40): error TS2507: Type 'TFunction' is not a constructor function type.

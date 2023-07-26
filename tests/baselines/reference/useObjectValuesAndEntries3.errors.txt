@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2017/useObjectValuesAndEntries3.ts] ////
+
 useObjectValuesAndEntries3.ts(3,22): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
 useObjectValuesAndEntries3.ts(7,22): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
 

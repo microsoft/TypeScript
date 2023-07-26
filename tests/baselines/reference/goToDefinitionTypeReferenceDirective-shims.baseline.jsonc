@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/shims/goToDefinitionTypeReferenceDirective-shims.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/shims/src/types/lib/index.d.ts ===
 // [||]declare let $: {x: number};

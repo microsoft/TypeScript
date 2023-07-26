@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameExportSpecifier2.ts] ////
+
 // === findRenameLocations ===
 // @providePrefixAndSuffixTextForRename: false
 

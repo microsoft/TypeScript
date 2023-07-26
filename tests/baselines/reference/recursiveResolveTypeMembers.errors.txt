@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveResolveTypeMembers.ts] ////
+
 recursiveResolveTypeMembers.ts(4,49): error TS2577: Return type annotation circularly references itself.
 recursiveResolveTypeMembers.ts(4,58): error TS2304: Cannot find name 'H'.
 recursiveResolveTypeMembers.ts(4,79): error TS2304: Cannot find name 'R'.

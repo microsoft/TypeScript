@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeTest1.ts] ////
+
 targetTypeTest1.ts(19,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 
 

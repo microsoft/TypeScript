@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts] ////
+
 === /tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts ===
 // function outerFoo() {
 //          ^^^^^^^^

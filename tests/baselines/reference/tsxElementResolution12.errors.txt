@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution12.tsx] ////
+
 file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 file.tsx(25,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
 file.tsx(26,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.

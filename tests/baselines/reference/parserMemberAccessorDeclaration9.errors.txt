@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration9.ts] ////
+
 parserMemberAccessorDeclaration9.ts(2,12): error TS1029: 'public' modifier must precede 'static' modifier.
 parserMemberAccessorDeclaration9.ts(2,23): error TS2378: A 'get' accessor must return a value.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedClassMethodShadowing.ts] ////
+
 privateNameNestedClassMethodShadowing.ts(7,31): error TS18014: The property '#x' cannot be accessed on type 'Base' within this class because it is shadowed by another private identifier with the same spelling.
 
 

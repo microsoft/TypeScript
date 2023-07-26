@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessRelation.ts] ////
+
 indexedAccessRelation.ts(16,23): error TS2345: Argument of type '{ a: T; }' is not assignable to parameter of type 'Pick<S & State<T>, "a">'.
   Types of property 'a' are incompatible.
     Type 'T' is not assignable to type 'S["a"] & T'.

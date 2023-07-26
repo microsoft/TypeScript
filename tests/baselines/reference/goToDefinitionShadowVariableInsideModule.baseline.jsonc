@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionShadowVariableInsideModule.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/goToDefinitionShadowVariableInsideModule.ts ===
 // module shdModule {

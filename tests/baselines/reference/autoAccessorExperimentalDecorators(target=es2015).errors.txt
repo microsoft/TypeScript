@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorExperimentalDecorators.ts] ////
+
 autoAccessorExperimentalDecorators.ts(12,5): error TS1206: Decorators are not valid here.
 autoAccessorExperimentalDecorators.ts(15,5): error TS1206: Decorators are not valid here.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts] ////
+
 lib.es5.d.ts(--,--): error TS2411: Property 'constructor' of type 'Function' is not assignable to 'string' index type 'Object'.
 lib.es5.d.ts(--,--): error TS2411: Property 'toString' of type '() => string' is not assignable to 'string' index type 'Object'.
 lib.es5.d.ts(--,--): error TS2411: Property 'toLocaleString' of type '() => string' is not assignable to 'string' index type 'Object'.

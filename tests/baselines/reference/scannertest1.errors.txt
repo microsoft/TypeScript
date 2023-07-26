@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannertest1.ts] ////
+
 scannertest1.ts(1,21): error TS6053: File 'References.ts' not found.
 scannertest1.ts(5,21): error TS2304: Cannot find name 'CharacterCodes'.
 scannertest1.ts(5,47): error TS2304: Cannot find name 'CharacterCodes'.

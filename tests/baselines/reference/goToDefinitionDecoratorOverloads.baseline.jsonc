@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionDecoratorOverloads.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionDecoratorOverloads.ts ===
 // async function f() {}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxChildrenIndividualErrorElaborations.tsx] ////
+
 index.tsx(14,9): error TS2322: Type 'number' is not assignable to type 'string'.
 index.tsx(18,15): error TS2747: 'Blah' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is '(x: number) => string'.
 index.tsx(23,10): error TS2746: This JSX tag's 'children' prop expects a single child of type '(x: number) => string', but multiple children were provided.

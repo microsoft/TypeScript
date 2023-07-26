@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodAsync.ts] ////
+
 privateNameStaticMethodAsync.ts(11,11): error TS1029: 'static' modifier must precede 'async' modifier.
 
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfInterface.ts ===
 // /*FIND ALL REFS*/<|interface [|{| isWriteAccess: true, isDefinition: true |}I|] {

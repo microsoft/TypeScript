@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsCommonJsRequire.ts] ////
+
 // === findAllReferences ===
 // === /b.js ===
 // <|const { [|{| defId: 0, isWriteAccess: true |}f|] } = require('./a')|>

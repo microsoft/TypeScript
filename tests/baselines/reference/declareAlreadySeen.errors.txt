@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareAlreadySeen.ts] ////
+
 declareAlreadySeen.ts(2,13): error TS1030: 'declare' modifier already seen.
 declareAlreadySeen.ts(3,13): error TS1030: 'declare' modifier already seen.
 declareAlreadySeen.ts(5,13): error TS1030: 'declare' modifier already seen.

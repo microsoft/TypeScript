@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignaturesWithOptionalParameters.ts] ////
+
 assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type 'new (x: number) => number' is not assignable to type 'new () => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
 assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(17,5): error TS2322: Type 'new (x: number, y?: number) => number' is not assignable to type 'new () => number'.

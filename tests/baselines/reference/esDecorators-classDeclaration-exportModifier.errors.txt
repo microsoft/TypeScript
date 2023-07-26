@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-exportModifier.ts] ////
+
 file3.js(2,8): error TS1206: Decorators are not valid here.
 file6.js(2,13): error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
 file7.js(2,21): error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.

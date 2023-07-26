@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getEmitOutputSourceMap2.ts] ////
+
 EmitSkipped: false
 
 FileName : sample/outDir/inputFile1.js.map

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryDeclarationsLocalTypes.tsx] ////
+
 component.tsx(4,136): error TS2609: JSX spread child must be an array type.
 component.tsx(4,140): error TS2532: Object is possibly 'undefined'.
 index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.

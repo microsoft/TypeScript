@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericDefaultsErrors.ts] ////
+
 genericDefaultsErrors.ts(3,41): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 genericDefaultsErrors.ts(4,59): error TS2344: Type 'T' does not satisfy the constraint 'number'.
   Type 'string' is not assignable to type 'number'.

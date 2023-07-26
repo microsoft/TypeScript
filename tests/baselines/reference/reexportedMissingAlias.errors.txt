@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reexportedMissingAlias.ts] ////
+
 second.d.ts(2,27): error TS2304: Cannot find name 'CompletelyMissing'.
 second.d.ts(2,27): error TS2503: Cannot find namespace 'CompletelyMissing'.
 

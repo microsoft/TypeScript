@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/importMeta/importMeta.ts] ////
+
 error TS2468: Cannot find global value 'Promise'.
 assignmentTargets.ts(1,32): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.
 assignmentTargets.ts(1,44): error TS2339: Property 'blah' does not exist on type 'ImportMeta'.

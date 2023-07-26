@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringAssignmentWithDefault2.ts] ////
+
 destructuringAssignmentWithDefault2.ts(11,4): error TS2322: Type 'undefined' is not assignable to type 'number'.
 destructuringAssignmentWithDefault2.ts(11,4): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.

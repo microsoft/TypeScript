@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classStaticPropertyAccess.ts] ////
+
 classStaticPropertyAccess.ts(10,1): error TS2576: Property '"' does not exist on type 'A'. Did you mean to access the static member 'A["\""]' instead?
 classStaticPropertyAccess.ts(11,1): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A['y']' instead?
 classStaticPropertyAccess.ts(12,3): error TS2576: Property 'y' does not exist on type 'A'. Did you mean to access the static member 'A.y' instead?

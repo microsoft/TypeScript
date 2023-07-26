@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationDestructuringParameterArrayBindingPatternDefaultValues.ts] ////
+
 
 1  >declare var console: {
 

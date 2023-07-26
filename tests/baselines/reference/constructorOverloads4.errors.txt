@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorOverloads4.ts] ////
+
 constructorOverloads4.ts(10,1): error TS2349: This expression is not callable.
   Type 'Function' has no call signatures.
 

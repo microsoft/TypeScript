@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useBeforeDeclaration_jsx.tsx] ////
+
 useBeforeDeclaration_jsx.tsx(6,19): error TS2729: Property 'z' is used before its initialization.
 useBeforeDeclaration_jsx.tsx(7,19): error TS2729: Property 'z' is used before its initialization.
 useBeforeDeclaration_jsx.tsx(8,28): error TS2729: Property 'x' is used before its initialization.

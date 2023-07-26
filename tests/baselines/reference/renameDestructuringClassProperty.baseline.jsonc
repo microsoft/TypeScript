@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameDestructuringClassProperty.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringClassProperty.ts ===
 // class A {

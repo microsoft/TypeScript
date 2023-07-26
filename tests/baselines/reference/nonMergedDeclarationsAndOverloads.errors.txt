@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonMergedDeclarationsAndOverloads.ts] ////
+
 nonMergedDeclarationsAndOverloads.ts(2,5): error TS2300: Duplicate identifier 'm1'.
 nonMergedDeclarationsAndOverloads.ts(4,5): error TS2300: Duplicate identifier 'm1'.
 nonMergedDeclarationsAndOverloads.ts(5,5): error TS2300: Duplicate identifier 'm1'.

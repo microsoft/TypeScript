@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeReservedWord2.ts] ////
+
 strictModeReservedWord2.ts(2,11): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
 strictModeReservedWord2.ts(3,11): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
 strictModeReservedWord2.ts(4,9): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classUpdateTests.ts] ////
+
 classUpdateTests.ts(34,2): error TS2377: Constructors for derived classes must contain a 'super' call.
 classUpdateTests.ts(43,18): error TS2335: 'super' can only be referenced in a derived class.
 classUpdateTests.ts(63,7): error TS2415: Class 'L' incorrectly extends base class 'G'.

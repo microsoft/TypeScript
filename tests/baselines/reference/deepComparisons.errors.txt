@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deepComparisons.ts] ////
+
 deepComparisons.ts(2,9): error TS2322: Type 'T' is not assignable to type 'Extract<T, string>'.
 deepComparisons.ts(3,9): error TS2322: Type 'T[K1]' is not assignable to type 'Extract<T[K1], string>'.
   Type 'T[keyof T]' is not assignable to type 'Extract<T[K1], string>'.

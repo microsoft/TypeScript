@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varianceAnnotationValidation.ts] ////
+
 varianceAnnotationValidation.ts(5,22): error TS2636: Type 'Controller<sub-T>' is not assignable to type 'Controller<super-T>' as implied by variance annotation.
   Types of property 'run' are incompatible.
     Type '(animal: sub-T) => void' is not assignable to type '(animal: super-T) => void'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocParamTagInvalid.ts] ////
+
 /a.js(1,21): error TS8024: JSDoc '@param' tag has name 'colour', but there is no parameter with that name.
 
 

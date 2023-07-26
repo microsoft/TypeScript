@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts] ////
+
 classStaticInitializersUsePropertiesBeforeDeclaration.ts(2,25): error TS2450: Enum 'Enum' used before its declaration.
 classStaticInitializersUsePropertiesBeforeDeclaration.ts(2,30): error TS2729: Property 'A' is used before its initialization.
 classStaticInitializersUsePropertiesBeforeDeclaration.ts(3,31): error TS2448: Block-scoped variable 'ObjLiteral' used before its declaration.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignature.ts] ////
+
 propertyAccessStringIndexSignature.ts(10,7): error TS2339: Property 'nope' does not exist on type 'Empty'.
 
 

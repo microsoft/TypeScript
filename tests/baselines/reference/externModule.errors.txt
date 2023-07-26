@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externModule.ts] ////
+
 externModule.ts(1,1): error TS2304: Cannot find name 'declare'.
 externModule.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 externModule.ts(1,16): error TS1437: Namespace must be given a name.

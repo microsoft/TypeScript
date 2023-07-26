@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/declarationNotFoundPackageBundlesTypes.ts] ////
+
 index.ts(2,24): error TS7016: Could not find a declaration file for module 'foo/other'. 'node_modules/foo/other.js' implicitly has an 'any' type.
   If the 'foo' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module 'foo/other';`
 

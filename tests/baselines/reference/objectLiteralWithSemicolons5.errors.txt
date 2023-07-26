@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralWithSemicolons5.ts] ////
+
 objectLiteralWithSemicolons5.ts(1,20): error TS1005: ',' expected.
 objectLiteralWithSemicolons5.ts(1,25): error TS2304: Cannot find name 'b'.
 objectLiteralWithSemicolons5.ts(1,26): error TS1005: ',' expected.

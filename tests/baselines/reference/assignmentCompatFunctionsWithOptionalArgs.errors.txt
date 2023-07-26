@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts] ////
+
 assignmentCompatFunctionsWithOptionalArgs.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 assignmentCompatFunctionsWithOptionalArgs.ts(4,17): error TS2322: Type 'boolean' is not assignable to type 'string'.
 assignmentCompatFunctionsWithOptionalArgs.ts(5,5): error TS2345: Argument of type '{ name: string; }' is not assignable to parameter of type '{ id: number; name?: string; }'.

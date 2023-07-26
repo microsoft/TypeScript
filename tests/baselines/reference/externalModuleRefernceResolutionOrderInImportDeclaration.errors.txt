@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/externalModuleRefernceResolutionOrderInImportDeclaration.ts] ////
+
 externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts(4,7): error TS2339: Property 'bar' does not exist on type 'typeof import("externalModuleRefernceResolutionOrderInImportDeclaration_file1")'.
 
 

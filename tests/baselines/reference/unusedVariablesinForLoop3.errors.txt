@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesinForLoop3.ts] ////
+
 unusedVariablesinForLoop3.ts(2,16): error TS6133: 'elem' is declared but its value is never read.
 
 

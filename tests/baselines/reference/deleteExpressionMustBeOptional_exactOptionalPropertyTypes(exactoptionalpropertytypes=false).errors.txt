@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts] ////
+
 deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(26,8): error TS2790: The operand of a 'delete' operator must be optional.
 deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(28,8): error TS2790: The operand of a 'delete' operator must be optional.
 deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(35,10): error TS2339: Property 'j' does not exist on type 'Foo'.

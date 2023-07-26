@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts] ////
+
 typeGuardInClass.ts(6,17): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 typeGuardInClass.ts(13,17): error TS2322: Type 'string | number' is not assignable to type 'number'.

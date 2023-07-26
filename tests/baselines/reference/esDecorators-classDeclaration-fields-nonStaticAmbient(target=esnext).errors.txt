@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/fields/esDecorators-classDeclaration-fields-nonStaticAmbient.ts] ////
+
 esDecorators-classDeclaration-fields-nonStaticAmbient.ts(6,5): error TS1206: Decorators are not valid here.
 esDecorators-classDeclaration-fields-nonStaticAmbient.ts(7,5): error TS1206: Decorators are not valid here.
 esDecorators-classDeclaration-fields-nonStaticAmbient.ts(8,5): error TS1206: Decorators are not valid here.

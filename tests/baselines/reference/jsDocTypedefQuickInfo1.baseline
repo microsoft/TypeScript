@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsDocTypedefQuickInfo1.ts] ////
+
 === /tests/cases/fourslash/jsDocTypedef1.js ===
 // /**
 //  * @typedef {Object} Opts

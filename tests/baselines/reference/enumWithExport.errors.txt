@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithExport.ts] ////
+
 enumWithExport.ts(5,7): error TS2304: Cannot find name 'y'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts] ////
+
 assignmentLHSIsValue.ts(6,21): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 assignmentLHSIsValue.ts(7,13): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 assignmentLHSIsValue.ts(8,21): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.

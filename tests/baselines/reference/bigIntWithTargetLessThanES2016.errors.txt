@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bigIntWithTargetLessThanES2016.ts] ////
+
 bigIntWithTargetLessThanES2016.ts(1,1): error TS2791: Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.
 bigIntWithTargetLessThanES2016.ts(4,1): error TS2791: Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.
 

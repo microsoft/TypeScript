@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsdocSatisfiesTagFindAllReferences.ts] ////
+
 // === findAllReferences ===
 // === /a.js ===
 // /**

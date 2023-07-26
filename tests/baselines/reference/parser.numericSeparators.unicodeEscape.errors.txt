@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.unicodeEscape.ts] ////
+
 1.ts(1,7): error TS1199: Unterminated Unicode escape sequence.
 10.ts(1,5): error TS1125: Hexadecimal digit expected.
 11.ts(1,5): error TS1125: Hexadecimal digit expected.

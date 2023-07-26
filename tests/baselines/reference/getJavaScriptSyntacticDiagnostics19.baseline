@@ -1,4 +1,5 @@
-Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics19.ts':
+//// [/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics19.ts] ////
+
 /tests/cases/fourslash/a.js(1,6): error TS8006: 'enum' declarations can only be used in TypeScript files.
 
 

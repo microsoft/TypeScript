@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxParsingError1.tsx] ////
+
 file.tsx(11,30): error TS2695: Left side of comma operator is unused and has no side effects.
 file.tsx(11,30): error TS18007: JSX expressions may not use the comma operator. Did you mean to write an array?
 

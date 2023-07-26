@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution2_classic.ts] ////
+
 root/tsconfig.json(8,13): error TS5061: Pattern '*1*' can have at most one '*' character.
 root/tsconfig.json(8,22): error TS5062: Substitution '*2*' in pattern '*1*' can have at most one '*' character.
 

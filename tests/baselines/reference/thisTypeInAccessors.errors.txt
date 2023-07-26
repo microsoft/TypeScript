@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInAccessors.ts] ////
+
 thisTypeInAccessors.ts(8,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 thisTypeInAccessors.ts(9,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 thisTypeInAccessors.ts(13,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.

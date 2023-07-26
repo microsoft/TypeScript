@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports9.ts] ////
+
 file2.ts(1,8): error TS6133: 'c' is declared but its value is never read.
 
 

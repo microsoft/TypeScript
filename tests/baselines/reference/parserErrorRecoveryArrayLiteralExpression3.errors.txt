@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression3.ts] ////
+
 parserErrorRecoveryArrayLiteralExpression3.ts(1,54): error TS1005: ',' expected.
 parserErrorRecoveryArrayLiteralExpression3.ts(1,56): error TS2695: Left side of comma operator is unused and has no side effects.
 parserErrorRecoveryArrayLiteralExpression3.ts(1,56): error TS2695: Left side of comma operator is unused and has no side effects.

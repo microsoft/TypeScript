@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericsWithDuplicateTypeParameters1.ts] ////
+
 genericsWithDuplicateTypeParameters1.ts(1,15): error TS2300: Duplicate identifier 'x'.
 genericsWithDuplicateTypeParameters1.ts(2,16): error TS2300: Duplicate identifier 'X'.
 genericsWithDuplicateTypeParameters1.ts(3,12): error TS2300: Duplicate identifier 'X'.

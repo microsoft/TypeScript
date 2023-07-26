@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload4.tsx] ////
+
 file.tsx(12,22): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes'.

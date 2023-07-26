@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOverloads3.ts] ////
+
 callOverloads3.ts(1,10): error TS2814: Function with bodies can only merge with classes that are ambient.
 callOverloads3.ts(2,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 callOverloads3.ts(2,10): error TS2814: Function with bodies can only merge with classes that are ambient.

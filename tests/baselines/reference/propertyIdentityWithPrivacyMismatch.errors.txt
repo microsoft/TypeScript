@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyIdentityWithPrivacyMismatch.ts] ////
+
 propertyIdentityWithPrivacyMismatch_1.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'Foo', but here has type 'Foo'.
 propertyIdentityWithPrivacyMismatch_1.ts(13,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'Foo1', but here has type 'Foo2'.
 

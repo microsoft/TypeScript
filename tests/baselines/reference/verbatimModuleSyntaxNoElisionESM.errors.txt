@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxNoElisionESM.ts] ////
+
 /b.ts(1,13): error TS1484: 'A' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
 /b.ts(5,10): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.
 /b.ts(6,10): error TS1205: Re-exporting a type when 'verbatimModuleSyntax' is enabled requires using 'export type'.

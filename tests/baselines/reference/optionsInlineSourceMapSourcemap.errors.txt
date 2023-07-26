@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionsInlineSourceMapSourcemap.ts] ////
+
 error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
 
 

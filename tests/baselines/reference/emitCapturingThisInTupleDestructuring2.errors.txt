@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitCapturingThisInTupleDestructuring2.ts] ////
+
 emitCapturingThisInTupleDestructuring2.ts(8,39): error TS2493: Tuple type '[number, number]' of length '2' has no element at index '2'.
 
 

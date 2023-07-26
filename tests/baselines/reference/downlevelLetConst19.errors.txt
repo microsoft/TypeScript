@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/downlevelLetConst19.ts] ////
+
 downlevelLetConst19.ts(9,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
 
 

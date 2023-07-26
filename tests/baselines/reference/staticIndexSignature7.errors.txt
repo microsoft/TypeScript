@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature7.ts] ////
+
 staticIndexSignature7.ts(3,12): error TS2411: Property 'x' of type 'number' is not assignable to 'string' index type 'string'.
 staticIndexSignature7.ts(7,12): error TS2411: Property 'foo' of type '() => void' is not assignable to 'string' index type 'string'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/inferTypes1.ts] ////
+
 inferTypes1.ts(36,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
 inferTypes1.ts(37,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.

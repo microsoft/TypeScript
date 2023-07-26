@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts] ////
+
 decrementOperatorWithEnumTypeInvalidOperations.ts(7,25): error TS2628: Cannot assign to 'ENUM' because it is an enum.
 decrementOperatorWithEnumTypeInvalidOperations.ts(8,25): error TS2628: Cannot assign to 'ENUM1' because it is an enum.
 decrementOperatorWithEnumTypeInvalidOperations.ts(10,23): error TS2628: Cannot assign to 'ENUM' because it is an enum.

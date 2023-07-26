@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultIsNotVisibleInLocalScope.ts] ////
+
 a.ts(4,24): error TS2304: Cannot find name 'default'.
 b.ts(2,24): error TS2304: Cannot find name 'default'.
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsdocThrowsTag_rename.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/jsdocThrowsTag_rename.ts ===
 // <|class /*RENAME*/[|ERENAME|] extends Error {}|>

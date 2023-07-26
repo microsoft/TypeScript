@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts] ////
+
 optionalPropertyAssignableToStringIndexSignature.ts(6,1): error TS2322: Type '{ k1: string | undefined; }' is not assignable to type '{ [key: string]: string; }'.
   Property 'k1' is incompatible with index signature.
     Type 'string | undefined' is not assignable to type 'string'.

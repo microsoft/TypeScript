@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/definePropertyOutputES3.ts] ////
+
 error TS5048: Option 'useDefineForClassFields' cannot be specified when option 'target' is 'ES3'.
 error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 

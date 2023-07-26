@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability12.ts] ////
+
 assignmentCompatability12.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ one: string; }'.
   Types of property 'one' are incompatible.
     Type 'number' is not assignable to type 'string'.

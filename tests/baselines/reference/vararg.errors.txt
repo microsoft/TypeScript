@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/vararg.ts] ////
+
 vararg.ts(12,31): error TS2370: A rest parameter must be of an array type.
 vararg.ts(17,13): error TS2304: Cannot find name 'builder'.
 vararg.ts(19,17): error TS2304: Cannot find name 'builder'.

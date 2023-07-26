@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/autoImportAllowTsExtensions3.ts] ////
+
 ```ts
 // @Filename: /main.ts
 import { Component } from "./Component.tsx";

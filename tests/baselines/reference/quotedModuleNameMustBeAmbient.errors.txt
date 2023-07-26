@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/quotedModuleNameMustBeAmbient.ts] ////
+
 quotedModuleNameMustBeAmbient.ts(1,8): error TS1035: Only ambient modules can use quoted names.
 
 

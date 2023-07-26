@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/namespaceAssignmentToRequireAlias.ts] ////
+
 bug40140.js(1,19): error TS7016: Could not find a declaration file for module 'untyped'. 'node_modules/untyped/index.js' implicitly has an 'any' type.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralMemberWithQuestionMark1.ts] ////
+
 objectLiteralMemberWithQuestionMark1.ts(1,14): error TS1162: An object member cannot be declared optional.
 
 

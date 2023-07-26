@@ -1,3 +1,6 @@
+//// [tests/cases/compiler/unicodeEscapesInNames01.ts] ////
+
+
 //// [identifierVariableWithEscape1.js.map]
 {"version":3,"file":"identifierVariableWithEscape1.js","sourceRoot":"","sources":["identifierVariableWithEscape1.ts"],"names":[],"mappings":";;;AAAW,QAAA,MAAM,GAAG,EAAE,CAAC;AACvB,SAAC,EAAE,CAAC"}
 //// https://sokra.github.io/source-map-visualization#base64,InVzZSBzdHJpY3QiOw0KT2JqZWN0LmRlZmluZVByb3BlcnR5KGV4cG9ydHMsICJfX2VzTW9kdWxlIiwgeyB2YWx1ZTogdHJ1ZSB9KTsNCmV4cG9ydHMueCA9IHZvaWQgMDsNCmV4cG9ydHMuXHUwMDc4ID0gMTA7DQpleHBvcnRzLngrKzsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWlkZW50aWZpZXJWYXJpYWJsZVdpdGhFc2NhcGUxLmpzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaWRlbnRpZmllclZhcmlhYmxlV2l0aEVzY2FwZTEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpZGVudGlmaWVyVmFyaWFibGVXaXRoRXNjYXBlMS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBVyxRQUFBLE1BQU0sR0FBRyxFQUFFLENBQUM7QUFDdkIsU0FBQyxFQUFFLENBQUMifQ==,ZXhwb3J0IGxldCBcdTAwNzggPSAxMDsKeCsrOwo=

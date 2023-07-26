@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans6.ts] ////
+
 [96mfile1.ts[0m:[93m3[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
 
 [7m3[0m         duplicate1: () => string;

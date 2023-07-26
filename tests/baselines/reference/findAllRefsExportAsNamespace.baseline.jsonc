@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsExportAsNamespace.ts] ////
+
 // === findAllReferences ===
 // === /node_modules/a/index.d.ts ===
 // <|export function /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}f|](): void;|>

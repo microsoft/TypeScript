@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForExternalModuleNames.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
 // /*FIND ALL REFS*/<|declare module "[|{| isWriteAccess: true, isDefinition: true |}foo|]" {

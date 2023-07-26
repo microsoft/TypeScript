@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedDestructuring.ts] ////
+
 unusedDestructuring.ts(3,7): error TS6198: All destructured elements are unused.
 unusedDestructuring.ts(4,9): error TS6133: 'c' is declared but its value is never read.
 unusedDestructuring.ts(6,7): error TS6133: 'e' is declared but its value is never read.

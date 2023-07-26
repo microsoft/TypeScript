@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/topLevelLambda4.ts] ////
+
 topLevelLambda4.ts(1,22): error TS2532: Object is possibly 'undefined'.
 
 

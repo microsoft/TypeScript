@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndInvalidOperands.ts] ////
+
 exponentiationOperatorWithNullValueAndInvalidOperands.ts(9,12): error TS18050: The value 'null' cannot be used here.
 exponentiationOperatorWithNullValueAndInvalidOperands.ts(9,20): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorWithNullValueAndInvalidOperands.ts(10,12): error TS18050: The value 'null' cannot be used here.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration2.ts ===
 // class Foo {

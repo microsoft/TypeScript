@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importNotElidedWhenNotFound.ts] ////
+
 importNotElidedWhenNotFound.ts(1,15): error TS2307: Cannot find module 'file' or its corresponding type declarations.
 importNotElidedWhenNotFound.ts(2,15): error TS2307: Cannot find module 'other_file' or its corresponding type declarations.
 importNotElidedWhenNotFound.ts(10,16): error TS2307: Cannot find module 'file2' or its corresponding type declarations.

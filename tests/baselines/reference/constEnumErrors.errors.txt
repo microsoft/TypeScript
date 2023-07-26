@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumErrors.ts] ////
+
 constEnumErrors.ts(1,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 constEnumErrors.ts(5,8): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 constEnumErrors.ts(12,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.

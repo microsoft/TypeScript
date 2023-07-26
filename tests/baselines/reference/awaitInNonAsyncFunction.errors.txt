@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitInNonAsyncFunction.ts] ////
+
 awaitInNonAsyncFunction.ts(4,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.
 awaitInNonAsyncFunction.ts(5,10): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 awaitInNonAsyncFunction.ts(9,7): error TS1103: 'for await' loops are only allowed within async functions and at the top levels of modules.

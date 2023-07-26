@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts] ////
+
 shorthandPropertyAssignmentsInDestructuring_ES6.ts(14,9): error TS2339: Property 's1' does not exist on type '{}'.
 shorthandPropertyAssignmentsInDestructuring_ES6.ts(20,9): error TS2339: Property 's1' does not exist on type '{}'.
 shorthandPropertyAssignmentsInDestructuring_ES6.ts(38,9): error TS2322: Type 'number' is not assignable to type 'string'.

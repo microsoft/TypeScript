@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/goToSource12_callbackParam.ts] ////
+
 // === goToSourceDefinition ===
 // === /node_modules/yargs/index.js ===
 // export function command(cmd, cb) { cb({ [|positional|]: "This is obviously not even close to realistic" }); }

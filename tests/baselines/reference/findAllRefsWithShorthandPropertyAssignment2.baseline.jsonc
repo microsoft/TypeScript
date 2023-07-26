@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts ===
 // <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}dx|] = "Foo";|>

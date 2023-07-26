@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorAssignability.ts] ////
+
 generatorAssignability.ts(10,5): error TS2764: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array spread will always send 'undefined'.
 generatorAssignability.ts(14,5): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.
 generatorAssignability.ts(18,5): error TS2765: Cannot iterate value because the 'next' method of its iterator expects type 'string', but array destructuring will always send 'undefined'.

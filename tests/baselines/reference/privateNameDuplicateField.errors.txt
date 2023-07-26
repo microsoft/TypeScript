@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts] ////
+
 privateNameDuplicateField.ts(6,9): error TS2300: Duplicate identifier '#foo'.
 privateNameDuplicateField.ts(11,9): error TS2300: Duplicate identifier '#foo'.
 privateNameDuplicateField.ts(12,9): error TS2300: Duplicate identifier '#foo'.

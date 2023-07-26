@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyAssignmentInSubclassOfClassExpression.ts] ////
+
 readonlyAssignmentInSubclassOfClassExpression.ts(4,14): error TS2540: Cannot assign to 'attrib' because it is a read-only property.
 
 

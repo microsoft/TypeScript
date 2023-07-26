@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/widenToAny2.ts] ////
+
 widenToAny2.ts(4,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 

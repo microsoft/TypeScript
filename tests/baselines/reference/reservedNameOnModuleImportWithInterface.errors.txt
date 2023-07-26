@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts] ////
+
 reservedNameOnModuleImportWithInterface.ts(6,12): error TS2438: Import name cannot be 'string'.
 
 

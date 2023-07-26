@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reExportGlobalDeclaration4.ts] ////
+
 file2.ts(1,9): error TS2661: Cannot export 'Cls1'. Only local declarations can be exported from a module.
 file2.ts(1,15): error TS2661: Cannot export 'Cls1'. Only local declarations can be exported from a module.
 file2.ts(2,9): error TS2661: Cannot export 'Cls2'. Only local declarations can be exported from a module.

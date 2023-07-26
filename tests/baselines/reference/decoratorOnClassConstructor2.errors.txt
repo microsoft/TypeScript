@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor2.ts] ////
+
 2.ts(1,20): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 2.ts(2,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 

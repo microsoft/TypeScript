@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/declaredClassMergedwithSelf.ts] ////
+
 file1.ts(1,15): error TS2300: Duplicate identifier 'C1'.
 file1.ts(3,15): error TS2300: Duplicate identifier 'C1'.
 file1.ts(5,15): error TS2300: Duplicate identifier 'C2'.

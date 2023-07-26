@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethod.ts] ////
+
 privateNameMethod.ts(7,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 privateNameMethod.ts(8,14): error TS2554: Expected 1 arguments, but got 0.
 

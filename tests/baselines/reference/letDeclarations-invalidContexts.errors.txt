@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-invalidContexts.ts] ////
+
 letDeclarations-invalidContexts.ts(3,5): error TS1156: 'let' declarations can only be declared inside a block.
 letDeclarations-invalidContexts.ts(5,5): error TS1156: 'let' declarations can only be declared inside a block.
 letDeclarations-invalidContexts.ts(8,5): error TS1156: 'let' declarations can only be declared inside a block.

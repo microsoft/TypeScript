@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/paramPropertiesInSignatures.ts] ////
+
 paramPropertiesInSignatures.ts(2,14): error TS2369: A parameter property is only allowed in a constructor implementation.
 paramPropertiesInSignatures.ts(3,14): error TS2369: A parameter property is only allowed in a constructor implementation.
 paramPropertiesInSignatures.ts(8,14): error TS2369: A parameter property is only allowed in a constructor implementation.

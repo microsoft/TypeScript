@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letConstInCaseClauses.ts] ////
+
 letConstInCaseClauses.ts(22,14): error TS2678: Type '10' is not comparable to type '1'.
 letConstInCaseClauses.ts(26,14): error TS2678: Type '10' is not comparable to type '2'.
 

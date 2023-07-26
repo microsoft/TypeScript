@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor5.ts] ////
+
 autoAccessor5.ts(2,14): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
 autoAccessor5.ts(3,14): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.
 autoAccessor5.ts(4,21): error TS18045: Properties with the 'accessor' modifier are only available when targeting ECMAScript 2015 and higher.

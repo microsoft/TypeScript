@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFactoryMissingErrorInsideAClass.ts] ////
+
 test.tsx(3,17): error TS2304: Cannot find name 'factory'.
 
 

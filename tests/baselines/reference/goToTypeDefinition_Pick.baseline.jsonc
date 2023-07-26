@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToTypeDefinition_Pick.ts] ////
+
 // === goToType ===
 // === /tests/cases/fourslash/goToTypeDefinition_Pick.ts ===
 // type User = [|{| defId: 0 |}{ id: number; name: string; }|];

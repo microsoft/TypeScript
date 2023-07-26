@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileInJsFile.ts] ////
+
 /user.js(2,7): error TS2339: Property 'b' does not exist on type '{ a: number; }'.
 /user.js(5,7): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; }'.
 /user.js(9,7): error TS2339: Property 'b' does not exist on type '{ a: number; }'.

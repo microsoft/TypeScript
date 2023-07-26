@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors.ts] ////
+
 plainJSGrammarErrors.js(3,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
 plainJSGrammarErrors.js(5,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
 plainJSGrammarErrors.js(10,15): error TS2803: Cannot assign to private method '#m'. Private methods are not writable.

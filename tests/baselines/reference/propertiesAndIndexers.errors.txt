@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertiesAndIndexers.ts] ////
+
 propertiesAndIndexers.ts(16,5): error TS2411: Property '1' of type 'Z' is not assignable to 'number' index type 'string'.
 propertiesAndIndexers.ts(18,5): error TS2411: Property '3' of type 'boolean' is not assignable to 'number' index type 'string'.
 propertiesAndIndexers.ts(19,5): error TS2411: Property '6' of type '() => string' is not assignable to 'number' index type 'string'.

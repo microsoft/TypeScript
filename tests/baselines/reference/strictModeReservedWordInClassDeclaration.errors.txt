@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts] ////
+
 strictModeReservedWordInClassDeclaration.ts(4,17): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 strictModeReservedWordInClassDeclaration.ts(4,26): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 strictModeReservedWordInClassDeclaration.ts(4,34): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.

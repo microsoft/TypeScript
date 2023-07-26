@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/packageJsonImportsExportsOptionCompat.ts] ////
+
 error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 

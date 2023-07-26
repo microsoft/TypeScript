@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedFreshLiteral.ts] ////
+
 nestedFreshLiteral.ts(12,21): error TS2322: Type '{ colour: string; }' is not assignable to type 'CSSProps'.
   Object literal may only specify known properties, but 'colour' does not exist in type 'CSSProps'. Did you mean to write 'color'?
 

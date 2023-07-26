@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionFunctionType.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/goToDefinitionFunctionType.ts ===
 // <|const [|c|]: () => void;|>

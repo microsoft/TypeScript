@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/goToSource5_sameAsGoToDef1.ts] ////
+
 // === goToSourceDefinition ===
 // === /a.ts ===
 // export const [|a|] = 'a';

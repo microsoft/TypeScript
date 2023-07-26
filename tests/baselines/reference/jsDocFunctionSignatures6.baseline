@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsDocFunctionSignatures6.ts] ////
+
 === /tests/cases/fourslash/Foo.js ===
 // /**
 //  * @param {string} p1 - A string param

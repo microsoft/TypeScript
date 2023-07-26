@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorOverloads1.ts] ////
+
 generatorOverloads1.ts(2,13): error TS1222: An overload signature cannot be declared as a generator.
 generatorOverloads1.ts(3,13): error TS1222: An overload signature cannot be declared as a generator.
 

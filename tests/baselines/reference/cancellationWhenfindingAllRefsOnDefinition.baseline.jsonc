@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/cancellationWhenfindingAllRefsOnDefinition.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
 // --- (line: 3) skipped ---

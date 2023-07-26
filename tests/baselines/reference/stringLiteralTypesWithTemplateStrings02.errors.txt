@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings02.ts] ////
+
 stringLiteralTypesWithTemplateStrings02.ts(1,5): error TS2322: Type '"AB\nC"' is not assignable to type '"AB\r\nC"'.
 
 

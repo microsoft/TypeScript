@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts] ////
+
 requiredMappedTypeModifierTrumpsVariance.ts(5,1): error TS2741: Property 'a' is missing in type 'Required<{ b?: 1; x: 1; }>' but required in type 'Required<{ a?: 1; x: 1; }>'.
 requiredMappedTypeModifierTrumpsVariance.ts(6,1): error TS2741: Property 'b' is missing in type 'Required<{ a?: 1; x: 1; }>' but required in type 'Required<{ b?: 1; x: 1; }>'.
 requiredMappedTypeModifierTrumpsVariance.ts(8,3): error TS2339: Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.

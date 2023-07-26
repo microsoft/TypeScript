@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasBug.ts] ////
+
 aliasBug.ts(16,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
 
 

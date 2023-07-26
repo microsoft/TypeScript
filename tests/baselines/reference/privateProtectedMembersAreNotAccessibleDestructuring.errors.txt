@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts] ////
+
 privateProtectedMembersAreNotAccessibleDestructuring.ts(12,15): error TS2341: Property 'priv' is private and only accessible within class 'K'.
 privateProtectedMembersAreNotAccessibleDestructuring.ts(17,7): error TS2341: Property 'priv' is private and only accessible within class 'K'.
 privateProtectedMembersAreNotAccessibleDestructuring.ts(18,7): error TS2445: Property 'prot' is protected and only accessible within class 'K' and its subclasses.

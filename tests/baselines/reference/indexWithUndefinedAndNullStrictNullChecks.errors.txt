@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts] ////
+
 indexWithUndefinedAndNullStrictNullChecks.ts(9,19): error TS2454: Variable 'n' is used before being assigned.
 indexWithUndefinedAndNullStrictNullChecks.ts(9,21): error TS2538: Type 'undefined' cannot be used as an index type.
 indexWithUndefinedAndNullStrictNullChecks.ts(10,7): error TS2454: Variable 'n' is used before being assigned.

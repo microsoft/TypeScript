@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeTagRequiredParameters.ts] ////
+
 a.js(11,1): error TS2554: Expected 1 arguments, but got 0.
 a.js(12,1): error TS2554: Expected 1 arguments, but got 0.
 a.js(13,1): error TS2554: Expected 1 arguments, but got 0.

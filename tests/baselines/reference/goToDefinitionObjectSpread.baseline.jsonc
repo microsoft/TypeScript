@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionObjectSpread.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionObjectSpread.ts ===
 // interface A1 { <|[|{| defId: 0 |}a|]: number|> };

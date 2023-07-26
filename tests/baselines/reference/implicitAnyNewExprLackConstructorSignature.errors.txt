@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyNewExprLackConstructorSignature.ts] ////
+
 implicitAnyNewExprLackConstructorSignature.ts(2,14): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 

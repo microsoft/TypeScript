@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsInForIn.ts] ////
+
 awaitUsingDeclarationsInForIn.ts(2,10): error TS1494: The left-hand side of a 'for...in' statement cannot be an 'await using' declaration.
 
 

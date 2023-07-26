@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ClassDeclaration22.ts] ////
+
 ClassDeclaration22.ts(3,5): error TS2389: Function implementation name must be '"foo"'.
 
 

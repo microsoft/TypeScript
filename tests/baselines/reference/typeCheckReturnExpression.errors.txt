@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeCheckReturnExpression.ts] ////
+
 typeCheckReturnExpression.ts(1,11): error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
 
 

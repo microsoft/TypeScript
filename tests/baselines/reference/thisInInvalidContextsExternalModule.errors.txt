@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts] ////
+
 thisInInvalidContextsExternalModule.ts(9,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 thisInInvalidContextsExternalModule.ts(17,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 thisInInvalidContextsExternalModule.ts(23,13): error TS2331: 'this' cannot be referenced in a module or namespace body.

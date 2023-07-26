@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/constructorNameInAccessor.ts] ////
+
 constructorNameInAccessor.ts(2,9): error TS1341: Class constructor may not be an accessor.
 constructorNameInAccessor.ts(3,9): error TS1341: Class constructor may not be an accessor.
 

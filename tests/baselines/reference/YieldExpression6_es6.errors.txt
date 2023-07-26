@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression6_es6.ts] ////
+
 YieldExpression6_es6.ts(2,9): error TS2488: Type '() => any' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/divergentAccessorsTypes5.ts] ////
+
 divergentAccessorsTypes5.ts(31,1): error TS2322: Type '42' is not assignable to type '"hello"'.
 divergentAccessorsTypes5.ts(36,1): error TS2322: Type '"hello"' is not assignable to type '42'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors4.ts] ////
+
 fatarrowfunctionsOptionalArgsErrors4.ts(1,14): error TS1015: Parameter cannot have question mark and initializer.
 fatarrowfunctionsOptionalArgsErrors4.ts(2,15): error TS1015: Parameter cannot have question mark and initializer.
 fatarrowfunctionsOptionalArgsErrors4.ts(3,21): error TS1015: Parameter cannot have question mark and initializer.

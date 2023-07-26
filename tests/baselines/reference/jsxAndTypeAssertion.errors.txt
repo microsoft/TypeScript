@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx] ////
+
 jsxAndTypeAssertion.tsx(6,6): error TS17008: JSX element 'any' has no corresponding closing tag.
 jsxAndTypeAssertion.tsx(6,13): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
 jsxAndTypeAssertion.tsx(6,17): error TS1005: '}' expected.

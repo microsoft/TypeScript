@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashIntypeCheckInvocationExpression.ts] ////
+
 crashIntypeCheckInvocationExpression.ts(6,28): error TS2304: Cannot find name 'task'.
 crashIntypeCheckInvocationExpression.ts(8,18): error TS2304: Cannot find name 'path'.
 crashIntypeCheckInvocationExpression.ts(9,19): error TS2347: Untyped function calls may not accept type arguments.

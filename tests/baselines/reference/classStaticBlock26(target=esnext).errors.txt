@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock26.ts] ////
+
 classStaticBlock26.ts(3,9): error TS18037: 'await' expression cannot be used inside a class static block.
 classStaticBlock26.ts(3,14): error TS1109: Expression expected.
 classStaticBlock26.ts(6,9): error TS18037: 'await' expression cannot be used inside a class static block.

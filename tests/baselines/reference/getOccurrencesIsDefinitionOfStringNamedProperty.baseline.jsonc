@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesIsDefinitionOfStringNamedProperty.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfStringNamedProperty.ts ===
 // let o = { /*FIND ALL REFS*/<|"[|{| isWriteAccess: true, isDefinition: true |}x|]": 12|> };

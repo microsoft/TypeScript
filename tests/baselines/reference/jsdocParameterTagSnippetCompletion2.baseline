@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsdocParameterTagSnippetCompletion2.ts] ////
+
 === /tests/cases/fourslash/b.js ===
 // /**
 //  * 

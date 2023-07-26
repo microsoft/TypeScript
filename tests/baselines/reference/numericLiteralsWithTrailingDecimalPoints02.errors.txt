@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts] ////
+
 numericLiteralsWithTrailingDecimalPoints02.ts(3,3): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
 numericLiteralsWithTrailingDecimalPoints02.ts(9,15): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
 numericLiteralsWithTrailingDecimalPoints02.ts(9,23): error TS1005: ',' expected.

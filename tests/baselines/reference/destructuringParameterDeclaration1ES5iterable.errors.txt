@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5iterable.ts] ////
+
 destructuringParameterDeclaration1ES5iterable.ts(12,4): error TS2345: Argument of type '[number, number, string[][], number]' is not assignable to parameter of type '[number, number, string[][]]'.
   Source has 4 element(s) but target allows only 3.
 destructuringParameterDeclaration1ES5iterable.ts(57,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.

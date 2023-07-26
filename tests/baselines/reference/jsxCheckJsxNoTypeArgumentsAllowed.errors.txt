@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxCheckJsxNoTypeArgumentsAllowed.tsx] ////
+
 file.jsx(1,18): error TS18042: 'Prop' is a type and cannot be imported in JavaScript files. Use 'import("./component").Prop' in a JSDoc type annotation.
 file.jsx(4,9): error TS2657: JSX expressions must have one parent element.
 file.jsx(4,16): error TS1003: Identifier expected.

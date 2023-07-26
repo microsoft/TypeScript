@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts] ////
+
 protectedInstanceMemberAccessibility.ts(14,23): error TS2339: Property 'z' does not exist on type 'B'.
 protectedInstanceMemberAccessibility.ts(16,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 protectedInstanceMemberAccessibility.ts(18,24): error TS2339: Property 'y' does not exist on type 'A'.

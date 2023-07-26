@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedStaticClassPropertyAccessibleWithinSubclass.ts] ////
+
 protectedStaticClassPropertyAccessibleWithinSubclass.ts(7,18): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
 protectedStaticClassPropertyAccessibleWithinSubclass.ts(16,18): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
 protectedStaticClassPropertyAccessibleWithinSubclass.ts(25,18): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemModule11.ts] ////
+
 file1.ts(6,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 file2.ts(6,15): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 file3.ts(1,25): error TS2792: Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidUnicodeEscapeSequance.ts] ////
+
 invalidUnicodeEscapeSequance.ts(1,8): error TS1127: Invalid character.
 
 

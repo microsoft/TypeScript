@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticOffOfInstance1.ts] ////
+
 staticOffOfInstance1.ts(3,10): error TS2576: Property 'Foo' does not exist on type 'List'. Did you mean to access the static member 'List.Foo' instead?
 
 

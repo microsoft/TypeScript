@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName6.ts] ////
+
 parserES5ComputedPropertyName6.ts(2,3): error TS1164: Computed property names are not allowed in enums.
 
 

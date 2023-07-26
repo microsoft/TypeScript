@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsObjectLiteralHasCheckedKeyof.ts] ////
+
 file.js(11,1): error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts] ////
+
 classAbstractGeneric.ts(10,7): error TS18052: Non-abstract class 'C<T>' does not implement all abstract members of 'A<T>'
 classAbstractGeneric.ts(12,7): error TS18052: Non-abstract class 'D' does not implement all abstract members of 'A<number>'
 classAbstractGeneric.ts(14,7): error TS18052: Non-abstract class 'E<T>' does not implement all abstract members of 'A<T>'

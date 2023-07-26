@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportsAliasLoop1.ts] ////
+
 x.js(1,9): error TS2339: Property 'fn1' does not exist on type 'typeof import("x")'.
 
 

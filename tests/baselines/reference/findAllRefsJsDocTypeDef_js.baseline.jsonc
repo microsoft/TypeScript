@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsJsDocTypeDef_js.ts] ////
+
 // === findAllReferences ===
 // === /a.js ===
 // /** /*FIND ALL REFS*/@typedef {number} T */

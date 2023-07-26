@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionUndefinedSymbols.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionUndefinedSymbols.ts ===
 // some/*GOTO DEF*/Variable;

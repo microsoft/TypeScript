@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts] ////
+
 trailingCommasInFunctionParametersAndArguments.ts(5,20): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
 
 

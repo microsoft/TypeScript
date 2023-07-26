@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts] ////
+
 readonlyArraysAndTuples.ts(9,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
 readonlyArraysAndTuples.ts(10,15): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
 readonlyArraysAndTuples.ts(11,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndAlias.ts] ////
+
 collisionExportsRequireAndAlias_file2.ts(1,8): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 collisionExportsRequireAndAlias_file2.ts(2,8): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 

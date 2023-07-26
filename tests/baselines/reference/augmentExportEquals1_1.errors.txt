@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentExportEquals1_1.ts] ////
+
 file2.ts(6,16): error TS2671: Cannot augment module 'file1' because it resolves to a non-module entity.
 file3.ts(3,8): error TS2503: Cannot find namespace 'x'.
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/autoImportVerbatimCJS1.ts] ////
+
 ```ts
 // @Filename: /a.ts
 /*|*/

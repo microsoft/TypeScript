@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocPropertyTagInvalid.ts] ////
+
 /a.js(3,15): error TS2552: Cannot find name 'sting'. Did you mean 'string'?
 
 

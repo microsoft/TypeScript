@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPrototypeAssignment3.ts] ////
+
 bug26885.js(11,16): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
   No index signature with a parameter of type 'string' was found on type '{}'.
 

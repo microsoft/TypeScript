@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration13_es6.ts] ////
+
 FunctionDeclaration13_es6.ts(3,11): error TS2304: Cannot find name 'yield'.
 
 

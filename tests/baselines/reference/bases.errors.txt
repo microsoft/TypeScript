@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bases.ts] ////
+
 bases.ts(7,14): error TS2339: Property 'y' does not exist on type 'B'.
 bases.ts(7,15): error TS1005: ';' expected.
 bases.ts(7,17): error TS2693: 'any' only refers to a type, but is being used as a value here.

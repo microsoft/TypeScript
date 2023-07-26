@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeAccessibility.ts] ////
+
 thisTypeAccessibility.ts(26,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
 thisTypeAccessibility.ts(29,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
 thisTypeAccessibility.ts(30,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.

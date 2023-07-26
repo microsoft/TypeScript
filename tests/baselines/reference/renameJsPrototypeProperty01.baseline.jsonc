@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameJsPrototypeProperty01.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/a.js ===
 // function bar() {

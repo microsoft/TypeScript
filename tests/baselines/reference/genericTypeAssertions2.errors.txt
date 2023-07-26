@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeAssertions2.ts] ////
+
 genericTypeAssertions2.ts(10,5): error TS2322: Type 'B<string>' is not assignable to type 'A<number>'.
   Types of property 'foo' are incompatible.
     Type '(x: string) => void' is not assignable to type '(x: number) => void'.

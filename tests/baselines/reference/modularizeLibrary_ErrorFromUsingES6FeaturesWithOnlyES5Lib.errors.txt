@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts] ////
+
 modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(4,18): error TS2550: Property 'from' does not exist on type 'ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(10,13): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(17,5): error TS2339: Property 'name' does not exist on type '() => void'.

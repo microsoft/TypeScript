@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoCircularInstantiationExpression.ts] ////
+
 === /tests/cases/fourslash/quickInfoCircularInstantiationExpression.ts ===
 // declare function foo<T>(t: T): typeof foo<T>;
 // foo("");

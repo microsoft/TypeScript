@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesSwitchCaseDefault2.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault2.ts ===
 // switch (10) {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx] ////
+
 reactDefaultPropsInferenceSuccess.tsx(27,36): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<Props>): FieldFeedback<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.

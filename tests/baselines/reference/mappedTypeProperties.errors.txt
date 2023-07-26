@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeProperties.ts] ////
+
 mappedTypeProperties.ts(3,5): error TS7061: A mapped type may not declare properties or methods.
 mappedTypeProperties.ts(9,5): error TS7061: A mapped type may not declare properties or methods.
 mappedTypeProperties.ts(14,5): error TS7061: A mapped type may not declare properties or methods.

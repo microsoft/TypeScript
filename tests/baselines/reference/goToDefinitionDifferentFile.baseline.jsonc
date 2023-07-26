@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionDifferentFile.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/goToDefinitionDifferentFile_Definition.ts ===
 // <|var [|remoteVariable|];|>

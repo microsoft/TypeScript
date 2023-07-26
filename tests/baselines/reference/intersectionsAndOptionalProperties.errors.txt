@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionsAndOptionalProperties.ts] ////
+
 intersectionsAndOptionalProperties.ts(5,1): error TS2322: Type '{ a: null; b: string; }' is not assignable to type '{ a?: number | undefined; b: string; }'.
   Types of property 'a' are incompatible.
     Type 'null' is not assignable to type 'number | undefined'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/circular3.ts] ////
+
 /b.ts(1,15): error TS2303: Circular definition of import alias 'B'.
 
 

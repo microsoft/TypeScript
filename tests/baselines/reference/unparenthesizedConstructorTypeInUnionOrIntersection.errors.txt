@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts] ////
+
 unparenthesizedConstructorTypeInUnionOrIntersection.ts(1,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
 unparenthesizedConstructorTypeInUnionOrIntersection.ts(2,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
 unparenthesizedConstructorTypeInUnionOrIntersection.ts(3,12): error TS1386: Constructor type notation must be parenthesized when used in a union type.

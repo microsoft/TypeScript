@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.ts] ////
+
 namespacer.js(2,1): error TS2323: Cannot redeclare exported variable 'NS'.
 namespacer.js(3,1): error TS2323: Cannot redeclare exported variable 'NS'.
 

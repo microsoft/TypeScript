@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/abstractPropertyInitializer.ts] ////
+
 abstractPropertyInitializer.ts(2,14): error TS1267: Property 'prop' cannot have an initializer because it is marked abstract.
 
 

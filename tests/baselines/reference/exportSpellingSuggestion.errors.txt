@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/exportSpellingSuggestion.ts] ////
+
 b.ts(1,10): error TS2724: '"./a"' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
 
 

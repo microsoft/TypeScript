@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidTripleSlashReference.ts] ////
+
 invalidTripleSlashReference.ts(1,22): error TS6053: File 'filedoesnotexist.ts' not found.
 invalidTripleSlashReference.ts(2,22): error TS6053: File 'otherdoesnotexist.d.ts' not found.
 

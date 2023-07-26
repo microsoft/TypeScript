@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts] ////
+
 didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts(10,8): error TS2741: Property 'x' is missing in type 'typeof Bar' but required in type 'Bar'.
 didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts(11,8): error TS2740: Type 'DateConstructor' is missing the following properties from type 'Date': toDateString, toTimeString, toLocaleDateString, toLocaleTimeString, and 37 more.
 didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts(17,4): error TS2345: Argument of type '() => number' is not assignable to parameter of type 'number'.

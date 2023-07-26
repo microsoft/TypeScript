@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/getFileReferences_deduplicate.ts] ////
+
 // === getFileReferences ===
 // fileName: /util.ts
 

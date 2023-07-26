@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList8.ts] ////
+
 parserParameterList8.ts(2,14): error TS2369: A parameter property is only allowed in a constructor implementation.
 parserParameterList8.ts(3,14): error TS2369: A parameter property is only allowed in a constructor implementation.
 parserParameterList8.ts(4,14): error TS2369: A parameter property is only allowed in a constructor implementation.

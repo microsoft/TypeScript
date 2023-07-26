@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForGlobals.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForGlobals_1.ts ===
 // /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}global|] = 2;|>

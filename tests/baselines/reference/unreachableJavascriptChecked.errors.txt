@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unreachableJavascriptChecked.ts] ////
+
 unreachable.js(3,5): error TS7027: Unreachable code detected.
 unreachable.js(6,5): error TS7027: Unreachable code detected.
 

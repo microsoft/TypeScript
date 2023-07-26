@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/trailingCommaSignatureHelp.ts] ////
+
 === /tests/cases/fourslash/trailingCommaSignatureHelp.ts ===
 // function str(n: number): string;
 // /**

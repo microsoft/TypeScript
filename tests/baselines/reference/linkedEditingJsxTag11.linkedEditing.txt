@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/linkedEditingJsxTag11.ts] ////
+
 === /customElements.tsx ===
 const jsx = <[|/*0*/fbt:enum|] knownProp="accepted"
     unknownProp="rejected">

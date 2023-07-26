@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/divergentAccessorsVisibility1.ts] ////
+
 divergentAccessorsVisibility1.ts(11,19): error TS2808: A get accessor must be at least as accessible as the setter
 divergentAccessorsVisibility1.ts(12,9): error TS2808: A get accessor must be at least as accessible as the setter
 divergentAccessorsVisibility1.ts(20,17): error TS2808: A get accessor must be at least as accessible as the setter

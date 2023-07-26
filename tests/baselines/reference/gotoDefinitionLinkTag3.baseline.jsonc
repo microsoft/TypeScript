@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/gotoDefinitionLinkTag3.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /a.ts ===
 // enum E {

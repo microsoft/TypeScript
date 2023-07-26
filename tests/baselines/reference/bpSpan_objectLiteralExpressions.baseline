@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationObjectLiteralExpressions.ts] ////
+
 
 1  >var x = {
 

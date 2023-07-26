@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveNamedLambdaCall.ts] ////
+
 recursiveNamedLambdaCall.ts(3,8): error TS2304: Cannot find name 'top'.
 recursiveNamedLambdaCall.ts(3,15): error TS2304: Cannot find name 'top'.
 recursiveNamedLambdaCall.ts(8,7): error TS2304: Cannot find name 'top'.

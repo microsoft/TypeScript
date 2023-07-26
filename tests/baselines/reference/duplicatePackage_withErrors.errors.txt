@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePackage_withErrors.ts] ////
+
 /node_modules/a/node_modules/x/index.d.ts(1,18): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
 
 

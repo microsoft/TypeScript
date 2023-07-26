@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationExportAssignment.ts] ////
+
 
 1  >class a {
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocIndexSignature.ts] ////
+
 indices.js(9,5): error TS2322: Type 'number' is not assignable to type 'boolean'.
 
 

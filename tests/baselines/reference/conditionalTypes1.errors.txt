@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/conditionalTypes1.ts] ////
+
 conditionalTypes1.ts(12,5): error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
   Type 'T' is not assignable to type '{}'.
 conditionalTypes1.ts(17,5): error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.

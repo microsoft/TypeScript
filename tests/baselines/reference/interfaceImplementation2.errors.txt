@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceImplementation2.ts] ////
+
 interfaceImplementation2.ts(8,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
   Property 'iFn' is missing in type 'C3' but required in type 'I1'.
 

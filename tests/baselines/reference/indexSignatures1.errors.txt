@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/indexSignatures1.ts] ////
+
 indexSignatures1.ts(7,5): error TS2322: Type '{ [sym]: number; }' is not assignable to type '{ [key: symbol]: string; }'.
   Property '[sym]' is incompatible with index signature.
     Type 'number' is not assignable to type 'string'.

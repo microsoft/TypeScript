@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures2.ts] ////
+
 assignmentCompatWithGenericCallSignatures2.ts(15,1): error TS2322: Type 'B' is not assignable to type 'A'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'T[]' is not assignable to type 'T'.

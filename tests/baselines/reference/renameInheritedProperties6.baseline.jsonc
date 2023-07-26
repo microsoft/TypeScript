@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameInheritedProperties6.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameInheritedProperties6.ts ===
 // interface C extends D {

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesIsDefinitionOfParameter.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfParameter.ts ===
 // function f(/*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}x|]: number|>) {

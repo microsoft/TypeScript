@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace8.ts] ////
+
 /c.ts(2,1): error TS2308: Module "./a" has already exported a member named 'B'. Consider explicitly re-exporting to resolve the ambiguity.
 /d.ts(2,16): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
 

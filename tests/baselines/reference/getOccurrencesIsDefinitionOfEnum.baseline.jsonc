@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfEnum.ts ===
 // /*FIND ALL REFS*/<|enum [|{| isWriteAccess: true, isDefinition: true |}E|] {

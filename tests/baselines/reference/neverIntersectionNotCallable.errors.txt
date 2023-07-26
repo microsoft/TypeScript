@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/never/neverIntersectionNotCallable.ts] ////
+
 neverIntersectionNotCallable.ts(2,1): error TS2349: This expression is not callable.
   Type 'never' has no call signatures.
 

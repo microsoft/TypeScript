@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts] ////
+
 parserRealSource9.ts(4,21): error TS6053: File 'typescript.ts' not found.
 parserRealSource9.ts(8,38): error TS2304: Cannot find name 'TypeChecker'.
 parserRealSource9.ts(9,48): error TS2304: Cannot find name 'TypeLink'.

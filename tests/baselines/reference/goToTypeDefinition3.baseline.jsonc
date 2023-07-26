@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToTypeDefinition3.ts] ////
+
 // === goToType ===
 // === /tests/cases/fourslash/goToTypeDefinition3.ts ===
 // <|type [|T|] = string;|>

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveInheritance3.ts] ////
+
 recursiveInheritance3.ts(1,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
   Property 'other' is missing in type 'C' but required in type 'I'.
 

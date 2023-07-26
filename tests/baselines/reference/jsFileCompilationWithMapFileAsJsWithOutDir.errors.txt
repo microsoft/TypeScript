@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationWithMapFileAsJsWithOutDir.ts] ////
+
 error TS6054: File 'b.js.map' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
   The file is in the program because:
     Root file specified for compilation

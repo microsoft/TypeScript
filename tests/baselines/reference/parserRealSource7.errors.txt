@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts] ////
+
 parserRealSource7.ts(4,21): error TS6053: File 'typescript.ts' not found.
 parserRealSource7.ts(12,38): error TS2304: Cannot find name 'ASTList'.
 parserRealSource7.ts(12,62): error TS2304: Cannot find name 'TypeLink'.

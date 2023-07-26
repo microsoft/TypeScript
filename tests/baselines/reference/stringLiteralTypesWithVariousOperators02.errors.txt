@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts] ////
+
 stringLiteralTypesWithVariousOperators02.ts(6,9): error TS2365: Operator '+' cannot be applied to types 'string | number' and 'number'.
 stringLiteralTypesWithVariousOperators02.ts(7,9): error TS2365: Operator '+' cannot be applied to types 'number' and 'string | number'.
 stringLiteralTypesWithVariousOperators02.ts(8,9): error TS2365: Operator '+' cannot be applied to types 'string | number' and 'string | number'.

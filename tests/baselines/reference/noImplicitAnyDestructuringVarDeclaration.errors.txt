@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyDestructuringVarDeclaration.ts] ////
+
 noImplicitAnyDestructuringVarDeclaration.ts(1,5): error TS1182: A destructuring declaration must have an initializer.
 noImplicitAnyDestructuringVarDeclaration.ts(1,6): error TS7031: Binding element 'a' implicitly has an 'any' type.
 noImplicitAnyDestructuringVarDeclaration.ts(1,10): error TS1182: A destructuring declaration must have an initializer.

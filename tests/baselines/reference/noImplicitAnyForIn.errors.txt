@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyForIn.ts] ////
+
 noImplicitAnyForIn.ts(7,18): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
   No index signature with a parameter of type 'string' was found on type '{}'.
 noImplicitAnyForIn.ts(14,18): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.

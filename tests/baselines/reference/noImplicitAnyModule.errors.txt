@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyModule.ts] ////
+
 noImplicitAnyModule.ts(4,9): error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
 noImplicitAnyModule.ts(9,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
 noImplicitAnyModule.ts(10,16): error TS7010: 'g', which lacks return-type annotation, implicitly has an 'any' return type.

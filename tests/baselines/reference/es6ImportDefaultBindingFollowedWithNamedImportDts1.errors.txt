@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportDts1.ts] ////
+
 client.ts(3,27): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
 client.ts(5,27): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
 client.ts(7,27): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?

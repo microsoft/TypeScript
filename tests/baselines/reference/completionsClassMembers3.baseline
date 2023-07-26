@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/completionsClassMembers3.ts] ////
+
 === /tests/cases/fourslash/completionsClassMembers3.ts ===
 // interface I {
 //     method(): void;

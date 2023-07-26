@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferences.ts] ////
+
 intraExpressionInferences.ts(131,5): error TS2322: Type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: any; str: number; }' is not assignable to type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>'.
   Call signature return types '{ bool: any; str: number; }' and 'Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>' are incompatible.
     The types of 'str' are incompatible between these types.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFactoryNotIdentifierOrQualifiedName2.ts] ////
+
 error TS5067: Invalid value for 'jsxFactory'. 'id1 id2' is not a valid identifier or qualified-name.
 test.tsx(12,5): error TS2304: Cannot find name 'React'.
 test.tsx(13,5): error TS2304: Cannot find name 'React'.

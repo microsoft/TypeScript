@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitReturnsWithProtectedBlocks3.ts] ////
+
 noImplicitReturnsWithProtectedBlocks3.ts(4,20): error TS7030: Not all code paths return a value.
 
 

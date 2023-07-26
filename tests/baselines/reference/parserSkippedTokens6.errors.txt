@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens6.ts] ////
+
 parserSkippedTokens6.ts(1,9): error TS1127: Invalid character.
 
 

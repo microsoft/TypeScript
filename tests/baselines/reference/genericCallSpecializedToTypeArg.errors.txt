@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCallSpecializedToTypeArg.ts] ////
+
 genericCallSpecializedToTypeArg.ts(6,5): error TS2339: Property 'getDist' does not exist on type 'U'.
 
 

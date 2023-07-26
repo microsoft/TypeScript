@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionExpandoElementAccess.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionExpandoElementAccess.ts ===
 // function f() {}

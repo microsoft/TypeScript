@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of2.ts] ////
+
 for-of2.ts(1,7): error TS1155: 'const' declarations must be initialized.
 for-of2.ts(2,6): error TS2588: Cannot assign to 'v' because it is a constant.
 

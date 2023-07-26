@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerRelative1.ts] ////
+
 /main.ts(4,16): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 /main.ts(7,16): error TS2307: Cannot find module './redirect/index' or its corresponding type declarations.
 

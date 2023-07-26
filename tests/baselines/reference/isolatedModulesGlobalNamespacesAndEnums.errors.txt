@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesGlobalNamespacesAndEnums.ts] ////
+
 enum2.ts(3,9): error TS1281: Cannot access 'A' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.A' instead.
 enum2.ts(4,9): error TS1281: Cannot access 'X' from another file without qualification when 'isolatedModules' is enabled. Use 'Enum.X' instead.
 script-namespaces.ts(1,11): error TS1280: Namespaces are not allowed in global script files when 'isolatedModules' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts] ////
+
 genericCallWithGenericSignatureArguments3.ts(32,19): error TS2345: Argument of type '(a1: (y: string) => string) => (n: Object) => 1' is not assignable to parameter of type '(x: (a: string) => boolean) => (n: Object) => 1'.
   Types of parameters 'a1' and 'x' are incompatible.
     Type 'boolean' is not assignable to type 'string'.

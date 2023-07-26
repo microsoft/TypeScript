@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsImportAssignment.ts] ////
+
 file.js(4,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 file.js(6,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 index.js(2,1): error TS8002: 'import ... =' can only be used in TypeScript files.

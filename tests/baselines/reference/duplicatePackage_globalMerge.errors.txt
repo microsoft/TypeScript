@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePackage_globalMerge.ts] ////
+
 /node_modules/@types/react/index.d.ts(1,9): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
 /src/index.ts(1,24): error TS2306: File '/node_modules/@types/react/index.d.ts' is not a module.
 /tests/index.ts(1,24): error TS2306: File '/tests/node_modules/@types/react/index.d.ts' is not a module.

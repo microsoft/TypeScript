@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyAccess2.ts] ////
+
 propertyAccess2.ts(2,5): error TS2339: Property 'toBAZ' does not exist on type 'number'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesNoDelete.ts] ////
+
 privateNamesNoDelete.ts(4,16): error TS2790: The operand of a 'delete' operator must be optional.
 privateNamesNoDelete.ts(4,16): error TS18011: The operand of a 'delete' operator cannot be a private identifier.
 

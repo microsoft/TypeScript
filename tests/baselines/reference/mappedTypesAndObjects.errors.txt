@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts] ////
+
 mappedTypesAndObjects.ts(25,11): error TS2430: Interface 'E1<T>' incorrectly extends interface 'Base'.
   Types of property 'foo' are incompatible.
     Type 'T' is not assignable to type '{ [key: string]: any; }'.

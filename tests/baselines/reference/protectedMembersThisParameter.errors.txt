@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/protectedMembersThisParameter.ts] ////
+
 protectedMembersThisParameter.ts(9,9): error TS2445: Property 'secret' is protected and only accessible within class 'Message' and its subclasses.
 protectedMembersThisParameter.ts(30,7): error TS2445: Property 'b' is protected and only accessible within class 'B' and its subclasses.
 protectedMembersThisParameter.ts(41,7): error TS2446: Property 'a' is protected and only accessible through an instance of class 'C'. This is an instance of class 'B'.

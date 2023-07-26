@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/conflictingCommonJSES2015Exports.ts] ////
+
 bug24934.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 

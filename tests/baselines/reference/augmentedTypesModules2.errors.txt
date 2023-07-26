@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesModules2.ts] ////
+
 augmentedTypesModules2.ts(5,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 augmentedTypesModules2.ts(8,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 augmentedTypesModules2.ts(14,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.

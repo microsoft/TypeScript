@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNamespace.ts ===
 // /*FIND ALL REFS*/<|namespace [|{| isWriteAccess: true, isDefinition: true |}Numbers|] {

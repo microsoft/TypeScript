@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllReferencesJsRequireDestructuring.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/foo.js ===
 // module.exports = {

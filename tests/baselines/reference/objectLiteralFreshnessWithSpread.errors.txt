@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralFreshnessWithSpread.ts] ////
+
 objectLiteralFreshnessWithSpread.ts(2,35): error TS2322: Type '{ z: number; b: number; extra: number; a: number; }' is not assignable to type '{ a: any; b: any; }'.
   Object literal may only specify known properties, and 'z' does not exist in type '{ a: any; b: any; }'.
 

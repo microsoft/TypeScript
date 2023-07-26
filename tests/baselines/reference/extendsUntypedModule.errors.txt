@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendsUntypedModule.ts] ////
+
 /a.ts(2,1): error TS6133: 'Bar' is declared but its value is never read.
 
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/linkedEditingJsxTag10.ts] ////
+
 === /jsx0.tsx ===
 const jsx = <>
 

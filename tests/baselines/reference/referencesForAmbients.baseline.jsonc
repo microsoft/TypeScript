@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForAmbients.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForAmbients.ts ===
 // /*FIND ALL REFS*/<|declare module "[|{| isWriteAccess: true, isDefinition: true |}foo|]" {

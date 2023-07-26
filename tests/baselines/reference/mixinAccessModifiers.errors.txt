@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinAccessModifiers.ts] ////
+
 mixinAccessModifiers.ts(38,4): error TS2339: Property 'p' does not exist on type 'never'.
   The intersection 'Private & Private2' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
 mixinAccessModifiers.ts(42,4): error TS2339: Property 'p' does not exist on type 'never'.

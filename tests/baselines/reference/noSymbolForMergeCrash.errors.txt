@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noSymbolForMergeCrash.ts] ////
+
 final.ts(1,6): error TS2649: Cannot augment module 'A' with value exports because it resolves to a non-module entity.
 
 

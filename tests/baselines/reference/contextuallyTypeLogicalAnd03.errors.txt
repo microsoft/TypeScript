@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd03.ts] ////
+
 contextuallyTypeLogicalAnd03.ts(4,6): error TS7006: Parameter 'a' implicitly has an 'any' type.
 
 

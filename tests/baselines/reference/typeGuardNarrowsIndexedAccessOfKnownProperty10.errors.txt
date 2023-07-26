@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty10.ts] ////
+
 typeGuardNarrowsIndexedAccessOfKnownProperty10.ts(5,6): error TS2448: Block-scoped variable 'id' used before its declaration.
 
 

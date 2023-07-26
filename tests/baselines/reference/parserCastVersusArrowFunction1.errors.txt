@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts] ////
+
 parserCastVersusArrowFunction1.ts(2,10): error TS2304: Cannot find name 'T'.
 parserCastVersusArrowFunction1.ts(2,12): error TS2304: Cannot find name 'a'.
 parserCastVersusArrowFunction1.ts(4,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any) => number'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocCatchClauseWithTypeAnnotation.ts] ////
+
 foo.js(20,54): error TS2339: Property 'foo' does not exist on type 'unknown'.
 foo.js(21,54): error TS2339: Property 'foo' does not exist on type 'unknown'.
 foo.js(22,31): error TS1196: Catch clause variable type annotation must be 'any' or 'unknown' if specified.

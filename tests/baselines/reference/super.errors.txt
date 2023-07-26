@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/super.ts] ////
+
 super.ts(29,9): error TS2335: 'super' can only be referenced in a derived class.
 
 

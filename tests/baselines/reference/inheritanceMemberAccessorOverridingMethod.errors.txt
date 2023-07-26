@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts] ////
+
 inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS2423: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member accessor.
 
 

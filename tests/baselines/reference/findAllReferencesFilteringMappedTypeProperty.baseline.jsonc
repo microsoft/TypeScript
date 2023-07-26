@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllReferencesFilteringMappedTypeProperty.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllReferencesFilteringMappedTypeProperty.ts ===
 // const obj = { /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}a|]: 1|>, b: 2 };

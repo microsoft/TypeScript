@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalExpression1.ts] ////
+
 conditionalExpression1.ts(1,5): error TS2322: Type 'string | number' is not assignable to type 'boolean'.
   Type 'number' is not assignable to type 'boolean'.
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsWriteAccess.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsWriteAccess.ts ===
 // interface Obj {

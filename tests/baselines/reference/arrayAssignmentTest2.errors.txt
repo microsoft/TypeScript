@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayAssignmentTest2.ts] ////
+
 arrayAssignmentTest2.ts(47,1): error TS2322: Type 'C2[]' is not assignable to type 'C3[]'.
   Property 'CM3M1' is missing in type 'C2' but required in type 'C3'.
 arrayAssignmentTest2.ts(48,1): error TS2322: Type 'C1[]' is not assignable to type 'C3[]'.

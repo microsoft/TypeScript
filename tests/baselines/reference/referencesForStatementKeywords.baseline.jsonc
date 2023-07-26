@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForStatementKeywords.ts] ////
+
 // === findAllReferences ===
 // === /main.ts ===
 // // import ... = ...

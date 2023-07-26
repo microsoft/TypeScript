@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_JSDocTags12.ts] ////
+
 type B = {};
 type A = {
     a(/** Comment */ /**/p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;

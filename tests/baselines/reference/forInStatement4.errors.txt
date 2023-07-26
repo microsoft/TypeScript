@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forInStatement4.ts] ////
+
 forInStatement4.ts(2,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
 
 

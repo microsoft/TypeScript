@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unaryOperatorsInStrictMode.ts] ////
+
 unaryOperatorsInStrictMode.ts(3,3): error TS1100: Invalid use of 'eval' in strict mode.
 unaryOperatorsInStrictMode.ts(3,3): error TS2630: Cannot assign to 'eval' because it is a function.
 unaryOperatorsInStrictMode.ts(4,3): error TS1100: Invalid use of 'eval' in strict mode.

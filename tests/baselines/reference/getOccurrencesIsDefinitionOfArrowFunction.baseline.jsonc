@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts ===
 // /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}f|] = x => x + 1;|>

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralExcessProperties.ts] ////
+
 objectLiteralExcessProperties.ts(9,18): error TS2322: Type '{ forword: string; }' is not assignable to type 'Book'.
   Object literal may only specify known properties, but 'forword' does not exist in type 'Book'. Did you mean to write 'foreword'?
 objectLiteralExcessProperties.ts(11,27): error TS2322: Type '{ foreward: string; }' is not assignable to type 'string | Book'.

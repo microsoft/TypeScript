@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts] ////
+
 parserClassDeclaration18.ts(4,25): error TS1183: An implementation cannot be declared in ambient contexts.
 
 

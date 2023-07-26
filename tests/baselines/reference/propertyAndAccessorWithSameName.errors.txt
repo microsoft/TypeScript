@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts] ////
+
 propertyAndAccessorWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
 propertyAndAccessorWithSameName.ts(3,9): error TS2300: Duplicate identifier 'x'.
 propertyAndAccessorWithSameName.ts(9,5): error TS2300: Duplicate identifier 'x'.

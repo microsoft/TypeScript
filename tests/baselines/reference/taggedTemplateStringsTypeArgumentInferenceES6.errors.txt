@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInferenceES6.ts] ////
+
 taggedTemplateStringsTypeArgumentInferenceES6.ts(62,36): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
 taggedTemplateStringsTypeArgumentInferenceES6.ts(63,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
 taggedTemplateStringsTypeArgumentInferenceES6.ts(76,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.

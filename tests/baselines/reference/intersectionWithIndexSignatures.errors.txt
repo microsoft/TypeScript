@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts] ////
+
 intersectionWithIndexSignatures.ts(17,1): error TS2322: Type '{ x: A; } & { y: B; }' is not assignable to type '{ [key: string]: A; }'.
   Property 'y' is incompatible with index signature.
     Property 'a' is missing in type 'B' but required in type 'A'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts] ////
+
 destructuringObjectBindingPatternAndAssignment3.ts(2,7): error TS1005: ',' expected.
 destructuringObjectBindingPatternAndAssignment3.ts(3,5): error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
 destructuringObjectBindingPatternAndAssignment3.ts(3,6): error TS2339: Property 'i' does not exist on type 'string | number'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionThisCapturingES6.ts] ////
+
 emitArrowFunctionThisCapturingES6.ts(6,10): error TS2339: Property 'name' does not exist on type 'typeof globalThis'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts] ////
+
 spreadOverwritesPropertyStrict.ts(3,17): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 spreadOverwritesPropertyStrict.ts(9,14): error TS2783: 'x' is specified more than once, so this usage will be overwritten.
 spreadOverwritesPropertyStrict.ts(15,14): error TS2783: 'x' is specified more than once, so this usage will be overwritten.

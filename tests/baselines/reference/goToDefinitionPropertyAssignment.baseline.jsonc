@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionPropertyAssignment.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionPropertyAssignment.ts ===
 // <|export const [|Component|] = () => { return "OK"}|>

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_objectTypes.ts] ////
+
 type X = {
   /**/foo?: string;
   readonly bar: { x: number };

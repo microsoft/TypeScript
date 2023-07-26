@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences2.ts] ////
+
 bug39372.js(25,7): error TS2322: Type '{}' is not assignable to type 'XMLObject<{ foo: string; }>'.
   Type '{}' is missing the following properties from type '{ $A: { foo?: XMLObject<string>[]; }; $O: { foo?: { $$?: Record<string, string>; } & { $: string; }; }; $$?: Record<string, string>; }': $A, $O
 

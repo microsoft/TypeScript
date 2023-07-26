@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findReferencesJSXTagName2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/index.tsx ===
 // /*FIND ALL REFS*/<|const [|{| isWriteAccess: true, isDefinition: true |}obj|] = {Component: () => <div/>};|>

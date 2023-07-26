@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/protoAssignment.ts] ////
+
 protoAssignment.ts(1,26): error TS2304: Cannot find name 'Comparable'.
 
 

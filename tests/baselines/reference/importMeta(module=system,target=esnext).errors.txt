@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/importMeta/importMeta.ts] ////
+
 error TS2468: Cannot find global value 'Promise'.
 assignmentTargets.ts(1,44): error TS2339: Property 'blah' does not exist on type 'ImportMeta'.
 assignmentTargets.ts(1,63): error TS2339: Property 'blue' does not exist on type 'ImportMeta'.

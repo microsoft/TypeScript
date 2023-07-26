@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts] ////
+
 taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.ts(4,31): error TS2322: Type 'string' is not assignable to type 'number'.
 
 

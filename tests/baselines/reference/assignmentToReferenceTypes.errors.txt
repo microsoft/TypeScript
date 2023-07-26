@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentToReferenceTypes.ts] ////
+
 assignmentToReferenceTypes.ts(5,1): error TS2708: Cannot use namespace 'M' as a value.
 assignmentToReferenceTypes.ts(9,1): error TS2629: Cannot assign to 'C' because it is a class.
 assignmentToReferenceTypes.ts(13,1): error TS2628: Cannot assign to 'E' because it is an enum.

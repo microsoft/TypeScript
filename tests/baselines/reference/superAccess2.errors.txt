@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superAccess2.ts] ////
+
 superAccess2.ts(7,15): error TS1034: 'super' must be followed by an argument list or member access.
 superAccess2.ts(8,22): error TS1034: 'super' must be followed by an argument list or member access.
 superAccess2.ts(11,28): error TS2336: 'super' cannot be referenced in constructor arguments.

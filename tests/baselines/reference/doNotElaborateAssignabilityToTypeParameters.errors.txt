@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotElaborateAssignabilityToTypeParameters.ts] ////
+
 doNotElaborateAssignabilityToTypeParameters.ts(3,3): error TS2322: Type 'Yadda | Awaited<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Yadda | Awaited<T>'.
 

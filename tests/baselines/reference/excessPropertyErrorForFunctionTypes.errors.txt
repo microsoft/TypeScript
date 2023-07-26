@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts] ////
+
 excessPropertyErrorForFunctionTypes.ts(4,44): error TS2322: Type '{ a: number; c: number; d: number; }' is not assignable to type 'DoesntWork'.
   Object literal may only specify known properties, and 'd' does not exist in type 'DoesntWork'.
 

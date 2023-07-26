@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsDocSee4.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/jsDocSee4.ts ===
 // <|class [|A|] {

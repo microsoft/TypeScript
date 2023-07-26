@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInModule.ts] ////
+
 thisInModule.ts(3,5): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 

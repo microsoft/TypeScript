@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport5.ts] ////
+
 lateBoundAssignmentDeclarationSupport5.js(12,12): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'F'.
   Property 'my-fake-sym' does not exist on type 'F'.
 lateBoundAssignmentDeclarationSupport5.js(13,12): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'F'.

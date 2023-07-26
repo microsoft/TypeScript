@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts] ////
+
 classExtendingNonConstructor.ts(7,18): error TS2507: Type 'undefined' is not a constructor function type.
 classExtendingNonConstructor.ts(8,18): error TS2507: Type 'true' is not a constructor function type.
 classExtendingNonConstructor.ts(9,18): error TS2507: Type 'false' is not a constructor function type.

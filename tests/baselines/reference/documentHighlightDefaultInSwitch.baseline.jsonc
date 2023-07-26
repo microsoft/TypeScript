@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/documentHighlightDefaultInSwitch.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/documentHighlightDefaultInSwitch.ts ===
 // const foo = 'foo';

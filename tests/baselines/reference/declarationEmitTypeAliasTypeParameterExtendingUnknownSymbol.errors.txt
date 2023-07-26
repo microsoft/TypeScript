@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts] ////
+
 declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts(1,18): error TS2304: Cannot find name 'Unknown'.
 declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts(1,18): error TS4083: Type parameter 'T' of exported type alias has or is using private name 'Unknown'.
 

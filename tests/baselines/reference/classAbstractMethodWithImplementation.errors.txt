@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodWithImplementation.ts] ////
+
 classAbstractMethodWithImplementation.ts(2,14): error TS1245: Method 'foo' cannot have an implementation because it is marked abstract.
 
 

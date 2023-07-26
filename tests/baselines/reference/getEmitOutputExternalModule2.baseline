@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getEmitOutputExternalModule2.ts] ////
+
 EmitSkipped: false
 
 FileName : declSingleFile.js

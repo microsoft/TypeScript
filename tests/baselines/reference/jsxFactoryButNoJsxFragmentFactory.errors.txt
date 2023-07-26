@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFactoryButNoJsxFragmentFactory.tsx] ////
+
 jsxFactoryButNoJsxFragmentFactory.tsx(3,1): error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.
 jsxFactoryButNoJsxFragmentFactory.tsx(4,1): error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.
 jsxFactoryButNoJsxFragmentFactory.tsx(4,17): error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.

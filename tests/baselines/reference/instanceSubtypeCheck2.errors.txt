@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceSubtypeCheck2.ts] ////
+
 instanceSubtypeCheck2.ts(6,5): error TS2416: Property 'x' in type 'C2<T>' is not assignable to the same property in base type 'C1<T>'.
   Type 'string' is not assignable to type 'C2<T>'.
 

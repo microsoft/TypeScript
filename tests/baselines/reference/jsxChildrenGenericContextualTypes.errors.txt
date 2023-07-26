@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxChildrenGenericContextualTypes.tsx] ////
+
 jsxChildrenGenericContextualTypes.tsx(20,46): error TS2322: Type '"y"' is not assignable to type '"x"'.
 jsxChildrenGenericContextualTypes.tsx(21,42): error TS2322: Type '"y"' is not assignable to type '"x"'.
 jsxChildrenGenericContextualTypes.tsx(22,45): error TS2322: Type 'number' is not assignable to type '"x"'.

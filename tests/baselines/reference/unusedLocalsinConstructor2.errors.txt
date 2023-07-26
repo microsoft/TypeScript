@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsinConstructor2.ts] ////
+
 unusedLocalsinConstructor2.ts(3,13): error TS6133: 'unused' is declared but its value is never read.
 
 

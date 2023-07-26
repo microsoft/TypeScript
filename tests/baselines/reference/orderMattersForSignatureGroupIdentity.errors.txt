@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts] ////
+
 orderMattersForSignatureGroupIdentity.ts(19,1): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
     Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ s: string; }'.

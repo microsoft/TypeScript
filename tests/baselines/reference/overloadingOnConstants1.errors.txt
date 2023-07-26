@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadingOnConstants1.ts] ////
+
 overloadingOnConstants1.ts(22,5): error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived1'.
 overloadingOnConstants1.ts(23,5): error TS2741: Property 'biz' is missing in type 'Derived1' but required in type 'Derived3'.
 overloadingOnConstants1.ts(24,5): error TS2741: Property 'bar' is missing in type 'Derived2' but required in type 'Derived1'.

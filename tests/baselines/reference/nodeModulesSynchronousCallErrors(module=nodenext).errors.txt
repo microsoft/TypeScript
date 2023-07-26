@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesSynchronousCallErrors.ts] ////
+
 error TS-1: Pre-emit (9) and post-emit (10) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 error TS2468: Cannot find global value 'Promise'.
 index.ts(3,22): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.

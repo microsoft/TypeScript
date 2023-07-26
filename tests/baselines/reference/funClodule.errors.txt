@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/funClodule.ts] ////
+
 funClodule.ts(15,10): error TS2814: Function with bodies can only merge with classes that are ambient.
 funClodule.ts(19,7): error TS2813: Class declaration cannot implement overload list for 'foo3'.
 

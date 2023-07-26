@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationBindStrictModeErrors.ts] ////
+
 a.js(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
 a.js(7,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
 a.js(8,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.

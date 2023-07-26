@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors7.ts] ////
+
 parserAccessors7.ts(1,15): error TS1054: A 'get' accessor cannot have parameters.
 parserAccessors7.ts(1,15): error TS2378: A 'get' accessor must return a value.
 

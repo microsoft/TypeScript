@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocAccessibilityTags.ts] ////
+
 jsdocAccessibilityTag.js(50,14): error TS2341: Property 'priv' is private and only accessible within class 'A'.
 jsdocAccessibilityTag.js(55,14): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
 jsdocAccessibilityTag.js(58,9): error TS2341: Property 'priv' is private and only accessible within class 'A'.

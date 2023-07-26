@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importEqualsError45874.ts] ////
+
 /globals.ts(5,22): error TS2694: Namespace 'globals' has no exported member 'toString'.
 
 

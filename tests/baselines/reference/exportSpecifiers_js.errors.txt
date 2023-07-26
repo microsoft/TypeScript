@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportSpecifiers_js.ts] ////
+
 a.js(2,10): error TS8006: 'export...type' declarations can only be used in TypeScript files.
 
 

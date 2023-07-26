@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importNonExportedMember.ts] ////
+
 b.ts(1,15): error TS2460: Module '"./a"' declares 'bar' locally, but it is exported as 'baz'.
 
 

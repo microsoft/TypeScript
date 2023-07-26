@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/classWithPrivateProperty.ts] ////
+
 classWithPrivateProperty.ts(15,20): error TS2341: Property 'x' is private and only accessible within class 'C'.
 classWithPrivateProperty.ts(16,20): error TS2341: Property 'a' is private and only accessible within class 'C'.
 classWithPrivateProperty.ts(17,20): error TS2341: Property 'b' is private and only accessible within class 'C'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts] ////
+
 duplicateObjectLiteralProperty_computedName2.ts(8,5): error TS1117: An object literal cannot have multiple properties with the same name.
 duplicateObjectLiteralProperty_computedName2.ts(13,5): error TS1117: An object literal cannot have multiple properties with the same name.
 duplicateObjectLiteralProperty_computedName2.ts(18,5): error TS1117: An object literal cannot have multiple properties with the same name.

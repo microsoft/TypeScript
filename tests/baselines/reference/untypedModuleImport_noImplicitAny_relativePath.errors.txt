@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_noImplicitAny_relativePath.ts] ////
+
 /a.ts(1,22): error TS7016: Could not find a declaration file for module './node_modules/foo'. '/node_modules/foo/index.js' implicitly has an 'any' type.
 
 

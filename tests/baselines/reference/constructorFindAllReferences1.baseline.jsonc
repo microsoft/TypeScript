@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/constructorFindAllReferences1.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/constructorFindAllReferences1.ts ===
 // export class C {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts] ////
+
 excessPropertyCheckIntersectionWithRecursiveType.ts(13,9): error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type '{ l2: Schema1<boolean>; }'.
   Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema1<boolean>; }'.
 excessPropertyCheckIntersectionWithRecursiveType.ts(26,9): error TS2322: Type '{ l2: { type: "boolean"; }; invalid: false; }' is not assignable to type '{ l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.

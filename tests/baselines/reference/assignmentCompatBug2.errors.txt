@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatBug2.ts] ////
+
 assignmentCompatBug2.ts(1,27): error TS2322: Type '{ a: number; }' is not assignable to type '{ b: number; }'.
   Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
 assignmentCompatBug2.ts(3,8): error TS2322: Type '{ a: number; }' is not assignable to type '{ b: number; }'.

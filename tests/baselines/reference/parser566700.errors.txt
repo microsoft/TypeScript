@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser566700.ts] ////
+
 parser566700.ts(1,10): error TS1109: Expression expected.
 
 

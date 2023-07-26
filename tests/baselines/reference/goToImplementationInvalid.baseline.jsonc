@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToImplementationInvalid.ts] ////
+
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInvalid.ts ===
 // var x1 = 50/*GOTO IMPL*/0;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsDefaultsErr.ts] ////
+
 index2.js(2,22): error TS2300: Duplicate identifier 'C'.
 index2.js(4,31): error TS2300: Duplicate identifier 'default'.
 

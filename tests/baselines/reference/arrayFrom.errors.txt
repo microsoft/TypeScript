@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayFrom.ts] ////
+
 arrayFrom.ts(20,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 arrayFrom.ts(23,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.

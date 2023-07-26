@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumIdentifierLiterals.ts] ////
+
 enumIdentifierLiterals.ts(2,5): error TS2452: An enum member cannot have a numeric name.
 enumIdentifierLiterals.ts(3,5): error TS2452: An enum member cannot have a numeric name.
 enumIdentifierLiterals.ts(4,5): error TS2452: An enum member cannot have a numeric name.

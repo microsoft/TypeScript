@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/javascriptThisAssignmentInStaticBlock.ts] ////
+
 /src/a.js(10,7): error TS2417: Class static side 'typeof ElementsArray' incorrectly extends base class static side '{ isArray(arg: any): arg is any[]; readonly prototype: any[]; }'.
   Types of property 'isArray' are incompatible.
     Type '(arg: any) => boolean' is not assignable to type '(arg: any) => arg is any[]'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts] ////
+
 typeGuardFunctionOfFormThisErrors.ts(23,1): error TS2322: Type '() => this is LeadGuard' is not assignable to type '() => this is FollowerGuard'.
   Type predicate 'this is LeadGuard' is not assignable to 'this is FollowerGuard'.
     Property 'follow' is missing in type 'LeadGuard' but required in type 'FollowerGuard'.

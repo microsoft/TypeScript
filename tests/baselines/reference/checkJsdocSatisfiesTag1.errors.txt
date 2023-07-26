@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag1.ts] ////
+
 /a.js(21,44): error TS1360: Type '{ a: number; b: number; }' does not satisfy the expected type 'T1'.
   Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
 /a.js(22,17): error TS1360: Type '{}' does not satisfy the expected type 'T1'.

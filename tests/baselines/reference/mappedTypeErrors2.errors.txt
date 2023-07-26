@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeErrors2.ts] ////
+
 mappedTypeErrors2.ts(9,30): error TS2536: Type 'K' cannot be used to index type 'T1<K>'.
 mappedTypeErrors2.ts(13,30): error TS2536: Type 'K' cannot be used to index type 'T3'.
 mappedTypeErrors2.ts(15,38): error TS2536: Type 'S' cannot be used to index type '{ [key in AB[S]]: true; }'.

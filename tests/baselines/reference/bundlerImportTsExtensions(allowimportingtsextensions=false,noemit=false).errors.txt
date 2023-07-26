@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerImportTsExtensions.ts] ////
+
 error TS5056: Cannot write file 'out/b.js' because it would be overwritten by multiple input files.
 error TS5056: Cannot write file 'out/c.js' because it would be overwritten by multiple input files.
 error TS6054: File '/project/e.txt' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.

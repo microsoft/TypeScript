@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decrementAndIncrementOperators.ts] ////
+
 decrementAndIncrementOperators.ts(4,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
 decrementAndIncrementOperators.ts(6,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
 decrementAndIncrementOperators.ts(7,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.

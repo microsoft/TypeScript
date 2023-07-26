@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverrideOldResolutionError.ts] ////
+
 /index.ts(1,23): error TS1452: 'resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.
 /index.ts(1,23): error TS2688: Cannot find type definition file for 'pkg'.
 /index.ts(2,23): error TS1452: 'resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.

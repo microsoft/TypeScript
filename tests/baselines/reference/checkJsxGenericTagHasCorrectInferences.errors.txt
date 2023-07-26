@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxGenericTagHasCorrectInferences.tsx] ////
+
 file.tsx(13,54): error TS2322: Type '(a: { x: string; }) => string' is not assignable to type '((a: { x: string; }) => string) & ((cur: { x: string; }) => { x: string; })'.
   Type '(a: { x: string; }) => string' is not assignable to type '(cur: { x: string; }) => { x: string; }'.
     Type 'string' is not assignable to type '{ x: string; }'.

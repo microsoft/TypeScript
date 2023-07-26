@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameStringPropertyNames.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameStringPropertyNames.ts ===
 // var o = {

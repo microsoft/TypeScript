@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAsBaseType.ts] ////
+
 moduleAsBaseType.ts(2,17): error TS2708: Cannot use namespace 'M' as a value.
 moduleAsBaseType.ts(3,21): error TS2709: Cannot use namespace 'M' as a type.
 moduleAsBaseType.ts(4,21): error TS2709: Cannot use namespace 'M' as a type.

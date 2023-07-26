@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyWithOverloads.ts] ////
+
 noImplicitAnyWithOverloads.ts(2,5): error TS7008: Member 'foo' implicitly has an 'any' type.
 noImplicitAnyWithOverloads.ts(6,10): error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
 noImplicitAnyWithOverloads.ts(7,10): error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.

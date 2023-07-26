@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientExportDefaultErrors.ts] ////
+
 foo.d.ts(1,16): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
 foo2.d.ts(1,10): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
 indirection.d.ts(3,20): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.

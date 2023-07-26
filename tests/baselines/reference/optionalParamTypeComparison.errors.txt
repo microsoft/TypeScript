@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParamTypeComparison.ts] ////
+
 optionalParamTypeComparison.ts(4,1): error TS2322: Type '(s: string, b?: boolean) => void' is not assignable to type '(s: string, n?: number) => void'.
   Types of parameters 'b' and 'n' are incompatible.
     Type 'number' is not assignable to type 'boolean'.

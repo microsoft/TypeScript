@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reexportMissingDefault6.ts] ////
+
 a.ts(2,10): error TS2305: Module '"./b"' has no exported member 'default'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/plainJSRedeclare.ts] ////
+
 plainJSRedeclare.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
 plainJSRedeclare.js(2,5): error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
 

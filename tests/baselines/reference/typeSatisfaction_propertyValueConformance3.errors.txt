@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance3.ts] ////
+
 typeSatisfaction_propertyValueConformance3.ts(6,26): error TS2322: Type '{ r: number; g: number; d: number; }' is not assignable to type 'Color'.
   Object literal may only specify known properties, and 'd' does not exist in type 'Color'.
 

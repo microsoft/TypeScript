@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentWithInvalidOperands.ts] ////
+
 compoundAdditionAssignmentWithInvalidOperands.ts(6,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'void'.
 compoundAdditionAssignmentWithInvalidOperands.ts(7,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'boolean'.
 compoundAdditionAssignmentWithInvalidOperands.ts(8,1): error TS2365: Operator '+=' cannot be applied to types 'boolean' and 'number'.

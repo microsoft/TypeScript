@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleInheritance.ts] ////
+
 multipleInheritance.ts(9,21): error TS1174: Classes can only extend a single class.
 multipleInheritance.ts(18,21): error TS1174: Classes can only extend a single class.
 multipleInheritance.ts(35,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.

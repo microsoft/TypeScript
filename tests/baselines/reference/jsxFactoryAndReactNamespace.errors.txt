@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFactoryAndReactNamespace.ts] ////
+
 error TS5053: Option 'reactNamespace' cannot be specified with option 'jsxFactory'.
 
 

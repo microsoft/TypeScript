@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts] ////
+
 overloadingStaticFunctionsInFunctions.ts(1,14): error TS1005: '(' expected.
 overloadingStaticFunctionsInFunctions.ts(2,3): error TS1128: Declaration or statement expected.
 overloadingStaticFunctionsInFunctions.ts(2,10): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.

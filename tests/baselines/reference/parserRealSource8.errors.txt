@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts] ////
+
 parserRealSource8.ts(4,21): error TS6053: File 'typescript.ts' not found.
 parserRealSource8.ts(9,41): error TS2304: Cannot find name 'ScopeChain'.
 parserRealSource8.ts(10,39): error TS2304: Cannot find name 'TypeFlow'.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsClassWithStaticThisAccess.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsClassWithStaticThisAccess.ts ===
 // <|class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}C|] {

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/hoverOverComment.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/hoverOverComment.ts ===
 // export function f() {}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superCallArgsMustMatch.ts] ////
+
 superCallArgsMustMatch.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorElaboration.ts] ////
+
 errorElaboration.ts(10,18): error TS2300: Duplicate identifier 'foo'.
 errorElaboration.ts(12,5): error TS2345: Argument of type '() => Container<Ref<string>>' is not assignable to parameter of type '() => Container<Ref<number>>'.
   Type 'Container<Ref<string>>' is not assignable to type 'Container<Ref<number>>'.

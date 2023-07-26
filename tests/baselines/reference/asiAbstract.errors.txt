@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asiAbstract.ts] ////
+
 asiAbstract.ts(1,1): error TS2304: Cannot find name 'abstract'.
 asiAbstract.ts(3,3): error TS1244: Abstract methods can only appear within an abstract class.
 

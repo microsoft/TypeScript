@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName.ts] ////
+
 twoGenericInterfacesDifferingByTypeParameterName.ts(3,11): error TS2428: All declarations of 'A' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName.ts(7,11): error TS2428: All declarations of 'A' must have identical type parameters.
 twoGenericInterfacesDifferingByTypeParameterName.ts(11,11): error TS2428: All declarations of 'B' must have identical type parameters.

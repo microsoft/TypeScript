@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultTypeAndFunctionOverloads.ts] ////
+
 exportDefaultTypeAndFunctionOverloads.ts(1,25): error TS2528: A module cannot have multiple default exports.
 exportDefaultTypeAndFunctionOverloads.ts(2,25): error TS2528: A module cannot have multiple default exports.
 exportDefaultTypeAndFunctionOverloads.ts(3,25): error TS2528: A module cannot have multiple default exports.

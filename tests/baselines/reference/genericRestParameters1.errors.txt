@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/genericRestParameters1.ts] ////
+
 genericRestParameters1.ts(135,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
 genericRestParameters1.ts(164,1): error TS2322: Type '(a: never) => void' is not assignable to type '(...args: any[]) => void'.

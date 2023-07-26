@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1.ts] ////
+
 es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(3,27): error TS2614: Module '"es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'a'. Did you mean to use 'import a from "es6ImportDefaultBindingFollowedWithNamedImport1_0"' instead?
 es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(5,27): error TS2614: Module '"es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'a'. Did you mean to use 'import a from "es6ImportDefaultBindingFollowedWithNamedImport1_0"' instead?
 es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(7,27): error TS2614: Module '"es6ImportDefaultBindingFollowedWithNamedImport1_0"' has no exported member 'x'. Did you mean to use 'import x from "es6ImportDefaultBindingFollowedWithNamedImport1_0"' instead?

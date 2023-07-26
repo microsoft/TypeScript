@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superAccess.ts] ////
+
 superAccess.ts(9,24): error TS2576: Property 'S1' does not exist on type 'MyBase'. Did you mean to access the static member 'MyBase.S1' instead?
 superAccess.ts(10,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 superAccess.ts(11,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature11.ts] ////
+
 parserIndexSignature11.ts(2,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 parserIndexSignature11.ts(2,10): error TS2304: Cannot find name 'p'.
 parserIndexSignature11.ts(3,9): error TS1021: An index signature must have a type annotation.

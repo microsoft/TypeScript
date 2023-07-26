@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingMemberErrorHasShortPath.ts] ////
+
 C:/foo/bar/Baz/src/sample.ts(1,10): error TS2724: '"./utils.js"' has no exported member named 'exit'. Did you mean 'exist'?
 
 

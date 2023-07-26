@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/complexRecursiveCollections.ts] ////
+
 immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Keyed<K, V>' is not assignable to type 'this'.

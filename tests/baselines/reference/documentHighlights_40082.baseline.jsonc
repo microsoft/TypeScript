@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/documentHighlights_40082.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/documentHighlights_40082.ts ===
 // export = (state, messages) => {

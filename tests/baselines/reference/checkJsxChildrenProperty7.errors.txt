@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty7.tsx] ////
+
 file.tsx(24,40): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element | Element[]'.
 file.tsx(26,22): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element | Element[]'.
 file.tsx(27,30): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element | Element[]'.

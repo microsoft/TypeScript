@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/baseCheck.ts] ////
+
 baseCheck.ts(9,18): error TS2552: Cannot find name 'loc'. Did you mean 'Lock'?
 baseCheck.ts(17,53): error TS2554: Expected 2 arguments, but got 1.
 baseCheck.ts(17,59): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.

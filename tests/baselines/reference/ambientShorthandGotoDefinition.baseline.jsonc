@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/ambientShorthandGotoDefinition.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/declarations.d.ts ===
 // <|declare module [|"jquery"|]|>

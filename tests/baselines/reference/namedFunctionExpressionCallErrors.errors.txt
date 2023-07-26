@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namedFunctionExpressionCallErrors.ts] ////
+
 namedFunctionExpressionCallErrors.ts(5,1): error TS2304: Cannot find name 'foo'.
 namedFunctionExpressionCallErrors.ts(12,5): error TS2304: Cannot find name 'foo'.
 namedFunctionExpressionCallErrors.ts(16,1): error TS2304: Cannot find name 'bar'.

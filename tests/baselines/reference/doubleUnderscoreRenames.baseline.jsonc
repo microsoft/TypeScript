@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/doubleUnderscoreRenames.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/fileA.ts ===
 // <|export function /*RENAME*/[|__fooRENAME|]() {

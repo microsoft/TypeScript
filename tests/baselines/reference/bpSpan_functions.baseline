@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/breakpointValidationFunctions.ts] ////
+
 
 1  >var greetings = 0;
 

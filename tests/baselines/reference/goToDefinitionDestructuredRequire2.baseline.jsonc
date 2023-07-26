@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionDestructuredRequire2.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/util.js ===
 // <|class [|Util|] {}|>

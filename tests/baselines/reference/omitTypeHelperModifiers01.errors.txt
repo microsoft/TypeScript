@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/omitTypeHelperModifiers01.ts] ////
+
 omitTypeHelperModifiers01.ts(16,7): error TS2540: Cannot assign to 'c' because it is a read-only property.
 
 

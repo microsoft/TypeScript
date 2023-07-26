@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern22.ts] ////
+
 iterableArrayPattern22.ts(1,5): error TS2488: Type '{ 0: string; 1: boolean; }' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 

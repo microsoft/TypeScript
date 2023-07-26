@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts] ////
+
 errorsForCallAndAssignmentAreSimilar.ts(11,11): error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
 errorsForCallAndAssignmentAreSimilar.ts(16,11): error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
 

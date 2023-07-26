@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty17.ts] ////
+
 symbolProperty17.ts(2,5): error TS2411: Property '[Symbol.iterator]' of type 'number' is not assignable to 'symbol' index type 'string'.
 
 

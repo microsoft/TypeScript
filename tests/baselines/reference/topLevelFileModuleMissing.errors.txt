@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelFileModuleMissing.ts] ////
+
 foo_1.ts(1,22): error TS2307: Cannot find module 'vs/foo' or its corresponding type declarations.
 
 

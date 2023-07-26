@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionAsTypeReferenceDirectiveScoped.ts] ////
+
 /a.ts(2,30): error TS2307: Cannot find module '@mangled/typescache' or its corresponding type declarations.
 /a.ts(4,36): error TS2307: Cannot find module '@mangled/nodemodulescache' or its corresponding type declarations.
 /a.ts(5,30): error TS2307: Cannot find module '@scoped/attypescache' or its corresponding type declarations.

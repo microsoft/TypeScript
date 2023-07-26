@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictSubtypeAndNarrowing.ts] ////
+
 strictSubtypeAndNarrowing.ts(123,27): error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
   Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
 strictSubtypeAndNarrowing.ts(124,27): error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.

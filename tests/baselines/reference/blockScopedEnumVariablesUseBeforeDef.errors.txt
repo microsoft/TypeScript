@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef.ts] ////
+
 blockScopedEnumVariablesUseBeforeDef.ts(2,12): error TS2450: Enum 'E' used before its declaration.
 
 

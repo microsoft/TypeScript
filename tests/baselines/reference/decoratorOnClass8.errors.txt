@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/decoratorOnClass8.ts] ////
+
 decoratorOnClass8.ts(3,1): error TS1238: Unable to resolve signature of class decorator when called as an expression.
   The runtime will invoke the decorator with 1 arguments, but the decorator expects 2.
 

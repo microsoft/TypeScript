@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/super1.ts] ////
+
 super1.ts(16,22): error TS2339: Property 'super' does not exist on type 'Sub1'.
 super1.ts(29,22): error TS2339: Property 'prototype' does not exist on type 'Base2'.
 super1.ts(42,22): error TS2339: Property 'bar' does not exist on type 'Base3'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/umd8.ts] ////
+
 a.ts(7,14): error TS2686: 'Foo' refers to a UMD global, but the current file is a module. Consider adding an import instead.
 
 

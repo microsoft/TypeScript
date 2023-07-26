@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment1.ts] ////
+
 parserShorthandPropertyAssignment1.ts(3,11): error TS1162: An object member cannot be declared optional.
 parserShorthandPropertyAssignment1.ts(3,16): error TS1162: An object member cannot be declared optional.
 

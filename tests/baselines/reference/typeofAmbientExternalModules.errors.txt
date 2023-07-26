@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofAmbientExternalModules.ts] ////
+
 typeofAmbientExternalModules_2.ts(7,1): error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("typeofAmbientExternalModules_0")'.
 typeofAmbientExternalModules_2.ts(9,1): error TS2741: Property 'prototype' is missing in type 'typeof import("typeofAmbientExternalModules_0")' but required in type 'typeof D'.
 

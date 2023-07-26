@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplements_class.ts] ////
+
 /a.js(13,5): error TS2416: Property 'method' in type 'B2' is not assignable to the same property in base type 'A'.
   Type '() => string' is not assignable to type '() => number'.
     Type 'string' is not assignable to type 'number'.

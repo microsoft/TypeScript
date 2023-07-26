@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameLocationsForFunctionExpression02.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameLocationsForFunctionExpression02.ts ===
 // function f() {

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsUnresolvedSymbols1.ts ===
 // let a: /*FIND ALL REFS*/[|Bar|];

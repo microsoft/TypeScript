@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsIndexedAccessTypes.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsIndexedAccessTypes.ts ===
 // interface I {

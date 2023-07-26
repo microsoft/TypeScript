@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts] ////
+
 inferFromGenericFunctionReturnTypes3.ts(28,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"bar"'.
 inferFromGenericFunctionReturnTypes3.ts(180,26): error TS2322: Type '{ state: State.A; }[] | { state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
   Type '{ state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace3.ts] ////
+
 1.ts(2,1): error TS2448: Block-scoped variable 'ns' used before its declaration.
 1.ts(3,1): error TS2448: Block-scoped variable 'ns' used before its declaration.
 

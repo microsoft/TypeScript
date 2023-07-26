@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts] ////
+
 genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts(13,5): error TS2322: Type 'ReturnType<T[M]>' is not assignable to type 'A'.
   Type 'unknown' is not assignable to type 'A'.
     Type 'ReturnType<T[keyof T]>' is not assignable to type 'A'.

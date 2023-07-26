@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ExportEqualsInterop.ts] ////
+
 main.ts(15,1): error TS2693: 'z1' only refers to a type, but is being used as a value here.
 main.ts(21,4): error TS2339: Property 'a' does not exist on type '() => any'.
 main.ts(23,4): error TS2339: Property 'a' does not exist on type 'typeof Foo'.

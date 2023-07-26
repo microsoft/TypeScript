@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts] ////
+
 parserArgumentList1.ts(2,42): error TS2304: Cannot find name '_classNameRegexp'.
 
 

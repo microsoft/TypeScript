@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution5.tsx] ////
+
 file.tsx(20,10): error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'PoisonedProp'.
   Types of property 'y' are incompatible.
     Type 'number' is not assignable to type '2'.

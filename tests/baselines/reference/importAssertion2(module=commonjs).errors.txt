@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/importAssertion/importAssertion2.ts] ////
+
 1.ts(1,22): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
 1.ts(2,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
 1.ts(3,21): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.

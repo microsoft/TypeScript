@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxIntrinsicElementsTypeArgumentErrors.tsx] ////
+
 jsxIntrinsicElementsTypeArgumentErrors.tsx(5,15): error TS1099: Type argument list cannot be empty.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(7,16): error TS2558: Expected 0 type arguments, but got 1.
 jsxIntrinsicElementsTypeArgumentErrors.tsx(7,22): error TS1009: Trailing comma not allowed.

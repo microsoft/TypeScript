@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesClassExpressionThis.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
 // var x = class C {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClassInheritsConstructorFromNonGenericClass.ts] ////
+
 genericClassInheritsConstructorFromNonGenericClass.ts(1,17): error TS2449: Class 'B' used before its declaration.
 genericClassInheritsConstructorFromNonGenericClass.ts(2,20): error TS2449: Class 'C' used before its declaration.
 

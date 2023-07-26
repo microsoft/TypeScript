@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts] ////
+
 invalidTypeOfTarget.ts(1,16): error TS1003: Identifier expected.
 invalidTypeOfTarget.ts(2,16): error TS1003: Identifier expected.
 invalidTypeOfTarget.ts(2,24): error TS1005: '=>' expected.

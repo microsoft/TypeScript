@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocPrototypePropertyAccessWithType.ts] ////
+
 /a.js(1,16): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 

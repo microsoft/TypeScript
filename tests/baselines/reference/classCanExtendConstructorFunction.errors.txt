@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/classCanExtendConstructorFunction.ts] ////
+
 first.js(23,9): error TS2554: Expected 1 arguments, but got 0.
 first.js(31,5): error TS2416: Property 'load' in type 'Sql' is not assignable to the same property in base type 'Wagon'.
   Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.

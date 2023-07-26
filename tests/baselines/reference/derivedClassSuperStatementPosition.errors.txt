@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts] ////
+
 derivedClassSuperStatementPosition.ts(12,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 derivedClassSuperStatementPosition.ts(22,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 derivedClassSuperStatementPosition.ts(45,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts] ////
+
 parseRegularExpressionMixedWithComments.ts(5,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 parseRegularExpressionMixedWithComments.ts(5,23): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 parseRegularExpressionMixedWithComments.ts(6,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

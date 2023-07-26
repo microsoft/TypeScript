@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsxNotSetError.ts] ////
+
 /bar.jsx(1,17): error TS6142: Module '/foo' was resolved to '/foo.jsx', but '--jsx' is not set.
 /bar.jsx(2,11): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
 /foo.jsx(2,5): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.

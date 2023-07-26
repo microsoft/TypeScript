@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty5.tsx] ////
+
 file.tsx(20,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
 file.tsx(25,9): error TS2740: Type 'ReactElement<any>' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
 file.tsx(29,10): error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.

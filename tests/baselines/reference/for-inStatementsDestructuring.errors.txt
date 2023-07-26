@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring.ts] ////
+
 for-inStatementsDestructuring.ts(1,10): error TS2461: Type 'string' is not an array type.
 for-inStatementsDestructuring.ts(1,10): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
 

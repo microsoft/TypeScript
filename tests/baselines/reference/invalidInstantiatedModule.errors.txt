@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts] ////
+
 invalidInstantiatedModule.ts(2,18): error TS2300: Duplicate identifier 'Point'.
 invalidInstantiatedModule.ts(3,16): error TS2300: Duplicate identifier 'Point'.
 invalidInstantiatedModule.ts(12,8): error TS2833: Cannot find namespace 'm'. Did you mean 'M'?

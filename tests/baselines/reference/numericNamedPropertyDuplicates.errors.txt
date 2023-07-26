@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericNamedPropertyDuplicates.ts] ////
+
 numericNamedPropertyDuplicates.ts(3,5): error TS2300: Duplicate identifier '1.0'.
 numericNamedPropertyDuplicates.ts(5,12): error TS2300: Duplicate identifier '2'.
 numericNamedPropertyDuplicates.ts(9,5): error TS2300: Duplicate identifier '2'.

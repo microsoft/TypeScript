@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts] ////
+
 asyncFunctionDeclaration15_es5.ts(6,23): error TS1055: Type '{}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
 asyncFunctionDeclaration15_es5.ts(6,23): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 asyncFunctionDeclaration15_es5.ts(7,23): error TS1055: Type 'any' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.

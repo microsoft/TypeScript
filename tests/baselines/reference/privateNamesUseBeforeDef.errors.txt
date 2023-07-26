@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts] ////
+
 privateNamesUseBeforeDef.ts(2,17): error TS2729: Property '#bar' is used before its initialization.
 privateNamesUseBeforeDef.ts(17,17): error TS2729: Property '#bar' is used before its initialization.
 

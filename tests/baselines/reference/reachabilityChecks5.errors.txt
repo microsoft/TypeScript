@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks5.ts] ////
+
 reachabilityChecks5.ts(5,17): error TS7030: Not all code paths return a value.
 reachabilityChecks5.ts(18,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 reachabilityChecks5.ts(30,17): error TS7030: Not all code paths return a value.

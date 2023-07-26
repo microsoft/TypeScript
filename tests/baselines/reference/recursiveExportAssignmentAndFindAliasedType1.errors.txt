@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType1.ts] ////
+
 recursiveExportAssignmentAndFindAliasedType1_moduleDef.d.ts(2,5): error TS2303: Circular definition of import alias 'self'.
 
 

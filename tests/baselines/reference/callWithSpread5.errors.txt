@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts] ////
+
 callWithSpread5.ts(7,4): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 

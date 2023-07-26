@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierComputedName.ts] ////
+
 duplicateIdentifierComputedName.ts(3,5): error TS2300: Duplicate identifier '["a"]'.
 
 

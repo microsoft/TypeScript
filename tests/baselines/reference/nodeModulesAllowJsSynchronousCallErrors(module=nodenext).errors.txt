@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsSynchronousCallErrors.ts] ////
+
 error TS-1: Pre-emit (13) and post-emit (14) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 error TS2468: Cannot find global value 'Promise'.
 index.js(3,1): error TS8002: 'import ... =' can only be used in TypeScript files.

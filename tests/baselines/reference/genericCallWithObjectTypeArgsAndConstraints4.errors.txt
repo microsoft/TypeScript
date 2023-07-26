@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts] ////
+
 genericCallWithObjectTypeArgsAndConstraints4.ts(19,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
   Property 'y' is missing in type 'C' but required in type 'D'.
 genericCallWithObjectTypeArgsAndConstraints4.ts(30,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.

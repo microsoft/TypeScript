@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/importingExportingTypes.ts] ////
+
 /index.js(1,21): error TS18042: 'WriteFileOptions' is a type and cannot be imported in JavaScript files. Use 'import("fs").WriteFileOptions' in a JSDoc type annotation.
 /index.js(1,39): error TS18042: 'WriteFileOptions' is a type and cannot be imported in JavaScript files. Use 'import("fs").WriteFileOptions' in a JSDoc type annotation.
 /index.js(5,10): error TS18043: Types cannot appear in export declarations in JavaScript files.

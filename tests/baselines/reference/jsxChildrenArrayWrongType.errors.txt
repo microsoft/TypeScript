@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxChildrenArrayWrongType.tsx] ////
+
 index.tsx(11,5): error TS2769: No overload matches this call.
   Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
     Type 'unknown' is not assignable to type 'string | boolean'.

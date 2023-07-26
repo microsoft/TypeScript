@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration5_es5.ts] ////
+
 asyncFunctionDeclaration5_es5.ts(1,20): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 
 

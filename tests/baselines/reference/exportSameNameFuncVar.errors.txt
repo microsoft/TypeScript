@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportSameNameFuncVar.ts] ////
+
 exportSameNameFuncVar.ts(1,12): error TS2300: Duplicate identifier 'a'.
 exportSameNameFuncVar.ts(2,17): error TS2300: Duplicate identifier 'a'.
 

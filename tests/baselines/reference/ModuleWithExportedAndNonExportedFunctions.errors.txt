@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts] ////
+
 ModuleWithExportedAndNonExportedFunctions.ts(28,13): error TS2339: Property 'fn2' does not exist on type 'typeof A'.
 ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng2' does not exist on type 'typeof A'. Did you mean 'fng'?
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedProperty.ts] ////
+
 objectTypeWithRecursiveWrappedProperty.ts(13,1): error TS2322: Type 'List<string>' is not assignable to type 'List<number>'.
   Type 'string' is not assignable to type 'number'.
 

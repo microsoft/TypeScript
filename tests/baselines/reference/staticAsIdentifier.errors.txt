@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticAsIdentifier.ts] ////
+
 staticAsIdentifier.ts(12,12): error TS1434: Unexpected keyword or identifier.
 staticAsIdentifier.ts(16,12): error TS1434: Unexpected keyword or identifier.
 

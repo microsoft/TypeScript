@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportSpecifiers.ts] ////
+
 /exports.ts(9,15): error TS2207: The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.
 /imports.ts(3,1): error TS1362: 'as' cannot be used as a value because it was exported using 'export type'.
 /imports.ts(4,1): error TS1362: 'something' cannot be used as a value because it was exported using 'export type'.

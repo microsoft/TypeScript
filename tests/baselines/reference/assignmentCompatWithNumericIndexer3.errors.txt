@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts] ////
+
 assignmentCompatWithNumericIndexer3.ts(14,1): error TS2322: Type '{ [x: number]: Base; }' is not assignable to type 'A'.
   'number' index signatures are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.

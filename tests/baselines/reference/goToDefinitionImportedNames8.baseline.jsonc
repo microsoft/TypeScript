@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionImportedNames8.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/a.js ===
 // <|class [|Class|] {

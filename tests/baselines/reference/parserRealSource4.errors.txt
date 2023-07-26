@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts] ////
+
 parserRealSource4.ts(4,21): error TS6053: File 'typescript.ts' not found.
 parserRealSource4.ts(195,38): error TS1011: An element access expression should take an argument.
 

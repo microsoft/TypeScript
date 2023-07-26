@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/divergentAccessorsTypes6.ts] ////
+
 divergentAccessorsTypes6.ts(11,1): error TS2322: Type 'CSSStyleDeclaration' is not assignable to type 'string'.
 divergentAccessorsTypes6.ts(19,23): error TS2344: Type 'string' does not satisfy the constraint 'never'.
 divergentAccessorsTypes6.ts(23,23): error TS2344: Type 'string' does not satisfy the constraint 'never'.

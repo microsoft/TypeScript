@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitReadonlyComputedProperty.ts] ////
+
 index.ts(3,14): error TS4023: Exported variable 'spread' has or is using name 'SYMBOL' from external module "bug" but cannot be named.
 
 

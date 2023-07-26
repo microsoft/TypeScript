@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToTypeDefinitionModule.ts] ////
+
 // === goToType ===
 // === /tests/cases/fourslash/module1.ts ===
 // <|module [|M|] {

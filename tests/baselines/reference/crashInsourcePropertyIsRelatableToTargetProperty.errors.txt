@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts] ////
+
 crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D'.
 
 

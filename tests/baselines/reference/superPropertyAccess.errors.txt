@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superPropertyAccess.ts] ////
+
 superPropertyAccess.ts(21,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 superPropertyAccess.ts(23,15): error TS2341: Property 'p1' is private and only accessible within class 'MyBase'.
 superPropertyAccess.ts(25,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.

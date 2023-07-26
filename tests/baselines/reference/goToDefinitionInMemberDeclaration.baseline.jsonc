@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionInMemberDeclaration.ts ===
 // <|interface [|IFoo|] { method1(): number; }|>

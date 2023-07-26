@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findReferencesJSXTagName3.ts] ////
+
 // === findAllReferences ===
 // === /a.tsx ===
 // namespace JSX {

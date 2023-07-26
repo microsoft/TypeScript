@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoInheritDoc.ts] ////
+
 === /tests/cases/fourslash/quickInfoInheritDoc.ts ===
 // abstract class BaseClass {
 //     /**

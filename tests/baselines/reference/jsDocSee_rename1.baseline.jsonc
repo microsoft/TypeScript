@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsDocSee_rename1.ts] ////
+
 // === findRenameLocations ===
 // @findInComments: true
 

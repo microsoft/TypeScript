@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts] ////
+
 importCallExpressionGrammarError.ts(5,8): error TS1325: Argument of dynamic import cannot be spread element.
 importCallExpressionGrammarError.ts(7,17): error TS1325: Argument of dynamic import cannot be spread element.
 importCallExpressionGrammarError.ts(8,12): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments

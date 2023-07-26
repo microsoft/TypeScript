@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts] ////
+
 parserErrorRecovery_ObjectLiteral2.ts(1,11): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
 parserErrorRecovery_ObjectLiteral2.ts(2,1): error TS1005: ',' expected.
 parserErrorRecovery_ObjectLiteral2.ts(2,7): error TS1005: ':' expected.

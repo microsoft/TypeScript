@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts] ////
+
 classExtendsItselfIndirectly.ts(1,7): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
 classExtendsItselfIndirectly.ts(1,17): error TS2449: Class 'E' used before its declaration.
 classExtendsItselfIndirectly.ts(3,7): error TS2506: 'D' is referenced directly or indirectly in its own base expression.

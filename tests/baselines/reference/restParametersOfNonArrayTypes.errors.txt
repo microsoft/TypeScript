@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes.ts] ////
+
 restParametersOfNonArrayTypes.ts(3,14): error TS2370: A rest parameter must be of an array type.
 restParametersOfNonArrayTypes.ts(4,22): error TS2370: A rest parameter must be of an array type.
 restParametersOfNonArrayTypes.ts(5,11): error TS1014: A rest parameter must be last in a parameter list.

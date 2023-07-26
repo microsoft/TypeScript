@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/explainFilesNodeNextWithTypesReference.ts] ////
+
 // === findAllReferences ===
 // === /node_modules/react-hook-form/dist/index.d.ts ===
 // /// <reference types="[|react|]/*FIND ALL REFS*/" />

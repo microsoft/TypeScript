@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bigintWithoutLib.ts] ////
+
 bigintWithoutLib.ts(4,25): error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(5,13): error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(6,5): error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.

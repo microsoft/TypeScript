@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/importAssertion/importAssertion3.ts] ////
+
 1.ts(1,27): error TS2822: Import assertions cannot be used with type-only imports or exports.
 1.ts(2,30): error TS2822: Import assertions cannot be used with type-only imports or exports.
 2.ts(1,31): error TS2822: Import assertions cannot be used with type-only imports or exports.

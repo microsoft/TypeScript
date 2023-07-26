@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts] ////
+
 objectTypeWithDuplicateNumericProperty.ts(6,5): error TS2300: Duplicate identifier '1.0'.
 objectTypeWithDuplicateNumericProperty.ts(7,5): error TS2300: Duplicate identifier '1.'.
 objectTypeWithDuplicateNumericProperty.ts(8,5): error TS2300: Duplicate identifier '1.00'.

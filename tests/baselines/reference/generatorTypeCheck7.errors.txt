@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts] ////
+
 generatorTypeCheck7.ts(4,17): error TS2741: Property 'hello' is missing in type 'Generator<number, any, undefined>' but required in type 'WeirdIter'.
 
 

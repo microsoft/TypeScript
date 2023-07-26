@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/declarationFiles.ts] ////
+
 declarationFiles.ts(4,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 declarationFiles.ts(30,5): error TS2527: The inferred type of 'x1' references an inaccessible 'this' type. A type annotation is necessary.
 declarationFiles.ts(32,5): error TS2527: The inferred type of 'x3' references an inaccessible 'this' type. A type annotation is necessary.

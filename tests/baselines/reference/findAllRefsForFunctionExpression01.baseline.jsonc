@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForFunctionExpression01.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/file1.ts ===
 // var foo = /*FIND ALL REFS*/<|function [|{| isWriteAccess: true |}foo|](a = [|foo|](), b = () => [|foo|]) {

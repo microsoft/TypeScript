@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/import/importTypeLocalMissing.ts] ////
+
 usage.ts(1,24): error TS2307: Cannot find module './fo' or its corresponding type declarations.
 usage.ts(2,22): error TS2307: Cannot find module './fo2' or its corresponding type declarations.
 usage.ts(3,36): error TS2694: Namespace '"foo2".Bar' has no exported member 'Q'.

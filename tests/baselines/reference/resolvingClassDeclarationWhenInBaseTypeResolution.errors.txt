@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts] ////
+
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(2,45): error TS2449: Class 'nitidus' used before its declaration.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(9,56): error TS2449: Class 'mixtus' used before its declaration.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(45,48): error TS2449: Class 'psilurus' used before its declaration.

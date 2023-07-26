@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForExportedValues.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExportedValues.ts ===
 // module M {

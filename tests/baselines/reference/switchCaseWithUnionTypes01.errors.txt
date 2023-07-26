@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts] ////
+
 switchCaseWithUnionTypes01.ts(22,10): error TS2678: Type 'boolean' is not comparable to type 'string | number'.
 
 

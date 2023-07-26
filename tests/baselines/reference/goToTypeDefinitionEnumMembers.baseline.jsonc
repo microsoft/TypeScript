@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToTypeDefinitionEnumMembers.ts] ////
+
 // === goToType ===
 // === /tests/cases/fourslash/goToTypeDefinitionEnumMembers.ts ===
 // enum E {

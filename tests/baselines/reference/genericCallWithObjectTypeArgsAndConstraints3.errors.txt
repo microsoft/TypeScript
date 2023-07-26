@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts] ////
+
 genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2741: Property 'y' is missing in type 'Derived2' but required in type 'Derived'.
 
 

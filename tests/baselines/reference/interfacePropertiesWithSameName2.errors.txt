@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfacePropertiesWithSameName2.ts] ////
+
 interfacePropertiesWithSameName2.ts(10,11): error TS2320: Interface 'MoverShaker' cannot simultaneously extend types 'Mover' and 'Shaker'.
   Named property 'getStatus' of types 'Mover' and 'Shaker' are not identical.
 interfacePropertiesWithSameName2.ts(26,11): error TS2320: Interface 'MoverShaker2' cannot simultaneously extend types 'Mover' and 'Shaker'.

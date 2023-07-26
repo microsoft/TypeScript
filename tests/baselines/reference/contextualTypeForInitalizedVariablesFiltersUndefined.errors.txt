@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts] ////
+
 contextualTypeForInitalizedVariablesFiltersUndefined.ts(7,9): error TS2339: Property 's' does not exist on type '{ s: string; } | undefined'.
 contextualTypeForInitalizedVariablesFiltersUndefined.ts(8,16): error TS2339: Property 's' does not exist on type '{ s: string; } | undefined'.
 

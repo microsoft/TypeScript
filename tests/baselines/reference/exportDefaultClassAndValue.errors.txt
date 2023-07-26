@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultClassAndValue.ts] ////
+
 exportDefaultClassAndValue.ts(2,1): error TS2323: Cannot redeclare exported variable 'default'.
 exportDefaultClassAndValue.ts(3,22): error TS2323: Cannot redeclare exported variable 'default'.
 

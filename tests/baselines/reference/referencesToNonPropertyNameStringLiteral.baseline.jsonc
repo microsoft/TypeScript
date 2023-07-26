@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/referencesToNonPropertyNameStringLiteral.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/server/referencesToNonPropertyNameStringLiteral.ts ===
 // const str: string = "hello/*FIND ALL REFS*/";

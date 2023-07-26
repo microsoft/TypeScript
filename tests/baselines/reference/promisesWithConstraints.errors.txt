@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promisesWithConstraints.ts] ////
+
 promisesWithConstraints.ts(15,1): error TS2322: Type 'Promise<Foo>' is not assignable to type 'Promise<Bar>'.
   Property 'y' is missing in type 'Foo' but required in type 'Bar'.
 promisesWithConstraints.ts(20,1): error TS2322: Type 'CPromise<Foo>' is not assignable to type 'CPromise<Bar>'.

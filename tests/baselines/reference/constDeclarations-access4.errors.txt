@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-access4.ts] ////
+
 constDeclarations-access4.ts(6,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
 constDeclarations-access4.ts(7,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
 constDeclarations-access4.ts(8,3): error TS2540: Cannot assign to 'x' because it is a read-only property.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/references/library-reference-5.ts] ////
+
 /node_modules/bar/index.d.ts(1,23): error TS4090: Conflicting definitions for 'alpha' found at '/node_modules/bar/node_modules/alpha/index.d.ts' and '/node_modules/foo/node_modules/alpha/index.d.ts'. Consider installing a specific version of this library to resolve the conflict.
   The file is in the program because:
     Type library referenced via 'alpha' from file '/node_modules/foo/index.d.ts'

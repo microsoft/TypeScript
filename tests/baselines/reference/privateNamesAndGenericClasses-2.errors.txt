@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndGenericClasses-2.ts] ////
+
 privateNamesAndGenericClasses-2.ts(24,3): error TS18013: Property '#foo' is not accessible outside class 'C' because it has a private identifier.
 privateNamesAndGenericClasses-2.ts(25,1): error TS2322: Type 'C<string>' is not assignable to type 'C<number>'.
   Type 'string' is not assignable to type 'number'.

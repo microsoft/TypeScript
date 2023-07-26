@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/subclassThisTypeAssignable01.ts] ////
+
 file1.js(2,7): error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
 tile1.ts(2,30): error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
 tile1.ts(6,81): error TS2744: Type parameter defaults can only reference previously declared type parameters.

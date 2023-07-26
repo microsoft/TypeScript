@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration9.ts] ////
+
 parserIndexMemberDeclaration9.ts(2,4): error TS1071: 'export' modifier cannot appear on an index signature.
 
 

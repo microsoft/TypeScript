@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForInheritedProperties7.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties7.ts ===
 // class class1 extends class1 {

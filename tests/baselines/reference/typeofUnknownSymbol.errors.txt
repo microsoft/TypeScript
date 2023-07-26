@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofUnknownSymbol.ts] ////
+
 typeofUnknownSymbol.ts(2,16): error TS2304: Cannot find name 'whatsthis'.
 
 

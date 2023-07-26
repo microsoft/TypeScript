@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingFunctionImplementation2.ts] ////
+
 missingFunctionImplementation2_a.ts(3,19): error TS2384: Overload signatures must all be ambient or non-ambient.
 missingFunctionImplementation2_b.ts(1,17): error TS2391: Function implementation is missing or not immediately following the declaration.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralParameterResolution.ts] ////
+
 objectLiteralParameterResolution.ts(9,14): error TS2304: Cannot find name 'wrapSuccessCallback'.
 objectLiteralParameterResolution.ts(9,34): error TS2304: Cannot find name 'requestContext'.
 objectLiteralParameterResolution.ts(9,50): error TS2304: Cannot find name 'callback'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty3.ts] ////
+
 accessorsOverrideProperty3.ts(6,9): error TS2611: 'sound' is defined as a property in class 'Animal', but is overridden here in 'Lion' as an accessor.
 
 

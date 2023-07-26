@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.3.ts] ////
+
 topLevelAwaitErrors.3.ts(4,6): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 
 

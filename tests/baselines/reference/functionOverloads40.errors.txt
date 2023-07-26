@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads40.ts] ////
+
 functionOverloads40.ts(4,15): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
     Type 'string' is not assignable to type 'number'.

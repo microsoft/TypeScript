@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importHelpersNoHelpersForPrivateFields.ts] ////
+
 main.ts(4,9): error TS2343: This syntax requires an imported helper named '__classPrivateFieldSet' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 main.ts(4,23): error TS2343: This syntax requires an imported helper named '__classPrivateFieldGet' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 main.ts(5,9): error TS2343: This syntax requires an imported helper named '__classPrivateFieldIn' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.

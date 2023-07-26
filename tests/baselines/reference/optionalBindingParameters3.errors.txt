@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/optionalBindingParameters3.ts] ////
+
 /a.js(9,12): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 
 

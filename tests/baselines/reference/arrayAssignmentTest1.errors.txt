@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayAssignmentTest1.ts] ////
+
 arrayAssignmentTest1.ts(46,5): error TS2741: Property 'IM1' is missing in type 'undefined[]' but required in type 'I1'.
 arrayAssignmentTest1.ts(47,5): error TS2739: Type 'undefined[]' is missing the following properties from type 'C1': IM1, C1M1
 arrayAssignmentTest1.ts(48,5): error TS2739: Type 'undefined[]' is missing the following properties from type 'C2': C2M1, IM1, C1M1

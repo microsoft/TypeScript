@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionAcrossMultipleProjects.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/a.ts ===
 // <|var [|{| defId: 0 |}x|]: number;|>

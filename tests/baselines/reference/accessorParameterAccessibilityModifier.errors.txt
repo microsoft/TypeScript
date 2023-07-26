@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorParameterAccessibilityModifier.ts] ////
+
 accessorParameterAccessibilityModifier.ts(2,11): error TS2369: A parameter property is only allowed in a constructor implementation.
 accessorParameterAccessibilityModifier.ts(3,18): error TS2369: A parameter property is only allowed in a constructor implementation.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports_mixedImports.ts] ////
+
 error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
 /index.ts(1,21): error TS1444: 'ComponentProps' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.

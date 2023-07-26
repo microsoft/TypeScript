@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-useBeforeDefinition2.ts] ////
+
 error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'outFile' instead.
 file1.ts(1,1): error TS2448: Block-scoped variable 'c' used before its declaration.

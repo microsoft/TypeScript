@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/exportsAndImportsWithUnderscores1.ts] ////
+
 error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 m1.ts(5,5): error TS1005: ',' expected.
 

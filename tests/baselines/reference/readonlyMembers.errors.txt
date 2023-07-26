@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyMembers.ts] ////
+
 readonlyMembers.ts(6,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
 readonlyMembers.ts(7,3): error TS2540: Cannot assign to 'b' because it is a read-only property.
 readonlyMembers.ts(16,14): error TS2540: Cannot assign to 'c' because it is a read-only property.

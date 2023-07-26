@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsReExportsUseInImportType.ts] ////
+
 // === findAllReferences ===
 // === /foo/types/types.ts ===
 // <|export type /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Full|] = { prop: string; };|>

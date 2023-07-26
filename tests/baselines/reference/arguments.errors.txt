@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arguments.ts] ////
+
 arguments.ts(6,8): error TS2304: Cannot find name 'arguments'.
 arguments.ts(9,25): error TS2304: Cannot find name 'arguments'.
 arguments.ts(10,23): error TS2304: Cannot find name 'arguments'.

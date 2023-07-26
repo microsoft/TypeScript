@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOverloads2.ts] ////
+
 callOverloads2.ts(1,7): error TS2813: Class declaration cannot implement overload list for 'Foo'.
 callOverloads2.ts(9,10): error TS2814: Function with bodies can only merge with classes that are ambient.
 callOverloads2.ts(11,10): error TS2389: Function implementation name must be 'Foo'.
