@@ -14888,8 +14888,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getReturnTypeOfTypeTag(declaration);
     }
 
-    function isResolvingReturnTypeOfSignature(signature: Signature) {
-        return !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0;
+    function isResolvingReturnTypeOfSignature(signature: Signature): boolean {
+        return signature.compositeSignatures && some(signature.compositeSignatures, isResolvingReturnTypeOfSignature) ||
+            !signature.resolvedReturnType && findResolutionCycleStartIndex(signature, TypeSystemPropertyName.ResolvedReturnType) >= 0;
     }
 
     function getRestTypeOfSignature(signature: Signature): Type {
