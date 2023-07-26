@@ -810,9 +810,11 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     resolutionHost.onDiscoveredSymlink();
                 }
                 resolutionsInFile.set(name, mode, resolution);
-                watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName, deferWatchingNonRelativeResolution);
-                if (existingResolution) {
-                    stopWatchFailedLookupLocationOfResolution(existingResolution, path, getResolutionWithResolvedFileName);
+                if (resolution !== existingResolution) {
+                    watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName, deferWatchingNonRelativeResolution);
+                    if (existingResolution) {
+                        stopWatchFailedLookupLocationOfResolution(existingResolution, path, getResolutionWithResolvedFileName);
+                    }
                 }
 
                 if (logChanges && filesWithChangedSetOfUnresolvedImports && !resolutionIsEqualTo(existingResolution, resolution)) {
