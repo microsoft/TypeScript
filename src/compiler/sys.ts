@@ -1711,7 +1711,7 @@ export let sys: System = (() => {
 
         function bufferFrom(input: string, encoding?: string): Buffer {
             // See https://github.com/Microsoft/TypeScript/issues/25652
-            return Buffer.from && (Buffer.from as Function) !== Int8Array.from
+            return Buffer.from && Buffer.from !== Int8Array.from
                 ? Buffer.from(input, encoding)
                 : new Buffer(input, encoding);
         }
