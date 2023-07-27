@@ -313,7 +313,7 @@ import {
     unusedLabelIsError,
     VariableDeclaration,
     WhileStatement,
-    WithStatement,
+    WithStatement
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -444,6 +444,14 @@ function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visite
                     }
                     if (found === ModuleInstanceState.Instantiated) {
                         return found;
+                    }
+                    if (statement.kind === SyntaxKind.ImportEqualsDeclaration) {
+                        // Treat re-exports of import aliases as instantiated,
+                        // since they're ambiguous. This is consistent with
+                        // `export import x = mod.x` being treated as instantiated:
+                        //   import x = mod.x;
+                        //   export { x };
+                        found = ModuleInstanceState.Instantiated;
                     }
                 }
             }

@@ -34,6 +34,7 @@
         "dot-notation": "error",
         "eqeqeq": "error",
         "no-caller": "error",
+        "no-constant-condition": ["error", { "checkLoops": false }],
         "no-eval": "error",
         "no-extra-bind": "error",
         "no-new-func": "error",
@@ -57,6 +58,13 @@
         "prefer-object-spread": "error",
         "unicode-bom": ["error", "never"],
 
+        // Enabled in eslint:recommended, but not applicable here
+        "no-extra-boolean-cast": "off",
+        "no-case-declarations": "off",
+        "no-cond-assign": "off",
+        "no-control-regex": "off",
+        "no-inner-declarations": "off",
+
         // @typescript-eslint/eslint-plugin
         "@typescript-eslint/naming-convention": [
             "error",
@@ -79,21 +87,25 @@
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
         "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/ban-types": [
+            "error",
+            {
+                "extendDefaults": true,
+                "types": {
+                    // This is theoretically good, but ts-eslint appears to mistake our declaration of Symbol for the global Symbol type.
+                    // See: https://github.com/typescript-eslint/typescript-eslint/issues/7306
+                    "Symbol": false,
+                    "{}": false // {} is a totally useful and valid type.
+                }
+            }
+        ],
 
         // Todo: For each of these, investigate whether we want to enable them ✨
-        "@typescript-eslint/ban-types": "off",
-        "no-case-declarations": "off",
-        "no-cond-assign": "off",
-        "no-constant-condition": "off",
-        "no-control-regex": "off",
-        "no-debugger": "off",
-        "no-extra-boolean-cast": "off",
-        "no-inner-declarations": "off",
         "prefer-rest-params": "off",
         "prefer-spread": "off",
         "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/no-empty-interface": "off",
-        "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": "off",
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820

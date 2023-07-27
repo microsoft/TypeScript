@@ -604,7 +604,6 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         if (hasChangedCompilerOptions) {
             newLine = updateNewLine();
             if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
-                debugger;
                 resolutionCache.onChangesAffectModuleResolution();
             }
         }
