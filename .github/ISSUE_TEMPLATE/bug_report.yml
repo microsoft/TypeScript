@@ -4,7 +4,7 @@ body:
   - type: markdown
     attributes:
       value: Please fill in each section completely. Thank you!
-  - type: input
+  - type: textarea
     id: search_terms
     attributes:
       label: "🔎 Search Terms"
@@ -63,16 +63,16 @@ body:
         Please post the relevant code sample here as well.
         This code and the Playground code should be the same, do not use separate examples.
 
-        ```ts
-        // We can quickly address your report if:
-        //  - The code sample is short. Nearly all TypeScript bugs can be demonstrated in 20-30 lines of code!
-        //  - It doesn't use external libraries. These are often issues with the type definitions rather than TypeScript bugs.
-        //  - The incorrectness of the behavior is readily apparent from reading the sample.
-        // Reports are slower to investigate if:
-        //  - We have to pare too much extraneous code.
-        //  - We have to clone a large repo and validate that the problem isn't elsewhere.
-        //  - The sample is confusing or doesn't clearly demonstrate what's wrong.
-        ```
+        We can quickly address your report if:
+
+          - The code sample is short. Nearly all TypeScript bugs can be demonstrated in 20-30 lines of code!
+          - It doesn't use external libraries. These are often issues with the type definitions rather than TypeScript bugs.
+          - The incorrectness of the behavior is readily apparent from reading the sample.
+
+        Reports are slower to investigate if:
+          - We have to pare too much extraneous code.
+          - We have to clone a large repo and validate that the problem isn't elsewhere.
+          - The sample is confusing or doesn't clearly demonstrate what's wrong.
       render: Markdown
     validations:
       required: false

@@ -24,14 +24,14 @@ body:
 
           Conversely, if you are seeing built-in methods you expect to *not* see, check your 'lib' setting or review your dependencies for lib/reference directives that might be polluting
           your global scope. This is common when using the 'node' type library. See https://github.com/microsoft/TypeScript/issues/40184
-  - type: textarea
+  - type: input
     id: compilation_target
     attributes:
       label: "⚙ Compilation target"
       description: "What's your compilation target (e.g.: `ES2015`)?"
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: current_lib
     attributes:
       label: "⚙ Library"
