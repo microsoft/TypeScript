@@ -17379,7 +17379,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return autoType;
                     }
                 }
-                const propType = getTypeOfSymbol(prop);
+                const propType = accessFlags & AccessFlags.Writing ? getWriteTypeOfSymbol(prop) : getTypeOfSymbol(prop);
                 return accessExpression && getAssignmentTargetKind(accessExpression) !== AssignmentKind.Definite ? getFlowTypeOfReference(accessExpression, propType) :
                     accessNode && isIndexedAccessTypeNode(accessNode) && containsMissingType(propType) ? getUnionType([propType, undefinedType]) :
                     propType;
