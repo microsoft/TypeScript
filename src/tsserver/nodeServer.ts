@@ -1,3 +1,4 @@
+import { incrementalVerifier } from "../harness/incrementalUtils";
 import * as protocol from "../server/protocol";
 import * as ts from "./_namespaces/ts";
 import {
@@ -811,6 +812,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                 logger,
                 canUseEvents: true,
                 typesMapLocation,
+                incrementalVerifier,
             });
 
             this.eventPort = eventPort;

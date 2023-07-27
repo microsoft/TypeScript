@@ -11,6 +11,7 @@
         { "path": "../services" },
         { "path": "../jsTyping" },
         { "path": "../server" },
+        { "path": "../harness" },
     ],
     "include": ["**/*"]
 }
