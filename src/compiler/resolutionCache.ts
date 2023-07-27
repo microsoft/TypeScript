@@ -140,7 +140,7 @@ export interface ResolutionCache {
 
     invalidateResolutionsOfFailedLookupLocations(): boolean;
     invalidateResolutionOfFile(filePath: Path): void;
-    removeResolutionsOfFile(filePath: Path): void;
+    removeResolutionsOfFile(filePath: Path, syncDirWatcherRemove?: boolean): void;
     removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
     setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<Path, readonly string[]>): void;
     createHasInvalidatedResolutions(
@@ -542,7 +542,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         moduleResolutionCache.getPackageJsonInfoCache(),
     );
 
-    const directoryWatchesOfFailedLookups = new Map<string, DirectoryWatchesOfFailedLookup>();
+    const directoryWatchesOfFailedLookups = new Map<Path, DirectoryWatchesOfFailedLookup>();
     const fileWatchesOfAffectingLocations = new Map<string, FileWatcherOfAffectingLocation>();
     const rootDir = getRootDirectoryOfResolutionCache(rootDirForResolution, getCurrentDirectory);
     const rootPath = resolutionHost.toPath(rootDir);
@@ -719,19 +719,23 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 }
             });
         }
-        directoryWatchesOfFailedLookups.forEach((watcher, path) => {
-            if (watcher.refCount === 0) {
-                directoryWatchesOfFailedLookups.delete(path);
-                watcher.watcher.close();
-            }
-        });
-        fileWatchesOfAffectingLocations.forEach((watcher, path) => {
-            if (watcher.files === 0 && watcher.resolutions === 0 && !watcher.symlinks?.size) {
-                fileWatchesOfAffectingLocations.delete(path);
-                watcher.watcher.close();
-            }
-        });
+        directoryWatchesOfFailedLookups.forEach(closeDirectoryWatchesOfFailedLookup);
+        fileWatchesOfAffectingLocations.forEach(closeFileWatcherOfAffectingLocation);
         hasChangedAutomaticTypeDirectiveNames = false;
+    }
+
+    function closeDirectoryWatchesOfFailedLookup(watcher: DirectoryWatchesOfFailedLookup, path: Path) {
+        if (watcher.refCount === 0) {
+            directoryWatchesOfFailedLookups.delete(path);
+            watcher.watcher.close();
+        }
+    }
+
+    function closeFileWatcherOfAffectingLocation(watcher: FileWatcherOfAffectingLocation, path: string) {
+        if (watcher.files === 0 && watcher.resolutions === 0 && !watcher.symlinks?.size) {
+            fileWatchesOfAffectingLocations.delete(path);
+            watcher.watcher.close();
+        }
     }
 
     interface ResolveNamesWithLocalCacheInput<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName> {
@@ -1139,7 +1143,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
     }
 
-    function stopWatchFailedLookupLocation(failedLookupLocation: string, removeAtRoot: boolean) {
+    function stopWatchFailedLookupLocation(failedLookupLocation: string, removeAtRoot: boolean, syncDirWatcherRemove: boolean | undefined) {
         const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
         const toWatch = getDirectoryToWatchFailedLookupLocation(
             failedLookupLocation,
@@ -1155,7 +1159,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 removeAtRoot = true;
             }
             else {
-                removeDirectoryWatcher(dirPath);
+                removeDirectoryWatcher(dirPath, syncDirWatcherRemove);
             }
         }
         return removeAtRoot;
@@ -1165,6 +1169,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolution: T,
         filePath: Path,
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+        syncDirWatcherRemove?: boolean,
     ) {
         Debug.checkDefined(resolution.files).delete(filePath);
         resolution.refCount!--;
@@ -1183,11 +1188,11 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             let removeAtRoot = false;
             if (failedLookupLocations) {
                 for (const failedLookupLocation of failedLookupLocations) {
-                    removeAtRoot = stopWatchFailedLookupLocation(failedLookupLocation, removeAtRoot);
+                    removeAtRoot = stopWatchFailedLookupLocation(failedLookupLocation, removeAtRoot, syncDirWatcherRemove);
                 }
             }
-            if (node10Result) removeAtRoot = stopWatchFailedLookupLocation(node10Result, removeAtRoot);
-            if (removeAtRoot) removeDirectoryWatcher(rootPath);
+            if (node10Result) removeAtRoot = stopWatchFailedLookupLocation(node10Result, removeAtRoot, syncDirWatcherRemove);
+            if (removeAtRoot) removeDirectoryWatcher(rootPath, syncDirWatcherRemove);
         }
         else if (affectingLocations?.length) {
             resolutionsWithOnlyAffectingLocations.delete(resolution);
@@ -1197,14 +1202,16 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             for (const affectingLocation of affectingLocations) {
                 const watcher = fileWatchesOfAffectingLocations.get(affectingLocation)!;
                 watcher.resolutions--;
+                if (syncDirWatcherRemove) closeFileWatcherOfAffectingLocation(watcher, affectingLocation);
             }
         }
     }
 
-    function removeDirectoryWatcher(dirPath: string) {
+    function removeDirectoryWatcher(dirPath: Path, syncDirWatcherRemove: boolean | undefined) {
         const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath)!;
         // Do not close the watcher yet since it might be needed by other failed lookup locations.
         dirWatcher.refCount--;
+        if (syncDirWatcherRemove) closeDirectoryWatchesOfFailedLookup(dirWatcher, dirPath);
     }
 
     function createDirectoryWatcher(directory: string, dirPath: Path, nonRecursive: boolean | undefined) {
@@ -1223,11 +1230,17 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         cache: Map<string, ModeAwareCache<T>>,
         filePath: Path,
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+        syncDirWatcherRemove: boolean | undefined,
     ) {
         // Deleted file, stop watching failed lookups for all the resolutions in the file
         const resolutions = cache.get(filePath);
         if (resolutions) {
-            resolutions.forEach(resolution => stopWatchFailedLookupLocationOfResolution(resolution, filePath, getResolutionWithResolvedFileName));
+            resolutions.forEach(resolution => stopWatchFailedLookupLocationOfResolution(
+                resolution,
+                filePath,
+                getResolutionWithResolvedFileName,
+                syncDirWatcherRemove,
+            ));
             cache.delete(filePath);
         }
     }
@@ -1246,9 +1259,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolvedProjectReference.commandLine.fileNames.forEach(f => removeResolutionsOfFile(resolutionHost.toPath(f)));
     }
 
-    function removeResolutionsOfFile(filePath: Path) {
-        removeResolutionsOfFileFromCache(resolvedModuleNames, filePath, getResolvedModule);
-        removeResolutionsOfFileFromCache(resolvedTypeReferenceDirectives, filePath, getResolvedTypeReferenceDirective);
+    function removeResolutionsOfFile(filePath: Path, syncDirWatcherRemove?: boolean) {
+        removeResolutionsOfFileFromCache(resolvedModuleNames, filePath, getResolvedModule, syncDirWatcherRemove);
+        removeResolutionsOfFileFromCache(resolvedTypeReferenceDirectives, filePath, getResolvedTypeReferenceDirective, syncDirWatcherRemove);
     }
 
     function invalidateResolutions(resolutions: Set<ResolutionWithFailedLookupLocations> | Map<string, ResolutionWithFailedLookupLocations> | undefined, canInvalidate: (resolution: ResolutionWithFailedLookupLocations) => boolean | undefined) {
