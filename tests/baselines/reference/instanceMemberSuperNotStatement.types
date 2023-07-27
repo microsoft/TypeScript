@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/instanceMemberSuperNotStatement.ts] ////
+
+=== instanceMemberSuperNotStatement.ts ===
+class A extends class {} {
+>A : A
+>class {} : (Anonymous class)
+
+  a = 1;
+>a : number
+>1 : 1
+
+  constructor() {
+    console.log(super());
+>console.log(super()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>super() : void
+>super : typeof (Anonymous class)
+  }
+}
+

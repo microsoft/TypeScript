@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/privateMethodSuperNotStatement(target=es2021).ts] ////
+
+=== privateMethodSuperNotStatement(target=es2021).ts ===
+class A extends class {} {
+>A : Symbol(A, Decl(privateMethodSuperNotStatement(target=es2021).ts, 0, 0))
+
+  constructor() {
+    console.log(super());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super : Symbol((Anonymous class), Decl(privateMethodSuperNotStatement(target=es2021).ts, 0, 15))
+  }
+  #foo() {}
+>#foo : Symbol(A.#foo, Decl(privateMethodSuperNotStatement(target=es2021).ts, 3, 3))
+}
+

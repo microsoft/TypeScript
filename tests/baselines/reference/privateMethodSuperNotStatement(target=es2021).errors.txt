@@ -1,0 +1,13 @@
+privateMethodSuperNotStatement(target=es2021).ts(3,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+
+
+==== privateMethodSuperNotStatement(target=es2021).ts (1 errors) ====
+    class A extends class {} {
+      constructor() {
+        console.log(super());
+                    ~~~~~~~
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+      }
+      #foo() {}
+    }
+    

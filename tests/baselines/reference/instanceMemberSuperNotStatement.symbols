@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/instanceMemberSuperNotStatement.ts] ////
+
+=== instanceMemberSuperNotStatement.ts ===
+class A extends class {} {
+>A : Symbol(A, Decl(instanceMemberSuperNotStatement.ts, 0, 0))
+
+  a = 1;
+>a : Symbol(A.a, Decl(instanceMemberSuperNotStatement.ts, 0, 26))
+
+  constructor() {
+    console.log(super());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super : Symbol((Anonymous class), Decl(instanceMemberSuperNotStatement.ts, 0, 15))
+  }
+}
+
