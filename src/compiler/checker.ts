@@ -28672,9 +28672,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return errorType;
         }
 
-        return nodeCheckFlag === NodeCheckFlags.SuperStatic
-            ? getBaseConstructorTypeOfClass(classType)
-            : getTypeWithThisArgument(baseClassType, classType.thisType);
+        if (nodeCheckFlag === NodeCheckFlags.SuperStatic) {
+            return getBaseConstructorTypeOfClass(classType);
+        }
+
+        if (container.kind === SyntaxKind.MethodDeclaration) {
+            const signature = getSignatureFromDeclaration(container);
+            if (signature.thisParameter) {
+                return getTypeOfSymbol(signature.thisParameter);
+            }
+        }
+
+        return getTypeWithThisArgument(baseClassType, classType.thisType);
 
         function isLegalUsageOfSuperExpression(container: Node): boolean {
             if (isCallExpression) {
