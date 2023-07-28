@@ -62,6 +62,7 @@ export function createDeprecation(name: string, options: DeprecationOptions = {}
 function wrapFunction<F extends (...args: any[]) => any>(deprecation: () => void, func: F): F {
     return function (this: unknown) {
         deprecation();
+        // eslint-disable-next-line prefer-rest-params
         return func.apply(this, arguments);
     } as F;
 }

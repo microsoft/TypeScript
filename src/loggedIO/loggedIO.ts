@@ -366,12 +366,15 @@ function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
         // eslint-disable-next-line local/only-arrow-functions
         return (function () {
             if (replayLog !== undefined) {
+                // eslint-disable-next-line prefer-spread, prefer-rest-params
                 return replay.apply(undefined, arguments);
             }
             else if (recordLog !== undefined) {
+                // eslint-disable-next-line prefer-spread, prefer-rest-params
                 return record.apply(undefined, arguments);
             }
             else {
+                // eslint-disable-next-line prefer-rest-params
                 return original.apply(underlying, arguments);
             }
         } as any);
