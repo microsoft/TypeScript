@@ -16439,7 +16439,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
-        const templates = filter(types, t => !!(t.flags & TypeFlags.TemplateLiteral) && isPatternLiteralType(t)) as TemplateLiteralType[];
+        const templates = filter(types, t =>
+            !!(t.flags & TypeFlags.TemplateLiteral) &&
+            isPatternLiteralType(t) &&
+            (t as TemplateLiteralType).types.every(t => !(t.flags & TypeFlags.Intersection) || !areIntersectedTypesAvoidingPrimitiveReduction((t as IntersectionType).types))
+        ) as TemplateLiteralType[];
         if (templates.length) {
             let i = types.length;
             while (i > 0) {
