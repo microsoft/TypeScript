@@ -8110,9 +8110,8 @@ export function setObjectAllocator(alloc: ObjectAllocator) {
     forEach(objectAllocatorPatchers, fn => fn(objectAllocator));
 }
 
-// TODO(jakebailey): replace args type with DiagnosticArguments
 /** @internal */
-export function formatStringFromArgs(text: string, args: ArrayLike<string | number>): string {
+export function formatStringFromArgs(text: string, args: DiagnosticArguments): string {
     return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index]));
 }
 
