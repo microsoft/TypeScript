@@ -12,8 +12,6 @@ import { exec, ExecError } from "./utils.mjs";
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
-export const localRwcBaseline = "internal/baselines/rwc/local";
-export const refRwcBaseline = "internal/baselines/rwc/reference";
 export const coverageDir = "coverage";
 
 /**
@@ -25,7 +23,7 @@ export const coverageDir = "coverage";
  * @param {boolean} [options.watching]
  */
 export async function runConsoleTests(runJs, defaultReporter, runInParallel, options = {}) {
-    let testTimeout = cmdLineOptions.timeout;
+    const testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
@@ -65,10 +63,6 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         fs.mkdirSync(taskConfigsFolder);
 
         workerCount = cmdLineOptions.workers;
-    }
-
-    if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 400000;
     }
 
     if (options.watching) {
@@ -174,8 +168,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 }
 
 export async function cleanTestDirs() {
-    await del([localBaseline, localRwcBaseline]);
-    await fs.promises.mkdir(localRwcBaseline, { recursive: true });
+    await del([localBaseline]);
     await fs.promises.mkdir(localBaseline, { recursive: true });
 }
 

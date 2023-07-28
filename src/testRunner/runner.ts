@@ -13,7 +13,6 @@ import {
     TestRunnerKind,
 } from "./_namespaces/Harness";
 import * as project from "./_namespaces/project";
-import * as RWC from "./_namespaces/RWC";
 import * as ts from "./_namespaces/ts";
 import * as vpath from "./_namespaces/vpath";
 
@@ -72,8 +71,6 @@ export function createRunner(kind: TestRunnerKind): RunnerBase {
             return new FourSlashRunner(FourSlash.FourSlashTestType.Server);
         case "project":
             return new project.ProjectRunner();
-        case "rwc":
-            return new RWC.RWCRunner();
     }
     return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -205,8 +202,6 @@ function handleTestConfig() {
                     case "fourslash-generated":
                         runners.push(new GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
                         break;
-                    case "rwc":
-                        runners.push(new RWC.RWCRunner());
                         break;
                 }
             }
