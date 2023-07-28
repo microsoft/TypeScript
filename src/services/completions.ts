@@ -3460,31 +3460,33 @@ function getCompletionData(
             }
         }
 
-        // GH#39946. Pulling on the type of a node inside of a function with a contextual `this` parameter can result in a circularity
-        // if the `node` is part of the exprssion of a `yield` or `return`. This circularity doesn't exist at compile time because
-        // we will check (and cache) the type of `this` *before* checking the type of the node.
-        typeChecker.tryGetThisTypeAt(node, /*includeGlobalThis*/ false);
-        let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
+        if (!isTypeLocation || isInTypeQuery(node)) {
+            // GH#39946. Pulling on the type of a node inside of a function with a contextual `this` parameter can result in a circularity
+            // if the `node` is part of the exprssion of a `yield` or `return`. This circularity doesn't exist at compile time because
+            // we will check (and cache) the type of `this` *before* checking the type of the node.
+            typeChecker.tryGetThisTypeAt(node, /*includeGlobalThis*/ false);
+            let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
 
-        if (!isTypeLocation) {
-            let insertQuestionDot = false;
-            if (type.isNullableType()) {
-                const canCorrectToQuestionDot =
-                    isRightOfDot &&
-                    !isRightOfQuestionDot &&
-                    preferences.includeAutomaticOptionalChainCompletions !== false;
+            if (!isTypeLocation) {
+                let insertQuestionDot = false;
+                if (type.isNullableType()) {
+                    const canCorrectToQuestionDot =
+                        isRightOfDot &&
+                        !isRightOfQuestionDot &&
+                        preferences.includeAutomaticOptionalChainCompletions !== false;
 
-                if (canCorrectToQuestionDot || isRightOfQuestionDot) {
-                    type = type.getNonNullableType();
-                    if (canCorrectToQuestionDot) {
-                        insertQuestionDot = true;
+                    if (canCorrectToQuestionDot || isRightOfQuestionDot) {
+                        type = type.getNonNullableType();
+                        if (canCorrectToQuestionDot) {
+                            insertQuestionDot = true;
+                        }
                     }
                 }
+                addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
             }
-            addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
-        }
-        else if (isInTypeQuery(node)) {
-            addTypeProperties(type.getNonNullableType(), /*insertAwait*/ false, /*insertQuestionDot*/ false);
+            else {
+                addTypeProperties(type.getNonNullableType(), /*insertAwait*/ false, /*insertQuestionDot*/ false);
+            }
         }
     }
 
