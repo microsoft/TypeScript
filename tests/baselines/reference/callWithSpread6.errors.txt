@@ -1,0 +1,53 @@
+callWithSpread6.ts(15,1): error TS2554: Expected 4 arguments, but got 3.
+callWithSpread6.ts(17,19): error TS2554: Expected 1-4 arguments, but got 5.
+callWithSpread6.ts(18,10): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread6.ts(20,1): error TS2555: Expected at least 2 arguments, but got 1.
+callWithSpread6.ts(22,3): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread6.ts(23,1): error TS2555: Expected at least 3 arguments, but got 1.
+callWithSpread6.ts(24,1): error TS2555: Expected at least 3 arguments, but got 2.
+
+
+==== callWithSpread6.ts (7 errors) ====
+    declare const n: number
+    declare const nntnnnt: [number, number] | [number, number, number]
+    declare const ntnnnt: [number] | [number, number, number]
+    declare const ntnnnut: [number] | [number, number, number?]
+    declare function setHours(a: number, b?: number, c?: number, d?: number): number
+    declare function setHoursStrict(a: number, b: number, c: number, d: number): number
+    declare function f(a: number, b: number, ...c: number[]): number
+    declare function g(a: number, b?: number, ...c: number[]): number
+    declare function h(a: number, b: number, c: number, ...d: number[]): number
+    
+    setHours(...nntnnnt)
+    setHours(...ntnnnt)
+    setHours(...ntnnnut)
+    setHours(n, n, ...nntnnnt)
+    setHoursStrict(n, ...nntnnnt)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 4 arguments, but got 3.
+!!! related TS6210 callWithSpread6.ts:6:66: An argument for 'd' was not provided.
+    setHoursStrict(n, n, ...nntnnnt)
+    setHours(n, n, n, ...nntnnnt)
+                      ~~~~~~~~~~
+!!! error TS2554: Expected 1-4 arguments, but got 5.
+    setHours(...nntnnnt, n)
+             ~~~~~~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+    
+    f(...ntnnnt)
+    ~~~~~~~~~~~~
+!!! error TS2555: Expected at least 2 arguments, but got 1.
+!!! related TS6210 callWithSpread6.ts:7:31: An argument for 'b' was not provided.
+    f(...nntnnnt)
+    f(...nntnnnt, n)
+      ~~~~~~~~~~
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+    h(...ntnnnt)
+    ~~~~~~~~~~~~
+!!! error TS2555: Expected at least 3 arguments, but got 1.
+!!! related TS6210 callWithSpread6.ts:9:31: An argument for 'b' was not provided.
+    h(...nntnnnt)
+    ~~~~~~~~~~~~~
+!!! error TS2555: Expected at least 3 arguments, but got 2.
+!!! related TS6210 callWithSpread6.ts:9:42: An argument for 'c' was not provided.
+    

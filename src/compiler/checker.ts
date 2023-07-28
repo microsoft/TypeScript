@@ -28807,7 +28807,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const iife = getImmediatelyInvokedFunctionExpression(func);
         if (iife && iife.arguments) {
-            const args = getEffectiveCallArguments(iife);
+            const [args,] = getEffectiveCallArguments(iife);
             const indexOfParameter = func.parameters.indexOf(parameter);
             if (parameter.dotDotDotToken) {
                 return getSpreadArgumentType(args, indexOfParameter, args.length, anyType, /*context*/ undefined, CheckMode.Normal);
@@ -29002,7 +29002,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
     function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type | undefined {
-        const args = getEffectiveCallArguments(callTarget);
+        const [args,] = getEffectiveCallArguments(callTarget);
         const argIndex = args.indexOf(arg); // -1 for e.g. the expression of a CallExpression, or the tag of a TaggedTemplateExpression
         return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex);
     }
@@ -32335,14 +32335,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(t.flags & (TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Unknown | TypeFlags.Any));
     }
 
-    function hasCorrectArity(node: CallLikeExpression, args: readonly Expression[], signature: Signature, signatureHelpTrailingComma = false) {
-        let argCount: number;
+    function hasCorrectArity(node: CallLikeExpression, args: readonly Expression[], shortestTupleArgs: number, signature: Signature, signatureHelpTrailingComma = false) {
+        let maxArgCount: number;
+        let minArgCount = shortestTupleArgs;
         let callIsIncomplete = false; // In incomplete call we want to be lenient when we have too few arguments
-        let effectiveParameterCount = getParameterCount(signature);
-        let effectiveMinimumArguments = getMinArgumentCount(signature);
+        let effectiveMaxParameters = getParameterCount(signature);
+        let effectiveMinParameters = getMinArgumentCount(signature);
 
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
-            argCount = args.length;
+            maxArgCount = args.length;
             if (node.template.kind === SyntaxKind.TemplateExpression) {
                 // If a tagged template expression lacks a tail literal, the call is incomplete.
                 // Specifically, a template only can end in a TemplateTail or a Missing literal.
@@ -32359,16 +32360,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else if (node.kind === SyntaxKind.Decorator) {
-            argCount = getDecoratorArgumentCount(node, signature);
+            minArgCount = maxArgCount = getDecoratorArgumentCount(node, signature);
         }
         else if (isJsxOpeningLikeElement(node)) {
             callIsIncomplete = node.attributes.end === node.end;
             if (callIsIncomplete) {
                 return true;
             }
-            argCount = effectiveMinimumArguments === 0 ? args.length : 1;
-            effectiveParameterCount = args.length === 0 ? effectiveParameterCount : 1; // class may have argumentless ctor functions - still resolve ctor and compare vs props member type
-            effectiveMinimumArguments = Math.min(effectiveMinimumArguments, 1); // sfc may specify context argument - handled by framework and not typechecked
+            minArgCount = maxArgCount = effectiveMinParameters === 0 ? args.length : 1;
+            effectiveMaxParameters = args.length === 0 ? effectiveMaxParameters : 1; // class may have argumentless ctor functions - still resolve ctor and compare vs props member type
+            effectiveMinParameters = Math.min(effectiveMinParameters, 1); // sfc may specify context argument - handled by framework and not typechecked
         }
         else if (!node.arguments) {
             // This only happens when we have something of the form: 'new C'
@@ -32376,7 +32377,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getMinArgumentCount(signature) === 0;
         }
         else {
-            argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
+            maxArgCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
 
             // If we are missing the close parenthesis, the call is incomplete.
             callIsIncomplete = node.arguments.end === node.end;
@@ -32389,16 +32390,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // Too many arguments implies incorrect arity.
-        if (!hasEffectiveRestParameter(signature) && argCount > effectiveParameterCount) {
+        if (!hasEffectiveRestParameter(signature) && maxArgCount > effectiveMaxParameters) {
             return false;
         }
 
         // If the call is incomplete, we should skip the lower bound check.
         // JSX signatures can have extra parameters provided by the library which we don't check
-        if (callIsIncomplete || argCount >= effectiveMinimumArguments) {
+        if (callIsIncomplete || minArgCount >= effectiveMinParameters) {
             return true;
         }
-        for (let i = argCount; i < effectiveMinimumArguments; i++) {
+        for (let i = maxArgCount; i < effectiveMinParameters; i++) {
             const type = getTypeAtPosition(signature, i);
             if (filterType(type, isInJSFile(node) && !strictNullChecks ? acceptsVoidUndefinedUnknownOrAny : acceptsVoid).flags & TypeFlags.Never) {
                 return false;
@@ -32883,7 +32884,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * Returns the effective arguments for an expression that works like a function invocation.
      */
-    function getEffectiveCallArguments(node: CallLikeExpression): readonly Expression[] {
+    function getEffectiveCallArguments(node: CallLikeExpression, signatures?: readonly Signature[]): [args: readonly Expression[], shortest: number] {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             const template = node.template;
             const args: Expression[] = [createSyntheticExpression(template, getGlobalTemplateStringsArrayType())];
@@ -32892,38 +32893,79 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     args.push(span.expression);
                 });
             }
-            return args;
+            return [args, args.length];
         }
         if (node.kind === SyntaxKind.Decorator) {
-            return getEffectiveDecoratorArguments(node);
+            const args = getEffectiveDecoratorArguments(node);
+            return [args, args.length];
         }
         if (isJsxOpeningLikeElement(node)) {
-            return node.attributes.properties.length > 0 || (isJsxOpeningElement(node) && node.parent.children.length > 0) ? [node.attributes] : emptyArray;
+            return node.attributes.properties.length > 0 || (isJsxOpeningElement(node) && node.parent.children.length > 0) ? [[node.attributes], 1] : [emptyArray, 0];
         }
         const args = node.arguments || emptyArray;
         const spreadIndex = getSpreadArgumentIndex(args);
         if (spreadIndex >= 0) {
+            // TODO: Better variable names
+            let shortest = 0;
             // Create synthetic arguments from spreads of tuple types.
             const effectiveArgs = args.slice(0, spreadIndex);
             for (let i = spreadIndex; i < args.length; i++) {
                 const arg = args[i];
                 // We can call checkExpressionCached because spread expressions never have a contextual type.
-                const spreadType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((arg as SpreadElement).expression) : checkExpressionCached((arg as SpreadElement).expression));
-                if (spreadType && isTupleType(spreadType)) {
-                    forEach(getElementTypes(spreadType), (t, i) => {
-                        const flags = spreadType.target.elementFlags[i];
-                        const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t,
-                            !!(flags & ElementFlags.Variable), spreadType.target.labeledElementDeclarations?.[i]);
-                        effectiveArgs.push(syntheticArg);
-                    });
+                const spreadType = arg.kind === SyntaxKind.SpreadElement
+                    && (flowLoopCount ? checkExpression((arg as SpreadElement).expression) : checkExpressionCached((arg as SpreadElement).expression));
+                if (spreadType && everyType(spreadType, isTupleType)) {
+                    if (spreadType.flags & TypeFlags.Union) {
+                        if (i !== args.length - 1
+                            || !signatures
+                            || signatures.some(s => signatureHasRestParameter(s) && i === s.parameters.length - 1)) {
+                            effectiveArgs.push(arg);
+                            shortest++;
+                        }
+                        else {
+                            let tmp = [];
+                            const types = (spreadType as UnionType).types;
+                            const typess = (types as TupleTypeReference[]).map(getElementTypes);
+                            const short = Math.min(...typess.map(ts => ts.length));
+                            shortest += short;
+                            const length = Math.min(...typess.map(ts => ts.length));
+                            for (let j = 0; j < length; j++) {
+                                // TODO: need to handle non-Fixed by filling in with the trailing rest type instead of undefinedType
+                                const t = getUnionType(typess.map(ts => ts[j] || undefinedType));
+                                const flags: ElementFlags = types
+                                    .map(t => (t as TupleTypeReference).target.elementFlags[j] || ElementFlags.Optional)
+                                    .reduce((total: number,f) => f | total, 0);
+                                // TODO: bail if flags aren't ElementFlags.Fixed (it might be OK to allow a rest at the end, but still need tests for it)
+                                if (flags & ~ElementFlags.Fixed) {
+                                    tmp = [arg];
+                                    break;
+
+                                }
+                                // TODO: Not sure at all what to do with labels, but there might be some utilities for this already
+                                const syntheticArg = createSyntheticExpression(arg, t);
+                                tmp.push(syntheticArg);
+                            }
+                            effectiveArgs.push(...tmp);
+                        }
+                    }
+                    else {
+                        forEach(getElementTypes(spreadType as TupleTypeReference), (t, i) => {
+                            const flags = (spreadType as TupleTypeReference).target.elementFlags[i];
+                            const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t,
+                                !!(flags & ElementFlags.Variable), (spreadType as TupleTypeReference).target.labeledElementDeclarations?.[i]);
+                            effectiveArgs.push(syntheticArg);
+                            shortest++;
+                        });
+                    }
                 }
                 else {
                     effectiveArgs.push(arg);
+                    shortest++;
                 }
             }
-            return effectiveArgs;
+            return [effectiveArgs, shortest || effectiveArgs.length];
         }
-        return args;
+        return [args, args.length];
     }
 
     /**
@@ -33024,8 +33066,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return constructorSymbol === globalPromiseSymbol;
     }
 
-    function getArgumentArityError(node: CallLikeExpression, signatures: readonly Signature[], args: readonly Expression[], headMessage?: DiagnosticMessage) {
+    function getArgumentArityError(node: CallLikeExpression, signatures: readonly Signature[], args: readonly Expression[], shortestTupleArgs: number, headMessage?: DiagnosticMessage) {
         const spreadIndex = getSpreadArgumentIndex(args);
+        const minArgLength = shortestTupleArgs;
+        const maxArgLength = args.length;
         if (spreadIndex > -1) {
             return createDiagnosticForNode(args[spreadIndex], Diagnostics.A_spread_argument_must_either_have_a_tuple_type_or_be_passed_to_a_rest_parameter);
         }
@@ -33045,14 +33089,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             max = Math.max(max, maxParameter);
             // shortest parameter count *longer than the call*/longest parameter count *shorter than the call*
-            if (minParameter < args.length && minParameter > maxBelow) maxBelow = minParameter;
-            if (args.length < maxParameter && maxParameter < minAbove) minAbove = maxParameter;
+            if (minParameter < minArgLength && minParameter > maxBelow) maxBelow = minParameter;
+            if (maxArgLength < maxParameter && maxParameter < minAbove) minAbove = maxParameter;
         }
         const hasRestParameter = some(signatures, hasEffectiveRestParameter);
         const parameterRange = hasRestParameter ? min
             : min < max ? min + "-" + max
             : min;
-        const isVoidPromiseError = !hasRestParameter && parameterRange === 1 && args.length === 0 && isPromiseResolveArityError(node);
+        const isVoidPromiseError = !hasRestParameter && parameterRange === 1 && minArgLength === 0 && isPromiseResolveArityError(node);
         if (isVoidPromiseError && isInJSFile(node)) {
             return getDiagnosticForCallNode(node, Diagnostics.Expected_1_argument_but_got_0_new_Promise_needs_a_JSDoc_hint_to_produce_a_resolve_that_can_be_called_without_arguments);
         }
@@ -33063,33 +33107,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
             isVoidPromiseError ? Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise :
             Diagnostics.Expected_0_arguments_but_got_1;
-
-        if (min < args.length && args.length < max) {
+        // TODO: (sigh) better error messages when minArgLength < maxArgLength, because it means that "expected 4, got 3" should be "expected 4, got *a minimum* of 3"
+        if (min < minArgLength && maxArgLength < max) {
             // between min and max, but with no matching overload
             if (headMessage) {
-                let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
+                let chain = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, maxArgLength, maxBelow, minAbove);
                 chain = chainDiagnosticMessages(chain, headMessage);
                 return getDiagnosticForCallNode(node, chain);
             }
-            return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
+            return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, maxArgLength, maxBelow, minAbove);
         }
-        else if (args.length < min) {
+        else if (maxArgLength < min) {
             // too short: put the error span on the call expression, not any of the args
             let diagnostic: Diagnostic;
             if (headMessage) {
-                let chain = chainDiagnosticMessages(/*details*/ undefined, error, parameterRange, args.length);
+                let chain = chainDiagnosticMessages(/*details*/ undefined, error, parameterRange, maxArgLength);
                 chain = chainDiagnosticMessages(chain, headMessage);
                 diagnostic = getDiagnosticForCallNode(node, chain);
             }
             else {
-                diagnostic = getDiagnosticForCallNode(node, error, parameterRange, args.length);
+                diagnostic = getDiagnosticForCallNode(node, error, parameterRange, maxArgLength);
             }
-            const parameter = closestSignature?.declaration?.parameters[closestSignature.thisParameter ? args.length + 1 : args.length];
+            const parameter = closestSignature?.declaration?.parameters[closestSignature.thisParameter ? maxArgLength + 1 : maxArgLength];
             if (parameter) {
                 const messageAndArgs: DiagnosticAndArguments =
                     isBindingPattern(parameter.name) ? [Diagnostics.An_argument_matching_this_binding_pattern_was_not_provided]
                         : isRestParameter(parameter) ? [Diagnostics.Arguments_for_the_rest_parameter_0_were_not_provided, idText(getFirstIdentifier(parameter.name))]
-                        : [Diagnostics.An_argument_for_0_was_not_provided, !parameter.name ? args.length : idText(getFirstIdentifier(parameter.name))];
+                        : [Diagnostics.An_argument_for_0_was_not_provided, !parameter.name ? maxArgLength : idText(getFirstIdentifier(parameter.name))];
                 const parameterError = createDiagnosticForNode(parameter, ...messageAndArgs);
                 return addRelatedInfo(diagnostic, parameterError);
             }
@@ -33105,11 +33149,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             setTextRangePosEnd(errorSpan, pos, end);
             if (headMessage) {
-                let chain = chainDiagnosticMessages(/*details*/ undefined, error, parameterRange, args.length);
+                let chain = chainDiagnosticMessages(/*details*/ undefined, error, parameterRange, maxArgLength);
                 chain = chainDiagnosticMessages(chain, headMessage);
                 return createDiagnosticForNodeArrayFromMessageChain(getSourceFileOfNode(node), errorSpan, chain);
             }
-            return createDiagnosticForNodeArray(getSourceFileOfNode(node), errorSpan, error, parameterRange, args.length);
+            return createDiagnosticForNodeArray(getSourceFileOfNode(node), errorSpan, error, parameterRange, maxArgLength);
         }
     }
 
@@ -33178,7 +33222,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         reorderCandidates(signatures, candidates, callChainFlags);
         Debug.assert(candidates.length, "Revert #54442 and add a testcase with whatever triggered this");
 
-        const args = getEffectiveCallArguments(node);
+        const [args, shortestTupleArgs] = getEffectiveCallArguments(node, signatures);
 
         // The excludeArgument array contains true for each context sensitive argument (an argument
         // is context sensitive it is susceptible to a one-time permanent contextual typing).
@@ -33333,7 +33377,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (candidateForArgumentArityError) {
-                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, headMessage));
+                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, shortestTupleArgs, headMessage));
             }
             else if (candidateForTypeArgumentError) {
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, headMessage);
@@ -33344,7 +33388,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!, headMessage));
                 }
                 else {
-                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args, headMessage));
+                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args, shortestTupleArgs, headMessage));
                 }
             }
         }
@@ -33379,7 +33423,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (isSingleNonGenericCandidate) {
                 const candidate = candidates[0];
-                if (some(typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
+                if (some(typeArguments) || !hasCorrectArity(node, args, shortestTupleArgs, candidate, signatureHelpTrailingComma)) {
                     return undefined;
                 }
                 if (getSignatureApplicabilityError(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false, /*containingMessageChain*/ undefined)) {
@@ -33391,7 +33435,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
                 const candidate = candidates[candidateIndex];
-                if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
+                if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, shortestTupleArgs, candidate, signatureHelpTrailingComma)) {
                     continue;
                 }
 
@@ -33415,7 +33459,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
                     // If the original signature has a generic rest type, instantiation may produce a
                     // signature with different arity and we need to perform another arity check.
-                    if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
+                    if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, shortestTupleArgs, checkCandidate, signatureHelpTrailingComma)) {
                         candidateForArgumentArityError = checkCandidate;
                         continue;
                     }
@@ -33438,7 +33482,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
                         // If the original signature has a generic rest type, instantiation may produce a
                         // signature with different arity and we need to perform another arity check.
-                        if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
+                        if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, shortestTupleArgs, checkCandidate, signatureHelpTrailingComma)) {
                             candidateForArgumentArityError = checkCandidate;
                             continue;
                         }

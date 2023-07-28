@@ -1,0 +1,110 @@
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread6.ts] ////
+
+=== callWithSpread6.ts ===
+declare const n: number
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+
+declare const nntnnnt: [number, number] | [number, number, number]
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+
+declare const ntnnnt: [number] | [number, number, number]
+>ntnnnt : Symbol(ntnnnt, Decl(callWithSpread6.ts, 2, 13))
+
+declare const ntnnnut: [number] | [number, number, number?]
+>ntnnnut : Symbol(ntnnnut, Decl(callWithSpread6.ts, 3, 13))
+
+declare function setHours(a: number, b?: number, c?: number, d?: number): number
+>setHours : Symbol(setHours, Decl(callWithSpread6.ts, 3, 59))
+>a : Symbol(a, Decl(callWithSpread6.ts, 4, 26))
+>b : Symbol(b, Decl(callWithSpread6.ts, 4, 36))
+>c : Symbol(c, Decl(callWithSpread6.ts, 4, 48))
+>d : Symbol(d, Decl(callWithSpread6.ts, 4, 60))
+
+declare function setHoursStrict(a: number, b: number, c: number, d: number): number
+>setHoursStrict : Symbol(setHoursStrict, Decl(callWithSpread6.ts, 4, 80))
+>a : Symbol(a, Decl(callWithSpread6.ts, 5, 32))
+>b : Symbol(b, Decl(callWithSpread6.ts, 5, 42))
+>c : Symbol(c, Decl(callWithSpread6.ts, 5, 53))
+>d : Symbol(d, Decl(callWithSpread6.ts, 5, 64))
+
+declare function f(a: number, b: number, ...c: number[]): number
+>f : Symbol(f, Decl(callWithSpread6.ts, 5, 83))
+>a : Symbol(a, Decl(callWithSpread6.ts, 6, 19))
+>b : Symbol(b, Decl(callWithSpread6.ts, 6, 29))
+>c : Symbol(c, Decl(callWithSpread6.ts, 6, 40))
+
+declare function g(a: number, b?: number, ...c: number[]): number
+>g : Symbol(g, Decl(callWithSpread6.ts, 6, 64))
+>a : Symbol(a, Decl(callWithSpread6.ts, 7, 19))
+>b : Symbol(b, Decl(callWithSpread6.ts, 7, 29))
+>c : Symbol(c, Decl(callWithSpread6.ts, 7, 41))
+
+declare function h(a: number, b: number, c: number, ...d: number[]): number
+>h : Symbol(h, Decl(callWithSpread6.ts, 7, 65))
+>a : Symbol(a, Decl(callWithSpread6.ts, 8, 19))
+>b : Symbol(b, Decl(callWithSpread6.ts, 8, 29))
+>c : Symbol(c, Decl(callWithSpread6.ts, 8, 40))
+>d : Symbol(d, Decl(callWithSpread6.ts, 8, 51))
+
+setHours(...nntnnnt)
+>setHours : Symbol(setHours, Decl(callWithSpread6.ts, 3, 59))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+
+setHours(...ntnnnt)
+>setHours : Symbol(setHours, Decl(callWithSpread6.ts, 3, 59))
+>ntnnnt : Symbol(ntnnnt, Decl(callWithSpread6.ts, 2, 13))
+
+setHours(...ntnnnut)
+>setHours : Symbol(setHours, Decl(callWithSpread6.ts, 3, 59))
+>ntnnnut : Symbol(ntnnnut, Decl(callWithSpread6.ts, 3, 13))
+
+setHours(n, n, ...nntnnnt)
+>setHours : Symbol(setHours, Decl(callWithSpread6.ts, 3, 59))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+
+setHoursStrict(n, ...nntnnnt)
+>setHoursStrict : Symbol(setHoursStrict, Decl(callWithSpread6.ts, 4, 80))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+
+setHoursStrict(n, n, ...nntnnnt)
+>setHoursStrict : Symbol(setHoursStrict, Decl(callWithSpread6.ts, 4, 80))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+
+setHours(n, n, n, ...nntnnnt)
+>setHours : Symbol(setHours, Decl(callWithSpread6.ts, 3, 59))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+
+setHours(...nntnnnt, n)
+>setHours : Symbol(setHours, Decl(callWithSpread6.ts, 3, 59))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+
+f(...ntnnnt)
+>f : Symbol(f, Decl(callWithSpread6.ts, 5, 83))
+>ntnnnt : Symbol(ntnnnt, Decl(callWithSpread6.ts, 2, 13))
+
+f(...nntnnnt)
+>f : Symbol(f, Decl(callWithSpread6.ts, 5, 83))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+
+f(...nntnnnt, n)
+>f : Symbol(f, Decl(callWithSpread6.ts, 5, 83))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+>n : Symbol(n, Decl(callWithSpread6.ts, 0, 13))
+
+h(...ntnnnt)
+>h : Symbol(h, Decl(callWithSpread6.ts, 7, 65))
+>ntnnnt : Symbol(ntnnnt, Decl(callWithSpread6.ts, 2, 13))
+
+h(...nntnnnt)
+>h : Symbol(h, Decl(callWithSpread6.ts, 7, 65))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread6.ts, 1, 13))
+

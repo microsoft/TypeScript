@@ -1,0 +1,136 @@
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread6.ts] ////
+
+=== callWithSpread6.ts ===
+declare const n: number
+>n : number
+
+declare const nntnnnt: [number, number] | [number, number, number]
+>nntnnnt : [number, number] | [number, number, number]
+
+declare const ntnnnt: [number] | [number, number, number]
+>ntnnnt : [number, number, number] | [number]
+
+declare const ntnnnut: [number] | [number, number, number?]
+>ntnnnut : [number] | [number, number, (number | undefined)?]
+
+declare function setHours(a: number, b?: number, c?: number, d?: number): number
+>setHours : (a: number, b?: number, c?: number, d?: number) => number
+>a : number
+>b : number | undefined
+>c : number | undefined
+>d : number | undefined
+
+declare function setHoursStrict(a: number, b: number, c: number, d: number): number
+>setHoursStrict : (a: number, b: number, c: number, d: number) => number
+>a : number
+>b : number
+>c : number
+>d : number
+
+declare function f(a: number, b: number, ...c: number[]): number
+>f : (a: number, b: number, ...c: number[]) => number
+>a : number
+>b : number
+>c : number[]
+
+declare function g(a: number, b?: number, ...c: number[]): number
+>g : (a: number, b?: number, ...c: number[]) => number
+>a : number
+>b : number | undefined
+>c : number[]
+
+declare function h(a: number, b: number, c: number, ...d: number[]): number
+>h : (a: number, b: number, c: number, ...d: number[]) => number
+>a : number
+>b : number
+>c : number
+>d : number[]
+
+setHours(...nntnnnt)
+>setHours(...nntnnnt) : number
+>setHours : (a: number, b?: number | undefined, c?: number | undefined, d?: number | undefined) => number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+
+setHours(...ntnnnt)
+>setHours(...ntnnnt) : number
+>setHours : (a: number, b?: number | undefined, c?: number | undefined, d?: number | undefined) => number
+>...ntnnnt : number
+>ntnnnt : [number, number, number] | [number]
+
+setHours(...ntnnnut)
+>setHours(...ntnnnut) : number
+>setHours : (a: number, b?: number | undefined, c?: number | undefined, d?: number | undefined) => number
+>...ntnnnut : number | undefined
+>ntnnnut : [number] | [number, number, (number | undefined)?]
+
+setHours(n, n, ...nntnnnt)
+>setHours(n, n, ...nntnnnt) : number
+>setHours : (a: number, b?: number | undefined, c?: number | undefined, d?: number | undefined) => number
+>n : number
+>n : number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+
+setHoursStrict(n, ...nntnnnt)
+>setHoursStrict(n, ...nntnnnt) : number
+>setHoursStrict : (a: number, b: number, c: number, d: number) => number
+>n : number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+
+setHoursStrict(n, n, ...nntnnnt)
+>setHoursStrict(n, n, ...nntnnnt) : number
+>setHoursStrict : (a: number, b: number, c: number, d: number) => number
+>n : number
+>n : number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+
+setHours(n, n, n, ...nntnnnt)
+>setHours(n, n, n, ...nntnnnt) : number
+>setHours : (a: number, b?: number | undefined, c?: number | undefined, d?: number | undefined) => number
+>n : number
+>n : number
+>n : number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+
+setHours(...nntnnnt, n)
+>setHours(...nntnnnt, n) : number
+>setHours : (a: number, b?: number | undefined, c?: number | undefined, d?: number | undefined) => number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+>n : number
+
+f(...ntnnnt)
+>f(...ntnnnt) : number
+>f : (a: number, b: number, ...c: number[]) => number
+>...ntnnnt : number
+>ntnnnt : [number, number, number] | [number]
+
+f(...nntnnnt)
+>f(...nntnnnt) : number
+>f : (a: number, b: number, ...c: number[]) => number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+
+f(...nntnnnt, n)
+>f(...nntnnnt, n) : number
+>f : (a: number, b: number, ...c: number[]) => number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+>n : number
+
+h(...ntnnnt)
+>h(...ntnnnt) : number
+>h : (a: number, b: number, c: number, ...d: number[]) => number
+>...ntnnnt : number
+>ntnnnt : [number, number, number] | [number]
+
+h(...nntnnnt)
+>h(...nntnnnt) : number
+>h : (a: number, b: number, c: number, ...d: number[]) => number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+
