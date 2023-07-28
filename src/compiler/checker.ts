@@ -564,6 +564,7 @@ import {
     isInternalModuleImportEqualsDeclaration,
     isInTopLevelContext,
     isIntrinsicJsxName,
+    isInTypeQuery,
     isIterationStatement,
     isJSDocAllType,
     isJSDocAugmentsTag,
@@ -25370,15 +25371,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     /*excludeGlobals*/ false) || unknownSymbol;
         }
         return links.resolvedSymbol;
-    }
-
-    function isInTypeQuery(node: Node): boolean {
-        // TypeScript 1.0 spec (April 2014): 3.6.3
-        // A type query consists of the keyword typeof followed by an expression.
-        // The expression is restricted to a single identifier or a sequence of identifiers separated by periods
-        return !!findAncestor(
-            node,
-            n => n.kind === SyntaxKind.TypeQuery ? true : n.kind === SyntaxKind.Identifier || n.kind === SyntaxKind.QualifiedName ? false : "quit");
     }
 
     function isInAmbientOrTypeNode(node: Node): boolean {
