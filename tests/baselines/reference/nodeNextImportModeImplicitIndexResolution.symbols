@@ -1,12 +1,14 @@
-=== tests/cases/compiler/node_modules/pkg/index.d.ts ===
+//// [tests/cases/compiler/nodeNextImportModeImplicitIndexResolution.ts] ////
+
+=== node_modules/pkg/index.d.ts ===
 export const item = 4;
 >item : Symbol(item, Decl(index.d.ts, 0, 12))
 
-=== tests/cases/compiler/pkg/index.d.ts ===
+=== pkg/index.d.ts ===
 export const item = 4;
 >item : Symbol(item, Decl(index.d.ts, 0, 12))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { item } from "pkg"; // should work (`index.js` is assumed to be the entrypoint for packages found via nonrelative import)
 >item : Symbol(item, Decl(index.ts, 0, 8))
 

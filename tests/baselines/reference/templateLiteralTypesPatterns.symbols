@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts] ////
+
+=== templateLiteralTypesPatterns.ts ===
 type RequiresLeadingSlash = `/${string}`;
 >RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
 

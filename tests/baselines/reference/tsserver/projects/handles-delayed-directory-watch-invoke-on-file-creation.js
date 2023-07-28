@@ -157,17 +157,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/sub/a.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -205,15 +205,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -485,25 +485,25 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/project/a.ts: *new*
   {"pollingInterval":500}
-/users/username/projects/project/sub/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/users/username/projects/project/sub/jsconfig.json: *new*
-  {"pollingInterval":2000}
 /users/username/projects/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/sub/jsconfig.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/sub/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/sub/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -643,9 +643,9 @@ After running Timeout callback:: count: 2
 14: *ensureProjectForOpenFiles*
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 /users/username/projects/project/sub/node_modules/@types:
   {"pollingInterval":500}
@@ -653,17 +653,17 @@ PolledWatches::
 PolledWatches *deleted*::
 /users/username/projects/project/a.ts:
   {"pollingInterval":500}
-/users/username/projects/project/sub/tsconfig.json:
+/users/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
 /users/username/projects/project/sub/jsconfig.json:
   {"pollingInterval":2000}
-/users/username/projects/project/jsconfig.json:
+/users/username/projects/project/sub/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::

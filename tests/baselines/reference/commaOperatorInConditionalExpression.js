@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commaOperatorInConditionalExpression.ts] ////
+
 //// [commaOperatorInConditionalExpression.ts]
 function f (m: string) {
     [1, 2, 3].map(i => {

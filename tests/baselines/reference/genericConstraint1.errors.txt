@@ -1,7 +1,7 @@
-tests/cases/compiler/genericConstraint1.ts(8,8): error TS2344: Type 'string' does not satisfy the constraint 'number'.
+genericConstraint1.ts(8,8): error TS2344: Type 'string' does not satisfy the constraint 'number'.
 
 
-==== tests/cases/compiler/genericConstraint1.ts (1 errors) ====
+==== genericConstraint1.ts (1 errors) ====
     class C<T> {
         public bar2<U extends T>(x: T, y: U): T {
             return null;

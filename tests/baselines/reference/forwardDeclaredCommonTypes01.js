@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forwardDeclaredCommonTypes01.ts] ////
+
 //// [forwardDeclaredCommonTypes01.ts]
 interface Promise<T> {}
 interface Symbol {}

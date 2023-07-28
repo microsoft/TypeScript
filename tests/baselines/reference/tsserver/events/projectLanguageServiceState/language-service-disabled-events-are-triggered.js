@@ -340,11 +340,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/data/package.json: *new*
+  {}
 /a/jsconfig.json:
   {}
 /a/largefile.js:
-  {}
-/a/data/package.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -442,19 +442,19 @@ After running Timeout callback:: count: 2
 8: *ensureProjectForOpenFiles*
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/bower_components: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /a/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
+/a/data/package.json:
+  {}
 /a/jsconfig.json:
   {}
 /a/largefile.js:
-  {}
-/a/data/package.json:
   {}
 
 FsWatchesRecursive::

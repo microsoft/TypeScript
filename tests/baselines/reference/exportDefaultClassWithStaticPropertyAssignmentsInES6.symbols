@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classDeclaration/exportDefaultClassWithStaticPropertyAssignmentsInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/exportDefaultClassWithStaticPropertyAssignmentsInES6.ts] ////
+
+=== exportDefaultClassWithStaticPropertyAssignmentsInES6.ts ===
 export default class {
     static z: string = "Foo";
 >z : Symbol(default.z, Decl(exportDefaultClassWithStaticPropertyAssignmentsInES6.ts, 0, 22))

@@ -1,7 +1,7 @@
-tests/cases/conformance/internalModules/DeclarationMerging/module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+module.ts(2,19): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 
 
-==== tests/cases/conformance/internalModules/DeclarationMerging/class.ts (0 errors) ====
+==== class.ts (0 errors) ====
     module X.Y {
         export class Point {
             constructor(x: number, y: number) {
@@ -13,7 +13,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/module.ts(2,19): erro
         }
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/module.ts (1 errors) ====
+==== module.ts (1 errors) ====
     module X.Y {
         export module Point {
                       ~~~~~
@@ -22,13 +22,13 @@ tests/cases/conformance/internalModules/DeclarationMerging/module.ts(2,19): erro
         }
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/test.ts (0 errors) ====
+==== test.ts (0 errors) ====
     //var cl: { x: number; y: number; }
     var cl = new X.Y.Point(1,1);
     var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
     
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts (0 errors) ====
+==== simple.ts (0 errors) ====
     class A {
         id: string;
     }

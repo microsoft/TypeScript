@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/quotedFunctionName1.ts] ////
+
 //// [quotedFunctionName1.ts]
 class Test1 {
   "prop1"() { }

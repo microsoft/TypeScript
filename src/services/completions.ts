@@ -7,6 +7,7 @@ import {
     BindingPattern,
     BreakOrContinueStatement,
     CancellationToken,
+    canHaveDecorators,
     canUsePropertyAccess,
     CaseBlock,
     cast,
@@ -44,6 +45,7 @@ import {
     createTextSpanFromRange,
     Debug,
     Declaration,
+    Decorator,
     Diagnostics,
     diagnosticToString,
     displayPart,
@@ -91,6 +93,7 @@ import {
     getLineAndCharacterOfPosition,
     getLineStartPositionForPosition,
     getLocalSymbolForExportDefault,
+    getModifiers,
     getNameOfDeclaration,
     getNameTable,
     getNewLineCharacter,
@@ -145,6 +148,7 @@ import {
     isConstructorDeclaration,
     isContextualKeyword,
     isDeclarationName,
+    isDecorator,
     isDeprecatedDeclaration,
     isEntityName,
     isEnumMember,
@@ -160,6 +164,7 @@ import {
     isFunctionLikeDeclaration,
     isFunctionLikeKind,
     isFunctionTypeNode,
+    isGetAccessorDeclaration,
     isIdentifier,
     isIdentifierText,
     isImportableFile,
@@ -203,6 +208,7 @@ import {
     isNamedImportsOrExports,
     isNamespaceImport,
     isNodeDescendantOf,
+    isNonContextualKeyword,
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isObjectTypeDeclaration,
@@ -213,9 +219,11 @@ import {
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPropertyAccessExpression,
+    isPropertyAssignment,
     isPropertyDeclaration,
     isPropertyNameLiteral,
     isRegularExpressionLiteral,
+    isSetAccessorDeclaration,
     isShorthandPropertyAssignment,
     isSingleOrDoubleQuote,
     isSourceFile,
@@ -276,6 +284,7 @@ import {
     memoizeOne,
     MethodDeclaration,
     ModifierFlags,
+    ModifierLike,
     modifiersToFlags,
     ModifierSyntaxKind,
     modifierToFlag,
@@ -438,6 +447,8 @@ export enum CompletionSource {
     ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
     /** Case completions for switch statements */
     SwitchCases = "SwitchCases/",
+    /** Completions for an Object literal expression */
+    ObjectLiteralMemberWithComma = "ObjectLiteralMemberWithComma/",
 }
 
 /** @internal */
@@ -1609,6 +1620,7 @@ function createCompletionEntry(
     includeSymbol: boolean
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
+    let filterText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
     let data: CompletionEntryData | undefined;
     let isSnippet: true | undefined;
@@ -1677,17 +1689,45 @@ function createCompletionEntry(
         hasAction = true;
     }
 
+    // Provide object member completions when missing commas, and insert missing commas.
+    // For example:
+    //
+    //    interface I {
+    //        a: string;
+    //        b: number
+    //     }
+    //
+    //     const cc: I = { a: "red" | }
+    //
+    // Completion should add a comma after "red" and provide completions for b
+    if (completionKind === CompletionKind.ObjectPropertyDeclaration && contextToken && findPrecedingToken(contextToken.pos, sourceFile, contextToken)?.kind !== SyntaxKind.CommaToken) {
+        if (isMethodDeclaration(contextToken.parent.parent) ||
+            isGetAccessorDeclaration(contextToken.parent.parent) ||
+            isSetAccessorDeclaration(contextToken.parent.parent) ||
+            isSpreadAssignment(contextToken.parent) ||
+            findAncestor(contextToken.parent, isPropertyAssignment)?.getLastToken(sourceFile) === contextToken ||
+            isShorthandPropertyAssignment(contextToken.parent) && getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
+
+            source = CompletionSource.ObjectLiteralMemberWithComma;
+            hasAction = true;
+        }
+    }
+
     if (preferences.includeCompletionsWithClassMemberSnippets &&
         preferences.includeCompletionsWithInsertText &&
         completionKind === CompletionKind.MemberLike &&
         isClassLikeMemberCompletion(symbol, location, sourceFile)) {
         let importAdder;
-        ({ insertText, isSnippet, importAdder, replacementSpan } =
-            getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext));
-        sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
-        if (importAdder?.hasFixes()) {
-            hasAction = true;
-            source = CompletionSource.ClassMemberSnippet;
+        const memberCompletionEntry = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, position, contextToken, formatContext);
+        if (memberCompletionEntry) {
+            ({ insertText, filterText, isSnippet, importAdder } = memberCompletionEntry);
+            if (importAdder?.hasFixes()) {
+                hasAction = true;
+                source = CompletionSource.ClassMemberSnippet;
+            }
+        }
+        else {
+            return undefined; // Skip this entry
         }
     }
 
@@ -1738,6 +1778,14 @@ function createCompletionEntry(
         hasAction = !importStatementCompletion;
     }
 
+    const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
+    if (parentNamedImportOrExport?.kind === SyntaxKind.NamedImports) {
+        const possibleToken = stringToToken(name);
+        if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+            insertText = `${name} as ${name}_`;
+        }
+    }
+
     // TODO(drosen): Right now we just permit *all* semantic meanings when calling
     // 'getSymbolKind' which is permissible given that it is backwards compatible; but
     // really we should consider passing the meaning for the node so that we don't report
@@ -1755,6 +1803,7 @@ function createCompletionEntry(
         hasAction: hasAction ? true : undefined,
         isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
         insertText,
+        filterText,
         replacementSpan,
         sourceDisplay,
         labelDetails,
@@ -1826,15 +1875,15 @@ function getEntryForMemberCompletion(
     position: number,
     contextToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
-): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder, replacementSpan?: TextSpan } {
+): { insertText: string, filterText?: string, isSnippet?: true, importAdder?: codefix.ImportAdder, eraseRange?: TextRange } | undefined {
     const classLikeDeclaration = findAncestor(location, isClassLike);
     if (!classLikeDeclaration) {
-        return { insertText: name };
+        return undefined; // This should never happen.
     }
 
     let isSnippet: true | undefined;
-    let replacementSpan: TextSpan | undefined;
     let insertText: string = name;
+    const filterText: string = name;
 
     const checker = program.getTypeChecker();
     const sourceFile = location.getSourceFile();
@@ -1863,11 +1912,11 @@ function getEntryForMemberCompletion(
     }
 
     let modifiers = ModifierFlags.None;
+    const { modifiers: presentModifiers, range: eraseRange, decorators: presentDecorators } = getPresentModifiers(contextToken, sourceFile, position);
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
-    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken, sourceFile, position);
-    const isAbstract = !!(presentModifiers & ModifierFlags.Abstract);
-    const completionNodes: Node[] = [];
+    const isAbstract = presentModifiers & ModifierFlags.Abstract && classLikeDeclaration.modifierFlagsCache & ModifierFlags.Abstract;
+    let completionNodes: codefix.AddNode[] = [];
     codefix.addNewNodeForMemberSymbol(
         symbol,
         classLikeDeclaration,
@@ -1896,20 +1945,49 @@ function getEntryForMemberCompletion(
                 // This is needed when we have overloaded signatures,
                 // so this callback will be called for multiple nodes/signatures,
                 // and we need to make sure the modifiers are uniform for all nodes/signatures.
-                modifiers = node.modifierFlagsCache | requiredModifiers | presentModifiers;
+                modifiers = node.modifierFlagsCache | requiredModifiers;
             }
             node = factory.updateModifiers(node, modifiers);
             completionNodes.push(node);
         },
         body,
         codefix.PreserveOptionalFlags.Property,
-        isAbstract);
+        !!isAbstract);
 
     if (completionNodes.length) {
+        const isMethod = symbol.flags & SymbolFlags.Method;
+        let allowedModifiers = modifiers | ModifierFlags.Override | ModifierFlags.Public;
+        if (!isMethod) {
+            allowedModifiers |= ModifierFlags.Ambient | ModifierFlags.Readonly;
+        }
+        else {
+            allowedModifiers |= ModifierFlags.Async;
+        }
+        const allowedAndPresent = presentModifiers & allowedModifiers;
+        if (presentModifiers & (~allowedModifiers)) {
+            return undefined; // This completion entry will be filtered out.
+        }
+        // If the original member is protected, we allow it to change to public.
+        if (modifiers & ModifierFlags.Protected && allowedAndPresent & ModifierFlags.Public) {
+            modifiers &= ~ModifierFlags.Protected;
+        }
+        // `public` modifier is optional and can be dropped.
+        if (allowedAndPresent !== ModifierFlags.None && !(allowedAndPresent & ModifierFlags.Public)) {
+            modifiers &= ~ModifierFlags.Public;
+        }
+        modifiers |= allowedAndPresent;
+        completionNodes = completionNodes.map(node => factory.updateModifiers(node, modifiers));
+        // Add back the decorators that were already present.
+        if (presentDecorators?.length) {
+            const lastNode = completionNodes[completionNodes.length - 1];
+            if (canHaveDecorators(lastNode)) {
+                completionNodes[completionNodes.length - 1] = factory.updateModifierLike(lastNode, (presentDecorators as ModifierLike[]).concat(getModifiers(lastNode) || []));
+            }
+        }
+
         const format = ListFormat.MultiLine | ListFormat.NoTrailingNewLine;
-        replacementSpan = modifiersSpan;
-         // If we have access to formatting settings, we print the nodes using the emitter,
-         // and then format the printed text.
+        // If we have access to formatting settings, we print the nodes using the emitter,
+        // and then format the printed text.
         if (formatContext) {
             insertText = printer.printAndFormatSnippetList(
                 format,
@@ -1925,21 +2003,22 @@ function getEntryForMemberCompletion(
         }
     }
 
-    return { insertText, isSnippet, importAdder, replacementSpan };
+    return { insertText, filterText, isSnippet, importAdder, eraseRange };
 }
 
 function getPresentModifiers(
     contextToken: Node | undefined,
     sourceFile: SourceFile,
-    position: number): { modifiers: ModifierFlags, span?: TextSpan } {
+    position: number): { modifiers: ModifierFlags, decorators?: Decorator[], range?: TextRange } {
     if (!contextToken ||
         getLineAndCharacterOfPosition(sourceFile, position).line
             > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line) {
         return { modifiers: ModifierFlags.None };
     }
     let modifiers = ModifierFlags.None;
-    let span;
+    let decorators: Decorator[] | undefined;
     let contextMod;
+    const range: TextRange = { pos: position, end: position };
     /*
     Cases supported:
     In
@@ -1959,15 +2038,19 @@ function getPresentModifiers(
     `location.parent` is property declaration ``protected override m``,
     `location.parent.parent` is class declaration ``class C { ... }``.
     */
-    if (contextMod = isModifierLike(contextToken)) {
-        modifiers |= modifierToFlag(contextMod);
-        span = createTextSpanFromNode(contextToken);
-    }
-    if (isPropertyDeclaration(contextToken.parent)) {
+    if (isPropertyDeclaration(contextToken.parent) && contextToken.parent.modifiers) {
         modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
-        span = createTextSpanFromNode(contextToken.parent);
+        decorators = contextToken.parent.modifiers.filter(isDecorator) || [];
+        range.pos = Math.min(range.pos, contextToken.parent.modifiers.pos);
     }
-    return { modifiers, span };
+    if (contextMod = isModifierLike(contextToken)) {
+        const contextModifierFlag = modifierToFlag(contextMod);
+        if (!(modifiers & contextModifierFlag)) {
+            modifiers |= contextModifierFlag;
+            range.pos = Math.min(range.pos, contextToken.pos);
+        }
+    }
+    return { modifiers, decorators, range: range.pos !== position ? range : undefined };
 }
 
 function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
@@ -2394,7 +2477,7 @@ export function getCompletionEntriesFromSymbols(
     includeSymbol = false
 ): UniqueNameSet {
     const start = timestamp();
-    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken);
+    const variableOrParameterDeclaration = getVariableOrParameterDeclaration(contextToken, location);
     const useSemicolons = probablyUsesSemicolons(sourceFile);
     const typeChecker = program.getTypeChecker();
     // Tracks unique names.
@@ -2619,7 +2702,8 @@ function getSymbolCompletionFromEntryId(
         return info && info.name === entryId.name && (
             entryId.source === CompletionSource.ClassMemberSnippet && symbol.flags & SymbolFlags.ClassMember
             || entryId.source === CompletionSource.ObjectLiteralMethodSnippet && symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)
-            || getSourceFromOrigin(origin) === entryId.source)
+            || getSourceFromOrigin(origin) === entryId.source
+            || entryId.source === CompletionSource.ObjectLiteralMemberWithComma)
             ? { type: "symbol" as const, symbol, location, origin, contextToken, previousToken, isJsxInitializer, isTypeOnlyLocation }
             : undefined;
     }) || { type: "none" };
@@ -2763,14 +2847,14 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
     cancellationToken: CancellationToken,
 ): CodeActionsAndSourceDisplay {
     if (data?.moduleSpecifier) {
-        if (previousToken && getImportStatementCompletionInfo(contextToken || previousToken).replacementSpan) {
+        if (previousToken && getImportStatementCompletionInfo(contextToken || previousToken, sourceFile).replacementSpan) {
             // Import statement completion: 'import c|'
             return { codeActions: undefined, sourceDisplay: [textPart(data.moduleSpecifier)] };
         }
     }
 
     if (source === CompletionSource.ClassMemberSnippet) {
-        const { importAdder } = getEntryForMemberCompletion(
+        const { importAdder, eraseRange } = getEntryForMemberCompletion(
             host,
             program,
             compilerOptions,
@@ -2780,11 +2864,18 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
             location,
             position,
             contextToken,
-            formatContext);
-        if (importAdder) {
+            formatContext)!;
+        if (importAdder || eraseRange) {
             const changes = textChanges.ChangeTracker.with(
                 { host, formatContext, preferences },
-                importAdder.writeFixes);
+                tracker => {
+                    if (importAdder) {
+                        importAdder.writeFixes(tracker);
+                    }
+                    if (eraseRange) {
+                        tracker.deleteRange(sourceFile, eraseRange);
+                    }
+                });
             return {
                 sourceDisplay: undefined,
                 codeActions: [{
@@ -2806,6 +2897,23 @@ function getCompletionEntryCodeActionsAndSourceDisplay(
 
         Debug.assertIsDefined(codeAction, "Expected to have a code action for promoting type-only alias");
         return { codeActions: [codeAction], sourceDisplay: undefined };
+    }
+
+    if (source === CompletionSource.ObjectLiteralMemberWithComma && contextToken) {
+        const changes = textChanges.ChangeTracker.with(
+            { host, formatContext, preferences },
+            tracker => tracker.insertText(sourceFile, contextToken.end, ",")
+        );
+
+        if (changes) {
+            return {
+                sourceDisplay: undefined,
+                codeActions: [{
+                    changes,
+                    description: diagnosticToString([Diagnostics.Add_missing_comma_for_object_member_completion_0, name]),
+                }],
+            };
+        }
     }
 
     if (!origin || !(originIsExport(origin) || originIsResolvedExport(origin))) {
@@ -3068,7 +3176,7 @@ function getCompletionData(
     let flags = CompletionInfoFlags.None;
 
     if (contextToken) {
-        const importStatementCompletionInfo = getImportStatementCompletionInfo(contextToken);
+        const importStatementCompletionInfo = getImportStatementCompletionInfo(contextToken, sourceFile);
         if (importStatementCompletionInfo.keywordCompletion) {
             if (importStatementCompletionInfo.isKeywordOnlyCompletion) {
                 return {
@@ -3477,7 +3585,8 @@ function getCompletionData(
             const nameSymbol = leftMostName && typeChecker.getSymbolAtLocation(leftMostName);
             // If this is nested like for `namespace N { export const sym = Symbol(); }`, we'll add the completion for `N`.
             const firstAccessibleSymbol = nameSymbol && getFirstSymbolInChain(nameSymbol, contextToken, typeChecker);
-            if (firstAccessibleSymbol && addToSeen(seenPropertySymbols, getSymbolId(firstAccessibleSymbol))) {
+            const firstAccessibleSymbolId = firstAccessibleSymbol && getSymbolId(firstAccessibleSymbol);
+            if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
                 const moduleSymbol = firstAccessibleSymbol.parent;
@@ -3513,6 +3622,9 @@ function getCompletionData(
                 }
             }
             else if (preferences.includeCompletionsWithInsertText) {
+                if (firstAccessibleSymbolId && seenPropertySymbols.has(firstAccessibleSymbolId)) {
+                    return;
+                }
                 addSymbolOriginInfo(symbol);
                 addSymbolSortInfo(symbol);
                 symbols.push(symbol);
@@ -4085,7 +4197,7 @@ function getCompletionData(
         const members = getPropertiesForCompletion(containerExpectedType, typeChecker);
         const existingMembers = getPropertiesForCompletion(containerActualType, typeChecker);
 
-        const existingMemberEscapedNames: Set<__String> = new Set();
+        const existingMemberEscapedNames = new Set<__String>();
         existingMembers.forEach(s => existingMemberEscapedNames.add(s.escapedName));
 
         symbols = concatenate(symbols, filter(members, s => !existingMemberEscapedNames.has(s.escapedName)));
@@ -4104,7 +4216,7 @@ function getCompletionData(
      */
     function tryGetObjectLikeCompletionSymbols(): GlobalsSearch | undefined {
         const symbolsStartIndex = symbols.length;
-        const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
+        const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken, position, sourceFile);
         if (!objectLikeContainer) return GlobalsSearch.Continue;
 
         // We're looking up possible property names from contextual/inferred/declared type.
@@ -4832,7 +4944,7 @@ function getCompletionData(
  * Returns the immediate owning object literal or binding pattern of a context token,
  * on the condition that one exists and that the context implies completion should be given.
  */
-function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): ObjectLiteralExpression | ObjectBindingPattern | undefined {
+function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, position: number, sourceFile: SourceFile): ObjectLiteralExpression | ObjectBindingPattern | undefined {
     if (contextToken) {
         const { parent } = contextToken;
         switch (contextToken.kind) {
@@ -4847,8 +4959,33 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): Ob
             case SyntaxKind.AsyncKeyword:
                 return tryCast(parent.parent, isObjectLiteralExpression);
             case SyntaxKind.Identifier:
-                return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
-                    ? contextToken.parent.parent : undefined;
+                if ((contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)) {
+                    return contextToken.parent.parent;
+                }
+                else {
+                    if (isObjectLiteralExpression(contextToken.parent.parent) &&
+                        (isSpreadAssignment(contextToken.parent) || isShorthandPropertyAssignment(contextToken.parent) &&
+                        (getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line))) {
+                        return contextToken.parent.parent;
+                    }
+                    const ancestorNode = findAncestor(parent, isPropertyAssignment);
+                    if (ancestorNode?.getLastToken(sourceFile) === contextToken && isObjectLiteralExpression(ancestorNode.parent)) {
+                        return ancestorNode.parent;
+                    }
+                }
+                break;
+            default:
+                if (parent.parent?.parent && (isMethodDeclaration(parent.parent) || isGetAccessorDeclaration(parent.parent) || isSetAccessorDeclaration(parent.parent)) && isObjectLiteralExpression(parent.parent.parent)) {
+                    return parent.parent.parent;
+                }
+                if (isSpreadAssignment(parent) && isObjectLiteralExpression(parent.parent)) {
+                    return parent.parent;
+                }
+                const ancestorNode = findAncestor(parent, isPropertyAssignment);
+                if (contextToken.kind !== SyntaxKind.ColonToken && ancestorNode?.getLastToken(sourceFile) === contextToken &&
+                    isObjectLiteralExpression(ancestorNode.parent)) {
+                    return ancestorNode.parent;
+                }
         }
     }
 
@@ -5336,7 +5473,7 @@ export interface ImportStatementCompletionInfo {
     replacementSpan: TextSpan | undefined;
 }
 
-function getImportStatementCompletionInfo(contextToken: Node): ImportStatementCompletionInfo {
+function getImportStatementCompletionInfo(contextToken: Node, sourceFile: SourceFile): ImportStatementCompletionInfo {
     let keywordCompletion: TokenSyntaxKind | undefined;
     let isKeywordOnlyCompletion = false;
     const candidate = getCandidate();
@@ -5352,6 +5489,15 @@ function getImportStatementCompletionInfo(contextToken: Node): ImportStatementCo
     function getCandidate() {
         const parent = contextToken.parent;
         if (isImportEqualsDeclaration(parent)) {
+            // import Foo |
+            // import Foo f|
+            const lastToken = parent.getLastToken(sourceFile);
+            if (isIdentifier(contextToken) && lastToken !== contextToken) {
+                keywordCompletion = SyntaxKind.FromKeyword;
+                isKeywordOnlyCompletion = true;
+                return undefined;
+            }
+
             keywordCompletion = contextToken.kind === SyntaxKind.TypeKeyword ? undefined : SyntaxKind.TypeKeyword;
             return isModuleSpecifierMissingOrEmpty(parent.moduleReference) ? parent : undefined;
         }
@@ -5464,14 +5610,20 @@ function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression
     return !tryCast(isExternalModuleReference(specifier) ? specifier.expression : specifier, isStringLiteralLike)?.text;
 }
 
-function getVariableOrParameterDeclaration(contextToken: Node | undefined) {
+function getVariableOrParameterDeclaration(contextToken: Node | undefined, location: Node) {
     if (!contextToken) return;
 
-    const declaration = findAncestor(contextToken, node =>
+    const possiblyParameterDeclaration = findAncestor(contextToken, node =>
         isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
             ? "quit"
-            : isVariableDeclaration(node) || ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
-    return declaration as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
+            : ((isParameter(node) || isTypeParameterDeclaration(node)) && !isIndexSignatureDeclaration(node.parent)));
+
+    const possiblyVariableDeclaration = findAncestor(location, node =>
+        isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
+            ? "quit"
+            : isVariableDeclaration(node));
+
+    return (possiblyParameterDeclaration || possiblyVariableDeclaration) as ParameterDeclaration | TypeParameterDeclaration | VariableDeclaration | undefined;
 }
 
 function isArrowFunctionBody(node: Node) {

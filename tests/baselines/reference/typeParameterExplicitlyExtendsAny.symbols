@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts ===
+//// [tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts] ////
+
+=== typeParameterExplicitlyExtendsAny.ts ===
 function fee<T>() {
 >fee : Symbol(fee, Decl(typeParameterExplicitlyExtendsAny.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterExplicitlyExtendsAny.ts, 0, 13))

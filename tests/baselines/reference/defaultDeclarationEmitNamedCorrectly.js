@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultDeclarationEmitNamedCorrectly.ts] ////
+
 //// [defaultDeclarationEmitNamedCorrectly.ts]
 export interface Things<P, T> {
     p: P;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndFunction.ts] ////
+
 //// [collisionExportsRequireAndFunction.ts]
 export function exports() {
     return 1;

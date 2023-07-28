@@ -604,7 +604,6 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         if (hasChangedCompilerOptions) {
             newLine = updateNewLine();
             if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
-                debugger;
                 resolutionCache.onChangesAffectModuleResolution();
             }
         }
@@ -724,7 +723,8 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         }
 
         // Create new source file if requested or the versions dont match
-        if (hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile)) {
+        const impliedNodeFormat = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined;
+        if (hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile) || hostSourceFile.sourceFile.impliedNodeFormat !== impliedNodeFormat) {
             const sourceFile = getNewSourceFile(fileName, languageVersionOrOptions, onError);
             if (hostSourceFile) {
                 if (sourceFile) {

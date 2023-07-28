@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleImport.ts] ////
+
 //// [moduleImport.ts]
 module A.B.C {
 	import XYZ = X.Y.Z;

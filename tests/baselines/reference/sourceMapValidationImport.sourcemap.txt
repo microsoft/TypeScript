@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationImport.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationImport.js
+emittedFile:sourceMapValidationImport.js
 sourceFile:sourceMapValidationImport.ts
 -------------------------------------------------------------------
 >>>"use strict";

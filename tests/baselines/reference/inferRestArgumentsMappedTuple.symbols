@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferRestArgumentsMappedTuple.ts ===
+//// [tests/cases/compiler/inferRestArgumentsMappedTuple.ts] ////
+
+=== inferRestArgumentsMappedTuple.ts ===
 type MyMappedType<Primitive extends any> = {
 >MyMappedType : Symbol(MyMappedType, Decl(inferRestArgumentsMappedTuple.ts, 0, 0))
 >Primitive : Symbol(Primitive, Decl(inferRestArgumentsMappedTuple.ts, 0, 18))

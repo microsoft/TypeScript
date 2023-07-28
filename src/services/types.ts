@@ -652,7 +652,7 @@ export interface LanguageService {
      * arguments for any interactive action before offering it.
      */
     getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string, includeInteractiveActions?: boolean): ApplicableRefactorInfo[];
-    getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined, includeInteractiveActions?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
+    getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined, interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo | undefined;
     getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): { newFileName: string, files: string[] };
     organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
     getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
@@ -866,11 +866,17 @@ export const enum InlayHintKind {
 }
 
 export interface InlayHint {
-    text: string;
+    text: string | InlayHintDisplayPart[];
     position: number;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+}
+
+export interface InlayHintDisplayPart {
+    text: string;
+    span?: TextSpan;
+    file?: string;
 }
 
 export interface TodoCommentDescriptor {
@@ -1002,6 +1008,7 @@ export interface RefactorEditInfo {
     renameFilename?: string;
     renameLocation?: number;
     commands?: CodeActionCommand[];
+    notApplicableReason?: string;
 }
 
 export type RefactorTriggerReason = "implicit" | "invoked";
@@ -1406,6 +1413,7 @@ export interface CompletionEntry {
     kindModifiers?: string; // see ScriptElementKindModifier, comma separated
     sortText: string;
     insertText?: string;
+    filterText?: string;
     isSnippet?: true;
     /**
      * An optional span that indicates the text to be replaced by this completion item.
@@ -1593,6 +1601,12 @@ export const enum ScriptElementKind {
 
     /** Inside function */
     localVariableElement = "local var",
+
+    /** using foo = ... */
+    variableUsingElement = "using",
+
+    /** await using foo = ... */
+    variableAwaitUsingElement = "await using",
 
     /**
      * Inside module and script only

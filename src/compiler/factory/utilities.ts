@@ -178,6 +178,7 @@ import {
     Token,
     TransformFlags,
     TypeNode,
+    WrappedExpression
 } from "../_namespaces/ts";
 
 // Compound nodes
@@ -655,6 +656,8 @@ export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All):
     return false;
 }
 
+/** @internal */
+export function skipOuterExpressions<T extends Expression>(node: WrappedExpression<T>): T;
 /** @internal */
 export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
 /** @internal */

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/constructorFunctionTypeIsAssignableToBaseType.ts] ////
+
 //// [constructorFunctionTypeIsAssignableToBaseType.ts]
 class Base {
     static foo: {

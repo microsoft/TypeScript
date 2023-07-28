@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyAmbients.ts] ////
+
 //// [implicitAnyAmbients.ts]
 declare module m {
     var x; // error

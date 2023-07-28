@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExport.ts] ////
+
 //// [internalAliasEnumInsideLocalModuleWithoutExport.ts]
 export module a {
     export enum weekend {
@@ -34,14 +36,14 @@ var c;
 
 
 //// [internalAliasEnumInsideLocalModuleWithoutExport.d.ts]
-export declare module a {
+export declare namespace a {
     enum weekend {
         Friday = 0,
         Saturday = 1,
         Sunday = 2
     }
 }
-export declare module c {
+export declare namespace c {
     import b = a.weekend;
     var bVal: b;
 }

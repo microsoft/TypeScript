@@ -6,27 +6,32 @@ import {
     Block,
     CallExpression,
     CharacterCodes,
+    CheckFlags,
     ClassLikeDeclaration,
     CodeFixContextBase,
     combine,
     Debug,
+    Declaration,
     Diagnostics,
     emptyArray,
     EntityName,
     Expression,
     factory,
     find,
+    firstOrUndefined,
     flatMap,
     FunctionDeclaration,
     FunctionExpression,
     GetAccessorDeclaration,
     getAllAccessorDeclarations,
+    getCheckFlags,
     getEffectiveModifierFlags,
     getEmitScriptTarget,
     getFirstIdentifier,
     getModuleSpecifierResolverHost,
     getNameForExportedSymbol,
     getNameOfDeclaration,
+    getPropertyNameFromType,
     getQuotePreference,
     getSetAccessorValueParameter,
     getSynthesizedDeepClone,
@@ -52,6 +57,7 @@ import {
     isSetAccessorDeclaration,
     isStringLiteral,
     isTypeNode,
+    isTypeUsableAsPropertyName,
     isYieldExpression,
     LanguageServiceHost,
     length,
@@ -69,6 +75,7 @@ import {
     ObjectLiteralExpression,
     ObjectType,
     ParameterDeclaration,
+    PrivateIdentifier,
     Program,
     PropertyAssignment,
     PropertyDeclaration,
@@ -90,6 +97,7 @@ import {
     textChanges,
     TextSpan,
     textSpanEnd,
+    TransientSymbol,
     tryCast,
     TsConfigSourceFile,
     Type,
@@ -97,6 +105,7 @@ import {
     TypeFlags,
     TypeNode,
     TypeParameterDeclaration,
+    unescapeLeadingUnderscores,
     UnionType,
     UserPreferences,
     visitEachChild,
@@ -173,7 +182,7 @@ export function addNewNodeForMemberSymbol(
     isAmbient = false,
 ): void {
     const declarations = symbol.getDeclarations();
-    const declaration = declarations?.[0];
+    const declaration = firstOrUndefined(declarations);
     const checker = context.program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
 
@@ -192,9 +201,10 @@ export function addNewNodeForMemberSymbol(
      * In such cases, we assume the declaration to be a `PropertySignature`.
      */
     const kind = declaration?.kind ?? SyntaxKind.PropertySignature;
-    const declarationName = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
+    const declarationName = createDeclarationName(symbol, declaration);
     const effectiveModifierFlags = declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None;
-    let modifierFlags =
+    let modifierFlags = effectiveModifierFlags & ModifierFlags.Static;
+    modifierFlags |=
         effectiveModifierFlags & ModifierFlags.Public ? ModifierFlags.Public :
         effectiveModifierFlags & ModifierFlags.Protected ? ModifierFlags.Protected :
         ModifierFlags.None;
@@ -308,7 +318,6 @@ export function addNewNodeForMemberSymbol(
         if (method) addClassElement(method);
     }
 
-
     function createModifiers(): NodeArray<Modifier> | undefined {
         let modifiers: Modifier[] | undefined;
 
@@ -341,6 +350,16 @@ export function addNewNodeForMemberSymbol(
 
     function createTypeNode(typeNode: TypeNode | undefined) {
         return getSynthesizedDeepClone(typeNode, /*includeTrivia*/ false);
+    }
+
+    function createDeclarationName(symbol: Symbol, declaration: Declaration | undefined): PropertyName {
+        if (getCheckFlags(symbol) & CheckFlags.Mapped) {
+            const nameType = (symbol as TransientSymbol).links.nameType;
+            if (nameType && isTypeUsableAsPropertyName(nameType)) {
+                return factory.createIdentifier(unescapeLeadingUnderscores(getPropertyNameFromType(nameType)));
+            }
+        }
+        return getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
     }
 }
 
@@ -463,7 +482,7 @@ export function createSignatureDeclarationFromCallExpression(
     context: CodeFixContextBase,
     importAdder: ImportAdder,
     call: CallExpression,
-    name: Identifier | string,
+    name: Identifier | PrivateIdentifier | string,
     modifierFlags: ModifierFlags,
     contextNode: Node
 ): MethodDeclaration | FunctionDeclaration | MethodSignature {
@@ -479,7 +498,7 @@ export function createSignatureDeclarationFromCallExpression(
         isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
     const instanceTypes = isJs ? [] : map(args, arg => checker.getTypeAtLocation(arg));
     const { argumentTypeNodes, argumentTypeParameters } = getArgumentTypesAndTypeParameters(
-        checker, importAdder, instanceTypes, contextNode, scriptTarget, /*flags*/ undefined, tracker
+        checker, importAdder, instanceTypes, contextNode, scriptTarget, NodeBuilderFlags.NoTruncation, tracker
     );
 
     const modifiers = modifierFlags
@@ -516,6 +535,7 @@ export function createSignatureDeclarationFromCallExpression(
                 type === undefined ? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword) : type
             );
         case SyntaxKind.FunctionDeclaration:
+            Debug.assert(typeof name === "string" || isIdentifier(name), "Unexpected name");
             return factory.createFunctionDeclaration(
                 modifiers,
                 asteriskToken,

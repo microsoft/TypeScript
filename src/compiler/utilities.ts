@@ -52,6 +52,7 @@ import {
     ClassDeclaration,
     ClassElement,
     ClassExpression,
+    classHasDeclaredOrExplicitlyAssignedName,
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
     combinePaths,
@@ -73,6 +74,7 @@ import {
     ConditionalExpression,
     ConstructorDeclaration,
     ConstructSignatureDeclaration,
+    ContainerFlags,
     contains,
     containsPath,
     createGetCanonicalFileName,
@@ -162,6 +164,7 @@ import {
     GetCanonicalFileName,
     getCombinedModifierFlags,
     getCombinedNodeFlags,
+    getContainerFlags,
     getDirectoryPath,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
@@ -293,6 +296,7 @@ import {
     isJSDocTypeTag,
     isJsxChild,
     isJsxFragment,
+    isJsxNamespacedName,
     isJsxOpeningLikeElement,
     isJsxText,
     isLeftHandSideExpression,
@@ -378,10 +382,12 @@ import {
     LiteralLikeNode,
     LogicalOperator,
     LogicalOrCoalescingAssignmentOperator,
+    mangleScopedPackageName,
     map,
     mapDefined,
     MapLike,
     MemberName,
+    MetaProperty,
     MethodDeclaration,
     MethodSignature,
     ModeAwareCache,
@@ -410,6 +416,7 @@ import {
     noop,
     normalizePath,
     NoSubstitutionTemplateLiteral,
+    NumberLiteralType,
     NumericLiteral,
     ObjectFlags,
     ObjectFlagsType,
@@ -488,6 +495,7 @@ import {
     stringContains,
     StringLiteral,
     StringLiteralLike,
+    StringLiteralType,
     stringToToken,
     SuperCall,
     SuperExpression,
@@ -525,6 +533,7 @@ import {
     TypeAliasDeclaration,
     TypeAssertion,
     TypeChecker,
+    TypeCheckerHost,
     TypeElement,
     TypeFlags,
     TypeLiteralNode,
@@ -537,6 +546,7 @@ import {
     TypeReferenceNode,
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
+    UniqueESSymbolType,
     UserPreferences,
     ValidImportTypeNode,
     VariableDeclaration,
@@ -780,7 +790,37 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
         oldResolution.resolvedModule.extension === newResolution.resolvedModule.extension &&
         oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
         oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
-        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId);
+        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId) &&
+        oldResolution.node10Result === newResolution.node10Result;
+}
+
+/** @internal */
+export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
+    const node10Result = sourceFile.resolvedModules?.get(moduleReference, mode)?.node10Result;
+    const result = node10Result
+        ? chainDiagnosticMessages(
+            /*details*/ undefined,
+            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+            node10Result,
+            node10Result.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageName)}` : packageName)
+        : host.typesPackageExists(packageName)
+            ? chainDiagnosticMessages(
+                /*details*/ undefined,
+                Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
+                packageName, mangleScopedPackageName(packageName))
+            : host.packageBundlesTypes(packageName)
+                ? chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    Diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1,
+                    packageName,
+                    moduleReference)
+                : chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    Diagnostics.Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+                    moduleReference,
+                    mangleScopedPackageName(packageName));
+    if (result) result.repopulateInfo = () => ({ moduleReference, mode, packageName: packageName === moduleReference ? undefined : packageName });
+    return result;
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
@@ -1824,7 +1864,7 @@ function isCommonJSContainingModuleKind(kind: ModuleKind) {
 
 /** @internal */
 export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-    return isExternalModule(node) || getIsolatedModules(compilerOptions) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
+    return isExternalModule(node) || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
 }
 
 /**
@@ -1989,6 +2029,11 @@ export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
     return isAnyImportSyntax(node) || isExportDeclaration(node);
 }
 
+/** @internal */
+export function getEnclosingContainer(node: Node): Node | undefined {
+    return findAncestor(node.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer));
+}
+
 // Gets the nearest enclosing block scope container that has the provided node
 // as a descendant, that is not the provided node.
 /** @internal */
@@ -2024,7 +2069,7 @@ export function isComputedNonLiteralName(name: PropertyName): boolean {
 }
 
 /** @internal */
-export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String | undefined {
+export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral | JsxAttributeName): __String | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
@@ -2036,13 +2081,15 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
         case SyntaxKind.ComputedPropertyName:
             if (isStringOrNumericLiteralLike(name.expression)) return escapeLeadingUnderscores(name.expression.text);
             return undefined;
+        case SyntaxKind.JsxNamespacedName:
+            return getEscapedTextOfJsxNamespacedName(name);
         default:
             return Debug.assertNever(name);
     }
 }
 
 /** @internal */
-export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
+export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral | JsxAttributeName): __String {
     return Debug.checkDefined(tryGetTextOfPropertyName(name));
 }
 
@@ -2293,14 +2340,36 @@ export function isDeclarationReadonly(declaration: Declaration): boolean {
     return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration, declaration.parent));
 }
 
-/** @internal */
-export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
-    return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of an `await using` declaration.
+ * @internal
+ */
+export function isVarAwaitUsing(node: VariableDeclaration | VariableDeclarationList): boolean {
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.AwaitUsing;
 }
 
-/** @internal */
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `using` declaration.
+ * @internal
+ */
+export function isVarUsing(node: VariableDeclaration | VariableDeclarationList): boolean {
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Using;
+}
+
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `const` declaration.
+ * @internal
+ */
+export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Const;
+}
+
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `let` declaration.
+ * @internal
+ */
 export function isLet(node: Node): boolean {
-    return !!(getCombinedNodeFlags(node) & NodeFlags.Let);
+    return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Let;
 }
 
 /** @internal */
@@ -2774,6 +2843,12 @@ export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDe
 }
 
 /** @internal */
+export function getContainingClassExcludingClassDecorators(node: Node): ClassLikeDeclaration | undefined {
+    const decorator = findAncestor(node.parent, n => isClassLike(n) ? "quit" : isDecorator(n));
+    return decorator && isClassLike(decorator.parent) ? getContainingClass(decorator.parent) : getContainingClass(decorator ?? node);
+}
+
+/** @internal */
 export type ThisContainer =
     | FunctionDeclaration
     | FunctionExpression
@@ -3074,7 +3149,7 @@ export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNam
 }
 
 /** @internal */
-export function getInvokedExpression(node: CallLikeExpression): Expression {
+export function getInvokedExpression(node: CallLikeExpression): Expression | JsxTagNameExpression {
     switch (node.kind) {
         case SyntaxKind.TaggedTemplateExpression:
             return node.tag;
@@ -4954,7 +5029,7 @@ export function isDynamicName(name: DeclarationName): boolean {
 }
 
 /** @internal */
-export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
+export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttributeName): __String | undefined {
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
@@ -4974,6 +5049,8 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName): __String
                 return nameExpression.operand.text as __String;
             }
             return undefined;
+        case SyntaxKind.JsxNamespacedName:
+            return getEscapedTextOfJsxNamespacedName(name);
         default:
             return Debug.assertNever(name);
     }
@@ -4993,12 +5070,12 @@ export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
 }
 /** @internal */
 export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral | PrivateIdentifier): string {
-    return isMemberName(node) ? idText(node) : node.text;
+    return isMemberName(node) ? idText(node) : isJsxNamespacedName(node) ? getTextOfJsxNamespacedName(node) : node.text;
 }
 
 /** @internal */
 export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
-    return isMemberName(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
+    return isMemberName(node) ? node.escapedText : isJsxNamespacedName(node) ? getEscapedTextOfJsxNamespacedName(node) : escapeLeadingUnderscores(node.text);
 }
 
 /** @internal */
@@ -5060,8 +5137,12 @@ export function isAnonymousFunctionDefinition(node: Expression, cb?: (node: Anon
     node = skipOuterExpressions(node);
     switch (node.kind) {
         case SyntaxKind.ClassExpression:
+            if (classHasDeclaredOrExplicitlyAssignedName(node as ClassExpression)) {
+                return false;
+            }
+            break;
         case SyntaxKind.FunctionExpression:
-            if ((node as ClassExpression | FunctionExpression).name) {
+            if ((node as FunctionExpression).name) {
                 return false;
             }
             break;
@@ -5127,7 +5208,8 @@ export type NamedEvaluation =
     | ParameterDeclaration & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
     | BindingElement & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
     | PropertyDeclaration & { readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
-    | AssignmentExpression<EqualsToken | AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<EqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
     | ExportAssignment & { readonly expression: WrappedExpression<AnonymousFunctionDefinition> }
     ;
 
@@ -7025,7 +7107,7 @@ export function isPropertyAccessEntityNameExpression(node: Node): node is Proper
 }
 
 /** @internal */
-export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): string | undefined {
+export function tryGetPropertyAccessOrIdentifierToString(expr: Expression | JsxTagNameExpression): string | undefined {
     if (isPropertyAccessExpression(expr)) {
         const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
         if (baseStr !== undefined) {
@@ -7041,6 +7123,9 @@ export function tryGetPropertyAccessOrIdentifierToString(expr: Expression): stri
     else if (isIdentifier(expr)) {
         return unescapeLeadingUnderscores(expr.escapedText);
     }
+    else if (isJsxNamespacedName(expr)) {
+        return getTextOfJsxNamespacedName(expr);
+    }
     return undefined;
 }
 
@@ -7052,7 +7137,8 @@ export function isPrototypeAccess(node: Node): node is BindableStaticAccessExpre
 /** @internal */
 export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
     return (node.parent.kind === SyntaxKind.QualifiedName && (node.parent as QualifiedName).right === node) ||
-        (node.parent.kind === SyntaxKind.PropertyAccessExpression && (node.parent as PropertyAccessExpression).name === node);
+        (node.parent.kind === SyntaxKind.PropertyAccessExpression && (node.parent as PropertyAccessExpression).name === node) ||
+        (node.parent.kind === SyntaxKind.MetaProperty && (node.parent as MetaProperty).name === node);
 }
 
 /** @internal */
@@ -10229,4 +10315,26 @@ export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
 /** @internal */
 export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
     return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
+}
+
+/**
+ * Indicates whether a type can be used as a property name.
+ * @internal
+ */
+export function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType {
+    return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
+}
+
+/**
+ * Gets the symbolic name for a member from its type.
+ * @internal
+ */
+export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
+    if (type.flags & TypeFlags.UniqueESSymbol) {
+        return (type as UniqueESSymbolType).escapedName;
+    }
+    if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+        return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
+    }
+    return Debug.fail();
 }

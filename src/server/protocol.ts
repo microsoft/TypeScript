@@ -721,6 +721,7 @@ export interface RefactorEditInfo {
      */
     renameLocation?: Location;
     renameFilename?: string;
+    notApplicableReason?: string;
 }
 
 /**
@@ -2336,6 +2337,11 @@ export interface CompletionEntry {
      */
     insertText?: string;
     /**
+     * A string that should be used when filtering a set of
+     * completion items.
+     */
+    filterText?: string;
+    /**
      * `insertText` should be interpreted as a snippet if true.
      */
     isSnippet?: true;
@@ -2669,11 +2675,16 @@ export interface InlayHintsRequest extends Request {
 }
 
 export interface InlayHintItem {
-    text: string;
+    text: string | InlayHintItemDisplayPart[];
     position: Location;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+}
+
+export interface InlayHintItemDisplayPart {
+    text: string;
+    span?: FileSpan;
 }
 
 export interface InlayHintsResponse extends Response {
@@ -3530,6 +3541,8 @@ export interface UserPreferences {
     readonly includeInlayPropertyDeclarationTypeHints?: boolean;
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
     readonly includeInlayEnumMemberValueHints?: boolean;
+    readonly interactiveInlayHints?: boolean;
+
     readonly autoImportFileExcludePatterns?: string[];
 
     /**

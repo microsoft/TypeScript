@@ -1,4 +1,6 @@
-=== tests/cases/compiler/keyofGenericExtendingClassDoubleLayer.ts ===
+//// [tests/cases/compiler/keyofGenericExtendingClassDoubleLayer.ts] ////
+
+=== keyofGenericExtendingClassDoubleLayer.ts ===
 class Model<Attributes = any> {
 >Model : Symbol(Model, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 0))
 >Attributes : Symbol(Attributes, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 12))

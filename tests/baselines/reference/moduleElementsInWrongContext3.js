@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleElementsInWrongContext3.ts] ////
+
 //// [moduleElementsInWrongContext3.ts]
 module P {
     {

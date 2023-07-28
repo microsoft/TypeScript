@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ClassDeclaration22.ts] ////
+
 //// [ClassDeclaration22.ts]
 class C {
     "foo"();

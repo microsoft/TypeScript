@@ -72,6 +72,7 @@ import {
     ObjectFlags,
     ObjectType,
     RelationComparisonResult,
+    ScriptKind,
     Signature,
     SignatureCheckMode,
     SignatureFlags,
@@ -192,6 +193,7 @@ export namespace Debug {
     }
 
     export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
+        // eslint-disable-next-line no-debugger
         debugger;
         const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
         if ((Error as any).captureStackTrace) {
@@ -437,6 +439,10 @@ export namespace Debug {
 
     export function formatSnippetKind(kind: SnippetKind | undefined): string {
         return formatEnum(kind, (ts as any).SnippetKind, /*isFlags*/ false);
+    }
+
+    export function formatScriptKind(kind: ScriptKind | undefined): string {
+        return formatEnum(kind, (ts as any).ScriptKind, /*isFlags*/ false);
     }
 
     export function formatNodeFlags(flags: NodeFlags | undefined): string {

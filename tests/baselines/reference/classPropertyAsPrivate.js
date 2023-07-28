@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts] ////
+
 //// [classPropertyAsPrivate.ts]
 class C {
     private x: string;

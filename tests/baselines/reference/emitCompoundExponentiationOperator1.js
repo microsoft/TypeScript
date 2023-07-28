@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationOperator1.ts] ////
+
 //// [emitCompoundExponentiationOperator1.ts]
 var comp: number;
 

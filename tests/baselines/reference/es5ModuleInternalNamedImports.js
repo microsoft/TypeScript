@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ModuleInternalNamedImports.ts] ////
+
 //// [es5ModuleInternalNamedImports.ts]
 export module M {
     // variable

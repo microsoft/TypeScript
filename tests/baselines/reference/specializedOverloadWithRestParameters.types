@@ -1,4 +1,6 @@
-=== tests/cases/compiler/specializedOverloadWithRestParameters.ts ===
+//// [tests/cases/compiler/specializedOverloadWithRestParameters.ts] ////
+
+=== specializedOverloadWithRestParameters.ts ===
 class Base { foo() { } }
 >Base : Base
 >foo : () => void

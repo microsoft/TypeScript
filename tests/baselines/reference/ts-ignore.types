@@ -1,4 +1,6 @@
-=== tests/cases/conformance/directives/ts-ignore.ts ===
+//// [tests/cases/conformance/directives/ts-ignore.ts] ////
+
+=== ts-ignore.ts ===
 // @ts-ignore with additional commenting
 var invalidCommentedFancy: number = 'nope';
 >invalidCommentedFancy : number
@@ -25,5 +27,15 @@ var invalidPlain: number = 'nope';
 
 var validPlain: string = 'nope';
 >validPlain : string
+>'nope' : "nope"
+
+// @ts-ignore: with additional commenting
+var invalidCommentedFancy: number = 'nope';
+>invalidCommentedFancy : number
+>'nope' : "nope"
+
+// @ts-ignore: with additional commenting
+var validCommentedFancy: string = 'nope';
+>validCommentedFancy : string
 >'nope' : "nope"
 

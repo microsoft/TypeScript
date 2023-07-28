@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts ===
+//// [tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts] ////
+
+=== blockScopedVariablesUseBeforeDef.ts ===
 function foo0() {
 >foo0 : Symbol(foo0, Decl(blockScopedVariablesUseBeforeDef.ts, 0, 0))
 

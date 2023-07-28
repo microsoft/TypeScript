@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts] ////
+
 //// [templateLiteralTypesPatterns.ts]
 type RequiresLeadingSlash = `/${string}`;
 

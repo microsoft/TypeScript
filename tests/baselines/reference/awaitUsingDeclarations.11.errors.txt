@@ -1,0 +1,12 @@
+awaitUsingDeclarations.11.ts(1,1): error TS1495: 'export' modifier cannot appear on an 'await using' declaration.
+awaitUsingDeclarations.11.ts(2,1): error TS1495: 'declare' modifier cannot appear on an 'await using' declaration.
+
+
+==== awaitUsingDeclarations.11.ts (2 errors) ====
+    export await using x = null;
+    ~~~~~~
+!!! error TS1495: 'export' modifier cannot appear on an 'await using' declaration.
+    declare await using y: null;
+    ~~~~~~~
+!!! error TS1495: 'declare' modifier cannot appear on an 'await using' declaration.
+    

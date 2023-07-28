@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forInStrictNullChecksNoError.ts] ////
+
 //// [forInStrictNullChecksNoError.ts]
 function f(x: { [key: string]: number; } | null | undefined) {
     for (const key in x) {  // 1

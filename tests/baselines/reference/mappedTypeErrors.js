@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeErrors.ts] ////
+
 //// [mappedTypeErrors.ts]
 interface Shape {
     name: string;

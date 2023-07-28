@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends3.ts ===
+//// [tests/cases/compiler/declarationEmitExpressionInExtends3.ts] ////
+
+=== declarationEmitExpressionInExtends3.ts ===
 export class ExportedClass<T> {
 >ExportedClass : Symbol(ExportedClass, Decl(declarationEmitExpressionInExtends3.ts, 0, 0))
 >T : Symbol(T, Decl(declarationEmitExpressionInExtends3.ts, 0, 27))

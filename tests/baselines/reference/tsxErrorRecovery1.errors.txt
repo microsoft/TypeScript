@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(4,19): error TS1109: Expression expected.
+file.tsx(4,19): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     declare namespace JSX { interface Element { } }
     
     function foo() {

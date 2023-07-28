@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck11.ts] ////
+
 //// [ES5For-ofTypeCheck11.ts]
 var union: string | number[];
 var v: string;

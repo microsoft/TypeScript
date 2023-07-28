@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationTypeLiteral.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationTypeLiteral.ts] ////
+
+=== declFileTypeAnnotationTypeLiteral.ts ===
 class c {
 >c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 0, 0))
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithBooleanType.ts] ////
+
 //// [bitwiseNotOperatorWithBooleanType.ts]
 // ~ operator on boolean type
 var BOOLEAN: boolean;

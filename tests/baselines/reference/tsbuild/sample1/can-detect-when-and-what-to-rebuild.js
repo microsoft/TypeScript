@@ -683,6 +683,21 @@ exports.multiply = multiply;
 
 Change:: rebuilds when tsconfig changes
 Input::
+//// [/lib/lib.es2020.full.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 //// [/src/tests/tsconfig.json]
 {
     "references": [
@@ -691,7 +706,7 @@ Input::
     ],
     "files": ["index.ts"],
     "compilerOptions": {
-        "composite": true, "target": "es3",
+        "composite": true, "target": "es2020",
         "declaration": true,
         "forceConsistentCasingInFileNames": true,
         "skipDefaultLibCheck": true
@@ -702,42 +717,38 @@ Input::
 
 Output::
 /lib/tsc --b /src/tests --verbose
-[[90m12:00:59 AM[0m] Projects in this build: 
+[[90m12:01:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:01:00 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
+[[90m12:01:01 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
 
-[[90m12:01:01 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than output 'src/logic/tsconfig.tsbuildinfo'
+[[90m12:01:02 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than output 'src/logic/tsconfig.tsbuildinfo'
 
-[[90m12:01:02 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output 'src/tests/tsconfig.tsbuildinfo' is older than input 'src/tests/tsconfig.json'
+[[90m12:01:03 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output 'src/tests/tsconfig.tsbuildinfo' is older than input 'src/tests/tsconfig.json'
 
-[[90m12:01:03 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90m12:01:04 AM[0m] Building project '/src/tests/tsconfig.json'...
 
-[96msrc/tests/tsconfig.json[0m:[93m8[0m:[93m38[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-
-[7m8[0m         "composite": true, "target": "es3",
-[7m [0m [91m                                     ~~~~~[0m
+exitCode:: ExitStatus.Success
 
 
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+//// [/src/tests/index.js]
+const m = 10;
 
 
 //// [/src/tests/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3708260210-const m = 10;","signature":"-357908916-declare const m = 10;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"target":0},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"affectedFilesPendingEmit":[2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.es2020.full.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3708260210-const m = 10;","signature":"-357908916-declare const m = 10;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"target":7},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileNames": [
-      "../../lib/lib.d.ts",
+      "../../lib/lib.es2020.full.d.ts",
       "./index.ts"
     ],
     "fileInfos": {
-      "../../lib/lib.d.ts": {
+      "../../lib/lib.es2020.full.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
           "affectsGlobalScope": true
@@ -767,23 +778,17 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       "composite": true,
       "declaration": true,
       "skipDefaultLibCheck": true,
-      "target": 0
+      "target": 7
     },
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
+      "../../lib/lib.es2020.full.d.ts",
       "./index.ts"
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "./index.ts",
-        "Js | Dts"
-      ]
     ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 938
+  "size": 919
 }
 
