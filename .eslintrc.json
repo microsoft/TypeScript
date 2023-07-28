@@ -84,6 +84,7 @@
         "@typescript-eslint/class-literal-property-style": "off",
         "@typescript-eslint/consistent-indexed-object-style": "off",
         "@typescript-eslint/no-duplicate-enum-values": "off",
+        "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
         "@typescript-eslint/no-var-requires": "off",
@@ -106,7 +107,6 @@
         "no-useless-escape": "off",
         "prefer-rest-params": "off",
         "prefer-spread": "off",
-        "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-unused-vars": "off",
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
