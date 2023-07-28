@@ -8667,6 +8667,11 @@ export function getUseDefineForClassFields(compilerOptions: CompilerOptions): bo
 }
 
 /** @internal */
+export function getEmitStandardClassFields(compilerOptions: CompilerOptions) {
+    return compilerOptions.useDefineForClassFields !== false && getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022;
+}
+
+/** @internal */
 export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
     return optionsHaveChanges(oldOptions, newOptions, semanticDiagnosticsOptionDeclarations);
 }
