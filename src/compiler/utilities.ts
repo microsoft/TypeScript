@@ -8141,8 +8141,7 @@ export function createDetachedDiagnostic(fileName: string, start: number, length
     assertDiagnosticLocation(/*file*/ undefined, start, length);
     let text = getLocaleSpecificMessage(message);
 
-    // TODO(jakebailey): would love to use length here; maybe use some instead?
-    if (args.length > 0) {
+    if (some(args)) {
         text = formatStringFromArgs(text, args);
     }
 
@@ -8212,8 +8211,7 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
 
     let text = getLocaleSpecificMessage(message);
 
-    // TODO(jakebailey): would love to use length here; maybe use some instead?
-    if (args.length > 0) {
+    if (some(args)) {
         text = formatStringFromArgs(text, args);
     }
 
@@ -8234,7 +8232,7 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
 export function formatMessage(message: DiagnosticMessage, ...args: DiagnosticArguments): string {
     let text = getLocaleSpecificMessage(message);
 
-    if (length(args)) {
+    if (some(args)) {
         text = formatStringFromArgs(text, args);
     }
 
@@ -8245,7 +8243,7 @@ export function formatMessage(message: DiagnosticMessage, ...args: DiagnosticArg
 export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
     let text = getLocaleSpecificMessage(message);
 
-    if (length(args)) {
+    if (some(args)) {
         text = formatStringFromArgs(text, args);
     }
 
@@ -8280,7 +8278,7 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
 export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain {
     let text = getLocaleSpecificMessage(message);
 
-    if (length(args)) {
+    if (some(args)) {
         text = formatStringFromArgs(text, args);
     }
     return {
