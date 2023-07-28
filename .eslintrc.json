@@ -104,7 +104,6 @@
         ],
 
         // Todo: For each of these, investigate whether we want to enable them ✨
-        "no-useless-escape": "off",
         "prefer-rest-params": "off",
         "prefer-spread": "off",
         "@typescript-eslint/no-unused-vars": "off",
