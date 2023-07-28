@@ -16277,6 +16277,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type.elementFlags.length - findLastIndex(type.elementFlags, f => !(f & flags)) - 1;
     }
 
+    function getTotalFixedElementCount(type: TupleType) {
+        return type.fixedLength + getEndElementCount(type, ElementFlags.Fixed);
+    }
+
     function getElementTypes(type: TupleTypeReference): readonly Type[] {
         const typeArguments = getTypeArguments(type);
         const arity = getTypeReferenceArity(type);
@@ -17402,10 +17406,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (index >= 0) {
                     errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, numberType));
-                    return mapType(objectType, t => {
-                        const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedType;
-                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, missingType]) : restType;
-                    });
+                    return getTupleElementTypeOutOfStartCount(objectType, index, accessFlags & AccessFlags.IncludeUndefined ? missingType : undefined);
                 }
             }
         }
@@ -17745,8 +17746,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // preserve backwards compatibility. For example, an element access 'this["foo"]' has always been resolved
         // eagerly using the constraint type of 'this' at the given location.
         if (isGenericIndexType(indexType) || (accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType ?
-            isGenericTupleType(objectType) && !indexTypeLessThan(indexType, objectType.target.fixedLength) :
-            isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, objectType.target.fixedLength)) || isGenericReducibleType(objectType))) {
+            isGenericTupleType(objectType) && !indexTypeLessThan(indexType, getTotalFixedElementCount(objectType.target)) :
+            isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, getTotalFixedElementCount(objectType.target))) || isGenericReducibleType(objectType))) {
             if (objectType.flags & TypeFlags.AnyOrUnknown) {
                 return objectType;
             }
@@ -23325,18 +23326,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return propType;
         }
         if (everyType(type, isTupleType)) {
-            return mapType(type, t => {
-                const tupleType = t as TupleTypeReference;
-                const restType = getRestTypeOfTupleType(tupleType);
-                if (!restType) {
-                    return undefinedType;
-                }
-                if (compilerOptions.noUncheckedIndexedAccess &&
-                    index >= tupleType.target.fixedLength + getEndElementCount(tupleType.target, ElementFlags.Fixed)) {
-                    return getUnionType([restType, undefinedType]);
-                }
-                return restType;
-            });
+            return getTupleElementTypeOutOfStartCount(type, index, compilerOptions.noUncheckedIndexedAccess ? undefinedType : undefined);
         }
         return undefined;
     }
@@ -23452,6 +23442,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getRestTypeOfTupleType(type: TupleTypeReference) {
         return getElementTypeOfSliceOfTupleType(type, type.target.fixedLength);
+    }
+
+    function getTupleElementTypeOutOfStartCount(type: Type, index: number, undefinedOrMissingType: Type | undefined) {
+        return mapType(type, t => {
+            const tupleType = t as TupleTypeReference;
+            const restType = getRestTypeOfTupleType(tupleType);
+            if (!restType) {
+                return undefinedType;
+            }
+            if (undefinedOrMissingType && index >= getTotalFixedElementCount(tupleType.target)) {
+                return getUnionType([restType, undefinedOrMissingType]);
+            }
+            return restType;
+        });
     }
 
     function getRestArrayTypeOfTupleType(type: TupleTypeReference) {
