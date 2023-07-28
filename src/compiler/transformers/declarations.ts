@@ -95,15 +95,14 @@ import {
     isAnyImportSyntax,
     isArray,
     isArrayBindingElement,
-    isBinaryExpression,
     isBindingElement,
     isBindingPattern,
     isClassDeclaration,
     isClassElement,
     isDeclaration,
-    isElementAccessExpression,
     isEntityName,
     isEntityNameExpression,
+    isExpandoPropertyDeclarationCandidate,
     isExportAssignment,
     isExportDeclaration,
     isExpressionWithTypeArguments,
@@ -133,7 +132,6 @@ import {
     isNightly,
     isOmittedExpression,
     isPrivateIdentifier,
-    isPropertyAccessExpression,
     isPropertySignature,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
@@ -1525,7 +1523,7 @@ export function transformDeclarations(context: TransformationContext) {
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                        if (!p.valueDeclaration || !(isPropertyAccessExpression(p.valueDeclaration) || isElementAccessExpression(p.valueDeclaration) || isBinaryExpression(p.valueDeclaration))) {
+                        if (!isExpandoPropertyDeclarationCandidate(p.valueDeclaration)) {
                             return undefined;
                         }
                         const nameStr = unescapeLeadingUnderscores(p.escapedName);

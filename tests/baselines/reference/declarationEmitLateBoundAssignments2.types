@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/declarationEmitLateBoundAssignments2.ts] ////
+
+=== declarationEmitLateBoundAssignments2.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54811
+
+const c = "C"
+>c : "C"
+>"C" : "C"
+
+export function decl () {}
+>decl : typeof decl
+
+decl["B"] = 'foo'
+>decl["B"] = 'foo' : "foo"
+>decl["B"] : string
+>decl : typeof decl
+>"B" : "B"
+>'foo' : "foo"
+
+export function decl2 () {}
+>decl2 : typeof decl2
+
+decl2[c] = 0
+>decl2[c] = 0 : 0
+>decl2[c] : number
+>decl2 : typeof decl2
+>c : "C"
+>0 : 0
+
+export const arrow = () => {}
+>arrow : { (): void; B: string; }
+>() => {} : { (): void; B: string; }
+
+arrow["B"] = 'bar'
+>arrow["B"] = 'bar' : "bar"
+>arrow["B"] : string
+>arrow : { (): void; B: string; }
+>"B" : "B"
+>'bar' : "bar"
+
+export const arrow2 = () => {}
+>arrow2 : { (): void; C: number; }
+>() => {} : { (): void; C: number; }
+
+arrow2[c] = 100
+>arrow2[c] = 100 : 100
+>arrow2[c] : number
+>arrow2 : { (): void; C: number; }
+>c : "C"
+>100 : 100
+

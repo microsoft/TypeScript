@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/declarationEmitLateBoundAssignments2.ts] ////
+
+=== declarationEmitLateBoundAssignments2.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54811
+
+const c = "C"
+>c : Symbol(c, Decl(declarationEmitLateBoundAssignments2.ts, 2, 5))
+
+export function decl () {}
+>decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 2, 13), Decl(declarationEmitLateBoundAssignments2.ts, 4, 26))
+
+decl["B"] = 'foo'
+>decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 2, 13), Decl(declarationEmitLateBoundAssignments2.ts, 4, 26))
+>"B" : Symbol(decl["B"], Decl(declarationEmitLateBoundAssignments2.ts, 4, 26))
+
+export function decl2 () {}
+>decl2 : Symbol(decl2, Decl(declarationEmitLateBoundAssignments2.ts, 5, 17), Decl(declarationEmitLateBoundAssignments2.ts, 7, 27))
+
+decl2[c] = 0
+>decl2 : Symbol(decl2, Decl(declarationEmitLateBoundAssignments2.ts, 5, 17), Decl(declarationEmitLateBoundAssignments2.ts, 7, 27))
+>c : Symbol(c, Decl(declarationEmitLateBoundAssignments2.ts, 2, 5))
+
+export const arrow = () => {}
+>arrow : Symbol(arrow, Decl(declarationEmitLateBoundAssignments2.ts, 10, 12), Decl(declarationEmitLateBoundAssignments2.ts, 10, 29))
+
+arrow["B"] = 'bar'
+>arrow : Symbol(arrow, Decl(declarationEmitLateBoundAssignments2.ts, 10, 12), Decl(declarationEmitLateBoundAssignments2.ts, 10, 29))
+>"B" : Symbol(arrow["B"], Decl(declarationEmitLateBoundAssignments2.ts, 10, 29))
+
+export const arrow2 = () => {}
+>arrow2 : Symbol(arrow2, Decl(declarationEmitLateBoundAssignments2.ts, 13, 12), Decl(declarationEmitLateBoundAssignments2.ts, 13, 30))
+
+arrow2[c] = 100
+>arrow2 : Symbol(arrow2, Decl(declarationEmitLateBoundAssignments2.ts, 13, 12), Decl(declarationEmitLateBoundAssignments2.ts, 13, 30))
+>c : Symbol(c, Decl(declarationEmitLateBoundAssignments2.ts, 2, 5))
+
