@@ -6,6 +6,7 @@ import {
     arrayToMap,
     assign,
     BuildOptions,
+    cast,
     changeExtension,
     CharacterCodes,
     combinePaths,
@@ -2018,9 +2019,8 @@ export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
 }
 
 /** @internal */
-export function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
-    const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-    return diagnostic.messageText as string;
+export function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
+    return cast(createCompilerDiagnostic(message, ...args).messageText, isString);
 }
 
 export type DiagnosticReporter = (diagnostic: Diagnostic) => void;

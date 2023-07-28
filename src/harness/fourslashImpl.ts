@@ -3279,7 +3279,7 @@ export class TestState {
             assert.equal(action.description, options.description);
         }
         else if (Array.isArray(options.description)) {
-            const description = ts.formatStringFromArgs(options.description[0], options.description, 1);
+            const description = ts.formatStringFromArgs(options.description[0], options.description.slice(1));
             assert.equal(action.description, description);
         }
         else {

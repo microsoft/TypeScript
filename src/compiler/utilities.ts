@@ -8110,9 +8110,10 @@ export function setObjectAllocator(alloc: ObjectAllocator) {
     forEach(objectAllocatorPatchers, fn => fn(objectAllocator));
 }
 
+// TODO(jakebailey): replace args type with DiagnosticArguments
 /** @internal */
-export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
-    return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index + baseIndex]));
+export function formatStringFromArgs(text: string, args: ArrayLike<string | number>): string {
+    return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index]));
 }
 
 let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -8137,14 +8138,13 @@ export function getLocaleSpecificMessage(message: DiagnosticMessage) {
 }
 
 /** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation;
-/** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage): DiagnosticWithDetachedLocation {
+export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation {
     assertDiagnosticLocation(/*file*/ undefined, start, length);
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 4) {
-        text = formatStringFromArgs(text, arguments, 4);
+    // TODO(jakebailey): would love to use length here; maybe use some instead?
+    if (args.length > 0) {
+        text = formatStringFromArgs(text, args);
     }
 
     return {
@@ -8208,15 +8208,14 @@ export function attachFileToDiagnostics(diagnostics: DiagnosticWithDetachedLocat
 }
 
 /** @internal */
-export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation;
-/** @internal */
-export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
+export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
     assertDiagnosticLocation(file, start, length);
 
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 4) {
-        text = formatStringFromArgs(text, arguments, 4);
+    // TODO(jakebailey): would love to use length here; maybe use some instead?
+    if (args.length > 0) {
+        text = formatStringFromArgs(text, args);
     }
 
     return {
@@ -8233,26 +8232,22 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
 }
 
 /** @internal */
-export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: DiagnosticArguments): string;
-/** @internal */
-export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
+export function formatMessage(message: DiagnosticMessage, ...args: DiagnosticArguments): string {
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 2) {
-        text = formatStringFromArgs(text, arguments, 2);
+    if (length(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return text;
 }
 
 /** @internal */
-export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic;
-/** @internal */
-export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
+export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 1) {
-        text = formatStringFromArgs(text, arguments, 1);
+    if (length(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return {
@@ -8283,13 +8278,11 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
 }
 
 /** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain;
-/** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
+export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain {
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 2) {
-        text = formatStringFromArgs(text, arguments, 2);
+    if (length(args)) {
+        text = formatStringFromArgs(text, args);
     }
     return {
         messageText: text,
