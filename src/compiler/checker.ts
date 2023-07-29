@@ -25490,9 +25490,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isEntityNameExpression(node.argumentExpression) ? tryGetNameFromEntityNameExpression(node.argumentExpression) : undefined;
     }
 
-    function tryGetNameFromEntityNameExpression(node: EntityNameExpression) {
-        const type = getTypeOfExpression(node);
-        return tryGetNameFromType(type);
+    function tryGetNameFromEntityNameExpression(node: EntityNameOrEntityNameExpression) {
+        const symbol = resolveEntityName(node, SymbolFlags.Value, /*ignoreErrors*/ true);
+        if (!symbol || !(isConstantVariable(symbol) || (symbol.flags & SymbolFlags.EnumMember))) return undefined;
+
+        const declaration = symbol.valueDeclaration;
+        if (declaration === undefined) return undefined;
+
+        const type = tryGetTypeFromEffectiveTypeNode(declaration);
+        if (type) {
+            const name = tryGetNameFromType(type);
+            if (name !== undefined) {
+                return name;
+            }
+        }
+        if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node)) {
+            const initializer = getEffectiveInitializer(declaration);
+            if (initializer) {
+                return tryGetNameFromType(getTypeOfExpression(initializer));
+            }
+            if (isEnumMember(declaration)) {
+                return getTextOfPropertyName(declaration.name);
+            }
+        }
+        return undefined;
     }
 
     function containsMatchingReference(source: Node, target: Node) {
@@ -49111,7 +49132,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getEffectivePropertyNameForPropertyNameNode(node: PropertyName) {
         const name = getPropertyNameForPropertyNameNode(node);
         return name ? name :
-            isComputedPropertyName(node) && isEntityNameExpression(node.expression) ? tryGetNameFromEntityNameExpression(node.expression) : undefined;
+            isComputedPropertyName(node) && isEntityNameExpression(node.expression) ? tryGetNameFromType(getTypeOfExpression(node.expression)) : undefined;
     }
 
     function getCombinedModifierFlagsCached(node: Declaration) {
