@@ -40,8 +40,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
         return Debug.fail("Tried to add a parameter name to a non-parameter: " + Debug.formatSyntaxKind(token.kind));
     }
 
-    const parameters = param.parent.parameters;
-    const i = parameters.indexOf(param);
+    const i = param.parent.parameters.indexOf(param);
     Debug.assert(!param.type, "Tried to add a parameter name to a parameter that already had one.");
     Debug.assert(i > -1, "Parameter not found in parent parameter list.");
 
