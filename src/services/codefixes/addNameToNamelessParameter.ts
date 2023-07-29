@@ -63,7 +63,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
     );
     changeTracker.replaceRange(sourceFile, createRange(param.getStart(sourceFile), end), replacement);
 }
-``
+
 function tryGetNextParam(sourceFile: SourceFile, param: ParameterDeclaration) {
     const nextToken = findNextToken(param.name, param.parent, sourceFile);
     if (nextToken && nextToken.kind === SyntaxKind.OpenBracketToken
