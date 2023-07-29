@@ -1,0 +1,46 @@
+uniqueSymbolsPropertyNames.ts(10,10): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+uniqueSymbolsPropertyNames.ts(15,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(16,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(21,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(26,3): error TS1117: An object literal cannot have multiple properties with the same name.
+
+
+==== uniqueSymbolsPropertyNames.ts (5 errors) ====
+    interface OpTypes {
+      readonly equal: unique symbol;
+    }
+    
+    namespace OpNamespace {
+      export declare const equal: unique symbol;
+    }
+    
+    const Op: OpTypes = {
+      equal: Symbol.for("equal"),
+             ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    } as OpTypes;
+    
+    const t0 = {
+      equal: "first",
+      equal: "second",
+      ~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+      ["equal"]: "last",
+      ~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    
+    const t1 = {
+      [Op.equal]: "first",
+      [Op.equal]: "last",
+      ~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    
+    const t2 = {
+      [OpNamespace.equal]: "first",
+      [OpNamespace.equal]: "last",
+      ~~~~~~~~~~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    

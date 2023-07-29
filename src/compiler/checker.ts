@@ -25490,30 +25490,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isEntityNameExpression(node.argumentExpression) ? tryGetNameFromEntityNameExpression(node.argumentExpression) : undefined;
     }
 
-    function tryGetNameFromEntityNameExpression(node: EntityNameOrEntityNameExpression) {
-        const symbol = resolveEntityName(node, SymbolFlags.Value, /*ignoreErrors*/ true);
-        if (!symbol || !(isConstantVariable(symbol) || (symbol.flags & SymbolFlags.EnumMember))) return undefined;
-
-        const declaration = symbol.valueDeclaration;
-        if (declaration === undefined) return undefined;
-
-        const type = tryGetTypeFromEffectiveTypeNode(declaration);
-        if (type) {
-            const name = tryGetNameFromType(type);
-            if (name !== undefined) {
-                return name;
-            }
-        }
-        if (hasOnlyExpressionInitializer(declaration) && isBlockScopedNameDeclaredBeforeUse(declaration, node)) {
-            const initializer = getEffectiveInitializer(declaration);
-            if (initializer) {
-                return tryGetNameFromType(getTypeOfExpression(initializer));
-            }
-            if (isEnumMember(declaration)) {
-                return getTextOfPropertyName(declaration.name);
-            }
-        }
-        return undefined;
+    function tryGetNameFromEntityNameExpression(node: EntityNameExpression) {
+        const type = getTypeOfExpression(node);
+        return tryGetNameFromType(type);
     }
 
     function containsMatchingReference(source: Node, target: Node) {

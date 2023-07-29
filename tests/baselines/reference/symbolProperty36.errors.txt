@@ -1,0 +1,10 @@
+symbolProperty36.ts(3,5): error TS1117: An object literal cannot have multiple properties with the same name.
+
+
+==== symbolProperty36.ts (1 errors) ====
+    var x = {
+        [Symbol.isConcatSpreadable]: 0,
+        [Symbol.isConcatSpreadable]: 1
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    }
