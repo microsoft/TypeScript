@@ -1,3 +1,5 @@
+// @target: esnext
+// @lib: esnext
 interface OpTypes {
   readonly equal: unique symbol;
 }
@@ -5,6 +7,18 @@ interface OpTypes {
 namespace OpNamespace {
   export declare const equal: unique symbol;
 }
+
+const uniqueSymbol0 = Symbol.for("");
+const uniqueSymbol1 = Symbol.for("");
+
+
+function getUniqueSymbol0(): typeof uniqueSymbol0 {
+  return uniqueSymbol0;
+}
+
+function getUniqueSymbol1(): typeof uniqueSymbol1 {
+    return uniqueSymbol1;
+  }
 
 const Op: OpTypes = {
   equal: Symbol.for("equal"),
@@ -24,4 +38,11 @@ const t1 = {
 const t2 = {
   [OpNamespace.equal]: "first",
   [OpNamespace.equal]: "last",
+};
+
+const t3 = {
+  [getUniqueSymbol0()]: "first",
+  [getUniqueSymbol0()]: "last",
+  [getUniqueSymbol1()]: "first",
+  [getUniqueSymbol1()]: "last",
 };

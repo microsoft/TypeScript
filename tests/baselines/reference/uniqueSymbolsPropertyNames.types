@@ -13,17 +13,50 @@ namespace OpNamespace {
 >equal : unique symbol
 }
 
+const uniqueSymbol0 = Symbol.for("");
+>uniqueSymbol0 : unique symbol
+>Symbol.for("") : unique symbol
+>Symbol.for : (key: string) => symbol
+>Symbol : SymbolConstructor
+>for : (key: string) => symbol
+>"" : ""
+
+const uniqueSymbol1 = Symbol.for("");
+>uniqueSymbol1 : unique symbol
+>Symbol.for("") : unique symbol
+>Symbol.for : (key: string) => symbol
+>Symbol : SymbolConstructor
+>for : (key: string) => symbol
+>"" : ""
+
+
+function getUniqueSymbol0(): typeof uniqueSymbol0 {
+>getUniqueSymbol0 : () => typeof uniqueSymbol0
+>uniqueSymbol0 : unique symbol
+
+  return uniqueSymbol0;
+>uniqueSymbol0 : unique symbol
+}
+
+function getUniqueSymbol1(): typeof uniqueSymbol1 {
+>getUniqueSymbol1 : () => typeof uniqueSymbol1
+>uniqueSymbol1 : unique symbol
+
+    return uniqueSymbol1;
+>uniqueSymbol1 : unique symbol
+  }
+
 const Op: OpTypes = {
 >Op : OpTypes
 >{  equal: Symbol.for("equal"),} as OpTypes : OpTypes
->{  equal: Symbol.for("equal"),} : { equal: any; }
+>{  equal: Symbol.for("equal"),} : { equal: symbol; }
 
   equal: Symbol.for("equal"),
->equal : any
->Symbol.for("equal") : any
->Symbol.for : any
->Symbol : any
->for : any
+>equal : symbol
+>Symbol.for("equal") : symbol
+>Symbol.for : (key: string) => symbol
+>Symbol : SymbolConstructor
+>for : (key: string) => symbol
 >"equal" : "equal"
 
 } as OpTypes;
@@ -83,6 +116,36 @@ const t2 = {
 >OpNamespace.equal : unique symbol
 >OpNamespace : typeof OpNamespace
 >equal : unique symbol
+>"last" : "last"
+
+};
+
+const t3 = {
+>t3 : { [uniqueSymbol0]: string; [uniqueSymbol1]: string; }
+>{  [getUniqueSymbol0()]: "first",  [getUniqueSymbol0()]: "last",  [getUniqueSymbol1()]: "first",  [getUniqueSymbol1()]: "last",} : { [uniqueSymbol0]: string; [uniqueSymbol1]: string; }
+
+  [getUniqueSymbol0()]: "first",
+>[getUniqueSymbol0()] : string
+>getUniqueSymbol0() : unique symbol
+>getUniqueSymbol0 : () => unique symbol
+>"first" : "first"
+
+  [getUniqueSymbol0()]: "last",
+>[getUniqueSymbol0()] : string
+>getUniqueSymbol0() : unique symbol
+>getUniqueSymbol0 : () => unique symbol
+>"last" : "last"
+
+  [getUniqueSymbol1()]: "first",
+>[getUniqueSymbol1()] : string
+>getUniqueSymbol1() : unique symbol
+>getUniqueSymbol1 : () => unique symbol
+>"first" : "first"
+
+  [getUniqueSymbol1()]: "last",
+>[getUniqueSymbol1()] : string
+>getUniqueSymbol1() : unique symbol
+>getUniqueSymbol1 : () => unique symbol
 >"last" : "last"
 
 };
