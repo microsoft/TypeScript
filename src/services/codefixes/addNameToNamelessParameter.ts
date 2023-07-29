@@ -58,12 +58,12 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
         param.dotDotDotToken,
         "arg" + i,
         param.questionToken,
-        param.dotDotDotToken ? isArrayTypeNode(typeNode) ? typeNode : factory.createArrayTypeNode(typeNode) : typeNode,
+        param.dotDotDotToken && !isArrayTypeNode(typeNode) ? factory.createArrayTypeNode(typeNode) : typeNode,
         param.initializer,
     );
     changeTracker.replaceRange(sourceFile, createRange(param.getStart(sourceFile), end), replacement);
 }
-
+``
 function tryGetNextParam(sourceFile: SourceFile, param: ParameterDeclaration) {
     const nextToken = findNextToken(param.name, param.parent, sourceFile);
     if (nextToken && nextToken.kind === SyntaxKind.OpenBracketToken
