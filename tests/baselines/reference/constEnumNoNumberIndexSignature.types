@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/constEnums/constEnumNoNumberIndexSignature.ts] ////
+
+=== constEnumNoNumberIndexSignature.ts ===
+// https://github.com/microsoft/TypeScript/issues/55212
+
+const enum Foo {
+>Foo : Foo
+
+    a = 1,
+>a : Foo.a
+>1 : 1
+}
+
+export const v = Foo["1"]
+>v : any
+>Foo["1"] : any
+>Foo : typeof Foo
+>"1" : "1"
+

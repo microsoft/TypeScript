@@ -13120,7 +13120,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (baseConstructorIndexInfo) {
                 indexInfos = append(indexInfos, baseConstructorIndexInfo);
             }
-            if (symbol.flags & SymbolFlags.Enum && (getDeclaredTypeOfSymbol(symbol).flags & TypeFlags.Enum ||
+            if (symbol.flags & SymbolFlags.RegularEnum && (getDeclaredTypeOfSymbol(symbol).flags & TypeFlags.Enum ||
                 some(type.properties, prop => !!(getTypeOfSymbol(prop).flags & TypeFlags.NumberLike)))) {
                 indexInfos = append(indexInfos, enumNumberIndexInfo);
             }

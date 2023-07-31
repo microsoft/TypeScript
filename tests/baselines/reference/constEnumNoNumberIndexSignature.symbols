@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/constEnums/constEnumNoNumberIndexSignature.ts] ////
+
+=== constEnumNoNumberIndexSignature.ts ===
+// https://github.com/microsoft/TypeScript/issues/55212
+
+const enum Foo {
+>Foo : Symbol(Foo, Decl(constEnumNoNumberIndexSignature.ts, 0, 0))
+
+    a = 1,
+>a : Symbol(Foo.a, Decl(constEnumNoNumberIndexSignature.ts, 2, 16))
+}
+
+export const v = Foo["1"]
+>v : Symbol(v, Decl(constEnumNoNumberIndexSignature.ts, 6, 12))
+>Foo : Symbol(Foo, Decl(constEnumNoNumberIndexSignature.ts, 0, 0))
+
