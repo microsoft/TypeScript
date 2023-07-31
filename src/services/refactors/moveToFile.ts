@@ -927,8 +927,8 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
      * function add(x: string, y: string): string;
      * |]const a = 1;
      */
-    if (overloadRangeToMove && (statements[overloadRangeToMove.end].end >= range.end ||
-        range.end <= statements[overloadRangeToMove.end].end || range.end <= statements[overloadRangeToMove.end + 1].getStart())) {
+    const statementAfterLastOverload = overloadRangeToMove && statements[overloadRangeToMove.end + 1];
+    if (statementAfterLastOverload && range.end <= statementAfterLastOverload.getStart()) {
         return { toMove: overloadRangeToMove.toMove, afterLast: statements[overloadRangeToMove.end + 1] };
     }
 
