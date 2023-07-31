@@ -915,24 +915,26 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     const startStatement = statements[startNodeIndex];
 
     const overloadRangeToMove = getOverloadRangeToMove(file, startStatement);
-    /**function [|add(x: number, y: number): number;
-       function add(x: string, y: string): string;|]
-                        or
-       function [|add(x: number, y: number): number;
-       function add(x: string, y: string): string;
-       |]
-                        or
-       function [|add(x: number, y: number): number;
-       function add(x: string, y: string): string;
-       |]const a = 1;
+    /**
+     * function [|add(x: number, y: number): number;
+     * function add(x: string, y: string): string;|]
+     *                  or
+     * function [|add(x: number, y: number): number;
+     * function add(x: string, y: string): string;
+     * |]
+     *                  or
+     * function [|add(x: number, y: number): number;
+     * function add(x: string, y: string): string;
+     * |]const a = 1;
      */
-    if (overloadRangeToMove && (statements[overloadRangeToMove.end].end >= range.end || overloadRangeToMove.end === statements.length - 1 || range.end <= statements[overloadRangeToMove.end + 1].getStart())) {
+    if (overloadRangeToMove && (statements[overloadRangeToMove.end].end >= range.end ||
+        range.end <= statements[overloadRangeToMove.end].end || range.end <= statements[overloadRangeToMove.end + 1].getStart())) {
         return { toMove: overloadRangeToMove.toMove, afterLast: statements[overloadRangeToMove.end + 1] };
     }
 
     let afterEndNodeIndex = findIndex(statements, s => s.end >= range.end, startNodeIndex);
     /**[|const a = 1;
-       |]const b = 2;
+     * |]const b = 2;
      */
     if (afterEndNodeIndex !== -1 && range.end <= statements[afterEndNodeIndex].getStart()) {
         afterEndNodeIndex = afterEndNodeIndex - 1;
@@ -941,11 +943,11 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     const endingOverloadRangeToMove = getOverloadRangeToMove(file, statements[afterEndNodeIndex]);
 
     /**[|function add1(x: number, y: number): number;
-       function add1(x: string, y: string): string;
-       function foo() { }
-       const a = 1;
-       function add2(x: boolean): string;
-       function add2(x: number): number;|]
+     * function add1(x: string, y: string): string;
+     * function foo() { }
+     * const a = 1;
+     * function add2(x: boolean): string;
+     * function add2(x: number): number;|]
      */
     if (endingOverloadRangeToMove && overloadRangeToMove) {
         return {
@@ -955,18 +957,18 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     }
 
     /**function [|add(x: number, y: number): number;
-       function add(x: string, y: string): string;
-       function foo() { }|]
-                        or
-       function [|add(x: number, y: number): number;
-       function add(x: string, y: string): string;
-       function foo() { }
-       |]
-                        or
-       [|function add(x: number, y: number): number;
-       function add(x: string, y: string): string;
-       function foo() { }
-       |]const a = 1;
+     * function add(x: string, y: string): string;
+     * function foo() { }|]
+     *                  or
+     * function [|add(x: number, y: number): number;
+     * function add(x: string, y: string): string;
+     * function foo() { }
+     * |]
+     *                  or
+     * [|function add(x: number, y: number): number;
+     * function add(x: string, y: string): string;
+     * function foo() { }
+     * |]const a = 1;
      */
     if (overloadRangeToMove) {
         return {
@@ -977,21 +979,31 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
 
     /**[|const a = 1;
      * function add(x: number, y: number): number;
-       function add(x: string, y: string): string;|]
-                        or
-       [|
-       function add(x: number, y: number): number;
-       function add(x: string, y: string): string;
-       |]
-                        or
-       const a = 1;[|
-       function add(x: number, y: number): number;
-       function add(x: string, y: string): string;|]
+     * function add(x: string, y: string): string;|]
+     *                  or
+     * [|
+     * function add(x: number, y: number): number;
+     * function add(x: string, y: string): string;
+     * |]
+     *                  or
+     * const a = 1;[|
+     * function add(x: number, y: number): number;
+     * function add(x: string, y: string): string;|]
      */
     if (endingOverloadRangeToMove) {
+        let endNodeIndex;
+        let afterLastStatement;
+        if (endingOverloadRangeToMove.end === statements.length - 1) {
+            endNodeIndex = statements.length;
+            afterLastStatement = undefined;
+        }
+        else{
+            endNodeIndex = endingOverloadRangeToMove.end + 1;
+            afterLastStatement = statements[endNodeIndex];
+        }
         return {
-            toMove: statements.slice(startNodeIndex, endingOverloadRangeToMove.end === statements.length - 1 ? statements.length : endingOverloadRangeToMove.end + 1),
-            afterLast: endingOverloadRangeToMove.end === statements.length - 1 ? undefined : statements[endingOverloadRangeToMove.end + 1],
+            toMove: statements.slice(startNodeIndex, endNodeIndex),
+            afterLast: afterLastStatement,
         };
     }
     return {
