@@ -2206,6 +2206,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var identityRelation = new Map<string, RelationComparisonResult>();
     var enumRelation = new Map<string, RelationComparisonResult>();
 
+    // function relationName(relation: Map<string, RelationComparisonResult>): string {
+    //     if (relation === subtypeRelation) return "subtype";
+    //     if (relation === strictSubtypeRelation) return "strict subtype";
+    //     if (relation === assignableRelation) return "assignable";
+    //     if (relation === comparableRelation) return "comparable";
+    //     if (relation === identityRelation) return "identity";
+    //     if (relation === enumRelation) return "enum";
+    //     Debug.fail("Unknown relation");
+    // }
+    // (globalThis as any).__relationName = relationName;
+
     var builtinGlobals = createSymbolTable();
     builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
 
@@ -21286,6 +21297,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 tracing?.pop();
             }
 
+            // if (entry !== undefined) {
+            //     // If the previous entry and the result disagree, then something has gone wrong.
+            //     Debug.assert(!!(entry & RelationComparisonResult.Succeeded) === (result !== Ternary.False), "Cached relationship does not match recalculated result");
+            // }
+
             if (outofbandVarianceMarkerHandler) {
                 outofbandVarianceMarkerHandler = originalHandler;
             }
@@ -21951,7 +21967,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // reveal the reason).
                     // We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
                     // we can return `False` early here to skip calculating the structural error message we don't need.
-                    if (varianceCheckFailed && !(reportErrors && some(variances, v => (v & VarianceFlags.VarianceMask) === VarianceFlags.Invariant))) {
+                    if (varianceCheckFailed && !(some(variances, v => (v & VarianceFlags.VarianceMask) === VarianceFlags.Invariant))) {
                         return Ternary.False;
                     }
                     // We remember the original error information so we can restore it in case the structural
