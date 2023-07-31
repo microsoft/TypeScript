@@ -2206,17 +2206,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var identityRelation = new Map<string, RelationComparisonResult>();
     var enumRelation = new Map<string, RelationComparisonResult>();
 
-    // function relationName(relation: Map<string, RelationComparisonResult>): string {
-    //     if (relation === subtypeRelation) return "subtype";
-    //     if (relation === strictSubtypeRelation) return "strict subtype";
-    //     if (relation === assignableRelation) return "assignable";
-    //     if (relation === comparableRelation) return "comparable";
-    //     if (relation === identityRelation) return "identity";
-    //     if (relation === enumRelation) return "enum";
-    //     Debug.fail("Unknown relation");
-    // }
-    // (globalThis as any).__relationName = relationName;
-
     var builtinGlobals = createSymbolTable();
     builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
 
