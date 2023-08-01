@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/constructorWithEscapeSequence.ts] ////
+
+=== constructorWithEscapeSequence.ts ===
+export class C {
+>C : Symbol(C, Decl(constructorWithEscapeSequence.ts, 0, 0))
+
+  \u{63}onstructor() {}
+}
+
