@@ -30045,7 +30045,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createTupleType(elementTypes, elementFlags);
         }
         if (forceTuple || inConstContext || inTupleContext) {
-            return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext));
+            return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext && !(contextualType && isMutableArrayOrTuple(contextualType))));
         }
         return createArrayLiteralType(createArrayType(elementTypes.length ?
             getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), UnionReduction.Subtype) :
@@ -32623,7 +32623,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 names.push((arg as SyntheticExpression).tupleNameSource!);
             }
         }
-        return createTupleType(types, flags, inConstContext, length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, inConstContext && !isMutableArrayOrTuple(getBaseConstraintOrType(restType)), length(names) === length(types) ? names : undefined);
     }
 
     function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
