@@ -21205,7 +21205,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const id = getRelationKey(source, target, intersectionState, relation, /*ignoreConstraints*/ false);
             const entry = relation.get(id);
             if (entry !== undefined) {
-                if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
+                if (reportErrors && entry & RelationComparisonResult.Failed) {
                     // We are elaborating errors and the cached result is an unreported failure. The result will be reported
                     // as a failure, and should be updated as a reported failure by the bottom of this function.
                 }
