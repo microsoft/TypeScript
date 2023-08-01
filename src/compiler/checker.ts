@@ -23925,7 +23925,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
         }
         if (targetRestType) {
-            callback(getRestTypeAtPosition(source, paramCount, /*readonly*/ isConstTypeVariable(targetRestType)), targetRestType);
+            callback(getRestTypeAtPosition(source, paramCount, /*readonly*/ isConstTypeVariable(targetRestType) && !isMutableArrayOrTuple(getBaseConstraintOrType(targetRestType))), targetRestType);
         }
     }
 
