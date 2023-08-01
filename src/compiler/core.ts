@@ -2886,10 +2886,22 @@ export function isNodeLikeSystem(): boolean {
 
 /** @internal */
 export interface StackSet<T extends {}> {
+    /**
+     * Returns true if the value has already been pushed.
+     */
     has(value: T): boolean;
+    /**
+     * Pushes to the stack. The value pushed must not have been pushed before.
+     */
     push(value: T): void;
-    pop(): T;
-    // get size(): number;
+    /**
+     * This pops from the stack until the callback returns true.
+     *
+     * Note that a value is popped, _then_ the callback is evaluated, meaning
+     * that if you return true to stop iteration, the value that the callback
+     * returned true for will still have been popped.
+     */
+    popAll(callback: (v: T) => boolean): void;
 }
 
 /** @internal */
@@ -2907,20 +2919,19 @@ export function createStackSet<T extends {}>(): StackSet<T> {
             return set.has(value);
         },
         push(value) {
-            // Debug.assert(!set.has(value), "Value already pushed");
             set.add(value);
             stack[end] = value;
             end++;
         },
-        pop() {
-            end--;
-            // Debug.assertGreaterThanOrEqual(end, 0);
-            const value = stack[end];
-            set.delete(value);
-            return value;
+        popAll(callback) {
+            while (end > 0) {
+                end--;
+                const value = stack[end];
+                set.delete(value);
+                if (callback(value)) {
+                    break;
+                }
+            }
         },
-        // get size() {
-        //     return end;
-        // },
     };
 }

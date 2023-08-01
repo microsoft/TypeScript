@@ -21304,21 +21304,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (result === Ternary.True || result === Ternary.Maybe) {
                         // If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
                         // results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
-                        while (true) {
-                            const popped = maybeKeys.pop();
-                            relation.set(popped, RelationComparisonResult.Succeeded | propagatingVarianceFlags);
-                            if (popped === id) {
-                                break;
-                            }
-                        }
+                        maybeKeys.popAll(v => {
+                            relation.set(v, RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                            return v === id;
+                        });
                     }
                     else {
-                        while (true) {
-                            const popped = maybeKeys.pop();
-                            if (popped === id) {
-                                break;
-                            }
-                        }
+                        maybeKeys.popAll(v => v === id);
                     }
                 }
                 // Note: it's intentional that we don't pop in the else case;
@@ -21329,12 +21321,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
                 relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
-                while (true) {
-                    const popped = maybeKeys.pop();
-                    if (popped === id) {
-                        break;
-                    }
-                }
+                maybeKeys.popAll(v => v === id);
             }
             return result;
         }
