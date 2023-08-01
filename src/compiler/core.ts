@@ -2889,38 +2889,38 @@ export interface StackSet<T extends {}> {
     has(value: T): boolean;
     push(value: T): void;
     pop(): T;
-    get size(): number;
+    // get size(): number;
 }
 
 /** @internal */
 export function createStackSet<T extends {}>(): StackSet<T> {
-    const refs = new Map<T, number>();
-    const stack: T[] = [];
-    let end = 0;
+    // Why var? It avoids TDZ checks in the runtime which can be costly.
+    // See: https://github.com/microsoft/TypeScript/issues/52924
+    /* eslint-disable no-var */
+    var set = new Set<T>();
+    var stack: T[] = [];
+    var end = 0;
+    /* eslint-enable no-var */
+
     return {
         has(value) {
-            return refs.has(value);
+            return set.has(value);
         },
         push(value) {
-            refs.set(value, (refs.get(value) ?? 0) + 1);
+            // Debug.assert(!set.has(value), "Value already pushed");
+            set.add(value);
             stack[end] = value;
             end++;
         },
         pop() {
             end--;
-            Debug.assertGreaterThanOrEqual(end, 0);
+            // Debug.assertGreaterThanOrEqual(end, 0);
             const value = stack[end];
-            const refCount = refs.get(value)! - 1;
-            if (refCount === 0) {
-                refs.delete(value);
-            }
-            else {
-                refs.set(value, refCount);
-            }
+            set.delete(value);
             return value;
         },
-        get size() {
-            return end;
-        },
+        // get size() {
+        //     return end;
+        // },
     };
 }

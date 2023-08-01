@@ -21248,7 +21248,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return Ternary.False;
                 }
             }
-            const maybeStart = maybeKeys.size;
+            // const maybeStart = maybeKeys.size;
             maybeKeys.push(id);
             const saveExpandingFlags = expandingFlags;
             if (recursionFlags & RecursionFlags.Source) {
@@ -21304,14 +21304,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (result === Ternary.True || result === Ternary.Maybe) {
                         // If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
                         // results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
-                        while (maybeKeys.size > maybeStart) {
-                            const id = maybeKeys.pop();
-                            relation.set(id, RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                        while (true) {
+                            const popped = maybeKeys.pop();
+                            relation.set(popped, RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                            if (popped === id) {
+                                break;
+                            }
                         }
                     }
                     else {
-                        while (maybeKeys.size > maybeStart) {
-                            maybeKeys.pop();
+                        while (true) {
+                            const popped = maybeKeys.pop();
+                            if (popped === id) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -21323,8 +21329,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
                 relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
-                while (maybeKeys.size > maybeStart) {
-                    maybeKeys.pop();
+                while (true) {
+                    const popped = maybeKeys.pop();
+                    if (popped === id) {
+                        break;
+                    }
                 }
             }
             return result;
