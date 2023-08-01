@@ -485,3 +485,169 @@ const t2_55033 = factory_55033((a: { test: number }, b: string) => {})(
 >"some string" : "some string"
 
 );
+
+// Same with non-readonly constraint
+
+function factory_55033_2<const T extends unknown[]>(cb: (...args: T) => void) {
+>factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
+>cb : (...args: T) => void
+>args : T
+
+    return function call<const K extends T>(...args: K): K {
+>function call<const K extends T>(...args: K): K {        return {} as K;    } : <const K extends T>(...args: K) => K
+>call : <const K extends T>(...args: K) => K
+>args : K
+
+        return {} as K;
+>{} as K : K
+>{} : {}
+
+    };
+}
+
+const t1_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
+>t1_55033_2 : [{ readonly test: 123; }, "some string"]
+>factory_55033_2((a: { test: number }, b: string) => {})(    { test: 123 },    "some string") : [{ readonly test: 123; }, "some string"]
+>factory_55033_2((a: { test: number }, b: string) => {}) : <const K extends [a: { test: number; }, b: string]>(...args: K) => K
+>factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
+>(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
+>a : { test: number; }
+>test : number
+>b : string
+
+    { test: 123 },
+>{ test: 123 } : { test: 123; }
+>test : 123
+>123 : 123
+
+    "some string"
+>"some string" : "some string"
+
+);
+
+const t2_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
+>t2_55033_2 : [{ readonly test: 123; }, "some string"]
+>factory_55033_2((a: { test: number }, b: string) => {})(    { test: 123 } as const,    "some string") : [{ readonly test: 123; }, "some string"]
+>factory_55033_2((a: { test: number }, b: string) => {}) : <const K extends [a: { test: number; }, b: string]>(...args: K) => K
+>factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
+>(a: { test: number }, b: string) => {} : (a: {    test: number;}, b: string) => void
+>a : { test: number; }
+>test : number
+>b : string
+
+    { test: 123 } as const,
+>{ test: 123 } as const : { readonly test: 123; }
+>{ test: 123 } : { readonly test: 123; }
+>test : 123
+>123 : 123
+
+    "some string"
+>"some string" : "some string"
+
+);
+
+// Repro from https://github.com/microsoft/TypeScript/issues/51931
+
+declare function fn<const T extends any[]>(...args: T): T;
+>fn : <const T extends any[]>(...args: T) => T
+>args : T
+
+const a = fn("a", false);
+>a : ["a", false]
+>fn("a", false) : ["a", false]
+>fn : <const T extends any[]>(...args: T) => T
+>"a" : "a"
+>false : false
+
+// More examples of non-readonly constraints
+
+declare function fa1<const T extends unknown[]>(args: T): T;
+>fa1 : <const T extends unknown[]>(args: T) => T
+>args : T
+
+declare function fa2<const T extends readonly unknown[]>(args: T): T;
+>fa2 : <const T extends readonly unknown[]>(args: T) => T
+>args : T
+
+fa1(["hello", 42]);
+>fa1(["hello", 42]) : ["hello", 42]
+>fa1 : <const T extends unknown[]>(args: T) => T
+>["hello", 42] : ["hello", 42]
+>"hello" : "hello"
+>42 : 42
+
+fa2(["hello", 42]);
+>fa2(["hello", 42]) : readonly ["hello", 42]
+>fa2 : <const T extends readonly unknown[]>(args: T) => T
+>["hello", 42] : ["hello", 42]
+>"hello" : "hello"
+>42 : 42
+
+declare function fb1<const T extends unknown[]>(...args: T): T;
+>fb1 : <const T extends unknown[]>(...args: T) => T
+>args : T
+
+declare function fb2<const T extends readonly unknown[]>(...args: T): T;
+>fb2 : <const T extends readonly unknown[]>(...args: T) => T
+>args : T
+
+fb1("hello", 42);
+>fb1("hello", 42) : ["hello", 42]
+>fb1 : <const T extends unknown[]>(...args: T) => T
+>"hello" : "hello"
+>42 : 42
+
+fb2("hello", 42);
+>fb2("hello", 42) : readonly ["hello", 42]
+>fb2 : <const T extends readonly unknown[]>(...args: T) => T
+>"hello" : "hello"
+>42 : 42
+
+declare function fc1<const T extends unknown[]>(f: (...args: T) => void, ...args: T): T;
+>fc1 : <const T extends unknown[]>(f: (...args: T) => void, ...args: T) => T
+>f : (...args: T) => void
+>args : T
+>args : T
+
+declare function fc2<const T extends readonly unknown[]>(f: (...args: T) => void, ...args: T): T;
+>fc2 : <const T extends readonly unknown[]>(f: (...args: T) => void, ...args: T) => T
+>f : (...args: T) => void
+>args : T
+>args : T
+
+fc1((a: string, b: number) => {}, "hello", 42);
+>fc1((a: string, b: number) => {}, "hello", 42) : ["hello", 42]
+>fc1 : <const T extends unknown[]>(f: (...args: T) => void, ...args: T) => T
+>(a: string, b: number) => {} : (a: string, b: number) => void
+>a : string
+>b : number
+>"hello" : "hello"
+>42 : 42
+
+fc2((a: string, b: number) => {}, "hello", 42);
+>fc2((a: string, b: number) => {}, "hello", 42) : readonly ["hello", 42]
+>fc2 : <const T extends readonly unknown[]>(f: (...args: T) => void, ...args: T) => T
+>(a: string, b: number) => {} : (a: string, b: number) => void
+>a : string
+>b : number
+>"hello" : "hello"
+>42 : 42
+
+declare function fn1<const T extends { foo: unknown[] }[]>(...args: T): T;
+>fn1 : <const T extends { foo: unknown[]; }[]>(...args: T) => T
+>foo : unknown[]
+>args : T
+
+fn1({ foo: ["hello", 123] }, { foo: [true]});
+>fn1({ foo: ["hello", 123] }, { foo: [true]}) : [{ readonly foo: ["hello", 123]; }, { readonly foo: [true]; }]
+>fn1 : <const T extends { foo: unknown[]; }[]>(...args: T) => T
+>{ foo: ["hello", 123] } : { foo: ["hello", 123]; }
+>foo : ["hello", 123]
+>["hello", 123] : ["hello", 123]
+>"hello" : "hello"
+>123 : 123
+>{ foo: [true]} : { foo: [true]; }
+>foo : [true]
+>[true] : [true]
+>true : true
+

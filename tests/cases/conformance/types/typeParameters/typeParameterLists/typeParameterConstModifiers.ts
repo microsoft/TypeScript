@@ -124,3 +124,51 @@ const t2_55033 = factory_55033((a: { test: number }, b: string) => {})(
     { test: 123 } as const,
     "some string"
 );
+
+// Same with non-readonly constraint
+
+function factory_55033_2<const T extends unknown[]>(cb: (...args: T) => void) {
+    return function call<const K extends T>(...args: K): K {
+        return {} as K;
+    };
+}
+
+const t1_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
+    { test: 123 },
+    "some string"
+);
+
+const t2_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
+    { test: 123 } as const,
+    "some string"
+);
+
+// Repro from https://github.com/microsoft/TypeScript/issues/51931
+
+declare function fn<const T extends any[]>(...args: T): T;
+
+const a = fn("a", false);
+
+// More examples of non-readonly constraints
+
+declare function fa1<const T extends unknown[]>(args: T): T;
+declare function fa2<const T extends readonly unknown[]>(args: T): T;
+
+fa1(["hello", 42]);
+fa2(["hello", 42]);
+
+declare function fb1<const T extends unknown[]>(...args: T): T;
+declare function fb2<const T extends readonly unknown[]>(...args: T): T;
+
+fb1("hello", 42);
+fb2("hello", 42);
+
+declare function fc1<const T extends unknown[]>(f: (...args: T) => void, ...args: T): T;
+declare function fc2<const T extends readonly unknown[]>(f: (...args: T) => void, ...args: T): T;
+
+fc1((a: string, b: number) => {}, "hello", 42);
+fc2((a: string, b: number) => {}, "hello", 42);
+
+declare function fn1<const T extends { foo: unknown[] }[]>(...args: T): T;
+
+fn1({ foo: ["hello", 123] }, { foo: [true]});
