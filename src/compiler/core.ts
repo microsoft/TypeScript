@@ -2919,6 +2919,7 @@ export function createStackSet<T extends {}>(): StackSet<T> {
             return set.has(value);
         },
         push(value) {
+            Debug.assert(!set.has(value));
             set.add(value);
             stack[end] = value;
             end++;
