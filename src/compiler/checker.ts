@@ -48446,7 +48446,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     diagnostics.add(diagnostic);
                     return true;
                 }
-                // mvmo
+
                 return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
             }
 
