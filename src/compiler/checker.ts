@@ -21248,7 +21248,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return Ternary.False;
                 }
             }
-            // const maybeStart = maybeKeys.size;
             maybeKeys.push(id);
             const saveExpandingFlags = expandingFlags;
             if (recursionFlags & RecursionFlags.Source) {
