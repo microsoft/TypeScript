@@ -8,6 +8,7 @@ classStaticBlock26.ts(13,19): error TS1109: Expression expected.
 classStaticBlock26.ts(17,18): error TS1005: ':' expected.
 classStaticBlock26.ts(20,9): error TS18037: 'await' expression cannot be used inside a class static block.
 classStaticBlock26.ts(20,14): error TS1109: Expression expected.
+classStaticBlock26.ts(21,9): error TS18055: Cannot find label ''.
 classStaticBlock26.ts(21,15): error TS1003: Identifier expected.
 classStaticBlock26.ts(21,15): error TS18037: 'await' expression cannot be used inside a class static block.
 classStaticBlock26.ts(21,20): error TS1109: Expression expected.
@@ -18,7 +19,7 @@ classStaticBlock26.ts(26,21): error TS18037: 'await' expression cannot be used i
 classStaticBlock26.ts(26,27): error TS1109: Expression expected.
 
 
-==== classStaticBlock26.ts (18 errors) ====
+==== classStaticBlock26.ts (19 errors) ====
     class C {
         static {
             await; // illegal
@@ -60,6 +61,8 @@ classStaticBlock26.ts(26,27): error TS1109: Expression expected.
                  ~
 !!! error TS1109: Expression expected.
             break await; // illegal, 'await' cannot be used as a label
+            ~~~~~
+!!! error TS18055: Cannot find label ''.
                   ~~~~~
 !!! error TS1003: Identifier expected.
                   ~~~~~

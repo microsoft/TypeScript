@@ -7868,5 +7868,9 @@
     "Cannot find label '{0}'.": {
         "category": "Error",
         "code": 18055
+    },
+    "Label '{0}' declared after usage": {
+        "category": "Error",
+        "code": 18056
     }
 }
