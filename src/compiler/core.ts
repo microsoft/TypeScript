@@ -2882,3 +2882,45 @@ export function isNodeLikeSystem(): boolean {
         && !(process as any).browser
         && typeof module === "object";
 }
+
+
+/** @internal */
+export interface StackSet<T extends {}> {
+    has(value: T): boolean;
+    push(value: T): void;
+    pop(): T;
+    get size(): number;
+}
+
+/** @internal */
+export function createStackSet<T extends {}>(): StackSet<T> {
+    const refs = new Map<T, number>();
+    const stack: T[] = [];
+    let end = 0;
+    return {
+        has(value) {
+            return refs.has(value);
+        },
+        push(value) {
+            refs.set(value, (refs.get(value) ?? 0) + 1);
+            stack[end] = value;
+            end++;
+        },
+        pop() {
+            end--;
+            Debug.assertGreaterThanOrEqual(end, 0);
+            const value = stack[end];
+            const refCount = refs.get(value)! - 1;
+            if (refCount === 0) {
+                refs.delete(value);
+            }
+            else {
+                refs.set(value, refCount);
+            }
+            return value;
+        },
+        get size() {
+            return end;
+        },
+    };
+}

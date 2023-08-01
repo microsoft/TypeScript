@@ -118,6 +118,7 @@ import {
     createPrinterWithRemoveCommentsNeverAsciiEscape,
     createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createPropertyNameNodeForIdentifierOrLiteral,
+    createStackSet,
     createSymbolTable,
     createTextWriter,
     Debug,
@@ -962,6 +963,7 @@ import {
     SourceFile,
     SpreadAssignment,
     SpreadElement,
+    StackSet,
     startsWith,
     Statement,
     stringContains,
@@ -20348,10 +20350,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         let errorInfo: DiagnosticMessageChain | undefined;
         let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
-        let maybeKeys: string[];
+        let maybeKeys: StackSet<string>;
         let sourceStack: Type[];
         let targetStack: Type[];
-        let maybeCount = 0;
         let sourceDepth = 0;
         let targetDepth = 0;
         let expandingFlags = ExpandingFlags.None;
@@ -21224,29 +21225,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             if (!maybeKeys) {
-                maybeKeys = [];
+                maybeKeys = createStackSet();
                 sourceStack = [];
                 targetStack = [];
             }
             else {
+                // If source and target are already being compared, consider them related with assumptions
+                if (maybeKeys.has(id)) {
+                    return Ternary.Maybe;
+                }
+
                 // A key that starts with "*" is an indication that we have type references that reference constrained
                 // type parameters. For such keys we also check against the key we would have gotten if all type parameters
                 // were unconstrained.
                 const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, intersectionState, relation, /*ignoreConstraints*/ true) : undefined;
-                for (let i = 0; i < maybeCount; i++) {
-                    // If source and target are already being compared, consider them related with assumptions
-                    if (id === maybeKeys[i] || broadestEquivalentId && broadestEquivalentId === maybeKeys[i]) {
-                        return Ternary.Maybe;
-                    }
+                if (broadestEquivalentId && maybeKeys.has(broadestEquivalentId)) {
+                    return Ternary.Maybe;
                 }
+
                 if (sourceDepth === 100 || targetDepth === 100) {
                     overflow = true;
                     return Ternary.False;
                 }
             }
-            const maybeStart = maybeCount;
-            maybeKeys[maybeCount] = id;
-            maybeCount++;
+            const maybeStart = maybeKeys.size;
+            maybeKeys.push(id);
             const saveExpandingFlags = expandingFlags;
             if (recursionFlags & RecursionFlags.Source) {
                 sourceStack[sourceDepth] = source;
@@ -21301,18 +21304,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (result === Ternary.True || result === Ternary.Maybe) {
                         // If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
                         // results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
-                        for (let i = maybeStart; i < maybeCount; i++) {
-                            relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                        while (maybeKeys.size > maybeStart) {
+                            const id = maybeKeys.pop();
+                            relation.set(id, RelationComparisonResult.Succeeded | propagatingVarianceFlags);
                         }
                     }
-                    maybeCount = maybeStart;
+                    else {
+                        while (maybeKeys.size > maybeStart) {
+                            maybeKeys.pop();
+                        }
+                    }
                 }
+                // Note: it's intentional that we don't pop in the else case;
+                // we leave them on the stack such that when we hit depth zero
+                // above, we can report all of them as successful.
             }
             else {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
                 relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
-                maybeCount = maybeStart;
+                while (maybeKeys.size > maybeStart) {
+                    maybeKeys.pop();
+                }
             }
             return result;
         }
