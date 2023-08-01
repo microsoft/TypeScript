@@ -2885,7 +2885,7 @@ export function isNodeLikeSystem(): boolean {
 
 
 /** @internal */
-export interface StackSet<T extends {}> {
+export interface StackSet<T> {
     /**
      * Returns true if the value has already been pushed.
      */
@@ -2895,17 +2895,16 @@ export interface StackSet<T extends {}> {
      */
     push(value: T): void;
     /**
-     * This pops from the stack until the callback returns true.
+     * This pops from the stack, stopping iteration after v is found.
      *
-     * Note that a value is popped, _then_ the callback is evaluated, meaning
-     * that if you return true to stop iteration, the value that the callback
-     * returned true for will still have been popped.
+     * Note that the callback is evaluated _after_ the item is popped, meaning
+     * the callback will execute for v and it will not remain on the stack.
      */
-    popAll(callback: (v: T) => boolean): void;
+    popUntilInclusive(v: T, callback?: (v: T) => void): void;
 }
 
 /** @internal */
-export function createStackSet<T extends {}>(): StackSet<T> {
+export function createStackSet<T>(): StackSet<T> {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
@@ -2924,13 +2923,14 @@ export function createStackSet<T extends {}>(): StackSet<T> {
             stack[end] = value;
             end++;
         },
-        popAll(callback) {
+        popUntilInclusive(v, callback) {
             while (end > 0) {
                 end--;
                 const value = stack[end];
                 set.delete(value);
-                if (callback(value)) {
-                    break;
+                callback?.(value);
+                if (value === v) {
+                    return;
                 }
             }
         },
