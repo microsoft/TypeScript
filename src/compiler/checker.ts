@@ -45463,7 +45463,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (meaning) {
                 source.forEach(symbol => {
                     // Similar condition as in `resolveNameHelper`
-                    if (!getDeclarationOfKind(symbol, SyntaxKind.ExportSpecifier) && !getDeclarationOfKind(symbol, SyntaxKind.NamespaceExport)) {
+                    if (!getDeclarationOfKind(symbol, SyntaxKind.ExportSpecifier) && !getDeclarationOfKind(symbol, SyntaxKind.NamespaceExport) && symbol.escapedName !== InternalSymbolName.Default) {
                         copySymbol(symbol, meaning);
                     }
                 });
