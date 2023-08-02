@@ -43854,11 +43854,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return +(expr as NumericLiteral).text;
             case SyntaxKind.ParenthesizedExpression:
                 return evaluate((expr as ParenthesizedExpression).expression, location);
-            case SyntaxKind.Identifier:
-                if (isInfinityOrNaNString((expr as Identifier).escapedText)) {
-                    return +((expr as Identifier).escapedText);
+            case SyntaxKind.Identifier: {
+                const identifier = expr as Identifier;
+                if (isInfinityOrNaNString(identifier.escapedText) && (resolveEntityName(identifier, SymbolFlags.Value, /*ignoreErrors*/ true) === getGlobalSymbol(identifier.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))) {
+                    return +(identifier.escapedText);
                 }
                 // falls through
+            }
             case SyntaxKind.PropertyAccessExpression:
                 if (isEntityNameExpression(expr)) {
                     const symbol = resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true);
