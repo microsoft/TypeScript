@@ -1,4 +1,4 @@
-parser_breakTarget5.ts(5,7): error TS18055: Cannot find label 'target'.
+parser_breakTarget5.ts(5,7): error TS18055: Label 'target' used before declaration
 
 
 ==== parser_breakTarget5.ts (1 errors) ====
@@ -8,7 +8,7 @@ parser_breakTarget5.ts(5,7): error TS18055: Cannot find label 'target'.
         while (true) {
           break target;
           ~~~~~~~~~~~~~
-!!! error TS18055: Cannot find label 'target'.
+!!! error TS18055: Label 'target' used before declaration
         }
       }
     }

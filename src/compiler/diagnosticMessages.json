@@ -7865,11 +7865,11 @@
         "category": "Error",
         "code": 18054
     },
-    "Cannot find label '{0}'.": {
+    "Label '{0}' used before declaration": {
         "category": "Error",
         "code": 18055
     },
-    "Label '{0}' declared after usage": {
+    "Label defined here": {
         "category": "Error",
         "code": 18056
     }

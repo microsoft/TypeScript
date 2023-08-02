@@ -1,4 +1,4 @@
-parser_continueNotInIterationStatement4.ts(4,5): error TS18055: Cannot find label 'TWO'.
+parser_continueNotInIterationStatement4.ts(4,5): error TS18055: Label 'TWO' used before declaration
 
 
 ==== parser_continueNotInIterationStatement4.ts (1 errors) ====
@@ -7,7 +7,7 @@ parser_continueNotInIterationStatement4.ts(4,5): error TS18055: Cannot find labe
       var x = () => {
         continue TWO;
         ~~~~~~~~~~~~~
-!!! error TS18055: Cannot find label 'TWO'.
+!!! error TS18055: Label 'TWO' used before declaration
       }
     }
     

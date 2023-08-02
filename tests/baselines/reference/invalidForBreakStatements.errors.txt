@@ -1,7 +1,7 @@
 invalidForBreakStatements.ts(4,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
 invalidForBreakStatements.ts(8,9): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
-invalidForBreakStatements.ts(14,9): error TS18055: Cannot find label 'TWO'.
-invalidForBreakStatements.ts(21,9): error TS18055: Cannot find label 'THREE'.
+invalidForBreakStatements.ts(14,9): error TS18055: Label 'TWO' used before declaration
+invalidForBreakStatements.ts(21,9): error TS18055: Label 'THREE' used before declaration
 invalidForBreakStatements.ts(27,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 invalidForBreakStatements.ts(36,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 
@@ -26,7 +26,7 @@ invalidForBreakStatements.ts(36,5): error TS1116: A 'break' statement can only j
         var x = () => {
             break TWO;
             ~~~~~~~~~~
-!!! error TS18055: Cannot find label 'TWO'.
+!!! error TS18055: Label 'TWO' used before declaration
         }
     }
     
@@ -35,7 +35,7 @@ invalidForBreakStatements.ts(36,5): error TS1116: A 'break' statement can only j
         var fn = function () {
             break THREE;
             ~~~~~~~~~~~~
-!!! error TS18055: Cannot find label 'THREE'.
+!!! error TS18055: Label 'THREE' used before declaration
         }
     }
     
