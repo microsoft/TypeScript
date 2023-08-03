@@ -41020,12 +41020,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return;
         }
 
-        // skip variable declarations that don't have initializers
         // NOTE: in ES6 spec initializer is required in variable declarations where name is binding pattern
         // so we'll always treat binding elements as initialized
-        if (node.kind === SyntaxKind.VariableDeclaration && !node.initializer) {
-            return;
-        }
 
         const symbol = getSymbolOfDeclaration(node);
         if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
@@ -41050,10 +41046,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             container.kind === SyntaxKind.ModuleDeclaration ||
                             container.kind === SyntaxKind.SourceFile);
 
-                    // here we know that function scoped variable is shadowed by block scoped one
-                    // if they are defined in the same scope - binder has already reported redeclaration error
-                    // otherwise if variable has an initializer - show error that initialization will fail
-                    // since LHS will be block scoped name instead of function scoped
+                    // here we know that function scoped variable is "shadowed" by block scoped one
+                    // a var declatation can't hoist past a lexical declaration and it results in a SyntaxError at runtime
                     if (!namesShareScope) {
                         const name = symbolToString(localDeclarationSymbol);
                         error(node, Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
