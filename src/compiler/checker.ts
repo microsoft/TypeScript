@@ -21325,7 +21325,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         resetMaybeStack();
                     }
                 }
-                // Note: it's intentional that we don't pop in the else case;
+                // Note: it's intentional that we don't reset in the else case;
                 // we leave them on the stack such that when we hit depth zero
                 // above, we can report all of them as successful.
             }
