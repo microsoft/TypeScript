@@ -38,7 +38,6 @@ body:
         - This changed between versions ______ and _______
         - This is the behavior in every version I tried, and I reviewed the FAQ for entries about _________
         - I was unable to test this on prior versions because _______
-      render: Markdown
     validations:
       required: true
   - type: input
@@ -73,7 +72,6 @@ body:
           - We have to pare too much extraneous code.
           - We have to clone a large repo and validate that the problem isn't elsewhere.
           - The sample is confusing or doesn't clearly demonstrate what's wrong.
-      render: Markdown
     validations:
       required: false
   - type: textarea
