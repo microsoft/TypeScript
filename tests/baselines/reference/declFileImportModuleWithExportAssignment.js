@@ -40,7 +40,7 @@ exports.a.test1(null, null, null);
 
 
 //// [declFileImportModuleWithExportAssignment_0.d.ts]
-declare module m2 {
+declare namespace m2 {
     interface connectModule {
         (res: any, req: any, next: any): void;
     }

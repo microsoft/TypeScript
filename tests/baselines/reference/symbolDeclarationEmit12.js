@@ -30,7 +30,7 @@ var M;
 
 
 //// [symbolDeclarationEmit12.d.ts]
-declare module M {
+declare namespace M {
     interface I {
     }
     export class C {

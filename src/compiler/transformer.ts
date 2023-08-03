@@ -72,7 +72,7 @@ import {
     transformNodeModule,
     transformSystemModule,
     transformTypeScript,
-    VariableDeclaration,
+    VariableDeclaration
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -131,11 +131,6 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     if (compilerOptions.experimentalDecorators) {
         transformers.push(transformLegacyDecorators);
     }
-    else if (languageVersion < ScriptTarget.ESNext || !useDefineForClassFields) {
-        transformers.push(transformESDecorators);
-    }
-
-    transformers.push(transformClassFields);
 
     if (getJSXTransformEnabled(compilerOptions)) {
         transformers.push(transformJsx);
@@ -144,6 +139,12 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     if (languageVersion < ScriptTarget.ESNext) {
         transformers.push(transformESNext);
     }
+
+    if (!compilerOptions.experimentalDecorators && (languageVersion < ScriptTarget.ESNext || !useDefineForClassFields)) {
+        transformers.push(transformESDecorators);
+    }
+
+    transformers.push(transformClassFields);
 
     if (languageVersion < ScriptTarget.ES2021) {
         transformers.push(transformES2021);

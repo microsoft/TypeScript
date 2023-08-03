@@ -222,7 +222,7 @@ var x
         const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
         const paramTag = sourceFile.getChildren()[0].getChildren()[0].getChildren()[0].getChildren()[0];
         const kids = paramTag.getChildren();
-        const seen: Set<ts.Node> = new Set();
+        const seen = new Set<ts.Node>();
         ts.forEachChild(paramTag, n => {
             assert.strictEqual(/*actual*/ false, seen.has(n), "Found a duplicate-added child");
             seen.add(n);

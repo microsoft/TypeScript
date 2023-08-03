@@ -1,0 +1,33 @@
+esDecorators-privateFieldAccess.ts(3,13): error TS18016: Private identifiers are not allowed outside class bodies.
+esDecorators-privateFieldAccess.ts(11,18): error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
+
+
+==== esDecorators-privateFieldAccess.ts (2 errors) ====
+    declare let dec: any;
+    
+    @dec(x => x.#foo) // error
+                ~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    class A {
+        #foo = 3;
+    
+        @dec(this, (x: A) => x.#foo) // ok
+        m() {}
+    }
+    
+    @dec((x: B) => x.#foo) // error
+                     ~~~~
+!!! error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
+    class B {
+        #foo = 3;
+    }
+    
+    class C {
+        #foo = 2;
+        m() {
+            @dec(() => this.#foo) // ok
+            class D {}
+            return D;
+        }
+    }
+    

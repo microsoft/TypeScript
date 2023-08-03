@@ -73,7 +73,7 @@ declare class c {
 }
 declare class g<T> {
 }
-declare module m {
+declare namespace m {
     class c {
     }
 }
