@@ -433,7 +433,7 @@ export class FileSystem {
      */
     public utimesSync(path: string, atime: Date, mtime: Date) {
         if (this.isReadonly) throw createIOError("EROFS");
-        if (!isFinite(+atime) || !isFinite(+mtime)) throw createIOError("EINVAL");
+        if (!Number.isFinite(+atime) || !Number.isFinite(+mtime)) throw createIOError("EINVAL");
 
         const entry = this._walk(this._resolve(path));
         if (!entry || !entry.node) {

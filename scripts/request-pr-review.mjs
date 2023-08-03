@@ -28,7 +28,7 @@ if (!options.token || !options.pull || !options.reviewer || !options.owner || !o
 }
 
 const pull_number = +options.pull;
-if (!isFinite(pull_number)) {
+if (!Number.isFinite(pull_number)) {
     console.error("Invalid arguments");
     printHelpAndExit(-2);
 }

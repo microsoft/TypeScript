@@ -85,7 +85,7 @@ export function createOverload<T extends OverloadDefinitions>(name: string, over
     if (deprecations) {
         for (const key of Object.keys(deprecations)) {
             const index = +key as (keyof T & number);
-            if (!isNaN(index) && hasProperty(overloads, `${index}`)) {
+            if (!Number.isNaN(index) && hasProperty(overloads, `${index}`)) {
                 overloads[index] = deprecate(overloads[index], { ...deprecations[index], name });
             }
         }

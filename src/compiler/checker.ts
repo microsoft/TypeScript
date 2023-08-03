@@ -24279,7 +24279,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isValidNumberString(s: string, roundTripOnly: boolean): boolean {
         if (s === "") return false;
         const n = +s;
-        return isFinite(n) && (!roundTripOnly || "" + n === s);
+        return Number.isFinite(n) && (!roundTripOnly || "" + n === s);
     }
 
     /**
@@ -43789,8 +43789,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const initializer = member.initializer!;
         const value = evaluate(initializer, member);
         if (value !== undefined) {
-            if (isConstEnum && typeof value === "number" && !isFinite(value)) {
-                error(initializer, isNaN(value) ?
+            if (isConstEnum && typeof value === "number" && !Number.isFinite(value)) {
+                error(initializer, Number.isNaN(value) ?
                     Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN :
                     Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
             }

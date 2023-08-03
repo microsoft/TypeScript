@@ -3064,7 +3064,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             // check if constant enum value is a non-negative integer
             const constantValue = getConstantValue(expression);
             // isFinite handles cases when constantValue is undefined
-            return typeof constantValue === "number" && isFinite(constantValue)
+            return typeof constantValue === "number" && Number.isFinite(constantValue)
                 && constantValue >= 0 && Math.floor(constantValue) === constantValue;
         }
     }

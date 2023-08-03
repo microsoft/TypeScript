@@ -376,7 +376,7 @@ export namespace Compiler {
                 return value;
             case "number": {
                 const numverValue = parseInt(value, 10);
-                if (isNaN(numverValue)) {
+                if (Number.isNaN(numverValue)) {
                     throw new Error(`Value must be a number, got: ${JSON.stringify(value)}`);
                 }
                 return numverValue;

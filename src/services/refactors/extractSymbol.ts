@@ -346,14 +346,14 @@ export function getRefactorEditsToExtractSymbol(context: RefactorContext, action
     const parsedFunctionIndexMatch = /^function_scope_(\d+)$/.exec(actionName);
     if (parsedFunctionIndexMatch) {
         const index = +parsedFunctionIndexMatch[1];
-        Debug.assert(isFinite(index), "Expected to parse a finite number from the function scope index");
+        Debug.assert(Number.isFinite(index), "Expected to parse a finite number from the function scope index");
         return getFunctionExtractionAtIndex(targetRange, context, index);
     }
 
     const parsedConstantIndexMatch = /^constant_scope_(\d+)$/.exec(actionName);
     if (parsedConstantIndexMatch) {
         const index = +parsedConstantIndexMatch[1];
-        Debug.assert(isFinite(index), "Expected to parse a finite number from the constant scope index");
+        Debug.assert(Number.isFinite(index), "Expected to parse a finite number from the constant scope index");
         return getConstantExtractionAtIndex(targetRange, context, index);
     }
 
