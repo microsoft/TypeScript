@@ -21322,7 +21322,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         resetMaybeStack(/*markAllAsSucceeded*/ true);
                     }
                     else {
-                        resetMaybeStack();
+                        resetMaybeStack(/*markAllAsSucceeded*/ false);
                     }
                 }
                 // Note: it's intentional that we don't reset in the else case;
@@ -21333,11 +21333,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
                 relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
-                resetMaybeStack();
+                resetMaybeStack(/*markAllAsSucceeded*/ false);
             }
             return result;
 
-            function resetMaybeStack(markAllAsSucceeded = false) {
+            function resetMaybeStack(markAllAsSucceeded: boolean) {
                 for (let i = maybeStart; i < maybeCount; i++) {
                     maybeKeysSet.delete(maybeKeys[i]);
                     if (markAllAsSucceeded) {
