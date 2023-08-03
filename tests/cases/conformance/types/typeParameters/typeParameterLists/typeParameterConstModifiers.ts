@@ -169,6 +169,14 @@ declare function fc2<const T extends readonly unknown[]>(f: (...args: T) => void
 fc1((a: string, b: number) => {}, "hello", 42);
 fc2((a: string, b: number) => {}, "hello", 42);
 
+declare function fd1<const T extends string[] | number[]>(args: T): T;
+declare function fd2<const T extends readonly string[] | readonly number[]>(args: T): T;
+
+fd1(["hello", "world"]);
+fd1([1, 2, 3]);
+fd2(["hello", "world"]);
+fd2([1, 2, 3]);
+
 declare function fn1<const T extends { foo: unknown[] }[]>(...args: T): T;
 
 fn1({ foo: ["hello", 123] }, { foo: [true]});
