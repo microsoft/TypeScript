@@ -594,7 +594,7 @@ export function getDeclarationsOfKind<T extends Declaration>(symbol: Symbol, kin
 }
 
 /** @internal */
-export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
+export function createSymbolTable(symbols?: Iterable<Symbol>): SymbolTable {
     const result = new Map<__String, Symbol>();
     if (symbols) {
         for (const symbol of symbols) {
