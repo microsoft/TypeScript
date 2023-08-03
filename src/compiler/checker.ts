@@ -20361,6 +20361,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let errorInfo: DiagnosticMessageChain | undefined;
         let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
         let maybeKeys: string[];
+        let maybeKeysSet: Set<string>;
         let sourceStack: Type[];
         let targetStack: Type[];
         let maybeCount = 0;
@@ -21237,20 +21238,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (!maybeKeys) {
                 maybeKeys = [];
+                maybeKeysSet = new Set();
                 sourceStack = [];
                 targetStack = [];
             }
             else {
+                // If source and target are already being compared, consider them related with assumptions
+                if (maybeKeysSet.has(id)) {
+                    return Ternary.Maybe;
+                }
+
                 // A key that starts with "*" is an indication that we have type references that reference constrained
                 // type parameters. For such keys we also check against the key we would have gotten if all type parameters
                 // were unconstrained.
                 const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, intersectionState, relation, /*ignoreConstraints*/ true) : undefined;
-                for (let i = 0; i < maybeCount; i++) {
-                    // If source and target are already being compared, consider them related with assumptions
-                    if (id === maybeKeys[i] || broadestEquivalentId && broadestEquivalentId === maybeKeys[i]) {
-                        return Ternary.Maybe;
-                    }
+                if (broadestEquivalentId && maybeKeysSet.has(broadestEquivalentId)) {
+                    return Ternary.Maybe;
                 }
+
                 if (sourceDepth === 100 || targetDepth === 100) {
                     overflow = true;
                     return Ternary.False;
@@ -21258,6 +21263,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const maybeStart = maybeCount;
             maybeKeys[maybeCount] = id;
+            maybeKeysSet.add(id);
             maybeCount++;
             const saveExpandingFlags = expandingFlags;
             if (recursionFlags & RecursionFlags.Source) {
@@ -21313,20 +21319,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (result === Ternary.True || result === Ternary.Maybe) {
                         // If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
                         // results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
-                        for (let i = maybeStart; i < maybeCount; i++) {
-                            relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
-                        }
+                        resetMaybeStack(/*markAllAsSucceeded*/ true);
                     }
-                    maybeCount = maybeStart;
+                    else {
+                        resetMaybeStack(/*markAllAsSucceeded*/ false);
+                    }
                 }
+                // Note: it's intentional that we don't reset in the else case;
+                // we leave them on the stack such that when we hit depth zero
+                // above, we can report all of them as successful.
             }
             else {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
                 relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
-                maybeCount = maybeStart;
+                resetMaybeStack(/*markAllAsSucceeded*/ false);
             }
             return result;
+
+            function resetMaybeStack(markAllAsSucceeded: boolean) {
+                for (let i = maybeStart; i < maybeCount; i++) {
+                    maybeKeysSet.delete(maybeKeys[i]);
+                    if (markAllAsSucceeded) {
+                        relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                    }
+                }
+                maybeCount = maybeStart;
+            }
         }
 
         function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
