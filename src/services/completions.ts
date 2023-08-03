@@ -5298,6 +5298,11 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
                 return cls;
             }
             break;
+        case SyntaxKind.PrivateIdentifier:
+            if (tryCast(location.parent, isPropertyDeclaration)) {
+                return findAncestor(location, isClassLike);
+            }
+            break;
         case SyntaxKind.Identifier: {
             const originalKeywordKind = identifierToKeywordKind(location as Identifier);
             if (originalKeywordKind) {
