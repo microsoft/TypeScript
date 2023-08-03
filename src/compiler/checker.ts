@@ -48431,16 +48431,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         break;
                     }
 
-                    let matchingLabelDeclaration = false;
-                    forEachChild(functionOrClassLike.body, (childNode) => {
-                        if (matchingLabelDeclaration) {
-                            return;
-                        }
-
+                    forEachChild(functionOrClassLike.body, childNode => {
                         const labeledStatement = childNode as LabeledStatement;
                         if (labeledStatement.kind === SyntaxKind.LabeledStatement && labeledStatement.label.escapedText === node.label!.escapedText) {
                             diagnostic.relatedInformation = [createDiagnosticForNode(labeledStatement.label, Diagnostics.Label_defined_here, labeledStatement.label.escapedText.toString())];
-                            matchingLabelDeclaration = true;
+                            return true;
                         }
                     });
 
