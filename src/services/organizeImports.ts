@@ -94,7 +94,7 @@ export function organizeImports(
 
     const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
         if (shouldRemove) importGroup = removeUnusedImports(importGroup, sourceFile, program);
-        if (shouldCombine) importGroup = coalesceImportsWorker(importGroup, comparer, sourceFile);
+        if (shouldCombine) importGroup = coalesceImportsWorker(importGroup, comparer, sourceFile, preferences);
         if (shouldSort) importGroup = stableSort(importGroup, (s1, s2) => compareImportsOrRequireStatements(s1, s2, comparer));
         return importGroup;
     };
@@ -105,7 +105,7 @@ export function organizeImports(
     if (mode !== OrganizeImportsMode.RemoveUnused) {
         // All of the old ExportDeclarations in the file, in syntactic order.
         getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl =>
-            organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer)));
+            organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer, preferences)));
     }
 
     for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
@@ -117,7 +117,7 @@ export function organizeImports(
         // Exports are always used
         if (mode !== OrganizeImportsMode.RemoveUnused) {
             const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
-            organizeImportsWorker(ambientModuleExportDecls, group => coalesceExportsWorker(group, comparer));
+            organizeImportsWorker(ambientModuleExportDecls, group => coalesceExportsWorker(group, comparer, preferences));
         }
     }
 
@@ -310,12 +310,12 @@ function getExternalModuleName(specifier: Expression | undefined) {
  * @deprecated Only used for testing
  * @internal
  */
-export function coalesceImports(importGroup: readonly ImportDeclaration[], ignoreCase: boolean, sourceFile?: SourceFile): readonly ImportDeclaration[] {
+export function coalesceImports(importGroup: readonly ImportDeclaration[], ignoreCase: boolean, sourceFile?: SourceFile, preferences?: UserPreferences): readonly ImportDeclaration[] {
     const comparer = getOrganizeImportsOrdinalStringComparer(ignoreCase);
-    return coalesceImportsWorker(importGroup, comparer, sourceFile);
+    return coalesceImportsWorker(importGroup, comparer, sourceFile, preferences);
 }
 
-function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], comparer: Comparer<string>, sourceFile?: SourceFile): readonly ImportDeclaration[] {
+function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], comparer: Comparer<string>, sourceFile?: SourceFile, preferences?: UserPreferences): readonly ImportDeclaration[] {
     if (importGroup.length === 0) {
         return importGroup;
     }
@@ -372,7 +372,7 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
         newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
         const sortedImportSpecifiers = factory.createNodeArray(
-            sortSpecifiers(newImportSpecifiers, comparer),
+            sortSpecifiers(newImportSpecifiers, comparer, preferences),
             firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma
         );
 
@@ -485,18 +485,17 @@ function getCategorizedImports(importGroup: readonly ImportDeclaration[]) {
  * @deprecated Only used for testing
  * @internal
  */
-export function coalesceExports(exportGroup: readonly ExportDeclaration[], ignoreCase: boolean) {
+export function coalesceExports(exportGroup: readonly ExportDeclaration[], ignoreCase: boolean, preferences?: UserPreferences) {
     const comparer = getOrganizeImportsOrdinalStringComparer(ignoreCase);
-    return coalesceExportsWorker(exportGroup, comparer);
+    return coalesceExportsWorker(exportGroup, comparer, preferences);
 }
 
-function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], comparer: Comparer<string>) {
+function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], comparer: Comparer<string>, preferences?: UserPreferences) {
     if (exportGroup.length === 0) {
         return exportGroup;
     }
 
     const { exportWithoutClause, namedExports, typeOnlyExports } = getCategorizedExports(exportGroup);
-
     const coalescedExports: ExportDeclaration[] = [];
 
     if (exportWithoutClause) {
@@ -510,7 +509,7 @@ function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], compar
         const newExportSpecifiers: ExportSpecifier[] = [];
         newExportSpecifiers.push(...flatMap(exportGroup, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
 
-        const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers, comparer);
+        const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers, comparer, preferences);
 
         const exportDecl = exportGroup[0];
         coalescedExports.push(
@@ -574,13 +573,20 @@ function updateImportDeclarationAndClause(
         importDeclaration.assertClause);
 }
 
-function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[], comparer: Comparer<string>) {
-    return stableSort(specifiers, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer));
+function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[], comparer: Comparer<string>, preferences?: UserPreferences): readonly T[] {
+    return stableSort(specifiers, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer, preferences));
 }
 
 /** @internal */
-export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>): Comparison {
-    return compareBooleans(s1.isTypeOnly, s2.isTypeOnly) || comparer(s1.name.text, s2.name.text);
+export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>, preferences?: UserPreferences): Comparison {
+    switch (preferences?.organizeImportsTypeOrder){
+        case "first":
+            return compareBooleans(s2.isTypeOnly, s1.isTypeOnly) || comparer(s1.name.text, s2.name.text);
+        case "last":
+            return compareBooleans(s1.isTypeOnly, s2.isTypeOnly) || comparer(s1.name.text, s2.name.text);
+        default:
+            return comparer(s1.name.text, s2.name.text);
+    }
 }
 
 /**

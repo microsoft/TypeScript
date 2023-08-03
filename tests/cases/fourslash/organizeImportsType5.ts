@@ -1,0 +1,21 @@
+/// <reference path='fourslash.ts' />
+
+// @allowSyntheticDefaultImports: true
+// @moduleResolution: node
+// @noUnusedLocals: true
+// @target: es2018
+
+//// type A = string;
+//// type B = string;
+//// const C = "hello";
+//// export { A, type B, C };
+
+verify.organizeImports(
+`type A = string;
+type B = string;
+const C = "hello";
+export { type B, A, C };
+`,
+    undefined, 
+    { organizeImportsTypeOrder : "first" }
+);
