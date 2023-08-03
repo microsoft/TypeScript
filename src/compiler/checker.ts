@@ -118,7 +118,6 @@ import {
     createPrinterWithRemoveCommentsNeverAsciiEscape,
     createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createPropertyNameNodeForIdentifierOrLiteral,
-    createStackSet,
     createSymbolTable,
     createTextWriter,
     Debug,
@@ -963,7 +962,6 @@ import {
     SourceFile,
     SpreadAssignment,
     SpreadElement,
-    StackSet,
     startsWith,
     Statement,
     stringContains,
@@ -20362,9 +20360,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         let errorInfo: DiagnosticMessageChain | undefined;
         let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
-        let maybeKeys: StackSet<string>;
+        let maybeKeys: string[];
+        let maybeKeysSet: Set<string>;
         let sourceStack: Type[];
         let targetStack: Type[];
+        let maybeCount = 0;
         let sourceDepth = 0;
         let targetDepth = 0;
         let expandingFlags = ExpandingFlags.None;
@@ -21237,13 +21237,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             if (!maybeKeys) {
-                maybeKeys = createStackSet();
+                maybeKeys = [];
+                maybeKeysSet = new Set();
                 sourceStack = [];
                 targetStack = [];
             }
             else {
                 // If source and target are already being compared, consider them related with assumptions
-                if (maybeKeys.has(id)) {
+                if (maybeKeysSet.has(id)) {
                     return Ternary.Maybe;
                 }
 
@@ -21251,7 +21252,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // type parameters. For such keys we also check against the key we would have gotten if all type parameters
                 // were unconstrained.
                 const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, intersectionState, relation, /*ignoreConstraints*/ true) : undefined;
-                if (broadestEquivalentId && maybeKeys.has(broadestEquivalentId)) {
+                if (broadestEquivalentId && maybeKeysSet.has(broadestEquivalentId)) {
                     return Ternary.Maybe;
                 }
 
@@ -21260,7 +21261,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return Ternary.False;
                 }
             }
-            maybeKeys.push(id);
+            const maybeStart = maybeCount;
+            maybeKeys[maybeCount] = id;
+            maybeKeysSet.add(id);
+            maybeCount++;
             const saveExpandingFlags = expandingFlags;
             if (recursionFlags & RecursionFlags.Source) {
                 sourceStack[sourceDepth] = source;
@@ -21315,12 +21319,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (result === Ternary.True || result === Ternary.Maybe) {
                         // If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
                         // results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
-                        maybeKeys.popUntilInclusive(id, v => {
-                            relation.set(v, RelationComparisonResult.Succeeded | propagatingVarianceFlags);
-                        });
+                        resetMaybeStack(/*markAllAsSucceeded*/ true);
                     }
                     else {
-                        maybeKeys.popUntilInclusive(id);
+                        resetMaybeStack();
                     }
                 }
                 // Note: it's intentional that we don't pop in the else case;
@@ -21331,9 +21333,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
                 relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
-                maybeKeys.popUntilInclusive(id);
+                resetMaybeStack();
             }
             return result;
+
+            function resetMaybeStack(markAllAsSucceeded = false) {
+                for (let i = maybeStart; i < maybeCount; i++) {
+                    maybeKeysSet.delete(maybeKeys[i]);
+                    if (markAllAsSucceeded) {
+                        relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                    }
+                }
+                maybeCount = maybeStart;
+            }
         }
 
         function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
