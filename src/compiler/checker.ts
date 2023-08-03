@@ -2712,7 +2712,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return symbol;
                 }
                 if (symbol.flags & SymbolFlags.Alias) {
-                    const targetFlags = getAllSymbolFlags(symbol);
+                    const targetFlags = getSymbolFlags(symbol);
                     // `targetFlags` will be `SymbolFlags.All` if an error occurred in alias resolution; this avoids cascading errors
                     if (targetFlags & meaning) {
                         return symbol;
@@ -3731,7 +3731,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return true;
             }
             const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false));
-            const allFlags = symbol && getAllSymbolFlags(symbol);
+            const allFlags = symbol && getSymbolFlags(symbol);
             if (symbol && allFlags !== undefined && !(allFlags & SymbolFlags.Value)) {
                 const rawName = unescapeLeadingUnderscores(name);
                 if (isES2015OrLaterConstructorName(name)) {
@@ -4464,32 +4464,44 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @returns SymbolFlags.All if `symbol` is an alias that ultimately resolves to `unknown`;
      * combined flags of all alias targets otherwise.
      */
-    function getAllSymbolFlags(symbol: Symbol): SymbolFlags {
-      let flags = symbol.flags;
-      let seenSymbols;
-      while (symbol.flags & SymbolFlags.Alias) {
-          const target = resolveAlias(symbol);
-          if (target === unknownSymbol) {
-              return SymbolFlags.All;
-          }
+    function getSymbolFlags(symbol: Symbol, excludeTypeOnlyMeanings?: boolean, excludeLocalMeanings?: boolean): SymbolFlags {
+        const typeOnlyDeclaration = excludeTypeOnlyMeanings && getTypeOnlyAliasDeclaration(symbol);
+        const typeOnlyDeclarationIsExportStar = typeOnlyDeclaration && isExportDeclaration(typeOnlyDeclaration);
+        const typeOnlyResolution = typeOnlyDeclaration && (
+            typeOnlyDeclarationIsExportStar
+                ? resolveExternalModuleName(typeOnlyDeclaration.moduleSpecifier, typeOnlyDeclaration.moduleSpecifier, /*ignoreErrors*/ true)
+                : resolveAlias(typeOnlyDeclaration.symbol));
+        const typeOnlyExportStarTargets = typeOnlyDeclarationIsExportStar && typeOnlyResolution ? getExportsOfModule(typeOnlyResolution) : undefined;
+        let flags = excludeLocalMeanings ? SymbolFlags.None : symbol.flags;
+        let seenSymbols;
+        while (symbol.flags & SymbolFlags.Alias) {
+            const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
+            if (!typeOnlyDeclarationIsExportStar && target === typeOnlyResolution ||
+                typeOnlyExportStarTargets?.get(target.escapedName) === target
+            ) {
+                break;
+            }
+            if (target === unknownSymbol) {
+                return SymbolFlags.All;
+            }
 
-          // Optimizations - try to avoid creating or adding to
-          // `seenSymbols` if possible
-          if (target === symbol || seenSymbols?.has(target)) {
-              break;
-          }
-          if (target.flags & SymbolFlags.Alias) {
-              if (seenSymbols) {
-                  seenSymbols.add(target);
-              }
-              else {
-                  seenSymbols = new Set([symbol, target]);
-              }
-          }
-          flags |= target.flags;
-          symbol = target;
-      }
-      return flags;
+            // Optimizations - try to avoid creating or adding to
+            // `seenSymbols` if possible
+            if (target === symbol || seenSymbols?.has(target)) {
+                break;
+            }
+            if (target.flags & SymbolFlags.Alias) {
+                if (seenSymbols) {
+                    seenSymbols.add(target);
+                }
+                else {
+                    seenSymbols = new Set([symbol, target]);
+                }
+            }
+            flags |= target.flags;
+            symbol = target;
+        }
+        return flags;
     }
 
     /**
@@ -4517,7 +4529,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         immediateTarget: Symbol | undefined,
         finalTarget: Symbol | undefined,
         overwriteEmpty: boolean,
-        exportStarDeclaration?: ExportDeclaration & { readonly isTypeOnly: true },
+        exportStarDeclaration?: ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression },
         exportStarName?: __String,
     ): boolean {
         if (!aliasDeclaration || isPropertyAccessExpression(aliasDeclaration)) return false;
@@ -4566,7 +4578,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const resolved = links.typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration
                 ? resolveSymbol(getExportsOfModule(links.typeOnlyDeclaration.symbol.parent!).get(links.typeOnlyExportStarName || symbol.escapedName))!
                 : resolveAlias(links.typeOnlyDeclaration.symbol);
-            return getAllSymbolFlags(resolved) & include ? links.typeOnlyDeclaration : undefined;
+            return getSymbolFlags(resolved) & include ? links.typeOnlyDeclaration : undefined;
         }
         return undefined;
     }
@@ -4579,7 +4591,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const target = resolveAlias(symbol);
         if (target) {
             const markAlias = target === unknownSymbol ||
-                ((getAllSymbolFlags(target) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value));
+                ((getSymbolFlags(symbol, /*excludeTypeOnlyMeanings*/ true) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
 
             if (markAlias) {
                 markAliasSymbolAsReferenced(symbol);
@@ -4601,7 +4613,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // This way a chain of imports can be elided if ultimately the final input is only used in a type
             // position.
             if (isInternalModuleImportEqualsDeclaration(node)) {
-                if (getAllSymbolFlags(resolveSymbol(symbol)) & SymbolFlags.Value) {
+                if (getSymbolFlags(resolveSymbol(symbol)) & SymbolFlags.Value) {
                     // import foo = <symbol>
                     checkExpressionCached(node.moduleReference as Expression);
                 }
@@ -5321,7 +5333,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getExportsOfModuleWorker(moduleSymbol: Symbol) {
         const visitedSymbols: Symbol[] = [];
-        let typeOnlyExportStarMap: Map<__String, ExportDeclaration & { readonly isTypeOnly: true }> | undefined;
+        let typeOnlyExportStarMap: Map<__String, ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression }> | undefined;
         const nonTypeOnlyNames = new Set<__String>();
 
         // A module defined by an 'export=' consists of one export that needs to be resolved
@@ -5388,7 +5400,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeOnlyExportStarMap ??= new Map();
                 symbols.forEach((_, escapedName) => typeOnlyExportStarMap!.set(
                     escapedName,
-                    exportStar as ExportDeclaration & { readonly isTypeOnly: true }));
+                    exportStar as ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression }));
             }
             return symbols;
         }
@@ -5579,7 +5591,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean {
         return !!(
             symbol.flags & SymbolFlags.Value ||
-            symbol.flags & SymbolFlags.Alias && getAllSymbolFlags(symbol) & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
+            symbol.flags & SymbolFlags.Alias && getSymbolFlags(symbol, !includeTypeOnlyMembers) & SymbolFlags.Value);
     }
 
     function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
@@ -5878,7 +5890,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Qualify if the symbol from symbol table has same meaning as expected
             const shouldResolveAlias = (symbolFromSymbolTable.flags & SymbolFlags.Alias && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier));
             symbolFromSymbolTable = shouldResolveAlias ? resolveAlias(symbolFromSymbolTable) : symbolFromSymbolTable;
-            const flags = shouldResolveAlias ? getAllSymbolFlags(symbolFromSymbolTable) : symbolFromSymbolTable.flags;
+            const flags = shouldResolveAlias ? getSymbolFlags(symbolFromSymbolTable) : symbolFromSymbolTable.flags;
             if (flags & meaning) {
                 qualify = true;
                 return true;
@@ -8946,7 +8958,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function isTypeOnlyNamespace(symbol: Symbol) {
-                return every(getNamespaceMembersForSerialization(symbol), m => !(getAllSymbolFlags(resolveSymbol(m)) & SymbolFlags.Value));
+                return every(getNamespaceMembersForSerialization(symbol), m => !(getSymbolFlags(resolveSymbol(m)) & SymbolFlags.Value));
             }
 
             function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
@@ -11457,7 +11469,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
                 : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
                 : declaredType ? declaredType
-                : getAllSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
+                : getSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                 : errorType;
         }
         return links.type;
@@ -27825,9 +27837,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!canCollectSymbolAliasAccessabilityData) {
             return;
         }
-        if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
+        if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location)) {
             const target = resolveAlias(symbol);
-            if (getAllSymbolFlags(target) & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+            if (getSymbolFlags(symbol, /*excludeTypeOnlyMeanings*/ true) & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
                 // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
                 // (because the const enum value will not be inlined), or if (2) the alias is an export
                 // of a const enum declaration that will be preserved.
@@ -41027,12 +41039,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return;
         }
 
-        // skip variable declarations that don't have initializers
         // NOTE: in ES6 spec initializer is required in variable declarations where name is binding pattern
         // so we'll always treat binding elements as initialized
-        if (node.kind === SyntaxKind.VariableDeclaration && !node.initializer) {
-            return;
-        }
 
         const symbol = getSymbolOfDeclaration(node);
         if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
@@ -41057,10 +41065,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             container.kind === SyntaxKind.ModuleDeclaration ||
                             container.kind === SyntaxKind.SourceFile);
 
-                    // here we know that function scoped variable is shadowed by block scoped one
-                    // if they are defined in the same scope - binder has already reported redeclaration error
-                    // otherwise if variable has an initializer - show error that initialization will fail
-                    // since LHS will be block scoped name instead of function scoped
+                    // here we know that function scoped variable is "shadowed" by block scoped one
+                    // a var declatation can't hoist past a lexical declaration and it results in a SyntaxError at runtime
                     if (!namesShareScope) {
                         const name = symbolToString(localDeclarationSymbol);
                         error(node, Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
@@ -43861,11 +43867,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return +(expr as NumericLiteral).text;
             case SyntaxKind.ParenthesizedExpression:
                 return evaluate((expr as ParenthesizedExpression).expression, location);
-            case SyntaxKind.Identifier:
-                if (isInfinityOrNaNString((expr as Identifier).escapedText)) {
-                    return +((expr as Identifier).escapedText);
+            case SyntaxKind.Identifier: {
+                const identifier = expr as Identifier;
+                if (isInfinityOrNaNString(identifier.escapedText) && (resolveEntityName(identifier, SymbolFlags.Value, /*ignoreErrors*/ true) === getGlobalSymbol(identifier.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))) {
+                    return +(identifier.escapedText);
                 }
                 // falls through
+            }
             case SyntaxKind.PropertyAccessExpression:
                 if (isEntityNameExpression(expr)) {
                     const symbol = resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true);
@@ -44287,7 +44295,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             }
 
-            const targetFlags = getAllSymbolFlags(target);
+            const targetFlags = getSymbolFlags(target);
             const excludedMeanings =
                 (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
                 (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
@@ -44489,7 +44497,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
                 const target = resolveAlias(getSymbolOfDeclaration(node));
                 if (target !== unknownSymbol) {
-                    const targetFlags = getAllSymbolFlags(target);
+                    const targetFlags = getSymbolFlags(target);
                     if (targetFlags & SymbolFlags.Value) {
                         // Target is a value symbol, check that it is not hidden by a local declaration with the same name
                         const moduleName = getFirstIdentifier(node.moduleReference);
@@ -44646,7 +44654,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     markExportAsReferenced(node);
                 }
                 const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-                if (!target || getAllSymbolFlags(target) & SymbolFlags.Value) {
+                if (!target || getSymbolFlags(target) & SymbolFlags.Value) {
                     checkExpressionCached(node.propertyName || node.name);
                 }
             }
@@ -44702,7 +44710,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (sym) {
                 markAliasReferenced(sym, id);
                 // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
-                if (getAllSymbolFlags(sym) & SymbolFlags.Value) {
+                if (getSymbolFlags(sym) & SymbolFlags.Value) {
                     // However if it is a value, we need to check it's being used correctly
                     checkExpressionCached(id);
                     if (!isIllegalExportDefaultInCJS && !(node.flags & NodeFlags.Ambient) && compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
@@ -45470,7 +45478,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (meaning) {
                 source.forEach(symbol => {
                     // Similar condition as in `resolveNameHelper`
-                    if (!getDeclarationOfKind(symbol, SyntaxKind.ExportSpecifier) && !getDeclarationOfKind(symbol, SyntaxKind.NamespaceExport)) {
+                    if (!getDeclarationOfKind(symbol, SyntaxKind.ExportSpecifier) && !getDeclarationOfKind(symbol, SyntaxKind.NamespaceExport) && symbol.escapedName !== InternalSymbolName.Default) {
                         copySymbol(symbol, meaning);
                     }
                 });
@@ -46209,7 +46217,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function isValue(s: Symbol): boolean {
             s = resolveSymbol(s);
-            return s && !!(getAllSymbolFlags(s) & SymbolFlags.Value);
+            return s && !!(getSymbolFlags(s) & SymbolFlags.Value);
         }
     }
 
@@ -46364,7 +46372,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
                 const symbol = getSymbolOfDeclaration(node as ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier);
-                return !!symbol && isAliasResolvedToValue(symbol) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value);
+                return !!symbol && isAliasResolvedToValue(symbol, /*excludeTypeOnlyValues*/ true);
             case SyntaxKind.ExportDeclaration:
                 const exportClause = (node as ExportDeclaration).exportClause;
                 return !!exportClause && (
@@ -46390,7 +46398,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isValue && node.moduleReference && !nodeIsMissing(node.moduleReference);
     }
 
-    function isAliasResolvedToValue(symbol: Symbol | undefined): boolean {
+    function isAliasResolvedToValue(symbol: Symbol | undefined, excludeTypeOnlyValues?: boolean): boolean {
         if (!symbol) {
             return false;
         }
@@ -46400,7 +46408,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // const enums and modules that contain only const enums are not considered values from the emit perspective
         // unless 'preserveConstEnums' option is set to true
-        return !!((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) &&
+        return !!(getSymbolFlags(symbol, excludeTypeOnlyValues, /*excludeLocalMeanings*/ true) & SymbolFlags.Value) &&
             (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target));
     }
 
@@ -46418,7 +46426,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const target = getSymbolLinks(symbol).aliasTarget;
             if (target && getEffectiveModifierFlags(node) & ModifierFlags.Export &&
-                getAllSymbolFlags(target) & SymbolFlags.Value &&
+                getSymbolFlags(target) & SymbolFlags.Value &&
                 (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target))) {
                 // An `export import ... =` of a value symbol is always considered referenced
                 return true;
