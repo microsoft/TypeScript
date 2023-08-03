@@ -5832,9 +5832,11 @@ declare namespace ts {
         };
     }) | ExportDeclaration & {
         readonly isTypeOnly: true;
+        readonly moduleSpecifier: Expression;
     } | NamespaceExport & {
         readonly parent: ExportDeclaration & {
             readonly isTypeOnly: true;
+            readonly moduleSpecifier: Expression;
         };
     };
     type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
