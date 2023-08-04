@@ -846,7 +846,6 @@ import {
     NodeCheckFlags,
     NodeFlags,
     nodeHasName,
-    nodeIsDecorated,
     nodeIsMissing,
     nodeIsPresent,
     nodeIsSynthesized,
@@ -1070,7 +1069,7 @@ import {
     WhileStatement,
     WideningContext,
     WithStatement,
-    YieldExpression,
+    YieldExpression
 } from "./_namespaces/ts";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 import * as performance from "./_namespaces/ts.performance";
@@ -27964,37 +27963,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         let declaration = localOrExportSymbol.valueDeclaration;
         if (declaration && localOrExportSymbol.flags & SymbolFlags.Class) {
-            // Due to the emit for class decorators, any reference to the class from inside of the class body
-            // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
-            // behavior of class names in ES6.
-            if (declaration.kind === SyntaxKind.ClassDeclaration
-                && nodeIsDecorated(legacyDecorators, declaration as ClassDeclaration)) {
-                let container = getContainingClass(node);
-                while (container !== undefined) {
-                    if (container === declaration && container.name !== node) {
-                        getNodeLinks(declaration).flags |= NodeCheckFlags.ClassWithConstructorReference;
-                        getNodeLinks(node).flags |= NodeCheckFlags.ConstructorReferenceInClass;
-                        break;
-                    }
-
-                    container = getContainingClass(container);
-                }
-            }
-            else if (declaration.kind === SyntaxKind.ClassExpression) {
-                // When we emit a class expression with static members that contain a reference
-                // to the constructor in the initializer, we will need to substitute that
-                // binding with an alias as the class name is not in scope.
+            // When we downlevel classes we may emit some code outside of the class body. Due to the fact the
+            // class name is double-bound, we must ensure we mark references to the class name so that we can
+            // emit an alias to the class later.
+            if (isClassLike(declaration) && declaration.name !== node) {
                 let container = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
-                while (container.kind !== SyntaxKind.SourceFile) {
-                    if (container.parent === declaration) {
-                        if (isPropertyDeclaration(container) && isStatic(container) || isClassStaticBlockDeclaration(container)) {
-                            getNodeLinks(declaration).flags |= NodeCheckFlags.ClassWithConstructorReference;
-                            getNodeLinks(node).flags |= NodeCheckFlags.ConstructorReferenceInClass;
-                        }
-                        break;
-                    }
-
+                while (container.kind !== SyntaxKind.SourceFile && container.parent !== declaration) {
                     container = getThisContainer(container, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
+                }
+
+                if (container.kind !== SyntaxKind.SourceFile) {
+                    getNodeLinks(declaration).flags |= NodeCheckFlags.ContainsConstructorReference;
+                    getNodeLinks(container).flags |= NodeCheckFlags.ContainsConstructorReference;
+                    getNodeLinks(node).flags |= NodeCheckFlags.ConstructorReference;
                 }
             }
         }
