@@ -4356,6 +4356,7 @@ declare namespace ts {
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+        readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {

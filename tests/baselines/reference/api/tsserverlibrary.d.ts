@@ -2892,6 +2892,13 @@ declare namespace ts {
                  */
                 readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
                 /**
+                 * Indicates where named type-only imports should sort. The default order ("inline") sorts imports regardless of if the imports are
+                 * type-only.
+                 *
+                 * Default: `inline`
+                 */
+                readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
+                /**
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */
                 readonly disableLineTextInReferences?: boolean;
@@ -8414,6 +8421,7 @@ declare namespace ts {
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+        readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {

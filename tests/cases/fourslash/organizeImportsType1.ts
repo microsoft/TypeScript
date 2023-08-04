@@ -18,3 +18,28 @@ verify.organizeImports(
 
 console.log(A, B, C, D, E);`
 );
+
+verify.organizeImports(
+`import { A, type B, C, D, type E } from "foo";
+
+console.log(A, B, C, D, E);`,
+    undefined, 
+    { organizeImportsTypeOrder : "inline" }
+);
+    
+
+verify.organizeImports(
+`import { type B, type E, A, C, D } from "foo";
+
+console.log(A, B, C, D, E);`,
+    undefined, 
+    { organizeImportsTypeOrder : "first" }
+);
+
+verify.organizeImports(
+`import { A, C, D, type B, type E } from "foo";
+
+console.log(A, B, C, D, E);`,
+    undefined, 
+    { organizeImportsTypeOrder : "last" }
+);

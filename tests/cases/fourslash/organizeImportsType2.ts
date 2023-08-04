@@ -5,18 +5,45 @@
 // @noUnusedLocals: true
 // @target: es2018
 
-//// import { A } from "foo";
-//// import { type B } from "foo";
-//// import { C } from "foo";
-//// import { type E } from "foo";
-//// import { D } from "foo";
-////
-//// console.log(A, B, C, D, E);
+//// type A = string;
+//// type B = string;
+//// const C = "hello";
+//// export { A, type B, C };
 
 verify.organizeImports(
-`import { type B, type E, A, C, D } from "foo";
+`type A = string;
+type B = string;
+const C = "hello";
+export { A, type B, C };
+`
+);
 
-console.log(A, B, C, D, E);`,
+verify.organizeImports(
+`type A = string;
+type B = string;
+const C = "hello";
+export { A, type B, C };
+`,
+    undefined, 
+    { organizeImportsTypeOrder : "inline" }
+);
+
+verify.organizeImports(
+`type A = string;
+type B = string;
+const C = "hello";
+export { type B, A, C };
+`,
     undefined, 
     { organizeImportsTypeOrder : "first" }
+);
+
+verify.organizeImports(
+`type A = string;
+type B = string;
+const C = "hello";
+export { A, C, type B };
+`,
+    undefined, 
+    { organizeImportsTypeOrder : "last" }
 );

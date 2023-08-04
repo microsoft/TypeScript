@@ -217,7 +217,7 @@ describe("unittests:: services:: organizeImports", () => {
         it("Sort specifiers - type-only", () => {
             const sortedImports = parseImports(`import { type z, y, type x, c, type b, a } from "lib";`);
             const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
-            const expectedCoalescedImports = parseImports(`import { a, c, y, type b, type x, type z } from "lib";`);
+            const expectedCoalescedImports = parseImports(`import { a, type b, c, type x, y, type z } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
 

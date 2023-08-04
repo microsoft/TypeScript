@@ -53,6 +53,7 @@ import {
     getSourceFileOfNode,
     getSymbolId,
     getTokenAtPosition,
+    getTokenPosOfNode,
     getTypeKeywordOfTypeOnlyImport,
     getUniqueSymbolId,
     hostGetCanonicalFileName,
@@ -1329,10 +1330,14 @@ function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaratio
             if (aliasDeclaration.isTypeOnly) {
                 const sortKind = OrganizeImports.detectImportSpecifierSorting(aliasDeclaration.parent.elements, preferences);
                 if (aliasDeclaration.parent.elements.length > 1 && sortKind) {
-                    changes.delete(sourceFile, aliasDeclaration);
                     const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
                     const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
                     const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, comparer);
+                    if (insertionIndex === aliasDeclaration.parent.elements.indexOf(aliasDeclaration)) {
+                        changes.deleteRange(sourceFile, { pos: getTokenPosOfNode(aliasDeclaration.getFirstToken()!), end: getTokenPosOfNode(aliasDeclaration.propertyName ?? aliasDeclaration.name) });
+                        return aliasDeclaration;
+                    }
+                    changes.delete(sourceFile, aliasDeclaration);
                     changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
                 }
                 else {
