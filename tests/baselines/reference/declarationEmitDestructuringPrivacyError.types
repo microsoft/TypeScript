@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringPrivacyError.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringPrivacyError.ts] ////
+
+=== declarationEmitDestructuringPrivacyError.ts ===
 module m {
 >m : typeof m
 

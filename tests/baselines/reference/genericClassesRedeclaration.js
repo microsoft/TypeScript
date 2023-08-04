@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClassesRedeclaration.ts] ////
+
 //// [genericClassesRedeclaration.ts]
 declare module TypeScript {
     interface IIndexable<T> {

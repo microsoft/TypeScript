@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/validate.ts ===
+//// [tests/cases/conformance/jsdoc/checkObjectDefineProperty.ts] ////
+
+=== validate.ts ===
 // Validate in TS as simple validations would usually be interpreted as more special assignments
 import x = require("./");
 >x : Symbol(x, Decl(validate.ts, 0, 0))
@@ -68,7 +70,7 @@ x.middleInit = "R"; // should also fail
 >x : Symbol(x, Decl(validate.ts, 0, 0))
 >middleInit : Symbol(x.middleInit, Decl(index.js, 1, 71))
 
-=== tests/cases/conformance/jsdoc/index.js ===
+=== index.js ===
 const x = {};
 >x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22), Decl(index.js, 2, 22), Decl(index.js, 3, 22), Decl(index.js, 4, 22) ... and 2 more)
 

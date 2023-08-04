@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataConditionalType.ts] ////
+
 //// [decoratorMetadataConditionalType.ts]
 declare function d(): PropertyDecorator;
 abstract class BaseEntity<T> {

@@ -1,7 +1,7 @@
-tests/cases/conformance/generators/generatorReturnTypeInference.ts(72,15): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
+generatorReturnTypeInference.ts(72,15): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
 
 
-==== tests/cases/conformance/generators/generatorReturnTypeInference.ts (1 errors) ====
+==== generatorReturnTypeInference.ts (1 errors) ====
     declare const iterableIterator: IterableIterator<number>;
     declare const generator: Generator<number, string, boolean>;
     declare const never: never;

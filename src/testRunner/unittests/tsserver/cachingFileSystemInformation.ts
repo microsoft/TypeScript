@@ -397,7 +397,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
     "typescript"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \\"Error: no test specified\\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -483,7 +483,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             ts.forEach(filesAndFoldersToAdd, f => {
                 f.path = f.path
                     .replace("/a/b/node_modules/.staging", "/a/b/node_modules")
-                    .replace(/[\-\.][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w]/g, "");
+                    .replace(/[-.][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w]/g, "");
             });
 
             host.deleteFolder(root + "/a/b/node_modules/.staging", /*recursive*/ true);

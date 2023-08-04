@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration24.ts(1,7): error TS2414: Class name cannot be 'any'.
+parserClassDeclaration24.ts(1,7): error TS2414: Class name cannot be 'any'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration24.ts (1 errors) ====
+==== parserClassDeclaration24.ts (1 errors) ====
     class any {
           ~~~
 !!! error TS2414: Class name cannot be 'any'.

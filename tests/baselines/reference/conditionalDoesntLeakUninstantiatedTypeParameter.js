@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalDoesntLeakUninstantiatedTypeParameter.ts] ////
+
 //// [conditionalDoesntLeakUninstantiatedTypeParameter.ts]
 interface Synthetic<A, B extends A> {}
 type SyntheticDestination<T, U> = U extends Synthetic<T, infer V> ? V : never;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInterfaceTypeCall.ts ===
+//// [tests/cases/compiler/genericInterfaceTypeCall.ts] ////
+
+=== genericInterfaceTypeCall.ts ===
 interface Foo<T> {
 >Foo : Symbol(Foo, Decl(genericInterfaceTypeCall.ts, 0, 0))
 >T : Symbol(T, Decl(genericInterfaceTypeCall.ts, 0, 14))

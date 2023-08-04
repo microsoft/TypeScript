@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fromAsIdentifier1.ts ===
+//// [tests/cases/compiler/fromAsIdentifier1.ts] ////
+
+=== fromAsIdentifier1.ts ===
 var from;
 >from : Symbol(from, Decl(fromAsIdentifier1.ts, 0, 3))
 

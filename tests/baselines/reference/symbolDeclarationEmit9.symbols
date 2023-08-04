@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit9.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit9.ts] ////
+
+=== symbolDeclarationEmit9.ts ===
 var obj = {
 >obj : Symbol(obj, Decl(symbolDeclarationEmit9.ts, 0, 3))
 

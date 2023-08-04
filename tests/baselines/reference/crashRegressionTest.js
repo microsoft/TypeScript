@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashRegressionTest.ts] ////
+
 //// [crashRegressionTest.ts]
 module MsPortal.Util.TemplateEngine {
     "use strict";

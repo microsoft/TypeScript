@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/unknown/unknownControlFlow.ts ===
+//// [tests/cases/conformance/types/unknown/unknownControlFlow.ts] ////
+
+=== unknownControlFlow.ts ===
 type T01 = {} & string;  // {} & string
 >T01 : Symbol(T01, Decl(unknownControlFlow.ts, 0, 0))
 

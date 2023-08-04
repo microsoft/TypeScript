@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cyclicTypeInstantiation.ts] ////
+
 //// [cyclicTypeInstantiation.ts]
 function foo<T>() {
     var x: {

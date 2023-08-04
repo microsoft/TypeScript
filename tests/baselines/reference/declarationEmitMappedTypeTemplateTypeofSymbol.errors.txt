@@ -1,8 +1,8 @@
-tests/cases/compiler/b.ts(2,14): error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
-tests/cases/compiler/c.ts(3,14): error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
+b.ts(2,14): error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
+c.ts(3,14): error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
 
 
-==== tests/cases/compiler/a.d.ts (0 errors) ====
+==== a.d.ts (0 errors) ====
     export declare const timestampSymbol: unique symbol;
     
     export declare const Timestamp: {
@@ -11,13 +11,13 @@ tests/cases/compiler/c.ts(3,14): error TS4118: The type of this node cannot be s
     
     export declare function now(): typeof Timestamp;
     
-==== tests/cases/compiler/b.ts (1 errors) ====
+==== b.ts (1 errors) ====
     import * as x from "./a";
     export const timestamp = x.now();
                  ~~~~~~~~~
 !!! error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
     
-==== tests/cases/compiler/c.ts (1 errors) ====
+==== c.ts (1 errors) ====
     import { now } from "./a";
     
     export const timestamp = now();

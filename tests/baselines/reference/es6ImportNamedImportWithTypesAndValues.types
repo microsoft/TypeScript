@@ -1,4 +1,6 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportWithTypesAndValues.ts] ////
+
+=== server.ts ===
 export interface I {
     prop: string;
 >prop : string
@@ -22,7 +24,7 @@ export class C2 implements I2 {
 >"world" : "world"
 }
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 import { C, I, C2 } from "./server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 >C : typeof C
 >I : any

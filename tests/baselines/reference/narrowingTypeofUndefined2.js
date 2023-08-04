@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingTypeofUndefined2.ts] ////
+
 //// [narrowingTypeofUndefined2.ts]
 declare function takeArray(arr: Array<unknown>): void;
 

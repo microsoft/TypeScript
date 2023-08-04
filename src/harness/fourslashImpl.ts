@@ -442,11 +442,11 @@ export class TestState {
             for (const k of keys) {
                 const key = k as keyof typeof ls;
                 if (cacheableMembers.indexOf(key) === -1) {
-                    proxy[key] = (...args: any[]) => (ls[key] as Function)(...args);
+                    proxy[key] = (...args: any[]) => (ls[key] as (...args: any[]) => any)(...args);
                     continue;
                 }
                 const memo = Utils.memoize(
-                    (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as Function)(...args),
+                    (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as (...args: any[]) => any)(...args),
                     (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|")
                 );
                 proxy[key] = (...args: any[]) => memo(
@@ -822,21 +822,29 @@ export class TestState {
         });
     }
 
-    public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.UserPreferences) {
-        const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
-        assert.equal(hints.length, expected.length, "Number of hints");
-
+    public baselineInlayHints(span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preferences?: ts.UserPreferences): void{
         interface HasPosition { position: number; }
         const sortHints = (a: HasPosition, b: HasPosition) => {
             return a.position - b.position;
         };
-        ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
-            assert.equal(actual.text, expected.text, "Text");
-            assert.equal(actual.position, expected.position, "Position");
-            assert.equal(actual.kind, expected.kind, "Kind");
-            assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
-            assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
+
+        const baselineFile = this.getBaselineFileNameForContainingTestFile();
+        const fileName = this.activeFile.fileName;
+        const hints = this.languageService.provideInlayHints(fileName, span, preferences);
+        const annotations = ts.map(hints.sort(sortHints), hint => {
+            const span = { start: hint.position, length: hint.text.length };
+            const { character, line } = this.languageServiceAdapterHost.positionToLineAndCharacter(fileName, span.start);
+            const underline = " ".repeat(character) + "^";
+            let annotation = this.getFileContent(fileName).split(/\r?\n/)[line];
+            annotation += "\n" + underline + "\n" + JSON.stringify(hint, undefined, "  ");
+            return annotation;
         });
+
+        if (annotations.length === 0) {
+            annotations.push("=== No inlay hints ===");
+        }
+
+        Harness.Baseline.runBaseline(baselineFile, annotations.join("\n\n"));
     }
 
     public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
@@ -1445,6 +1453,7 @@ export class TestState {
         }: BaselineDocumentSpansWithFileContentsOptions<T>,
         spanToContextId: Map<T, number>,
     ) {
+        const isLibFile = /lib(?:.*)\.d\.ts$/.test(fileName);
         let readableContents = `// === ${fileName} ===`;
         let newContent = "";
         interface Detail {
@@ -1619,12 +1628,12 @@ export class TestState {
                 if (locationLine - posLine > nLines) {
                     if (newContent) {
                         readableContents = readableContents + "\n" + readableJsoncBaseline(newContent + content.slice(pos, lineStarts[posLine + TestState.nLinesContext]) +
-                            `--- (line: ${posLine + TestState.nLinesContext + 1}) skipped ---`);
+                            `--- (line: ${isLibFile ? "--" : posLine + TestState.nLinesContext + 1}) skipped ---`);
                         if (location !== undefined) readableContents += "\n";
                         newContent = "";
                     }
                     if (location !== undefined) {
-                        newContent += `--- (line: ${locationLine - TestState.nLinesContext + 1}) skipped ---\n` +
+                        newContent += `--- (line: ${isLibFile ? "--" : locationLine - TestState.nLinesContext + 1}) skipped ---\n` +
                             content.slice(lineStarts[locationLine - TestState.nLinesContext + 1], location);
                     }
                     return;
@@ -2402,7 +2411,7 @@ export class TestState {
             q1.marker.fileName === q1.marker.fileName
             ? (q1.marker.position > q2.marker.position ? -1 : 1)
             : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
-        const files: Map<string, string[]> = new Map();
+        const files = new Map<string, string[]>();
         let previous: T | undefined;
         for (const { marker, item } of sorted) {
             const span = (item ? getSpan(item) : undefined) ?? { start: marker.position, length: 1 };
@@ -3583,6 +3592,73 @@ export class TestState {
             this.goToMarker(markerName);
             const actual = this.languageService.getLinkedEditingRangeAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.deepEqual(actual, map[markerName], markerName);
+        }
+    }
+
+    public baselineLinkedEditing(): void {
+        const baselineFile = this.getBaselineFileNameForContainingTestFile(".linkedEditing.txt");
+        const files = this.testData.files;
+
+        let baselineContent = "";
+        let offset = 0;
+        for (const f of files) {
+            const result = getLinkedEditingBaselineWorker(f, offset, this.languageService);
+            baselineContent += result.baselineContent + `\n\n\n`;
+            offset = result.offset;
+        }
+
+        Harness.Baseline.runBaseline(baselineFile, baselineContent);
+
+        function getLinkedEditingBaselineWorker(activeFile: FourSlashFile, offset: number, languageService: ts.LanguageService) {
+            const fileName = activeFile.fileName;
+            let baselineContent = `=== ${fileName} ===\n`;
+
+            // get linkedEdit at every position in the file, then group positions by their linkedEdit
+            const linkedEditsInFile = new Map<string, number[]>();
+            for(let pos = 0; pos < activeFile.content.length; pos++) {
+                const linkedEditAtPosition = languageService.getLinkedEditingRangeAtPosition(fileName, pos);
+                if (!linkedEditAtPosition) continue;
+
+                const linkedEditString = JSON.stringify(linkedEditAtPosition);
+                const existingPositions = linkedEditsInFile.get(linkedEditString) ?? [];
+                linkedEditsInFile.set(linkedEditString, [...existingPositions, pos]);
+            }
+
+            const linkedEditsByRange = [...linkedEditsInFile.entries()].sort((a, b) => a[1][0] - b[1][0]);
+            if (linkedEditsByRange.length === 0) {
+                return { baselineContent: baselineContent + activeFile.content + `\n\n--No linked edits found--`, offset };
+            }
+
+            let inlineLinkedEditBaselines: { start: number, end: number, index: number }[] = [];
+            let linkedEditInfoBaseline = "";
+            for (const edit of linkedEditsByRange) {
+                const [linkedEdit, positions] = edit;
+                let rangeStart = 0;
+                for (let j = 0; j < positions.length - 1; j++) {
+                    // for each distinct range in the list of positions, add an entry to the list of places that need to be annotated in the baseline
+                    if (positions[j] + 1 !== positions[j + 1]) {
+                        inlineLinkedEditBaselines.push({ start: positions[rangeStart], end: positions[j], index: offset });
+                        rangeStart = j + 1;
+                    }
+                }
+                inlineLinkedEditBaselines.push({ start: positions[rangeStart], end: positions[positions.length - 1], index: offset });
+
+                // add the LinkedEditInfo with its index to the baseline
+                linkedEditInfoBaseline += `\n\n=== ${offset} ===\n` + linkedEdit;
+                offset++;
+            }
+
+            inlineLinkedEditBaselines = inlineLinkedEditBaselines.sort((a, b) => a.start - b.start);
+            const fileText = activeFile.content;
+            baselineContent += fileText.slice(0, inlineLinkedEditBaselines[0].start);
+            for (let i = 0; i < inlineLinkedEditBaselines.length; i++) {
+                const e = inlineLinkedEditBaselines[i];
+                const sliceEnd = inlineLinkedEditBaselines[i + 1]?.start;
+                baselineContent += `[|/*${e.index}*/` + fileText.slice(e.start, e.end) + `|]` + fileText.slice(e.end, sliceEnd);
+            }
+
+            baselineContent += linkedEditInfoBaseline;
+            return { baselineContent, offset };
         }
     }
 
@@ -4836,7 +4912,7 @@ function toArray<T>(x: ArrayOrSingle<T>): readonly T[] {
 }
 
 function makeWhitespaceVisible(text: string) {
-    return text.replace(/ /g, "\u00B7").replace(/\r/g, "\u00B6").replace(/\n/g, "\u2193\n").replace(/\t/g, "\u2192\   ");
+    return text.replace(/ /g, "\u00B7").replace(/\r/g, "\u00B6").replace(/\n/g, "\u2193\n").replace(/\t/g, "\u2192   ");
 }
 
 function showTextDiff(expected: string, actual: string): string {

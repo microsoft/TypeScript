@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts] ////
+
 //// [mappedTypeAsClauses.ts]
 // Mapped type 'as N' clauses
 

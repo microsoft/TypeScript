@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ImportNamedImportAmd_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportAmd.ts] ////
+
+=== es6ImportNamedImportAmd_0.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 0, 10))
 
@@ -25,7 +27,7 @@ export var z2 = 10;
 export var aaaa = 10;
 >aaaa : Symbol(aaaa, Decl(es6ImportNamedImportAmd_0.ts, 7, 10))
 
-=== tests/cases/compiler/es6ImportNamedImportAmd_1.ts ===
+=== es6ImportNamedImportAmd_1.ts ===
 import { } from "es6ImportNamedImportAmd_0";
 import { a } from "es6ImportNamedImportAmd_0";
 >a : Symbol(a, Decl(es6ImportNamedImportAmd_1.ts, 1, 8))

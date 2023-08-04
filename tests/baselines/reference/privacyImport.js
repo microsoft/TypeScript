@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyImport.ts] ////
+
 //// [privacyImport.ts]
 export module m1 {
     export module m1_M1_public {
@@ -706,15 +708,15 @@ var m3;
 
 
 //// [privacyImport.d.ts]
-export declare module m1 {
-    export module m1_M1_public {
+export declare namespace m1 {
+    export namespace m1_M1_public {
         class c1 {
         }
         function f1(): c1;
         var v1: typeof c1;
         var v2: c1;
     }
-    module m1_M2_private {
+    namespace m1_M2_private {
         class c1 {
         }
         function f1(): c1;
@@ -735,14 +737,14 @@ export declare module m1 {
     export import m1_im2_public = m1_M2_private;
     export {};
 }
-export declare module glo_M1_public {
+export declare namespace glo_M1_public {
     class c1 {
     }
     function f1(): c1;
     var v1: typeof c1;
     var v2: c1;
 }
-export declare module glo_M3_private {
+export declare namespace glo_M3_private {
     class c1 {
     }
     function f1(): c1;
@@ -761,5 +763,5 @@ export declare var glo_im3_private_v3_public: typeof glo_im3_private.f1;
 export declare var glo_im3_private_v4_public: glo_im3_private.c1;
 export import glo_im1_public = glo_M1_public;
 export import glo_im2_public = glo_M3_private;
-export declare module m3 {
+export declare namespace m3 {
 }

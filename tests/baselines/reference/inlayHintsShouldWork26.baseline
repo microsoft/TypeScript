@@ -1,0 +1,8 @@
+foo((a) => { })
+      ^
+{
+  "text": ": 2 | 3",
+  "position": 63,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

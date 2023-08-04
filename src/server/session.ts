@@ -946,6 +946,7 @@ export interface SessionOptions {
     pluginProbeLocations?: readonly string[];
     allowLocalPluginLoads?: boolean;
     typesMapLocation?: string;
+    /** @internal */ incrementalVerifier?: (service: ProjectService) => void;
 }
 
 export class Session<TMessage = string> implements EventSender {
@@ -1010,7 +1011,8 @@ export class Session<TMessage = string> implements EventSender {
             allowLocalPluginLoads: opts.allowLocalPluginLoads,
             typesMapLocation: opts.typesMapLocation,
             serverMode: opts.serverMode,
-            session: this
+            session: this,
+            incrementalVerifier: opts.incrementalVerifier,
         };
         this.projectService = new ProjectService(settings);
         this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
@@ -1339,6 +1341,7 @@ export class Session<TMessage = string> implements EventSender {
         this.logger.info(`cleaning ${caption}`);
         for (const p of projects) {
             p.getLanguageService(/*ensureSynchronized*/ false).cleanupSemanticCache();
+            p.cleanupProgram();
         }
     }
 
@@ -1841,10 +1844,23 @@ export class Session<TMessage = string> implements EventSender {
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
         const hints = project.getLanguageService().provideInlayHints(file, args, this.getPreferences(file));
 
-        return hints.map(hint => ({
-            ...hint,
-            position: scriptInfo.positionToLineOffset(hint.position),
-        }));
+        return hints.map(hint => {
+            const { text, position } = hint;
+            const hintText = typeof text === "string" ? text : text.map(({ text, span, file }) => ({
+                text,
+                span: span && {
+                    start: scriptInfo.positionToLineOffset(span.start),
+                    end: scriptInfo.positionToLineOffset(span.start + span.length),
+                    file: file!
+                }
+            }));
+
+            return {
+                ...hint,
+                position: scriptInfo.positionToLineOffset(position),
+                text: hintText
+            };
+        });
     }
 
     private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {

@@ -1,8 +1,10 @@
 import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import {
+    __String,
     AnyImportOrRequireStatement,
     append,
     ApplicableRefactorInfo,
+    arrayFrom,
     AssignmentDeclarationKind,
     BinaryExpression,
     BindingElement,
@@ -26,16 +28,18 @@ import {
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
+    ExportDeclaration,
     Expression,
     ExpressionStatement,
     extensionFromPath,
     ExternalModuleReference,
     factory,
     fileShouldUseJavaScriptRequire,
+    filter,
     find,
     FindAllReferences,
     findIndex,
-    findLastIndex,
+    findLast,
     firstDefined,
     flatMap,
     forEachKey,
@@ -69,13 +73,15 @@ import {
     isBinaryExpression,
     isBindingElement,
     isDeclarationName,
+    isExportDeclaration,
+    isExportSpecifier,
     isExpressionStatement,
     isExternalModuleReference,
     isFunctionLikeDeclaration,
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
-    isNamedDeclaration,
+    isNamedExports,
     isObjectLiteralExpression,
     isOmittedExpression,
     isPrologueDirective,
@@ -109,7 +115,6 @@ import {
     PropertyAccessExpression,
     PropertyAssignment,
     QuotePreference,
-    rangeContainsRange,
     RefactorContext,
     RefactorEditInfo,
     RequireOrImportCall,
@@ -167,15 +172,23 @@ registerRefactor(refactorNameForMoveToFile, {
     getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, interactiveRefactorArguments): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
+        const { host, program } = context;
         Debug.assert(interactiveRefactorArguments, "No interactive refactor arguments available");
         const targetFile = interactiveRefactorArguments.targetFile;
         if (hasJSFileExtension(targetFile) || hasTSFileExtension(targetFile)) {
+            if (host.fileExists(targetFile) && program.getSourceFile(targetFile) === undefined) {
+                return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_statements_to_the_selected_file));
+            }
             const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
-        return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid) };
+        return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid));
     }
 });
+
+function error(notApplicableReason: string) {
+    return { edits: [], renameFilename: undefined, renameLocation: undefined, notApplicableReason };
+}
 
 function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
@@ -228,7 +241,7 @@ function getNewStatementsAndRemoveFromOldFile(
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromTargetFile, useEsModuleSyntax);
     if (typeof targetFile !== "string") {
         if (targetFile.statements.length > 0) {
-            changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], body);
+            moveStatementsToTargetFile(changes, program, body, targetFile, toMove);
         }
         else {
             changes.insertNodesAtEndOfFile(targetFile, body, /*blankLineBetween*/ false);
@@ -238,7 +251,7 @@ function getNewStatementsAndRemoveFromOldFile(
         }
     }
     if (importAdder) {
-        importAdder.writeFixes(changes);
+        importAdder.writeFixes(changes, quotePreference);
     }
     if (imports.length && body.length) {
         return [
@@ -897,28 +910,33 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const { statements } = file;
 
-    const startNodeIndex = findIndex(statements, s => s.end > range.pos);
+    let startNodeIndex = findIndex(statements, s => s.end > range.pos);
     if (startNodeIndex === -1) return undefined;
-
     const startStatement = statements[startNodeIndex];
-    if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
-        return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
-    }
 
     const overloadRangeToMove = getOverloadRangeToMove(file, startStatement);
     if (overloadRangeToMove) {
-        return overloadRangeToMove;
+        startNodeIndex = overloadRangeToMove.start;
     }
 
-    // Can't only partially include the start node or be partially into the next node
-    if (range.pos > startStatement.getStart(file)) return undefined;
-    const afterEndNodeIndex = findIndex(statements, s => s.end > range.end, startNodeIndex);
-    // Can't be partially into the next node
-    if (afterEndNodeIndex !== -1 && (afterEndNodeIndex === 0 || statements[afterEndNodeIndex].getStart(file) < range.end)) return undefined;
+    let endNodeIndex = findIndex(statements, s => s.end >= range.end, startNodeIndex);
+    /**
+     * [|const a = 2;
+     * function foo() {
+     * }
+     * |]
+     */
+    if (endNodeIndex !== -1 && range.end <= statements[endNodeIndex].getStart()) {
+        endNodeIndex--;
+    }
+    const endingOverloadRangeToMove = getOverloadRangeToMove(file, statements[endNodeIndex]);
+    if (endingOverloadRangeToMove) {
+        endNodeIndex = endingOverloadRangeToMove.end;
+    }
 
     return {
-        toMove: statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex),
-        afterLast: afterEndNodeIndex === -1 ? undefined : statements[afterEndNodeIndex],
+        toMove: statements.slice(startNodeIndex, endNodeIndex === -1 ? statements.length : endNodeIndex + 1),
+        afterLast: endNodeIndex === -1 ? undefined : statements[endNodeIndex + 1]
     };
 }
 
@@ -1129,16 +1147,71 @@ function isNonVariableTopLevelDeclaration(node: Node): node is NonVariableTopLev
     }
 }
 
+function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program: Program, statements: readonly Statement[], targetFile: SourceFile, toMove: ToMove) {
+    const removedExports = new Set<ExportDeclaration>();
+    const targetExports = targetFile.symbol?.exports;
+    if (targetExports) {
+        const checker = program.getTypeChecker();
+        const targetToSourceExports = new Map<ExportDeclaration, Set<TopLevelDeclaration>>();
+
+        for (const node of toMove.all) {
+            if (isTopLevelDeclarationStatement(node) && hasSyntacticModifier(node, ModifierFlags.Export)) {
+                forEachTopLevelDeclaration(node, declaration => {
+                    const targetDeclarations = canHaveSymbol(declaration) ? targetExports.get(declaration.symbol.escapedName)?.declarations : undefined;
+                    const exportDeclaration = firstDefined(targetDeclarations, d =>
+                        isExportDeclaration(d) ? d :
+                            isExportSpecifier(d) ? tryCast(d.parent.parent, isExportDeclaration) : undefined);
+                    if (exportDeclaration && exportDeclaration.moduleSpecifier) {
+                        targetToSourceExports.set(exportDeclaration,
+                            (targetToSourceExports.get(exportDeclaration) || new Set()).add(declaration));
+                    }
+                });
+            }
+        }
+
+        for (const [exportDeclaration, topLevelDeclarations] of arrayFrom(targetToSourceExports)) {
+            if (exportDeclaration.exportClause && isNamedExports(exportDeclaration.exportClause) && length(exportDeclaration.exportClause.elements)) {
+                const elements = exportDeclaration.exportClause.elements;
+                const updatedElements = filter(elements, elem =>
+                    find(skipAlias(elem.symbol, checker).declarations, d => isTopLevelDeclaration(d) && topLevelDeclarations.has(d)) === undefined);
+
+                if (length(updatedElements) === 0) {
+                    changes.deleteNode(targetFile, exportDeclaration);
+                    removedExports.add(exportDeclaration);
+                    continue;
+                }
+
+                if (length(updatedElements) < length(elements)) {
+                    changes.replaceNode(targetFile, exportDeclaration,
+                        factory.updateExportDeclaration(exportDeclaration, exportDeclaration.modifiers, exportDeclaration.isTypeOnly,
+                            factory.updateNamedExports(exportDeclaration.exportClause , factory.createNodeArray(updatedElements, elements.hasTrailingComma)), exportDeclaration.moduleSpecifier, exportDeclaration.assertClause));
+                }
+            }
+        }
+    }
+
+    const lastReExport = findLast(targetFile.statements, n =>
+        isExportDeclaration(n) && !!n.moduleSpecifier && !removedExports.has(n));
+    if (lastReExport) {
+        changes.insertNodesBefore(targetFile, lastReExport, statements, /*blankLineBetween*/ true);
+    }
+    else {
+        changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], statements);
+    }
+}
+
 function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
     if (isFunctionLikeDeclaration(statement)) {
         const declarations = statement.symbol.declarations;
         if (declarations === undefined || length(declarations) <= 1 || !contains(declarations, statement)) {
             return undefined;
         }
+        const firstDecl = declarations[0];
         const lastDecl = declarations[length(declarations) - 1];
         const statementsToMove = mapDefined(declarations, d => getSourceFileOfNode(d) === sourceFile && isStatement(d) ? d : undefined);
-        const end = findLastIndex(sourceFile.statements, s => s.end > lastDecl.end);
-        return { toMove: statementsToMove, afterLast: end >= 0 ? sourceFile.statements[end] : undefined };
+        const end = findIndex(sourceFile.statements, s => s.end >= lastDecl.end);
+        const start = findIndex(sourceFile.statements, s => s.end >= firstDecl.end);
+        return { toMove: statementsToMove, start, end };
     }
     return undefined;
 }

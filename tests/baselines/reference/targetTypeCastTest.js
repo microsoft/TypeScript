@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeCastTest.ts] ////
+
 //// [targetTypeCastTest.ts]
 declare var Point: { new(x:number, y:number): {x: number; y: number; }; }
 

@@ -1,0 +1,8 @@
+const f: F = (a, b: number) => { }
+               ^
+{
+  "text": ": string",
+  "position": 55,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

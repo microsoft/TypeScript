@@ -1,4 +1,6 @@
-=== tests/cases/compiler/checkDestructuringShorthandAssigment2.ts ===
+//// [tests/cases/compiler/checkDestructuringShorthandAssigment2.ts] ////
+
+=== checkDestructuringShorthandAssigment2.ts ===
 // GH #38175 -- should not crash while checking
 
 let o: any, k: any;

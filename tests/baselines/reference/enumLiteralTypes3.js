@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/enumLiteralTypes3.ts] ////
+
 //// [enumLiteralTypes3.ts]
 const enum Choice { Unknown, Yes, No };
 

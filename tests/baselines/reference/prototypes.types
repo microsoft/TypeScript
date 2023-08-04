@@ -1,4 +1,6 @@
-=== tests/cases/compiler/prototypes.ts ===
+//// [tests/cases/compiler/prototypes.ts] ////
+
+=== prototypes.ts ===
 Object.prototype; // ok
 >Object.prototype : Object
 >Object : ObjectConstructor

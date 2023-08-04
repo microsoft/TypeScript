@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ifElseWithStatements1.ts] ////
+
 //// [ifElseWithStatements1.ts]
 if (true)
     f();

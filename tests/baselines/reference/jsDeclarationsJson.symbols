@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsJson.ts] ////
+
+=== index.js ===
 const j = require("./obj.json");
 >j : Symbol(j, Decl(index.js, 0, 5))
 >require : Symbol(require)
->"./obj.json" : Symbol("tests/cases/conformance/jsdoc/declarations/obj", Decl(obj.json, 0, 0))
+>"./obj.json" : Symbol("obj", Decl(obj.json, 0, 0))
 
 module.exports = j;
 >module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
@@ -10,7 +12,7 @@ module.exports = j;
 >exports : Symbol(export=, Decl(index.js, 0, 32))
 >j : Symbol(j, Decl(index.js, 0, 5))
 
-=== tests/cases/conformance/jsdoc/declarations/obj.json ===
+=== obj.json ===
 {
     "x": 12,
 >"x" : Symbol("x", Decl(obj.json, 0, 1))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lambdaASIEmit.ts ===
+//// [tests/cases/compiler/lambdaASIEmit.ts] ////
+
+=== lambdaASIEmit.ts ===
 function Foo(x: any)
 >Foo : (x: any) => void
 >x : any

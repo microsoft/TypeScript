@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsEnumTag.ts] ////
+
 //// [index.js]
 /** @enum {string} */
 export const Target = {

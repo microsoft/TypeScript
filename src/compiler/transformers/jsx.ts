@@ -472,15 +472,15 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                     for (const prop of attr.expression.properties) {
                         if (isSpreadAssignment(prop)) {
                             finishObjectLiteralIfNeeded();
-                            expressions.push(prop.expression);
+                            expressions.push(Debug.checkDefined(visitNode(prop.expression, visitor, isExpression)));
                             continue;
                         }
-                        properties.push(prop);
+                        properties.push(Debug.checkDefined(visitNode(prop, visitor)) as ObjectLiteralElementLike);
                     }
                     continue;
                 }
                 finishObjectLiteralIfNeeded();
-                expressions.push(attr.expression);
+                expressions.push(Debug.checkDefined(visitNode(attr.expression, visitor, isExpression)));
                 continue;
             }
             properties.push(transformJsxAttributeToObjectLiteralElement(attr));

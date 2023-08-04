@@ -137,7 +137,7 @@ class ProjectTestCase {
 
     constructor(testCaseFileName: string, { testCase, moduleKind, vfs }: ProjectTestPayload) {
         this.testCase = testCase;
-        this.testCaseJustName = testCaseFileName.replace(/^.*[\\\/]/, "").replace(/\.json/, "");
+        this.testCaseJustName = testCaseFileName.replace(/^.*[\\/]/, "").replace(/\.json/, "");
         this.compilerOptions = createCompilerOptions(testCase, moduleKind);
         this.sys = new fakes.System(vfs);
 
