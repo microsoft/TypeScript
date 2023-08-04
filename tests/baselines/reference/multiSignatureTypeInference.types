@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multiSignatureTypeInference.ts ===
+//// [tests/cases/compiler/multiSignatureTypeInference.ts] ////
+
+=== multiSignatureTypeInference.ts ===
 declare function f1(arg: boolean): string;
 >f1 : { (arg: boolean): string; (arg1: number, arg2: number): number; (...args: string[]): string[]; }
 >arg : boolean
