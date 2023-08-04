@@ -910,105 +910,33 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const { statements } = file;
 
-    const startNodeIndex = findIndex(statements, s => s.end > range.pos);
+    let startNodeIndex = findIndex(statements, s => s.end > range.pos);
     if (startNodeIndex === -1) return undefined;
     const startStatement = statements[startNodeIndex];
 
     const overloadRangeToMove = getOverloadRangeToMove(file, startStatement);
-    /**
-     * function [|add(x: number, y: number): number;
-     * function add(x: string, y: string): string;|]
-     *                  or
-     * function [|add(x: number, y: number): number;
-     * function add(x: string, y: string): string;
-     * |]
-     *                  or
-     * function [|add(x: number, y: number): number;
-     * function add(x: string, y: string): string;
-     * |]const a = 1;
-     */
-    const statementAfterLastOverload = overloadRangeToMove && statements[overloadRangeToMove.end + 1];
-    if (statementAfterLastOverload && range.end <= statementAfterLastOverload.getStart()) {
-        return { toMove: overloadRangeToMove.toMove, afterLast: statements[overloadRangeToMove.end + 1] };
-    }
-
-    let afterEndNodeIndex = findIndex(statements, s => s.end >= range.end, startNodeIndex);
-    /**[|const a = 1;
-     * |]const b = 2;
-     */
-    if (afterEndNodeIndex !== -1 && range.end <= statements[afterEndNodeIndex].getStart()) {
-        afterEndNodeIndex = afterEndNodeIndex - 1;
-    }
-
-    const endingOverloadRangeToMove = getOverloadRangeToMove(file, statements[afterEndNodeIndex]);
-
-    /**[|function add1(x: number, y: number): number;
-     * function add1(x: string, y: string): string;
-     * function foo() { }
-     * const a = 1;
-     * function add2(x: boolean): string;
-     * function add2(x: number): number;|]
-     */
-    if (endingOverloadRangeToMove && overloadRangeToMove) {
-        return {
-            toMove: statements.slice(findIndex(statements, s => s.pos === overloadRangeToMove.toMove[0].pos), endingOverloadRangeToMove.end + 1),
-            afterLast: endingOverloadRangeToMove.end === statements.length - 1 ? undefined : statements[endingOverloadRangeToMove.end + 1]
-        };
-    }
-
-    /**function [|add(x: number, y: number): number;
-     * function add(x: string, y: string): string;
-     * function foo() { }|]
-     *                  or
-     * function [|add(x: number, y: number): number;
-     * function add(x: string, y: string): string;
-     * function foo() { }
-     * |]
-     *                  or
-     * [|function add(x: number, y: number): number;
-     * function add(x: string, y: string): string;
-     * function foo() { }
-     * |]const a = 1;
-     */
     if (overloadRangeToMove) {
-        return {
-            toMove: statements.slice(findIndex(statements, s => s.end === overloadRangeToMove.toMove[0].end), afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex + 1),
-            afterLast: afterEndNodeIndex === -1 || afterEndNodeIndex === statements.length - 1 ? undefined : statements[afterEndNodeIndex + 1],
-        };
+        startNodeIndex = overloadRangeToMove.start;
     }
 
-    /**[|const a = 1;
-     * function add(x: number, y: number): number;
-     * function add(x: string, y: string): string;|]
-     *                  or
-     * [|
-     * function add(x: number, y: number): number;
-     * function add(x: string, y: string): string;
+    let endNodeIndex = findIndex(statements, s => s.end >= range.end, startNodeIndex);
+    /**
+     * [|const a = 2;
+     * function foo() {
+     * }
      * |]
-     *                  or
-     * const a = 1;[|
-     * function add(x: number, y: number): number;
-     * function add(x: string, y: string): string;|]
      */
-    if (endingOverloadRangeToMove) {
-        let endNodeIndex;
-        let afterLastStatement;
-        if (endingOverloadRangeToMove.end === statements.length - 1) {
-            endNodeIndex = statements.length;
-            afterLastStatement = undefined;
-        }
-        else{
-            endNodeIndex = endingOverloadRangeToMove.end + 1;
-            afterLastStatement = statements[endNodeIndex];
-        }
-        return {
-            toMove: statements.slice(startNodeIndex, endNodeIndex),
-            afterLast: afterLastStatement,
-        };
+    if (endNodeIndex !== -1 && range.end <= statements[endNodeIndex].getStart()) {
+        endNodeIndex--;
     }
+    const endingOverloadRangeToMove = getOverloadRangeToMove(file, statements[endNodeIndex]);
+    if (endingOverloadRangeToMove) {
+        endNodeIndex = endingOverloadRangeToMove.end;
+    }
+
     return {
-        toMove: statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex + 1),
-        afterLast: afterEndNodeIndex === -1 ? undefined : statements[afterEndNodeIndex + 1],
+        toMove: statements.slice(startNodeIndex, endNodeIndex === -1 ? statements.length : endNodeIndex + 1),
+        afterLast: endNodeIndex === -1 ? undefined : statements[endNodeIndex + 1]
     };
 }
 
@@ -1278,10 +1206,12 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
         if (declarations === undefined || length(declarations) <= 1 || !contains(declarations, statement)) {
             return undefined;
         }
+        const firstDecl = declarations[0];
         const lastDecl = declarations[length(declarations) - 1];
         const statementsToMove = mapDefined(declarations, d => getSourceFileOfNode(d) === sourceFile && isStatement(d) ? d : undefined);
         const end = findIndex(sourceFile.statements, s => s.end >= lastDecl.end);
-        return { toMove: statementsToMove, end };
+        const start = findIndex(sourceFile.statements, s => s.end >= firstDecl.end);
+        return { toMove: statementsToMove, start, end };
     }
     return undefined;
 }
