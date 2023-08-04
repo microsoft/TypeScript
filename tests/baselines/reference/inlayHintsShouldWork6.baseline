@@ -1,9 +1,13 @@
 foo(1, 2, 3)
     ^
 {
-  "text": [
+  "text": "",
+  "position": 81,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "c",
+      "text": "",
       "span": {
         "start": 50,
         "length": 1
@@ -13,8 +17,5 @@ foo(1, 2, 3)
     {
       "text": ":"
     }
-  ],
-  "position": 81,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

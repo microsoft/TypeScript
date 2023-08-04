@@ -10,9 +10,13 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
     2,
     ^
 {
-  "text": [
+  "text": "",
+  "position": 134,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "bParameter",
+      "text": "",
       "span": {
         "start": 34,
         "length": 10
@@ -22,18 +26,19 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
     {
       "text": ":"
     }
-  ],
-  "position": 134,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
     3
     ^
 {
-  "text": [
+  "text": "",
+  "position": 338,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "cParameter",
+      "text": "",
       "span": {
         "start": 54,
         "length": 10
@@ -43,18 +48,19 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
     {
       "text": ":"
     }
-  ],
-  "position": 338,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
     1,
     ^
 {
-  "text": [
+  "text": "",
+  "position": 373,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "aParameter",
+      "text": "",
       "span": {
         "start": 14,
         "length": 10
@@ -64,18 +70,19 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
     {
       "text": ":"
     }
-  ],
-  "position": 373,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
     2,
     ^
 {
-  "text": [
+  "text": "",
+  "position": 380,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "bParameter",
+      "text": "",
       "span": {
         "start": 34,
         "length": 10
@@ -85,18 +92,19 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
     {
       "text": ":"
     }
-  ],
-  "position": 380,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
     3
     ^
 {
-  "text": [
+  "text": "",
+  "position": 440,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "cParameter",
+      "text": "",
       "span": {
         "start": 54,
         "length": 10
@@ -106,8 +114,5 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
     {
       "text": ":"
     }
-  ],
-  "position": 440,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

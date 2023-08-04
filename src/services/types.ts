@@ -866,11 +866,12 @@ export const enum InlayHintKind {
 }
 
 export interface InlayHint {
-    text: string | InlayHintDisplayPart[];
+    text: string;
     position: number;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+    displayParts?: InlayHintDisplayPart[];
 }
 
 export interface InlayHintDisplayPart {

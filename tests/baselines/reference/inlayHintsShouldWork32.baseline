@@ -1,9 +1,13 @@
 function c2 () { foo2(1, 2); }
                       ^
 {
-  "text": [
+  "text": "",
+  "position": 293,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "c",
+      "text": "",
       "span": {
         "start": 55,
         "length": 1
@@ -13,18 +17,19 @@ function c2 () { foo2(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 293,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c2 () { foo2(1, 2); }
                          ^
 {
-  "text": [
+  "text": "",
+  "position": 296,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "d",
+      "text": "",
       "span": {
         "start": 66,
         "length": 1
@@ -34,18 +39,19 @@ function c2 () { foo2(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 296,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c3 () { foo3(1, 2); }
                       ^
 {
-  "text": [
+  "text": "",
+  "position": 324,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "e",
+      "text": "",
       "span": {
         "start": 95,
         "length": 1
@@ -55,18 +61,19 @@ function c3 () { foo3(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 324,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c3 () { foo3(1, 2); }
                          ^
 {
-  "text": [
+  "text": "",
+  "position": 327,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "f",
+      "text": "",
       "span": {
         "start": 106,
         "length": 1
@@ -76,18 +83,19 @@ function c3 () { foo3(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 327,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c4 () { foo4(1, 2); }
                       ^
 {
-  "text": [
+  "text": "",
+  "position": 355,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "g",
+      "text": "",
       "span": {
         "start": 135,
         "length": 1
@@ -97,18 +105,19 @@ function c4 () { foo4(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 355,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c4 () { foo4(1, 2); }
                          ^
 {
-  "text": [
+  "text": "",
+  "position": 358,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "h",
+      "text": "",
       "span": {
         "start": 146,
         "length": 1
@@ -118,8 +127,5 @@ function c4 () { foo4(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 358,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

@@ -1,9 +1,13 @@
 foo2(1, 2);
      ^
 {
-  "text": [
+  "text": "",
+  "position": 257,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "c",
+      "text": "",
       "span": {
         "start": 55,
         "length": 1
@@ -13,18 +17,19 @@ foo2(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 257,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo2(1, 2);
         ^
 {
-  "text": [
+  "text": "",
+  "position": 260,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "d",
+      "text": "",
       "span": {
         "start": 66,
         "length": 1
@@ -34,18 +39,19 @@ foo2(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 260,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo3(1, 2);
      ^
 {
-  "text": [
+  "text": "",
+  "position": 269,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "e",
+      "text": "",
       "span": {
         "start": 95,
         "length": 1
@@ -55,18 +61,19 @@ foo3(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 269,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo3(1, 2);
         ^
 {
-  "text": [
+  "text": "",
+  "position": 272,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "f",
+      "text": "",
       "span": {
         "start": 106,
         "length": 1
@@ -76,18 +83,19 @@ foo3(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 272,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo4(1, 2);
      ^
 {
-  "text": [
+  "text": "",
+  "position": 281,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "g",
+      "text": "",
       "span": {
         "start": 135,
         "length": 1
@@ -97,18 +105,19 @@ foo4(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 281,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo4(1, 2);
         ^
 {
-  "text": [
+  "text": "",
+  "position": 284,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "h",
+      "text": "",
       "span": {
         "start": 146,
         "length": 1
@@ -118,8 +127,5 @@ foo4(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 284,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

@@ -1,9 +1,13 @@
 trace(`${1}`);
       ^
 {
-  "text": [
+  "text": "",
+  "position": 41,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "message",
+      "text": "",
       "span": {
         "start": 15,
         "length": 7
@@ -13,18 +17,19 @@ trace(`${1}`);
     {
       "text": ":"
     }
-  ],
-  "position": 41,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 trace(``);
       ^
 {
-  "text": [
+  "text": "",
+  "position": 56,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "message",
+      "text": "",
       "span": {
         "start": 15,
         "length": 7
@@ -34,8 +39,5 @@ trace(``);
     {
       "text": ":"
     }
-  ],
-  "position": 56,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

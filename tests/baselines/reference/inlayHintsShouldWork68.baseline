@@ -1,9 +1,13 @@
 const C1 = class extends foo(1) { }
                              ^
 {
-  "text": [
+  "text": "",
+  "position": 63,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "a",
+      "text": "",
       "span": {
         "start": 13,
         "length": 1
@@ -13,18 +17,19 @@ const C1 = class extends foo(1) { }
     {
       "text": ":"
     }
-  ],
-  "position": 63,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 class C2 extends foo(1) { }
                      ^
 {
-  "text": [
+  "text": "",
+  "position": 91,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "a",
+      "text": "",
       "span": {
         "start": 13,
         "length": 1
@@ -34,8 +39,5 @@ class C2 extends foo(1) { }
     {
       "text": ":"
     }
-  ],
-  "position": 91,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

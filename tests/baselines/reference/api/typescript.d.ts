@@ -6416,11 +6416,12 @@ declare namespace ts {
         Enum = "Enum"
     }
     interface InlayHint {
-        text: string | InlayHintDisplayPart[];
+        text: string;
         position: number;
         kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
+        displayParts?: InlayHintDisplayPart[];
     }
     interface InlayHintDisplayPart {
         text: string;

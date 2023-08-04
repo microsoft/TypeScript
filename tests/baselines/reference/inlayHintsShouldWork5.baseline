@@ -1,9 +1,13 @@
 foo(1, 2, 3)
     ^
 {
-  "text": [
+  "text": "",
+  "position": 87,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "c",
+      "text": "",
       "span": {
         "start": 56,
         "length": 1
@@ -13,18 +17,19 @@ foo(1, 2, 3)
     {
       "text": ":"
     }
-  ],
-  "position": 87,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo(1, 2, 3)
        ^
 {
-  "text": [
+  "text": "",
+  "position": 90,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "a",
+      "text": "",
       "span": {
         "start": 13,
         "length": 1
@@ -34,18 +39,19 @@ foo(1, 2, 3)
     {
       "text": ":"
     }
-  ],
-  "position": 90,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo(1, 2, 3)
           ^
 {
-  "text": [
+  "text": "",
+  "position": 93,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
-      "text": "b",
+      "text": "",
       "span": {
         "start": 24,
         "length": 1
@@ -55,8 +61,5 @@ foo(1, 2, 3)
     {
       "text": ":"
     }
-  ],
-  "position": 93,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
