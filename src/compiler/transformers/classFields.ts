@@ -154,6 +154,7 @@ import {
     Modifier,
     ModifierFlags,
     ModifierLike,
+    modifiersToFlags,
     moveRangePastModifiers,
     moveRangePos,
     newPrivateEnvironment,
@@ -896,6 +897,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
     }
 
+    function getClassThis() {
+        const lex = getClassLexicalEnvironment();
+        const classThis = lex.classThis ?? lex.classConstructor ?? currentClassContainer?.name;
+        return Debug.checkDefined(classThis);
+    }
+
     function transformAutoAccessor(node: AutoAccessorPropertyDeclaration): VisitResult<Node> {
         // transforms:
         //      accessor x = 1;
@@ -935,12 +942,15 @@ export function transformClassFields(context: TransformationContext): (x: Source
         setEmitFlags(backingField, EmitFlags.NoComments);
         setSourceMapRange(backingField, sourceMapRange);
 
-        const getter = createAccessorPropertyGetRedirector(factory, node, modifiers, getterName);
+        const receiver = isStatic(node) ? getClassThis() : factory.createThis();
+        const getter = createAccessorPropertyGetRedirector(factory, node, modifiers, getterName, receiver);
         setOriginalNode(getter, node);
         setCommentRange(getter, commentRange);
         setSourceMapRange(getter, sourceMapRange);
 
-        const setter = createAccessorPropertySetRedirector(factory, node, modifiers, setterName);
+        // create a fresh copy of the modifiers so that we don't duplicate comments
+        const setterModifiers = factory.createModifiersFromModifierFlags(modifiersToFlags(modifiers));
+        const setter = createAccessorPropertySetRedirector(factory, node, setterModifiers, setterName, receiver);
         setOriginalNode(setter, node);
         setEmitFlags(setter, EmitFlags.NoComments);
         setSourceMapRange(setter, sourceMapRange);
@@ -1692,9 +1702,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
         let containsInstanceAutoAccessors = false;
         for (const member of node.members) {
             if (isStatic(member)) {
-                if (member.name &&
-                    (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) &&
+                if (member.name && (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) &&
                     shouldTransformPrivateElementsOrClassStaticBlocks) {
+                    facts |= ClassFacts.NeedsClassConstructorReference;
+                }
+                else if (isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name && !node.emitNode?.classThis) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
                 if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
@@ -1843,10 +1855,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
                 pendingClassReferenceAssignment = factory.createAssignment(temp, factory.getInternalName(node));
             }
+        }
 
-            if (node.emitNode?.classThis) {
-                getClassLexicalEnvironment().classThis = node.emitNode.classThis;
-            }
+        if (node.emitNode?.classThis) {
+            getClassLexicalEnvironment().classThis = node.emitNode.classThis;
         }
 
         const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
