@@ -403,27 +403,54 @@ export const watchMin = task({
 });
 
 
-const { main: lssl, build: buildLssl, watch: watchLssl } = entrypointBuildTask({
+// TODO(jakebailey): how can we make this backwards compatible?
+// Does anyone actually load tsserverlibrary into the browser directly?
+// Do we have to create a <script>?
+const lsslJs = `
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = require("./typescript.js");
+}
+else if (typeof importScripts !== "undefined") {
+    importScripts("./typescript.js");
+}
+else {
+    throw new Error("tsserverlibrary cannot loaded; use typescript.js instead");
+}
+`;
+
+const lsslDts = `
+import ts = require("./typescript.js");
+export = ts;
+`;
+
+const lsslDtsInternal = `
+import ts = require("./typescript.internal.js");
+export = ts;
+`;
+
+/**
+ * @param {string} contents
+ */
+async function fileContentsWithCopyright(contents) {
+    return await copyright() + contents.trim().replace(/\r\n/g, "\n") + "\n";
+}
+
+const lssl = task({
     name: "lssl",
     description: "Builds language service server library",
-    buildDeps: [generateDiagnostics],
-    project: "src/typescript",
-    srcEntrypoint: "./src/typescript/typescript.ts",
-    builtEntrypoint: "./built/local/tsserverlibrary/tsserverlibrary.js",
-    output: "./built/local/tsserverlibrary.js",
-    mainDeps: [generateLibs],
-    bundlerOptions: { exportIsTsObject: true },
+    dependencies: [services],
+    run: async () => {
+        await fs.promises.writeFile("./built/local/tsserverlibrary.js", await fileContentsWithCopyright(lsslJs));
+    }
 });
-export { lssl, watchLssl };
 
 export const dtsLssl = task({
     name: "dts-lssl",
     description: "Bundles tsserverlibrary.d.ts",
-    dependencies: [buildLssl],
+    dependencies: [dtsServices],
     run: async () => {
-        if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.internal.d.ts"])) {
-            await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/tsserverlibrary.d.ts");
-        }
+        await fs.promises.writeFile("./built/local/tsserverlibrary.d.ts", await fileContentsWithCopyright(lsslDts));
+        await fs.promises.writeFile("./built/local/tsserverlibrary.internal.d.ts", await fileContentsWithCopyright(lsslDtsInternal));
     }
 });
 
@@ -562,7 +589,7 @@ export const watchLocal = task({
     name: "watch-local",
     description: "Watches the full compiler and services",
     hiddenFromTaskList: true,
-    dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts, watchSrc],
+    dependencies: [localize, watchTsc, watchTsserver, watchServices, watchOtherOutputs, dts, watchSrc],
 });
 
 const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
