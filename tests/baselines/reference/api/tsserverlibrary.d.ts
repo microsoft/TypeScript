@@ -2124,6 +2124,7 @@ declare namespace ts {
                 arguments: InlayHintsRequestArgs;
             }
             interface InlayHintItem {
+                /** This property will be the empty string when displayParts is set. */
                 text: string;
                 position: Location;
                 kind: InlayHintKind;
@@ -10391,6 +10392,7 @@ declare namespace ts {
         Enum = "Enum"
     }
     interface InlayHint {
+        /** This property will be the empty string when displayParts is set. */
         text: string;
         position: number;
         kind: InlayHintKind;

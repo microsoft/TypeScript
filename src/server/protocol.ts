@@ -2675,6 +2675,7 @@ export interface InlayHintsRequest extends Request {
 }
 
 export interface InlayHintItem {
+    /** This property will be the empty string when displayParts is set. */
     text: string;
     position: Location;
     kind: InlayHintKind;
