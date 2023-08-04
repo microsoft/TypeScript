@@ -1765,7 +1765,7 @@ export function transformDeclarations(context: TransformationContext) {
                     if (shouldStripInternal(m)) return;
                     // Rewrite enum values to their constants, if available
                     const constValue = resolver.getConstantValue(m);
-                    const newInitializer = typeof constValue === "undefined"
+                    const newInitializer = constValue === undefined
                         ? undefined
                         : typeof constValue === "string"
                         ? factory.createStringLiteral(constValue)
