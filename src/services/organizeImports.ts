@@ -715,9 +715,13 @@ class ImportSpecifierSortingCache implements MemoizeCache<[readonly ImportSpecif
 
 /** @internal */
 export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly ImportSpecifier[], preferences: UserPreferences): SortKind => {
-    if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))) {
+    // If types are not sorted as specified, then imports are assumed to be unsorted.
+    // If there is no type sorting specification, then we move on to case sensitivity detection.
+    if (preferences.organizeImportsTypeOrder === "last" && !arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))
+        || preferences.organizeImportsTypeOrder === "first" && !arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s2.isTypeOnly, s1.isTypeOnly))) {
         return SortKind.None;
     }
+
     const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
     const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
     return detectSortCaseSensitivity(specifiers, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive);

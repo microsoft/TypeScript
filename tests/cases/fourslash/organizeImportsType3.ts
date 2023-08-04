@@ -1,0 +1,48 @@
+/// <reference path="fourslash.ts" />
+
+// Regression test for bug #41417
+
+//// import {
+////     d, 
+////     type d as D,
+////     type c,
+////     c as C,
+////     b,
+////     b as B,
+////     type A,
+////     a
+//// } from './foo';
+//// console.log(A, a, B, b, c, C, d, D);
+
+verify.organizeImports(
+`import {
+    type A,
+    b as B,
+    c as C,
+    type d as D,
+    a,
+    b,
+    type c,
+    d
+} from './foo';
+console.log(A, a, B, b, c, C, d, D);`,
+    /*mode*/ undefined,
+    { organizeImportsIgnoreCase: false }
+);
+
+verify.organizeImports(
+`import {
+    type A,
+    a,
+    b as B,
+    b,
+    c as C,
+    type c,
+    type d as D,
+    d
+} from './foo';
+console.log(A, a, B, b, c, C, d, D);`,
+    /*mode*/ undefined,
+    { organizeImportsIgnoreCase: true }
+);
+

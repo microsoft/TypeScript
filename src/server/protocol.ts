@@ -3599,7 +3599,7 @@ export interface UserPreferences {
      */
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
     /**
-     * Indicates where named type-only imports should sort. The default order ("inline") sorts imports regardless of if the imports are 
+     * Indicates where named type-only imports should sort. The default order ("inline") sorts imports regardless of if imports are
      * type-only.
      *
      * Default: `inline`
