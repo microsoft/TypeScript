@@ -162,8 +162,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         let hintText = `${isFirstVariadicArgument ? "..." : ""}${text}`;
         let displayParts: InlayHintDisplayPart[] | undefined;
         if (shouldUseInteractiveInlayHints(preferences)) {
-            hintText = "";
             displayParts = [getNodeDisplayPart(hintText, parameter, sourceFile!), { text: ":" }];
+            hintText = "";
         }
         else {
             hintText += ":";

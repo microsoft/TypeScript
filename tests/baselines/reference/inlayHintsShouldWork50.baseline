@@ -7,7 +7,7 @@ foo(1, '', false, 1, 2)
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "f",
       "span": {
         "start": 70,
         "length": 1
@@ -29,7 +29,7 @@ foo(1, '', false, 1, 2)
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "a",
       "span": {
         "start": 10,
         "length": 1
@@ -51,7 +51,7 @@ foo(1, '', false, 1, 2)
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "b",
       "span": {
         "start": 21,
         "length": 1
@@ -73,7 +73,7 @@ foo(1, '', false, 1, 2)
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "...c",
       "span": {
         "start": 36,
         "length": 1
@@ -95,7 +95,7 @@ foo1(1, "", "")
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "f1",
       "span": {
         "start": 120,
         "length": 2
@@ -117,7 +117,7 @@ foo1(1, "", "")
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "...args",
       "span": {
         "start": 135,
         "length": 4

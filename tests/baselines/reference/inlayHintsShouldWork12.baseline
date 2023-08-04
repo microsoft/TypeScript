@@ -7,7 +7,7 @@
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "b",
       "span": {
         "start": 17,
         "length": 1
@@ -29,7 +29,7 @@ foo((c: number) => c + 1);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "a",
       "span": {
         "start": 13,
         "length": 1

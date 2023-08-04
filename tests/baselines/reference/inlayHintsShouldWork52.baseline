@@ -16,7 +16,7 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "bParameter",
       "span": {
         "start": 34,
         "length": 10
@@ -38,7 +38,7 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "cParameter",
       "span": {
         "start": 54,
         "length": 10
@@ -60,7 +60,7 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "aParameter",
       "span": {
         "start": 14,
         "length": 10
@@ -82,7 +82,7 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "bParameter",
       "span": {
         "start": 34,
         "length": 10
@@ -104,7 +104,7 @@ function foo (aParameter: number, bParameter: number, cParameter: number) { }
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "cParameter",
       "span": {
         "start": 54,
         "length": 10

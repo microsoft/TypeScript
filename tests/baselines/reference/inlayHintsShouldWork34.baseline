@@ -7,7 +7,7 @@ foo(1);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "v",
       "span": {
         "start": 14,
         "length": 1
@@ -29,7 +29,7 @@ foo('');
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "v",
       "span": {
         "start": 14,
         "length": 1
@@ -51,7 +51,7 @@ foo(true);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "v",
       "span": {
         "start": 14,
         "length": 1
@@ -73,7 +73,7 @@ foo((1));
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "v",
       "span": {
         "start": 14,
         "length": 1
@@ -95,7 +95,7 @@ foo(foo(1));
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "v",
       "span": {
         "start": 14,
         "length": 1

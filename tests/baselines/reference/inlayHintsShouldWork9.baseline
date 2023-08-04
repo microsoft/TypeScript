@@ -7,7 +7,7 @@ call(1);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "a",
       "span": {
         "start": 22,
         "length": 1
@@ -29,7 +29,7 @@ call(1, 2);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "b",
       "span": {
         "start": 44,
         "length": 1
@@ -51,7 +51,7 @@ call(1, 2);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "c",
       "span": {
         "start": 55,
         "length": 1
@@ -73,7 +73,7 @@ new call(1);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "d",
       "span": {
         "start": 81,
         "length": 1

@@ -7,7 +7,7 @@ foo(a, 2);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "b",
       "span": {
         "start": 25,
         "length": 1

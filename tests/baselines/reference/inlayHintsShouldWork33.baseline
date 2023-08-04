@@ -7,7 +7,7 @@ foo2(1, 2);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "c",
       "span": {
         "start": 55,
         "length": 1
@@ -29,7 +29,7 @@ foo2(1, 2);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "d",
       "span": {
         "start": 66,
         "length": 1
@@ -51,7 +51,7 @@ foo3(1, 2);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "e",
       "span": {
         "start": 95,
         "length": 1
@@ -73,7 +73,7 @@ foo3(1, 2);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "f",
       "span": {
         "start": 106,
         "length": 1
@@ -95,7 +95,7 @@ foo4(1, 2);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "g",
       "span": {
         "start": 135,
         "length": 1
@@ -117,7 +117,7 @@ foo4(1, 2);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "h",
       "span": {
         "start": 146,
         "length": 1

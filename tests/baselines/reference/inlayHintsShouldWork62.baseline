@@ -7,7 +7,7 @@ trace(`${1}`);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "message",
       "span": {
         "start": 15,
         "length": 7
@@ -29,7 +29,7 @@ trace(``);
   "whitespaceAfter": true,
   "displayParts": [
     {
-      "text": "",
+      "text": "message",
       "span": {
         "start": 15,
         "length": 7
