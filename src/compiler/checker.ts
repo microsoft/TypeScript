@@ -452,7 +452,6 @@ import {
     isAssignmentOperator,
     isAssignmentPattern,
     isAssignmentTarget,
-    isAsyncFunction,
     isAutoAccessorPropertyDeclaration,
     isAwaitExpression,
     isBinaryExpression,
@@ -3841,7 +3840,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function isSameScopeDescendentOf(initial: Node, parent: Node | undefined, stopAt: Node): boolean {
         return !!parent && !!findAncestor(initial, n => n === parent
-            || (n === stopAt || isFunctionLike(n) && (!getImmediatelyInvokedFunctionExpression(n) || isAsyncFunction(n)) ? "quit" : false));
+            || (n === stopAt || isFunctionLike(n) && (!getImmediatelyInvokedFunctionExpression(n) || (getFunctionFlags(n) & (FunctionFlags.AsyncGenerator))) ? "quit" : false));
     }
 
     function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
