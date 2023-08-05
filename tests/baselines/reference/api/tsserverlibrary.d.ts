@@ -2124,11 +2124,13 @@ declare namespace ts {
                 arguments: InlayHintsRequestArgs;
             }
             interface InlayHintItem {
-                text: string | InlayHintItemDisplayPart[];
+                /** This property will be the empty string when displayParts is set. */
+                text: string;
                 position: Location;
                 kind: InlayHintKind;
                 whitespaceBefore?: boolean;
                 whitespaceAfter?: boolean;
+                displayParts?: InlayHintItemDisplayPart[];
             }
             interface InlayHintItemDisplayPart {
                 text: string;
@@ -10390,11 +10392,13 @@ declare namespace ts {
         Enum = "Enum"
     }
     interface InlayHint {
-        text: string | InlayHintDisplayPart[];
+        /** This property will be the empty string when displayParts is set. */
+        text: string;
         position: number;
         kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
+        displayParts?: InlayHintDisplayPart[];
     }
     interface InlayHintDisplayPart {
         text: string;

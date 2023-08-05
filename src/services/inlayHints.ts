@@ -159,9 +159,11 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean, sourceFile: SourceFile | undefined) {
-        let hintText: string | InlayHintDisplayPart[] = `${isFirstVariadicArgument ? "..." : ""}${text}`;
+        let hintText = `${isFirstVariadicArgument ? "..." : ""}${text}`;
+        let displayParts: InlayHintDisplayPart[] | undefined;
         if (shouldUseInteractiveInlayHints(preferences)) {
-            hintText = [getNodeDisplayPart(hintText, parameter, sourceFile!), { text: ":" }];
+            displayParts = [getNodeDisplayPart(hintText, parameter, sourceFile!), { text: ":" }];
+            hintText = "";
         }
         else {
             hintText += ":";
@@ -172,6 +174,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             position,
             kind: InlayHintKind.Parameter,
             whitespaceAfter: true,
+            displayParts,
         });
     }
 
