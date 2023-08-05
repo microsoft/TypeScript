@@ -1,0 +1,179 @@
+//// [tests/cases/conformance/controlFlow/controlFlowIIFE2.ts] ////
+
+=== controlFlowIIFE2.ts ===
+// #30625
+declare const x: string | undefined;
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 1, 13))
+
+declare const y: { z: string | undefined };
+>y : Symbol(y, Decl(controlFlowIIFE2.ts, 2, 13))
+>z : Symbol(z, Decl(controlFlowIIFE2.ts, 2, 18))
+
+function needsString(it: string) {
+>needsString : Symbol(needsString, Decl(controlFlowIIFE2.ts, 2, 43))
+>it : Symbol(it, Decl(controlFlowIIFE2.ts, 3, 21))
+
+    return it;
+>it : Symbol(it, Decl(controlFlowIIFE2.ts, 3, 21))
+}
+
+function a() {
+>a : Symbol(a, Decl(controlFlowIIFE2.ts, 5, 1))
+
+    if (!x) {
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 1, 13))
+
+        throw new Error("Missing x");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+    const res1 = (() => needsString(x))();
+>res1 : Symbol(res1, Decl(controlFlowIIFE2.ts, 11, 9))
+>needsString : Symbol(needsString, Decl(controlFlowIIFE2.ts, 2, 43))
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 1, 13))
+
+    const res2 = (async () => needsString(x))();
+>res2 : Symbol(res2, Decl(controlFlowIIFE2.ts, 12, 9))
+>needsString : Symbol(needsString, Decl(controlFlowIIFE2.ts, 2, 43))
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 1, 13))
+
+    if (!y.z) {
+>y.z : Symbol(z, Decl(controlFlowIIFE2.ts, 2, 18))
+>y : Symbol(y, Decl(controlFlowIIFE2.ts, 2, 13))
+>z : Symbol(z, Decl(controlFlowIIFE2.ts, 2, 18))
+
+        throw new Error("Missing z.");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+    }
+
+    const res3 = (() => needsString(y.z))();
+>res3 : Symbol(res3, Decl(controlFlowIIFE2.ts, 18, 9))
+>needsString : Symbol(needsString, Decl(controlFlowIIFE2.ts, 2, 43))
+>y.z : Symbol(z, Decl(controlFlowIIFE2.ts, 2, 18))
+>y : Symbol(y, Decl(controlFlowIIFE2.ts, 2, 13))
+>z : Symbol(z, Decl(controlFlowIIFE2.ts, 2, 18))
+
+    const res4 = (async () => needsString(y.z))(); // should not error
+>res4 : Symbol(res4, Decl(controlFlowIIFE2.ts, 19, 9))
+>needsString : Symbol(needsString, Decl(controlFlowIIFE2.ts, 2, 43))
+>y.z : Symbol(z, Decl(controlFlowIIFE2.ts, 2, 18))
+>y : Symbol(y, Decl(controlFlowIIFE2.ts, 2, 13))
+>z : Symbol(z, Decl(controlFlowIIFE2.ts, 2, 18))
+}
+
+// #38929
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(controlFlowIIFE2.ts, 20, 1))
+
+    public foo: number;
+>foo : Symbol(MyClass.foo, Decl(controlFlowIIFE2.ts, 23, 15))
+
+    constructor() {
+        this.foo = 0;
+>this.foo : Symbol(MyClass.foo, Decl(controlFlowIIFE2.ts, 23, 15))
+>this : Symbol(MyClass, Decl(controlFlowIIFE2.ts, 20, 1))
+>foo : Symbol(MyClass.foo, Decl(controlFlowIIFE2.ts, 23, 15))
+
+        (async () => this.foo + 5)(); // should not error
+>this.foo : Symbol(MyClass.foo, Decl(controlFlowIIFE2.ts, 23, 15))
+>this : Symbol(MyClass, Decl(controlFlowIIFE2.ts, 20, 1))
+>foo : Symbol(MyClass.foo, Decl(controlFlowIIFE2.ts, 23, 15))
+    }
+}
+
+async function f1() {
+>f1 : Symbol(f1, Decl(controlFlowIIFE2.ts, 30, 1))
+
+    let x: string | undefined;
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 33, 7))
+
+    let y: string | undefined;
+>y : Symbol(y, Decl(controlFlowIIFE2.ts, 34, 7))
+
+    (async () => {
+        x = "";
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 33, 7))
+
+        await 2;
+        y = "";
+>y : Symbol(y, Decl(controlFlowIIFE2.ts, 34, 7))
+
+    })();
+    x.toLowerCase(); // ideally should not error, but unfortunately does
+>x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 33, 7))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+    y.toLowerCase(); // should error
+>y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(controlFlowIIFE2.ts, 34, 7))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+
+async function f2() {
+>f2 : Symbol(f2, Decl(controlFlowIIFE2.ts, 42, 1))
+
+    let x: string | undefined;
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 45, 7))
+
+    await (async () => {
+        x = "";
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 45, 7))
+
+    })();
+    x.toLowerCase(); // should not error
+>x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 45, 7))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+
+async function f3() {
+>f3 : Symbol(f3, Decl(controlFlowIIFE2.ts, 50, 1))
+
+    let x: string | undefined;
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 53, 7))
+
+    await (async () => {
+        x = "";
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 53, 7))
+
+    })();
+    x.toLowerCase(); // should not error
+>x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 53, 7))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+
+async function f4() {
+>f4 : Symbol(f4, Decl(controlFlowIIFE2.ts, 58, 1))
+
+    let x = "";
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 61, 7))
+
+    (() => {
+        throw new Error("");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    })();
+    x.toLowerCase(); // should error. unreachable
+>x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 61, 7))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+
+async function f5() {
+>f5 : Symbol(f5, Decl(controlFlowIIFE2.ts, 66, 1))
+
+    let x = "";
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 69, 7))
+
+    await (async () => {
+        throw new Error("");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    })();
+    x.toLowerCase(); // should error. unreachable
+>x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowIIFE2.ts, 69, 7))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+

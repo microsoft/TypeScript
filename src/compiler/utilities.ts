@@ -3087,6 +3087,14 @@ export function getImmediatelyInvokedFunctionExpression(func: Node): CallExpress
 }
 
 /** @internal */
+export function isAwaited(node: Node): boolean {
+    while(node.kind === SyntaxKind.ParenthesizedExpression) {
+        node = node.parent;
+    }
+    return node.kind === SyntaxKind.AwaitExpression;
+}
+
+/** @internal */
 export function isSuperOrSuperProperty(node: Node): node is SuperExpression | SuperProperty {
     return node.kind === SyntaxKind.SuperKeyword
         || isSuperProperty(node);

@@ -1,0 +1,254 @@
+//// [tests/cases/conformance/controlFlow/controlFlowIIFE2.ts] ////
+
+=== controlFlowIIFE2.ts ===
+// #30625
+declare const x: string | undefined;
+>x : string | undefined
+
+declare const y: { z: string | undefined };
+>y : { z: string | undefined; }
+>z : string | undefined
+
+function needsString(it: string) {
+>needsString : (it: string) => string
+>it : string
+
+    return it;
+>it : string
+}
+
+function a() {
+>a : () => void
+
+    if (!x) {
+>!x : boolean
+>x : string | undefined
+
+        throw new Error("Missing x");
+>new Error("Missing x") : Error
+>Error : ErrorConstructor
+>"Missing x" : "Missing x"
+    }
+    const res1 = (() => needsString(x))();
+>res1 : string
+>(() => needsString(x))() : string
+>(() => needsString(x)) : () => string
+>() => needsString(x) : () => string
+>needsString(x) : string
+>needsString : (it: string) => string
+>x : string
+
+    const res2 = (async () => needsString(x))();
+>res2 : Promise<string>
+>(async () => needsString(x))() : Promise<string>
+>(async () => needsString(x)) : () => Promise<string>
+>async () => needsString(x) : () => Promise<string>
+>needsString(x) : string
+>needsString : (it: string) => string
+>x : string
+
+    if (!y.z) {
+>!y.z : boolean
+>y.z : string | undefined
+>y : { z: string | undefined; }
+>z : string | undefined
+
+        throw new Error("Missing z.");
+>new Error("Missing z.") : Error
+>Error : ErrorConstructor
+>"Missing z." : "Missing z."
+    }
+
+    const res3 = (() => needsString(y.z))();
+>res3 : string
+>(() => needsString(y.z))() : string
+>(() => needsString(y.z)) : () => string
+>() => needsString(y.z) : () => string
+>needsString(y.z) : string
+>needsString : (it: string) => string
+>y.z : string
+>y : { z: string | undefined; }
+>z : string
+
+    const res4 = (async () => needsString(y.z))(); // should not error
+>res4 : Promise<string>
+>(async () => needsString(y.z))() : Promise<string>
+>(async () => needsString(y.z)) : () => Promise<string>
+>async () => needsString(y.z) : () => Promise<string>
+>needsString(y.z) : string
+>needsString : (it: string) => string
+>y.z : string
+>y : { z: string | undefined; }
+>z : string
+}
+
+// #38929
+class MyClass {
+>MyClass : MyClass
+
+    public foo: number;
+>foo : number
+
+    constructor() {
+        this.foo = 0;
+>this.foo = 0 : 0
+>this.foo : number
+>this : this
+>foo : number
+>0 : 0
+
+        (async () => this.foo + 5)(); // should not error
+>(async () => this.foo + 5)() : Promise<number>
+>(async () => this.foo + 5) : () => Promise<number>
+>async () => this.foo + 5 : () => Promise<number>
+>this.foo + 5 : number
+>this.foo : number
+>this : this
+>foo : number
+>5 : 5
+    }
+}
+
+async function f1() {
+>f1 : () => Promise<void>
+
+    let x: string | undefined;
+>x : string | undefined
+
+    let y: string | undefined;
+>y : string | undefined
+
+    (async () => {
+>(async () => {        x = "";        await 2;        y = "";    })() : Promise<void>
+>(async () => {        x = "";        await 2;        y = "";    }) : () => Promise<void>
+>async () => {        x = "";        await 2;        y = "";    } : () => Promise<void>
+
+        x = "";
+>x = "" : ""
+>x : string | undefined
+>"" : ""
+
+        await 2;
+>await 2 : 2
+>2 : 2
+
+        y = "";
+>y = "" : ""
+>y : string | undefined
+>"" : ""
+
+    })();
+    x.toLowerCase(); // ideally should not error, but unfortunately does
+>x.toLowerCase() : string
+>x.toLowerCase : () => string
+>x : string | undefined
+>toLowerCase : () => string
+
+    y.toLowerCase(); // should error
+>y.toLowerCase() : string
+>y.toLowerCase : () => string
+>y : string | undefined
+>toLowerCase : () => string
+}
+
+async function f2() {
+>f2 : () => Promise<void>
+
+    let x: string | undefined;
+>x : string | undefined
+
+    await (async () => {
+>await (async () => {        x = "";    })() : void
+>(async () => {        x = "";    })() : Promise<void>
+>(async () => {        x = "";    }) : () => Promise<void>
+>async () => {        x = "";    } : () => Promise<void>
+
+        x = "";
+>x = "" : ""
+>x : string | undefined
+>"" : ""
+
+    })();
+    x.toLowerCase(); // should not error
+>x.toLowerCase() : string
+>x.toLowerCase : () => string
+>x : string
+>toLowerCase : () => string
+}
+
+async function f3() {
+>f3 : () => Promise<void>
+
+    let x: string | undefined;
+>x : string | undefined
+
+    await (async () => {
+>await (async () => {        x = "";    })() : void
+>(async () => {        x = "";    })() : Promise<void>
+>(async () => {        x = "";    }) : () => Promise<void>
+>async () => {        x = "";    } : () => Promise<void>
+
+        x = "";
+>x = "" : ""
+>x : string | undefined
+>"" : ""
+
+    })();
+    x.toLowerCase(); // should not error
+>x.toLowerCase() : string
+>x.toLowerCase : () => string
+>x : string
+>toLowerCase : () => string
+}
+
+async function f4() {
+>f4 : () => Promise<void>
+
+    let x = "";
+>x : string
+>"" : ""
+
+    (() => {
+>(() => {        throw new Error("");    })() : never
+>(() => {        throw new Error("");    }) : () => never
+>() => {        throw new Error("");    } : () => never
+
+        throw new Error("");
+>new Error("") : Error
+>Error : ErrorConstructor
+>"" : ""
+
+    })();
+    x.toLowerCase(); // should error. unreachable
+>x.toLowerCase() : string
+>x.toLowerCase : () => string
+>x : string
+>toLowerCase : () => string
+}
+
+async function f5() {
+>f5 : () => Promise<void>
+
+    let x = "";
+>x : string
+>"" : ""
+
+    await (async () => {
+>await (async () => {        throw new Error("");    })() : never
+>(async () => {        throw new Error("");    })() : Promise<never>
+>(async () => {        throw new Error("");    }) : () => Promise<never>
+>async () => {        throw new Error("");    } : () => Promise<never>
+
+        throw new Error("");
+>new Error("") : Error
+>Error : ErrorConstructor
+>"" : ""
+
+    })();
+    x.toLowerCase(); // should error. unreachable
+>x.toLowerCase() : string
+>x.toLowerCase : () => string
+>x : string
+>toLowerCase : () => string
+}
+
