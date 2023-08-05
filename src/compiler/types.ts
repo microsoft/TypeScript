@@ -6594,7 +6594,7 @@ export interface TypeParameter extends InstantiableType {
     /** @internal */
     resolvedDefaultType?: Type;
     /** @internal */
-    exprName?: EntityName;
+    exprName?: EntityName | null;
 }
 
 /** @internal */

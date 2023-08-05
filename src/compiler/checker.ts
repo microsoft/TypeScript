@@ -950,7 +950,6 @@ import {
     shouldResolveJsRequire,
     Signature,
     SignatureDeclaration,
-    SignatureDeclarationBase,
     SignatureFlags,
     SignatureKind,
     singleElementArray,
@@ -17830,7 +17829,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
                 // When we're looking at making an inference for an infer type, when we get its constraint, it'll automagically be
-                // instantiated with the context, so it doesn't need the mapper for the inference contex - however the constraint
+                // instantiated with the context, so it doesn't need the mapper for the inference context - however the constraint
                 // may refer to another _root_, _uncloned_ `infer` type parameter [1], or to something mapped by `mapper` [2].
                 // [1] Eg, if we have `Foo<T, U extends T>` and `Foo<number, infer B>` - `B` is constrained to `T`, which, in turn, has been instantiated
                 // as `number`
@@ -17838,7 +17837,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // [2] Eg, if we have `Foo<T, U extends T>` and `Foo<Q, infer B>` where `Q` is mapped by `mapper` into `number` - `B` is constrained to `T`
                 // which is in turn instantiated as `Q`, which is in turn instantiated as `number`.
                 // So we need to:
-                //    * Clone the type parameters so their constraints can be instantiated in the context of `mapper` (otherwise theyd only get inference context information)
+                //    * Clone the type parameters so their constraints can be instantiated in the context of `mapper` (otherwise they'd only get inference context information)
                 //    * Set the clones to both map the conditional's enclosing `mapper` and the original params
                 //    * instantiate the extends type with the clones
                 //    * incorporate all of the component mappers into the combined mapper for the true and false members
@@ -17873,7 +17872,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
             if (!checkTypeDeferred && !isDeferredType(inferredExtendsType, checkTuples)) {
-                // Return falseType for a definitely false extends check. We check an instantiations of the two
+                // Return falseType for a definitely false extends check. We check an instantiation of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
@@ -18025,12 +18024,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
             }
-            // >> TODO: (some) calls to `instantiateType` should be calls to instantiate narrow type worker etc
-            // const checkType = root.isDistributive
-                // ? instantiateNarrowType(getActualTypeVariable(root.checkType), narrowMapper, mapper)
-                // : instantiateNarrowType(getActualTypeVariable(root.checkType), narrowMapper, mapper);
-            const checkType = instantiateNarrowType(getActualTypeVariable(root.checkType), narrowMapper, mapper);
-            const extendsType = instantiateType(root.extendsType, mapper);
+            // >> TODO: we should only do this instantiation with `narrowMapper` if checktype is distributive
+            // >> TODO: what about if root is substitution type? should we still instantiate it??
+            const checkType = root.isDistributive ?
+                instantiateType(getActualTypeVariable(root.checkType), combineTypeMappers(mapper, narrowMapper)) :
+                // >> TODO: in what order can we combine mappers? mapper first guarantess the mapping from check type to a
+                // type of a union comes first in the distributive case,
+                // but then if narrow mapper refers to a variable in mapper, it won't be properly instantiated.
+                // but can that even happen?
+                instantiateType(getActualTypeVariable(root.checkType), mapper);
+            const extendsType = instantiateType(root.extendsType, mapper); // >> TODO: Type parameter narrowing should not affect the extends type. Except it does here, because the mapper will have info from `narrowType` in case this is distributive, from the `getNarrowConditionalTypeInstantiation` caller
             if (checkType === errorType || extendsType === errorType) {
                 return errorType;
             }
@@ -18091,7 +18094,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
             // if (!checkTypeDeferred && !isDeferredType(inferredExtendsType, checkTuples)) {
             if (true) {
-                // Return falseType for a definitely false extends check. We check an instantiations of the two
+                // Return falseType for a definitely false extends check. We check an instantiation of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
@@ -18110,7 +18113,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             root = newRoot;
                             continue;
                         }
-                        if (canTailRecurse(falseType, mapper)) {
+                        if (canTailRecurse(falseType, narrowMapper, mapper)) { // >> TODO: should this be `mapper` or `narrowMapper`?
                             continue;
                         }
                     }
@@ -18125,17 +18128,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
                     const trueType = getTypeFromTypeNode(root.node.trueType);
                     const trueMapper = combinedMapper || mapper;
-                    if (canTailRecurse(trueType, trueMapper)) {
+                    if (canTailRecurse(trueType, narrowMapper, trueMapper)) {
                         continue;
                     }
                     result = instantiateNarrowType(trueType, narrowMapper, trueMapper);
                     break;
                 }
-                // >> TODO: let's see
+                // >> TODO: document why/when we need this
                 if (isTypeStrictSubtypeOf(checkType, inferredExtendsType)) {
                     const trueType = getTypeFromTypeNode(root.node.trueType);
                     const trueMapper = combinedMapper || mapper;
-                    if (canTailRecurse(trueType, trueMapper)) {
+                    if (canTailRecurse(trueType, narrowMapper, trueMapper)) {
                         continue;
                     }
                     result = instantiateNarrowType(trueType, narrowMapper, trueMapper);
@@ -18145,28 +18148,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Return a deferred type for a check that is neither definitely true nor definitely false
             result = createType(TypeFlags.Conditional) as ConditionalType;
             result.root = root;
-            result.checkType = instantiateType(root.checkType, mapper); // >> TODO: what `instantiate` should this one be?
-            result.extendsType = instantiateType(root.extendsType, mapper); // >> TODO: what `instantiate` should this one be?
+            result.checkType = instantiateType(root.checkType, mapper);
+            result.extendsType = instantiateType(root.extendsType, mapper);
             result.mapper = mapper;
             result.combinedMapper = combinedMapper;
             result.aliasSymbol = aliasSymbol || root.aliasSymbol;
             result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
+            // >> TODO: narrowly instantiate true and false branch? No, it doesn't seem that useful
             break;
         }
-        // return extraTypes ? getUnionType(append(extraTypes, result)) : result; // >> TODO: should be intersection
         return extraTypes ? getIntersectionType(append(extraTypes, result)) : result;
         // We tail-recurse for generic conditional types that (a) have not already been evaluated and cached, and
         // (b) are non distributive, have a check type that is unaffected by instantiation, or have a non-union check
         // type. Note that recursion is possible only through aliased conditional types, so we only increment the tail
         // recursion counter for those.
-        function canTailRecurse(newType: Type, newMapper: TypeMapper | undefined) { // >> TODO: do we need to update this?
-            if (newType.flags & TypeFlags.Conditional && newMapper) {
+        function canTailRecurse(newType: Type, narrowMapper: TypeMapper, newMapper: TypeMapper | undefined) {
+            if (newType.flags & TypeFlags.Conditional && newMapper) { // >> TODO: do we need to use `narrowMapper` here?
                 const newRoot = (newType as ConditionalType).root;
                 if (newRoot.outerTypeParameters) {
                     const typeParamMapper = combineTypeMappers((newType as ConditionalType).mapper, newMapper);
                     const typeArguments = map(newRoot.outerTypeParameters, t => getMappedType(t, typeParamMapper));
                     const newRootMapper = createTypeMapper(newRoot.outerTypeParameters, typeArguments);
-                    const newCheckType = newRoot.isDistributive ? getMappedType(newRoot.checkType, newRootMapper) : undefined;
+                    const newCheckType = newRoot.isDistributive ?
+                        // getMappedType(newRoot.checkType, newRootMapper) :
+                        instantiateType(getActualTypeVariable(root.checkType), combineTypeMappers(mapper, narrowMapper)) : // >> TODO: I think now we need to actually instantiate it fully to see if the new check type is union or not, because now we have two mappers
+                        undefined;
                     if (!newCheckType || newCheckType === newRoot.checkType || !(newCheckType.flags & (TypeFlags.Union | TypeFlags.Never))) {
                         root = newRoot;
                         mapper = newRootMapper;
@@ -19285,6 +19291,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
+    /**
+     * This is similar to `instantiateType`, but with behavior specific to narrowing a return type based on control flow for type parameters.
+     */
     function instantiateNarrowType(type: Type, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, noTopLevel?: boolean): Type;
     function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, noTopLevel?: boolean): Type | undefined;
     function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, noTopLevel = false): Type | undefined {
@@ -19297,7 +19306,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         mapper: TypeMapper | undefined,
         aliasSymbol: Symbol | undefined,
         aliasTypeArguments: readonly Type[] | undefined,
-        noTopLevel: boolean): Type {
+        _noTopLevel: boolean): Type {
         if (!couldContainTypeVariables(type)) {
             return type;
         }
@@ -19305,84 +19314,63 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We have reached 100 recursive type instantiations, or 5M type instantiations caused by the same statement
             // or expression. There is a very high likelyhood we're dealing with a combination of infinite generic types
             // that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
-            tracing?.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
+            tracing?.instant(tracing.Phase.CheckTypes, "instantiateNarrowType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
             return errorType;
         }
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
-        const result = instantiateNarrowTypeWorker(type, narrowMapper, mapper, aliasSymbol, aliasTypeArguments, noTopLevel);
+        const result = instantiateNarrowTypeWorker(type, narrowMapper, mapper, aliasSymbol, aliasTypeArguments /*, noTopLevel*/);
         instantiationDepth--;
         return result;
     }
+
+    /**
+     *
+     * @param narrowMapper special mapper that has mappings originating from type parameter narrowing, and should only be considered in some places
+     * @param mapper the usual mapper that should be used for all instantiations
+     */
     function instantiateNarrowTypeWorker(
         type: Type,
         narrowMapper: TypeMapper,
         mapper: TypeMapper | undefined,
         aliasSymbol: Symbol | undefined,
         aliasTypeArguments: readonly Type[] | undefined,
-        noTopLevel: boolean): Type {
+        // noTopLevel: boolean): Type {
+        ): Type {
         const flags = type.flags;
-        if (flags & TypeFlags.TypeParameter) {
-            if (noTopLevel) {
-                return type;
-            }
-            return getMappedType(type, combineTypeMappers(mapper, narrowMapper));
-        }
-        // if (flags & TypeFlags.Object) {
-        //     const objectFlags = (type as ObjectType).objectFlags;
-        //     if (objectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
-        //         if (objectFlags & ObjectFlags.Reference && !(type as TypeReference).node) {
-        //             const resolvedTypeArguments = (type as TypeReference).resolvedTypeArguments;
-        //             const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-        //             return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((type as TypeReference).target, newTypeArguments) : type;
-        //         }
-        //         if (objectFlags & ObjectFlags.ReverseMapped) {
-        //             return instantiateReverseMappedType(type as ReverseMappedType, mapper);
-        //         }
-        //         return getObjectTypeInstantiation(type as TypeReference | AnonymousType | MappedType, mapper, aliasSymbol, aliasTypeArguments);
-        //     }
-        //     return type;
-        // }
-        // if (flags & TypeFlags.UnionOrIntersection) {
-        //     const origin = type.flags & TypeFlags.Union ? (type as UnionType).origin : undefined;
-        //     const types = origin && origin.flags & TypeFlags.UnionOrIntersection ? (origin as UnionOrIntersectionType).types : (type as UnionOrIntersectionType).types;
-        //     const newTypes = instantiateTypes(types, mapper);
-        //     if (newTypes === types && aliasSymbol === type.aliasSymbol) {
+        // if (flags & TypeFlags.TypeParameter) {
+        //     // We don't want to narrowly instantiate a return type that is just a type parameter.
+        //     if (noTopLevel) {
         //         return type;
         //     }
-        //     const newAliasSymbol = aliasSymbol || type.aliasSymbol;
-        //     const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
-        //     return flags & TypeFlags.Intersection || origin && origin.flags & TypeFlags.Intersection ?
-        //         getIntersectionType(newTypes, newAliasSymbol, newAliasTypeArguments) :
-        //         getUnionType(newTypes, UnionReduction.Literal, newAliasSymbol, newAliasTypeArguments);
-        // }
-        // if (flags & TypeFlags.Index) {
-        //     return getIndexType(instantiateType((type as IndexType).type, mapper));
-        // }
-        // if (flags & TypeFlags.TemplateLiteral) {
-        //     return getTemplateLiteralType((type as TemplateLiteralType).texts, instantiateTypes((type as TemplateLiteralType).types, mapper));
-        // }
-        // if (flags & TypeFlags.StringMapping) {
-        //     return getStringMappingType((type as StringMappingType).symbol, instantiateType((type as StringMappingType).type, mapper));
+        //     return getMappedType(type, combineTypeMappers(mapper, narrowMapper));
         // }
         if (flags & TypeFlags.IndexedAccess) {
-            // >> TODO: what's that extra alias stuff here?
+            // >> TODO: what's that extra alias stuff here doing?
             const newAliasSymbol = aliasSymbol || type.aliasSymbol;
             const newAliasTypeArguments = aliasSymbol || !mapper ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
-            const objectType = instantiateType((type as IndexedAccessType).objectType, mapper);
-            let indexType = instantiateType((type as IndexedAccessType).indexType, mapper);
+            const objectType = instantiateNarrowType((type as IndexedAccessType).objectType, narrowMapper, mapper);
+            let indexType = instantiateNarrowType((type as IndexedAccessType).indexType, narrowMapper, mapper);
+            let accessFlags = (type as IndexedAccessType).accessFlags;
             if (indexType.flags & TypeFlags.TypeParameter) {
                 indexType = getMappedType(indexType, narrowMapper);
+                accessFlags |= AccessFlags.Writing; // Get the writing type
             }
-            return getIndexedAccessType(
+            // >> NOTE: this possibly recurses forever; how do we break this recursion? is the below enough?
+            if (indexType === (type as IndexedAccessType).indexType && objectType === (type as IndexedAccessType).objectType) {
+                return type; // No type reduction or narrowing happened; so don't do anything else to avoid infinite recursion
+            }
+            const result = getIndexedAccessType(
                 objectType,
                 indexType,
-                (type as IndexedAccessType).accessFlags | AccessFlags.Writing, // Get the writing type
+                accessFlags,
                 /*accessNode*/ undefined,
                 newAliasSymbol,
                 newAliasTypeArguments);
+            // >> NOTE: We need to detect if result is different from just putting the already resolved types together
+            return instantiateNarrowType(result, narrowMapper, mapper);
         }
         if (flags & TypeFlags.Conditional) {
             return getNarrowConditionalTypeInstantiation(
@@ -19392,7 +19380,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 aliasSymbol,
                 aliasTypeArguments);
         }
-        // if (flags & TypeFlags.Substitution) {
+        // if (flags & TypeFlags.Substitution) { // >> TODO: why/when do we even need this?? If we're not doing anything special with narrow mapper, then we can just rely on the common case below and remove this
         //     const newBaseType = instantiateType((type as SubstitutionType).baseType, mapper);
         //     const newConstraint = instantiateType((type as SubstitutionType).constraint, mapper);
         //     // A substitution type originates in the true branch of a conditional type and can be resolved
@@ -19406,24 +19394,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //     }
         //     return newBaseType.flags & TypeFlags.TypeVariable ? getSubstitutionType(newBaseType, newConstraint) : getIntersectionType([newConstraint, newBaseType]);
         // }
-        return type;
+
+        return instantiateType(type, mapper);
     }
 
-    function getNarrowConditionalTypeInstantiation(type: ConditionalType, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+    function getNarrowConditionalTypeInstantiation(
+        type: ConditionalType,
+        narrowMapper: TypeMapper,
+        mapper: TypeMapper | undefined,
+        aliasSymbol?: Symbol,
+        aliasTypeArguments?: readonly Type[]): Type {
         const root = type.root;
         if (root.outerTypeParameters) {
             // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
             // mapper to the type parameters to produce the effective list of type arguments, and compute the
             // instantiation cache key from the type IDs of the type arguments.
             const typeArguments = mapper ? map(root.outerTypeParameters, t => getMappedType(t, mapper)) : root.outerTypeParameters;
-            // >> No caching
+            // >> No caching yet
             // const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
             // let result = root.instantiations!.get(id);
             // if (!result) {
             let result;
             const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
             const checkType = root.checkType;
-            const distributionType = root.isDistributive ? getMappedType(checkType, combineTypeMappers(newMapper, narrowMapper)) : undefined;
+            // >> TODO: what should be the mapper order here??
+            const distributionType = root.isDistributive ? getMappedType(checkType, combineTypeMappers(narrowMapper, newMapper)) : undefined;
             // Distributive conditional types are distributed over union types. For example, when the
             // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
             // result is (A extends U ? X : Y) | (B extends U ? X : Y).
@@ -19436,7 +19431,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         prependTypeMapping(checkType, t, newMapper)),
                     aliasSymbol,
                     aliasTypeArguments,
-                    /*useIntersection*/ true);
+                    /*useIntersection*/ true); // We use the intersection instead of unioning over the conditional types,
+                    // because we want the write type so that it is safe
             }
             else {
                 result = getNarrowConditionalType(root, narrowMapper, newMapper, aliasSymbol, aliasTypeArguments);
@@ -19445,7 +19441,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // }
             return result;
         }
-        return type;
+        return type; // >> TODO: narrowly instantiate true and false branch
     }
 
     function instantiateReverseMappedType(type: ReverseMappedType, mapper: TypeMapper) {
@@ -26409,7 +26405,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let mappedTypes: Type[] | undefined;
         let changed = false;
         for (const t of types) {
-            const mapped = t.flags & TypeFlags.Union ? mapType(t, mapper, noReductions) : mapper(t);
+            const mapped = t.flags & TypeFlags.Union ? mapType(t, mapper, noReductions, useIntersection) : mapper(t);
             changed ||= t !== mapped;
             if (mapped) {
                 if (!mappedTypes) {
@@ -26425,8 +26421,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function mapTypeWithAlias(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, useIntersection = false) {
         return type.flags & TypeFlags.Union && aliasSymbol ?
-            (useIntersection ? getIntersectionType(map((type as UnionType).types, mapper), aliasSymbol, aliasTypeArguments) : getUnionType(map((type as UnionType).types, mapper), UnionReduction.Literal, aliasSymbol, aliasTypeArguments)) :
-            mapType(type, mapper, useIntersection);
+            (useIntersection ?
+                getIntersectionType(map((type as UnionType).types, mapper), aliasSymbol, aliasTypeArguments) :
+                getUnionType(map((type as UnionType).types, mapper), UnionReduction.Literal, aliasSymbol, aliasTypeArguments)) :
+            mapType(type, mapper, /*noReductions*/ undefined, useIntersection);
     }
 
     function extractTypesOfKind(type: Type, kind: TypeFlags) {
@@ -29833,7 +29831,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return contextualTypes[index];
         }
         const links = getNodeLinks(node);
-        if (node.kind !== SyntaxKind.ReturnStatement && links.contextualReturnType) {
+        if (links.contextualReturnType) {
+            if (node.flags & NodeFlags.AwaitContext) {
+                return getUnionType([links.contextualReturnType, createPromiseLikeType(links.contextualReturnType)]);
+            }
             return links.contextualReturnType;
         }
         const { parent } = node;
@@ -42727,106 +42728,52 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (getReturnTypeFromAnnotation(container)) {
                 const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
-                let actualReturnType = unwrappedReturnType;
-                // /* Begin weird stuff */
-                // const links = node.expression && getNodeLinks(node.expression);
-                // if (links && !links.contextualReturnType) {
-                //     const outerTypeParameters = getOuterTypeParameters(container, /*includeThisTypes*/ false);
-                //     const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
-                //     const queryTypeParameters = typeParameters?.filter(isQueryTypeParameter);
-                //     if (queryTypeParameters) {
-                //         const narrowMapper = createTypeMapper(queryTypeParameters, queryTypeParameters.map(tp => {
-                //             const originalName = tp.exprName;
-                //             const fakeName = factory.cloneNode(originalName); // Fake a narrowable node.
-                //             setParent(fakeName, node.parent);
-                //             setNodeFlags(fakeName, fakeName.flags | NodeFlags.Synthesized);
-                //             fakeName.flowNode = node.flowNode;
-                //             // >> TODO: this call to checkExpression might report errors,
-                //             // >> and so might throw when trying to get span for fakeName.
-                //             // >> TODO: also, it shouldn't throw errors.
-                //             const exprType = checkExpression(fakeName);
-                //             // >> TODO: is there a better way of detecting that narrowing will be useless?
-                //             // >> https://github.com/microsoft/TypeScript/issues/51525 might help
-                //             if (getConstraintOfTypeParameter(tp)) {
-                //                 const narrowableConstraintType = mapType(tp.constraint!, getBaseConstraintOrType);
-                //                 if (narrowableConstraintType === exprType) {
-                //                     return tp; // Don't narrow if narrowing didn't do anything but obtain constraints
-                //                     // >> TODO: exclude such type parameters from the mapper
-                //                 }
-                //             }
-                //             return exprType;
-                //         }));
-                //         // >> TODO: don't instantiate at the top level
-                //         actualReturnType = instantiateNarrowType(
-                //             unwrappedReturnType,
-                //             narrowMapper,
-                //             /*mapper*/ undefined,
-                //             /*noTopLevel*/ true,
-                //         );
-                //     }
-                //     links.contextualReturnType = actualReturnType; // >> maybe don't store this if we don't need to?
-                // }
-                // /* End weird stuff */
-                // const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
-                // const unwrappedExprType = functionFlags & FunctionFlags.Async
-                //     ? checkAwaitedType(exprType, /*withAlias*/ false, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
-                //     : exprType;
-                // // if (unwrappedReturnType) {
-                // if (actualReturnType) {
-                //     // If the function has a return type, but promisedType is
-                //     // undefined, an error will be reported in checkAsyncFunctionReturnType
-                //     // so we don't need to report one here.
-                //     // checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, node, node.expression);
-                //     checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, actualReturnType, node, node.expression);
-                // }
-
                 checkReturnStatementExpression(node.expression);
 
                 function checkReturnStatementExpression(expr: Expression | undefined): void {
-                    // >> TODO: implement this
-                    // >> TODO: skip parentheses
-                    if (expr && isConditionalExpression(expr)) {
-                        return checkReturnConditionalExpression(expr);
-                    }
-                    // >> ELSE: base case: just do the checks
-                    /* Begin weird stuff */
-                    const links = expr && getNodeLinks(expr);
-                    if (links && !links.contextualReturnType) {
-                        const outerTypeParameters = getOuterTypeParameters(container!, /*includeThisTypes*/ false);
-                        const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
-                        const queryTypeParameters = typeParameters?.filter(isQueryTypeParameter);
-                        if (queryTypeParameters) {
-                            const narrowMapper = createTypeMapper(queryTypeParameters, queryTypeParameters.map(tp => {
-                                const originalName = tp.exprName;
-                                const fakeName = factory.cloneNode(originalName); // Fake a narrowable node.
-                                const fakePosition = isConditionalExpression(expr.parent) ? expr : expr.parent;
-                                setParent(fakeName, fakePosition.parent);
-                                setNodeFlags(fakeName, fakeName.flags | NodeFlags.Synthesized);
-                                fakeName.flowNode = (fakePosition as HasFlowNode).flowNode;
-                                // >> TODO: this call to checkExpression might report errors,
-                                // >> and so might throw when trying to get span for fakeName.
-                                // >> TODO: also, it shouldn't throw errors.
-                                const exprType = checkExpression(fakeName);
-                                // >> TODO: is there a better way of detecting that narrowing will be useless?
-                                // >> https://github.com/microsoft/TypeScript/issues/51525 might help
-                                if (getConstraintOfTypeParameter(tp)) {
-                                    const narrowableConstraintType = mapType(tp.constraint!, getBaseConstraintOrType);
-                                    if (narrowableConstraintType === exprType) {
-                                        return tp; // Don't narrow if narrowing didn't do anything but obtain constraints
-                                        // >> TODO: exclude such type parameters from the mapper
-                                    }
-                                }
-                                return exprType;
-                            }));
-                            // >> TODO: don't instantiate at the top level
-                            actualReturnType = instantiateNarrowType(
-                                unwrappedReturnType,
-                                narrowMapper,
-                                /*mapper*/ undefined,
-                                /*noTopLevel*/ true,
-                            );
+                    let actualReturnType = unwrappedReturnType;
+                    if (expr) {
+                        expr = skipParentheses(expr);
+                        if (isConditionalExpression(expr)) {
+                            return checkReturnConditionalExpression(expr);
                         }
-                        links.contextualReturnType = actualReturnType; // >> maybe don't store this if we don't need to?
+                        /* Begin weird stuff */
+                        const links = getNodeLinks(expr);
+                        if (!links.contextualReturnType) {
+                            const outerTypeParameters = getOuterTypeParameters(container!, /*includeThisTypes*/ false);
+                            const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
+                            const queryTypeParameters = typeParameters?.filter(isQueryTypeParameter);
+                            if (queryTypeParameters) {
+                                const narrowParent = isConditionalExpression(expr.parent) ? expr : expr.parent;
+                                const narrowed: [TypeParameter, Type][] = mapDefined(queryTypeParameters, tp => {
+                                    const narrowReference = factory.cloneNode(tp.exprName); // Construct a reference that can be narrowed.
+                                    setParent(narrowReference, narrowParent.parent);
+                                    setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
+                                    narrowReference.flowNode = (narrowParent as HasFlowNode).flowNode;
+                                    // >> TODO: this call to checkExpression might report errors,
+                                    // >> and so might throw when trying to get span for fakeName.
+                                    // >> TODO: also, it shouldn't throw errors. Maybe we can reuse `CheckMode.TypeOnly`?
+                                    const exprType = checkExpression(narrowReference);
+                                    // >> TODO: is there a better way of detecting that narrowing will be useless?
+                                    // >> https://github.com/microsoft/TypeScript/issues/51525 might help
+                                    if (getConstraintOfTypeParameter(tp)) {
+                                        const narrowableConstraintType = mapType(tp.constraint!, getBaseConstraintOrType);
+                                        if (narrowableConstraintType === exprType) {
+                                            return undefined; // Don't narrow if narrowing didn't do anything but obtain constraints
+                                        }
+                                    }
+                                    return [tp, exprType];
+                                });
+                                const narrowMapper = createTypeMapper(narrowed.map(([tp, _]) => tp), narrowed.map(([_, t]) => t));
+                                actualReturnType = instantiateNarrowType(
+                                    unwrappedReturnType,
+                                    narrowMapper,
+                                    /*mapper*/ undefined,
+                                    /*noTopLevel*/ true,
+                                );
+                            }
+                            links.contextualReturnType = actualReturnType;
+                        }
                     }
                     /* End weird stuff */
                     const exprType = expr ? checkExpressionCached(expr) : undefinedType;
@@ -42841,8 +42788,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // If the function has a return type, but promisedType is
                         // undefined, an error will be reported in checkAsyncFunctionReturnType
                         // so we don't need to report one here.
-                        // checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, node, node.expression);
-                        checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, actualReturnType, node, expr); // >> TODO: should this be node or expr?
+                         // >> TODO: should this be node or expr?
+                        const errorNode = node.expression && isConditionalExpression(skipParentheses(node.expression)) ? expr : node;
+                        checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, actualReturnType, errorNode, expr);
                     }
                 }
 
@@ -42859,9 +42807,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isQueryTypeParameter(typeParameter: TypeParameter): typeParameter is TypeParameter & { exprName: EntityName } {
-        if (typeParameter.exprName) {
-            return true; // >> TODO: also have a way to mark a type parameter as not a query one
-        }
         if (isThisTypeParameter(typeParameter)) {
             return false;
         }
@@ -42869,44 +42814,46 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
             // >> TODO: deal with synthetic tps?
         }
+        if (typeParameter.exprName) {
+            return true;
+        }
+        if (typeParameter.exprName === null) {
+            return false;
+        }
+
+        typeParameter.exprName = null;
+        // It should have a type parameter declaration because it is not a `this` type parameter, and it has a symbol
         const declaration = getDeclarationOfKind(typeParameter.symbol, SyntaxKind.TypeParameter)!;
         const owner = getTypeParameterOwner(declaration);
         if (!owner || !isFunctionLikeDeclaration(owner)) {
             return false; // Owner is class or interface, or a signature without an implementation
         }
-        const references: Node[] = []; // All nodes of kind `T` that resolve to the type parameter
-        owner.parameters.forEach(parameter => forEachChild(parameter, collectReferences));
+        const references: Node[] = []; // All parameter type nodes that look like `T` that resolve to the type parameter.
+        owner.parameters.forEach(parameter => parameter.type && collectReferences(parameter.type));
         if (references.length === 1) {
             const reference = references[0];
             let exprName;
-            if (isParameter(reference.parent) && reference.parent.parent === owner && (exprName = getNameOfDeclaration(reference.parent))) {
-                typeParameter.exprName = exprName as Identifier;
+            if (isParameter(reference.parent) &&
+                reference.parent.parent === owner &&
+                (exprName = getNameOfDeclaration(reference.parent)) &&
+                isIdentifier(exprName)) {
+                typeParameter.exprName = exprName;
                 return true;
             }
         }
         return false;
 
         function collectReferences(node: Node) {
-            if (isFunctionLikeDeclaration(node.parent) && node === node.parent.body) {
-                return;
-            }
-            if (isNodeDescendantOf(node, (owner as SignatureDeclarationBase).type)) {
-                return;
-            }
             if (isTypeReferenceNode(node)) {
                 const type = getTypeFromTypeNode(node);
-                if (type.flags & TypeFlags.TypeParameter && isTypeIdenticalTo(type, typeParameter)) {
+                if (type.flags & TypeFlags.TypeParameter && getActualTypeVariable(type) === typeParameter) {
                     references.push(node);
                 }
                 return;
             }
+            // >> TODO: should we skip some kinds of type nodes? e.g. typeof _?
             forEachChild(node, collectReferences);
         }
-
-        // function collectPath(node: TypeNode) {
-        //     // Assumptions: start from a type parameter/reference node, go up to parents,
-
-        // }
     }
 
     function checkWithStatement(node: WithStatement) {

@@ -1983,7 +1983,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return false;
             }
             n = n.parent;
-            while (isOuterExpression(n)) {
+            while (isOuterExpression(n)) { // >> TODO: I think we should only skip parentheses
                 n = n.parent;
             }
         }
