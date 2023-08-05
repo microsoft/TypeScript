@@ -32875,7 +32875,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression | undefined {
         const expression = node.kind === SyntaxKind.CallExpression ? node.expression :
-            node.kind === SyntaxKind.TaggedTemplateExpression ? node.tag : undefined;
+            node.kind === SyntaxKind.TaggedTemplateExpression ? node.tag :
+            node.kind === SyntaxKind.Decorator && !legacyDecorators ? node.expression :
+            undefined;
         if (expression) {
             const callee = skipOuterExpressions(expression);
             if (isAccessExpression(callee)) {
