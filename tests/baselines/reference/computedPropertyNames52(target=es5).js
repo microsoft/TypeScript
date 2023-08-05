@@ -17,7 +17,7 @@ var _loop_1 = function (i) {
     var _b = void 0, _c = void 0;
     array.push((_c = /** @class */ (function () {
             function C() {
-                this[_b] = function () { return C; };
+                this[_b] = function () { return _c; };
             }
             return C;
         }()),

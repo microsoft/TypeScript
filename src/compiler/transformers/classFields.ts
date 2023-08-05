@@ -1718,6 +1718,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 }
                 else if (isPrivateIdentifierClassElementDeclaration(member)) {
                     containsInstancePrivateElements = true;
+                    if (resolver.getNodeCheckFlags(member) & NodeCheckFlags.ContainsConstructorReference) {
+                        facts |= ClassFacts.NeedsClassConstructorReference;
+                    }
                 }
                 else if (isPropertyDeclaration(member)) {
                     containsPublicInstanceFields = true;
@@ -1849,6 +1852,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             }
         }
 
+        const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsConstructorReference;
         const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
         const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
         let modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
@@ -1887,6 +1891,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
             ));
         }
 
+        const alias = getClassLexicalEnvironment().classConstructor;
+        if (isClassWithConstructorReference && alias) {
+            enableSubstitutionForClassAliases();
+            classAliases[getOriginalNodeId(node)] = alias;
+        }
+
         const classDecl = factory.updateClassDeclaration(
             node,
             modifiers,
@@ -1918,7 +1928,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // these statements after the class expression variable statement.
         const isDecoratedClassDeclaration = !!(facts & ClassFacts.ClassWasDecorated);
         const staticPropertiesOrClassStaticBlocks = getStaticPropertiesAndClassStaticBlock(node);
-        const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
+        const classCheckFlags = resolver.getNodeCheckFlags(node);
+        const isClassWithConstructorReference = classCheckFlags & NodeCheckFlags.ContainsConstructorReference;
 
         let temp: Identifier | undefined;
         function createClassTempVar() {
@@ -1935,7 +1946,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return getClassLexicalEnvironment().classConstructor = node.emitNode.classThis;
             }
 
-            const classCheckFlags = resolver.getNodeCheckFlags(node);
             const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
             const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
             getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
@@ -3236,7 +3246,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
     function trySubstituteClassAlias(node: Identifier): Expression | undefined {
         if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassAliases) {
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReferenceInClass) {
+            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReference) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
