@@ -20198,7 +20198,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const id = getSymbolId(sourceSymbol) + "," + getSymbolId(targetSymbol);
         const entry = enumRelation.get(id);
-        if (entry !== undefined && !(!(entry & RelationComparisonResult.Reported) && entry & RelationComparisonResult.Failed && errorReporter)) {
+        if (entry !== undefined && !(entry & RelationComparisonResult.Failed && errorReporter)) {
             return !!(entry & RelationComparisonResult.Succeeded);
         }
         const targetEnumType = getTypeOfSymbol(targetSymbol);
@@ -20206,13 +20206,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (property.flags & SymbolFlags.EnumMember) {
                 const targetProperty = getPropertyOfType(targetEnumType, property.escapedName);
                 if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
+                    enumRelation.set(id, RelationComparisonResult.Failed);
+
                     if (errorReporter) {
                         errorReporter(Diagnostics.Property_0_is_missing_in_type_1, symbolName(property),
                             typeToString(getDeclaredTypeOfSymbol(targetSymbol), /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
-                        enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
-                    }
-                    else {
-                        enumRelation.set(id, RelationComparisonResult.Failed);
                     }
                     return false;
                 }
@@ -21331,7 +21329,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
-                relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
+                relation.set(id, RelationComparisonResult.Failed | propagatingVarianceFlags);
                 resetMaybeStack(/*markAllAsSucceeded*/ false);
             }
             return result;
