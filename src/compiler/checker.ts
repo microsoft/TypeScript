@@ -2761,6 +2761,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return sourceFiles.indexOf(declarationFile) <= sourceFiles.indexOf(useFile);
         }
 
+        // deferred usage in a type context is always OK regardless of the usage position:
+        if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isInAmbientOrTypeNode(usage)) {
+            return true;
+        }
+
         if (declaration.pos <= usage.pos && !(isPropertyDeclaration(declaration) && isThisProperty(usage.parent) && !declaration.initializer && !declaration.exclamationToken)) {
             // declaration is before usage
             if (declaration.kind === SyntaxKind.BindingElement) {
@@ -2802,9 +2807,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //    (except when emitStandardClassFields: true and the reference is to a parameter property)
         // 4. inside a static property initializer, a reference to a static method in the same class
         // 5. inside a TS export= declaration (since we will move the export statement during emit to avoid TDZ)
-        // or if usage is in a type context:
-        // 1. inside a type query (typeof in type position)
-        // 2. inside a jsdoc comment
         if (usage.parent.kind === SyntaxKind.ExportSpecifier || (usage.parent.kind === SyntaxKind.ExportAssignment && (usage.parent as ExportAssignment).isExportEquals)) {
             // export specifiers do not use the variable, they only make it available for use
             return true;
@@ -2814,9 +2816,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-        if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isInAmbientOrTypeNode(usage)) {
-            return true;
-        }
         if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
             if (emitStandardClassFields
                 && getContainingClass(declaration)
