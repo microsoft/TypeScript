@@ -2,6 +2,7 @@ subtypingWithNumericIndexer3.ts(11,7): error TS2415: Class 'B' incorrectly exten
   'number' index signatures are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 subtypingWithNumericIndexer3.ts(24,23): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+  Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 subtypingWithNumericIndexer3.ts(32,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
   'number' index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
@@ -48,6 +49,8 @@ subtypingWithNumericIndexer3.ts(40,11): error TS2415: Class 'B5<T>' incorrectly 
         class B extends A<Base> {
                           ~~~~
 !!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+!!! error TS2344:   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 subtypingWithNumericIndexer3.ts:4:34: 'bar' is declared here.
             [x: number]: Derived; // error
         }
     

@@ -4,6 +4,7 @@ assignmentCompatability_checking-apply-member-off-of-function-interface.ts(12,1)
 assignmentCompatability_checking-apply-member-off-of-function-interface.ts(13,1): error TS2741: Property 'apply' is missing in type '{}' but required in type 'Applicable'.
 assignmentCompatability_checking-apply-member-off-of-function-interface.ts(22,4): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Applicable'.
 assignmentCompatability_checking-apply-member-off-of-function-interface.ts(23,4): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Applicable'.
+  Property 'apply' is missing in type 'string[]' but required in type 'Applicable'.
 assignmentCompatability_checking-apply-member-off-of-function-interface.ts(24,4): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Applicable'.
 assignmentCompatability_checking-apply-member-off-of-function-interface.ts(25,4): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Applicable'.
   Property 'apply' is missing in type '{}' but required in type 'Applicable'.
@@ -47,6 +48,8 @@ assignmentCompatability_checking-apply-member-off-of-function-interface.ts(25,4)
     fn(['']);
        ~~~~
 !!! error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Applicable'.
+!!! error TS2345:   Property 'apply' is missing in type 'string[]' but required in type 'Applicable'.
+!!! related TS2728 assignmentCompatability_checking-apply-member-off-of-function-interface.ts:4:5: 'apply' is declared here.
     fn(4);
        ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Applicable'.

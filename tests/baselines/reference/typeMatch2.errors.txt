@@ -9,6 +9,7 @@ typeMatch2.ts(18,5): error TS2322: Type 'Animal[]' is not assignable to type 'Gi
 typeMatch2.ts(22,5): error TS2322: Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }'.
   Types of property 'f2' are incompatible.
     Type 'Animal[]' is not assignable to type 'Giraffe[]'.
+      Property 'g' is missing in type 'Animal' but required in type 'Giraffe'.
 typeMatch2.ts(34,26): error TS2322: Type '{ x: number; y: any; z: number; }' is not assignable to type '{ x: number; y: number; }'.
   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
 typeMatch2.ts(35,5): error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
@@ -56,6 +57,8 @@ typeMatch2.ts(35,5): error TS2741: Property 'y' is missing in type '{ x: number;
 !!! error TS2322: Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }'.
 !!! error TS2322:   Types of property 'f2' are incompatible.
 !!! error TS2322:     Type 'Animal[]' is not assignable to type 'Giraffe[]'.
+!!! error TS2322:       Property 'g' is missing in type 'Animal' but required in type 'Giraffe'.
+!!! related TS2728 typeMatch2.ts:10:40: 'g' is declared here.
     }
     
     function f4() {

@@ -15,6 +15,7 @@ typeParamExtendsOtherTypeParam.ts(17,37): error TS2344: Type '{ a: string; }' do
 typeParamExtendsOtherTypeParam.ts(28,15): error TS2344: Type 'I1' does not satisfy the constraint 'I2'.
   Property 'b' is missing in type 'I1' but required in type 'I2'.
 typeParamExtendsOtherTypeParam.ts(29,15): error TS2344: Type 'I1' does not satisfy the constraint 'I2'.
+  Property 'b' is missing in type 'I1' but required in type 'I2'.
 
 
 ==== typeParamExtendsOtherTypeParam.ts (8 errors) ====
@@ -77,4 +78,6 @@ typeParamExtendsOtherTypeParam.ts(29,15): error TS2344: Type 'I1' does not satis
     var x8: B<I2, I1>;
                   ~~
 !!! error TS2344: Type 'I1' does not satisfy the constraint 'I2'.
+!!! error TS2344:   Property 'b' is missing in type 'I1' but required in type 'I2'.
+!!! related TS2728 typeParamExtendsOtherTypeParam.ts:25:5: 'b' is declared here.
     

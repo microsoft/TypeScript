@@ -3,6 +3,7 @@ castingTuple.ts(13,23): error TS2352: Conversion of type '[number, string]' to t
 castingTuple.ts(14,15): error TS2352: Conversion of type '[number, string, boolean]' to type '[number, string]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Source has 3 element(s) but target allows only 2.
 castingTuple.ts(15,14): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Source has 2 element(s) but target requires 3.
 castingTuple.ts(18,21): error TS2352: Conversion of type '[C, D]' to type '[C, D, A]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Source has 2 element(s) but target requires 3.
 castingTuple.ts(20,33): error TS2493: Tuple type '[C, D, A]' of length '3' has no element at index '5'.
@@ -40,6 +41,7 @@ castingTuple.ts(33,1): error TS2304: Cannot find name 't4'.
     var longer = numStrTuple as [number, string, boolean]
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Source has 2 element(s) but target requires 3.
     var classCDTuple: [C, D] = [new C(), new D()];
     var interfaceIITuple = <[I, I]>classCDTuple;
     var classCDATuple = <[C, D, A]>classCDTuple;

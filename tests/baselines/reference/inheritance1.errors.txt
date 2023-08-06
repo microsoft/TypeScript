@@ -5,7 +5,7 @@ inheritance1.ts(18,7): error TS2420: Class 'Locations' incorrectly implements in
 inheritance1.ts(31,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'Button'.
 inheritance1.ts(37,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'TextBox'.
 inheritance1.ts(40,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
-inheritance1.ts(46,1): error TS2322: Type 'Image1' is not assignable to type 'SelectableControl'.
+inheritance1.ts(46,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
 inheritance1.ts(52,1): error TS2741: Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
 inheritance1.ts(53,1): error TS2741: Property 'state' is missing in type 'Locations' but required in type 'Control'.
 inheritance1.ts(55,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations'.
@@ -79,7 +79,8 @@ inheritance1.ts(61,1): error TS2741: Property 'select' is missing in type 'Contr
     var i1: Image1;
     sc = i1;
     ~~
-!!! error TS2322: Type 'Image1' is not assignable to type 'SelectableControl'.
+!!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
+!!! related TS2728 inheritance1.ts:5:5: 'select' is declared here.
     c = i1;
     i1 = sc;
     i1 = c;

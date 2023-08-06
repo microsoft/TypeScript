@@ -1,6 +1,7 @@
 arrayFrom.ts(20,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 arrayFrom.ts(23,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
+  Property 'b' is missing in type 'A' but required in type 'B'.
 
 
 ==== arrayFrom.ts (2 errors) ====
@@ -33,6 +34,8 @@ arrayFrom.ts(23,7): error TS2322: Type 'A[]' is not assignable to type 'B[]'.
     const result6: B[] = Array.from(inputALike); // expect error
           ~~~~~~~
 !!! error TS2322: Type 'A[]' is not assignable to type 'B[]'.
+!!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 arrayFrom.ts:9:3: 'b' is declared here.
     const result7: B[] = Array.from(inputALike, ({ a }): B => ({ b: a }));
     const result8: A[] = Array.from(inputARand);
     const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));

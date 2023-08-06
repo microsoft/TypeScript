@@ -11,6 +11,8 @@ keyofAndIndexedAccess.ts(317,5): error TS2322: Type 'T[keyof T]' is not assignab
     Type 'T[string]' is not assignable to type '{}'.
 keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to type '{}'.
   Type 'T[keyof T]' is not assignable to type '{}'.
+    Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
+      Type 'T[string]' is not assignable to type '{}'.
 
 
 ==== keyofAndIndexedAccess.ts (5 errors) ====
@@ -351,6 +353,8 @@ keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to 
         ~
 !!! error TS2322: Type 'T[K]' is not assignable to type '{}'.
 !!! error TS2322:   Type 'T[keyof T]' is not assignable to type '{}'.
+!!! error TS2322:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{}'.
+!!! error TS2322:       Type 'T[string]' is not assignable to type '{}'.
     }
     
     function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {

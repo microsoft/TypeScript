@@ -3,6 +3,7 @@ classPropertyErrorOnNameOnly.ts(7,3): error TS2322: Type '(val: Values) => "1" |
     Type 'undefined' is not assignable to type 'string'.
 classPropertyErrorOnNameOnly.ts(24,7): error TS2322: Type '(val: Values) => "1" | "2" | "3" | "4" | "5" | undefined' is not assignable to type 'FuncType'.
   Type 'string | undefined' is not assignable to type 'string'.
+    Type 'undefined' is not assignable to type 'string'.
 
 
 ==== classPropertyErrorOnNameOnly.ts (2 errors) ====
@@ -37,6 +38,7 @@ classPropertyErrorOnNameOnly.ts(24,7): error TS2322: Type '(val: Values) => "1" 
           ~~~~~~~~~~~~
 !!! error TS2322: Type '(val: Values) => "1" | "2" | "3" | "4" | "5" | undefined' is not assignable to type 'FuncType'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
         switch (val) {
           case 1:
             return "1";
