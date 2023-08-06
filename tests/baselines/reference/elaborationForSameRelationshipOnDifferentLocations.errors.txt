@@ -1,0 +1,33 @@
+elaborationForSameRelationshipOnDifferentLocations.ts(18,10): error TS2345: Argument of type 'Snake' is not assignable to parameter of type 'CouponInfo'.
+  Property 'couponTag' is missing in type 'Snake' but required in type 'CouponInfo'.
+elaborationForSameRelationshipOnDifferentLocations.ts(19,5): error TS2741: Property 'couponTag' is missing in type 'Snake' but required in type 'CouponInfo'.
+
+
+==== elaborationForSameRelationshipOnDifferentLocations.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/3276
+    
+    class GenericThingamabob<T> {
+        constructor(private entity: T) {}
+        add(item: T) { }
+    }
+    
+    class CouponInfo {
+        private couponTag: {};
+    }
+    
+    class Snake {
+        private snakeTag: {};
+    }
+    
+    var blah = new GenericThingamabob(new CouponInfo());
+    
+    blah.add(new Snake());
+             ~~~~~~~~~~~
+!!! error TS2345: Argument of type 'Snake' is not assignable to parameter of type 'CouponInfo'.
+!!! error TS2345:   Property 'couponTag' is missing in type 'Snake' but required in type 'CouponInfo'.
+!!! related TS2728 elaborationForSameRelationshipOnDifferentLocations.ts:9:13: 'couponTag' is declared here.
+    var x: CouponInfo = new Snake();
+        ~
+!!! error TS2741: Property 'couponTag' is missing in type 'Snake' but required in type 'CouponInfo'.
+!!! related TS2728 elaborationForSameRelationshipOnDifferentLocations.ts:9:13: 'couponTag' is declared here.
+    

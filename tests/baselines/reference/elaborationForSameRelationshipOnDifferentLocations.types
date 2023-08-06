@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/elaborationForSameRelationshipOnDifferentLocations.ts] ////
+
+=== elaborationForSameRelationshipOnDifferentLocations.ts ===
+// https://github.com/microsoft/TypeScript/issues/3276
+
+class GenericThingamabob<T> {
+>GenericThingamabob : GenericThingamabob<T>
+
+    constructor(private entity: T) {}
+>entity : T
+
+    add(item: T) { }
+>add : (item: T) => void
+>item : T
+}
+
+class CouponInfo {
+>CouponInfo : CouponInfo
+
+    private couponTag: {};
+>couponTag : {}
+}
+
+class Snake {
+>Snake : Snake
+
+    private snakeTag: {};
+>snakeTag : {}
+}
+
+var blah = new GenericThingamabob(new CouponInfo());
+>blah : GenericThingamabob<CouponInfo>
+>new GenericThingamabob(new CouponInfo()) : GenericThingamabob<CouponInfo>
+>GenericThingamabob : typeof GenericThingamabob
+>new CouponInfo() : CouponInfo
+>CouponInfo : typeof CouponInfo
+
+blah.add(new Snake());
+>blah.add(new Snake()) : void
+>blah.add : (item: CouponInfo) => void
+>blah : GenericThingamabob<CouponInfo>
+>add : (item: CouponInfo) => void
+>new Snake() : Snake
+>Snake : typeof Snake
+
+var x: CouponInfo = new Snake();
+>x : CouponInfo
+>new Snake() : Snake
+>Snake : typeof Snake
+
