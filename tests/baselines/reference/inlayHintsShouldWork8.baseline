@@ -1,7 +1,11 @@
 new Class(1)
           ^
 {
-  "text": [
+  "text": "",
+  "position": 136,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "a",
       "span": {
@@ -13,16 +17,17 @@ new Class(1)
     {
       "text": ":"
     }
-  ],
-  "position": 136,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 new Class(1, 2)
           ^
 {
-  "text": [
+  "text": "",
+  "position": 149,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "b",
       "span": {
@@ -34,16 +39,17 @@ new Class(1, 2)
     {
       "text": ":"
     }
-  ],
-  "position": 149,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 new Class(1, 2)
              ^
 {
-  "text": [
+  "text": "",
+  "position": 152,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "c",
       "span": {
@@ -55,8 +61,5 @@ new Class(1, 2)
     {
       "text": ":"
     }
-  ],
-  "position": 152,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

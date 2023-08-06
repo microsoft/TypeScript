@@ -1,7 +1,11 @@
 foo2(1, 2);
      ^
 {
-  "text": [
+  "text": "",
+  "position": 257,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "c",
       "span": {
@@ -13,16 +17,17 @@ foo2(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 257,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo2(1, 2);
         ^
 {
-  "text": [
+  "text": "",
+  "position": 260,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "d",
       "span": {
@@ -34,16 +39,17 @@ foo2(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 260,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo3(1, 2);
      ^
 {
-  "text": [
+  "text": "",
+  "position": 269,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "e",
       "span": {
@@ -55,16 +61,17 @@ foo3(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 269,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo3(1, 2);
         ^
 {
-  "text": [
+  "text": "",
+  "position": 272,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "f",
       "span": {
@@ -76,16 +83,17 @@ foo3(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 272,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo4(1, 2);
      ^
 {
-  "text": [
+  "text": "",
+  "position": 281,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "g",
       "span": {
@@ -97,16 +105,17 @@ foo4(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 281,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo4(1, 2);
         ^
 {
-  "text": [
+  "text": "",
+  "position": 284,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "h",
       "span": {
@@ -118,8 +127,5 @@ foo4(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 284,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

@@ -1,7 +1,11 @@
 foo(1, { c: 1 });
     ^
 {
-  "text": [
+  "text": "",
+  "position": 44,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "a",
       "span": {
@@ -13,8 +17,5 @@ foo(1, { c: 1 });
     {
       "text": ":"
     }
-  ],
-  "position": 44,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

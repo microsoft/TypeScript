@@ -2675,11 +2675,13 @@ export interface InlayHintsRequest extends Request {
 }
 
 export interface InlayHintItem {
-    text: string | InlayHintItemDisplayPart[];
+    /** This property will be the empty string when displayParts is set. */
+    text: string;
     position: Location;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+    displayParts?: InlayHintItemDisplayPart[];
 }
 
 export interface InlayHintItemDisplayPart {

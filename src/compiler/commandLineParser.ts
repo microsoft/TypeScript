@@ -885,7 +885,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Default_catch_clause_variables_as_unknown_instead_of_any,
-        defaultValueDescription: false,
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "alwaysStrict",

@@ -620,4 +620,16 @@ export * as alias from './file';`, {
             testVerbatimModuleSyntax: true
         }
     );
+
+    transpilesCorrectly("Preserves exported const merged with type-only import", `
+        import fooValue from "./values";
+        import type {Foo} from "./types";
+
+        const Foo: Foo = fooValue as any as Foo;
+
+        export {Foo};
+    `, {
+        options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
+        testVerbatimModuleSyntax: true
+    });
 });

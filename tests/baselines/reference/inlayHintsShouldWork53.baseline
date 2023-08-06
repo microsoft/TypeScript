@@ -1,7 +1,11 @@
 fn(/* nobody knows exactly what this param is */ 42);
                                                  ^
 {
-  "text": [
+  "text": "",
+  "position": 76,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "x",
       "span": {
@@ -13,8 +17,5 @@ fn(/* nobody knows exactly what this param is */ 42);
     {
       "text": ":"
     }
-  ],
-  "position": 76,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

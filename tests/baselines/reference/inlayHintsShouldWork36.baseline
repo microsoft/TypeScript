@@ -1,7 +1,11 @@
 foo(a, 2);
     ^
 {
-  "text": [
+  "text": "",
+  "position": 63,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "a",
       "span": {
@@ -13,16 +17,17 @@ foo(a, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 63,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo(a, 2);
        ^
 {
-  "text": [
+  "text": "",
+  "position": 66,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "b",
       "span": {
@@ -34,8 +39,5 @@ foo(a, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 66,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
