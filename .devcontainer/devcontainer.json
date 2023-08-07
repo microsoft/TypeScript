@@ -3,7 +3,7 @@
     "build": {
         "dockerfile": "Dockerfile",
         "args": {
-            "VARIANT": "14"
+            "VARIANT": "18"
         }
     },
     "settings": {
