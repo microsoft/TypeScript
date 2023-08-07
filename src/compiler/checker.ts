@@ -8082,7 +8082,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function isStringNamed(d: Declaration) {
             const name = getNameOfDeclaration(d);
-            return !!name && isStringLiteral(name);
+            if (!name) {
+                return false;
+            }
+            if (isComputedPropertyName(name)) {
+                const type = checkExpression(name.expression);
+                return !!(type.flags & TypeFlags.StringLike);
+            }
+            return isStringLiteral(name);
         }
 
         function isSingleQuotedStringNamed(d: Declaration) {
