@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/narrowingByBooleanDiscriminantStrictNullChecksFalse.ts] ////
+
+=== narrowingByBooleanDiscriminantStrictNullChecksFalse.ts ===
+// https://github.com/microsoft/TypeScript/issues/10564
+
+type Result = { success: true } | { success: false; error: string };
+>Result : Symbol(Result, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 0, 0))
+>success : Symbol(success, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 15))
+>success : Symbol(success, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 35))
+>error : Symbol(error, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 51))
+
+function handleError3(res: Result) {
+>handleError3 : Symbol(handleError3, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 68))
+>res : Symbol(res, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 4, 22))
+>Result : Symbol(Result, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 0, 0))
+
+  if (res.success) {
+>res.success : Symbol(success, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 15), Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 35))
+>res : Symbol(res, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 4, 22))
+>success : Symbol(success, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 15), Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 35))
+
+    return;
+  }
+
+  res.error;
+>res.error : Symbol(error, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 51))
+>res : Symbol(res, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 4, 22))
+>error : Symbol(error, Decl(narrowingByBooleanDiscriminantStrictNullChecksFalse.ts, 2, 51))
+}
+

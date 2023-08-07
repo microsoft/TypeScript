@@ -66,8 +66,8 @@ function f1(x) {
 >x : any
 
     if (!!true) {
->!!true : true
->!true : false
+>!!true : boolean
+>!true : boolean
 >true : true
 
         assert(typeof x === "string");
@@ -84,8 +84,8 @@ function f1(x) {
 >length : number
     }
     if (!!true) {
->!!true : true
->!true : false
+>!!true : boolean
+>!true : boolean
 >true : true
 
         assert2(typeof x === "string");
@@ -102,8 +102,8 @@ function f1(x) {
 >length : number
     }
     if (!!true) {
->!!true : true
->!true : false
+>!!true : boolean
+>!true : boolean
 >true : true
 
         assertIsString(x);
@@ -117,8 +117,8 @@ function f1(x) {
 >length : number
     }
     if (!!true) {
->!!true : true
->!true : false
+>!!true : boolean
+>!true : boolean
 >true : true
 
         fail();

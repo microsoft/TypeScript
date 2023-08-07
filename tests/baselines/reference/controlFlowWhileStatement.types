@@ -158,7 +158,7 @@ function f() {
             break;
         }
         if (cond) {
->cond : never
+>cond : true
 
             x = true;
 >x = true : true
@@ -200,7 +200,7 @@ function g() {
             break;
         }
         if (cond) {
->cond : false
+>cond : boolean
 
             x = true;
 >x = true : true

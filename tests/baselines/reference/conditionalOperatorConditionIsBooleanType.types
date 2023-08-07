@@ -112,7 +112,7 @@ true ? exprString1 : exprBoolean1; // union
 //Cond is a boolean type expression
 !true ? exprAny1 : exprAny2;
 >!true ? exprAny1 : exprAny2 : any
->!true : false
+>!true : boolean
 >true : true
 >exprAny1 : any
 >exprAny2 : any
@@ -143,7 +143,7 @@ null === undefined ? exprString1 : exprString2;
 
 true || false ? exprIsObject1 : exprIsObject2;
 >true || false ? exprIsObject1 : exprIsObject2 : Object
->true || false : true
+>true || false : boolean
 >true : true
 >false : false
 >exprIsObject1 : Object
@@ -251,7 +251,7 @@ var resultIsStringOrBoolean3 = false ? exprString1 : exprBoolean1; // union
 var resultIsAny3 = !true ? exprAny1 : exprAny2;
 >resultIsAny3 : any
 >!true ? exprAny1 : exprAny2 : any
->!true : false
+>!true : boolean
 >true : true
 >exprAny1 : any
 >exprAny2 : any
@@ -286,7 +286,7 @@ var resultIsString3 = null === undefined ? exprString1 : exprString2;
 var resultIsObject3 = true || false ? exprIsObject1 : exprIsObject2;
 >resultIsObject3 : Object
 >true || false ? exprIsObject1 : exprIsObject2 : Object
->true || false : true
+>true || false : boolean
 >true : true
 >false : false
 >exprIsObject1 : Object

@@ -30,7 +30,7 @@ if (x /* RegExp */, (x = true)) {
 }
 else {
     x; // boolean
->x : never
+>x : true
 
     x = 42;
 >x = 42 : 42

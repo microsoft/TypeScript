@@ -40,7 +40,7 @@ var ResultIsBoolean1 = !BOOLEAN;
 // boolean type literal
 var ResultIsBoolean2 = !true;
 >ResultIsBoolean2 : boolean
->!true : false
+>!true : boolean
 >true : true
 
 var ResultIsBoolean3 = !{ x: true, y: false };
@@ -90,7 +90,7 @@ var ResultIsBoolean = !!BOOLEAN;
 
 // miss assignment operators
 !true;
->!true : false
+>!true : boolean
 >true : true
 
 !BOOLEAN;
@@ -104,7 +104,7 @@ var ResultIsBoolean = !!BOOLEAN;
 
 !true, false;
 >!true, false : false
->!true : false
+>!true : boolean
 >true : true
 >false : false
 

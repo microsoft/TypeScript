@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/narrowingByBooleanDiscriminantStrictNullChecksFalse.ts] ////
+
+=== narrowingByBooleanDiscriminantStrictNullChecksFalse.ts ===
+// https://github.com/microsoft/TypeScript/issues/10564
+
+type Result = { success: true } | { success: false; error: string };
+>Result : { success: true; } | { success: false; error: string; }
+>success : true
+>true : true
+>success : false
+>false : false
+>error : string
+
+function handleError3(res: Result) {
+>handleError3 : (res: Result) => void
+>res : Result
+
+  if (res.success) {
+>res.success : boolean
+>res : Result
+>success : boolean
+
+    return;
+  }
+
+  res.error;
+>res.error : string
+>res : { success: false; error: string; }
+>error : string
+}
+
