@@ -43,6 +43,7 @@ import {
     CaseOrDefaultClause,
     cast,
     CatchClause,
+    CharacterCodes,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
@@ -1100,8 +1101,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createNumericLiteral(value: string | number, numericLiteralFlags: TokenFlags = TokenFlags.None): NumericLiteral {
+        const text = typeof value === "number" ? value + "" : value;
+        Debug.assert(text.charCodeAt(0) !== CharacterCodes.minus, "Negative numbers should be created in combination with createPrefixUnaryExpression");
         const node = createBaseDeclaration<NumericLiteral>(SyntaxKind.NumericLiteral);
-        node.text = typeof value === "number" ? value + "" : value;
+        node.text = text;
         node.numericLiteralFlags = numericLiteralFlags;
         if (numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) node.transformFlags |= TransformFlags.ContainsES2015;
         return node;
