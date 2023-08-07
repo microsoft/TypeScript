@@ -1645,7 +1645,7 @@ export function createAccessorPropertyBackingField(factory: NodeFactory, node: P
  *
  * @internal
  */
-export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName): GetAccessorDeclaration {
+export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()): GetAccessorDeclaration {
     return factory.createGetAccessorDeclaration(
         modifiers,
         name,
@@ -1654,7 +1654,7 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
         factory.createBlock([
             factory.createReturnStatement(
                 factory.createPropertyAccessExpression(
-                    factory.createThis(),
+                    receiver,
                     factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage")
                 )
             )
@@ -1667,7 +1667,7 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
  *
  * @internal
  */
-export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, name: PropertyName) {
+export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()) {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,
@@ -1680,7 +1680,7 @@ export function createAccessorPropertySetRedirector(factory: NodeFactory, node: 
             factory.createExpressionStatement(
                 factory.createAssignment(
                     factory.createPropertyAccessExpression(
-                        factory.createThis(),
+                        receiver,
                         factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage")
                     ),
                     factory.createIdentifier("value")

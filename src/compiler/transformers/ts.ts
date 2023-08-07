@@ -123,7 +123,6 @@ import {
     isTryStatement,
     JsxOpeningElement,
     JsxSelfClosingElement,
-    LeftHandSideExpression,
     map,
     mapDefined,
     MethodDeclaration,
@@ -2666,21 +2665,21 @@ export function transformTypeScript(context: TransformationContext) {
         return value.replace(/\*\//g, "*_/");
     }
 
-    function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression): LeftHandSideExpression {
+    function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression) {
         const constantValue = tryGetConstEnumValue(node);
         if (constantValue !== undefined) {
-            // track the constant value on the node for the printer in needsDotDotForPropertyAccess
+            // track the constant value on the node for the printer in mayNeedDotDotForPropertyAccess
             setConstantValue(node, constantValue);
+            const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
+                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(constantValue))) :
+                factory.createNumericLiteral(constantValue);
 
-            const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) : factory.createNumericLiteral(constantValue);
             if (!compilerOptions.removeComments) {
                 const originalNode = getOriginalNode(node, isAccessExpression);
-
                 addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${safeMultiLineComment(getTextOfNode(originalNode))} `);
             }
             return substitute;
         }
-
         return node;
     }
 

@@ -99,7 +99,7 @@ jobs:
             MESSAGE+=" You can [read more here](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md#contributing-libdts-fixes)."
             MESSAGE+=" For house-keeping purposes, this pull request will be closed."
 
-            gh pr close $issue --repo ${{ github.repository }} --comment "$MESSAGE"
+            gh pr close ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --comment "$MESSAGE"
             exit 1 # Stop the pipeline; we just closed the PR.
           fi
 
@@ -125,7 +125,8 @@ jobs:
             MESSAGE="Looks like you're introducing a change to the public API surface area."
             MESSAGE+=" If this includes breaking changes, please document them"
             MESSAGE+=" [on our wiki's API Breaking Changes page](https://github.com/microsoft/TypeScript/wiki/API-Breaking-Changes)."
-            MESSAGE+="\n\nAlso, please make sure @DanielRosenwasser and @RyanCavanaugh are aware of the changes, just as a heads up."
+            MESSAGE+=$'\n\n'
+            MESSAGE+="Also, please make sure @DanielRosenwasser and @RyanCavanaugh are aware of the changes, just as a heads up."
 
             if ./already_commented.sh "Looks like you're introducing a change to the public API surface area."; then
               echo "Already commented."

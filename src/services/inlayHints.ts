@@ -3,6 +3,7 @@ import {
     ArrowFunction,
     CallExpression,
     createPrinterWithRemoveComments,
+    createTextSpanFromNode,
     Debug,
     ElementFlags,
     EmitHint,
@@ -23,6 +24,7 @@ import {
     hasContextSensitiveParameters,
     Identifier,
     InlayHint,
+    InlayHintDisplayPart,
     InlayHintKind,
     InlayHintsContext,
     isArrowFunction,
@@ -60,6 +62,7 @@ import {
     Signature,
     skipParentheses,
     some,
+    SourceFile,
     Symbol,
     SymbolFlags,
     SyntaxKind,
@@ -73,7 +76,7 @@ import {
     VariableDeclaration,
 } from "./_namespaces/ts";
 
-const maxHintsLength = 30;
+const maxTypeHintLength = 30;
 
 const leadingParameterNameCommentRegexFactory = (name: string) => {
     return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
@@ -85,6 +88,10 @@ function shouldShowParameterNameHints(preferences: UserPreferences) {
 
 function shouldShowLiteralParameterNameHintsOnly(preferences: UserPreferences) {
     return preferences.includeInlayParameterNameHints === "literals";
+}
+
+function shouldUseInteractiveInlayHints(preferences: UserPreferences) {
+    return preferences.interactiveInlayHints === true;
 }
 
 /** @internal */
@@ -151,18 +158,29 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
     }
 
-    function addParameterHints(text: string, position: number, isFirstVariadicArgument: boolean) {
+    function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean, sourceFile: SourceFile | undefined) {
+        let hintText = `${isFirstVariadicArgument ? "..." : ""}${text}`;
+        let displayParts: InlayHintDisplayPart[] | undefined;
+        if (shouldUseInteractiveInlayHints(preferences)) {
+            displayParts = [getNodeDisplayPart(hintText, parameter, sourceFile!), { text: ":" }];
+            hintText = "";
+        }
+        else {
+            hintText += ":";
+        }
+
         result.push({
-            text: `${isFirstVariadicArgument ? "..." : ""}${truncation(text, maxHintsLength)}:`,
+            text: hintText,
             position,
             kind: InlayHintKind.Parameter,
             whitespaceAfter: true,
+            displayParts,
         });
     }
 
     function addTypeHints(text: string, position: number) {
         result.push({
-            text: `: ${truncation(text, maxHintsLength)}`,
+            text: `: ${text.length > maxTypeHintLength ? text.substr(0, maxTypeHintLength - "...".length) + "..." : text}`,
             position,
             kind: InlayHintKind.Type,
             whitespaceBefore: true,
@@ -171,7 +189,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function addEnumMemberValueHints(text: string, position: number) {
         result.push({
-            text: `= ${truncation(text, maxHintsLength)}`,
+            text: `= ${text}`,
             position,
             kind: InlayHintKind.Enum,
             whitespaceBefore: true,
@@ -231,6 +249,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         }
 
         let signatureParamPos = 0;
+        const sourceFile = shouldUseInteractiveInlayHints(preferences) ? expr.getSourceFile() : undefined;
         for (const originalArg of args) {
             const arg = skipParentheses(originalArg);
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
@@ -253,10 +272,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 }
             }
 
-            const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, signatureParamPos);
+            const identifierInfo = checker.getParameterIdentifierInfoAtPosition(signature, signatureParamPos);
             signatureParamPos = signatureParamPos + (spreadArgs || 1);
-            if (identifierNameInfo) {
-                const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
+            if (identifierInfo) {
+                const { parameter, parameterName, isRestParameter: isFirstVariadicArgument } = identifierInfo;
                 const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);
                 if (!isParameterNameNotSameAsArgument && !isFirstVariadicArgument) {
                     continue;
@@ -267,7 +286,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     continue;
                 }
 
-                addParameterHints(name, originalArg.getStart(), isFirstVariadicArgument);
+                addParameterHints(name, parameter, originalArg.getStart(), isFirstVariadicArgument, sourceFile);
             }
         }
     }
@@ -394,13 +413,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return printTypeInSingleLine(signatureParamType);
     }
 
-    function truncation(text: string, maxLength: number) {
-        if (text.length > maxLength) {
-            return text.substr(0, maxLength - "...".length) + "...";
-        }
-        return text;
-    }
-
     function printTypeInSingleLine(type: Type) {
         const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
         const printer = createPrinterWithRemoveComments();
@@ -422,5 +434,13 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
         }
         return true;
+    }
+
+    function getNodeDisplayPart(text: string, node: Node, sourceFile: SourceFile): InlayHintDisplayPart {
+        return {
+            text,
+            span: createTextSpanFromNode(node, sourceFile),
+            file: sourceFile.fileName
+        };
     }
 }

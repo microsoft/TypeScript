@@ -624,7 +624,7 @@ export function validateLocaleAndSetLanguage(
     sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
     errors?: Diagnostic[]) {
     const lowerCaseLocale = locale.toLowerCase();
-    const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
+    const matchResult = /^([a-z]+)([_-]([a-z]+))?$/.exec(lowerCaseLocale);
 
     if (!matchResult) {
         if (errors) {

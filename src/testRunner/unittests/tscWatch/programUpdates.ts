@@ -1333,7 +1333,7 @@ export function two() {
     function changeParameterTypeOfBFile(parameterName: string, toType: string): TscWatchCompileChange {
         return {
             caption: `Changed ${parameterName} type to ${toType}`,
-            edit: sys => sys.replaceFileText(`/user/username/projects/myproject/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`),
+            edit: sys => sys.replaceFileText(`/user/username/projects/myproject/b.ts`, new RegExp(`${parameterName}: [a-z]*`), `${parameterName}: ${toType}`),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
