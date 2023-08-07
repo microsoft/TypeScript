@@ -47436,9 +47436,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (flags & ModifierFlags.Accessor) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "accessor");
                         }
-                        else if (flags & ModifierFlags.Readonly) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "accessor", "readonly");
-                        }
                         else if (flags & ModifierFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "accessor", "declare");
                         }
@@ -47458,7 +47455,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return grammarErrorOnNode(modifier, Diagnostics.readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature);
                         }
                         else if (flags & ModifierFlags.Accessor) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "readonly", "accessor");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "readonly", "accessor");
                         }
                         flags |= ModifierFlags.Readonly;
                         break;
