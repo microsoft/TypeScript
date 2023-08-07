@@ -35,7 +35,7 @@ for (let y in obj) {
         continue;
     }
     if (cond) {
->cond : boolean
+>cond : false
 
         x = true;
 >x = true : true

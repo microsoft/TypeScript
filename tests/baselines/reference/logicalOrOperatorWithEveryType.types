@@ -106,7 +106,7 @@ var rb2 = a2 || a2;         // boolean   || boolean is boolean
 >rb2 : boolean
 >a2 || a2 : boolean
 >a2 : boolean
->a2 : boolean
+>a2 : false
 
 var rb3 = a3 || a2;         // number    || boolean is number | boolean
 >rb3 : number | boolean

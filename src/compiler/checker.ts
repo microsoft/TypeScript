@@ -1205,7 +1205,7 @@ export const enum TypeFacts {
     FalseStrictFacts = BaseBooleanStrictFacts | Falsy,
     FalseFacts = BaseBooleanFacts,
     TrueStrictFacts = BaseBooleanStrictFacts | Truthy,
-    TrueFacts = BaseBooleanFacts | Truthy,
+    TrueFacts = (BaseBooleanFacts & ~Falsy) | Truthy,
     SymbolStrictFacts = TypeofEQSymbol | TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
     SymbolFacts = SymbolStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
     ObjectStrictFacts = TypeofEQObject | TypeofEQHostObject | TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy,

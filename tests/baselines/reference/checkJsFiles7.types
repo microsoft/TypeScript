@@ -14,12 +14,12 @@ class C {
 >true : true
 
 		this.a = !!this.a;
->this.a = !!this.a : boolean
+>this.a = !!this.a : true
 >this.a : boolean
 >this : this
 >a : boolean
->!!this.a : boolean
->!this.a : boolean
+>!!this.a : true
+>!this.a : false
 >this.a : true
 >this : this
 >a : true

@@ -152,7 +152,7 @@ function f() {
             break;
         }
         if (cond) {
->cond : boolean
+>cond : false
 
             x = true;
 >x = true : true
@@ -167,7 +167,7 @@ function f() {
 >/a/ : RegExp
 
     } while (cond)
->cond : boolean
+>cond : false
 
     x; // number | boolean | RegExp
 >x : number | true | RegExp
@@ -195,7 +195,7 @@ function g() {
             break;
         }
         if (cond) {
->cond : boolean
+>cond : false
 
             x = true;
 >x = true : true

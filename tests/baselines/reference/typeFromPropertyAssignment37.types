@@ -32,7 +32,7 @@ const util = exports = module.exports = {}
 >{} : {}
 
 if (!!false) {
->!!false : boolean
+>!!false : false
 >!false : true
 >false : false
 

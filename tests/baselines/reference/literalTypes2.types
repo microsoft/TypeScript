@@ -239,7 +239,7 @@ function f3() {
 >E : typeof E
 >A : E.A
 >cond ? true : 123 : true | 123
->cond : boolean
+>cond : false
 >true : true
 >123 : 123
 
@@ -275,7 +275,7 @@ function f3() {
 >cond : boolean
 >c6 : { kind: 123; }
 >cond ? c7 : "hello" : [1 | 2, "foo" | "bar"] | "hello"
->cond : boolean
+>cond : false
 >c7 : [1 | 2, "foo" | "bar"]
 >"hello" : "hello"
 
