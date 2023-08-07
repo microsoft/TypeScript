@@ -751,7 +751,9 @@ function isJsxExpressionContext(context: FormattingContext): boolean {
 }
 
 function isNextTokenParentJsxAttribute(context: FormattingContext): boolean {
-    return context.nextTokenParent.kind === SyntaxKind.JsxAttribute;
+    return context.nextTokenParent.kind === SyntaxKind.JsxAttribute || (
+        context.nextTokenParent.kind === SyntaxKind.JsxNamespacedName && context.nextTokenParent.parent.kind === SyntaxKind.JsxAttribute
+    );
 }
 
 function isJsxAttributeContext(context: FormattingContext): boolean {
