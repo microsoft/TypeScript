@@ -30680,15 +30680,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!isErrorType(intrinsicElementsType)) {
                 // Property case
                 if (!isIdentifier(node.tagName) && !isJsxNamespacedName(node.tagName)) return Debug.fail();
-                const intrinsicProp = getPropertyOfType(intrinsicElementsType, isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText);
+                const propName = isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText;
+                const intrinsicProp = getPropertyOfType(intrinsicElementsType, propName);
                 if (intrinsicProp) {
                     links.jsxFlags |= JsxFlags.IntrinsicNamedElement;
                     return links.resolvedSymbol = intrinsicProp;
                 }
 
                 // Intrinsic string indexer case
-                const indexSignatureType = getIndexTypeOfType(intrinsicElementsType, stringType);
-                if (indexSignatureType) {
+                const indexSymbol = getApplicableIndexSymbol(intrinsicElementsType, getStringLiteralType(unescapeLeadingUnderscores(propName)));
+                if (indexSymbol) {
+                    links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
+                    return links.resolvedSymbol = indexSymbol;
+                }
+
+                if (getTypeOfPropertyOrIndexSignatureOfType(intrinsicElementsType, propName)) {
                     links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
                     return links.resolvedSymbol = intrinsicElementsType.symbol;
                 }
@@ -30916,8 +30922,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return links.resolvedJsxElementAttributesType = getTypeOfSymbol(symbol) || errorType;
             }
             else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
+                const propName = isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText;
                 return links.resolvedJsxElementAttributesType =
-                    getIndexTypeOfType(getJsxType(JsxNames.IntrinsicElements, node), stringType) || errorType;
+                    getApplicableIndexInfoForName(getJsxType(JsxNames.IntrinsicElements, node), propName)?.type || errorType;
             }
             else {
                 return links.resolvedJsxElementAttributesType = errorType;
@@ -45709,33 +45716,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (name.kind === SyntaxKind.PropertyAccessExpression) {
                     checkPropertyAccessExpression(name, CheckMode.Normal);
                     if (!links.resolvedSymbol) {
-                        const expressionType = checkExpressionCached(name.expression);
-                        const infos = getApplicableIndexInfos(expressionType, getLiteralTypeFromPropertyName(name.name));
-                        if (infos.length && (expressionType as ObjectType).members) {
-                            const resolved = resolveStructuredTypeMembers(expressionType as ObjectType);
-                            const symbol = resolved.members.get(InternalSymbolName.Index);
-                            if (infos === getIndexInfosOfType(expressionType)) {
-                                links.resolvedSymbol = symbol;
-                            }
-                            else if (symbol) {
-                                const symbolLinks = getSymbolLinks(symbol);
-                                const declarationList = mapDefined(infos, i => i.declaration);
-                                const nodeListId = map(declarationList, getNodeId).join(",");
-                                if (!symbolLinks.filteredIndexSymbolCache) {
-                                    symbolLinks.filteredIndexSymbolCache = new Map();
-                                }
-                                if (symbolLinks.filteredIndexSymbolCache.has(nodeListId)) {
-                                    links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
-                                }
-                                else {
-                                    const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
-                                    copy.declarations = mapDefined(infos, i => i.declaration);
-                                    copy.parent = expressionType.aliasSymbol ? expressionType.aliasSymbol : expressionType.symbol ? expressionType.symbol : getSymbolAtLocation(copy.declarations[0].parent);
-                                    symbolLinks.filteredIndexSymbolCache.set(nodeListId, copy);
-                                    links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
-                                }
-                            }
-                        }
+                        links.resolvedSymbol = getApplicableIndexSymbol(checkExpressionCached(name.expression), getLiteralTypeFromPropertyName(name.name));
                     }
                 }
                 else {
@@ -45760,6 +45741,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         return undefined;
+    }
+
+    function getApplicableIndexSymbol(type: Type, keyType: Type) {
+        const infos = getApplicableIndexInfos(type, keyType);
+        if (infos.length && (type as ObjectType).members) {
+            const symbol = getIndexSymbolFromSymbolTable(resolveStructuredTypeMembers(type as ObjectType).members);
+            if (infos === getIndexInfosOfType(type)) {
+                return symbol;
+            }
+            else if (symbol) {
+                const symbolLinks = getSymbolLinks(symbol);
+                const declarationList = mapDefined(infos, i => i.declaration);
+                const nodeListId = map(declarationList, getNodeId).join(",");
+                if (!symbolLinks.filteredIndexSymbolCache) {
+                    symbolLinks.filteredIndexSymbolCache = new Map();
+                }
+                if (symbolLinks.filteredIndexSymbolCache.has(nodeListId)) {
+                    return symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
+                }
+                else {
+                    const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
+                    copy.declarations = mapDefined(infos, i => i.declaration);
+                    copy.parent = type.aliasSymbol ? type.aliasSymbol : type.symbol ? type.symbol : getSymbolAtLocation(copy.declarations[0].parent);
+                    symbolLinks.filteredIndexSymbolCache.set(nodeListId, copy);
+                    return copy;
+                }
+            }
+        }
     }
 
     /**
