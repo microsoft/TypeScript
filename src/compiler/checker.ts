@@ -20352,9 +20352,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let expandingFlags = ExpandingFlags.None;
         let overflow = false;
         let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
+        let skipParentCounter = 0; // How many errors should be skipped 'above' in the elaboration pyramid
         let lastSkippedInfo: [Type, Type] | undefined;
         let incompatibleStack: DiagnosticAndArguments[] | undefined;
-        let skipParentCounter = 0;
 
         Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -20414,6 +20414,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             lastSkippedInfo = saved.lastSkippedInfo;
             incompatibleStack = saved.incompatibleStack;
             overrideNextErrorInfo = saved.overrideNextErrorInfo;
+            skipParentCounter = saved.skipParentCounter;
             relatedInfo = saved.relatedInfo;
         }
 
@@ -20423,6 +20424,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 lastSkippedInfo,
                 incompatibleStack: incompatibleStack?.slice(),
                 overrideNextErrorInfo,
+                skipParentCounter,
                 relatedInfo: relatedInfo?.slice() as [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined,
             };
         }
