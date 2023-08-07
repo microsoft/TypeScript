@@ -1,5 +1,5 @@
 ---
-name: Types Not Correct in/with Callback
+name: Types not correct in/with callback
 about: TypeScript assuming the wrong type either after a callback runs, or within
   a callback
 title: ''

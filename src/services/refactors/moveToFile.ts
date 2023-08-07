@@ -40,7 +40,6 @@ import {
     FindAllReferences,
     findIndex,
     findLast,
-    findLastIndex,
     firstDefined,
     flatMap,
     forEachKey,
@@ -82,7 +81,6 @@ import {
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
-    isNamedDeclaration,
     isNamedExports,
     isObjectLiteralExpression,
     isOmittedExpression,
@@ -117,7 +115,6 @@ import {
     PropertyAccessExpression,
     PropertyAssignment,
     QuotePreference,
-    rangeContainsRange,
     RefactorContext,
     RefactorEditInfo,
     RequireOrImportCall,
@@ -182,7 +179,7 @@ registerRefactor(refactorNameForMoveToFile, {
             if (host.fileExists(targetFile) && program.getSourceFile(targetFile) === undefined) {
                 return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_statements_to_the_selected_file));
             }
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, program, statements, t, context.host, context.preferences));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, interactiveRefactorArguments.targetFile, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
         return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid));
@@ -196,7 +193,7 @@ function error(notApplicableReason: string) {
 function doChange(context: RefactorContext, oldFile: SourceFile, targetFile: string, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
-    // For a new file
+    //For a new file
     if (!host.fileExists(targetFile)) {
         changes.createNewFile(oldFile, targetFile, getNewStatementsAndRemoveFromOldFile(oldFile, targetFile, usage, changes, toMove, program, host, preferences));
         addNewFileToTsconfig(program, changes, oldFile.fileName, targetFile, hostGetCanonicalFileName(host));
@@ -913,28 +910,33 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const { statements } = file;
 
-    const startNodeIndex = findIndex(statements, s => s.end > range.pos);
+    let startNodeIndex = findIndex(statements, s => s.end > range.pos);
     if (startNodeIndex === -1) return undefined;
-
     const startStatement = statements[startNodeIndex];
-    if (isNamedDeclaration(startStatement) && startStatement.name && rangeContainsRange(startStatement.name, range)) {
-        return { toMove: [statements[startNodeIndex]], afterLast: statements[startNodeIndex + 1] };
-    }
 
     const overloadRangeToMove = getOverloadRangeToMove(file, startStatement);
     if (overloadRangeToMove) {
-        return overloadRangeToMove;
+        startNodeIndex = overloadRangeToMove.start;
     }
 
-    // Can't only partially include the start node or be partially into the next node
-    if (range.pos > startStatement.getStart(file)) return undefined;
-    const afterEndNodeIndex = findIndex(statements, s => s.end > range.end, startNodeIndex);
-    // Can't be partially into the next node
-    if (afterEndNodeIndex !== -1 && (afterEndNodeIndex === 0 || statements[afterEndNodeIndex].getStart(file) < range.end)) return undefined;
+    let endNodeIndex = findIndex(statements, s => s.end >= range.end, startNodeIndex);
+    /**
+     * [|const a = 2;
+     * function foo() {
+     * }
+     * |]
+     */
+    if (endNodeIndex !== -1 && range.end <= statements[endNodeIndex].getStart()) {
+        endNodeIndex--;
+    }
+    const endingOverloadRangeToMove = getOverloadRangeToMove(file, statements[endNodeIndex]);
+    if (endingOverloadRangeToMove) {
+        endNodeIndex = endingOverloadRangeToMove.end;
+    }
 
     return {
-        toMove: statements.slice(startNodeIndex, afterEndNodeIndex === -1 ? statements.length : afterEndNodeIndex),
-        afterLast: afterEndNodeIndex === -1 ? undefined : statements[afterEndNodeIndex],
+        toMove: statements.slice(startNodeIndex, endNodeIndex === -1 ? statements.length : endNodeIndex + 1),
+        afterLast: endNodeIndex === -1 ? undefined : statements[endNodeIndex + 1]
     };
 }
 
@@ -1204,10 +1206,12 @@ function getOverloadRangeToMove(sourceFile: SourceFile, statement: Statement) {
         if (declarations === undefined || length(declarations) <= 1 || !contains(declarations, statement)) {
             return undefined;
         }
+        const firstDecl = declarations[0];
         const lastDecl = declarations[length(declarations) - 1];
         const statementsToMove = mapDefined(declarations, d => getSourceFileOfNode(d) === sourceFile && isStatement(d) ? d : undefined);
-        const end = findLastIndex(sourceFile.statements, s => s.end > lastDecl.end);
-        return { toMove: statementsToMove, afterLast: end >= 0 ? sourceFile.statements[end] : undefined };
+        const end = findIndex(sourceFile.statements, s => s.end >= lastDecl.end);
+        const start = findIndex(sourceFile.statements, s => s.end >= firstDecl.end);
+        return { toMove: statementsToMove, start, end };
     }
     return undefined;
 }

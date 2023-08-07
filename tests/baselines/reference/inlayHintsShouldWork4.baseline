@@ -1,7 +1,11 @@
 foo(1)
     ^
 {
-  "text": [
+  "text": "",
+  "position": 166,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "w",
       "span": {
@@ -13,16 +17,17 @@ foo(1)
     {
       "text": ":"
     }
-  ],
-  "position": 166,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo(1, 2)
     ^
 {
-  "text": [
+  "text": "",
+  "position": 173,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "a",
       "span": {
@@ -34,16 +39,17 @@ foo(1, 2)
     {
       "text": ":"
     }
-  ],
-  "position": 173,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo(1, 2)
        ^
 {
-  "text": [
+  "text": "",
+  "position": 176,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "b",
       "span": {
@@ -55,8 +61,5 @@ foo(1, 2)
     {
       "text": ":"
     }
-  ],
-  "position": 176,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

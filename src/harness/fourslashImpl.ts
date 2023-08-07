@@ -442,11 +442,11 @@ export class TestState {
             for (const k of keys) {
                 const key = k as keyof typeof ls;
                 if (cacheableMembers.indexOf(key) === -1) {
-                    proxy[key] = (...args: any[]) => (ls[key] as Function)(...args);
+                    proxy[key] = (...args: any[]) => (ls[key] as (...args: any[]) => any)(...args);
                     continue;
                 }
                 const memo = Utils.memoize(
-                    (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as Function)(...args),
+                    (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as (...args: any[]) => any)(...args),
                     (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|")
                 );
                 proxy[key] = (...args: any[]) => memo(
@@ -4912,7 +4912,7 @@ function toArray<T>(x: ArrayOrSingle<T>): readonly T[] {
 }
 
 function makeWhitespaceVisible(text: string) {
-    return text.replace(/ /g, "\u00B7").replace(/\r/g, "\u00B6").replace(/\n/g, "\u2193\n").replace(/\t/g, "\u2192\   ");
+    return text.replace(/ /g, "\u00B7").replace(/\r/g, "\u00B6").replace(/\n/g, "\u2193\n").replace(/\t/g, "\u2192   ");
 }
 
 function showTextDiff(expected: string, actual: string): string {
