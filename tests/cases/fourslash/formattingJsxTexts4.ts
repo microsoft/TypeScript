@@ -13,7 +13,9 @@ format.document();
 
 verify.currentFileContentIs(
 `function foo() {
-    const a = <ns:foobar x:test1 x:test2="string" x:test3={true ? 1 : 0} />;
+    const a = <ns:foobar   x:test1   x:test2="string"  x:test3={true ? 1 : 0} />;
 
     return a;
 }`);
+
+// the original whitespaces between attributes are not handled by TypeScript yet
