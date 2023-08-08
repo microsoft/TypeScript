@@ -6838,8 +6838,8 @@ export interface InferenceInfo {
 /** @internal */
 export const enum InferenceFlags {
     None            =      0,  // No special inference behaviors
-    NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
-    AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
+    NoDefault       = 1 << 0,  // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
+    AnyDefault      = 1 << 1,  // Infer anyType (in JS files) for no inferences (otherwise unknownType)
     SkippedGenericFunction = 1 << 2, // A generic function was skipped during inference
 }
 
