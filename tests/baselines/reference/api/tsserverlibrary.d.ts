@@ -4074,7 +4074,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.2";
+    const versionMajorMinor = "5.3";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**

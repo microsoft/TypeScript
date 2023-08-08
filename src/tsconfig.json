@@ -8,7 +8,6 @@
         { "path": "./executeCommandLine" },
         { "path": "./harness" },
         { "path": "./jsTyping" },
-        { "path": "./loggedIO" },
         { "path": "./server" },
         { "path": "./services" },
         { "path": "./testRunner" },

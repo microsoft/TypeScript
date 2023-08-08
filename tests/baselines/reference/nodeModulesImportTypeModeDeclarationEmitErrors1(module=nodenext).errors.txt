@@ -9,8 +9,7 @@ error TS2468: Cannot find global value 'Promise'.
 /other.ts(3,52): error TS1128: Declaration or statement expected.
 /other.ts(3,53): error TS2304: Cannot find name 'RequireInterface'.
 /other.ts(4,7): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-/other.ts(4,22): error TS2322: Type '{ "resolution-mode": string; }' is not assignable to type 'ImportCallOptions'.
-  Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
+/other.ts(4,22): error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
 /other.ts(4,52): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 /other.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other.ts(6,49): error TS1005: 'assert' expected.
@@ -128,8 +127,7 @@ error TS2468: Cannot find global value 'Promise'.
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
                          ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ "resolution-mode": string; }' is not assignable to type 'ImportCallOptions'.
-!!! error TS2322:   Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
+!!! error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
                                                        ~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
     
