@@ -46597,12 +46597,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
-        if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
+    function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration | EnumMember): boolean {
+        if (isDeclarationReadonly(node) || (isVariableDeclaration(node) && isVarConst(node)) || isEnumMember(node)) {
             // TODO: isolated declarations: Add a test for this.
             // In isolated declaration mode we can't really use the freshness of the type as this would require type information.
             return compilerOptions.isolatedDeclarations?
-                !node.type && !!node.initializer && isLiteralExpression(node.initializer):
+                (isEnumMember(node)|| !node.type) && !!node.initializer &&
+                (isLiteralExpression(node.initializer) || isPrefixUnaryExpression(node.initializer) && isLiteralExpression(node.initializer.operand)) :
                 isFreshLiteralType(getTypeOfSymbol(getSymbolOfDeclaration(node)));
         }
         return false;

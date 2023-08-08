@@ -1816,7 +1816,7 @@ export function transformDeclarations(context: TransformationContext) {
                 return cleanup(factory.updateEnumDeclaration(input, factory.createNodeArray(ensureModifiers(input)), input.name, factory.createNodeArray(mapDefined(input.members, m => {
                     if (shouldStripInternal(m)) return;
                     if (isolatedDeclarations) {
-                        if (m.initializer && !isLiteralExpression(m.initializer)) {
+                        if (!resolver.isLiteralConstDeclaration(m)) {
                             reportIsolatedDeclarationError(m);
                         }
                         return m;

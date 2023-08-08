@@ -1,0 +1,3 @@
+declare class Test {
+    #private;
+}

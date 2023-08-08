@@ -1,4 +1,4 @@
-import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName, EntityNameOrEntityNameExpression, findAncestor, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isBindingElement, isElementAccessExpression, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isParameterPropertyDeclaration, isPropertyAccessExpression, isSetAccessor, isSourceFile, isVariableDeclaration, isVariableStatement, ModifierFlags, NamespaceImport, Node, NodeFlags, ParameterDeclaration, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
+import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName, EntityNameOrEntityNameExpression, EnumMember, findAncestor, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isBindingElement, isElementAccessExpression, isEnumMember, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSourceFile, isVariableDeclaration, isVariableStatement, ModifierFlags, NamespaceImport, Node, NodeFlags, ParameterDeclaration, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
 
 import { Debug } from "./debug";
 import { BasicSymbol, bindSourceFile } from "./emit-binder";
@@ -12,10 +12,11 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     const { getNodeLinks, resolveName } = bindSourceFile(file, options, packageModuleType);
 
 
-    function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
+    function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration | EnumMember): boolean {
         if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
             // TODO: Make sure this is a valid approximation for literal types
-            return !node.type && hasProperty(node, "initializer") && !!node.initializer && isLiteralExpression(node.initializer);
+            return (isEnumMember(node) || !node.type) && hasProperty(node, "initializer") && !!node.initializer &&
+            (isLiteralExpression(node.initializer) || isPrefixUnaryExpression(node.initializer) && isLiteralExpression(node.initializer.operand));
             // Original TS version
             // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
         }

@@ -1,3 +1,4 @@
+export declare function testDefaultNoType(a: string, b?: string): number;
 declare function test(a: string): number;
 export declare const testAlias: typeof test;
 export declare function testOptional(a: string, b?: string): number;
