@@ -69,7 +69,6 @@ import {
     textSpanIntersectsWith,
     TupleTypeReference,
     Type,
-    TypeFormatFlags,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
@@ -414,7 +413,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function printTypeInSingleLine(type: Type) {
-        const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const printer = createPrinterWithRemoveComments();
 
         return usingSingleLineStringWriter(writer => {
