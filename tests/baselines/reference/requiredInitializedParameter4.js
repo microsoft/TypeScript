@@ -18,5 +18,5 @@ var C1 = /** @class */ (function () {
 
 //// [requiredInitializedParameter4.d.ts]
 declare class C1 {
-    method(a: number, b: any): void;
+    method(a: number | undefined, b: any): void;
 }

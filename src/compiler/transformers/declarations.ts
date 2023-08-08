@@ -733,13 +733,14 @@ export function transformDeclarations(context: TransformationContext) {
             oldDiag = getSymbolAccessibilityDiagnostic;
             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p);
         }
+        const isOptional = resolver.isOptionalParameter(p);
         const newParam = factory.updateParameterDeclaration(
             p,
             maskModifiers(factory, p, modifierMask),
             p.dotDotDotToken,
             filterBindingPatternInitializersAndRenamings(p.name),
-            resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
-            ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
+            isOptional ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
+            ensureType(p, type || p.type, /*ignorePrivate*/ true, /*shouldUseResolverType*/ !isOptional && !!p.initializer), // Ignore private param props, since this type is going straight back into a param
             ensureNoInitializer(p)
         );
         if (!suppressNewDiagnosticContexts) {
@@ -773,7 +774,7 @@ export function transformDeclarations(context: TransformationContext) {
         | PropertyDeclaration
         | PropertySignature;
 
-    function ensureType(node: HasInferredType, type: TypeNode | undefined, ignorePrivate?: boolean): TypeNode | undefined {
+    function ensureType(node: HasInferredType, type: TypeNode | undefined, ignorePrivate?: boolean, shouldUseResolverType?: boolean): TypeNode | undefined {
         if (!ignorePrivate && hasEffectiveModifier(node, ModifierFlags.Private)) {
             // Private nodes emit no types (except private parameter properties, whose parameter types are actually visible)
             return;
@@ -782,9 +783,6 @@ export function transformDeclarations(context: TransformationContext) {
             // Literal const declarations will have an initializer ensured rather than a type
             return;
         }
-        const shouldUseResolverType = node.kind === SyntaxKind.Parameter &&
-            (resolver.isRequiredInitializedParameter(node) ||
-             resolver.isOptionalUninitializedParameterProperty(node));
         if (type && !shouldUseResolverType) {
             return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }
