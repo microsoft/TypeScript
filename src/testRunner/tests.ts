@@ -95,6 +95,7 @@ import "./unittests/tsbuild/resolveJsonModule";
 import "./unittests/tsbuild/roots";
 import "./unittests/tsbuild/sample";
 import "./unittests/tsbuild/transitiveReferences";
+import "./unittests/tsbuild/typeReferenceDirectives";
 import "./unittests/tsbuildWatch/configFileErrors";
 import "./unittests/tsbuildWatch/demo";
 import "./unittests/tsbuildWatch/libraryResolution";

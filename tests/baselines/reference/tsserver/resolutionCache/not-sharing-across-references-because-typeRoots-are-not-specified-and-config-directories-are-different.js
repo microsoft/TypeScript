@@ -5,7 +5,7 @@ Before request
 export const x = 10;
 
 //// [/users/username/projects/common/tsconfig.json]
-{"compilerOptions":{"composite":true,"traceResolution":true,"typeRoots":[]}}
+{"compilerOptions":{"composite":true,"traceResolution":true}}
 
 //// [/users/username/projects/common/moduleA.ts]
 export const a = 10;
@@ -16,7 +16,7 @@ export const b = x;
 
 
 //// [/users/username/projects/app/tsconfig.json]
-{"compilerOptions":{"composite":true,"traceResolution":true,"typeRoots":[]},"references":[{"path":"../common"}]}
+{"compilerOptions":{"composite":true,"traceResolution":true},"references":[{"path":"../common"}]}
 
 //// [/users/username/projects/app/appA.ts]
 import { x } from "moduleX";
@@ -50,7 +50,6 @@ Info seq  [hh:mm:ss:mss] Config: /users/username/projects/app/tsconfig.json : {
  "options": {
   "composite": true,
   "traceResolution": true,
-  "typeRoots": [],
   "configFilePath": "/users/username/projects/app/tsconfig.json"
  },
  "projectReferences": [
@@ -72,7 +71,6 @@ Info seq  [hh:mm:ss:mss] Config: /users/username/projects/common/tsconfig.json :
  "options": {
   "composite": true,
   "traceResolution": true,
-  "typeRoots": [],
   "configFilePath": "/users/username/projects/common/tsconfig.json"
  }
 }
@@ -116,6 +114,10 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/common/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/common/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules/@types 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules/@types 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -156,7 +158,11 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/app/node_modules: *new*
   {"pollingInterval":500}
+/users/username/projects/app/node_modules/@types: *new*
+  {"pollingInterval":500}
 /users/username/projects/common/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
