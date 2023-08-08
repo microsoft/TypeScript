@@ -17,6 +17,8 @@ body:
       placeholder: |
         List of keywords you searched for before creating this issue.
         Write them down here so that others can find this suggestion more easily and help provide feedback.
+
+        e.g. "isArray readonly", "regex string types", "json const assertion import"
     validations:
       required: true
   - type: checkboxes

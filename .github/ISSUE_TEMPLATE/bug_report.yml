@@ -12,6 +12,11 @@ body:
         What search terms did you use when trying to find an existing bug report?
 
         List them here so people in the future can find this one more easily.
+      placeholder: |
+        List of keywords you searched for before creating this issue.
+        Write them down here so that others can find this bug more easily and help provide feedback.
+
+        e.g. "function inference any", "jsx attribute spread", "move to file duplicate imports", "discriminated union inference", "ts2822"
     validations:
       required: true
   - type: textarea
