@@ -177,6 +177,10 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             sourcesContent: false,
             treeShaking: taskOptions.treeShaking,
             packages: "external",
+            external: ["typescript", "./typescript.js"],
+            alias: {
+                typescript: "./typescript.js",
+            },
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         };
@@ -384,7 +388,7 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     srcEntrypoint: "./src/tsserver/server.ts",
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
-    mainDeps: [generateLibs],
+    mainDeps: [generateLibs, services],
 });
 export { tsserver, watchTsserver };
 
