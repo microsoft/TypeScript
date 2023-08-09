@@ -39,7 +39,7 @@ FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/tsconfig.json 200
 Synchronizing program
 CreatingProgramWith::
   roots: ["/home/user/projects/myproject/src/file.ts"]
-  options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
+  options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -72,7 +72,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myprojec
 
 
 Program root files: ["/home/user/projects/myproject/src/file.ts"]
-Program options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
+Program options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

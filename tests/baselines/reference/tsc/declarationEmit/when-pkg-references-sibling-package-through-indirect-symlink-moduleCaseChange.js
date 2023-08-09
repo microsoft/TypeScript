@@ -84,7 +84,7 @@ Found 1 error in pkg3/src/keys.ts[90m:2[0m
 
 
 Program root files: ["/user/username/projects/myproject/pkg3/src/index.ts","/user/username/projects/myproject/pkg3/src/keys.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","explainFiles":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

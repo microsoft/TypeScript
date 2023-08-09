@@ -746,6 +746,10 @@ export function executeCommandLine(
     cb: ExecuteCommandLineCallbacks,
     commandLineArgs: readonly string[],
 ) {
+    if (!commandLineArgs.find(arg => /^--?skipJSDocParsing$/.test(arg))) {
+        commandLineArgs = [...commandLineArgs, "--skipJSDocParsing"];
+    }
+
     if (isBuild(commandLineArgs)) {
         const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs.slice(1));
         if (buildOptions.generateCpuProfile && system.enableCPUProfiler) {

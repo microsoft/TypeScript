@@ -49,7 +49,7 @@ project/b.ts
 
 
 Program root files: ["c:/project/a.ts","c:/project/b.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"c:/project","explainFiles":true,"configFilePath":"c:/project/tsconfig.json"}
+Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"c:/project","explainFiles":true,"skipJSDocParsing":true,"configFilePath":"c:/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 c:/a/lib/lib.d.ts
@@ -135,7 +135,7 @@ project/b.ts
 
 
 Program root files: ["c:/project/a.ts","c:/project/b.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"c:/project","explainFiles":true,"configFilePath":"c:/project/tsconfig.json"}
+Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"c:/project","explainFiles":true,"skipJSDocParsing":true,"configFilePath":"c:/project/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 c:/a/lib/lib.d.ts

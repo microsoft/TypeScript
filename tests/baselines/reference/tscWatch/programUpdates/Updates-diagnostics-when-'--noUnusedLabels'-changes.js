@@ -30,7 +30,7 @@ Output::
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -87,7 +87,7 @@ Output::
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program options: {"allowUnusedLabels":false,"watch":true,"project":"/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a.ts
@@ -121,7 +121,7 @@ Output::
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a.ts

@@ -64,7 +64,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/project1/index.ts"]
-Program options: {"composite":true,"types":["foo","bar"],"watch":true,"configFilePath":"/user/username/projects/myproject/project1/tsconfig.json"}
+Program options: {"composite":true,"types":["foo","bar"],"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/project1/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -88,7 +88,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@types/bar/index.d.ts (used version)
 
 Program root files: ["/user/username/projects/myproject/project2/index.ts"]
-Program options: {"composite":true,"types":["foo"],"moduleResolution":1,"watch":true,"configFilePath":"/user/username/projects/myproject/project2/tsconfig.json"}
+Program options: {"composite":true,"types":["foo"],"moduleResolution":1,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/project2/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -320,7 +320,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/project1/index.ts"]
-Program options: {"composite":true,"types":["foo","bar"],"watch":true,"configFilePath":"/user/username/projects/myproject/project1/tsconfig.json"}
+Program options: {"composite":true,"types":["foo","bar"],"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/project1/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

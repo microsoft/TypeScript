@@ -38,7 +38,7 @@ FileWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src/tsconfig.jso
 Synchronizing program
 CreatingProgramWith::
   roots: ["/users/user/projects/myproject/src/index.ts"]
-  options: {"composite":true,"removeComments":true,"watch":true,"project":"/users/user/projects/myproject/src","extendedDiagnostics":true,"configFilePath":"/users/user/projects/myproject/src/tsconfig.json"}
+  options: {"composite":true,"removeComments":true,"watch":true,"project":"/users/user/projects/myproject/src","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/users/user/projects/myproject/src/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src/index.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src/node_modules/@types 1 undefined Type roots
@@ -56,7 +56,7 @@ FileWatcher:: Added:: WatchInfo: /users/user/projects/myconfigs/node_modules/@so
 
 
 Program root files: ["/users/user/projects/myproject/src/index.ts"]
-Program options: {"composite":true,"removeComments":true,"watch":true,"project":"/users/user/projects/myproject/src","extendedDiagnostics":true,"configFilePath":"/users/user/projects/myproject/src/tsconfig.json"}
+Program options: {"composite":true,"removeComments":true,"watch":true,"project":"/users/user/projects/myproject/src","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/users/user/projects/myproject/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

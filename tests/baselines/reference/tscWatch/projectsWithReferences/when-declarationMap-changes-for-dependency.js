@@ -207,7 +207,7 @@ logic/index.ts
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/logic","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/logic","traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -507,7 +507,7 @@ logic/index.ts
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/logic","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/logic","traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

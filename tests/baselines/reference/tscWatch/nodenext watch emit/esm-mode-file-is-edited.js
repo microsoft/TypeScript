@@ -38,7 +38,7 @@ Output::
 
 
 Program root files: ["/project/src/deps.d.ts","/project/src/index.ts"]
-Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","configFilePath":"/project/tsconfig.json"}
+Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2020.full.d.ts
@@ -97,7 +97,7 @@ Output::
 
 
 Program root files: ["/project/src/deps.d.ts","/project/src/index.ts"]
-Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","configFilePath":"/project/tsconfig.json"}
+Program options: {"strict":true,"target":7,"module":199,"moduleResolution":99,"outDir":"/dist","watch":true,"project":"/project/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/project/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.es2020.full.d.ts

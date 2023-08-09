@@ -38,7 +38,7 @@ Output::
 
 
 Program root files: ["/a.ts"]
-Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -97,7 +97,7 @@ Output::
 
 
 Program root files: ["/a.ts"]
-Program options: {"allowArbitraryExtensions":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program options: {"allowArbitraryExtensions":false,"watch":true,"project":"/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -149,7 +149,7 @@ Output::
 
 
 Program root files: ["/a.ts"]
-Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program options: {"allowArbitraryExtensions":true,"watch":true,"project":"/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

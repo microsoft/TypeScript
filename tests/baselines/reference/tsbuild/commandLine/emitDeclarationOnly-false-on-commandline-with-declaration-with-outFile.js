@@ -68,7 +68,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project1/outFile.js","module":2,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project1/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project1/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -82,7 +82,7 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project2/outFile.js","module":2,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project2/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -139,7 +139,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project2/outFile.js","module":2,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project2/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -186,7 +186,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project1/outFile.js","module":2,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project1/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project1/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -200,7 +200,7 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project2/outFile.js","module":2,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project2/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -245,7 +245,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project1/outFile.js","module":2,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project1/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project1/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -259,7 +259,7 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project2/outFile.js","module":2,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project2/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -332,7 +332,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project2/outFile.js","module":2,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":true,"outFile":"/src/project2/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -374,7 +374,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project2/outFile.js","module":2,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project2/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -421,7 +421,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project1/outFile.js","module":2,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project1/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project1/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -435,7 +435,7 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project2/outFile.js","module":2,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"declaration":true,"emitDeclarationOnly":false,"outFile":"/src/project2/outFile.js","module":2,"skipJSDocParsing":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

@@ -60,7 +60,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program options: {"composite":true,"emitDeclarationOnly":true,"skipJSDocParsing":true,"configFilePath":"/src/project1/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -84,7 +84,7 @@ Shape signatures in builder refreshed for::
 /src/project1/src/d.ts (computed .d.ts during emit)
 
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"composite":true,"emitDeclarationOnly":true,"skipJSDocParsing":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -393,7 +393,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program options: {"composite":true,"emitDeclarationOnly":true,"skipJSDocParsing":true,"configFilePath":"/src/project1/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -536,7 +536,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"emitDeclarationOnly":false,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program options: {"composite":true,"emitDeclarationOnly":false,"skipJSDocParsing":true,"configFilePath":"/src/project1/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -550,7 +550,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"composite":true,"emitDeclarationOnly":false,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program options: {"composite":true,"emitDeclarationOnly":false,"skipJSDocParsing":true,"configFilePath":"/src/project2/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -894,7 +894,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"emitDeclarationOnly":false,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program options: {"composite":true,"emitDeclarationOnly":false,"skipJSDocParsing":true,"configFilePath":"/src/project1/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

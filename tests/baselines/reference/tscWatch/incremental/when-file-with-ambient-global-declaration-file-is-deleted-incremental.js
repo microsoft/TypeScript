@@ -30,7 +30,7 @@ Output::
 
 
 Program root files: ["/users/username/projects/project/globals.d.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"incremental":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -133,7 +133,7 @@ Found 1 error in index.ts[90m:1[0m
 
 
 Program root files: ["/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"incremental":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

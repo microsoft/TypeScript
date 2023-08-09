@@ -26,7 +26,7 @@ Output::
 
 
 Program root files: ["/f.ts"]
-Program options: {"watch":true,"preserveWatchOutput":true}
+Program options: {"watch":true,"preserveWatchOutput":true,"skipJSDocParsing":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -70,7 +70,7 @@ Output::
 
 
 Program root files: ["/f.ts"]
-Program options: {"watch":true,"preserveWatchOutput":true}
+Program options: {"watch":true,"preserveWatchOutput":true,"skipJSDocParsing":true}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

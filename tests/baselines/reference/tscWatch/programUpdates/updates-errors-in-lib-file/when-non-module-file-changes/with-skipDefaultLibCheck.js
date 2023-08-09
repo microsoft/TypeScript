@@ -38,7 +38,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"watch":true,"skipDefaultLibCheck":true}
+Program options: {"watch":true,"skipDefaultLibCheck":true,"skipJSDocParsing":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -91,7 +91,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"watch":true,"skipDefaultLibCheck":true}
+Program options: {"watch":true,"skipDefaultLibCheck":true,"skipJSDocParsing":true}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -138,7 +138,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"watch":true,"skipDefaultLibCheck":true}
+Program options: {"watch":true,"skipDefaultLibCheck":true,"skipJSDocParsing":true}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

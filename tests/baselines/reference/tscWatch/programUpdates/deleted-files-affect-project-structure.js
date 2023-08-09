@@ -33,7 +33,7 @@ Output::
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"noImplicitAny":true}
+Program options: {"watch":true,"noImplicitAny":true,"skipJSDocParsing":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -135,7 +135,7 @@ Output::
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"noImplicitAny":true}
+Program options: {"watch":true,"noImplicitAny":true,"skipJSDocParsing":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

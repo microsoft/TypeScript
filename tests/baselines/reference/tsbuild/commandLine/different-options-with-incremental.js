@@ -43,7 +43,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -206,7 +206,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"sourceMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -374,7 +374,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -527,7 +527,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"declaration":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -676,7 +676,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"declaration":true,"declarationMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -857,7 +857,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -997,7 +997,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"declaration":true,"declarationMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1155,7 +1155,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"inlineSourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"inlineSourceMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1320,7 +1320,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"sourceMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1491,7 +1491,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1653,7 +1653,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"incremental":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"incremental":true,"declaration":true,"declarationMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

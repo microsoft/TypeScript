@@ -28,7 +28,7 @@ Output::
 
 
 Program root files: ["/a/app.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"skipJSDocParsing":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -77,7 +77,7 @@ Output::
 
 
 Program root files: ["/a/app.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"skipJSDocParsing":true}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

@@ -30,7 +30,7 @@ Output::
 
 
 Program root files: ["/A/B/app.ts"]
-Program options: {"watch":true,"project":"/A/B/tsconfig.json","configFilePath":"/A/B/tsconfig.json"}
+Program options: {"watch":true,"project":"/A/B/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/A/B/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

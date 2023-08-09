@@ -35,7 +35,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/index.ts"]
-Program options: {"noUnusedParameters":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"noUnusedParameters":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -81,7 +81,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/index.ts"]
-Program options: {"noUnusedParameters":false,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"noUnusedParameters":false,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

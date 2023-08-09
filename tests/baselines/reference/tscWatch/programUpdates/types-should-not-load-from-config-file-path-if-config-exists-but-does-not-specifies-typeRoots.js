@@ -42,7 +42,7 @@ Output::
 
 
 Program root files: ["/a/b/app.ts"]
-Program options: {"types":["node"],"typeRoots":[],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {"types":["node"],"typeRoots":[],"watch":true,"project":"/a/b/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

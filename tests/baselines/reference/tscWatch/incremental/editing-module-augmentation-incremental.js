@@ -33,7 +33,7 @@ Output::
 
 
 Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -168,7 +168,7 @@ Found 1 error in src/index.ts[90m:1[0m
 
 
 Program root files: ["/users/username/projects/project/src/index.ts","/users/username/projects/project/src/types/classnames.d.ts"]
-Program options: {"module":1,"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

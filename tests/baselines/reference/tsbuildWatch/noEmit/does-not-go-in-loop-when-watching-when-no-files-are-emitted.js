@@ -42,7 +42,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.js","/user/username/projects/myproject/b.ts"]
-Program options: {"allowJs":true,"noEmit":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"allowJs":true,"noEmit":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -95,7 +95,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.js","/user/username/projects/myproject/b.ts"]
-Program options: {"allowJs":true,"noEmit":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"allowJs":true,"noEmit":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -132,7 +132,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.js","/user/username/projects/myproject/b.ts"]
-Program options: {"allowJs":true,"noEmit":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"allowJs":true,"noEmit":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

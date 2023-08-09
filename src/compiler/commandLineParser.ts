@@ -510,6 +510,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         type: "boolean",
         defaultValueDescription: false,
         hiddenInAllViews: true,
+        affectsSourceFile: true,
     },
 ];
 
