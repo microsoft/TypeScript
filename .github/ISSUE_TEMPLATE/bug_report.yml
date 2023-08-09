@@ -77,6 +77,10 @@ body:
           - We have to pare too much extraneous code.
           - We have to clone a large repo and validate that the problem isn't elsewhere.
           - The sample is confusing or doesn't clearly demonstrate what's wrong.
+      value: |
+        ```ts
+        // Your code here
+        ```
     validations:
       required: false
   - type: textarea
