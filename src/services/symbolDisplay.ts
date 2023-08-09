@@ -60,7 +60,9 @@ import {
     isThisInTypeQuery,
     isTransientSymbol,
     isTypeAliasDeclaration,
+    isVarAwaitUsing,
     isVarConst,
+    isVarUsing,
     JSDocTagInfo,
     JsxOpeningLikeElement,
     keywordPart,
@@ -161,6 +163,12 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
         else if (symbol.valueDeclaration && isVarConst(symbol.valueDeclaration as VariableDeclaration)) {
             return ScriptElementKind.constElement;
         }
+        else if (symbol.valueDeclaration && isVarUsing(symbol.valueDeclaration as VariableDeclaration)) {
+            return ScriptElementKind.variableUsingElement;
+        }
+        else if (symbol.valueDeclaration && isVarAwaitUsing(symbol.valueDeclaration as VariableDeclaration)) {
+            return ScriptElementKind.variableAwaitUsingElement;
+        }
         else if (forEach(symbol.declarations, isLet)) {
             return ScriptElementKind.letElement;
         }
@@ -246,10 +254,8 @@ export interface SymbolDisplayPartsDocumentationAndSymbolKind {
     tags: JSDocTagInfo[] | undefined;
 }
 
-// TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
-/** @internal */
-export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
-    location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
+function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
+    location: Node, type: Type | undefined, semanticMeaning: SemanticMeaning, alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
     const displayParts: SymbolDisplayPart[] = [];
     let documentation: SymbolDisplayPart[] = [];
     let tags: JSDocTagInfo[] = [];
@@ -257,7 +263,6 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
     let hasAddedSymbolInfo = false;
     const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location) || isThisInTypeQuery(location);
-    let type: Type | undefined;
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
@@ -292,7 +297,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         }
 
         let signature: Signature | undefined;
-        type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+        type ??= isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
         if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
             const right = (location.parent as PropertyAccessExpression).name;
@@ -545,12 +550,13 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                         isModuleWithStringLiteralName(resolvedNode) &&
                         hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
                     const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
-                    const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                         typeChecker,
                         resolvedSymbol,
                         getSourceFileOfNode(resolvedNode),
                         resolvedNode,
                         declarationName,
+                        type,
                         semanticMeaning,
                         shouldUseAliasName ? symbol : resolvedSymbol);
                     displayParts.push(...resolvedInfo.displayParts);
@@ -630,6 +636,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                     symbolFlags & SymbolFlags.Variable ||
                     symbolKind === ScriptElementKind.localVariableElement ||
                     symbolKind === ScriptElementKind.indexSignatureElement ||
+                    symbolKind === ScriptElementKind.variableUsingElement ||
+                    symbolKind === ScriptElementKind.variableAwaitUsingElement ||
                     isThisExpression) {
                     displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                     displayParts.push(spacePart());
@@ -807,6 +815,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             case ScriptElementKind.letElement:
             case ScriptElementKind.constElement:
             case ScriptElementKind.constructorImplementationElement:
+            case ScriptElementKind.variableUsingElement:
+            case ScriptElementKind.variableAwaitUsingElement:
                 displayParts.push(textOrKeywordPart(symbolKind));
                 return;
             default:
@@ -844,6 +854,13 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         });
         addRange(displayParts, typeParameterParts);
     }
+}
+
+// TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
+/** @internal */
+export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
+    location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
+    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias);
 }
 
 function isLocalVariableOrFunction(symbol: Symbol) {

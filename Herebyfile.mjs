@@ -14,7 +14,7 @@ import util from "util";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
-import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
+import { localBaseline, refBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
 import { Debouncer, Deferred, exec, getDiffTool, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
@@ -740,12 +740,6 @@ export const diff = task({
     run: () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true, waitForExit: false }),
 });
 
-export const diffRwc = task({
-    name: "diff-rwc",
-    description: "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable",
-    run: () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true, waitForExit: false }),
-});
-
 /**
  * @param {string} localBaseline Path to the local copy of the baselines
  * @param {string} refBaseline Path to the reference copy of the baselines
@@ -780,12 +774,6 @@ export const baselineAccept = task({
     run: baselineAcceptTask(localBaseline, refBaseline),
 });
 
-export const baselineAcceptRwc = task({
-    name: "baseline-accept-rwc",
-    description: "Makes the most recent rwc test results the new baseline, overwriting the old baseline",
-    run: baselineAcceptTask(localRwcBaseline, refRwcBaseline),
-});
-
 // TODO(rbuckton): Determine if we still need this task. Depending on a relative
 //                 path here seems like a bad idea.
 export const updateSublime = task({
@@ -797,13 +785,6 @@ export const updateSublime = task({
             await fs.promises.copyFile(file, path.resolve("../TypeScript-Sublime-Plugin/tsserver/", path.basename(file)));
         }
     }
-});
-
-// TODO(rbuckton): Should the path to DefinitelyTyped be configurable via an environment variable?
-export const importDefinitelyTypedTests = task({
-    name: "importDefinitelyTypedTests",
-    description: "Runs the importDefinitelyTypedTests script to copy DT's tests to the TS-internal RWC tests",
-    run: () => exec(process.execPath, ["scripts/importDefinitelyTypedTests.mjs", "./", "../DefinitelyTyped"]),
 });
 
 

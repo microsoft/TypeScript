@@ -667,7 +667,7 @@ console.log(a);`,
             return {
                 ...withOptionChange(caption, option),
                 discrepancyExplanation: () => [
-                    `Clean build tsbuildinfo will have compilerOptions with composite and ${option.replace(/\-/g, "")}`,
+                    `Clean build tsbuildinfo will have compilerOptions with composite and ${option.replace(/-/g, "")}`,
                     `Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only`,
                 ]
             };

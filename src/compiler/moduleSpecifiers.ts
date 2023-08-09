@@ -775,7 +775,9 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                         validateEnding({ ending, value })
                     ) {
                         const matchedStar = value.substring(prefix.length, value.length - suffix.length);
-                        return pathIsRelative(matchedStar) ? undefined : key.replace("*", matchedStar);
+                        if (!pathIsRelative(matchedStar)) {
+                            return key.replace("*", matchedStar);
+                        }
                     }
                 }
             }
@@ -860,7 +862,7 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
             for (const key of getOwnKeys(exports as MapLike<unknown>)) {
                 if (key === "default" || conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(conditions, key)) {
                     const subTarget = (exports as MapLike<unknown>)[key];
-                    const result = tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, packageName, subTarget, conditions);
+                    const result = tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, packageName, subTarget, conditions, mode);
                     if (result) {
                         return result;
                     }

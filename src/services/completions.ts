@@ -181,6 +181,7 @@ import {
     isInString,
     isInterfaceDeclaration,
     isIntersectionTypeNode,
+    isInTypeQuery,
     isJSDoc,
     isJSDocAugmentsTag,
     isJSDocImplementsTag,
@@ -3111,7 +3112,7 @@ function getCompletionData(
                 //    *         |c|
                 //    */
                 const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                if (!/[^\*|\s(/)]/.test(sourceFile.text.substring(lineStart, position))) {
+                if (!/[^*|\s(/)]/.test(sourceFile.text.substring(lineStart, position))) {
                     return { kind: CompletionDataKind.JsDocTag };
                 }
             }
@@ -3515,28 +3516,33 @@ function getCompletionData(
             }
         }
 
-        if (!isTypeLocation) {
+        if (!isTypeLocation || isInTypeQuery(node)) {
             // GH#39946. Pulling on the type of a node inside of a function with a contextual `this` parameter can result in a circularity
             // if the `node` is part of the exprssion of a `yield` or `return`. This circularity doesn't exist at compile time because
             // we will check (and cache) the type of `this` *before* checking the type of the node.
             typeChecker.tryGetThisTypeAt(node, /*includeGlobalThis*/ false);
-
             let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
-            let insertQuestionDot = false;
-            if (type.isNullableType()) {
-                const canCorrectToQuestionDot =
-                    isRightOfDot &&
-                    !isRightOfQuestionDot &&
-                    preferences.includeAutomaticOptionalChainCompletions !== false;
 
-                if (canCorrectToQuestionDot || isRightOfQuestionDot) {
-                    type = type.getNonNullableType();
-                    if (canCorrectToQuestionDot) {
-                        insertQuestionDot = true;
+            if (!isTypeLocation) {
+                let insertQuestionDot = false;
+                if (type.isNullableType()) {
+                    const canCorrectToQuestionDot =
+                        isRightOfDot &&
+                        !isRightOfQuestionDot &&
+                        preferences.includeAutomaticOptionalChainCompletions !== false;
+
+                    if (canCorrectToQuestionDot || isRightOfQuestionDot) {
+                        type = type.getNonNullableType();
+                        if (canCorrectToQuestionDot) {
+                            insertQuestionDot = true;
+                        }
                     }
                 }
+                addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
             }
-            addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
+            else {
+                addTypeProperties(type.getNonNullableType(), /*insertAwait*/ false, /*insertQuestionDot*/ false);
+            }
         }
     }
 
@@ -3585,7 +3591,8 @@ function getCompletionData(
             const nameSymbol = leftMostName && typeChecker.getSymbolAtLocation(leftMostName);
             // If this is nested like for `namespace N { export const sym = Symbol(); }`, we'll add the completion for `N`.
             const firstAccessibleSymbol = nameSymbol && getFirstSymbolInChain(nameSymbol, contextToken, typeChecker);
-            if (firstAccessibleSymbol && addToSeen(seenPropertySymbols, getSymbolId(firstAccessibleSymbol))) {
+            const firstAccessibleSymbolId = firstAccessibleSymbol && getSymbolId(firstAccessibleSymbol);
+            if (firstAccessibleSymbolId && addToSeen(seenPropertySymbols, firstAccessibleSymbolId)) {
                 const index = symbols.length;
                 symbols.push(firstAccessibleSymbol);
                 const moduleSymbol = firstAccessibleSymbol.parent;
@@ -3621,6 +3628,9 @@ function getCompletionData(
                 }
             }
             else if (preferences.includeCompletionsWithInsertText) {
+                if (firstAccessibleSymbolId && seenPropertySymbols.has(firstAccessibleSymbolId)) {
+                    return;
+                }
                 addSymbolOriginInfo(symbol);
                 addSymbolSortInfo(symbol);
                 symbols.push(symbol);
@@ -4193,7 +4203,7 @@ function getCompletionData(
         const members = getPropertiesForCompletion(containerExpectedType, typeChecker);
         const existingMembers = getPropertiesForCompletion(containerActualType, typeChecker);
 
-        const existingMemberEscapedNames: Set<__String> = new Set();
+        const existingMemberEscapedNames = new Set<__String>();
         existingMembers.forEach(s => existingMemberEscapedNames.add(s.escapedName));
 
         symbols = concatenate(symbols, filter(members, s => !existingMemberEscapedNames.has(s.escapedName)));
@@ -5286,6 +5296,11 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
             const cls = tryCast(lastOrUndefined(cast(location.parent, isSourceFile).statements), isObjectTypeDeclaration);
             if (cls && !findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile)) {
                 return cls;
+            }
+            break;
+        case SyntaxKind.PrivateIdentifier:
+            if (tryCast(location.parent, isPropertyDeclaration)) {
+                return findAncestor(location, isClassLike);
             }
             break;
         case SyntaxKind.Identifier: {

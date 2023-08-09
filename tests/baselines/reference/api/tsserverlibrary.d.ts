@@ -2124,11 +2124,17 @@ declare namespace ts {
                 arguments: InlayHintsRequestArgs;
             }
             interface InlayHintItem {
+                /** This property will be the empty string when displayParts is set. */
                 text: string;
                 position: Location;
                 kind: InlayHintKind;
                 whitespaceBefore?: boolean;
                 whitespaceAfter?: boolean;
+                displayParts?: InlayHintItemDisplayPart[];
+            }
+            interface InlayHintItemDisplayPart {
+                text: string;
+                span?: FileSpan;
             }
             interface InlayHintsResponse extends Response {
                 body?: InlayHintItem[];
@@ -2832,6 +2838,7 @@ declare namespace ts {
                 readonly includeInlayPropertyDeclarationTypeHints?: boolean;
                 readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
                 readonly includeInlayEnumMemberValueHints?: boolean;
+                readonly interactiveInlayHints?: boolean;
                 readonly autoImportFileExcludePatterns?: string[];
                 /**
                  * Indicates whether imports should be organized in a case-insensitive manner.
@@ -3400,7 +3407,7 @@ declare namespace ts {
             markAsDirty(): void;
             getScriptFileNames(): string[];
             getLanguageService(): never;
-            getModuleResolutionHostForAutoImportProvider(): never;
+            getHostForAutoImportProvider(): never;
             getProjectReferences(): readonly ts.ProjectReference[] | undefined;
             getTypeAcquisition(): TypeAcquisition;
         }
@@ -4067,7 +4074,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.2";
+    const versionMajorMinor = "5.3";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -5827,9 +5834,11 @@ declare namespace ts {
         };
     }) | ExportDeclaration & {
         readonly isTypeOnly: true;
+        readonly moduleSpecifier: Expression;
     } | NamespaceExport & {
         readonly parent: ExportDeclaration & {
             readonly isTypeOnly: true;
+            readonly moduleSpecifier: Expression;
         };
     };
     type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
@@ -6274,7 +6283,7 @@ declare namespace ts {
         getSourceFileByPath(path: Path): SourceFile | undefined;
         getCurrentDirectory(): string;
     }
-    interface ParseConfigHost {
+    interface ParseConfigHost extends ModuleResolutionHost {
         useCaseSensitiveFileNames: boolean;
         readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
         /**
@@ -8400,6 +8409,7 @@ declare namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly interactiveInlayHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
@@ -10382,11 +10392,18 @@ declare namespace ts {
         Enum = "Enum"
     }
     interface InlayHint {
+        /** This property will be the empty string when displayParts is set. */
         text: string;
         position: number;
         kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
+        displayParts?: InlayHintDisplayPart[];
+    }
+    interface InlayHintDisplayPart {
+        text: string;
+        span?: TextSpan;
+        file?: string;
     }
     interface TodoCommentDescriptor {
         text: string;
@@ -10978,6 +10995,10 @@ declare namespace ts {
         variableElement = "var",
         /** Inside function */
         localVariableElement = "local var",
+        /** using foo = ... */
+        variableUsingElement = "using",
+        /** await using foo = ... */
+        variableAwaitUsingElement = "await using",
         /**
          * Inside module and script only
          * function f() { }
