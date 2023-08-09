@@ -244,10 +244,10 @@ function getNewStatementsAndRemoveFromOldFile(
             moveStatementsToTargetFile(changes, program, body, targetFile, toMove);
         }
         else {
-            changes.insertNodesAtEndOfFile(targetFile, body, /*blankLineBetween*/ false);
+            changes.insertNodesAtEndOfFile(targetFile, body, /*blankLineSuffix*/ false, !imports || usage.oldImportsNeededByTargetFile.size === 0 ? true : false);
         }
         if (imports.length > 0) {
-            insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
+            insertImports(changes, targetFile, imports, usage.oldImportsNeededByTargetFile.size === 0 ? true : false, preferences);
         }
     }
     if (importAdder) {
@@ -1196,7 +1196,9 @@ function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program:
         changes.insertNodesBefore(targetFile, lastReExport, statements, /*blankLineBetween*/ true);
     }
     else {
-        changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], statements);
+        (isImportDeclaration(targetFile.statements[targetFile.statements.length - 1])) ?
+            changes.insertNodesAtEndOfFile(targetFile, statements, /*blankLineSuffix*/ false, /*blankLinePrefix*/ true) :
+            changes.insertNodesAfter(targetFile, targetFile.statements[targetFile.statements.length - 1], statements);
     }
 }
 

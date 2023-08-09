@@ -620,7 +620,8 @@ export class ChangeTracker {
     private insertAtTopOfFile(sourceFile: SourceFile, insert: Statement | readonly Statement[], blankLineBetween: boolean): void {
         const pos = getInsertionPositionAtSourceFileTop(sourceFile);
         const options = {
-            prefix: pos === 0 ? undefined : this.newLineCharacter,
+            // While inserting import statements in a blank existing file, add a newline as a prefix only if the file is blank, or the import is added as the first statement without using importAdder.
+            prefix: pos === 0 || pos === sourceFile.end && blankLineBetween ? undefined : this.newLineCharacter,
             suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
         };
         if (isArray(insert)) {
@@ -634,18 +635,20 @@ export class ChangeTracker {
     public insertNodesAtEndOfFile(
         sourceFile: SourceFile,
         newNodes: readonly Statement[],
-        blankLineBetween: boolean): void {
-        this.insertAtEndOfFile(sourceFile, newNodes, blankLineBetween);
+        blankLineSuffix: boolean,
+        blankLinePrefix: boolean): void {
+        this.insertAtEndOfFile(sourceFile, newNodes, blankLineSuffix, blankLinePrefix);
     }
 
     private insertAtEndOfFile(
         sourceFile: SourceFile,
         insert: readonly Statement[],
-        blankLineBetween: boolean): void {
+        blankLineSuffix: boolean,
+        blankLinePrefix: boolean): void {
         const pos = sourceFile.end + 1;
         const options = {
-            prefix: this.newLineCharacter,
-            suffix: this.newLineCharacter + (blankLineBetween ? this.newLineCharacter : ""),
+            prefix: blankLinePrefix ? this.newLineCharacter : undefined,
+            suffix: this.newLineCharacter + (blankLineSuffix ? this.newLineCharacter : ""),
         };
         this.insertNodesAt(sourceFile, pos, insert, options);
     }
