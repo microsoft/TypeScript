@@ -1,0 +1,81 @@
+//// [tests/cases/conformance/types/literal/genericStringMappings.ts] ////
+
+=== genericStringMappings.ts ===
+// repro from #52102#issuecomment-1371248589
+
+type CamelCase1<
+>CamelCase1 : Symbol(CamelCase1, Decl(genericStringMappings.ts, 0, 0))
+
+  S extends string,
+>S : Symbol(S, Decl(genericStringMappings.ts, 2, 16))
+
+  L extends string = Lowercase<S>,
+>L : Symbol(L, Decl(genericStringMappings.ts, 3, 19))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(genericStringMappings.ts, 2, 16))
+
+  Res extends string = ""
+>Res : Symbol(Res, Decl(genericStringMappings.ts, 4, 34))
+
+> = L extends ""
+>L : Symbol(L, Decl(genericStringMappings.ts, 3, 19))
+
+  ? `start_${Uncapitalize<Res>}_end`
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+>Res : Symbol(Res, Decl(genericStringMappings.ts, 4, 34))
+
+  : CamelCase1<never, "", `${Res}${Capitalize<L>}`>;
+>CamelCase1 : Symbol(CamelCase1, Decl(genericStringMappings.ts, 0, 0))
+>Res : Symbol(Res, Decl(genericStringMappings.ts, 4, 34))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>L : Symbol(L, Decl(genericStringMappings.ts, 3, 19))
+
+type Test1 = CamelCase1<"ABC">
+>Test1 : Symbol(Test1, Decl(genericStringMappings.ts, 8, 52))
+>CamelCase1 : Symbol(CamelCase1, Decl(genericStringMappings.ts, 0, 0))
+
+// repro from #52102
+
+type CamelCase2<
+>CamelCase2 : Symbol(CamelCase2, Decl(genericStringMappings.ts, 10, 30))
+
+  S extends string,
+>S : Symbol(S, Decl(genericStringMappings.ts, 14, 16))
+
+  L extends string = Lowercase<S>,
+>L : Symbol(L, Decl(genericStringMappings.ts, 15, 19))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(genericStringMappings.ts, 14, 16))
+
+  Res extends string = ""
+>Res : Symbol(Res, Decl(genericStringMappings.ts, 16, 34))
+
+> = L extends ""
+>L : Symbol(L, Decl(genericStringMappings.ts, 15, 19))
+
+  ? Uncapitalize<Res>
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+>Res : Symbol(Res, Decl(genericStringMappings.ts, 16, 34))
+
+  : L extends `${infer H}_${infer T}`
+>L : Symbol(L, Decl(genericStringMappings.ts, 15, 19))
+>H : Symbol(H, Decl(genericStringMappings.ts, 20, 22))
+>T : Symbol(T, Decl(genericStringMappings.ts, 20, 33))
+
+  ? CamelCase2<never, T, `${Res}${Capitalize<H>}`>
+>CamelCase2 : Symbol(CamelCase2, Decl(genericStringMappings.ts, 10, 30))
+>T : Symbol(T, Decl(genericStringMappings.ts, 20, 33))
+>Res : Symbol(Res, Decl(genericStringMappings.ts, 16, 34))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>H : Symbol(H, Decl(genericStringMappings.ts, 20, 22))
+
+  : CamelCase2<never, "", `${Res}${Capitalize<L>}`>;
+>CamelCase2 : Symbol(CamelCase2, Decl(genericStringMappings.ts, 10, 30))
+>Res : Symbol(Res, Decl(genericStringMappings.ts, 16, 34))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>L : Symbol(L, Decl(genericStringMappings.ts, 15, 19))
+
+type Test2 = CamelCase2<"FOOBAR">
+>Test2 : Symbol(Test2, Decl(genericStringMappings.ts, 22, 52))
+>CamelCase2 : Symbol(CamelCase2, Decl(genericStringMappings.ts, 10, 30))
+

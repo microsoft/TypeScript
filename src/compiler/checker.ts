@@ -17267,7 +17267,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getStringMappingType(symbol: Symbol, type: Type): Type {
         return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
             type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
-            type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
+            type.flags & TypeFlags.TemplateLiteral ? applyTemplateStringMapping(symbol, type as TemplateLiteralType) :
             // Mapping<Mapping<T>> === Mapping<T>
             type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
             type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.StringMapping) || isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
@@ -17286,14 +17286,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return str;
     }
 
-    function applyTemplateStringMapping(symbol: Symbol, texts: readonly string[], types: readonly Type[]): [texts: readonly string[], types: readonly Type[]] {
+    function applyTemplateStringMapping(symbol: Symbol, type: TemplateLiteralType): Type {
+        const { texts, types } = type;
         switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
-            case IntrinsicTypeKind.Uppercase: return [texts.map(t => t.toUpperCase()), types.map(t => getStringMappingType(symbol, t))];
-            case IntrinsicTypeKind.Lowercase: return [texts.map(t => t.toLowerCase()), types.map(t => getStringMappingType(symbol, t))];
-            case IntrinsicTypeKind.Capitalize: return [texts[0] === "" ? texts : [texts[0].charAt(0).toUpperCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
-            case IntrinsicTypeKind.Uncapitalize: return [texts[0] === "" ? texts : [texts[0].charAt(0).toLowerCase() + texts[0].slice(1), ...texts.slice(1)], texts[0] === "" ? [getStringMappingType(symbol, types[0]), ...types.slice(1)] : types];
+            case IntrinsicTypeKind.Uppercase: return getTemplateLiteralType(texts.map(t => t.toUpperCase()), types.map(t => getStringMappingType(symbol, t)));
+            case IntrinsicTypeKind.Lowercase: return getTemplateLiteralType(texts.map(t => t.toLowerCase()), types.map(t => getStringMappingType(symbol, t)));
+            case IntrinsicTypeKind.Capitalize:
+            case IntrinsicTypeKind.Uncapitalize:
+                return texts[0] === "" && types.length
+                    ? types.length === 1 && texts[1] === ""
+                        ? getStringMappingType(symbol, types[0])
+                        : getStringMappingTypeForGenericType(symbol, type)
+                    : getTemplateLiteralType(
+                        [applyStringMapping(symbol, texts[0]), ...texts.slice(1)],
+                        types
+                    );
         }
-        return [texts, types];
+        return getTemplateLiteralType(texts, types);
     }
 
     function getStringMappingTypeForGenericType(symbol: Symbol, type: Type): Type {
