@@ -1,0 +1,23 @@
+noEnumOpMixing.ts(5,9): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+noEnumOpMixing.ts(13,9): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+
+
+==== noEnumOpMixing.ts (2 errors) ====
+    enum A { x, y, z }
+    enum B { d, e, f }
+    
+    // Should error
+    let m = A.x | B.d;
+            ~~~~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+    // Should OK
+    let n = A.x | A.y;
+    // Should OK
+    declare let a1: A, a2: A;
+    let o = a1 | a2;
+    // Should error
+    declare let b1: B;
+    let p = a1 | b1;
+            ~~~~~~~
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+    

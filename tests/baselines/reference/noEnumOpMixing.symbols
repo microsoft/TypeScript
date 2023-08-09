@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/noEnumOpMixing.ts] ////
+
+=== noEnumOpMixing.ts ===
+enum A { x, y, z }
+>A : Symbol(A, Decl(noEnumOpMixing.ts, 0, 0))
+>x : Symbol(A.x, Decl(noEnumOpMixing.ts, 0, 8))
+>y : Symbol(A.y, Decl(noEnumOpMixing.ts, 0, 11))
+>z : Symbol(A.z, Decl(noEnumOpMixing.ts, 0, 14))
+
+enum B { d, e, f }
+>B : Symbol(B, Decl(noEnumOpMixing.ts, 0, 18))
+>d : Symbol(B.d, Decl(noEnumOpMixing.ts, 1, 8))
+>e : Symbol(B.e, Decl(noEnumOpMixing.ts, 1, 11))
+>f : Symbol(B.f, Decl(noEnumOpMixing.ts, 1, 14))
+
+// Should error
+let m = A.x | B.d;
+>m : Symbol(m, Decl(noEnumOpMixing.ts, 4, 3))
+>A.x : Symbol(A.x, Decl(noEnumOpMixing.ts, 0, 8))
+>A : Symbol(A, Decl(noEnumOpMixing.ts, 0, 0))
+>x : Symbol(A.x, Decl(noEnumOpMixing.ts, 0, 8))
+>B.d : Symbol(B.d, Decl(noEnumOpMixing.ts, 1, 8))
+>B : Symbol(B, Decl(noEnumOpMixing.ts, 0, 18))
+>d : Symbol(B.d, Decl(noEnumOpMixing.ts, 1, 8))
+
+// Should OK
+let n = A.x | A.y;
+>n : Symbol(n, Decl(noEnumOpMixing.ts, 6, 3))
+>A.x : Symbol(A.x, Decl(noEnumOpMixing.ts, 0, 8))
+>A : Symbol(A, Decl(noEnumOpMixing.ts, 0, 0))
+>x : Symbol(A.x, Decl(noEnumOpMixing.ts, 0, 8))
+>A.y : Symbol(A.y, Decl(noEnumOpMixing.ts, 0, 11))
+>A : Symbol(A, Decl(noEnumOpMixing.ts, 0, 0))
+>y : Symbol(A.y, Decl(noEnumOpMixing.ts, 0, 11))
+
+// Should OK
+declare let a1: A, a2: A;
+>a1 : Symbol(a1, Decl(noEnumOpMixing.ts, 8, 11))
+>A : Symbol(A, Decl(noEnumOpMixing.ts, 0, 0))
+>a2 : Symbol(a2, Decl(noEnumOpMixing.ts, 8, 18))
+>A : Symbol(A, Decl(noEnumOpMixing.ts, 0, 0))
+
+let o = a1 | a2;
+>o : Symbol(o, Decl(noEnumOpMixing.ts, 9, 3))
+>a1 : Symbol(a1, Decl(noEnumOpMixing.ts, 8, 11))
+>a2 : Symbol(a2, Decl(noEnumOpMixing.ts, 8, 18))
+
+// Should error
+declare let b1: B;
+>b1 : Symbol(b1, Decl(noEnumOpMixing.ts, 11, 11))
+>B : Symbol(B, Decl(noEnumOpMixing.ts, 0, 18))
+
+let p = a1 | b1;
+>p : Symbol(p, Decl(noEnumOpMixing.ts, 12, 3))
+>a1 : Symbol(a1, Decl(noEnumOpMixing.ts, 8, 11))
+>b1 : Symbol(b1, Decl(noEnumOpMixing.ts, 11, 11))
+

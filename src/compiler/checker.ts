@@ -36979,6 +36979,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 leftType = checkNonNullType(leftType, left);
                 rightType = checkNonNullType(rightType, right);
 
+                // If both are enum types, they must be the same enum type
+                if (leftType.flags & rightType.flags & TypeFlags.EnumLiteral) {
+                    if (getBaseTypeOfEnumLikeType(leftType).symbol !== getBaseTypeOfEnumLikeType(rightType).symbol) {
+                        error(errorNode, Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations);
+                    }
+                }
+
                 let suggestedOperator: PunctuationSyntaxKind | undefined;
                 // if a user tries to apply a bitwise operator to 2 boolean operands
                 // try and return them a helpful suggestion
@@ -36992,6 +36999,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // otherwise just check each operand separately and report errors as normal
                     const leftOk = checkArithmeticOperandType(left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*isAwaitValid*/ true);
                     const rightOk = checkArithmeticOperandType(right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*isAwaitValid*/ true);
+
                     let resultType: Type;
                     // If both are any or unknown, allow operation; assume it will resolve to number
                     if ((isTypeAssignableToKind(leftType, TypeFlags.AnyOrUnknown) && isTypeAssignableToKind(rightType, TypeFlags.AnyOrUnknown)) ||

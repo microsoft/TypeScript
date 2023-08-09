@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/noEnumOpMixing.ts] ////
+
+=== noEnumOpMixing.ts ===
+enum A { x, y, z }
+>A : A
+>x : A.x
+>y : A.y
+>z : A.z
+
+enum B { d, e, f }
+>B : B
+>d : B.d
+>e : B.e
+>f : B.f
+
+// Should error
+let m = A.x | B.d;
+>m : number
+>A.x | B.d : number
+>A.x : A.x
+>A : typeof A
+>x : A.x
+>B.d : B.d
+>B : typeof B
+>d : B.d
+
+// Should OK
+let n = A.x | A.y;
+>n : number
+>A.x | A.y : number
+>A.x : A.x
+>A : typeof A
+>x : A.x
+>A.y : A.y
+>A : typeof A
+>y : A.y
+
+// Should OK
+declare let a1: A, a2: A;
+>a1 : A
+>a2 : A
+
+let o = a1 | a2;
+>o : number
+>a1 | a2 : number
+>a1 : A
+>a2 : A
+
+// Should error
+declare let b1: B;
+>b1 : B
+
+let p = a1 | b1;
+>p : number
+>a1 | b1 : number
+>a1 : A
+>b1 : B
+
