@@ -866,11 +866,19 @@ export const enum InlayHintKind {
 }
 
 export interface InlayHint {
+    /** This property will be the empty string when displayParts is set. */
     text: string;
     position: number;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+    displayParts?: InlayHintDisplayPart[];
+}
+
+export interface InlayHintDisplayPart {
+    text: string;
+    span?: TextSpan;
+    file?: string;
 }
 
 export interface TodoCommentDescriptor {
@@ -1595,6 +1603,12 @@ export const enum ScriptElementKind {
 
     /** Inside function */
     localVariableElement = "local var",
+
+    /** using foo = ... */
+    variableUsingElement = "using",
+
+    /** await using foo = ... */
+    variableAwaitUsingElement = "await using",
 
     /**
      * Inside module and script only

@@ -12,7 +12,7 @@ var m = M;
 
 
 //// [structuralTypeInDeclareFileForModule.d.ts]
-declare module M {
+declare namespace M {
     var x: any;
 }
 declare var m: typeof M;
