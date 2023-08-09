@@ -1,7 +1,11 @@
 call(1);
      ^
 {
-  "text": [
+  "text": "",
+  "position": 131,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "a",
       "span": {
@@ -13,16 +17,17 @@ call(1);
     {
       "text": ":"
     }
-  ],
-  "position": 131,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 call(1, 2);
      ^
 {
-  "text": [
+  "text": "",
+  "position": 140,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "b",
       "span": {
@@ -34,16 +39,17 @@ call(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 140,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 call(1, 2);
         ^
 {
-  "text": [
+  "text": "",
+  "position": 143,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "c",
       "span": {
@@ -55,16 +61,17 @@ call(1, 2);
     {
       "text": ":"
     }
-  ],
-  "position": 143,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 new call(1);
          ^
 {
-  "text": [
+  "text": "",
+  "position": 156,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "d",
       "span": {
@@ -76,8 +83,5 @@ new call(1);
     {
       "text": ":"
     }
-  ],
-  "position": 156,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

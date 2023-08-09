@@ -1,7 +1,11 @@
 foo(1, '', false, 1, 2)
     ^
 {
-  "text": [
+  "text": "",
+  "position": 161,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "f",
       "span": {
@@ -13,16 +17,17 @@ foo(1, '', false, 1, 2)
     {
       "text": ":"
     }
-  ],
-  "position": 161,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo(1, '', false, 1, 2)
        ^
 {
-  "text": [
+  "text": "",
+  "position": 164,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "a",
       "span": {
@@ -34,16 +39,17 @@ foo(1, '', false, 1, 2)
     {
       "text": ":"
     }
-  ],
-  "position": 164,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo(1, '', false, 1, 2)
            ^
 {
-  "text": [
+  "text": "",
+  "position": 168,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "b",
       "span": {
@@ -55,16 +61,17 @@ foo(1, '', false, 1, 2)
     {
       "text": ":"
     }
-  ],
-  "position": 168,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo(1, '', false, 1, 2)
                   ^
 {
-  "text": [
+  "text": "",
+  "position": 175,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "...c",
       "span": {
@@ -76,16 +83,17 @@ foo(1, '', false, 1, 2)
     {
       "text": ":"
     }
-  ],
-  "position": 175,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo1(1, "", "")
      ^
 {
-  "text": [
+  "text": "",
+  "position": 186,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "f1",
       "span": {
@@ -97,16 +105,17 @@ foo1(1, "", "")
     {
       "text": ":"
     }
-  ],
-  "position": 186,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo1(1, "", "")
         ^
 {
-  "text": [
+  "text": "",
+  "position": 189,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "...args",
       "span": {
@@ -118,8 +127,5 @@ foo1(1, "", "")
     {
       "text": ":"
     }
-  ],
-  "position": 189,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

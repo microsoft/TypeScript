@@ -760,21 +760,20 @@ export class SessionClient implements LanguageService {
         const response = this.processResponse<protocol.InlayHintsResponse>(request);
 
         return response.body!.map(item => {
-            const { text, position } = item;
-            const hint = typeof text === "string" ? text : text.map(({ text, span }) => ({
-                text,
-                span: span && {
-                    start: this.lineOffsetToPosition(span.file, span.start),
-                    length: this.lineOffsetToPosition(span.file, span.end) - this.lineOffsetToPosition(span.file, span.start),
-                },
-                file: span && span.file
-            }));
+            const { position, displayParts } = item;
 
             return ({
                 ...item,
                 position: this.lineOffsetToPosition(file, position),
-                text: hint,
-                kind: item.kind as InlayHintKind
+                kind: item.kind as InlayHintKind,
+                displayParts: displayParts?.map(({ text, span }) => ({
+                    text,
+                    span: span && {
+                        start: this.lineOffsetToPosition(span.file, span.start),
+                        length: this.lineOffsetToPosition(span.file, span.end) - this.lineOffsetToPosition(span.file, span.start),
+                    },
+                    file: span && span.file
+                })),
             });
         });
     }

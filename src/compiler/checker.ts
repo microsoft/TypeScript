@@ -851,7 +851,6 @@ import {
     NodeCheckFlags,
     NodeFlags,
     nodeHasName,
-    nodeIsDecorated,
     nodeIsMissing,
     nodeIsPresent,
     nodeIsSynthesized,
@@ -1075,7 +1074,7 @@ import {
     WhileStatement,
     WideningContext,
     WithStatement,
-    YieldExpression,
+    YieldExpression
 } from "./_namespaces/ts";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 import * as performance from "./_namespaces/ts.performance";
@@ -8112,7 +8111,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return factory.createStringLiteral(name, !!singleQuote);
                     }
                     if (isNumericLiteralName(name) && startsWith(name, "-")) {
-                        return factory.createComputedPropertyName(factory.createNumericLiteral(+name));
+                        return factory.createComputedPropertyName(factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(+name))));
                     }
                     return createPropertyNameNodeForIdentifierOrLiteral(name, getEmitScriptTarget(compilerOptions));
                 }
@@ -20370,6 +20369,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let expandingFlags = ExpandingFlags.None;
         let overflow = false;
         let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
+        let skipParentCounter = 0; // How many errors should be skipped 'above' in the elaboration pyramid
         let lastSkippedInfo: [Type, Type] | undefined;
         let incompatibleStack: DiagnosticAndArguments[] | undefined;
 
@@ -20431,6 +20431,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             lastSkippedInfo = saved.lastSkippedInfo;
             incompatibleStack = saved.incompatibleStack;
             overrideNextErrorInfo = saved.overrideNextErrorInfo;
+            skipParentCounter = saved.skipParentCounter;
             relatedInfo = saved.relatedInfo;
         }
 
@@ -20440,6 +20441,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 lastSkippedInfo,
                 incompatibleStack: incompatibleStack?.slice(),
                 overrideNextErrorInfo,
+                skipParentCounter,
                 relatedInfo: relatedInfo?.slice() as [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined,
             };
         }
@@ -20562,7 +20564,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             Debug.assert(!!errorNode);
             if (incompatibleStack) reportIncompatibleStack();
             if (message.elidedInCompatabilityPyramid) return;
-            errorInfo = chainDiagnosticMessages(errorInfo, message, ...args);
+            if (skipParentCounter === 0) {
+                errorInfo = chainDiagnosticMessages(errorInfo, message, ...args);
+            }
+            else {
+                skipParentCounter--;
+            }
+        }
+
+        function reportParentSkippedError(message: DiagnosticMessage, ...args: DiagnosticArguments): void {
+            reportError(message, ...args);
+            skipParentCounter++;
         }
 
         function associateRelatedInfo(info: DiagnosticRelatedInformation) {
@@ -20959,11 +20971,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     }
                                 }
                                 if (suggestion !== undefined) {
-                                    reportError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
+                                    reportParentSkippedError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
                                         symbolToString(prop), typeToString(errorTarget), suggestion);
                                 }
                                 else {
-                                    reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                    reportParentSkippedError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                         symbolToString(prop), typeToString(errorTarget));
                                 }
                             }
@@ -28001,37 +28013,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         let declaration = localOrExportSymbol.valueDeclaration;
         if (declaration && localOrExportSymbol.flags & SymbolFlags.Class) {
-            // Due to the emit for class decorators, any reference to the class from inside of the class body
-            // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
-            // behavior of class names in ES6.
-            if (declaration.kind === SyntaxKind.ClassDeclaration
-                && nodeIsDecorated(legacyDecorators, declaration as ClassDeclaration)) {
-                let container = getContainingClass(node);
-                while (container !== undefined) {
-                    if (container === declaration && container.name !== node) {
-                        getNodeLinks(declaration).flags |= NodeCheckFlags.ClassWithConstructorReference;
-                        getNodeLinks(node).flags |= NodeCheckFlags.ConstructorReferenceInClass;
-                        break;
-                    }
-
-                    container = getContainingClass(container);
-                }
-            }
-            else if (declaration.kind === SyntaxKind.ClassExpression) {
-                // When we emit a class expression with static members that contain a reference
-                // to the constructor in the initializer, we will need to substitute that
-                // binding with an alias as the class name is not in scope.
+            // When we downlevel classes we may emit some code outside of the class body. Due to the fact the
+            // class name is double-bound, we must ensure we mark references to the class name so that we can
+            // emit an alias to the class later.
+            if (isClassLike(declaration) && declaration.name !== node) {
                 let container = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
-                while (container.kind !== SyntaxKind.SourceFile) {
-                    if (container.parent === declaration) {
-                        if (isPropertyDeclaration(container) && isStatic(container) || isClassStaticBlockDeclaration(container)) {
-                            getNodeLinks(declaration).flags |= NodeCheckFlags.ClassWithConstructorReference;
-                            getNodeLinks(node).flags |= NodeCheckFlags.ConstructorReferenceInClass;
-                        }
-                        break;
-                    }
-
+                while (container.kind !== SyntaxKind.SourceFile && container.parent !== declaration) {
                     container = getThisContainer(container, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
+                }
+
+                if (container.kind !== SyntaxKind.SourceFile) {
+                    getNodeLinks(declaration).flags |= NodeCheckFlags.ContainsConstructorReference;
+                    getNodeLinks(container).flags |= NodeCheckFlags.ContainsConstructorReference;
+                    getNodeLinks(node).flags |= NodeCheckFlags.ConstructorReference;
                 }
             }
         }
@@ -29253,7 +29247,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (t.flags & TypeFlags.StructuredType) {
                 const prop = getPropertyOfType(t, name);
                 if (prop) {
-                    return isCircularMappedProperty(prop) ? undefined : getTypeOfSymbol(prop);
+                    return isCircularMappedProperty(prop) ? undefined : removeMissingType(getTypeOfSymbol(prop), !!(prop && prop.flags & SymbolFlags.Optional));
                 }
                 if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
                     const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
@@ -29330,7 +29324,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If index is before any spread element and within the fixed part of the contextual tuple type, return
                 // the type of the contextual tuple element.
                 if ((firstSpreadIndex === undefined || index < firstSpreadIndex) && index < t.target.fixedLength) {
-                    return getTypeArguments(t)[index];
+                    return removeMissingType(getTypeArguments(t)[index], !!(t.target.elementFlags[index] && ElementFlags.Optional));
                 }
                 // When the length is known and the index is after all spread elements we compute the offset from the element
                 // to the end and the number of ending fixed elements in the contextual tuple type.
@@ -30699,15 +30693,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!isErrorType(intrinsicElementsType)) {
                 // Property case
                 if (!isIdentifier(node.tagName) && !isJsxNamespacedName(node.tagName)) return Debug.fail();
-                const intrinsicProp = getPropertyOfType(intrinsicElementsType, isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText);
+                const propName = isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText;
+                const intrinsicProp = getPropertyOfType(intrinsicElementsType, propName);
                 if (intrinsicProp) {
                     links.jsxFlags |= JsxFlags.IntrinsicNamedElement;
                     return links.resolvedSymbol = intrinsicProp;
                 }
 
                 // Intrinsic string indexer case
-                const indexSignatureType = getIndexTypeOfType(intrinsicElementsType, stringType);
-                if (indexSignatureType) {
+                const indexSymbol = getApplicableIndexSymbol(intrinsicElementsType, getStringLiteralType(unescapeLeadingUnderscores(propName)));
+                if (indexSymbol) {
+                    links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
+                    return links.resolvedSymbol = indexSymbol;
+                }
+
+                if (getTypeOfPropertyOrIndexSignatureOfType(intrinsicElementsType, propName)) {
                     links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
                     return links.resolvedSymbol = intrinsicElementsType.symbol;
                 }
@@ -30935,8 +30935,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return links.resolvedJsxElementAttributesType = getTypeOfSymbol(symbol) || errorType;
             }
             else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
+                const propName = isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText;
                 return links.resolvedJsxElementAttributesType =
-                    getIndexTypeOfType(getJsxType(JsxNames.IntrinsicElements, node), stringType) || errorType;
+                    getApplicableIndexInfoForName(getJsxType(JsxNames.IntrinsicElements, node), propName)?.type || errorType;
             }
             else {
                 return links.resolvedJsxElementAttributesType = errorType;
@@ -32894,7 +32895,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression | undefined {
         const expression = node.kind === SyntaxKind.CallExpression ? node.expression :
-            node.kind === SyntaxKind.TaggedTemplateExpression ? node.tag : undefined;
+            node.kind === SyntaxKind.TaggedTemplateExpression ? node.tag :
+            node.kind === SyntaxKind.Decorator && !legacyDecorators ? node.expression :
+            undefined;
         if (expression) {
             const callee = skipOuterExpressions(expression);
             if (isAccessExpression(callee)) {
@@ -38003,9 +38006,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return hasSkipDirectInferenceFlag(node) ?
                     wildcardType :
                     getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
-            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.NumericLiteral: {
                 checkGrammarNumericLiteral(node as NumericLiteral);
-                return getFreshTypeOfLiteralType(getNumberLiteralType(+(node as NumericLiteral).text));
+                const value = +(node as NumericLiteral).text;
+                if (!isFinite(value)) {
+                    return numberType;
+                }
+                return getFreshTypeOfLiteralType(getNumberLiteralType(value));
+            }
             case SyntaxKind.BigIntLiteral:
                 checkGrammarBigIntLiteral(node as BigIntLiteral);
                 return getFreshTypeOfLiteralType(getBigIntLiteralType({
@@ -45726,33 +45734,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (name.kind === SyntaxKind.PropertyAccessExpression) {
                     checkPropertyAccessExpression(name, CheckMode.Normal);
                     if (!links.resolvedSymbol) {
-                        const expressionType = checkExpressionCached(name.expression);
-                        const infos = getApplicableIndexInfos(expressionType, getLiteralTypeFromPropertyName(name.name));
-                        if (infos.length && (expressionType as ObjectType).members) {
-                            const resolved = resolveStructuredTypeMembers(expressionType as ObjectType);
-                            const symbol = resolved.members.get(InternalSymbolName.Index);
-                            if (infos === getIndexInfosOfType(expressionType)) {
-                                links.resolvedSymbol = symbol;
-                            }
-                            else if (symbol) {
-                                const symbolLinks = getSymbolLinks(symbol);
-                                const declarationList = mapDefined(infos, i => i.declaration);
-                                const nodeListId = map(declarationList, getNodeId).join(",");
-                                if (!symbolLinks.filteredIndexSymbolCache) {
-                                    symbolLinks.filteredIndexSymbolCache = new Map();
-                                }
-                                if (symbolLinks.filteredIndexSymbolCache.has(nodeListId)) {
-                                    links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
-                                }
-                                else {
-                                    const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
-                                    copy.declarations = mapDefined(infos, i => i.declaration);
-                                    copy.parent = expressionType.aliasSymbol ? expressionType.aliasSymbol : expressionType.symbol ? expressionType.symbol : getSymbolAtLocation(copy.declarations[0].parent);
-                                    symbolLinks.filteredIndexSymbolCache.set(nodeListId, copy);
-                                    links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
-                                }
-                            }
-                        }
+                        links.resolvedSymbol = getApplicableIndexSymbol(checkExpressionCached(name.expression), getLiteralTypeFromPropertyName(name.name));
                     }
                 }
                 else {
@@ -45777,6 +45759,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         return undefined;
+    }
+
+    function getApplicableIndexSymbol(type: Type, keyType: Type) {
+        const infos = getApplicableIndexInfos(type, keyType);
+        if (infos.length && (type as ObjectType).members) {
+            const symbol = getIndexSymbolFromSymbolTable(resolveStructuredTypeMembers(type as ObjectType).members);
+            if (infos === getIndexInfosOfType(type)) {
+                return symbol;
+            }
+            else if (symbol) {
+                const symbolLinks = getSymbolLinks(symbol);
+                const declarationList = mapDefined(infos, i => i.declaration);
+                const nodeListId = map(declarationList, getNodeId).join(",");
+                if (!symbolLinks.filteredIndexSymbolCache) {
+                    symbolLinks.filteredIndexSymbolCache = new Map();
+                }
+                if (symbolLinks.filteredIndexSymbolCache.has(nodeListId)) {
+                    return symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
+                }
+                else {
+                    const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
+                    copy.declarations = mapDefined(infos, i => i.declaration);
+                    copy.parent = type.aliasSymbol ? type.aliasSymbol : type.symbol ? type.symbol : getSymbolAtLocation(copy.declarations[0].parent);
+                    symbolLinks.filteredIndexSymbolCache.set(nodeListId, copy);
+                    return copy;
+                }
+            }
+        }
     }
 
     /**
@@ -46777,8 +46787,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (enumResult) return enumResult;
         const literalValue = (type as LiteralType).value;
         return typeof literalValue === "object" ? factory.createBigIntLiteral(literalValue) :
-            typeof literalValue === "number" ? factory.createNumericLiteral(literalValue) :
-            factory.createStringLiteral(literalValue);
+            typeof literalValue === "string" ? factory.createStringLiteral(literalValue) :
+            literalValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(literalValue))) :
+            factory.createNumericLiteral(literalValue);
     }
 
     function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker) {
