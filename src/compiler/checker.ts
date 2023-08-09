@@ -32676,7 +32676,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const typeArgument = typeArgumentTypes[i];
                 if (!checkTypeAssignableTo(
-                    typeArgument,
+                    getTypeWithThisArgument(typeArgument, typeArgument),
                     getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
                     reportErrors ? typeArgumentNodes[i] : undefined,
                     typeArgumentHeadMessage,
