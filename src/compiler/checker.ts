@@ -21161,9 +21161,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        function typeArgumentsRelatedTo(sources: readonly Type[] = emptyArray, targets: readonly Type[] = emptyArray, variances: readonly VarianceFlags[] = emptyArray, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+        function typeArgumentsRelatedTo(sources: readonly Type[] = emptyArray, targets: readonly Type[] = emptyArray, variances: readonly VarianceFlags[] = emptyArray, reportErrors: boolean, intersectionState: IntersectionState): { result: Ternary, allowStructuralFallback: boolean } {
             if (sources.length !== targets.length && relation === identityRelation) {
-                return Ternary.False;
+                return { result: Ternary.False, allowStructuralFallback: false };
             }
             const length = sources.length <= targets.length ? sources.length : targets.length;
             let result = Ternary.True;
@@ -21210,12 +21210,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     if (!related) {
-                        return Ternary.False;
+                        return { result: Ternary.False, allowStructuralFallback: !!(varianceFlags & VarianceFlags.AllowStructuralFallback) };
                     }
                     result &= related;
                 }
             }
-            return result;
+            return { result, allowStructuralFallback: false };
         }
 
         // Determine if possibly recursive types are related. First, check if the result is already available in the global cache.
@@ -21964,10 +21964,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function relateVariances(sourceTypeArguments: readonly Type[] | undefined, targetTypeArguments: readonly Type[] | undefined, variances: VarianceFlags[], intersectionState: IntersectionState) {
-                if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, intersectionState)) {
+                const { result, allowStructuralFallback } = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, intersectionState);
+                if (result) {
                     return result;
                 }
-                if (some(variances, v => !!(v & VarianceFlags.AllowsStructuralFallback))) {
+                if (allowStructuralFallback) {
                     // If some type parameter was `Unmeasurable` or `Unreliable`, and we couldn't pass by assuming it was identical, then we
                     // have to allow a structural fallback check
                     // We elide the variance-based error elaborations, since those might not be too helpful, since we'll potentially
@@ -21976,8 +21977,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     resetErrorInfo(saveErrorInfo);
                     return undefined;
                 }
-                const allowStructuralFallback = targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances);
-                varianceCheckFailed = !allowStructuralFallback;
+                const allowStructuralFallbackForCovariantVoid = targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances);
+                varianceCheckFailed = !allowStructuralFallbackForCovariantVoid;
                 // The type arguments did not relate appropriately, but it may be because we have no variance
                 // information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
                 // arguments). It might also be the case that the target type has a 'void' type argument for
@@ -21985,7 +21986,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // (in which case any type argument is permitted on the source side). In those cases we proceed
                 // with a structural comparison. Otherwise, we know for certain the instantiations aren't
                 // related and we can return here.
-                if (variances !== emptyArray && !allowStructuralFallback) {
+                if (variances !== emptyArray && !allowStructuralFallbackForCovariantVoid) {
                     // In some cases generic types that are covariant in regular type checking mode become
                     // invariant in --strictFunctionTypes mode because one or more type parameters are used in
                     // both co- and contravariant positions. In order to make it easier to diagnose *why* such
@@ -22858,33 +22859,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     modifiers & ModifierFlags.In ? VarianceFlags.Invariant : VarianceFlags.Covariant :
                     modifiers & ModifierFlags.In ? VarianceFlags.Contravariant : undefined;
                 if (variance === undefined) {
-                    let unmeasurable = false;
-                    let unreliable = false;
                     const oldHandler = outofbandVarianceMarkerHandler;
-                    outofbandVarianceMarkerHandler = (onlyUnreliable) => onlyUnreliable ? unreliable = true : unmeasurable = true;
                     // We first compare instantiations where the type parameter is replaced with
                     // marker types that have a known subtype relationship. From this we can infer
                     // invariance, covariance, contravariance or bivariance.
                     const typeWithSuper = createMarkerType(symbol, tp, markerSuperType);
                     const typeWithSub = createMarkerType(symbol, tp, markerSubType);
-                    variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
-                        (isTypeAssignableTo(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
+                    variance = VarianceFlags.Invariant;
+                    outofbandVarianceMarkerHandler = (onlyUnreliable) => onlyUnreliable ? (variance! |= VarianceFlags.UnreliableCovariance) : (variance! |= VarianceFlags.Unmeasurable);
+                    const covariant = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0);
+                    outofbandVarianceMarkerHandler = (onlyUnreliable) => onlyUnreliable ? (variance! |= VarianceFlags.UnreliableContravariance) : (variance! |= VarianceFlags.Unmeasurable);
+                    const contravariant = (isTypeAssignableTo(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
+                    variance |= covariant | contravariant;
                     // If the instantiations appear to be related bivariantly it may be because the
                     // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
                     // type). To determine this we compare instantiations where the type parameter is
                     // replaced with marker types that are known to be unrelated.
-                    if (variance === VarianceFlags.Bivariant && isTypeAssignableTo(createMarkerType(symbol, tp, markerOtherType), typeWithSuper)) {
+                    if ((variance & VarianceFlags.Bivariant) === VarianceFlags.Bivariant && isTypeAssignableTo(createMarkerType(symbol, tp, markerOtherType), typeWithSuper)) {
                         variance = VarianceFlags.Independent;
                     }
                     outofbandVarianceMarkerHandler = oldHandler;
-                    if (unmeasurable || unreliable) {
-                        if (unmeasurable) {
-                            variance |= VarianceFlags.Unmeasurable;
-                        }
-                        if (unreliable) {
-                            variance |= VarianceFlags.Unreliable;
-                        }
-                    }
                 }
                 variances.push(variance);
             }
