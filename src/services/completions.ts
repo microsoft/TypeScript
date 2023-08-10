@@ -1855,6 +1855,8 @@ namespace ts.Completions {
         function shouldOfferImportCompletions(): boolean {
             // If already typing an import statement, provide completions for it.
             if (importCompletionNode) return true;
+            // Prevents auto-import completions in non-module files.
+            if (program.getCompilerOptions().module === ModuleKind.None) return false;
             // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
             if (isNonContextualObjectLiteral) return false;
             // If not already a module, must have modules enabled.
