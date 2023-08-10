@@ -403,18 +403,15 @@ export const watchMin = task({
 });
 
 
-// TODO(jakebailey): how can we make this backwards compatible?
-// Does anyone actually load tsserverlibrary into the browser directly?
-// Do we have to create a <script>?
+
+// This is technically not enough to make tsserverlibrary loadable in the
+// browser, but it's unlikely that anyone has actually been doing that.
 const lsslJs = `
 if (typeof module !== "undefined" && module.exports) {
     module.exports = require("./typescript.js");
 }
-else if (typeof importScripts !== "undefined") {
-    importScripts("./typescript.js");
-}
 else {
-    throw new Error("tsserverlibrary cannot loaded; use typescript.js instead");
+    throw new Error("tsserverlibrary requires CommonJS; use typescript.js instead");
 }
 `;
 
