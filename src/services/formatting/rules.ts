@@ -90,7 +90,7 @@ export function getAllRules(): RuleSpec[] {
         rule("IgnoreAfterLineComment", SyntaxKind.SingleLineCommentTrivia, anyToken, anyContext, RuleAction.StopProcessingSpaceActions),
 
         rule("NotSpaceBeforeColon", anyToken, SyntaxKind.ColonToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNotTypeAnnotationContext], RuleAction.DeleteSpace),
-        rule("SpaceAfterColon", SyntaxKind.ColonToken, anyToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.InsertSpace),
+        rule("SpaceAfterColon", SyntaxKind.ColonToken, anyToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNextTokenParentNotJsxNamespacedName], RuleAction.InsertSpace),
         rule("NoSpaceBeforeQuestionMark", anyToken, SyntaxKind.QuestionToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNotTypeAnnotationContext], RuleAction.DeleteSpace),
         // insert space after '?' only when it is used in conditional operator
         rule("SpaceAfterQuestionMarkInConditionalOperator", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext, isConditionalOperatorContext], RuleAction.InsertSpace),
@@ -179,6 +179,8 @@ export function getAllRules(): RuleSpec[] {
         rule("NoSpaceBeforeGreaterThanTokenInJsxOpeningElement", SyntaxKind.SlashToken, SyntaxKind.GreaterThanToken, [isJsxSelfClosingElementContext, isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         rule("NoSpaceBeforeEqualInJsxAttribute", anyToken, SyntaxKind.EqualsToken, [isJsxAttributeContext, isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         rule("NoSpaceAfterEqualInJsxAttribute", SyntaxKind.EqualsToken, anyToken, [isJsxAttributeContext, isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+        rule("NoSpaceBeforeJsxNamespaceColon", SyntaxKind.Identifier, SyntaxKind.ColonToken, [isNextTokenParentJsxNamespacedName], RuleAction.DeleteSpace),
+        rule("NoSpaceAfterJsxNamespaceColon", SyntaxKind.ColonToken, SyntaxKind.Identifier, [isNextTokenParentJsxNamespacedName], RuleAction.DeleteSpace),
 
         // TypeScript-specific rules
         // Use of module as a function call. e.g.: import m2 = module("m2");
@@ -749,11 +751,21 @@ function isJsxExpressionContext(context: FormattingContext): boolean {
 }
 
 function isNextTokenParentJsxAttribute(context: FormattingContext): boolean {
-    return context.nextTokenParent.kind === SyntaxKind.JsxAttribute;
+    return context.nextTokenParent.kind === SyntaxKind.JsxAttribute || (
+        context.nextTokenParent.kind === SyntaxKind.JsxNamespacedName && context.nextTokenParent.parent.kind === SyntaxKind.JsxAttribute
+    );
 }
 
 function isJsxAttributeContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.JsxAttribute;
+}
+
+function isNextTokenParentNotJsxNamespacedName(context: FormattingContext): boolean {
+    return context.nextTokenParent.kind !== SyntaxKind.JsxNamespacedName;
+}
+
+function isNextTokenParentJsxNamespacedName(context: FormattingContext): boolean {
+    return context.nextTokenParent.kind === SyntaxKind.JsxNamespacedName;
 }
 
 function isJsxSelfClosingElementContext(context: FormattingContext): boolean {
