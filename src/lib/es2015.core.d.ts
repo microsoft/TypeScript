@@ -288,7 +288,7 @@ interface ObjectConstructor {
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
      * @param target The target object to copy to.
-     * @param sources One or more source objects from which to copy properties
+     * @param sources One or more source objects from which to copy properties.
      */
     assign(target: object, ...sources: any[]): any;
 
@@ -391,7 +391,7 @@ interface String {
      * Returns true if searchString appears as a substring of the result of converting this
      * object to a String, at one or more positions that are
      * greater than or equal to position; otherwise, returns false.
-     * @param searchString search string
+     * @param searchString search string.
      * @param position If position is undefined, 0 is assumed, so as to search all of the String.
      */
     includes(searchString: string, position?: number): boolean;
@@ -407,7 +407,7 @@ interface String {
      * Returns the String value result of normalizing the string into the normalization form
      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
      * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-     * is "NFC"
+     * is "NFC".
      */
     normalize(form: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
 
@@ -415,14 +415,14 @@ interface String {
      * Returns the String value result of normalizing the string into the normalization form
      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
      * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-     * is "NFC"
+     * is "NFC".
      */
     normalize(form?: string): string;
 
     /**
      * Returns a String value that is made from count copies appended together. If count is 0,
      * the empty string is returned.
-     * @param count number of copies to append
+     * @param count number of copies to append.
      */
     repeat(count: number): string;
 
@@ -434,87 +434,87 @@ interface String {
     startsWith(searchString: string, position?: number): boolean;
 
     /**
-     * Returns an `<a>` HTML anchor element and sets the name attribute to the text value
-     * @deprecated A legacy feature for browser compatibility
-     * @param name
+     * Returns an `<a>` HTML anchor element and sets the name attribute to the text value.
+     * @deprecated A legacy feature for browser compatibility.
+     * @param name.
      */
     anchor(name: string): string;
 
     /**
-     * Returns a `<big>` HTML element
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<big>` HTML element.
+     * @deprecated A legacy feature for browser compatibility.
      */
     big(): string;
 
     /**
-     * Returns a `<blink>` HTML element
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<blink>` HTML element.
+     * @deprecated A legacy feature for browser compatibility.
      */
     blink(): string;
 
     /**
-     * Returns a `<b>` HTML element
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<b>` HTML element.
+     * @deprecated A legacy feature for browser compatibility.
      */
     bold(): string;
 
     /**
-     * Returns a `<tt>` HTML element
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<tt>` HTML element.
+     * @deprecated A legacy feature for browser compatibility.
      */
     fixed(): string;
 
     /**
-     * Returns a `<font>` HTML element and sets the color attribute value
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<font>` HTML element and sets the color attribute value.
+     * @deprecated A legacy feature for browser compatibility.
      */
     fontcolor(color: string): string;
 
     /**
-     * Returns a `<font>` HTML element and sets the size attribute value
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<font>` HTML element and sets the size attribute value.
+     * @deprecated A legacy feature for browser compatibility.
      */
     fontsize(size: number): string;
 
     /**
-     * Returns a `<font>` HTML element and sets the size attribute value
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<font>` HTML element and sets the size attribute value.
+     * @deprecated A legacy feature for browser compatibility.
      */
     fontsize(size: string): string;
 
     /**
-     * Returns an `<i>` HTML element
-     * @deprecated A legacy feature for browser compatibility
+     * Returns an `<i>` HTML element.
+     * @deprecated A legacy feature for browser compatibility.
      */
     italics(): string;
 
     /**
-     * Returns an `<a>` HTML element and sets the href attribute value
-     * @deprecated A legacy feature for browser compatibility
+     * Returns an `<a>` HTML element and sets the href attribute value.
+     * @deprecated A legacy feature for browser compatibility.
      */
     link(url: string): string;
 
     /**
-     * Returns a `<small>` HTML element
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<small>` HTML element.
+     * @deprecated A legacy feature for browser compatibility.
      */
     small(): string;
 
     /**
-     * Returns a `<strike>` HTML element
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<strike>` HTML element.
+     * @deprecated A legacy feature for browser compatibility.
      */
     strike(): string;
 
     /**
-     * Returns a `<sub>` HTML element
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<sub>` HTML element.
+     * @deprecated A legacy feature for browser compatibility.
      */
     sub(): string;
 
     /**
-     * Returns a `<sup>` HTML element
-     * @deprecated A legacy feature for browser compatibility
+     * Returns a `<sup>` HTML element.
+     * @deprecated A legacy feature for browser compatibility.
      */
     sup(): string;
 }
