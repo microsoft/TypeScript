@@ -893,8 +893,21 @@ function compilerOptionValueToString(value: unknown): string {
 }
 
 /** @internal */
-export function getKeyForCompilerOptions(options: CompilerOptions, affectingOptionDeclarations: readonly CommandLineOption[]) {
-    return affectingOptionDeclarations.map(option => compilerOptionValueToString(getCompilerOptionValue(options, option))).join("|") + `|${options.pathsBasePath}`;
+export function getKeyForCompilerOptions(currentDirectory: string | undefined, options: CompilerOptions, affectingOptionDeclarations: readonly CommandLineOption[]) {
+    return affectingOptionDeclarations.map(option => compilerOptionValueToString(getCompilerOptionValue(options, option))).join("|")
+        + `|${options.pathsBasePath}`
+        // TypeRoots are already serialized before so no need to serialize again
+        + `|${getEffectiveTypeRootsForKeyOfCompilerOptions(options, currentDirectory)}`;
+}
+
+function getEffectiveTypeRootsForKeyOfCompilerOptions(
+    options: CompilerOptions,
+    currentDirectory: string | undefined,
+) {
+    // TypeRoots are already serialized before so no need to serialize again
+    if (options.typeRoots) return undefined;
+    // Get the directory to traverse for type roots
+    return options.configFilePath ? getDirectoryPath(options.configFilePath) : currentDirectory;
 }
 
 /** @internal */
@@ -909,7 +922,11 @@ export interface CacheWithRedirects<K, V> {
 export type RedirectsCacheKey = string & { __compilerOptionsKey: any; };
 
 /** @internal */
-export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined, optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>): CacheWithRedirects<K, V> {
+export function createCacheWithRedirects<K, V>(
+    currentDirectory: string,
+    ownOptions: CompilerOptions | undefined,
+    optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>,
+): CacheWithRedirects<K, V> {
     const redirectsMap = new Map<CompilerOptions, Map<K, V>>();
     const redirectsKeyToMap = new Map<RedirectsCacheKey, Map<K, V>>();
     let ownMap = new Map<K, V>();
@@ -976,7 +993,7 @@ export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | und
     function getRedirectsCacheKey(options: CompilerOptions) {
         let result = optionsToRedirectsKey.get(options);
         if (!result) {
-            optionsToRedirectsKey.set(options, result = getKeyForCompilerOptions(options, moduleResolutionOptionDeclarations) as RedirectsCacheKey);
+            optionsToRedirectsKey.set(options, result = getKeyForCompilerOptions(currentDirectory, options, moduleResolutionOptionDeclarations) as RedirectsCacheKey);
         }
         return result;
     }
@@ -1019,7 +1036,11 @@ function createPerDirectoryResolutionCache<T>(
     options: CompilerOptions | undefined,
     optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>,
 ): PerDirectoryResolutionCache<T> {
-    const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options, optionsToRedirectsKey);
+    const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(
+        currentDirectory,
+        options,
+        optionsToRedirectsKey,
+    );
     return {
         getFromDirectoryCache,
         getOrCreateCacheForDirectory,
@@ -1123,7 +1144,11 @@ function createNonRelativeNameResolutionCache<T>(
     getResolvedFileName: (result: T) => string | undefined,
     optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>,
 ): NonRelativeNameResolutionCache<T> {
-    const moduleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, PerNonRelativeNameCache<T>>(options, optionsToRedirectsKey);
+    const moduleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, PerNonRelativeNameCache<T>>(
+        currentDirectory,
+        options,
+        optionsToRedirectsKey,
+    );
     return {
         getFromNonRelativeNameCache,
         getOrCreateCacheForNonRelativeName,

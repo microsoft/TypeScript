@@ -68,6 +68,7 @@ export interface DocumentRegistry {
         version: string,
         scriptKind?: ScriptKind,
         sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        currentDirectoryForDocument?: string,
     ): SourceFile;
 
     acquireDocumentWithKey(
@@ -103,6 +104,7 @@ export interface DocumentRegistry {
         version: string,
         scriptKind?: ScriptKind,
         sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        currentDirectoryForDocument?: string,
     ): SourceFile;
 
     updateDocumentWithKey(
@@ -116,7 +118,7 @@ export interface DocumentRegistry {
         sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
     ): SourceFile;
 
-    getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
+    getKeyForCompilationSettings(settings: CompilerOptions, currentDirectoryForDocument?: string): DocumentRegistryBucketKey;
     /** @internal */
     getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode): DocumentRegistryBucketKeyWithMode;
     /**
@@ -142,8 +144,9 @@ export interface DocumentRegistry {
      * @param compilationSettings The compilation settings used to acquire the file
      * @param scriptKind The script kind of the file to be released
      * @param impliedNodeFormat The implied source file format of the file to be released
+     * @param currentDirectoryForDocument The current directory of the file to be released
      */
-    releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode): void; // eslint-disable-line @typescript-eslint/unified-signatures
+    releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode, currentDirectoryForDocument?: string): void; // eslint-disable-line @typescript-eslint/unified-signatures
     /**
      * @deprecated pass scriptKind for and impliedNodeFormat correctness */
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
@@ -223,9 +226,17 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         return settingsOrHost as CompilerOptions;
     }
 
-    function acquireDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+    function acquireDocument(
+        fileName: string,
+        compilationSettings: CompilerOptions | MinimalResolutionCacheHost,
+        scriptSnapshot: IScriptSnapshot,
+        version: string,
+        scriptKind?: ScriptKind,
+        languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
+        currentDirectoryForDocument?: string,
+    ): SourceFile {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-        const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
+        const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings), currentDirectoryForDocument);
         return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
     }
 
@@ -233,9 +244,17 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind, languageVersionOrOptions);
     }
 
-    function updateDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+    function updateDocument(
+        fileName: string,
+        compilationSettings: CompilerOptions | MinimalResolutionCacheHost,
+        scriptSnapshot: IScriptSnapshot,
+        version: string,
+        scriptKind?: ScriptKind,
+        languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
+        currentDirectoryForDocument?: string,
+    ): SourceFile {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-        const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
+        const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings), currentDirectoryForDocument);
         return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
     }
 
@@ -359,9 +378,15 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         }
     }
 
-    function releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind, impliedNodeFormat?: ResolutionMode): void {
+    function releaseDocument(
+        fileName: string,
+        compilationSettings: CompilerOptions,
+        scriptKind?: ScriptKind,
+        impliedNodeFormat?: ResolutionMode,
+        currentDirectoryForDocument?: string,
+    ): void {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-        const key = getKeyForCompilationSettings(compilationSettings);
+        const key = getKeyForCompilationSettings(compilationSettings, currentDirectoryForDocument);
         return releaseDocumentWithKey(path, key, scriptKind, impliedNodeFormat);
     }
 
@@ -399,8 +424,8 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
     };
 }
 
-function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-    return getKeyForCompilerOptions(settings, sourceFileAffectingCompilerOptions) as DocumentRegistryBucketKey;
+function getKeyForCompilationSettings(settings: CompilerOptions, currentDirectoryForDocument: string | undefined): DocumentRegistryBucketKey {
+    return getKeyForCompilerOptions(currentDirectoryForDocument, settings, sourceFileAffectingCompilerOptions) as DocumentRegistryBucketKey;
 }
 
 function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode) {

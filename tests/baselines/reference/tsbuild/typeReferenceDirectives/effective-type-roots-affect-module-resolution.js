@@ -100,9 +100,12 @@ File '/users/username/projects/replay/axios-src/node_modules/@types/responselike
 File '/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts', result '/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts'.
 ======== Type reference directive 'responselike' was successfully resolved to '/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts', primary: true. ========
-======== Resolving type reference directive 'node', containing file '/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts'. ========
-Resolution for type reference directive 'node' was found in cache from location '/users/username/projects/replay/axios-src/node_modules/@types/responselike'.
-======== Type reference directive 'node' was successfully resolved to '/users/username/projects/replay/axios-src/test/module/ts-require/node_modules/@types/node/index.d.ts', primary: true. ========
+======== Resolving type reference directive 'node', containing file '/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts', root directory '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types,/users/username/projects/replay/axios-src/test/module/node_modules/@types,/users/username/projects/replay/axios-src/test/node_modules/@types,/users/username/projects/replay/axios-src/node_modules/@types,/users/username/projects/replay/node_modules/@types,/users/username/projects/node_modules/@types,/users/username/node_modules/@types,/users/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types, /users/username/projects/replay/axios-src/test/module/node_modules/@types, /users/username/projects/replay/axios-src/test/node_modules/@types, /users/username/projects/replay/axios-src/node_modules/@types, /users/username/projects/replay/node_modules/@types, /users/username/projects/node_modules/@types, /users/username/node_modules/@types, /users/node_modules/@types, /node_modules/@types'.
+File '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/node/index.d.ts' exists - use it as a name resolution result.
+Resolving real path for '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/node/index.d.ts', result '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/node/index.d.ts'.
+======== Type reference directive 'node' was successfully resolved to '/users/username/projects/replay/axios-src/test/module/ts/node_modules/@types/node/index.d.ts', primary: true. ========
 ../../../../../lib/lib.d.ts
   Default library for target 'es5'
 test/module/ts/index.ts
@@ -122,7 +125,7 @@ exports.y = 10;
 
 
 //// [/users/username/projects/replay/axios-src/test/module/ts/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../../lib/lib.d.ts","./index.ts","./node_modules/@types/node/index.d.ts","../../../node_modules/@types/responselike/index.d.ts","../ts-require/node_modules/@types/node/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-15001859510-export const y = 10;\n",{"version":"-7116520553-declare const tsGlobal = 10;\n","affectsGlobalScope":true},"4670743798-/// <reference types=\"node\" />\nexport const z = 10;\n"],"root":[2],"fileIdsList":[[5]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,4,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../../lib/lib.d.ts","./index.ts","./node_modules/@types/node/index.d.ts","../../../node_modules/@types/responselike/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-15001859510-export const y = 10;\n",{"version":"-7116520553-declare const tsGlobal = 10;\n","affectsGlobalScope":true},"4670743798-/// <reference types=\"node\" />\nexport const z = 10;\n"],"root":[2],"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,4,2,3]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/replay/axios-src/test/module/ts/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -131,12 +134,11 @@ exports.y = 10;
       "../../../../../../../../lib/lib.d.ts",
       "./index.ts",
       "./node_modules/@types/node/index.d.ts",
-      "../../../node_modules/@types/responselike/index.d.ts",
-      "../ts-require/node_modules/@types/node/index.d.ts"
+      "../../../node_modules/@types/responselike/index.d.ts"
     ],
     "fileNamesList": [
       [
-        "../ts-require/node_modules/@types/node/index.d.ts"
+        "./node_modules/@types/node/index.d.ts"
       ]
     ],
     "fileInfos": {
@@ -175,12 +177,12 @@ exports.y = 10;
     ],
     "referencedMap": {
       "../../../node_modules/@types/responselike/index.d.ts": [
-        "../ts-require/node_modules/@types/node/index.d.ts"
+        "./node_modules/@types/node/index.d.ts"
       ]
     },
     "exportedModulesMap": {
       "../../../node_modules/@types/responselike/index.d.ts": [
-        "../ts-require/node_modules/@types/node/index.d.ts"
+        "./node_modules/@types/node/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -191,7 +193,7 @@ exports.y = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1059
+  "size": 1007
 }
 
 //// [/users/username/projects/replay/axios-src/test/module/ts-require/index.js]
@@ -335,7 +337,7 @@ exports.z = 10;
 
 
 //// [/users/username/projects/replay/axios-src/test/module/ts/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../../lib/lib.d.ts","./index.ts","./node_modules/@types/node/index.d.ts","../../../node_modules/@types/responselike/index.d.ts","../ts-require/node_modules/@types/node/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14419396410-export const y = 10;\nexport const z = 10;","signature":"-7595215440-export declare const y = 10;\nexport declare const z = 10;\n"},{"version":"-7116520553-declare const tsGlobal = 10;\n","affectsGlobalScope":true},"4670743798-/// <reference types=\"node\" />\nexport const z = 10;\n"],"root":[2],"fileIdsList":[[3],[5]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,4,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../../lib/lib.d.ts","./index.ts","./node_modules/@types/node/index.d.ts","../../../node_modules/@types/responselike/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14419396410-export const y = 10;\nexport const z = 10;","signature":"-7595215440-export declare const y = 10;\nexport declare const z = 10;\n"},{"version":"-7116520553-declare const tsGlobal = 10;\n","affectsGlobalScope":true},"4670743798-/// <reference types=\"node\" />\nexport const z = 10;\n"],"root":[2],"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,4,2,3]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/replay/axios-src/test/module/ts/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -344,15 +346,11 @@ exports.z = 10;
       "../../../../../../../../lib/lib.d.ts",
       "./index.ts",
       "./node_modules/@types/node/index.d.ts",
-      "../../../node_modules/@types/responselike/index.d.ts",
-      "../ts-require/node_modules/@types/node/index.d.ts"
+      "../../../node_modules/@types/responselike/index.d.ts"
     ],
     "fileNamesList": [
       [
         "./node_modules/@types/node/index.d.ts"
-      ],
-      [
-        "../ts-require/node_modules/@types/node/index.d.ts"
       ]
     ],
     "fileInfos": {
@@ -400,7 +398,7 @@ exports.z = 10;
     },
     "exportedModulesMap": {
       "../../../node_modules/@types/responselike/index.d.ts": [
-        "../ts-require/node_modules/@types/node/index.d.ts"
+        "./node_modules/@types/node/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -411,6 +409,6 @@ exports.z = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1182
+  "size": 1126
 }
 

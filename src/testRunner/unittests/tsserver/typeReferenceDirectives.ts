@@ -136,7 +136,7 @@ declare class TestLib {
         openFilesForSession(["/users/username/projects/replay/axios-src/test/module/ts/index.js"], session);
         const firstProjectSourceFile = session.getProjectService().inferredProjects[0].getCurrentProgram()!.getSourceFile("/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts");
         const secondProjectSourceFile = session.getProjectService().inferredProjects[1].getCurrentProgram()!.getSourceFile("/users/username/projects/replay/axios-src/node_modules/@types/responselike/index.d.ts");
-        assert.isTrue(firstProjectSourceFile === secondProjectSourceFile, "Source file would be same in both projects even though resolutions will not be");
+        assert.isTrue(firstProjectSourceFile !== secondProjectSourceFile, "Source file should not be same in both projects");
         // So when first project is updated as part of this command, it will get incorrect type ref resolution from the other project
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
