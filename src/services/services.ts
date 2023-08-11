@@ -2614,7 +2614,7 @@ export function createLanguageService(
             // If the line is not an empty line; otherwise no-op.
             if (lineTextStart !== undefined) {
                 if (isJsx) {
-                    textChanges.push.apply(textChanges, toggleMultilineComment(fileName, { pos: lineStarts[i] + leftMostPosition, end: sourceFile.getLineEndOfPosition(lineStarts[i]) }, isCommenting, isJsx));
+                    textChanges.push(...toggleMultilineComment(fileName, { pos: lineStarts[i] + leftMostPosition, end: sourceFile.getLineEndOfPosition(lineStarts[i]) }, isCommenting, isJsx));
                 }
                 else if (isCommenting) {
                     textChanges.push({
@@ -2788,10 +2788,10 @@ export function createLanguageService(
             if (commentRange) {
                 switch (commentRange.kind) {
                     case SyntaxKind.SingleLineCommentTrivia:
-                        textChanges.push.apply(textChanges, toggleLineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
+                        textChanges.push(...toggleLineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
                         break;
                     case SyntaxKind.MultiLineCommentTrivia:
-                        textChanges.push.apply(textChanges, toggleMultilineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
+                        textChanges.push(...toggleMultilineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
                 }
 
                 i = commentRange.end + 1;
