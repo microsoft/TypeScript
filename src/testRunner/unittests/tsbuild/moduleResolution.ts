@@ -1,6 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
+    compilerOptionsToConfigJson,
+} from "../helpers/contents";
+import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc";
@@ -134,3 +137,156 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
         edits: noChangeOnlyRuns,
     });
 });
+// HEAD
+//
+describe("unittests:: tsbuild:: moduleResolution:: sharing resolutions across references", () => {
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "sharing across references",
+        fs: () =>
+            loadProjectFromFiles({
+                "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
+                "/users/username/projects/common/tsconfig.json": JSON.stringify({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                        typeRoots: [],
+                    }),
+                }),
+                "/users/username/projects/common/moduleA.ts": "export const a = 10;",
+                "/users/username/projects/common/moduleB.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const b = x;
+            `,
+                "/users/username/projects/app/tsconfig.json": JSON.stringify({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                        typeRoots: [],
+                    }),
+                    references: [{ path: "../common" }],
+                }),
+                "/users/username/projects/app/appA.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const y = x;
+            `,
+                "/users/username/projects/app/appB.ts": Utils.dedent`
+                import { b } from "../common/moduleB";
+                export const y = b;
+            `,
+            }),
+        commandLineArgs: ["-b", "/users/username/projects/app", "--verbose", "--traceResolution"],
+    });
+
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "sharing across references despite typeRoots are not specified",
+        fs: () =>
+            loadProjectFromFiles({
+                "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
+                "/users/username/projects/common/tsconfig.json": JSON.stringify({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                    }),
+                }),
+                "/users/username/projects/common/moduleA.ts": "export const a = 10;",
+                "/users/username/projects/common/moduleB.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const b = x;
+            `,
+                "/users/username/projects/app/tsconfig.json": JSON.stringify({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                    }),
+                    references: [{ path: "../common" }],
+                }),
+                "/users/username/projects/app/appA.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const y = x;
+            `,
+                "/users/username/projects/app/appB.ts": Utils.dedent`
+                import { b } from "../common/moduleB";
+                export const y = b;
+            `,
+            }),
+        commandLineArgs: ["-b", "/users/username/projects/app", "--verbose", "--traceResolution"],
+    });
+
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "not sharing across references because typeRoots are not specified and config directories are different",
+        fs: () =>
+            loadProjectFromFiles({
+                "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
+                "/users/username/projects/common/tsconfig.json": JSON.stringify({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                    }),
+                }),
+                "/users/username/projects/common/moduleA.ts": "export const a = 10;",
+                "/users/username/projects/common/moduleB.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const b = x;
+            `,
+                "/users/username/projects/common/node_modules/@types/moduleZ/index.d.ts": "export const mz = 10;",
+                "/users/username/projects/app/tsconfig.json": JSON.stringify({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                    }),
+                    references: [{ path: "../common" }],
+                }),
+                "/users/username/projects/app/appA.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const y = x;
+            `,
+                "/users/username/projects/app/appB.ts": Utils.dedent`
+                import { b } from "../common/moduleB";
+                export const y = b;
+            `,
+                "/users/username/projects/app/node_modules/@types/moduleZ/index.d.ts": "export const mz = 10;",
+            }),
+        commandLineArgs: ["-b", "/users/username/projects/app", "--verbose", "--traceResolution"],
+    });
+
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "not sharing across references",
+        fs: () =>
+            loadProjectFromFiles({
+                "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
+                "/users/username/projects/common/tsconfig.json": JSON.stringify({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                    }),
+                }),
+                "/users/username/projects/common/moduleA.ts": "export const a = 10;",
+                "/users/username/projects/common/moduleB.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const b = x;
+            `,
+                "/users/username/projects/app/tsconfig.json": JSON.stringify({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        composite: true,
+                        traceResolution: true,
+                        typeRoots: [], // Just some sample option that is different across the projects
+                    }),
+                    references: [{ path: "../common" }],
+                }),
+                "/users/username/projects/app/appA.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const y = x;
+            `,
+                "/users/username/projects/app/appB.ts": Utils.dedent`
+                import { b } from "../common/moduleB";
+                export const y = b;
+            `,
+            }),
+        commandLineArgs: ["-b", "/users/username/projects/app", "--verbose", "--traceResolution"],
+    });
+});
+// 4f64b7bc2f (Some tests for module resolution sharing in tsbuild scenario)

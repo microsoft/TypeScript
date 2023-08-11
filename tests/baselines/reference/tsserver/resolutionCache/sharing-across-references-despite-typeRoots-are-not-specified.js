@@ -15,9 +15,6 @@ import { x } from "moduleX";
 export const b = x;
 
 
-//// [/users/username/projects/common/node_modules/@types/moduleZ/index.d.ts]
-export const mz = 10;
-
 //// [/users/username/projects/app/tsconfig.json]
 {"compilerOptions":{"composite":true,"traceResolution":true},"references":[{"path":"../common"}]}
 
@@ -30,9 +27,6 @@ export const y = x;
 import { x } from "../common/moduleB";
 export const y = x;
 
-
-//// [/users/username/projects/app/node_modules/@types/moduleZ/index.d.ts]
-export const mz = 10;
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -87,10 +81,7 @@ Info seq  [hh:mm:ss:mss] ======== Resolving module 'moduleX' from '/users/userna
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/node_modules/moduleX.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/node_modules/moduleX.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/node_modules/moduleX.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/node_modules/@types/moduleX.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/users/username/projects/app/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX.tsx' does not exist.
@@ -113,10 +104,7 @@ Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/common/node_modules/moduleX.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/common/node_modules/moduleX.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/common/node_modules/moduleX.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/common/node_modules/@types/moduleX.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] Directory '/users/username/projects/common/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX.tsx' does not exist.
@@ -126,16 +114,8 @@ Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/ind
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/users/username/projects/node_modules/moduleX/index.d.ts', result '/users/username/projects/node_modules/moduleX/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'moduleX' was successfully resolved to '/users/username/projects/node_modules/moduleX/index.d.ts'. ========
-Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'moduleZ', containing file '/users/username/projects/app/__inferred type names__.ts', root directory '/users/username/projects/app/node_modules/@types,/users/username/projects/node_modules/@types,/users/username/node_modules/@types,/users/node_modules/@types,/node_modules/@types'. ========
-Info seq  [hh:mm:ss:mss] Resolving with primary search path '/users/username/projects/app/node_modules/@types, /users/username/projects/node_modules/@types, /users/username/node_modules/@types, /users/node_modules/@types, /node_modules/@types'.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/node_modules/@types/moduleZ/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/node_modules/@types/moduleZ/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/users/username/projects/app/node_modules/@types/moduleZ/index.d.ts', result '/users/username/projects/app/node_modules/@types/moduleZ/index.d.ts'.
-Info seq  [hh:mm:ss:mss] ======== Type reference directive 'moduleZ' was successfully resolved to '/users/username/projects/app/node_modules/@types/moduleZ/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/common/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
@@ -147,12 +127,11 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 	/users/username/projects/node_modules/moduleX/index.d.ts Text-1 "export const x = 10;"
 	/users/username/projects/app/appA.ts Text-1 "import { x } from \"moduleX\";\nexport const y = x;\n"
 	/users/username/projects/common/moduleB.ts Text-1 "import { x } from \"moduleX\";\nexport const b = x;\n"
 	/users/username/projects/app/appB.ts SVC-1-0 "import { x } from \"../common/moduleB\";\nexport const y = x;\n"
-	/users/username/projects/app/node_modules/@types/moduleZ/index.d.ts Text-1 "export const mz = 10;"
 
 
 	../node_modules/moduleX/index.d.ts
@@ -164,14 +143,12 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Imported via "../common/moduleB" from file 'appB.ts'
 	appB.ts
 	  Matched by default include pattern '**/*'
-	node_modules/@types/moduleZ/index.d.ts
-	  Entry point for implicit type library 'moduleZ'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/app
 Info seq  [hh:mm:ss:mss] For info: /users/username/projects/app/tsconfig.json :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/app/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -185,6 +162,12 @@ After request
 
 PolledWatches::
 /a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/users/username/projects/app/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/app/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/common/node_modules: *new*
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -202,13 +185,7 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/app: *new*
   {}
-/users/username/projects/app/node_modules: *new*
-  {}
-/users/username/projects/app/node_modules/@types: *new*
-  {}
 /users/username/projects/common: *new*
-  {}
-/users/username/projects/common/node_modules: *new*
   {}
 /users/username/projects/node_modules: *new*
   {}

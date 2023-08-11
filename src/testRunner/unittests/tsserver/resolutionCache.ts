@@ -664,7 +664,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
         baselineTsserverLogs("resolutionCache", "sharing across references", session);
     });
 
-    it("not sharing across references because typeRoots are not specified and config directories are different", () => {
+    it("sharing across references despite typeRoots are not specified", () => {
         const host = createServerHost({
             "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
             "/users/username/projects/common/tsconfig.json": JSON.stringify({
@@ -693,6 +693,43 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with pr
                 import { x } from "../common/moduleB";
                 export const y = x;
             `,
+        });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession(["/users/username/projects/app/appB.ts"], session);
+        baselineTsserverLogs("resolutionCache", "sharing across references despite typeRoots are not specified", session);
+    });
+
+    it("not sharing across references because typeRoots are not specified and config directories are different", () => {
+        const host = createServerHost({
+            "/users/username/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
+            "/users/username/projects/common/tsconfig.json": JSON.stringify({
+                compilerOptions: compilerOptionsToConfigJson({
+                    composite: true,
+                    traceResolution: true,
+                }),
+            }),
+            "/users/username/projects/common/moduleA.ts": "export const a = 10;",
+            "/users/username/projects/common/moduleB.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const b = x;
+            `,
+            "/users/username/projects/common/node_modules/@types/moduleZ/index.d.ts": "export const mz = 10;",
+            "/users/username/projects/app/tsconfig.json": JSON.stringify({
+                compilerOptions: compilerOptionsToConfigJson({
+                    composite: true,
+                    traceResolution: true,
+                }),
+                references: [{ path: "../common" }],
+            }),
+            "/users/username/projects/app/appA.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const y = x;
+            `,
+            "/users/username/projects/app/appB.ts": Utils.dedent`
+                import { x } from "../common/moduleB";
+                export const y = x;
+            `,
+            "/users/username/projects/app/node_modules/@types/moduleZ/index.d.ts": "export const mz = 10;",
         });
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession(["/users/username/projects/app/appB.ts"], session);
