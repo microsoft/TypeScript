@@ -6,7 +6,9 @@
         { "path": "../compiler" },
         { "path": "../jsTyping" },
         { "path": "../services" },
-        { "path": "../server" }
+        { "path": "../server" },
+        { "path": "../typingsInstallerCore"},
+        { "path": "../deprecatedCompat" },
     ],
     "include": ["**/*"]
 }

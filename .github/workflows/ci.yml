@@ -242,3 +242,17 @@ jobs:
           echo "Unused baselines:"
           git diff --exit-code --name-only
         fi
+
+  check-project-references:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - name: Check project references
+      run: node ./scripts/checkProjectReferences.mjs src/**/*tsconfig*.json
