@@ -2891,7 +2891,7 @@ export function createLanguageService(
         return result;
 
         function escapeRegExp(str: string): string {
-            return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+            return str.replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
         }
 
         function getTodoCommentsRegExp(): RegExp {

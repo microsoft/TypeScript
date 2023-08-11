@@ -33,12 +33,12 @@ let C = (() => {
     let _static_member_decorators_1;
     let _static_member_initializers_1 = [];
     return _a = class C {
-            static get field1() { return __classPrivateFieldGet(this, _a, "f", _C_field1_accessor_storage); }
-            static set field1(value) { __classPrivateFieldSet(this, _a, value, "f", _C_field1_accessor_storage); }
-            static get ["field2"]() { return __classPrivateFieldGet(this, _a, "f", _C__a_accessor_storage); }
-            static set ["field2"](value) { __classPrivateFieldSet(this, _a, value, "f", _C__a_accessor_storage); }
-            static get [(_static_field1_decorators = [dec(1)], _static_member_decorators = [dec(2)], _static_member_decorators_1 = [dec(3)], _b = __propKey(field3))]() { return __classPrivateFieldGet(this, _a, "f", _C__b_accessor_storage); }
-            static set [_b](value) { __classPrivateFieldSet(this, _a, value, "f", _C__b_accessor_storage); }
+            static get field1() { return __classPrivateFieldGet(_a, _a, "f", _C_field1_accessor_storage); }
+            static set field1(value) { __classPrivateFieldSet(_a, _a, value, "f", _C_field1_accessor_storage); }
+            static get ["field2"]() { return __classPrivateFieldGet(_a, _a, "f", _C__a_accessor_storage); }
+            static set ["field2"](value) { __classPrivateFieldSet(_a, _a, value, "f", _C__a_accessor_storage); }
+            static get [(_static_field1_decorators = [dec(1)], _static_member_decorators = [dec(2)], _static_member_decorators_1 = [dec(3)], _b = __propKey(field3))]() { return __classPrivateFieldGet(_a, _a, "f", _C__b_accessor_storage); }
+            static set [_b](value) { __classPrivateFieldSet(_a, _a, value, "f", _C__b_accessor_storage); }
         },
         (() => {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
@@ -60,8 +60,8 @@ let D = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var D = _classThis = class {
-        static get field1() { return __classPrivateFieldGet(this, _classThis, "f", _D_field1_accessor_storage); }
-        static set field1(value) { __classPrivateFieldSet(this, _classThis, value, "f", _D_field1_accessor_storage); }
+        static get field1() { return __classPrivateFieldGet(_classThis, _classThis, "f", _D_field1_accessor_storage); }
+        static set field1(value) { __classPrivateFieldSet(_classThis, _classThis, value, "f", _D_field1_accessor_storage); }
     };
     __setFunctionName(_classThis, "D");
     (() => {
