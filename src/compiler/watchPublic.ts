@@ -799,7 +799,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         return text !== undefined ? getSourceFileVersionAsHashFromText(compilerHost, text) : undefined;
     }
 
-    function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {
+    function onReleaseOldSourceFile(oldSourceFile: SourceFile, hasSourceFileByPath: boolean) {
         const hostSourceFileInfo = sourceFilesCache.get(oldSourceFile.resolvedPath);
         // If this is the source file thats in the cache and new program doesnt need it,
         // remove the cached entry.

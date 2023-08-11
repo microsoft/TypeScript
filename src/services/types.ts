@@ -7,6 +7,7 @@ import {
     DiagnosticWithLocation,
     DocumentHighlights,
     DocumentPositionMapper,
+    DocumentRegistryBucketKey,
     EmitOutput,
     ExportInfoMap,
     ExportMapInfoKey,
@@ -185,6 +186,13 @@ declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
     export interface SourceMapSource {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+    }
+}
+
+declare module "../compiler/types" {
+    /** @internal */
+    export interface Program {
+        getDocumentRegistryBucketKey(): DocumentRegistryBucketKey;
     }
 }
 
@@ -425,7 +433,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ getPackageJsonAutoImportProvider?(): Program | undefined;
     /** @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-    /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+    /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
 }
 

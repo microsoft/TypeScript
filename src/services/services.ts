@@ -1716,7 +1716,7 @@ export function createLanguageService(
         // The call to isProgramUptoDate below may refer back to documentRegistryBucketKey;
         // calculate this early so it's not undefined if downleveled to a var (or, if emitted
         // as a const variable without downleveling, doesn't crash).
-        const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings, currentDirectory);
+        const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings, compilerHost);
         let releasedScriptKinds: Set<Path> | undefined = new Set();
 
         // If the program is already up-to-date, we can reuse it
@@ -1741,6 +1741,7 @@ export function createLanguageService(
             projectReferences,
         };
         program = createProgram(options);
+        program.getDocumentRegistryBucketKey = () => documentRegistryBucketKey;
 
         // 'getOrCreateSourceFile' depends on caching but should be used past this point.
         // After this point, the cache needs to be cleared to allow all collected snapshots to be released
@@ -1785,20 +1786,19 @@ export function createLanguageService(
             );
         }
 
-        function onReleaseParsedCommandLine(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, oldOptions: CompilerOptions) {
+        function onReleaseParsedCommandLine(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined) {
             if (host.getParsedCommandLine) {
-                host.onReleaseParsedCommandLine?.(configFileName, oldResolvedRef, oldOptions);
+                host.onReleaseParsedCommandLine?.(configFileName, oldResolvedRef);
             }
             else if (oldResolvedRef) {
-                onReleaseOldSourceFile(oldResolvedRef.sourceFile, oldOptions);
+                onReleaseOldSourceFile(oldResolvedRef.sourceFile);
             }
         }
 
         // Release any files we have acquired in the old program but are
         // not part of the new program.
-        function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
-            const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions, currentDirectory);
-            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
+        function onReleaseOldSourceFile(oldSourceFile: SourceFile) {
+            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, program.getDocumentRegistryBucketKey(), oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
         }
 
         function getOrCreateSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -1821,7 +1821,7 @@ export function createLanguageService(
             // Check if the language version has changed since we last created a program; if they are the same,
             // it is safe to reuse the sourceFiles; if not, then the shape of the AST can change, and the oldSourceFile
             // can not be reused. we have to dump all syntax trees and create new ones.
-            if (!shouldCreateNewSourceFile) {
+            if (!shouldCreateNewSourceFile) { // Handle when directories get created
                 // Check if the old program had this file already
                 const oldSourceFile = program && program.getSourceFileByPath(path);
                 if (oldSourceFile) {
@@ -1857,7 +1857,7 @@ export function createLanguageService(
                         // Release old source file and fall through to aquire new file with new script kind
                         documentRegistry.releaseDocumentWithKey(
                             oldSourceFile.resolvedPath,
-                            documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions(), program.getCurrentDirectory()),
+                            program.getDocumentRegistryBucketKey(),
                             oldSourceFile.scriptKind,
                             oldSourceFile.impliedNodeFormat,
                         );
@@ -1948,7 +1948,7 @@ export function createLanguageService(
     function cleanupSemanticCache(): void {
         if (program) {
             // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
-            const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions(), program.getCurrentDirectory());
+            const key = program.getDocumentRegistryBucketKey();
             forEach(program.getSourceFiles(), f => documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind, f.impliedNodeFormat));
             program = undefined!; // TODO: GH#18217
         }

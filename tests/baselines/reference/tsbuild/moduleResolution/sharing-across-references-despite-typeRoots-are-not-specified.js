@@ -77,14 +77,7 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/users/username/projects/app/node_modules' does not exist, skipping all lookups in it.
-File '/users/username/projects/node_modules/moduleX/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/node_modules/moduleX.ts' does not exist.
-File '/users/username/projects/node_modules/moduleX.tsx' does not exist.
-File '/users/username/projects/node_modules/moduleX.d.ts' does not exist.
-File '/users/username/projects/node_modules/moduleX/index.ts' does not exist.
-File '/users/username/projects/node_modules/moduleX/index.tsx' does not exist.
-File '/users/username/projects/node_modules/moduleX/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/users/username/projects/node_modules/moduleX/index.d.ts', result '/users/username/projects/node_modules/moduleX/index.d.ts'.
+Resolution for module 'moduleX' was found in cache from location '/users/username/projects'.
 ======== Module name 'moduleX' was successfully resolved to '/users/username/projects/node_modules/moduleX/index.d.ts'. ========
 ======== Resolving module '../common/moduleB' from '/users/username/projects/app/appB.ts'. ========
 Module resolution kind is not specified, using 'Node10'.

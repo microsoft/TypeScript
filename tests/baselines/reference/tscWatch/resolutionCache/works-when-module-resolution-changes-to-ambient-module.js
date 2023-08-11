@@ -130,7 +130,7 @@ sysLog:: /users/username/projects/project/node_modules/@types:: Changing watcher
 
 Program root files: ["/users/username/projects/project/foo.ts"]
 Program options: {"watch":true}
-Program structureReused: SafeModules
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/foo.ts

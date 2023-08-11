@@ -105,14 +105,7 @@ Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'
 Info seq  [hh:mm:ss:mss] Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Directory '/users/username/projects/common/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/index.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/index.tsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/users/username/projects/node_modules/moduleX/index.d.ts', result '/users/username/projects/node_modules/moduleX/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Resolution for module 'moduleX' was found in cache from location '/users/username/projects'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'moduleX' was successfully resolved to '/users/username/projects/node_modules/moduleX/index.d.ts'. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations

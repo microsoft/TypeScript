@@ -83,7 +83,7 @@ function verifyDocumentRegistry(service: ts.server.ProjectService) {
         if (project.noDtsResolutionProject) collectStats(project.noDtsResolutionProject);
         const program = project.getCurrentProgram();
         if (!program) return;
-        const key = service.documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions(), program.getCurrentDirectory());
+        const key = program.getDocumentRegistryBucketKey();
         program.getSourceFiles().forEach(f => {
             const keyWithMode = service.documentRegistry.getDocumentRegistryBucketKeyWithMode(key, f.impliedNodeFormat);
             let mapForKeyWithMode = stats.get(keyWithMode);

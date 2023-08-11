@@ -17,6 +17,7 @@ import {
     IScriptSnapshot,
     isDeclarationFileName,
     MinimalResolutionCacheHost,
+    ModuleResolutionHost,
     Path,
     ResolutionMode,
     ScriptKind,
@@ -68,7 +69,7 @@ export interface DocumentRegistry {
         version: string,
         scriptKind?: ScriptKind,
         sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
-        currentDirectoryForDocument?: string,
+        host?: ModuleResolutionHost,
     ): SourceFile;
 
     acquireDocumentWithKey(
@@ -104,7 +105,7 @@ export interface DocumentRegistry {
         version: string,
         scriptKind?: ScriptKind,
         sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
-        currentDirectoryForDocument?: string,
+        host?: ModuleResolutionHost,
     ): SourceFile;
 
     updateDocumentWithKey(
@@ -118,7 +119,7 @@ export interface DocumentRegistry {
         sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
     ): SourceFile;
 
-    getKeyForCompilationSettings(settings: CompilerOptions, currentDirectoryForDocument?: string): DocumentRegistryBucketKey;
+    getKeyForCompilationSettings(settings: CompilerOptions, host?: ModuleResolutionHost): DocumentRegistryBucketKey;
     /** @internal */
     getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode): DocumentRegistryBucketKeyWithMode;
     /**
@@ -146,7 +147,7 @@ export interface DocumentRegistry {
      * @param impliedNodeFormat The implied source file format of the file to be released
      * @param currentDirectoryForDocument The current directory of the file to be released
      */
-    releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode, currentDirectoryForDocument?: string): void; // eslint-disable-line @typescript-eslint/unified-signatures
+    releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode, host?: ModuleResolutionHost): void; // eslint-disable-line @typescript-eslint/unified-signatures
     /**
      * @deprecated pass scriptKind for and impliedNodeFormat correctness */
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
@@ -233,10 +234,10 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         version: string,
         scriptKind?: ScriptKind,
         languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
-        currentDirectoryForDocument?: string,
+        host?: ModuleResolutionHost,
     ): SourceFile {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-        const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings), currentDirectoryForDocument);
+        const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings), host);
         return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
     }
 
@@ -251,10 +252,10 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         version: string,
         scriptKind?: ScriptKind,
         languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget,
-        currentDirectoryForDocument?: string,
+        host?: ModuleResolutionHost,
     ): SourceFile {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-        const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings), currentDirectoryForDocument);
+        const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings), host);
         return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
     }
 
@@ -383,10 +384,10 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         compilationSettings: CompilerOptions,
         scriptKind?: ScriptKind,
         impliedNodeFormat?: ResolutionMode,
-        currentDirectoryForDocument?: string,
+        host?: ModuleResolutionHost,
     ): void {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-        const key = getKeyForCompilationSettings(compilationSettings, currentDirectoryForDocument);
+        const key = getKeyForCompilationSettings(compilationSettings, host);
         return releaseDocumentWithKey(path, key, scriptKind, impliedNodeFormat);
     }
 
@@ -422,10 +423,15 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         reportStats,
         getBuckets: () => buckets,
     };
-}
 
-function getKeyForCompilationSettings(settings: CompilerOptions, currentDirectoryForDocument: string | undefined): DocumentRegistryBucketKey {
-    return getKeyForCompilerOptions(currentDirectoryForDocument, settings, sourceFileAffectingCompilerOptions) as DocumentRegistryBucketKey;
+    function getKeyForCompilationSettings(settings: CompilerOptions, host: ModuleResolutionHost | undefined): DocumentRegistryBucketKey {
+        return getKeyForCompilerOptions(
+            settings,
+            host,
+            currentDirectory,
+            sourceFileAffectingCompilerOptions,
+        ) as DocumentRegistryBucketKey;
+    }
 }
 
 function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode) {

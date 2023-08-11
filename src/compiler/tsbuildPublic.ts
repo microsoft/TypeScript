@@ -440,7 +440,13 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     compilerHost.getModuleResolutionCache = maybeBind(host, host.getModuleResolutionCache);
     let moduleResolutionCache: ModuleResolutionCache | undefined, typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
     if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
-        moduleResolutionCache = createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName);
+        moduleResolutionCache = createModuleResolutionCache(
+            compilerHost.getCurrentDirectory(),
+            compilerHost.getCanonicalFileName,
+            /*options*/ undefined,
+            /*packageJsonInfoCache*/ undefined,
+            () => compilerHost,
+        );
         compilerHost.resolveModuleNameLiterals = (moduleNames, containingFile, redirectedReference, options, containingSourceFile) =>
             loadWithModeAwareCache(
                 moduleNames,
@@ -460,6 +466,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
             compilerHost.getCanonicalFileName,
             /*options*/ undefined,
             moduleResolutionCache?.getPackageJsonInfoCache(),
+            () => compilerHost,
             moduleResolutionCache?.optionsToRedirectsKey,
         );
         compilerHost.resolveTypeReferenceDirectiveReferences = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile) =>
@@ -476,7 +483,13 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     }
     let libraryResolutionCache: ModuleResolutionCache | undefined;
     if (!compilerHost.resolveLibrary) {
-        libraryResolutionCache = createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+        libraryResolutionCache = createModuleResolutionCache(
+            compilerHost.getCurrentDirectory(),
+            compilerHost.getCanonicalFileName,
+            /*options*/ undefined,
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+            () => compilerHost,
+        );
         compilerHost.resolveLibrary = (libraryName, resolveFrom, options) =>
             resolveLibrary(
                 libraryName,

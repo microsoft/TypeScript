@@ -133,6 +133,7 @@ import {
     getNormalizedAbsolutePath,
     getNormalizedAbsolutePathWithoutRoot,
     getNormalizedPathComponents,
+    getOptionsForLibraryResolution,
     getOutputDeclarationFileName,
     getOutputPathsForBundle,
     getPackageScopeForPath,
@@ -317,6 +318,7 @@ import {
     toPath as ts_toPath,
     trace,
     tracing,
+    tryGetDefaultEffectiveTypeRoots,
     TsConfigSourceFile,
     TypeChecker,
     typeDirectiveIsEqualTo,
@@ -1444,11 +1446,12 @@ export const plainJSErrors = new Set<number>([
 /**
  * Determine if source file needs to be re-created even if its text hasn't changed
  */
-function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOptions: CompilerOptions): boolean {
+function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOptions: CompilerOptions, defaultEffectiveTypeRoots: string | undefined): boolean {
     if (!program) return false;
     // If any compiler options change, we can't reuse old source file even if version match
     // The change in options like these could result in change in syntax tree or `sourceFile.bindDiagnostics`.
-    return optionsHaveChanges(program.getCompilerOptions(), newOptions, sourceFileAffectingCompilerOptions);
+    return program.getDefaultEffectiveTypeRoots() !== defaultEffectiveTypeRoots ||
+        optionsHaveChanges(program.getCompilerOptions(), newOptions, sourceFileAffectingCompilerOptions);
 }
 
 function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[], typeScriptVersion?: string): CreateProgramOptions {
@@ -1591,7 +1594,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         moduleResolutionCache = host.getModuleResolutionCache?.();
     }
     else {
-        moduleResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName, options);
+        moduleResolutionCache = createModuleResolutionCache(
+            currentDirectory,
+            getCanonicalFileName,
+            options,
+            /*packageJsonInfoCache*/ undefined,
+            () => host,
+        );
         actualResolveModuleNamesWorker = (moduleNames, containingFile, redirectedReference, options, containingSourceFile) =>
             loadWithModeAwareCache(
                 moduleNames,
@@ -1632,6 +1641,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             getCanonicalFileName,
             /*options*/ undefined,
             moduleResolutionCache?.getPackageJsonInfoCache(),
+            () => host,
             moduleResolutionCache?.optionsToRedirectsKey,
         );
         actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile) =>
@@ -1653,7 +1663,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         actualResolveLibrary = host.resolveLibrary.bind(host);
     }
     else {
-        const libraryResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName, options, moduleResolutionCache?.getPackageJsonInfoCache());
+        const libraryResolutionCache = createModuleResolutionCache(
+            currentDirectory,
+            getCanonicalFileName,
+            getOptionsForLibraryResolution(options),
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+            () => host,
+        );
         actualResolveLibrary = (libraryName, resolveFrom, options) => resolveLibrary(libraryName, resolveFrom, options, host, libraryResolutionCache);
     }
 
@@ -1698,8 +1714,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     });
     const readFile = host.readFile.bind(host) as typeof host.readFile;
 
+    // If there is change in default effective type roots presence, we need to re-create source file
+    const defaultEffectiveTypeRoots = tryGetDefaultEffectiveTypeRoots(options, host, currentDirectory);
+
     tracing?.push(tracing.Phase.Program, "shouldProgramCreateNewSourceFiles", { hasOldProgram: !!oldProgram });
-    const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
+    const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options, defaultEffectiveTypeRoots);
     tracing?.pop();
     // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `tryReuseStructureFromOldProgram` which checks
     // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
@@ -1810,13 +1829,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 // old file wasn't redirect but new file is
                 (oldSourceFile.resolvedPath === oldSourceFile.path && newFile.resolvedPath !== oldSourceFile.path)
             ) {
-                host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
+                host.onReleaseOldSourceFile(oldSourceFile, !!getSourceFileByPath(oldSourceFile.path));
             }
         }
         if (!host.getParsedCommandLine) {
             oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
                 if (!getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
-                    host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
+                    host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, /*hasSourceFileByPath*/ false);
                 }
             });
         }
@@ -1831,7 +1850,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 const oldReference = parent?.commandLine.projectReferences![index] || oldProgram!.getProjectReferences()![index];
                 const oldRefPath = resolveProjectReferencePath(oldReference);
                 if (!projectReferenceRedirects?.has(toPath(oldRefPath))) {
-                    host.onReleaseParsedCommandLine!(oldRefPath, oldResolvedRef, oldProgram!.getCompilerOptions());
+                    host.onReleaseParsedCommandLine!(oldRefPath, oldResolvedRef);
                 }
             },
         );
@@ -1874,6 +1893,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
         getAutomaticTypeDirectiveNames: () => automaticTypeDirectiveNames!,
         getAutomaticTypeDirectiveResolutions: () => automaticTypeDirectiveResolutions,
+        getDefaultEffectiveTypeRoots: () => defaultEffectiveTypeRoots,
         isSourceFileFromExternalLibrary,
         isSourceFileDefaultLibrary,
         getSourceFileFromReference,
@@ -2350,7 +2370,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // check properties that can affect structure of the program or module resolution strategy
         // if any of these properties has changed - structure cannot be reused
         const oldOptions = oldProgram.getCompilerOptions();
-        if (changesAffectModuleResolution(oldOptions, options)) {
+        if (changesAffectModuleResolution(oldOptions, options) || defaultEffectiveTypeRoots !== oldProgram.getDefaultEffectiveTypeRoots()) {
             return StructureIsReused.Not;
         }
 

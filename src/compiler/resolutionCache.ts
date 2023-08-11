@@ -450,6 +450,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         getCurrentDirectory(),
         resolutionHost.getCanonicalFileName,
         resolutionHost.getCompilationSettings(),
+        /*packageJsonInfoCache*/ undefined,
+        getModuleResolutionHost,
     );
 
     const resolvedTypeReferenceDirectives = new Map<Path, ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
@@ -458,6 +460,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolutionHost.getCanonicalFileName,
         resolutionHost.getCompilationSettings(),
         moduleResolutionCache.getPackageJsonInfoCache(),
+        getModuleResolutionHost,
         moduleResolutionCache.optionsToRedirectsKey,
     );
 
@@ -467,6 +470,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolutionHost.getCanonicalFileName,
         getOptionsForLibraryResolution(resolutionHost.getCompilationSettings()),
         moduleResolutionCache.getPackageJsonInfoCache(),
+        getModuleResolutionHost,
     );
 
     const directoryWatchesOfFailedLookups = new Map<string, DirectoryWatchesOfFailedLookup>();
@@ -654,8 +658,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         hasChangedAutomaticTypeDirectiveNames = false;
     }
 
+    function getModuleResolutionHost() {
+        return resolutionHost.getCompilerHost?.() || resolutionHost;
+    }
+
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, redirectedReference?: ResolvedProjectReference, mode?: ResolutionMode): CachedResolvedModuleWithFailedLookupLocations {
-        const host = resolutionHost.getCompilerHost?.() || resolutionHost;
+        const host = getModuleResolutionHost();
         const primaryResult = ts_resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
         // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
         if (!resolutionHost.getGlobalCache) {

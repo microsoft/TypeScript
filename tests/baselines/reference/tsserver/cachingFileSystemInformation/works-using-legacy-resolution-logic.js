@@ -49,7 +49,9 @@ Info seq  [hh:mm:ss:mss] ../f1.ts(1,1): error TS2304: Cannot find name 'foo'.
 Info seq  [hh:mm:ss:mss] fileExists::
 
 Info seq  [hh:mm:ss:mss] directoryExists::
-
+/c/d/node_modules/@types: 1
+/c/node_modules/@types: 1
+/node_modules/@types: 1
 Info seq  [hh:mm:ss:mss] getDirectories::
 
 Info seq  [hh:mm:ss:mss] readFile::
@@ -155,9 +157,9 @@ Info seq  [hh:mm:ss:mss] fileExists::
 Info seq  [hh:mm:ss:mss] directoryExists::
 /c: 1
 /c/d: 1
-/c/d/node_modules/@types: 1
-/c/node_modules/@types: 1
-/node_modules/@types: 1
+/c/d/node_modules/@types: 3
+/c/node_modules/@types: 3
+/node_modules/@types: 3
 Info seq  [hh:mm:ss:mss] getDirectories::
 
 Info seq  [hh:mm:ss:mss] readFile::
