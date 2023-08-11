@@ -115,9 +115,8 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
-export function trace(host: ModuleResolutionHost): void {
-    host.trace!(formatMessage.apply(undefined, arguments));
+export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void {
+    host.trace!(formatMessage(message, ...args));
 }
 
 /** @internal */

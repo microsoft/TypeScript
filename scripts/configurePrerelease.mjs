@@ -90,7 +90,7 @@ function updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, nightlyPatc
  * @returns {{ majorMinor: string, patch: string }}
  */
 function parsePackageJsonVersion(versionString) {
-    const versionRgx = /(\d+\.\d+)\.(\d+)($|\-)/;
+    const versionRgx = /(\d+\.\d+)\.(\d+)($|-)/;
     const match = versionString.match(versionRgx);
     assert(match !== null, "package.json 'version' should match " + versionRgx.toString());
     return { majorMinor: match[1], patch: match[2] };
