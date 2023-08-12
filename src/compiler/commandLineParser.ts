@@ -6,6 +6,7 @@ import {
     arrayToMap,
     assign,
     BuildOptions,
+    cast,
     changeExtension,
     CharacterCodes,
     combinePaths,
@@ -218,10 +219,12 @@ const libEntries: [string, string][] = [
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
     ["esnext.intl", "lib.esnext.intl.d.ts"],
+    ["esnext.disposable", "lib.esnext.disposable.d.ts"],
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
     ["esnext.string", "lib.es2022.string.d.ts"],
     ["esnext.promise", "lib.es2021.promise.d.ts"],
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
+    ["esnext.decorators", "lib.esnext.decorators.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
@@ -655,6 +658,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "checkJs",
         type: "boolean",
+        affectsModuleResolution: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Enable_error_reporting_in_type_checked_JavaScript_files,
@@ -882,7 +886,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Default_catch_clause_variables_as_unknown_instead_of_any,
-        defaultValueDescription: false,
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "alwaysStrict",
@@ -2015,9 +2019,8 @@ export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
 }
 
 /** @internal */
-export function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
-    const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-    return diagnostic.messageText as string;
+export function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
+    return cast(createCompilerDiagnostic(message, ...args).messageText, isString);
 }
 
 export type DiagnosticReporter = (diagnostic: Diagnostic) => void;

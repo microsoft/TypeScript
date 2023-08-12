@@ -1844,10 +1844,22 @@ export class Session<TMessage = string> implements EventSender {
         const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
         const hints = project.getLanguageService().provideInlayHints(file, args, this.getPreferences(file));
 
-        return hints.map(hint => ({
-            ...hint,
-            position: scriptInfo.positionToLineOffset(hint.position),
-        }));
+        return hints.map(hint => {
+            const { position, displayParts } = hint;
+
+            return {
+                ...hint,
+                position: scriptInfo.positionToLineOffset(position),
+                displayParts: displayParts?.map(({ text, span, file }) => ({
+                    text,
+                    span: span && {
+                        start: scriptInfo.positionToLineOffset(span.start),
+                        end: scriptInfo.positionToLineOffset(span.start + span.length),
+                        file: file!
+                    }
+                })),
+            };
+        });
     }
 
     private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {

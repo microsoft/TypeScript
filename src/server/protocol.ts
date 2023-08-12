@@ -2675,11 +2675,18 @@ export interface InlayHintsRequest extends Request {
 }
 
 export interface InlayHintItem {
+    /** This property will be the empty string when displayParts is set. */
     text: string;
     position: Location;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+    displayParts?: InlayHintItemDisplayPart[];
+}
+
+export interface InlayHintItemDisplayPart {
+    text: string;
+    span?: FileSpan;
 }
 
 export interface InlayHintsResponse extends Response {
@@ -3536,6 +3543,8 @@ export interface UserPreferences {
     readonly includeInlayPropertyDeclarationTypeHints?: boolean;
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
     readonly includeInlayEnumMemberValueHints?: boolean;
+    readonly interactiveInlayHints?: boolean;
+
     readonly autoImportFileExcludePatterns?: string[];
 
     /**

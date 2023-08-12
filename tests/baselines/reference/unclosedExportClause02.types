@@ -7,34 +7,25 @@ export var x = "x";
 
 === t2.ts ===
 export { x, from
->x : any
->from : any
+>x : string
 
     "./t1";
->"./t1" : "./t1"
 
 === t3.ts ===
-export { from
->from : any
 
+export { from
     "./t1";
->"./t1" : "./t1"
 
 === t4.ts ===
 export { x as a from
->x : any
->a : any
->from : any
+>x : string
+>a : string
 
     "./t1";
->"./t1" : "./t1"
 
 === t5.ts ===
 export { x as a, from
->x : any
->a : any
->from : any
+>x : string
+>a : string
 
     "./t1";
->"./t1" : "./t1"
-
