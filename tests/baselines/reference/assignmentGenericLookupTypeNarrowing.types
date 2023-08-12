@@ -1,9 +1,10 @@
-=== tests/cases/conformance/expressions/assignmentOperator/assignmentGenericLookupTypeNarrowing.ts ===
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentGenericLookupTypeNarrowing.ts] ////
+
+=== assignmentGenericLookupTypeNarrowing.ts ===
 // Repro from #26130
 
 let mappedObject: {[K in "foo"]: null | {x: string}} = {foo: {x: "hello"}};
 >mappedObject : { foo: { x: string; }; }
->null : null
 >x : string
 >{foo: {x: "hello"}} : { foo: { x: string; }; }
 >foo : { x: string; }
@@ -14,7 +15,6 @@ let mappedObject: {[K in "foo"]: null | {x: string}} = {foo: {x: "hello"}};
 declare function foo<T>(x: T): null | T;
 >foo : <T>(x: T) => null | T
 >x : T
->null : null
 
 function bar<K extends "foo">(key: K) {
 >bar : <K extends "foo">(key: K) => void
@@ -31,7 +31,6 @@ function bar<K extends "foo">(key: K) {
   if (element == null)
 >element == null : boolean
 >element : { foo: { x: string; }; }[K]
->null : null
 
     return;
   const x = element.x;

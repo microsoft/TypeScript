@@ -1,10 +1,10 @@
-tests/cases/compiler/duplicateIdentifierDifferentModifiers.ts(2,15): error TS2687: All declarations of 'x' must have identical modifiers.
-tests/cases/compiler/duplicateIdentifierDifferentModifiers.ts(3,15): error TS2687: All declarations of 'x' must have identical modifiers.
-tests/cases/compiler/duplicateIdentifierDifferentModifiers.ts(16,11): error TS2687: All declarations of 'y' must have identical modifiers.
-tests/cases/compiler/duplicateIdentifierDifferentModifiers.ts(20,3): error TS2687: All declarations of 'y' must have identical modifiers.
+duplicateIdentifierDifferentModifiers.ts(2,15): error TS2687: All declarations of 'x' must have identical modifiers.
+duplicateIdentifierDifferentModifiers.ts(3,15): error TS2687: All declarations of 'x' must have identical modifiers.
+duplicateIdentifierDifferentModifiers.ts(16,11): error TS2687: All declarations of 'y' must have identical modifiers.
+duplicateIdentifierDifferentModifiers.ts(20,3): error TS2687: All declarations of 'y' must have identical modifiers.
 
 
-==== tests/cases/compiler/duplicateIdentifierDifferentModifiers.ts (4 errors) ====
+==== duplicateIdentifierDifferentModifiers.ts (4 errors) ====
     // Not OK
     interface B { x; }
                   ~

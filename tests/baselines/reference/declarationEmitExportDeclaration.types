@@ -1,4 +1,6 @@
-=== tests/cases/compiler/utils.ts ===
+//// [tests/cases/compiler/declarationEmitExportDeclaration.ts] ////
+
+=== utils.ts ===
 export function foo() { }
 >foo : () => void
 
@@ -7,7 +9,7 @@ export function bar() { }
 
 export interface Buzz { }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import {foo, bar, Buzz} from "./utils";
 >foo : () => void
 >bar : () => void

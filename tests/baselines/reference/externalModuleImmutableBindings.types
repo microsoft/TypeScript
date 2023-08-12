@@ -1,9 +1,11 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/externalModuleImmutableBindings.ts] ////
+
+=== f1.ts ===
 export var x = 1;
 >x : number
 >1 : 1
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 // all mutations below are illegal and should be fixed
 import * as stuff from './f1';
 >stuff : typeof stuff

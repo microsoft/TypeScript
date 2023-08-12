@@ -1,0 +1,39 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/index.js ===
+// var CircularList = (function () {
+//     var CircularList = function() {};
+//     Object.defineProperty(CircularList.prototype, "/*RENAME*/[|maxLengthRENAME|]", { value: 0, writable: true });
+//     CircularList.prototype.push = function (value) {
+//         // ...
+//         this.[|maxLengthRENAME|] + this.[|maxLengthRENAME|]
+//     }
+//     return CircularList;
+// })()
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/index.js ===
+// var CircularList = (function () {
+//     var CircularList = function() {};
+//     Object.defineProperty(CircularList.prototype, "[|maxLengthRENAME|]", { value: 0, writable: true });
+//     CircularList.prototype.push = function (value) {
+//         // ...
+//         this./*RENAME*/[|maxLengthRENAME|] + this.[|maxLengthRENAME|]
+//     }
+//     return CircularList;
+// })()
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/index.js ===
+// var CircularList = (function () {
+//     var CircularList = function() {};
+//     Object.defineProperty(CircularList.prototype, "[|maxLengthRENAME|]", { value: 0, writable: true });
+//     CircularList.prototype.push = function (value) {
+//         // ...
+//         this.[|maxLengthRENAME|] + this./*RENAME*/[|maxLengthRENAME|]
+//     }
+//     return CircularList;
+// })()

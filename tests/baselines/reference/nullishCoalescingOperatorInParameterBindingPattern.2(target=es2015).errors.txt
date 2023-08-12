@@ -1,8 +1,8 @@
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperatorInParameterBindingPattern.2.ts(3,6): error TS2373: Parameter '{ [a() ?? "d"]: c = "" }' cannot reference identifier 'a' declared after it.
-tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperatorInParameterBindingPattern.2.ts(6,31): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
+nullishCoalescingOperatorInParameterBindingPattern.2.ts(3,6): error TS2373: Parameter '{ [a() ?? "d"]: c = "" }' cannot reference identifier 'a' declared after it.
+nullishCoalescingOperatorInParameterBindingPattern.2.ts(6,31): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
 
 
-==== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperatorInParameterBindingPattern.2.ts (2 errors) ====
+==== nullishCoalescingOperatorInParameterBindingPattern.2.ts (2 errors) ====
     // https://github.com/microsoft/TypeScript/issues/36295
     const a = (): string | undefined => undefined;
     (({ [a() ?? "d"]: c = "" }) => { var a; })();

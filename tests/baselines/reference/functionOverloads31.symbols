@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads31.ts ===
+//// [tests/cases/compiler/functionOverloads31.ts] ////
+
+=== functionOverloads31.ts ===
 function foo(bar:string):string;
 >foo : Symbol(foo, Decl(functionOverloads31.ts, 0, 0), Decl(functionOverloads31.ts, 0, 32), Decl(functionOverloads31.ts, 1, 32))
 >bar : Symbol(bar, Decl(functionOverloads31.ts, 0, 13))

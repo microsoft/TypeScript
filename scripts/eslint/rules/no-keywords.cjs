@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: `disallows the use of certain TypeScript keywords as variable or parameter names`,
-            recommended: "error",
         },
         messages: {
             noKeywordsError: `{{ name }} clashes with keyword/type`,

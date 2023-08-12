@@ -91,14 +91,17 @@ import {
     ImportTypeNode,
     IndexSignatureDeclaration,
     InterfaceDeclaration,
+    isAmbientModule,
     isAnyImportSyntax,
     isArray,
     isArrayBindingElement,
+    isBinaryExpression,
     isBindingElement,
     isBindingPattern,
     isClassDeclaration,
     isClassElement,
     isDeclaration,
+    isElementAccessExpression,
     isEntityName,
     isEntityNameExpression,
     isExportAssignment,
@@ -114,6 +117,7 @@ import {
     isGlobalScopeAugmentation,
     isIdentifier,
     isIdentifierANonContextualKeyword,
+    isIdentifierText,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
@@ -147,7 +151,9 @@ import {
     isTypeParameterDeclaration,
     isTypeQueryNode,
     isUnparsedSource,
+    isVarAwaitUsing,
     isVariableDeclaration,
+    isVarUsing,
     last,
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
@@ -158,14 +164,17 @@ import {
     MethodSignature,
     Modifier,
     ModifierFlags,
+    ModifierLike,
     ModuleBody,
     ModuleDeclaration,
+    ModuleName,
     NamedDeclaration,
     NamespaceDeclaration,
     needsScopeMarker,
     Node,
     NodeArray,
     NodeBuilderFlags,
+    NodeFactory,
     NodeFlags,
     NodeId,
     normalizeSlashes,
@@ -180,6 +189,7 @@ import {
     pushIfUnique,
     removeAllComments,
     ResolutionMode,
+    ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
     setEmitFlags,
@@ -212,6 +222,7 @@ import {
     unescapeLeadingUnderscores,
     UnparsedSource,
     VariableDeclaration,
+    VariableDeclarationList,
     VariableStatement,
     visitArray,
     visitEachChild,
@@ -245,10 +256,10 @@ export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile)
                 // to handle
                 // ... parameters, /** @internal */
                 // public param: string
-                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
+                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true)),
                 getLeadingCommentRanges(text, node.pos)
             )
-            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
+            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));
         return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
     }
     const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
@@ -363,14 +374,14 @@ export function transformDeclarations(context: TransformationContext) {
                     context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode,
                         errorInfo.diagnosticMessage,
                         getTextOfNode(errorInfo.typeName),
-                        symbolAccessibilityResult.errorSymbolName,
-                        symbolAccessibilityResult.errorModuleName));
+                        symbolAccessibilityResult.errorSymbolName!,
+                        symbolAccessibilityResult.errorModuleName!));
                 }
                 else {
                     context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode,
                         errorInfo.diagnosticMessage,
-                        symbolAccessibilityResult.errorSymbolName,
-                        symbolAccessibilityResult.errorModuleName));
+                        symbolAccessibilityResult.errorSymbolName!,
+                        symbolAccessibilityResult.errorModuleName!));
                 }
                 return true;
             }
@@ -386,7 +397,7 @@ export function transformDeclarations(context: TransformationContext) {
 
     function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
         if (symbol.flags & SymbolFlags.TypeParameter) return false;
-        const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
+        const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasToMarkVisible*/ true));
         recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
         return issuedDiagnostic;
     }
@@ -701,7 +712,7 @@ export function transformDeclarations(context: TransformationContext) {
                 return factory.updateBindingElement(
                     elem,
                     elem.dotDotDotToken,
-                    /* propertyName */ undefined,
+                    /*propertyName*/ undefined,
                     elem.propertyName,
                     shouldPrintWithInitializer(elem) ? elem.initializer : undefined
                 );
@@ -724,7 +735,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
         const newParam = factory.updateParameterDeclaration(
             p,
-            maskModifiers(p, modifierMask),
+            maskModifiers(factory, p, modifierMask),
             p.dotDotDotToken,
             filterBindingPatternInitializersAndRenamings(p.name),
             resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
@@ -1125,7 +1136,7 @@ export function transformDeclarations(context: TransformationContext) {
         if (isMethodDeclaration(input) || isMethodSignature(input)) {
             if (hasEffectiveModifier(input, ModifierFlags.Private)) {
                 if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
-                return cleanup(factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                return cleanup(factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionOrExclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
             }
         }
 
@@ -1414,6 +1425,31 @@ export function transformDeclarations(context: TransformationContext) {
         return factory.updateModifiers(statement, modifiers);
     }
 
+    function updateModuleDeclarationAndKeyword(
+        node: ModuleDeclaration,
+        modifiers: readonly ModifierLike[] | undefined,
+        name: ModuleName,
+        body: ModuleBody | undefined
+    ) {
+        const updated = factory.updateModuleDeclaration(node, modifiers, name, body);
+
+        if (isAmbientModule(updated) || updated.flags & NodeFlags.Namespace) {
+            return updated;
+        }
+
+        const fixed = factory.createModuleDeclaration(
+            updated.modifiers,
+            updated.name,
+            updated.body,
+            updated.flags | NodeFlags.Namespace
+        );
+
+        setOriginalNode(fixed, updated);
+        setTextRange(fixed, updated);
+
+        return fixed;
+    }
+
     function transformTopLevelDeclaration(input: LateVisibilityPaintedStatement) {
         if (lateMarkedStatements) {
             while (orderedRemoveItem(lateMarkedStatements, input));
@@ -1489,13 +1525,16 @@ export function transformDeclarations(context: TransformationContext) {
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                        if (!p.valueDeclaration || !isPropertyAccessExpression(p.valueDeclaration)) {
-                            return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
+                        if (!p.valueDeclaration || !(isPropertyAccessExpression(p.valueDeclaration) || isElementAccessExpression(p.valueDeclaration) || isBinaryExpression(p.valueDeclaration))) {
+                            return undefined;
+                        }
+                        const nameStr = unescapeLeadingUnderscores(p.escapedName);
+                        if (!isIdentifierText(nameStr, ScriptTarget.ESNext)) {
+                            return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
                         const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                         getSymbolAccessibilityDiagnostic = oldDiag;
-                        const nameStr = unescapeLeadingUnderscores(p.escapedName);
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
                         const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
                         if (isNonContextualKeywordName) {
@@ -1587,7 +1626,8 @@ export function transformDeclarations(context: TransformationContext) {
                     needsScopeFixMarker = oldNeedsScopeFix;
                     resultHasScopeMarker = oldHasScopeFix;
                     const mods = ensureModifiers(input);
-                    return cleanup(factory.updateModuleDeclaration(
+
+                    return cleanup(updateModuleDeclarationAndKeyword(
                         input,
                         mods,
                         isExternalModuleAugmentation(input) ? rewriteModuleSpecifier(input, input.name) : input.name,
@@ -1603,7 +1643,7 @@ export function transformDeclarations(context: TransformationContext) {
                     const id = getOriginalNodeId(inner!); // TODO: GH#18217
                     const body = lateStatementReplacementMap.get(id);
                     lateStatementReplacementMap.delete(id);
-                    return cleanup(factory.updateModuleDeclaration(
+                    return cleanup(updateModuleDeclarationAndKeyword(
                         input,
                         mods,
                         input.name,
@@ -1647,7 +1687,7 @@ export function transformDeclarations(context: TransformationContext) {
                                 elems.push(factory.createPropertyDeclaration(
                                     ensureModifiers(param),
                                     elem.name as Identifier,
-                                    /*questionToken*/ undefined,
+                                    /*questionOrExclamationToken*/ undefined,
                                     ensureType(elem, /*type*/ undefined),
                                     /*initializer*/ undefined
                                 ));
@@ -1665,7 +1705,7 @@ export function transformDeclarations(context: TransformationContext) {
                     factory.createPropertyDeclaration(
                         /*modifiers*/ undefined,
                         factory.createPrivateIdentifier("#private"),
-                        /*questionToken*/ undefined,
+                        /*questionOrExclamationToken*/ undefined,
                         /*type*/ undefined,
                         /*initializer*/ undefined
                     )
@@ -1725,7 +1765,14 @@ export function transformDeclarations(context: TransformationContext) {
                     if (shouldStripInternal(m)) return;
                     // Rewrite enum values to their constants, if available
                     const constValue = resolver.getConstantValue(m);
-                    return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
+                    const newInitializer = constValue === undefined
+                        ? undefined
+                        : typeof constValue === "string"
+                        ? factory.createStringLiteral(constValue)
+                        : constValue < 0
+                        ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(constValue)))
+                        : factory.createNumericLiteral(constValue);
+                    return preserveJsDoc(factory.updateEnumMember(m, m.name, newInitializer), m);
                 }))));
             }
         }
@@ -1755,7 +1802,19 @@ export function transformDeclarations(context: TransformationContext) {
         if (!forEach(input.declarationList.declarations, getBindingNameVisible)) return;
         const nodes = visitNodes(input.declarationList.declarations, visitDeclarationSubtree, isVariableDeclaration);
         if (!length(nodes)) return;
-        return factory.updateVariableStatement(input, factory.createNodeArray(ensureModifiers(input)), factory.updateVariableDeclarationList(input.declarationList, nodes));
+
+        const modifiers = factory.createNodeArray(ensureModifiers(input));
+        let declList: VariableDeclarationList;
+        if (isVarUsing(input.declarationList) || isVarAwaitUsing(input.declarationList)) {
+            declList = factory.createVariableDeclarationList(nodes, NodeFlags.Const);
+            setOriginalNode(declList, input.declarationList);
+            setTextRange(declList, input.declarationList);
+            setCommentRange(declList, input.declarationList);
+        }
+        else {
+            declList = factory.updateVariableDeclarationList(input.declarationList, nodes);
+        }
+        return factory.updateVariableStatement(input, modifiers, declList);
     }
 
     function recreateBindingPattern(d: BindingPattern): VariableDeclaration[] {
@@ -1856,7 +1915,7 @@ function isAlwaysType(node: Node) {
 }
 
 // Elide "public" modifier, as it is the default
-function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
+function maskModifiers(factory: NodeFactory, node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
     return factory.createModifiersFromModifierFlags(maskModifierFlags(node, modifierMask, modifierAdditions));
 }
 

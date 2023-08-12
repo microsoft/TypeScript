@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug24730.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment26.ts] ////
+
+=== bug24730.js ===
 var UI = {}
 >UI : Symbol(UI, Decl(bug24730.js, 0, 3), Decl(bug24730.js, 0, 11), Decl(bug24730.js, 5, 2))
 

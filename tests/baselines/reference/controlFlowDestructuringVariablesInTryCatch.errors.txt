@@ -1,11 +1,11 @@
-tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(16,1): error TS2454: Variable 'a' is used before being assigned.
-tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(17,1): error TS2454: Variable 'b' is used before being assigned.
-tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(18,1): error TS2454: Variable 'c' is used before being assigned.
-tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(19,1): error TS2454: Variable 'd' is used before being assigned.
-tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(20,1): error TS2454: Variable 'e' is used before being assigned.
+controlFlowDestructuringVariablesInTryCatch.ts(16,1): error TS2454: Variable 'a' is used before being assigned.
+controlFlowDestructuringVariablesInTryCatch.ts(17,1): error TS2454: Variable 'b' is used before being assigned.
+controlFlowDestructuringVariablesInTryCatch.ts(18,1): error TS2454: Variable 'c' is used before being assigned.
+controlFlowDestructuringVariablesInTryCatch.ts(19,1): error TS2454: Variable 'd' is used before being assigned.
+controlFlowDestructuringVariablesInTryCatch.ts(20,1): error TS2454: Variable 'e' is used before being assigned.
 
 
-==== tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts (5 errors) ====
+==== controlFlowDestructuringVariablesInTryCatch.ts (5 errors) ====
     declare function f1(): string;
     declare function f2(): [b: string];
     declare function f3(): { c: string };

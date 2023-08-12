@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/typesWithSpecializedCallSignatures.ts] ////
+
 //// [typesWithSpecializedCallSignatures.ts]
 // basic uses of specialized signatures without errors
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientPropertyDeclarationInJs.ts] ////
+
 === /test.js ===
 class Foo {
 >Foo : Symbol(Foo, Decl(test.js, 0, 0))

@@ -5,6 +5,7 @@ import {
     arrayFrom,
     CancellationToken,
     cast,
+    changeAnyExtension,
     CodeAction,
     CodeFixAction,
     CodeFixContextBase,
@@ -18,7 +19,7 @@ import {
     createMultiMap,
     createPackageJsonImportFilter,
     Debug,
-    DiagnosticAndArguments,
+    DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
     DiagnosticWithLocation,
     emptyArray,
@@ -42,10 +43,13 @@ import {
     getExportInfoMap,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
+    getModeForUsageLocation,
     getNameForExportedSymbol,
     getNodeId,
+    getOutputExtension,
     getQuoteFromPreference,
     getQuotePreference,
+    getResolvedModule,
     getSourceFileOfNode,
     getSymbolId,
     getTokenAtPosition,
@@ -80,6 +84,7 @@ import {
     isStringANonContextualKeyword,
     isStringLiteral,
     isStringLiteralLike,
+    isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isUMDExportSymbol,
     isValidTypeOnlyAliasUseSite,
@@ -193,7 +198,7 @@ export interface ImportAdder {
     hasFixes(): boolean;
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
     addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) => void;
-    writeFixes: (changeTracker: textChanges.ChangeTracker) => void;
+    writeFixes: (changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) => void;
 }
 
 /** @internal */
@@ -231,7 +236,7 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
         const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
         const checker = program.getTypeChecker();
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
-        const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*isJsxTagName*/ false, program, host, preferences, cancellationToken);
+        const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
         const useRequire = shouldUseRequire(sourceFile, program);
         const fix = getImportFixForSymbol(sourceFile, Debug.checkDefined(exportInfo), program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
         if (fix) {
@@ -344,8 +349,15 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
         }
     }
 
-    function writeFixes(changeTracker: textChanges.ChangeTracker) {
-        const quotePreference = getQuotePreference(sourceFile, preferences);
+    function writeFixes(changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) {
+        let quotePreference: QuotePreference;
+        if (sourceFile.imports.length === 0 && oldFileQuotePreference !== undefined) {
+            // If the target file has no imports, we must use the same quote preference as the file we are importing from.
+            quotePreference = oldFileQuotePreference;
+        }
+        else {
+            quotePreference = getQuotePreference(sourceFile, preferences);
+        }
         for (const fix of addToNamespace) {
             addNamespaceQualifier(changeTracker, sourceFile, fix);
         }
@@ -359,7 +371,6 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 importClauseOrBindingPattern,
                 defaultImport,
                 arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
-                compilerOptions,
                 preferences);
         });
 
@@ -690,7 +701,24 @@ function getAddAsTypeOnly(
 }
 
 function tryAddToExistingImport(existingImports: readonly FixAddToExistingImportInfo[], isValidTypeOnlyUseSite: boolean, checker: TypeChecker, compilerOptions: CompilerOptions): FixAddToExistingImport | undefined {
-    return firstDefined(existingImports, ({ declaration, importKind, symbol, targetFlags }): FixAddToExistingImport | undefined => {
+    let best: FixAddToExistingImport | undefined;
+    for (const existingImport of existingImports) {
+        const fix = getAddToExistingImportFix(existingImport);
+        if (!fix) continue;
+        const isTypeOnly = isTypeOnlyImportDeclaration(fix.importClauseOrBindingPattern);
+        if (
+            fix.addAsTypeOnly !== AddAsTypeOnly.NotAllowed && isTypeOnly ||
+            fix.addAsTypeOnly === AddAsTypeOnly.NotAllowed && !isTypeOnly
+        ) {
+            // Give preference to putting types in existing type-only imports and avoiding conversions
+            // of import statements to/from type-only.
+            return fix;
+        }
+        best ??= fix;
+    }
+    return best;
+
+    function getAddToExistingImportFix({ declaration, importKind, symbol, targetFlags }: FixAddToExistingImportInfo): FixAddToExistingImport | undefined {
         if (importKind === ImportKind.CommonJS || importKind === ImportKind.Namespace || declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
             // These kinds of imports are not combinable with anything
             return undefined;
@@ -703,11 +731,15 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         }
 
         const { importClause } = declaration;
-        if (!importClause || !isStringLiteralLike(declaration.moduleSpecifier)) return undefined;
+        if (!importClause || !isStringLiteralLike(declaration.moduleSpecifier)) {
+            return undefined;
+        }
         const { name, namedBindings } = importClause;
         // A type-only import may not have both a default and named imports, so the only way a name can
         // be added to an existing type-only import is adding a named import to existing named bindings.
-        if (importClause.isTypeOnly && !(importKind === ImportKind.Named && namedBindings)) return undefined;
+        if (importClause.isTypeOnly && !(importKind === ImportKind.Named && namedBindings)) {
+            return undefined;
+        }
 
         // N.B. we don't have to figure out whether to use the main program checker
         // or the AutoImportProvider checker because we're adding to an existing import; the existence of
@@ -715,13 +747,16 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
         const addAsTypeOnly = getAddAsTypeOnly(isValidTypeOnlyUseSite, /*isForNewImportDeclaration*/ false, symbol, targetFlags, checker, compilerOptions);
 
         if (importKind === ImportKind.Default && (
-            name ||                                                   // Cannot add a default import to a declaration that already has one
+            name || // Cannot add a default import to a declaration that already has one
             addAsTypeOnly === AddAsTypeOnly.Required && namedBindings // Cannot add a default import as type-only if the import already has named bindings
-        )) return undefined;
-        if (
-            importKind === ImportKind.Named &&
-            namedBindings?.kind === SyntaxKind.NamespaceImport        // Cannot add a named import to a declaration that has a namespace import
-        ) return undefined;
+        )) {
+            return undefined;
+        }
+        if (importKind === ImportKind.Named &&
+            namedBindings?.kind === SyntaxKind.NamespaceImport // Cannot add a named import to a declaration that has a namespace import
+        ) {
+            return undefined;
+        }
 
         return {
             kind: ImportFixKind.AddToExisting,
@@ -730,7 +765,7 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
             moduleSpecifier: declaration.moduleSpecifier.text,
             addAsTypeOnly,
         };
-    });
+    }
 }
 
 function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile, compilerOptions: CompilerOptions) {
@@ -779,14 +814,19 @@ function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
         return getEmitModuleKind(compilerOptions) < ModuleKind.ES2015;
     }
 
-    // 4. Match the first other JS file in the program that's unambiguously CJS or ESM
+    // 4. In --module nodenext, assume we're not emitting JS -> JS, so use
+    //    whatever syntax Node expects based on the detected module kind
+    if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) return true;
+    if (sourceFile.impliedNodeFormat === ModuleKind.ESNext) return false;
+
+    // 5. Match the first other JS file in the program that's unambiguously CJS or ESM
     for (const otherFile of program.getSourceFiles()) {
         if (otherFile === sourceFile || !isSourceFileJS(otherFile) || program.isSourceFileFromExternalLibrary(otherFile)) continue;
         if (otherFile.commonJsModuleIndicator && !otherFile.externalModuleIndicator) return true;
         if (otherFile.externalModuleIndicator && !otherFile.commonJsModuleIndicator) return false;
     }
 
-    // 5. Literally nothing to go on
+    // 6. Literally nothing to go on
     return true;
 }
 
@@ -1148,7 +1188,7 @@ function getExportInfos(
 ): ReadonlyMap<string, readonly SymbolExportInfo[]> {
     // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
     // Maps symbol id to info for modules providing that symbol (original export + re-exports).
-    const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
+    const originalSymbolToExportInfos = createMultiMap<string, SymbolExportInfo>();
     const packageJsonFilter = createPackageJsonImportFilter(fromFile, preferences, host);
     const moduleSpecifierCache = host.getModuleSpecifierCache?.();
     const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
@@ -1212,13 +1252,13 @@ function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: C
 }
 
 function codeActionForFix(context: textChanges.TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): CodeFixAction {
-    let diag!: DiagnosticAndArguments;
+    let diag!: DiagnosticOrDiagnosticAndArguments;
     const changes = textChanges.ChangeTracker.with(context, tracker => {
         diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription, compilerOptions, preferences);
     });
     return createCodeFixAction(importFixName, changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
 }
-function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticAndArguments {
+function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticOrDiagnosticAndArguments {
     const quotePreference = getQuotePreference(sourceFile, preferences);
     switch (fix.kind) {
         case ImportFixKind.UseNamespace:
@@ -1235,7 +1275,6 @@ function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: 
                 importClauseOrBindingPattern,
                 importKind === ImportKind.Default ? { name: symbolName, addAsTypeOnly } : undefined,
                 importKind === ImportKind.Named ? [{ name: symbolName, addAsTypeOnly }] : emptyArray,
-                compilerOptions,
                 preferences);
             const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
             return includeSymbolNameInDescription
@@ -1321,6 +1360,15 @@ function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaratio
 
     function promoteImportClause(importClause: ImportClause) {
         changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(importClause, sourceFile));
+        // Change .ts extension to .js if necessary
+        if (!compilerOptions.allowImportingTsExtensions) {
+            const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
+            const resolvedModule = moduleSpecifier && getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
+            if (resolvedModule?.resolvedUsingTsExtension) {
+                const changedExtension = changeAnyExtension(moduleSpecifier!.text, getOutputExtension(moduleSpecifier!.text, compilerOptions));
+                changes.replaceNode(sourceFile, moduleSpecifier!, factory.createStringLiteral(changedExtension));
+            }
+        }
         if (convertExistingToTypeOnly) {
             const namedImports = tryCast(importClause.namedBindings, isNamedImports);
             if (namedImports && namedImports.elements.length > 1) {
@@ -1349,7 +1397,6 @@ function doAddExistingFix(
     clause: ImportClause | ObjectBindingPattern,
     defaultImport: Import | undefined,
     namedImports: readonly Import[],
-    compilerOptions: CompilerOptions,
     preferences: UserPreferences,
 ): void {
     if (clause.kind === SyntaxKind.ObjectBindingPattern) {
@@ -1364,13 +1411,6 @@ function doAddExistingFix(
 
     const promoteFromTypeOnly = clause.isTypeOnly && some([defaultImport, ...namedImports], i => i?.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
     const existingSpecifiers = clause.namedBindings && tryCast(clause.namedBindings, isNamedImports)?.elements;
-    // If we are promoting from a type-only import and `--isolatedModules` and `--preserveValueImports`
-    // are enabled, we need to make every existing import specifier type-only. It may be possible that
-    // some of them don't strictly need to be marked type-only (if they have a value meaning and are
-    // never used in an emitting position). These are allowed to be imported without being type-only,
-    // but the user has clearly already signified that they don't need them to be present at runtime
-    // by placing them in a type-only import. So, just mark each specifier as type-only.
-    const convertExistingToTypeOnly = promoteFromTypeOnly && importNameElisionDisabled(compilerOptions);
 
     if (defaultImport) {
         Debug.assert(!clause.name, "Cannot add a default import to an import clause that already has one");
@@ -1415,7 +1455,7 @@ function doAddExistingFix(
                 // Organize imports puts type-only import specifiers last, so if we're
                 // adding a non-type-only specifier and converting all the other ones to
                 // type-only, there's no need to ask for the insertion index - it's 0.
-                const insertionIndex = convertExistingToTypeOnly && !spec.isTypeOnly
+                const insertionIndex = promoteFromTypeOnly && !spec.isTypeOnly
                     ? 0
                     : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, comparer);
                 changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
@@ -1441,7 +1481,11 @@ function doAddExistingFix(
 
     if (promoteFromTypeOnly) {
         changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(clause, sourceFile));
-        if (convertExistingToTypeOnly && existingSpecifiers) {
+        if (existingSpecifiers) {
+            // We used to convert existing specifiers to type-only only if compiler options indicated that
+            // would be meaningful (see the `importNameElisionDisabled` utility function), but user
+            // feedback indicated a preference for preserving the type-onlyness of existing specifiers
+            // regardless of whether it would make a difference in emit.
             for (const specifier of existingSpecifiers) {
                 changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, specifier);
             }

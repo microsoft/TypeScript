@@ -1,4 +1,6 @@
-=== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts ===
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts] ////
+
+=== noUncheckedIndexedAccess.ts ===
 type CheckBooleanOnly<T extends boolean> = any;
 >CheckBooleanOnly : any
 
@@ -135,7 +137,6 @@ const e14: boolean = strMap[null as any];
 >strMap[null as any] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >null as any : any
->null : null
 
 // Should be OK
 const ok1: boolean | undefined = strMap["foo"];
@@ -197,7 +198,6 @@ strMap[null as any] = undefined;
 >strMap[null as any] : boolean
 >strMap : { [s: string]: boolean; }
 >null as any : any
->null : null
 >undefined : undefined
 
 // Numeric lookups are unaffected

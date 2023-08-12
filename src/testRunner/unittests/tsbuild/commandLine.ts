@@ -1,13 +1,14 @@
 import * as ts from "../../_namespaces/ts";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
-    appendText,
-    compilerOptionsToConfigJson,
-    loadProjectFromFiles,
     noChangeRun,
-    replaceText,
     TestTscEdit,
     verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import {
+    appendText,
+    loadProjectFromFiles, replaceText
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: commandLine::", () => {
     describe("different options::", () => {
@@ -25,7 +26,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             return {
                 ...withOptionChange(caption, option),
                 discrepancyExplanation: () => [
-                    `Clean build tsbuildinfo will have compilerOptions with composite and ${option.replace(/\-/g, "")}`,
+                    `Clean build tsbuildinfo will have compilerOptions with composite and ${option.replace(/-/g, "")}`,
                     `Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only`,
                 ]
             };

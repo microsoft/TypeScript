@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment10.ts ===
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment10.ts] ////
+
+=== logicalAssignment10.ts ===
 var count = 0;
 >count : Symbol(count, Decl(logicalAssignment10.ts, 0, 3))
 

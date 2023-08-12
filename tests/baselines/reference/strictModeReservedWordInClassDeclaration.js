@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts] ////
+
 //// [strictModeReservedWordInClassDeclaration.ts]
 interface public { }
 

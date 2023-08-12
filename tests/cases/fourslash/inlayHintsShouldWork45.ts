@@ -10,6 +10,6 @@
 //// const a = require('./a');
 
 goTo.file('/b.js')
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayVariableTypeHints: true,
 });

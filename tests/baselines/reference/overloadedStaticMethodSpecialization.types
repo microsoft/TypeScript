@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadedStaticMethodSpecialization.ts ===
+//// [tests/cases/compiler/overloadedStaticMethodSpecialization.ts] ////
+
+=== overloadedStaticMethodSpecialization.ts ===
 class A<T> {
 >A : A<T>
 
@@ -15,7 +17,6 @@ class A<T> {
 >v : any
 
         return null;
->null : null
     }
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionRestParameterUnderscoreIUsage.ts ===
+//// [tests/cases/compiler/collisionRestParameterUnderscoreIUsage.ts] ////
+
+=== collisionRestParameterUnderscoreIUsage.ts ===
 declare var console: { log(msg?: string): void; };
 >console : { log(msg?: string): void; }
 >log : (msg?: string) => void

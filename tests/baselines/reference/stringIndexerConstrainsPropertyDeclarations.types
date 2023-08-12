@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts] ////
+
+=== stringIndexerConstrainsPropertyDeclarations.ts ===
 // String indexer types constrain the types of named properties in their containing type
 
 interface MyString extends String {
@@ -209,7 +211,6 @@ var b: { [x: string]: string; } = {
     f: <MyString>null, 
 >f : MyString
 ><MyString>null : MyString
->null : null
 
     get X() { 
 >X : string

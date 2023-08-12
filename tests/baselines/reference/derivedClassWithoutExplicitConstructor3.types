@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts] ////
+
+=== derivedClassWithoutExplicitConstructor3.ts ===
 // automatic constructors with a class hieararchy of depth > 2
 
 class Base {
@@ -95,7 +97,6 @@ class D<T> extends Base {
 
     b: T = null;
 >b : T
->null : null
 
     constructor(y: T, z: T) {
 >y : T
@@ -126,7 +127,6 @@ class D2<T extends Date> extends D<T> {
 
     y: T = null;
 >y : T
->null : null
 }
 
 var d = new D2(); // error

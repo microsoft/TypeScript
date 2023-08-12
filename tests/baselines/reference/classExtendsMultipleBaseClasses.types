@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsMultipleBaseClasses.ts ===
+//// [tests/cases/compiler/classExtendsMultipleBaseClasses.ts] ////
+
+=== classExtendsMultipleBaseClasses.ts ===
 class A { }
 >A : A
 

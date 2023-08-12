@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts] ////
+
 //// [destructuringWithLiteralInitializers2.ts]
 function f00([x, y]) {}
 function f01([x, y] = []) {}

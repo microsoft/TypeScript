@@ -9,13 +9,15 @@ import * as ts from "./_namespaces/ts";
 import { getNewLineCharacter } from "./_namespaces/ts";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
+import { incrementalVerifier } from "./incrementalUtils";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-    const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
+    const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
     const langSvc: any = info.languageService;
     for (const k of Object.keys(langSvc)) {
         // eslint-disable-next-line local/only-arrow-functions
         proxy[k] = function () {
+            // eslint-disable-next-line prefer-spread, prefer-rest-params
             return langSvc[k].apply(langSvc, arguments);
         };
     }
@@ -332,7 +334,7 @@ export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     getHost(): LanguageServiceAdapterHost { return this.host; }
     getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
     getClassifier(): ts.Classifier { return ts.createClassifier(); }
-    getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJSFileExtension(fileName)); }
+    getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /*readImportFiles*/ true, ts.hasJSFileExtension(fileName)); }
 }
 
 /// Shim adapter
@@ -527,8 +529,8 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getSmartSelectionRange(fileName: string, position: number): ts.SelectionRange {
         return unwrapJSONCallResult(this.shim.getSmartSelectionRange(fileName, position));
     }
-    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ts.RenameLocation[] {
-        return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename));
+    findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences?: ts.UserPreferences | boolean): ts.RenameLocation[] {
+        return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments, preferences));
     }
     getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
         return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
@@ -550,9 +552,6 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     }
     getFileReferences(fileName: string): ts.ReferenceEntry[] {
         return unwrapJSONCallResult(this.shim.getFileReferences(fileName));
-    }
-    getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
-        return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
     }
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): ts.DocumentHighlights[] {
         return unwrapJSONCallResult(this.shim.getDocumentHighlights(fileName, position, JSON.stringify(filesToSearch)));
@@ -596,6 +595,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getJsxClosingTagAtPosition(): never {
         throw new Error("Not supported on the shim.");
     }
+    getLinkedEditingRangeAtPosition(): never {
+        throw new Error("Not supported on the shim.");
+    }
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
         return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
     }
@@ -614,6 +616,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
         throw new Error("Not supported on the shim.");
     }
     getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
+        throw new Error("Not supported on the shim.");
+    }
+    getMoveToRefactoringFileSuggestions(): { newFileName: string, files: string[] } {
         throw new Error("Not supported on the shim.");
     }
     organizeImports(_args: ts.OrganizeImportsArgs, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
@@ -866,22 +871,18 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
     }
 
     setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
-        // eslint-disable-next-line no-restricted-globals
         return setTimeout(callback, ms, ...args);
     }
 
     clearTimeout(timeoutId: any): void {
-        // eslint-disable-next-line no-restricted-globals
         clearTimeout(timeoutId);
     }
 
     setImmediate(callback: (...args: any[]) => void, _ms: number, ...args: any[]): any {
-        // eslint-disable-next-line no-restricted-globals
         return setImmediate(callback, args);
     }
 
     clearImmediate(timeoutId: any): void {
-        // eslint-disable-next-line no-restricted-globals
         clearImmediate(timeoutId);
     }
 
@@ -889,7 +890,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
         return mockHash(s);
     }
 
-    require(_initialDir: string, _moduleName: string): ts.RequireResult {
+    require(_initialDir: string, _moduleName: string): ts.ModuleImportResult {
         switch (_moduleName) {
             // Adds to the Quick Info a fixed string and a string from the config file
             // and replaces the first display part
@@ -901,6 +902,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                             const langSvc: any = info.languageService;
                             // eslint-disable-next-line local/only-arrow-functions
                             proxy.getQuickInfoAtPosition = function () {
+                                // eslint-disable-next-line prefer-spread, prefer-rest-params
                                 const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                 if (parts.displayParts.length > 0) {
                                     parts.displayParts[0].text = "Proxied";
@@ -1017,7 +1019,8 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: serverHost,
-            canUseEvents: true
+            canUseEvents: true,
+            incrementalVerifier,
         };
         this.server = new FourslashSession(opts);
 

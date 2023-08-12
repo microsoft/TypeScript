@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitClassMixinLocalClassDeclaration.ts ===
+//// [tests/cases/compiler/declarationEmitClassMixinLocalClassDeclaration.ts] ////
+
+=== declarationEmitClassMixinLocalClassDeclaration.ts ===
 export type AnyFunction<Result = any> = (...input: any[]) => Result
 >AnyFunction : Symbol(AnyFunction, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 0))
 >Result : Symbol(Result, Decl(declarationEmitClassMixinLocalClassDeclaration.ts, 0, 24))

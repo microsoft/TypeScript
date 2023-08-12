@@ -1,4 +1,6 @@
-=== tests/cases/compiler/baseIndexSignatureResolution.ts ===
+//// [tests/cases/compiler/baseIndexSignatureResolution.ts] ////
+
+=== baseIndexSignatureResolution.ts ===
 class Base { private a: string; }
 >Base : Base
 >a : string
@@ -19,7 +21,6 @@ interface FooOf<TBase extends Base> extends Foo {
 }
 var x: FooOf<Derived> = null;
 >x : FooOf<Derived>
->null : null
 
 var y: Derived = x[0];
 >y : Derived

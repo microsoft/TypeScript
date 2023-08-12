@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithConstructSignaturesDifferingParamCounts.ts] ////
+
 //// [objectTypesIdentityWithConstructSignaturesDifferingParamCounts.ts]
 // object types are identical structurally
 

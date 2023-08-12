@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithBooleanType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithBooleanType.ts] ////
+
+=== deleteOperatorWithBooleanType.ts ===
 // delete  operator on boolean type
 var BOOLEAN: boolean;
 >BOOLEAN : Symbol(BOOLEAN, Decl(deleteOperatorWithBooleanType.ts, 1, 3))

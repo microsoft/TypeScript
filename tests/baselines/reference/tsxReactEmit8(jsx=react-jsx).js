@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxReactEmit8.tsx] ////
+
 //// [tsxReactEmit8.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

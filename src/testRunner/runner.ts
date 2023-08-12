@@ -2,8 +2,6 @@ import * as FourSlash from "./_namespaces/FourSlash";
 import {
     CompilerBaselineRunner,
     CompilerTestType,
-    DefinitelyTypedRunner,
-    DockerfileRunner,
     FourSlashRunner,
     GeneratedFourslashRunner,
     IO,
@@ -12,12 +10,9 @@ import {
     setLightMode,
     setShardId,
     setShards,
-    Test262BaselineRunner,
     TestRunnerKind,
-    UserCodeRunner,
 } from "./_namespaces/Harness";
 import * as project from "./_namespaces/project";
-import * as RWC from "./_namespaces/RWC";
 import * as ts from "./_namespaces/ts";
 import * as vpath from "./_namespaces/vpath";
 
@@ -57,7 +52,7 @@ function tryGetConfig(args: string[]) {
     const prefix = "--config=";
     const configPath = ts.forEach(args, arg => arg.lastIndexOf(prefix, 0) === 0 && arg.substr(prefix.length));
     // strip leading and trailing quotes from the path (necessary on Windows since shell does not do it automatically)
-    return configPath && configPath.replace(/(^[\"'])|([\"']$)/g, "");
+    return configPath && configPath.replace(/(^["'])|(["']$)/g, "");
 }
 
 export function createRunner(kind: TestRunnerKind): RunnerBase {
@@ -76,16 +71,6 @@ export function createRunner(kind: TestRunnerKind): RunnerBase {
             return new FourSlashRunner(FourSlash.FourSlashTestType.Server);
         case "project":
             return new project.ProjectRunner();
-        case "rwc":
-            return new RWC.RWCRunner();
-        case "test262":
-            return new Test262BaselineRunner();
-        case "user":
-            return new UserCodeRunner();
-        case "dt":
-            return new DefinitelyTypedRunner();
-        case "docker":
-            return new DockerfileRunner();
     }
     return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -217,20 +202,6 @@ function handleTestConfig() {
                     case "fourslash-generated":
                         runners.push(new GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
                         break;
-                    case "rwc":
-                        runners.push(new RWC.RWCRunner());
-                        break;
-                    case "test262":
-                        runners.push(new Test262BaselineRunner());
-                        break;
-                    case "user":
-                        runners.push(new UserCodeRunner());
-                        break;
-                    case "dt":
-                        runners.push(new DefinitelyTypedRunner());
-                        break;
-                    case "docker":
-                        runners.push(new DockerfileRunner());
                         break;
                 }
             }
@@ -250,12 +221,6 @@ function handleTestConfig() {
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
-
-        // CRON-only tests
-        if (process.env.TRAVIS_EVENT_TYPE === "cron") {
-            runners.push(new UserCodeRunner());
-            runners.push(new DockerfileRunner());
-        }
     }
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for

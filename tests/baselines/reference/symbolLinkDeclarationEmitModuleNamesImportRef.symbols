@@ -1,4 +1,6 @@
-=== tests/cases/compiler/Folder/monorepo/core/index.ts ===
+//// [tests/cases/compiler/symbolLinkDeclarationEmitModuleNamesImportRef.ts] ////
+
+=== Folder/monorepo/core/index.ts ===
 import { styles } from "package-a";
 >styles : Symbol(styles, Decl(index.ts, 0, 8))
 
@@ -9,12 +11,12 @@ export function getStyles() {
 >styles : Symbol(styles, Decl(index.ts, 0, 8))
 }
 
-=== tests/cases/compiler/Folder/monorepo/package-a/index.d.ts ===
+=== Folder/monorepo/package-a/index.d.ts ===
 export declare const styles: import("styled-components").InterpolationValue[];
 >styles : Symbol(styles, Decl(index.d.ts, 0, 20))
 >InterpolationValue : Symbol(InterpolationValue, Decl(styled-components.d.ts, 0, 0))
 
-=== tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components.d.ts ===
+=== Folder/node_modules/styled-components/typings/styled-components.d.ts ===
 export interface InterpolationValue {}
 >InterpolationValue : Symbol(InterpolationValue, Decl(styled-components.d.ts, 0, 0))
 

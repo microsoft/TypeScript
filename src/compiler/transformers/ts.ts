@@ -41,7 +41,7 @@ import {
     Expression,
     ExpressionWithTypeArguments,
     filter,
-    findSuperStatementIndex,
+    findSuperStatementIndexPath,
     flattenDestructuringAssignment,
     FlattenLevel,
     FunctionDeclaration,
@@ -79,6 +79,8 @@ import {
     isAssertionExpression,
     isBindingName,
     isBindingPattern,
+    isBlock,
+    isCatchClause,
     isClassElement,
     isClassLike,
     isComputedPropertyName,
@@ -118,9 +120,9 @@ import {
     isSourceFile,
     isStatement,
     isTemplateLiteral,
+    isTryStatement,
     JsxOpeningElement,
     JsxSelfClosingElement,
-    LeftHandSideExpression,
     map,
     mapDefined,
     MethodDeclaration,
@@ -186,7 +188,6 @@ import {
     TextRange,
     TransformationContext,
     TransformFlags,
-    UnderscoreEscapedMap,
     VariableDeclaration,
     VariableStatement,
     visitEachChild,
@@ -195,7 +196,7 @@ import {
     visitNode,
     visitNodes,
     visitParameterList,
-    VisitResult,
+    VisitResult
 } from "../_namespaces/ts";
 
 /**
@@ -260,7 +261,7 @@ export function transformTypeScript(context: TransformationContext) {
     let currentNamespace: ModuleDeclaration;
     let currentNamespaceContainerName: Identifier;
     let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
-    let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node> | undefined;
+    let currentScopeFirstDeclarationsOfName: Map<__String, Node> | undefined;
     let currentClassHasParameterProperties: boolean | undefined;
 
     /**
@@ -801,7 +802,7 @@ export function transformTypeScript(context: TransformationContext) {
 
     function getClassFacts(node: ClassDeclaration) {
         let facts = ClassFacts.None;
-        if (some(getProperties(node, /*requireInitialized*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
+        if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
         const extendsClauseElement = getEffectiveBaseTypeNode(node);
         if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
         if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
@@ -847,9 +848,7 @@ export function transformTypeScript(context: TransformationContext) {
 
         const moveModifiers =
             promoteToIIFE ||
-            facts & ClassFacts.IsExportOfNamespace ||
-            facts & ClassFacts.HasClassOrConstructorParameterDecorators && legacyDecorators ||
-            facts & ClassFacts.HasStaticInitializedProperties;
+            facts & ClassFacts.IsExportOfNamespace;
 
         // elide modifiers on the declaration if we are emitting an IIFE or the class is
         // a namespace export
@@ -925,24 +924,19 @@ export function transformTypeScript(context: TransformationContext) {
             const iife = factory.createImmediatelyInvokedArrowFunction(statements);
             setInternalEmitFlags(iife, InternalEmitFlags.TypeScriptClassWrapper);
 
-            //  export let C = (() => { ... })();
-            const modifiers = facts & ClassFacts.IsNamedExternalExport ?
-                factory.createModifiersFromModifierFlags(ModifierFlags.Export) :
-                undefined;
-
             //  let C = (() => { ... })();
-            const varStatement = factory.createVariableStatement(
-                modifiers,
-                factory.createVariableDeclarationList([
-                    factory.createVariableDeclaration(
-                        factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
-                        /*exclamationToken*/ undefined,
-                        /*type*/ undefined,
-                        iife
-                    )
-                ], NodeFlags.Let)
+            const varDecl = factory.createVariableDeclaration(
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
+                /*exclamationToken*/ undefined,
+                /*type*/ undefined,
+                iife
             );
+            setOriginalNode(varDecl, node);
 
+            const varStatement = factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList([varDecl], NodeFlags.Let)
+            );
             setOriginalNode(varStatement, node);
             setCommentRange(varStatement, node);
             setSourceMapRange(varStatement, moveRangePastDecorators(node));
@@ -955,32 +949,26 @@ export function transformTypeScript(context: TransformationContext) {
 
         if (moveModifiers) {
             if (facts & ClassFacts.IsExportOfNamespace) {
-                return demarcateMultiStatementExport(
+                return [
                     statement,
-                    createExportMemberAssignmentStatement(node));
+                    createExportMemberAssignmentStatement(node)
+                ];
             }
             if (facts & ClassFacts.IsDefaultExternalExport) {
-                return demarcateMultiStatementExport(
+                return [
                     statement,
-                    factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+                    factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
+                ];
             }
-            if (facts & ClassFacts.IsNamedExternalExport && !promoteToIIFE) {
-                return demarcateMultiStatementExport(
+            if (facts & ClassFacts.IsNamedExternalExport) {
+                return [
                     statement,
-                    factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+                    factory.createExternalModuleExport(factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true))
+                ];
             }
         }
 
         return statement;
-    }
-
-    function demarcateMultiStatementExport(declarationStatement: Statement, exportStatement: Statement) {
-        addEmitFlags(declarationStatement, EmitFlags.HasEndOfDeclarationMarker);
-        return [
-            declarationStatement,
-            exportStatement,
-            factory.createEndOfDeclarationMarker(declarationStatement)
-        ];
     }
 
     function visitClassExpression(node: ClassExpression): Expression {
@@ -1302,6 +1290,37 @@ export function transformTypeScript(context: TransformationContext) {
         );
     }
 
+    function transformConstructorBodyWorker(statementsOut: Statement[], statementsIn: NodeArray<Statement>, statementOffset: number, superPath: readonly number[], superPathDepth: number, initializerStatements: readonly Statement[]) {
+        const superStatementIndex = superPath[superPathDepth];
+        const superStatement = statementsIn[superStatementIndex];
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, statementOffset, superStatementIndex - statementOffset));
+        if (isTryStatement(superStatement)) {
+            const tryBlockStatements: Statement[] = [];
+
+            transformConstructorBodyWorker(
+                tryBlockStatements,
+                superStatement.tryBlock.statements,
+                /*statementOffset*/ 0,
+                superPath,
+                superPathDepth + 1,
+                initializerStatements);
+
+            const tryBlockStatementsArray = factory.createNodeArray(tryBlockStatements);
+            setTextRange(tryBlockStatementsArray, superStatement.tryBlock.statements);
+
+            statementsOut.push(factory.updateTryStatement(
+                superStatement,
+                factory.updateBlock(superStatement.tryBlock, tryBlockStatements),
+                visitNode(superStatement.catchClause, visitor, isCatchClause),
+                visitNode(superStatement.finallyBlock, visitor, isBlock)));
+        }
+        else {
+            addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex, 1));
+            addRange(statementsOut, initializerStatements);
+        }
+        addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex + 1));
+    }
+
     function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
         const parametersWithPropertyAssignments = constructor &&
             filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as readonly ParameterPropertyDeclaration[] | undefined;
@@ -1314,15 +1333,7 @@ export function transformTypeScript(context: TransformationContext) {
         resumeLexicalEnvironment();
 
         const prologueStatementCount = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
-        const superStatementIndex = findSuperStatementIndex(body.statements, prologueStatementCount);
-
-        // If there was a super call, visit existing statements up to and including it
-        if (superStatementIndex >= 0) {
-            addRange(
-                statements,
-                visitNodes(body.statements, visitor, isStatement, prologueStatementCount, superStatementIndex + 1 - prologueStatementCount),
-            );
-        }
+        const superPath = findSuperStatementIndexPath(body.statements, prologueStatementCount);
 
         // Transform parameters into property assignments. Transforms this:
         //
@@ -1337,23 +1348,13 @@ export function transformTypeScript(context: TransformationContext) {
         //  }
         //
         const parameterPropertyAssignments = mapDefined(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment);
-
-        // If there is a super() call, the parameter properties go immediately after it
-        if (superStatementIndex >= 0) {
-            addRange(statements, parameterPropertyAssignments);
+        if (superPath.length) {
+            transformConstructorBodyWorker(statements, body.statements, prologueStatementCount, superPath, /*superPathDepth*/ 0, parameterPropertyAssignments);
         }
-        // Since there was no super() call, parameter properties are the first statements in the constructor after any prologue statements
         else {
-            statements = [
-                ...statements.slice(0, prologueStatementCount),
-                ...parameterPropertyAssignments,
-                ...statements.slice(prologueStatementCount),
-            ];
+            addRange(statements, parameterPropertyAssignments);
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, prologueStatementCount));
         }
-
-        // Add remaining statements from the body, skipping the super() call if it was found and any (already added) prologue statements
-        const start = superStatementIndex >= 0 ? superStatementIndex + 1 : prologueStatementCount;
-        addRange(statements, visitNodes(body.statements, visitor, isStatement, start));
 
         // End the lexical environment.
         statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
@@ -1763,9 +1764,9 @@ export function transformTypeScript(context: TransformationContext) {
         const containerName = getNamespaceContainerName(node);
 
         // `exportName` is the expression used within this node's container for any exported references.
-        const exportName = hasSyntacticModifier(node, ModifierFlags.Export)
+        const exportName = isExportOfNamespace(node)
             ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-            : factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+            : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  x || (x = {})
         //  exports.x || (exports.x = {})
@@ -1778,7 +1779,7 @@ export function transformTypeScript(context: TransformationContext) {
                 )
             );
 
-        if (hasNamespaceQualifiedExportName(node)) {
+        if (isExportOfNamespace(node)) {
             // `localName` is the expression used within this node's containing scope for any local references.
             const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
@@ -1816,9 +1817,6 @@ export function transformTypeScript(context: TransformationContext) {
         addEmitFlags(enumStatement, emitFlags);
         statements.push(enumStatement);
 
-        // Add a DeclarationMarker for the enum to preserve trailing comments and mark
-        // the end of the declaration.
-        statements.push(factory.createEndOfDeclarationMarker(node));
         return statements;
     }
 
@@ -1890,7 +1888,9 @@ export function transformTypeScript(context: TransformationContext) {
     function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
         const value = resolver.getConstantValue(member);
         if (value !== undefined) {
-            return typeof value === "string" ? factory.createStringLiteral(value) : factory.createNumericLiteral(value);
+            return typeof value === "string" ? factory.createStringLiteral(value) :
+                value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(value))) :
+                factory.createNumericLiteral(value);
         }
         else {
             enableSubstitutionForNonQualifiedEnumMembers();
@@ -1915,20 +1915,6 @@ export function transformTypeScript(context: TransformationContext) {
             return true;
         }
         return isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions));
-    }
-
-    /**
-     * Determines whether an exported declaration will have a qualified export name (e.g. `f.x`
-     * or `exports.x`).
-     */
-    function hasNamespaceQualifiedExportName(node: Node) {
-        return isExportOfNamespace(node)
-            || (isExternalModuleExport(node)
-                && moduleKind !== ModuleKind.ES2015
-                && moduleKind !== ModuleKind.ES2020
-                && moduleKind !== ModuleKind.ES2022
-                && moduleKind !== ModuleKind.ESNext
-                && moduleKind !== ModuleKind.System);
     }
 
     /**
@@ -1970,14 +1956,16 @@ export function transformTypeScript(context: TransformationContext) {
         // Emit a variable statement for the module. We emit top-level enums as a `var`
         // declaration to avoid static errors in global scripts scripts due to redeclaration.
         // enums in any other scope are emitted as a `let` declaration.
+        const varDecl = factory.createVariableDeclaration(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true));
+        const varFlags = currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let;
         const statement = factory.createVariableStatement(
             visitNodes(node.modifiers, modifierVisitor, isModifier),
-            factory.createVariableDeclarationList([
-                factory.createVariableDeclaration(
-                    factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-                )
-            ], currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let)
+            factory.createVariableDeclarationList([varDecl], varFlags)
         );
+
+        setOriginalNode(varDecl, node);
+        setSyntheticLeadingComments(varDecl, undefined);
+        setSyntheticTrailingComments(varDecl, undefined);
 
         setOriginalNode(statement, node);
 
@@ -2010,20 +1998,14 @@ export function transformTypeScript(context: TransformationContext) {
             //     })(m1 || (m1 = {})); // trailing comment module
             //
             setCommentRange(statement, node);
-            addEmitFlags(statement, EmitFlags.NoTrailingComments | EmitFlags.HasEndOfDeclarationMarker);
+            addEmitFlags(statement, EmitFlags.NoTrailingComments);
             statements.push(statement);
             return true;
         }
-        else {
-            // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
-            // declaration we do not emit a leading variable declaration. To preserve the
-            // begin/end semantics of the declararation and to properly handle exports
-            // we wrap the leading variable declaration in a `MergeDeclarationMarker`.
-            const mergeMarker = factory.createMergeDeclarationMarker(statement);
-            setEmitFlags(mergeMarker, EmitFlags.NoComments | EmitFlags.HasEndOfDeclarationMarker);
-            statements.push(mergeMarker);
-            return false;
-        }
+
+        // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
+        // declaration we do not emit a leading variable declaration.
+        return false;
     }
 
     /**
@@ -2065,9 +2047,9 @@ export function transformTypeScript(context: TransformationContext) {
         const containerName = getNamespaceContainerName(node);
 
         // `exportName` is the expression used within this node's container for any exported references.
-        const exportName = hasSyntacticModifier(node, ModifierFlags.Export)
+        const exportName = isExportOfNamespace(node)
             ? factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-            : factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+            : factory.getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
         //  x || (x = {})
         //  exports.x || (exports.x = {})
@@ -2080,7 +2062,7 @@ export function transformTypeScript(context: TransformationContext) {
                 )
             );
 
-        if (hasNamespaceQualifiedExportName(node)) {
+        if (isExportOfNamespace(node)) {
             // `localName` is the expression used within this node's containing scope for any local references.
             const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
@@ -2117,9 +2099,6 @@ export function transformTypeScript(context: TransformationContext) {
         addEmitFlags(moduleStatement, emitFlags);
         statements.push(moduleStatement);
 
-        // Add a DeclarationMarker for the namespace to preserve trailing comments and mark
-        // the end of the declaration.
-        statements.push(factory.createEndOfDeclarationMarker(node));
         return statements;
     }
 
@@ -2688,21 +2667,21 @@ export function transformTypeScript(context: TransformationContext) {
         return value.replace(/\*\//g, "*_/");
     }
 
-    function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression): LeftHandSideExpression {
+    function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression) {
         const constantValue = tryGetConstEnumValue(node);
         if (constantValue !== undefined) {
-            // track the constant value on the node for the printer in needsDotDotForPropertyAccess
+            // track the constant value on the node for the printer in mayNeedDotDotForPropertyAccess
             setConstantValue(node, constantValue);
+            const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
+                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(constantValue))) :
+                factory.createNumericLiteral(constantValue);
 
-            const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) : factory.createNumericLiteral(constantValue);
             if (!compilerOptions.removeComments) {
                 const originalNode = getOriginalNode(node, isAccessExpression);
-
                 addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${safeMultiLineComment(getTextOfNode(originalNode))} `);
             }
             return substitute;
         }
-
         return node;
     }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferRestArgumentsMappedTuple.ts] ////
+
 //// [inferRestArgumentsMappedTuple.ts]
 type MyMappedType<Primitive extends any> = {
 	primitive: Primitive;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationParenType.ts] ////
+
 //// [declFileTypeAnnotationParenType.ts]
 class c {
     private p: string;

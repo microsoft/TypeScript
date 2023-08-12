@@ -1,8 +1,8 @@
-tests/cases/compiler/unusedParameterProperty2.ts(2,25): error TS6138: Property 'used' is declared but its value is never read.
-tests/cases/compiler/unusedParameterProperty2.ts(3,13): error TS6133: 'foge' is declared but its value is never read.
+unusedParameterProperty2.ts(2,25): error TS6138: Property 'used' is declared but its value is never read.
+unusedParameterProperty2.ts(3,13): error TS6133: 'foge' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedParameterProperty2.ts (2 errors) ====
+==== unusedParameterProperty2.ts (2 errors) ====
     class A {
         constructor(private used) {
                             ~~~~
@@ -10,7 +10,6 @@ tests/cases/compiler/unusedParameterProperty2.ts(3,13): error TS6133: 'foge' is 
             let foge = used;
                 ~~~~
 !!! error TS6133: 'foge' is declared but its value is never read.
-            foge += "";
         }
     }
     

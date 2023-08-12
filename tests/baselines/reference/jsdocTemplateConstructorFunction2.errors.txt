@@ -1,8 +1,8 @@
-tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(21,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(28,15): error TS2304: Cannot find name 'T'.
+templateTagWithNestedTypeLiteral.js(21,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+templateTagWithNestedTypeLiteral.js(28,15): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js (2 errors) ====
+==== templateTagWithNestedTypeLiteral.js (2 errors) ====
     /**
      * @param {T} t
      * @template T

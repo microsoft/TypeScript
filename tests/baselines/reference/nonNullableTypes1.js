@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonNullableTypes1.ts] ////
+
 //// [nonNullableTypes1.ts]
 function f1<T>(x: T) {
     let y = x || "hello";  // NonNullable<T> | string

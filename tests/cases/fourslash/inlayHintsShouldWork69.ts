@@ -20,6 +20,6 @@
 ////function f11(a = { a: 1, b: 1 }) {}
 ////function f12(a = ((({ a: 1, b: 1 })))) {}
 
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayFunctionParameterTypeHints: true
 });

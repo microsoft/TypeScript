@@ -1,0 +1,27 @@
+signatureLengthMismatchInOverload.ts(5,3): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(callback: (arg: string, arg2: string) => void): void', gave the following error.
+    Argument of type '(arg: number, arg2: number) => void' is not assignable to parameter of type '(arg: string, arg2: string) => void'.
+      Types of parameters 'arg' and 'arg' are incompatible.
+        Type 'string' is not assignable to type 'number'.
+  Overload 2 of 2, '(callback: (arg: number) => void): void', gave the following error.
+    Argument of type '(arg: number, arg2: number) => void' is not assignable to parameter of type '(arg: number) => void'.
+      Target signature provides too few arguments. Expected 2 or more, but got 1.
+
+
+==== signatureLengthMismatchInOverload.ts (1 errors) ====
+    function f(callback: (arg: string, arg2: string) => void): void;
+    function f(callback: (arg: number) => void): void;
+    function f(callback: unknown) { }
+    
+    f((arg: number, arg2: number) => {});
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(callback: (arg: string, arg2: string) => void): void', gave the following error.
+!!! error TS2769:     Argument of type '(arg: number, arg2: number) => void' is not assignable to parameter of type '(arg: string, arg2: string) => void'.
+!!! error TS2769:       Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2769:         Type 'string' is not assignable to type 'number'.
+!!! error TS2769:   Overload 2 of 2, '(callback: (arg: number) => void): void', gave the following error.
+!!! error TS2769:     Argument of type '(arg: number, arg2: number) => void' is not assignable to parameter of type '(arg: number) => void'.
+!!! error TS2769:       Target signature provides too few arguments. Expected 2 or more, but got 1.
+!!! related TS2793 signatureLengthMismatchInOverload.ts:3:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
+    

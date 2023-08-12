@@ -285,7 +285,7 @@ function isPromiseTypedExpression(node: Node, checker: TypeChecker): node is Exp
 */
 function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<string, SynthIdentifier>): FunctionLikeDeclaration {
     const identsToRenameMap = new Map<string, Identifier>(); // key is the symbol id
-    const collidingSymbolMap = createMultiMap<Symbol>();
+    const collidingSymbolMap = createMultiMap<string, Symbol>();
     forEachChild(nodeToRename, function visit(node: Node) {
         if (!isIdentifier(node)) {
             forEachChild(node, visit);
@@ -497,7 +497,7 @@ function transformFinally(node: PromiseReturningCallExpression<"finally">, onFin
 
     // Transform the callback argument into an array of inlined statements. We pass whether we have an outer continuation here
     // as that indicates whether `return` is valid.
-    const inlinedCallback = transformCallbackArgument(onFinally, hasContinuation, /*continuationArgName*/ undefined, /*argName*/ undefined, node, transformer);
+    const inlinedCallback = transformCallbackArgument(onFinally, hasContinuation, /*continuationArgName*/ undefined, /*inputArgName*/ undefined, node, transformer);
     if (hasFailed()) return silentFail(); // shortcut out of more work
 
     const tryBlock = factory.createBlock(inlinedLeftHandSide);

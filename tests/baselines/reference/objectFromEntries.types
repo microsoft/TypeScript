@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectFromEntries.ts ===
+//// [tests/cases/compiler/objectFromEntries.ts] ////
+
+=== objectFromEntries.ts ===
 const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
 >o : { [k: string]: number; }
 >Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]) : { [k: string]: number; }
@@ -23,7 +25,7 @@ const o2 = Object.fromEntries(new URLSearchParams());
 >Object : ObjectConstructor
 >fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 >new URLSearchParams() : URLSearchParams
->URLSearchParams : { new (init?: string | URLSearchParams | string[][] | Record<string, string>): URLSearchParams; prototype: URLSearchParams; toString(): string; }
+>URLSearchParams : { new (init?: string | URLSearchParams | string[][] | Record<string, string>): URLSearchParams; prototype: URLSearchParams; }
 
 const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
 >o3 : { [k: string]: string; }
