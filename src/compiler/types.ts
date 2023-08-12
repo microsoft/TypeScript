@@ -2490,6 +2490,7 @@ export interface SyntheticExpression extends LeftHandSideExpression {
     readonly isSpread: boolean;
     readonly type: Type;
     readonly tupleNameSource?: ParameterDeclaration | NamedTupleMember;
+    readonly thisArgument?: LeftHandSideExpression;
 }
 
 // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -8833,7 +8834,7 @@ export interface NodeFactory {
     //
     // Synthetic Nodes
     //
-    /** @internal */ createSyntheticExpression(type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember): SyntheticExpression;
+    /** @internal */ createSyntheticExpression(type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember, thisArgument?: LeftHandSideExpression): SyntheticExpression;
     /** @internal */ createSyntaxList(children: Node[]): SyntaxList;
 
     //

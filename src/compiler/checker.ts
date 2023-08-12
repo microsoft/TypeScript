@@ -27465,23 +27465,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return type;
             }
-            const rightType = getTypeOfExpression(expr.right);
-            // if rightType is an object type with a custom `[Symbol.hasInstance]` method, and that method has a type
-            // predicate, use the type predicate to perform narrowing. This allows normal `object` types to participate
-            // in `instanceof`, as per Step 2 of https://tc39.es/ecma262/#sec-instanceofoperator.
-            const hasInstanceMethodType = getSymbolHasInstanceMethodOfObjectType(rightType);
-            if (hasInstanceMethodType) {
-                const syntheticCall = createSyntheticHasInstanceMethodCall(left, expr.right, type, hasInstanceMethodType);
-                const signature = getEffectsSignature(syntheticCall);
-                const predicate = signature && getTypePredicateOfSignature(signature);
-                if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
-                    return narrowTypeByTypePredicate(type, predicate, syntheticCall, assumeTrue);
-                }
-            }
-            if (!isTypeDerivedFrom(rightType, globalFunctionType)) {
-                return type;
-            }
-            const instanceType = mapType(rightType, getInstanceType);
+            const right = expr.right;
+            const rightType = getTypeOfExpression(right);
+            const instanceType = mapType(rightType, t => getInstanceType(t, left, type, right));
             // Don't narrow from `any` if the target type is exactly `Object` or `Function`, and narrow
             // in the false branch only if the target is a non-empty object type.
             if (isTypeAny(type) && (instanceType === globalObjectType || instanceType === globalFunctionType) ||
@@ -27491,7 +27477,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getNarrowedType(type, instanceType, assumeTrue, /*checkDerived*/ true);
         }
 
-        function getInstanceType(constructorType: Type) {
+        function getInstanceType(constructorType: Type, left: Expression, leftType: Type, right: Expression) {
+            // if rightType is an object type with a custom `[Symbol.hasInstance]` method, and that method has a type
+            // predicate, use the type predicate to perform narrowing. This allows normal `object` types to participate
+            // in `instanceof`, as per Step 2 of https://tc39.es/ecma262/#sec-instanceofoperator.
+            const hasInstanceMethodType = getSymbolHasInstanceMethodOfObjectType(constructorType);
+            if (hasInstanceMethodType) {
+                const syntheticCall = createSyntheticHasInstanceMethodCall(left, leftType, right, constructorType, hasInstanceMethodType);
+                const signature = getEffectsSignature(syntheticCall);
+                const predicate = signature && getTypePredicateOfSignature(signature);
+                if (predicate && predicate.kind == TypePredicateKind.Identifier && predicate.parameterIndex == 0) {
+                    return predicate.type;
+                }
+                if (!isTypeDerivedFrom(constructorType, globalFunctionType)) {
+                    return leftType;
+                }
+            }
             const prototypePropertyType = getTypeOfPropertyOfType(constructorType, "prototype" as __String);
             if (prototypePropertyType && !isTypeAny(prototypePropertyType)) {
                 return prototypePropertyType;
@@ -27575,17 +27576,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function narrowTypeByTypePredicate(type: Type, predicate: TypePredicate, callExpression: CallExpression, assumeTrue: boolean): Type {
             // Don't narrow from 'any' if the predicate type is exactly 'Object' or 'Function'
             if (predicate.type && !(isTypeAny(type) && (predicate.type === globalObjectType || predicate.type === globalFunctionType))) {
-                let predicateArgument = getTypePredicateArgument(predicate, callExpression);
+                const predicateArgument = getTypePredicateArgument(predicate, callExpression);
                 if (predicateArgument) {
-                    // If the predicate argument is synthetic and is the first argument of a synthetic call to
-                    // `[Symbol.hasInstance]`, replace the synthetic predicate argument with the actual argument from
-                    // the original `instanceof` expression which is stored as the synthetic argument's `parent`.
-                    if (isSyntheticExpression(predicateArgument) &&
-                        predicate.parameterIndex === 0 &&
-                        isSyntheticHasInstanceMethodCall(callExpression)) {
-                        Debug.assertNode(predicateArgument.parent, isExpression);
-                        predicateArgument = predicateArgument.parent;
-                    }
                     if (isMatchingReference(reference, predicateArgument)) {
                         return getNarrowedType(type, predicate.type, assumeTrue, /*checkDerived*/ false);
                     }
@@ -32891,11 +32883,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isAccessExpression(callee)) {
                 return callee.expression;
             }
+            if (isSyntheticExpression(callee)) {
+                return callee.thisArgument;
+            }
         }
     }
 
-    function createSyntheticExpression(parent: Node, type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember) {
-        const result = parseNodeFactory.createSyntheticExpression(type, isSpread, tupleNameSource);
+    function createSyntheticExpression(parent: Node, type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember, thisArgument?: LeftHandSideExpression) {
+        const result = parseNodeFactory.createSyntheticExpression(type, isSpread, tupleNameSource, thisArgument);
         setTextRange(result, parent);
         setParent(result, parent);
         return result;
@@ -36498,8 +36493,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param leftType The type of the left-hand expression of `instanceof`.
      * @param hasInstanceMethodType The type of the `[Symbol.hasInstance]` method of the right-hand expression of `instanceof`.
      */
-    function createSyntheticHasInstanceMethodCall(left: Expression, right: Expression, leftType: Type, hasInstanceMethodType: Type) {
-        const syntheticExpression = createSyntheticExpression(right, hasInstanceMethodType);
+    function createSyntheticHasInstanceMethodCall(left: Expression, leftType: Type, right: Expression, rightType: Type, hasInstanceMethodType: Type) {
+        const thisArgument = createSyntheticExpression(right, rightType);
+        const syntheticExpression = createSyntheticExpression(right, hasInstanceMethodType, /*isSpread*/ false, /*tupleNameSource*/ undefined, thisArgument);
         const syntheticArgument = createSyntheticExpression(left, leftType);
         const syntheticCall = parseNodeFactory.createCallExpression(syntheticExpression, /*typeArguments*/ undefined, [syntheticArgument]);
         setParent(syntheticCall, left.parent);
@@ -36556,7 +36552,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // must check the expression as if it were a call to `right[Symbol.hasInstance](left)1. The call to
                     // `getResolvedSignature`, below, will check that leftType is assignable to the type of the first
                     // parameter.
-                    const syntheticCall = createSyntheticHasInstanceMethodCall(left, right, leftType, hasInstanceMethodType);
+                    const syntheticCall = createSyntheticHasInstanceMethodCall(left, leftType, right, rightType, hasInstanceMethodType);
                     const returnType = getReturnTypeOfSignature(getResolvedSignature(syntheticCall));
 
                     // We also verify that the return type of the `[Symbol.hasInstance]` method is assignable to

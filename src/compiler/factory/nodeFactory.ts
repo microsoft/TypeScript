@@ -6133,11 +6133,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     // @api
-    function createSyntheticExpression(type: Type, isSpread = false, tupleNameSource?: ParameterDeclaration | NamedTupleMember) {
+    function createSyntheticExpression(type: Type, isSpread = false, tupleNameSource?: ParameterDeclaration | NamedTupleMember, thisArgument?: LeftHandSideExpression) {
         const node = createBaseNode<SyntheticExpression>(SyntaxKind.SyntheticExpression);
         node.type = type;
         node.isSpread = isSpread;
         node.tupleNameSource = tupleNameSource;
+        node.thisArgument = thisArgument;
         return node;
     }
 

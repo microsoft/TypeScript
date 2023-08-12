@@ -3,6 +3,7 @@
 
 interface Point { x: number, y: number }
 interface Point3D { x: number, y: number, z: number }
+interface Point3D2 extends Point { z: number }
 interface Line { start: Point, end: Point }
 
 declare var rhs0: { [Symbol.hasInstance](value: unknown): boolean; };
@@ -25,6 +26,7 @@ declare var lhs0: any;
 declare var lhs1: object;
 declare var lhs2: Point | Point3D | Line;
 declare var lhs3: Point3D | Line;
+declare var lhs4: Point | Point3D2 | Line;
 
 lhs0 instanceof rhs0 && lhs0;
 lhs0 instanceof rhs1 && lhs0;
@@ -75,3 +77,16 @@ lhs3 instanceof Rhs10 && lhs3;
 lhs3 instanceof Rhs11 && lhs3;
 lhs3 instanceof Rhs12 && lhs3;
 lhs3 instanceof Rhs13 && lhs3;
+
+lhs4 instanceof rhs0 && lhs4;
+lhs4 instanceof rhs1 && lhs4;
+lhs4 instanceof rhs2 && lhs4;
+lhs4 instanceof rhs3 && lhs4;
+lhs4 instanceof rhs4 && lhs4;
+lhs4 instanceof rhs5 && lhs4;
+lhs4 instanceof Rhs7 && lhs4;
+lhs4 instanceof Rhs8 && lhs4;
+lhs4 instanceof Rhs9 && lhs4;
+lhs4 instanceof Rhs10 && lhs4;
+lhs4 instanceof Rhs11 && lhs4;
+lhs4 instanceof Rhs12 && lhs4;
