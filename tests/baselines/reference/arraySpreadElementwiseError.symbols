@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/es6/spread/arraySpreadElementwiseError.ts] ////
+
+=== arraySpreadElementwiseError.ts ===
+// https://github.com/microsoft/TypeScript/issues/55340
+
+declare const a: Array<number | string>;
+>a : Symbol(a, Decl(arraySpreadElementwiseError.ts, 2, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const b: Array<number> = [...a, 1];
+>b : Symbol(b, Decl(arraySpreadElementwiseError.ts, 3, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(arraySpreadElementwiseError.ts, 2, 13))
+
