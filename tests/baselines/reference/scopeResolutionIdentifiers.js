@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/identifiers/scopeResolutionIdentifiers.ts] ////
+
 //// [scopeResolutionIdentifiers.ts]
 // EveryType used in a nested scope of a different EveryType with the same name, type of the identifier is the one defined in the inner scope
 

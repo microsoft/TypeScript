@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/commonTypeIntersection.ts ===
+//// [tests/cases/conformance/types/intersection/commonTypeIntersection.ts] ////
+
+=== commonTypeIntersection.ts ===
 declare let x1: { __typename?: 'TypeTwo' } & { a: boolean };
 >x1 : Symbol(x1, Decl(commonTypeIntersection.ts, 0, 11))
 >__typename : Symbol(__typename, Decl(commonTypeIntersection.ts, 0, 17))

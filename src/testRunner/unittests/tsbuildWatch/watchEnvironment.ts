@@ -3,13 +3,13 @@ import {
     createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     runWatchBaseline,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     libFile,
     TestServerHost,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
     it("watchFile on same file multiple times because file is part of multiple projects", () => {
@@ -41,9 +41,8 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                     caption: "modify typing file",
                     edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1);
-                        sys.checkTimeoutQueueLengthAndRun(1);
-                        sys.checkTimeoutQueueLength(0);
+                        sys.runQueuedTimeoutCallbacks();
+                        sys.runQueuedTimeoutCallbacks();
                     }
                 },
                 {
@@ -53,15 +52,14 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                         maxPkgs--;
                         writePkgReferences(sys);
                     },
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "modify typing file",
                     edit: sys => sys.writeFile(typing.path, typing.content),
                     timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1);
-                        sys.checkTimeoutQueueLengthAndRun(1);
-                        sys.checkTimeoutQueueLength(0);
+                        sys.runQueuedTimeoutCallbacks();
+                        sys.runQueuedTimeoutCallbacks();
                     }
                 },
                 {
@@ -71,12 +69,12 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                         maxPkgs = 0;
                         writePkgReferences(sys);
                     },
-                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "modify typing file",
                     edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
-                    timeouts: sys => sys.checkTimeoutQueueLength(0),
+                    timeouts: sys => sys.logTimeoutQueueLength(),
                 },
             ],
             watchOrSolution: solutionBuilder

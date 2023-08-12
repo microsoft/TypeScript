@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_es2015.ts ===
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_es2015.ts] ////
+
+=== labeledStatementWithLabel_es2015.ts ===
 label: function fn() { }
 >fn : Symbol(fn, Decl(labeledStatementWithLabel_es2015.ts, 0, 6))
 

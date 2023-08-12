@@ -18,8 +18,10 @@ import {
     LanguageVariant,
     LineAndCharacter,
     MapLike,
+    padLeft,
     parsePseudoBigInt,
     positionIsSynthesized,
+    PunctuationOrKeywordSyntaxKind,
     ScriptTarget,
     SourceFileLike,
     SyntaxKind,
@@ -27,7 +29,7 @@ import {
     trimStringStart,
 } from "./_namespaces/ts";
 
-export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
+export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
 
 /** @internal */
 export function tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
@@ -70,6 +72,7 @@ export interface Scanner {
     reScanSlashToken(): SyntaxKind;
     reScanAsteriskEqualsToken(): SyntaxKind;
     reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
+    /** @deprecated use {@link reScanTemplateToken}(false) */
     reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
     scanJsxIdentifier(): SyntaxKind;
     scanJsxAttributeValue(): SyntaxKind;
@@ -191,6 +194,7 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     undefined: SyntaxKind.UndefinedKeyword,
     unique: SyntaxKind.UniqueKeyword,
     unknown: SyntaxKind.UnknownKeyword,
+    using: SyntaxKind.UsingKeyword,
     var: SyntaxKind.VarKeyword,
     void: SyntaxKind.VoidKeyword,
     while: SyntaxKind.WhileKeyword,
@@ -388,6 +392,10 @@ function makeReverseMap(source: Map<string, number>): string[] {
 }
 
 const tokenStrings = makeReverseMap(textToToken);
+
+/** @internal */
+export function tokenToString(t: PunctuationOrKeywordSyntaxKind): string;
+export function tokenToString(t: SyntaxKind): string | undefined;
 export function tokenToString(t: SyntaxKind): string | undefined {
     return tokenStrings[t];
 }
@@ -1062,12 +1070,12 @@ export function createScanner(languageVersion: ScriptTarget,
     return scanner;
 
     function error(message: DiagnosticMessage): void;
-    function error(message: DiagnosticMessage, errPos: number, length: number): void;
-    function error(message: DiagnosticMessage, errPos: number = pos, length?: number): void {
+    function error(message: DiagnosticMessage, errPos: number, length: number, arg0?: any): void;
+    function error(message: DiagnosticMessage, errPos: number = pos, length?: number, arg0?: any): void {
         if (onError) {
             const oldPos = pos;
             pos = errPos;
-            onError(message, length || 0);
+            onError(message, length || 0, arg0);
             pos = oldPos;
         }
     }
@@ -1086,11 +1094,14 @@ export function createScanner(languageVersion: ScriptTarget,
                     isPreviousTokenSeparator = true;
                     result += text.substring(start, pos);
                 }
-                else if (isPreviousTokenSeparator) {
-                    error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
-                }
                 else {
-                    error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    tokenFlags |= TokenFlags.ContainsInvalidSeparator;
+                    if (isPreviousTokenSeparator) {
+                        error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
+                    }
+                    else {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    }
                 }
                 pos++;
                 start = pos;
@@ -1105,14 +1116,69 @@ export function createScanner(languageVersion: ScriptTarget,
             break;
         }
         if (text.charCodeAt(pos - 1) === CharacterCodes._) {
+            tokenFlags |= TokenFlags.ContainsInvalidSeparator;
             error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
         }
         return result + text.substring(start, pos);
     }
 
-    function scanNumber(): { type: SyntaxKind, value: string } {
-        const start = pos;
-        const mainFragment = scanNumberFragment();
+    // Extract from Section 12.9.3
+    // NumericLiteral ::=
+    //     | DecimalLiteral
+    //     | DecimalBigIntegerLiteral
+    //     | NonDecimalIntegerLiteral 'n'?
+    //     | LegacyOctalIntegerLiteral
+    // DecimalBigIntegerLiteral ::=
+    //     | '0n'
+    //     | [1-9] DecimalDigits? 'n'
+    //     | [1-9] '_' DecimalDigits 'n'
+    // DecimalLiteral ::=
+    //     | DecimalIntegerLiteral? '.' DecimalDigits? ExponentPart?
+    //     | '.' DecimalDigits ExponentPart?
+    //     | DecimalIntegerLiteral ExponentPart?
+    // DecimalIntegerLiteral ::=
+    //     | '0'
+    //     | [1-9] '_'? DecimalDigits
+    //     | NonOctalDecimalIntegerLiteral
+    // LegacyOctalIntegerLiteral ::= '0' [0-7]+
+    // NonOctalDecimalIntegerLiteral ::= '0' [0-7]* [89] [0-9]*
+    function scanNumber(): SyntaxKind {
+        let start = pos;
+        let mainFragment: string;
+        if (text.charCodeAt(pos) === CharacterCodes._0) {
+            pos++;
+            if (text.charCodeAt(pos) === CharacterCodes._) {
+                tokenFlags |= TokenFlags.ContainsSeparator | TokenFlags.ContainsInvalidSeparator;
+                error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                // treat it as a normal number literal
+                pos--;
+                mainFragment = scanNumberFragment();
+            }
+            // Separators are not allowed in the below cases
+            else if (!scanDigits()) {
+                // NonOctalDecimalIntegerLiteral, emit error later
+                // Separators in decimal and exponent parts are still allowed according to the spec
+                tokenFlags |= TokenFlags.ContainsLeadingZero;
+                mainFragment = "" + +tokenValue;
+            }
+            else if (!tokenValue) {
+                // a single zero
+                mainFragment = "0";
+            }
+            else {
+                // LegacyOctalIntegerLiteral
+                tokenValue = "" + parseInt(tokenValue, 8);
+                tokenFlags |= TokenFlags.Octal;
+                const withMinus = token === SyntaxKind.MinusToken;
+                const literal = (withMinus ? "-" : "") + "0o" + (+tokenValue).toString(8);
+                if (withMinus) start--;
+                error(Diagnostics.Octal_literals_are_not_allowed_Use_the_syntax_0, start, pos - start, literal);
+                return SyntaxKind.NumericLiteral;
+            }
+        }
+        else {
+            mainFragment = scanNumberFragment();
+        }
         let decimalFragment: string | undefined;
         let scientificFragment: string | undefined;
         if (text.charCodeAt(pos) === CharacterCodes.dot) {
@@ -1148,18 +1214,24 @@ export function createScanner(languageVersion: ScriptTarget,
             result = text.substring(start, end); // No need to use all the fragments; no _ removal needed
         }
 
+        if (tokenFlags & TokenFlags.ContainsLeadingZero) {
+            error(Diagnostics.Decimals_with_leading_zeros_are_not_allowed, start, end - start);
+            // if a literal has a leading zero, it must not be bigint
+            tokenValue = "" + +result;
+            return SyntaxKind.NumericLiteral;
+        }
+
         if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
             checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
-            return {
-                type: SyntaxKind.NumericLiteral,
-                value: "" + +result // if value is not an integer, it can be safely coerced to a number
-            };
+            // if value is not an integer, it can be safely coerced to a number
+            tokenValue = "" + +result;
+            return SyntaxKind.NumericLiteral;
         }
         else {
             tokenValue = result;
             const type = checkBigIntSuffix(); // if value is an integer, check whether it is a bigint
             checkForIdentifierStartAfterNumericLiteral(start);
-            return { type, value: tokenValue };
+            return type;
         }
     }
 
@@ -1185,12 +1257,17 @@ export function createScanner(languageVersion: ScriptTarget,
         }
     }
 
-    function scanOctalDigits(): number {
+    function scanDigits(): boolean {
         const start = pos;
-        while (isOctalDigit(text.charCodeAt(pos))) {
+        let isOctal = true;
+        while (isDigit(text.charCodeAt(pos))) {
+            if (!isOctalDigit(text.charCodeAt(pos))) {
+                isOctal = false;
+            }
             pos++;
         }
-        return +(text.substring(start, pos));
+        tokenValue = text.substring(start, pos);
+        return isOctal;
     }
 
     /**
@@ -1273,7 +1350,7 @@ export function createScanner(languageVersion: ScriptTarget,
             }
             if (ch === CharacterCodes.backslash && !jsxAttributeString) {
                 result += text.substring(start, pos);
-                result += scanEscapeSequence();
+                result += scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ true);
                 start = pos;
                 continue;
             }
@@ -1292,7 +1369,7 @@ export function createScanner(languageVersion: ScriptTarget,
      * Sets the current 'tokenValue' and returns a NoSubstitutionTemplateLiteral or
      * a literal component of a TemplateExpression.
      */
-    function scanTemplateAndSetTokenValue(isTaggedTemplate: boolean): SyntaxKind {
+    function scanTemplateAndSetTokenValue(shouldEmitInvalidEscapeError: boolean): SyntaxKind {
         const startedWithBacktick = text.charCodeAt(pos) === CharacterCodes.backtick;
 
         pos++;
@@ -1330,7 +1407,7 @@ export function createScanner(languageVersion: ScriptTarget,
             // Escape character
             if (currChar === CharacterCodes.backslash) {
                 contents += text.substring(start, pos);
-                contents += scanEscapeSequence(isTaggedTemplate);
+                contents += scanEscapeSequence(shouldEmitInvalidEscapeError);
                 start = pos;
                 continue;
             }
@@ -1359,7 +1436,22 @@ export function createScanner(languageVersion: ScriptTarget,
         return resultingToken;
     }
 
-    function scanEscapeSequence(isTaggedTemplate?: boolean): string {
+    // Extract from Section A.1
+    // EscapeSequence ::
+    //     | CharacterEscapeSequence
+    //     | 0 (?![0-9])
+    //     | LegacyOctalEscapeSequence
+    //     | NonOctalDecimalEscapeSequence
+    //     | HexEscapeSequence
+    //     | UnicodeEscapeSequence
+    // LegacyOctalEscapeSequence ::=
+    //     | '0' (?=[89])
+    //     | [1-7] (?![0-7])
+    //     | [0-3] [0-7] (?![0-7])
+    //     | [4-7] [0-7]
+    //     | [0-3] [0-7] [0-7]
+    // NonOctalDecimalEscapeSequence ::= [89]
+    function scanEscapeSequence(shouldEmitInvalidEscapeError?: boolean): string {
         const start = pos;
         pos++;
         if (pos >= end) {
@@ -1370,13 +1462,47 @@ export function createScanner(languageVersion: ScriptTarget,
         pos++;
         switch (ch) {
             case CharacterCodes._0:
-                // '\01'
-                if (isTaggedTemplate && pos < end && isDigit(text.charCodeAt(pos))) {
-                    pos++;
-                    tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                    return text.substring(start, pos);
+                // Although '0' preceding any digit is treated as LegacyOctalEscapeSequence,
+                // '\08' should separately be interpreted as '\0' + '8'.
+                if (pos >= end || !isDigit(text.charCodeAt(pos))) {
+                    return "\0";
                 }
-                return "\0";
+            // '\01', '\011'
+            // falls through
+            case CharacterCodes._1:
+            case CharacterCodes._2:
+            case CharacterCodes._3:
+                // '\1', '\17', '\177'
+                if (pos < end && isOctalDigit(text.charCodeAt(pos))) {
+                    pos++;
+                }
+            // '\17', '\177'
+            // falls through
+            case CharacterCodes._4:
+            case CharacterCodes._5:
+            case CharacterCodes._6:
+            case CharacterCodes._7:
+                // '\4', '\47' but not '\477'
+                if (pos < end && isOctalDigit(text.charCodeAt(pos))) {
+                    pos++;
+                }
+                // '\47'
+                tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                if (shouldEmitInvalidEscapeError) {
+                    const code = parseInt(text.substring(start + 1, pos), 8);
+                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + padLeft(code.toString(16), 2, "0"));
+                    return String.fromCharCode(code);
+                }
+                return text.substring(start, pos);
+            case CharacterCodes._8:
+            case CharacterCodes._9:
+                // the invalid '\8' and '\9'
+                tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                if (shouldEmitInvalidEscapeError) {
+                    error(Diagnostics.Escape_sequence_0_is_not_allowed, start, pos - start, text.substring(start, pos));
+                    return String.fromCharCode(ch);
+                }
+                return text.substring(start, pos);
             case CharacterCodes.b:
                 return "\b";
             case CharacterCodes.t:
@@ -1390,66 +1516,74 @@ export function createScanner(languageVersion: ScriptTarget,
             case CharacterCodes.r:
                 return "\r";
             case CharacterCodes.singleQuote:
-                return "\'";
+                return "'";
             case CharacterCodes.doubleQuote:
                 return "\"";
             case CharacterCodes.u:
-                if (isTaggedTemplate) {
-                    // '\u' or '\u0' or '\u00' or '\u000'
-                    for (let escapePos = pos; escapePos < pos + 4; escapePos++) {
-                        if (escapePos < end && !isHexDigit(text.charCodeAt(escapePos)) && text.charCodeAt(escapePos) !== CharacterCodes.openBrace) {
-                            pos = escapePos;
-                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                            return text.substring(start, pos);
-                        }
-                    }
-                }
-                // '\u{DDDDDDDD}'
                 if (pos < end && text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                    // '\u{DDDDDDDD}'
                     pos++;
-
-                    // '\u{'
-                    if (isTaggedTemplate && !isHexDigit(text.charCodeAt(pos))) {
+                    const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                    const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
+                    // '\u{Not Code Point' or '\u{CodePoint'
+                    if (escapedValue < 0) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Hexadecimal_digit_expected);
+                        }
                         return text.substring(start, pos);
                     }
-
-                    if (isTaggedTemplate) {
-                        const savePos = pos;
-                        const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
-                        const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
-
-                        // '\u{Not Code Point' or '\u{CodePoint'
-                        if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
-                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                            return text.substring(start, pos);
+                    if (!isCodePoint(escapedValue)) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
                         }
-                        else {
-                            pos = savePos;
-                        }
+                        return text.substring(start, pos);
                     }
+                    if (pos >= end) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Unexpected_end_of_text);
+                        }
+                        return text.substring(start, pos);
+                    }
+                    if (text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Unterminated_Unicode_escape_sequence);
+                        }
+                        return text.substring(start, pos);
+                    }
+                    pos++;
                     tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                    return scanExtendedUnicodeEscape();
+                    return utf16EncodeAsString(escapedValue);
                 }
-
-                tokenFlags |= TokenFlags.UnicodeEscape;
                 // '\uDDDD'
-                return scanHexadecimalEscape(/*numDigits*/ 4);
+                for (; pos < start + 6; pos++) {
+                    if (!(pos < end && isHexDigit(text.charCodeAt(pos)))) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Hexadecimal_digit_expected);
+                        }
+                        return text.substring(start, pos);
+                    }
+                }
+                tokenFlags |= TokenFlags.UnicodeEscape;
+                return String.fromCharCode(parseInt(text.substring(start + 2, pos), 16));
 
             case CharacterCodes.x:
-                if (isTaggedTemplate) {
-                    if (!isHexDigit(text.charCodeAt(pos))) {
+                // '\xDD'
+                for (; pos < start + 4; pos++) {
+                    if (!(pos < end && isHexDigit(text.charCodeAt(pos)))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                        return text.substring(start, pos);
-                    }
-                    else if (!isHexDigit(text.charCodeAt(pos + 1))) {
-                        pos++;
-                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Hexadecimal_digit_expected);
+                        }
                         return text.substring(start, pos);
                     }
                 }
-                // '\xDD'
-                return scanHexadecimalEscape(/*numDigits*/ 2);
+                tokenFlags |= TokenFlags.HexEscape;
+                return String.fromCharCode(parseInt(text.substring(start + 2, pos), 16));
 
             // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
             // the line terminator is interpreted to be "the empty code unit sequence".
@@ -1464,18 +1598,6 @@ export function createScanner(languageVersion: ScriptTarget,
                 return "";
             default:
                 return String.fromCharCode(ch);
-        }
-    }
-
-    function scanHexadecimalEscape(numDigits: number): string {
-        const escapedValue = scanExactNumberOfHexDigits(numDigits, /*canHaveSeparators*/ false);
-
-        if (escapedValue >= 0) {
-            return String.fromCharCode(escapedValue);
-        }
-        else {
-            error(Diagnostics.Hexadecimal_digit_expected);
-            return "";
         }
     }
 
@@ -1661,16 +1783,28 @@ export function createScanner(languageVersion: ScriptTarget,
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
-            const ch = codePointAt(text, pos);
 
-            // Special handling for shebang
-            if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
-                pos = scanShebangTrivia(text, pos);
-                if (skipTrivia) {
-                    continue;
+            const ch = codePointAt(text, pos);
+            if (pos === 0) {
+                // If a file wasn't valid text at all, it will usually be apparent at
+                // position 0 because UTF-8 decode will fail and produce U+FFFD.
+                // If that happens, just issue one error and refuse to try to scan further;
+                // this is likely a binary file that cannot be parsed
+                if (ch === CharacterCodes.replacementCharacter) {
+                    // Jump to the end of the file and fail.
+                    error(Diagnostics.File_appears_to_be_binary);
+                    pos = end;
+                    return token = SyntaxKind.NonTextFileMarkerTrivia;
                 }
-                else {
-                    return token = SyntaxKind.ShebangTrivia;
+                // Special handling for shebang
+                if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
+                    pos = scanShebangTrivia(text, pos);
+                    if (skipTrivia) {
+                        continue;
+                    }
+                    else {
+                        return token = SyntaxKind.ShebangTrivia;
+                    }
                 }
             }
 
@@ -1738,7 +1872,7 @@ export function createScanner(languageVersion: ScriptTarget,
                     tokenValue = scanString();
                     return token = SyntaxKind.StringLiteral;
                 case CharacterCodes.backtick:
-                    return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false);
+                    return token = scanTemplateAndSetTokenValue(/*shouldEmitInvalidEscapeError*/ false);
                 case CharacterCodes.percent:
                     if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -1803,7 +1937,7 @@ export function createScanner(languageVersion: ScriptTarget,
                     return token = SyntaxKind.MinusToken;
                 case CharacterCodes.dot:
                     if (isDigit(text.charCodeAt(pos + 1))) {
-                        tokenValue = scanNumber().value;
+                        scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     }
                     if (text.charCodeAt(pos + 1) === CharacterCodes.dot && text.charCodeAt(pos + 2) === CharacterCodes.dot) {
@@ -1921,15 +2055,6 @@ export function createScanner(languageVersion: ScriptTarget,
                         tokenFlags |= TokenFlags.OctalSpecifier;
                         return token = checkBigIntSuffix();
                     }
-                    // Try to parse as an octal
-                    if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
-                        tokenValue = "" + scanOctalDigits();
-                        tokenFlags |= TokenFlags.Octal;
-                        return token = SyntaxKind.NumericLiteral;
-                    }
-                // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
-                // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
-                // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
                 // falls through
                 case CharacterCodes._1:
                 case CharacterCodes._2:
@@ -1940,8 +2065,7 @@ export function createScanner(languageVersion: ScriptTarget,
                 case CharacterCodes._7:
                 case CharacterCodes._8:
                 case CharacterCodes._9:
-                    ({ type: token, value: tokenValue } = scanNumber());
-                    return token;
+                    return token = scanNumber();
                 case CharacterCodes.colon:
                     pos++;
                     return token = SyntaxKind.ColonToken;
@@ -2302,14 +2426,13 @@ export function createScanner(languageVersion: ScriptTarget,
      * Unconditionally back up and scan a template expression portion.
      */
     function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
-        Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
         pos = tokenStart;
-        return token = scanTemplateAndSetTokenValue(isTaggedTemplate);
+        return token = scanTemplateAndSetTokenValue(!isTaggedTemplate);
     }
 
     function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
         pos = tokenStart;
-        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
+        return token = scanTemplateAndSetTokenValue(/*shouldEmitInvalidEscapeError*/ true);
     }
 
     function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
@@ -2420,7 +2543,6 @@ export function createScanner(languageVersion: ScriptTarget,
             // everything after it to the token
             // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
             // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
-            let namespaceSeparator = false;
             while (pos < end) {
                 const ch = text.charCodeAt(pos);
                 if (ch === CharacterCodes.minus) {
@@ -2428,23 +2550,11 @@ export function createScanner(languageVersion: ScriptTarget,
                     pos++;
                     continue;
                 }
-                else if (ch === CharacterCodes.colon && !namespaceSeparator) {
-                    tokenValue += ":";
-                    pos++;
-                    namespaceSeparator = true;
-                    token = SyntaxKind.Identifier; // swap from keyword kind to identifier kind
-                    continue;
-                }
                 const oldPos = pos;
                 tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
                 if (pos === oldPos) {
                     break;
                 }
-            }
-            // Do not include a trailing namespace separator in the token, since this is against the spec.
-            if (tokenValue.slice(-1) === ":") {
-                tokenValue = tokenValue.slice(0, -1);
-                pos--;
             }
             return getIdentifierToken();
         }
@@ -2691,7 +2801,7 @@ const codePointAt: (s: string, i: number) => number = (String.prototype as any).
     }
     // Get the first code unit
     const first = str.charCodeAt(i);
-    // check if it’s the start of a surrogate pair
+    // check if it's the start of a surrogate pair
     if (first >= 0xD800 && first <= 0xDBFF && size > i + 1) { // high surrogate and there is a next code unit
         const second = str.charCodeAt(i + 1);
         if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate

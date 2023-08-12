@@ -1,3 +1,4 @@
+currentDirectory:: /a useCaseSensitiveFileNames: false
 Input::
 //// [/a/app.ts]
 let x = 1
@@ -50,10 +51,6 @@ No shapes updated in the builder::
 
 FsWatches::
 /a/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/a/node_modules/@types: *new*
   {}
 
 exitCode:: ExitStatus.undefined

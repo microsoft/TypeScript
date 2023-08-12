@@ -28,6 +28,7 @@ import {
     matchesExclude,
     matchFiles,
     memoize,
+    ModuleImportResult,
     noop,
     normalizePath,
     normalizeSlashes,
@@ -35,7 +36,6 @@ import {
     Path,
     perfLogger,
     PollingWatchKind,
-    RequireResult,
     resolveJSModule,
     some,
     startsWith,
@@ -286,7 +286,7 @@ function createDynamicPriorityPollingWatchFile(host: {
         return queue;
     }
 
-    function pollPollingIntervalQueue(queue: PollingIntervalQueue) {
+    function pollPollingIntervalQueue(_timeoutType: string, queue: PollingIntervalQueue) {
         queue.pollIndex = pollQueue(queue, queue.pollingInterval, queue.pollIndex, pollingChunkSize[queue.pollingInterval]);
         // Set the next polling index and timeout
         if (queue.length) {
@@ -298,12 +298,12 @@ function createDynamicPriorityPollingWatchFile(host: {
         }
     }
 
-    function pollLowPollingIntervalQueue(queue: PollingIntervalQueue) {
+    function pollLowPollingIntervalQueue(_timeoutType: string, queue: PollingIntervalQueue) {
         // Always poll complete list of changedFilesInLastPoll
         pollQueue(changedFilesInLastPoll, PollingInterval.Low, /*pollIndex*/ 0, changedFilesInLastPoll.length);
 
         // Finally do the actual polling of the queue
-        pollPollingIntervalQueue(queue);
+        pollPollingIntervalQueue(_timeoutType, queue);
         // Schedule poll if there are files in changedFilesInLastPoll but no files in the actual queue
         // as pollPollingIntervalQueue wont schedule for next poll
         if (!queue.pollScheduled && changedFilesInLastPoll.length) {
@@ -374,7 +374,7 @@ function createDynamicPriorityPollingWatchFile(host: {
     }
 
     function scheduleNextPoll(pollingInterval: PollingInterval) {
-        pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingIntervalQueue(pollingInterval));
+        pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingInterval === PollingInterval.Low ? "pollLowPollingIntervalQueue" : "pollPollingIntervalQueue", pollingIntervalQueue(pollingInterval));
     }
 }
 
@@ -465,7 +465,7 @@ function createFixedChunkSizePollingWatchFile(host: {
 
     function scheduleNextPoll() {
         if (!watchedFiles.length || pollScheduled) return;
-        pollScheduled = host.setTimeout(pollQueue, PollingInterval.High);
+        pollScheduled = host.setTimeout(pollQueue, PollingInterval.High, "pollQueue");
     }
 }
 
@@ -713,7 +713,7 @@ function createDirectoryWatcherSupportingRecursive({
             clearTimeout(timerToUpdateChildWatches);
             timerToUpdateChildWatches = undefined;
         }
-        timerToUpdateChildWatches = setTimeout(onTimerToUpdateChildWatches, 1000);
+        timerToUpdateChildWatches = setTimeout(onTimerToUpdateChildWatches, 1000, "timerToUpdateChildWatches");
     }
 
     function onTimerToUpdateChildWatches() {
@@ -812,7 +812,7 @@ function createDirectoryWatcherSupportingRecursive({
 }
 
 /** @internal */
-export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined, modifiedTime?: Date) => void;
+export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined | null, modifiedTime?: Date) => void;
 /** @internal */
 export type FsWatch = (fileOrDirectory: string, entryKind: FileSystemEntryKind, callback: FsWatchCallback, recursive: boolean, fallbackPollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined) => FileWatcher;
 /** @internal */
@@ -1205,7 +1205,7 @@ export function createSystemWatchFunctions({
             }
         }
 
-        function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
+        function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined | null) {
             // In some scenarios, file save operation fires event with fileName.ext~ instead of fileName.ext
             // To ensure we see the file going missing and coming back up (file delete and then recreated)
             // and watches being updated correctly we are calling back with fileName.ext as well as fileName.ext~
@@ -1428,7 +1428,7 @@ export interface System {
     base64decode?(input: string): string;
     base64encode?(input: string): string;
     /** @internal */ bufferFrom?(input: string, encoding?: string): Buffer;
-    /** @internal */ require?(baseDir: string, moduleName: string): RequireResult;
+    /** @internal */ require?(baseDir: string, moduleName: string): ModuleImportResult;
 
     // For testing
     /** @internal */ now?(): Date;
@@ -1578,7 +1578,7 @@ export let sys: System = (() => {
             disableCPUProfiler,
             cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
             realpath,
-            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+            debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)) || !!(process as any).recordreplay,
             tryEnableSourceMapsForHost() {
                 try {
                     (require("source-map-support") as typeof import("source-map-support")).install();
@@ -1711,7 +1711,7 @@ export let sys: System = (() => {
 
         function bufferFrom(input: string, encoding?: string): Buffer {
             // See https://github.com/Microsoft/TypeScript/issues/25652
-            return Buffer.from && (Buffer.from as Function) !== Int8Array.from
+            return Buffer.from && Buffer.from !== Int8Array.from
                 ? Buffer.from(input, encoding)
                 : new Buffer(input, encoding);
         }
@@ -1814,14 +1814,14 @@ export let sys: System = (() => {
         }
 
         function readFile(fileName: string, _encoding?: string): string | undefined {
-            perfLogger.logStartReadFile(fileName);
+            perfLogger?.logStartReadFile(fileName);
             const file = readFileWorker(fileName, _encoding);
-            perfLogger.logStopReadFile();
+            perfLogger?.logStopReadFile();
             return file;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            perfLogger.logEvent("WriteFile: " + fileName);
+            perfLogger?.logEvent("WriteFile: " + fileName);
             // If a BOM is required, emit one
             if (writeByteOrderMark) {
                 data = byteOrderMarkIndicator + data;
@@ -1841,7 +1841,7 @@ export let sys: System = (() => {
         }
 
         function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-            perfLogger.logEvent("ReadDir: " + (path || "."));
+            perfLogger?.logEvent("ReadDir: " + (path || "."));
             try {
                 const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                 const files: string[] = [];

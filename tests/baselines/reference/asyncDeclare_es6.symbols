@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/asyncDeclare_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncDeclare_es6.ts] ////
+
+=== asyncDeclare_es6.ts ===
 declare async function foo(): Promise<void>;
 >foo : Symbol(foo, Decl(asyncDeclare_es6.ts, 0, 0))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

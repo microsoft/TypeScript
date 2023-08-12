@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareDottedModuleName.ts] ////
+
 //// [declareDottedModuleName.ts]
 module M {
     module P.Q { } // This shouldnt be emitted
@@ -14,10 +16,10 @@ module T.U { // This needs to be emitted
 
 
 //// [declareDottedModuleName.d.ts]
-declare module M {
+declare namespace M {
 }
-declare module M {
-    module R.S { }
+declare namespace M {
+    namespace R.S { }
 }
-declare module T.U {
+declare namespace T.U {
 }

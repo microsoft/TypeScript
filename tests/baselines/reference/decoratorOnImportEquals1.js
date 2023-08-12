@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/invalid/decoratorOnImportEquals1.ts] ////
+
 //// [decoratorOnImportEquals1.ts]
 declare function dec<T>(target: T): T;
 

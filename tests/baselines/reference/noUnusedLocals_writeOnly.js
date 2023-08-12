@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_writeOnly.ts] ////
+
 //// [noUnusedLocals_writeOnly.ts]
 function f(x = 0, b = false) {
     // None of these statements read from 'x', so it will be marked unused.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypes4.ts] ////
+
 //// [mappedTypes4.ts]
 type Box<T> = {
 };

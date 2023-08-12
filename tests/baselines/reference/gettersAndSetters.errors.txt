@@ -1,8 +1,8 @@
-tests/cases/compiler/gettersAndSetters.ts(25,13): error TS2339: Property 'Baz' does not exist on type 'C'.
-tests/cases/compiler/gettersAndSetters.ts(26,3): error TS2339: Property 'Baz' does not exist on type 'C'.
+gettersAndSetters.ts(25,13): error TS2339: Property 'Baz' does not exist on type 'C'.
+gettersAndSetters.ts(26,3): error TS2339: Property 'Baz' does not exist on type 'C'.
 
 
-==== tests/cases/compiler/gettersAndSetters.ts (2 errors) ====
+==== gettersAndSetters.ts (2 errors) ====
     // classes
     class C {
         public fooBack = "";

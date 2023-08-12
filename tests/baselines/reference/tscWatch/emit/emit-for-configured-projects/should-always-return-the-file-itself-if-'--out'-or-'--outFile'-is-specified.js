@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -55,22 +56,18 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/file1consumer1.ts: *new*
-  {}
-/a/b/modulefile1.ts: *new*
   {}
 /a/b/file1consumer2.ts: *new*
   {}
 /a/b/globalfile3.ts: *new*
   {}
+/a/b/modulefile1.ts: *new*
+  {}
 /a/b/modulefile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -137,6 +134,9 @@ Input::
 export var T: number;export function Foo() { };
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...

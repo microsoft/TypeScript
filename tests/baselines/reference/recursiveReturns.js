@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveReturns.ts] ////
+
 //// [recursiveReturns.ts]
 function R1() {
 	R1();

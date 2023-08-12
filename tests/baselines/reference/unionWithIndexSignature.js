@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionWithIndexSignature.ts] ////
+
 //// [unionWithIndexSignature.ts]
 interface NumList {
   kind: 'n';

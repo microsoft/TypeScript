@@ -1,4 +1,6 @@
-=== tests/cases/compiler/baseTypeAfterDerivedType.ts ===
+//// [tests/cases/compiler/baseTypeAfterDerivedType.ts] ////
+
+=== baseTypeAfterDerivedType.ts ===
 interface Derived extends Base {
     method(...args: any[]): void;
 >method : (...args: any[]) => void

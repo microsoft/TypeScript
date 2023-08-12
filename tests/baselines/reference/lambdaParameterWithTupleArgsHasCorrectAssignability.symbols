@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lambdaParameterWithTupleArgsHasCorrectAssignability.ts ===
+//// [tests/cases/compiler/lambdaParameterWithTupleArgsHasCorrectAssignability.ts] ////
+
+=== lambdaParameterWithTupleArgsHasCorrectAssignability.ts ===
 type MyTupleItem = {};
 >MyTupleItem : Symbol(MyTupleItem, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 0, 0))
 

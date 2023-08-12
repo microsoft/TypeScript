@@ -1,4 +1,6 @@
-=== tests/cases/compiler/templateLiteralIntersection.ts ===
+//// [tests/cases/compiler/templateLiteralIntersection.ts] ////
+
+=== templateLiteralIntersection.ts ===
 // https://github.com/microsoft/TypeScript/issues/48034
 const a = 'a'
 >a : Symbol(a, Decl(templateLiteralIntersection.ts, 1, 5))

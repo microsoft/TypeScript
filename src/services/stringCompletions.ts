@@ -7,6 +7,7 @@ import {
     CaseClause,
     changeExtension,
     CharacterCodes,
+    CheckMode,
     combinePaths,
     comparePaths,
     comparePatternKeys,
@@ -44,7 +45,9 @@ import {
     flatten,
     forEachAncestorDirectory,
     getBaseFileName,
+    getConditions,
     getContextualTypeFromParent,
+    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     getEffectiveTypeRoots,
     getEmitModuleResolutionKind,
@@ -54,10 +57,12 @@ import {
     getOwnKeys,
     getPackageJsonTypesVersionsPaths,
     getPathComponents,
+    getPathsBasePath,
     getReplacementSpanForContextToken,
     getResolvePackageJsonExports,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
+    getTextOfJsxAttributeName,
     getTokenAtPosition,
     hasIndexSignature,
     hasProperty,
@@ -82,7 +87,6 @@ import {
     isString,
     isStringLiteral,
     isStringLiteralLike,
-    isTypeReferenceNode,
     isUrl,
     JsxAttribute,
     LanguageServiceHost,
@@ -243,7 +247,7 @@ function convertStringLiteralCompletions(
                 preferences,
                 options,
                 /*formatContext*/ undefined,
-                /*isTypeOnlyLocation */ undefined,
+                /*isTypeOnlyLocation*/ undefined,
                 /*propertyAccessToConvert*/ undefined,
                 /*jsxIdentifierExpected*/ undefined,
                 /*isJsxInitializer*/ undefined,
@@ -341,40 +345,10 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
     switch (parent.kind) {
         case SyntaxKind.LiteralType: {
             const grandParent = walkUpParentheses(parent.parent);
-            switch (grandParent.kind) {
-                case SyntaxKind.ExpressionWithTypeArguments:
-                case SyntaxKind.TypeReference: {
-                    const typeArgument = findAncestor(parent, n => n.parent === grandParent) as LiteralTypeNode;
-                    if (typeArgument) {
-                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
-                    }
-                    return undefined;
-                }
-                case SyntaxKind.IndexedAccessType:
-                    // Get all apparent property names
-                    // i.e. interface Foo {
-                    //          foo: string;
-                    //          bar: string;
-                    //      }
-                    //      let x: Foo["/*completion position*/"]
-                    const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
-                    if (!rangeContainsPosition(indexType, position)) {
-                        return undefined;
-                    }
-                    return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
-                case SyntaxKind.ImportType:
-                    return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
-                case SyntaxKind.UnionType: {
-                    if (!isTypeReferenceNode(grandParent.parent)) {
-                        return undefined;
-                    }
-                    const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent as UnionTypeNode, parent as LiteralTypeNode);
-                    const types = getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(grandParent as UnionTypeNode)).filter(t => !contains(alreadyUsedTypes, t.value));
-                    return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false };
-                }
-                default:
-                    return undefined;
+            if (grandParent.kind === SyntaxKind.ImportType) {
+                return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker, preferences) };
             }
+            return fromUnionableLiteralType(grandParent);
         }
         case SyntaxKind.PropertyAssignment:
             if (isObjectLiteralExpression(parent.parent) && (parent as PropertyAssignment).name === node) {
@@ -416,7 +390,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
                 // Get string literal completions from specialized signatures of the target
                 // i.e. declare function f(a: 'A');
                 // f("/*completion position*/")
-                return argumentInfo && getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || fromContextualType();
+                return argumentInfo && (getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) || getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker, CheckMode.Normal)) || fromContextualType(ContextFlags.None);
             }
             // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -439,7 +413,45 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             const literals = contextualTypes.types.filter(literal => !tracker.hasValue(literal.value));
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
         default:
-            return fromContextualType();
+            return fromContextualType() || fromContextualType(ContextFlags.None);
+    }
+
+    function fromUnionableLiteralType(grandParent: Node): StringLiteralCompletionsFromTypes | StringLiteralCompletionsFromProperties | undefined {
+        switch (grandParent.kind) {
+            case SyntaxKind.ExpressionWithTypeArguments:
+            case SyntaxKind.TypeReference: {
+                const typeArgument = findAncestor(parent, n => n.parent === grandParent) as LiteralTypeNode;
+                if (typeArgument) {
+                    return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
+                }
+                return undefined;
+            }
+            case SyntaxKind.IndexedAccessType:
+                // Get all apparent property names
+                // i.e. interface Foo {
+                //          foo: string;
+                //          bar: string;
+                //      }
+                //      let x: Foo["/*completion position*/"]
+                const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
+                if (!rangeContainsPosition(indexType, position)) {
+                    return undefined;
+                }
+                return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
+            case SyntaxKind.UnionType: {
+                const result = fromUnionableLiteralType(walkUpParentheses(grandParent.parent));
+                if (!result) {
+                    return undefined;
+                }
+                const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent as UnionTypeNode, parent as LiteralTypeNode);
+                if (result.kind === StringLiteralCompletionKind.Properties) {
+                    return { kind: StringLiteralCompletionKind.Properties, symbols: result.symbols.filter(sym => !contains(alreadyUsedTypes, sym.name)), hasIndexSignature: result.hasIndexSignature };
+                }
+                return { kind: StringLiteralCompletionKind.Types, types: result.types.filter(t => !contains(alreadyUsedTypes, t.value)), isNewIdentifier: false };
+            }
+            default:
+                return undefined;
+        }
     }
 
     function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
@@ -469,17 +481,17 @@ function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: 
         type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
 }
 
-function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes | undefined {
+function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker, checkMode = CheckMode.IsForStringLiteralArgumentCompletions): StringLiteralCompletionsFromTypes | undefined {
     let isNewIdentifier = false;
     const uniques = new Map<string, true>();
     const candidates: Signature[] = [];
     const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
-    checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates);
+    checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates, checkMode);
     const types = flatMap(candidates, candidate => {
         if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
         let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
         if (isJsxOpeningLikeElement(call)) {
-            const propType = checker.getTypeOfPropertyOfType(type, (editingArgument as JsxAttribute).name.text);
+            const propType = checker.getTypeOfPropertyOfType(type, getTextOfJsxAttributeName((editingArgument as JsxAttribute).name));
             if (propType) {
                 type = propType;
             }
@@ -559,7 +571,7 @@ function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile
     const scriptDirectory = getDirectoryPath(scriptPath);
     const extensionOptions = getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile, typeChecker, preferences, mode);
 
-    return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && (isRootedDiskPath(literalValue) || isUrl(literalValue))
+    return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && !compilerOptions.paths && (isRootedDiskPath(literalValue) || isUrl(literalValue))
         ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, extensionOptions)
         : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, mode, compilerOptions, host, extensionOptions, typeChecker);
 }
@@ -587,7 +599,7 @@ function getCompletionEntriesForRelativeModules(literalValue: string, scriptDire
             compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
     }
     else {
-        return arrayFrom(getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, scriptPath).values());
+        return arrayFrom(getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, scriptPath).values());
     }
 }
 
@@ -850,13 +862,15 @@ function getCompletionEntriesForNonRelativeModules(
 
     const result = createNameAndKindSet();
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+
     if (baseUrl) {
-        const projectDir = compilerOptions.project || host.getCurrentDirectory();
-        const absolute = normalizePath(combinePaths(projectDir, baseUrl));
+        const absolute = normalizePath(combinePaths(host.getCurrentDirectory(), baseUrl));
         getCompletionEntriesForDirectoryFragment(fragment, absolute, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
-        if (paths) {
-            addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, host, paths);
-        }
+    }
+
+    if (paths) {
+        const absolute = getPathsBasePath(compilerOptions, host)!;
+        addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions, host, paths);
     }
 
     const fragmentDirectory = getFragmentDirectory(fragment);
@@ -913,7 +927,7 @@ function getCompletionEntriesForNonRelativeModules(
                             }
                             const keys = getOwnKeys(exports);
                             const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
-                            const conditions = mode === ModuleKind.ESNext ? ["node", "import", "types"] : ["node", "require", "types"];
+                            const conditions = getConditions(compilerOptions, mode === ModuleKind.ESNext);
                             addCompletionEntriesFromPathsOrExports(
                                 result,
                                 fragmentSubpath,
@@ -1010,6 +1024,8 @@ function getModulesForPathsPattern(
     const expandedPrefixDirectory = fragmentHasPath ? combinePaths(normalizedPrefixDirectory, normalizedPrefixBase + fragmentDirectory) : normalizedPrefixDirectory;
 
     const normalizedSuffix = normalizePath(parsed.suffix);
+    const declarationExtension = normalizedSuffix && getDeclarationEmitExtensionForPath("_" + normalizedSuffix);
+    const matchingSuffixes = declarationExtension ? [changeExtension(normalizedSuffix, declarationExtension), normalizedSuffix] : [normalizedSuffix];
     // Need to normalize after combining: If we combinePaths("a", "../b"), we want "b" and not "a/../b".
     const baseDirectory = normalizePath(combinePaths(packageDirectory, expandedPrefixDirectory));
     const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
@@ -1022,9 +1038,11 @@ function getModulesForPathsPattern(
     // interpreted as "any character" can only return *too many* results as compared to the literal
     // interpretation, so we can filter those superfluous results out via `trimPrefixAndSuffix` as we've always
     // done.
-    const includeGlob = normalizedSuffix ? "**/*" + normalizedSuffix : "./*";
+    const includeGlobs = normalizedSuffix
+        ? matchingSuffixes.map(suffix => "**/*" + suffix)
+        : ["./*"];
 
-    const matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, [includeGlob]), match => {
+    const matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensionsToSearch, /*exclude*/ undefined, includeGlobs), match => {
         const trimmedWithPattern = trimPrefixAndSuffix(match);
         if (trimmedWithPattern) {
             if (containsSlash(trimmedWithPattern)) {
@@ -1044,8 +1062,10 @@ function getModulesForPathsPattern(
     return [...matches, ...directories];
 
     function trimPrefixAndSuffix(path: string): string | undefined {
-        const inner = withoutStartAndEnd(normalizePath(path), completePrefix, normalizedSuffix);
-        return inner === undefined ? undefined : removeLeadingDirectorySeparator(inner);
+        return firstDefined(matchingSuffixes, suffix => {
+            const inner = withoutStartAndEnd(normalizePath(path), completePrefix, suffix);
+            return inner === undefined ? undefined : removeLeadingDirectorySeparator(inner);
+        });
     }
 }
 

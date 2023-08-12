@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientClassMergesOverloadsWithInterface.ts ===
+//// [tests/cases/compiler/ambientClassMergesOverloadsWithInterface.ts] ////
+
+=== ambientClassMergesOverloadsWithInterface.ts ===
 declare class C {
 >C : C
 

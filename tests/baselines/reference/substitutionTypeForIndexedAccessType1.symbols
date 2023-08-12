@@ -1,4 +1,6 @@
-=== tests/cases/compiler/substitutionTypeForIndexedAccessType1.ts ===
+//// [tests/cases/compiler/substitutionTypeForIndexedAccessType1.ts] ////
+
+=== substitutionTypeForIndexedAccessType1.ts ===
 type AddPropToObject<Obj extends object, Prop extends string> = Prop extends keyof Obj
 >AddPropToObject : Symbol(AddPropToObject, Decl(substitutionTypeForIndexedAccessType1.ts, 0, 0))
 >Obj : Symbol(Obj, Decl(substitutionTypeForIndexedAccessType1.ts, 0, 21))

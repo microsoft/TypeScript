@@ -1,12 +1,12 @@
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(8,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(9,5): error TS2367: This comparison appears to be unintentional because the types '"bar"' and '"foo"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(10,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(17,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(18,5): error TS2367: This comparison appears to be unintentional because the types '"bar"' and '"foo"' have no overlap.
-tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts(19,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithEqualityChecks01.ts(8,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithEqualityChecks01.ts(9,5): error TS2367: This comparison appears to be unintentional because the types '"bar"' and '"foo"' have no overlap.
+stringLiteralsWithEqualityChecks01.ts(10,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithEqualityChecks01.ts(17,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
+stringLiteralsWithEqualityChecks01.ts(18,5): error TS2367: This comparison appears to be unintentional because the types '"bar"' and '"foo"' have no overlap.
+stringLiteralsWithEqualityChecks01.ts(19,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
 
 
-==== tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts (6 errors) ====
+==== stringLiteralsWithEqualityChecks01.ts (6 errors) ====
     let x: "foo";
     let y: "foo" | "bar";
     

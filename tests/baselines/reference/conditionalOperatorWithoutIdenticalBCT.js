@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts] ////
+
 //// [conditionalOperatorWithoutIdenticalBCT.ts]
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
 class X { propertyX: any; propertyX1: number; propertyX2: string };

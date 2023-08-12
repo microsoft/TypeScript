@@ -1,7 +1,7 @@
-tests/cases/compiler/amdDependencyCommentName3.ts(5,21): error TS2792: Cannot find module 'm2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+amdDependencyCommentName3.ts(5,21): error TS2792: Cannot find module 'm2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/amdDependencyCommentName3.ts (1 errors) ====
+==== amdDependencyCommentName3.ts (1 errors) ====
     ///<amd-dependency path='bar' name='b'/>
     ///<amd-dependency path='foo'/>
     ///<amd-dependency path='goo' name='c'/>

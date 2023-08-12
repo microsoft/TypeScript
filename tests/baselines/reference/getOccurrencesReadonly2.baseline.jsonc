@@ -1,0 +1,5 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesReadonly2.ts ===
+// type T = {
+//   /*HIGHLIGHTS*/[|{| kind: "none" |}readonly|] prop: string;
+// }

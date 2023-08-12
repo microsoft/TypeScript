@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmit_nameConflicts_0.ts ===
+//// [tests/cases/compiler/declarationEmitNameConflicts.ts] ////
+
+=== declarationEmit_nameConflicts_0.ts ===
 import im = require('./declarationEmit_nameConflicts_1');
 >im : typeof im
 
@@ -129,7 +131,7 @@ export module M.Q {
 >c : typeof M.N
     }
 }
-=== tests/cases/compiler/declarationEmit_nameConflicts_1.ts ===
+=== declarationEmit_nameConflicts_1.ts ===
 module f { export class c { } }
 >f : typeof f
 >c : c

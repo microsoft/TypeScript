@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword1.ts] ////
+
 //// [scannerUnicodeEscapeInKeyword1.ts]
 \u0076ar x = "hello";
 

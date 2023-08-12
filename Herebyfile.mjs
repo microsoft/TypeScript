@@ -14,8 +14,8 @@ import util from "util";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
-import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
-import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
+import { localBaseline, refBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
+import { Debouncer, Deferred, exec, getDiffTool, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
 
@@ -171,7 +171,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             bundle: true,
             outfile,
             platform: "node",
-            target: "es2018",
+            target: ["es2020", "node14.17"],
             format: "cjs",
             sourcemap: "linked",
             sourcesContent: false,
@@ -577,6 +577,7 @@ export const runTests = task({
 // task("runtests").flags = {
 //     "-t --tests=<regex>": "Pattern for tests to run.",
 //     "   --failed": "Runs tests listed in '.failed-tests'.",
+//     "   --coverage": "Generate test coverage using c8",
 //     "-r --reporter=<reporter>": "The mocha reporter to use.",
 //     "-i --break": "Runs tests in inspector mode (NodeJS 8 and later)",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass",
@@ -616,7 +617,6 @@ export const runTestsAndWatch = task({
         });
 
         process.on("SIGINT", endWatchMode);
-        process.on("SIGKILL", endWatchMode);
         process.on("beforeExit", endWatchMode);
         watchTestsEmitter.on("rebuild", onRebuild);
         testCaseWatcher.on("all", onChange);
@@ -715,6 +715,7 @@ export const runTestsParallel = task({
 });
 
 // task("runtests-parallel").flags = {
+//     "   --coverage": "Generate test coverage using c8",
 //     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
 //     "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
 //     "   --dirty": "Run tests without first cleaning test output directories.",
@@ -737,12 +738,6 @@ export const diff = task({
     name: "diff",
     description: "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable",
     run: () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true, waitForExit: false }),
-});
-
-export const diffRwc = task({
-    name: "diff-rwc",
-    description: "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable",
-    run: () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true, waitForExit: false }),
 });
 
 /**
@@ -779,12 +774,6 @@ export const baselineAccept = task({
     run: baselineAcceptTask(localBaseline, refBaseline),
 });
 
-export const baselineAcceptRwc = task({
-    name: "baseline-accept-rwc",
-    description: "Makes the most recent rwc test results the new baseline, overwriting the old baseline",
-    run: baselineAcceptTask(localRwcBaseline, refRwcBaseline),
-});
-
 // TODO(rbuckton): Determine if we still need this task. Depending on a relative
 //                 path here seems like a bad idea.
 export const updateSublime = task({
@@ -796,13 +785,6 @@ export const updateSublime = task({
             await fs.promises.copyFile(file, path.resolve("../TypeScript-Sublime-Plugin/tsserver/", path.basename(file)));
         }
     }
-});
-
-// TODO(rbuckton): Should the path to DefinitelyTyped be configurable via an environment variable?
-export const importDefinitelyTypedTests = task({
-    name: "importDefinitelyTypedTests",
-    description: "Runs the importDefinitelyTypedTests script to copy DT's tests to the TS-internal RWC tests",
-    run: () => exec(process.execPath, ["scripts/importDefinitelyTypedTests.mjs", "./", "../DefinitelyTyped"]),
 });
 
 
@@ -833,19 +815,7 @@ export const produceLKG = task({
             throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
         }
 
-        /** @type {number | undefined} */
-        let sizeBefore;
-        if (fs.existsSync("lib")) {
-            sizeBefore = getDirSize("lib");
-        }
         await exec(process.execPath, ["scripts/produceLKG.mjs"]);
-
-        if (sizeBefore !== undefined) {
-            const sizeAfter = getDirSize("lib");
-            if (sizeAfter > (sizeBefore * 1.10)) {
-                throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
-            }
-        }
     }
 });
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tryCatchFinallyControlFlow.ts] ////
+
 //// [tryCatchFinallyControlFlow.ts]
 // Repro from #34797
 

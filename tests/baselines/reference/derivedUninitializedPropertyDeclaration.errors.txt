@@ -1,12 +1,12 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(12,21): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,17): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+derivedUninitializedPropertyDeclaration.ts(12,21): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+derivedUninitializedPropertyDeclaration.ts(15,17): error TS1183: An implementation cannot be declared in ambient contexts.
+derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.
+derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (6 errors) ====
+==== derivedUninitializedPropertyDeclaration.ts (6 errors) ====
     class A {
         property = 'x';
         m() { return 1 }

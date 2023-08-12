@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts] ////
+
 //// [varNameConflictsWithImportInDifferentPartOfModule.ts]
 module M1 {
     export var q = 5;

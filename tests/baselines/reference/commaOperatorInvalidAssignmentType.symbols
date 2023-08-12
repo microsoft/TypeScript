@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts ===
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts] ////
+
+=== commaOperatorInvalidAssignmentType.ts ===
 var BOOLEAN: boolean;
 >BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorInvalidAssignmentType.ts, 0, 3))
 

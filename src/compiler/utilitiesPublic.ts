@@ -68,6 +68,7 @@ import {
     FunctionLikeDeclaration,
     FunctionTypeNode,
     GeneratedIdentifier,
+    GeneratedIdentifierFlags,
     GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
     getAssignmentDeclarationKind,
@@ -604,7 +605,11 @@ export function getCombinedNodeFlagsAlwaysIncludeJSDoc(node: Declaration): Modif
 // list.  By calling this function, all those flags are combined so that the client can treat
 // the node as if it actually had those flags.
 export function getCombinedNodeFlags(node: Node): NodeFlags {
-    return getCombinedFlags(node, n => n.flags);
+    return getCombinedFlags(node, getNodeFlags);
+}
+
+function getNodeFlags(node: Node) {
+    return node.flags;
 }
 
 /** @internal */
@@ -619,7 +624,7 @@ export function validateLocaleAndSetLanguage(
     sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
     errors?: Diagnostic[]) {
     const lowerCaseLocale = locale.toLowerCase();
-    const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
+    const matchResult = /^([a-z]+)([_-]([a-z]+))?$/.exec(lowerCaseLocale);
 
     if (!matchResult) {
         if (errors) {
@@ -1533,6 +1538,14 @@ export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPriva
     return isPrivateIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
 }
 
+/** @internal */
+export function isFileLevelReservedGeneratedIdentifier(node: GeneratedIdentifier) {
+    const flags = node.emitNode.autoGenerate.flags;
+    return !!(flags & GeneratedIdentifierFlags.FileLevel)
+        && !!(flags & GeneratedIdentifierFlags.Optimistic)
+        && !!(flags & GeneratedIdentifierFlags.ReservedInNestedScopes);
+}
+
 // Private Identifiers
 /** @internal */
 export function isPrivateIdentifierClassElementDeclaration(node: Node): node is PrivateClassElementDeclaration {
@@ -2333,9 +2346,7 @@ function isStatementKindButNotDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.VariableStatement
         || kind === SyntaxKind.WhileStatement
         || kind === SyntaxKind.WithStatement
-        || kind === SyntaxKind.NotEmittedStatement
-        || kind === SyntaxKind.EndOfDeclarationMarker
-        || kind === SyntaxKind.MergeDeclarationMarker;
+        || kind === SyntaxKind.NotEmittedStatement;
 }
 
 /** @internal */
@@ -2406,7 +2417,8 @@ export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression
     const kind = node.kind;
     return kind === SyntaxKind.ThisKeyword
         || kind === SyntaxKind.Identifier
-        || kind === SyntaxKind.PropertyAccessExpression;
+        || kind === SyntaxKind.PropertyAccessExpression
+        || kind === SyntaxKind.JsxNamespacedName;
 }
 
 export function isJsxChild(node: Node): node is JsxChild {

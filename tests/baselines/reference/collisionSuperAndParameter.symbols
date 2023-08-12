@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionSuperAndParameter.ts ===
+//// [tests/cases/compiler/collisionSuperAndParameter.ts] ////
+
+=== collisionSuperAndParameter.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(collisionSuperAndParameter.ts, 0, 0))
 

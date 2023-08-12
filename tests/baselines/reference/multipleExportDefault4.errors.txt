@@ -1,12 +1,12 @@
-tests/cases/conformance/externalModules/multipleExportDefault4.ts(1,22): error TS2528: A module cannot have multiple default exports.
-tests/cases/conformance/externalModules/multipleExportDefault4.ts(3,1): error TS2528: A module cannot have multiple default exports.
+multipleExportDefault4.ts(1,22): error TS2528: A module cannot have multiple default exports.
+multipleExportDefault4.ts(3,1): error TS2528: A module cannot have multiple default exports.
 
 
-==== tests/cases/conformance/externalModules/multipleExportDefault4.ts (2 errors) ====
+==== multipleExportDefault4.ts (2 errors) ====
     export default class C { }
                          ~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 tests/cases/conformance/externalModules/multipleExportDefault4.ts:3:1: Another export default is here.
+!!! related TS2753 multipleExportDefault4.ts:3:1: Another export default is here.
     
     export default {
     ~~~~~~~~~~~~~~~~
@@ -15,4 +15,4 @@ tests/cases/conformance/externalModules/multipleExportDefault4.ts(3,1): error TS
     };
     ~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 tests/cases/conformance/externalModules/multipleExportDefault4.ts:1:22: The first export default is here.
+!!! related TS2752 multipleExportDefault4.ts:1:22: The first export default is here.

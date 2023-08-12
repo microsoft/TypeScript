@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedTemplateStringsHexadecimalEscapesES6.ts ===
+//// [tests/cases/compiler/taggedTemplateStringsHexadecimalEscapesES6.ts] ////
+
+=== taggedTemplateStringsHexadecimalEscapesES6.ts ===
 function f(...args: any[]) {
 >f : (...args: any[]) => void
 >args : any[]

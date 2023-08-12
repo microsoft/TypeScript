@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadEquivalenceWithStatics.ts] ////
+
 //// [overloadEquivalenceWithStatics.ts]
 class A1<T> {
 static B<S>(v: A1<S>): A1<S>; // 1 

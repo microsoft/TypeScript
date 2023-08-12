@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsedAsNameValue_2.ts ===
+//// [tests/cases/compiler/aliasUsedAsNameValue.ts] ////
+
+=== aliasUsedAsNameValue_2.ts ===
 ///<reference path='aliasUsedAsNameValue_0.ts' />
 ///<reference path='aliasUsedAsNameValue_1.ts' />
 import mod = require("./aliasUsedAsNameValue_0");
@@ -20,11 +22,11 @@ export var a = function () {
 >mod : typeof mod
 }
 
-=== tests/cases/compiler/aliasUsedAsNameValue_0.ts ===
+=== aliasUsedAsNameValue_0.ts ===
 export var id: number;
 >id : number
 
-=== tests/cases/compiler/aliasUsedAsNameValue_1.ts ===
+=== aliasUsedAsNameValue_1.ts ===
 export function b(a: any): any { return null; }
 >b : (a: any) => any
 >a : any

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/a.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadInvalidType.tsx] ////
+
+=== a.tsx ===
 namespace JSX {
     export interface IntrinsicElements { [key: string]: any }
 >key : string

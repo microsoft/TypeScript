@@ -364,21 +364,21 @@ export function *mapIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U) {
  * Maps from T to T and avoids allocation if all elements map to themselves
  *
  * @internal */
-export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
+export function sameMap<T, U = T>(array: T[], f: (x: T, i: number) => U): U[];
 /** @internal */
-export function sameMap<T>(array: readonly T[], f: (x: T, i: number) => T): readonly T[];
+export function sameMap<T, U = T>(array: readonly T[], f: (x: T, i: number) => U): readonly U[];
 /** @internal */
-export function sameMap<T>(array: T[] | undefined, f: (x: T, i: number) => T): T[] | undefined;
+export function sameMap<T, U = T>(array: T[] | undefined, f: (x: T, i: number) => U): U[] | undefined;
 /** @internal */
-export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number) => T): readonly T[] | undefined;
+export function sameMap<T, U = T>(array: readonly T[] | undefined, f: (x: T, i: number) => U): readonly U[] | undefined;
 /** @internal */
-export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number) => T): readonly T[] | undefined {
+export function sameMap<T, U = T>(array: readonly T[] | undefined, f: (x: T, i: number) => U): readonly U[] | undefined {
     if (array) {
         for (let i = 0; i < array.length; i++) {
             const item = array[i];
             const mapped = f(item, i);
-            if (item !== mapped) {
-                const result = array.slice(0, i);
+            if (item as unknown !== mapped) {
+                const result: U[] = array.slice(0, i) as unknown[] as U[];
                 result.push(mapped);
                 for (i++; i < array.length; i++) {
                     result.push(f(array[i], i));
@@ -387,7 +387,7 @@ export function sameMap<T>(array: readonly T[] | undefined, f: (x: T, i: number)
             }
         }
     }
-    return array;
+    return array as unknown[] as U[];
 }
 
 /**
@@ -1948,7 +1948,7 @@ export function toLowerCase(x: string) {
 //
 // But to avoid having to do string building for most common cases, also ignore
 // a-z, 0-9, \u0131, \u00DF, \, /, ., : and space
-const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_\. ]+/g;
+const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_. ]+/g;
 /**
  * Case insensitive file systems have descripencies in how they handle some characters (eg. turkish Upper case I with dot on top - \u0130)
  * This function is used in places where we want to make file name as a key on these systems
@@ -2061,6 +2061,7 @@ export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t
     if (!!e) {
         const args: ((t: T) => T)[] = [];
         for (let i = 0; i < arguments.length; i++) {
+            // eslint-disable-next-line prefer-rest-params
             args[i] = arguments[i];
         }
 

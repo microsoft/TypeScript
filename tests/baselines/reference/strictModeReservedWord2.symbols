@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictModeReservedWord2.ts ===
+//// [tests/cases/compiler/strictModeReservedWord2.ts] ////
+
+=== strictModeReservedWord2.ts ===
 "use strict"
 interface public { }
 >public : Symbol(public, Decl(strictModeReservedWord2.ts, 0, 12))

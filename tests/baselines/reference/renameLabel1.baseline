@@ -1,5 +1,0 @@
-/*====== /tests/cases/fourslash/renameLabel1.ts ======*/
-
-RENAME: {
-    break [|RENAME|];
-}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/abstractClassInLocalScopeIsAbstract.ts] ////
+
 //// [abstractClassInLocalScopeIsAbstract.ts]
 (() => {
     abstract class A {}

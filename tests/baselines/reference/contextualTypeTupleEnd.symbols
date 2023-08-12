@@ -1,0 +1,186 @@
+//// [tests/cases/conformance/types/tuple/contextualTypeTupleEnd.ts] ////
+
+=== contextualTypeTupleEnd.ts ===
+type Funcs = [...((arg: number) => void)[], (arg: string) => void];
+>Funcs : Symbol(Funcs, Decl(contextualTypeTupleEnd.ts, 0, 0))
+>arg : Symbol(arg, Decl(contextualTypeTupleEnd.ts, 0, 19))
+>arg : Symbol(arg, Decl(contextualTypeTupleEnd.ts, 0, 45))
+
+declare function num(x: number): void;
+>num : Symbol(num, Decl(contextualTypeTupleEnd.ts, 0, 67))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 2, 21))
+
+declare function str(x: string): void;
+>str : Symbol(str, Decl(contextualTypeTupleEnd.ts, 2, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 3, 21))
+
+declare function f1(...args: Funcs): void;
+>f1 : Symbol(f1, Decl(contextualTypeTupleEnd.ts, 3, 38))
+>args : Symbol(args, Decl(contextualTypeTupleEnd.ts, 5, 20))
+>Funcs : Symbol(Funcs, Decl(contextualTypeTupleEnd.ts, 0, 0))
+
+f1();  // Error
+>f1 : Symbol(f1, Decl(contextualTypeTupleEnd.ts, 3, 38))
+
+f1(x => str(x));
+>f1 : Symbol(f1, Decl(contextualTypeTupleEnd.ts, 3, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 8, 3))
+>str : Symbol(str, Decl(contextualTypeTupleEnd.ts, 2, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 8, 3))
+
+f1(x => num(x), x => str(x));
+>f1 : Symbol(f1, Decl(contextualTypeTupleEnd.ts, 3, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 9, 3))
+>num : Symbol(num, Decl(contextualTypeTupleEnd.ts, 0, 67))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 9, 3))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 9, 15))
+>str : Symbol(str, Decl(contextualTypeTupleEnd.ts, 2, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 9, 15))
+
+f1(x => num(x), x => num(x), x => str(x));
+>f1 : Symbol(f1, Decl(contextualTypeTupleEnd.ts, 3, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 10, 3))
+>num : Symbol(num, Decl(contextualTypeTupleEnd.ts, 0, 67))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 10, 3))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 10, 15))
+>num : Symbol(num, Decl(contextualTypeTupleEnd.ts, 0, 67))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 10, 15))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 10, 28))
+>str : Symbol(str, Decl(contextualTypeTupleEnd.ts, 2, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 10, 28))
+
+const a0: Funcs = [];  // Error
+>a0 : Symbol(a0, Decl(contextualTypeTupleEnd.ts, 12, 5))
+>Funcs : Symbol(Funcs, Decl(contextualTypeTupleEnd.ts, 0, 0))
+
+const a1: Funcs = [x => str(x)];
+>a1 : Symbol(a1, Decl(contextualTypeTupleEnd.ts, 13, 5))
+>Funcs : Symbol(Funcs, Decl(contextualTypeTupleEnd.ts, 0, 0))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 13, 19))
+>str : Symbol(str, Decl(contextualTypeTupleEnd.ts, 2, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 13, 19))
+
+const a2: Funcs = [x => num(x), x => str(x)];
+>a2 : Symbol(a2, Decl(contextualTypeTupleEnd.ts, 14, 5))
+>Funcs : Symbol(Funcs, Decl(contextualTypeTupleEnd.ts, 0, 0))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 14, 19))
+>num : Symbol(num, Decl(contextualTypeTupleEnd.ts, 0, 67))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 14, 19))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 14, 31))
+>str : Symbol(str, Decl(contextualTypeTupleEnd.ts, 2, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 14, 31))
+
+const a3: Funcs = [x => num(x), x => num(x), x => str(x)];
+>a3 : Symbol(a3, Decl(contextualTypeTupleEnd.ts, 15, 5))
+>Funcs : Symbol(Funcs, Decl(contextualTypeTupleEnd.ts, 0, 0))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 15, 19))
+>num : Symbol(num, Decl(contextualTypeTupleEnd.ts, 0, 67))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 15, 19))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 15, 31))
+>num : Symbol(num, Decl(contextualTypeTupleEnd.ts, 0, 67))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 15, 31))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 15, 44))
+>str : Symbol(str, Decl(contextualTypeTupleEnd.ts, 2, 38))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 15, 44))
+
+// Repro from #43122
+
+export type Selector<State> = (state: State) => unknown;
+>Selector : Symbol(Selector, Decl(contextualTypeTupleEnd.ts, 15, 58))
+>State : Symbol(State, Decl(contextualTypeTupleEnd.ts, 19, 21))
+>state : Symbol(state, Decl(contextualTypeTupleEnd.ts, 19, 31))
+>State : Symbol(State, Decl(contextualTypeTupleEnd.ts, 19, 21))
+
+export type SelectorTuple<State> = Selector<State>[];
+>SelectorTuple : Symbol(SelectorTuple, Decl(contextualTypeTupleEnd.ts, 19, 56))
+>State : Symbol(State, Decl(contextualTypeTupleEnd.ts, 20, 26))
+>Selector : Symbol(Selector, Decl(contextualTypeTupleEnd.ts, 15, 58))
+>State : Symbol(State, Decl(contextualTypeTupleEnd.ts, 20, 26))
+
+export type ExampleState = {
+>ExampleState : Symbol(ExampleState, Decl(contextualTypeTupleEnd.ts, 20, 53))
+
+    foo: "foo";
+>foo : Symbol(foo, Decl(contextualTypeTupleEnd.ts, 22, 28))
+
+    bar: 42;
+>bar : Symbol(bar, Decl(contextualTypeTupleEnd.ts, 23, 15))
+
+};
+
+export function createSelector<S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) {
+>createSelector : Symbol(createSelector, Decl(contextualTypeTupleEnd.ts, 25, 2))
+>S : Symbol(S, Decl(contextualTypeTupleEnd.ts, 27, 31))
+>SelectorTuple : Symbol(SelectorTuple, Decl(contextualTypeTupleEnd.ts, 19, 56))
+>ExampleState : Symbol(ExampleState, Decl(contextualTypeTupleEnd.ts, 20, 53))
+>selectors : Symbol(selectors, Decl(contextualTypeTupleEnd.ts, 27, 70))
+>S : Symbol(S, Decl(contextualTypeTupleEnd.ts, 27, 31))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 27, 106))
+
+    console.log(selectors);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>selectors : Symbol(selectors, Decl(contextualTypeTupleEnd.ts, 27, 70))
+}
+
+createSelector(
+>createSelector : Symbol(createSelector, Decl(contextualTypeTupleEnd.ts, 25, 2))
+
+    x => x.foo,
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 31, 15))
+>x.foo : Symbol(foo, Decl(contextualTypeTupleEnd.ts, 22, 28))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 31, 15))
+>foo : Symbol(foo, Decl(contextualTypeTupleEnd.ts, 22, 28))
+
+    x => x.bar,
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 32, 15))
+>x.bar : Symbol(bar, Decl(contextualTypeTupleEnd.ts, 23, 15))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 32, 15))
+>bar : Symbol(bar, Decl(contextualTypeTupleEnd.ts, 23, 15))
+
+    () => 42
+);
+
+// Repro from #43122
+
+declare function example(...args: [...((n: number) => void)[], (x: any) => void]): void
+>example : Symbol(example, Decl(contextualTypeTupleEnd.ts, 35, 2))
+>args : Symbol(args, Decl(contextualTypeTupleEnd.ts, 39, 25))
+>n : Symbol(n, Decl(contextualTypeTupleEnd.ts, 39, 40))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 39, 64))
+
+example(
+>example : Symbol(example, Decl(contextualTypeTupleEnd.ts, 35, 2))
+
+    x => x.foo,  // Error
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 41, 8))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 41, 8))
+
+    x => x.bar,  // Error
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 42, 15))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 42, 15))
+
+    x => x.baz,
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 43, 15))
+>x : Symbol(x, Decl(contextualTypeTupleEnd.ts, 43, 15))
+
+);
+
+// Repro from #52846
+
+declare function test(...args: [...((arg: number) => void)[], (arg: string) => void]): void;
+>test : Symbol(test, Decl(contextualTypeTupleEnd.ts, 45, 2))
+>args : Symbol(args, Decl(contextualTypeTupleEnd.ts, 49, 22))
+>arg : Symbol(arg, Decl(contextualTypeTupleEnd.ts, 49, 37))
+>arg : Symbol(arg, Decl(contextualTypeTupleEnd.ts, 49, 63))
+  
+test(a => a, b => b, c => c);
+>test : Symbol(test, Decl(contextualTypeTupleEnd.ts, 45, 2))
+>a : Symbol(a, Decl(contextualTypeTupleEnd.ts, 51, 5))
+>a : Symbol(a, Decl(contextualTypeTupleEnd.ts, 51, 5))
+>b : Symbol(b, Decl(contextualTypeTupleEnd.ts, 51, 12))
+>b : Symbol(b, Decl(contextualTypeTupleEnd.ts, 51, 12))
+>c : Symbol(c, Decl(contextualTypeTupleEnd.ts, 51, 20))
+>c : Symbol(c, Decl(contextualTypeTupleEnd.ts, 51, 20))
+

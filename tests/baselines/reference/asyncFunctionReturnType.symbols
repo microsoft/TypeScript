@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncFunctionReturnType.ts ===
+//// [tests/cases/compiler/asyncFunctionReturnType.ts] ////
+
+=== asyncFunctionReturnType.ts ===
 async function fAsync() {
 >fAsync : Symbol(fAsync, Decl(asyncFunctionReturnType.ts, 0, 0))
 

@@ -1,13 +1,13 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(14,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(18,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(22,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(24,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(26,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(26,46): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(28,57): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(14,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(18,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(22,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(24,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(26,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(26,46): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+taggedTemplateStringsWithIncompatibleTypedTagsES6.ts(28,57): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts (7 errors) ====
+==== taggedTemplateStringsWithIncompatibleTypedTagsES6.ts (7 errors) ====
     interface I {
         (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
         g: I;

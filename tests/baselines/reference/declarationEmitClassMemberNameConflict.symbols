@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitClassMemberNameConflict.ts ===
+//// [tests/cases/compiler/declarationEmitClassMemberNameConflict.ts] ////
+
+=== declarationEmitClassMemberNameConflict.ts ===
 export class C1 {
 >C1 : Symbol(C1, Decl(declarationEmitClassMemberNameConflict.ts, 0, 0))
 

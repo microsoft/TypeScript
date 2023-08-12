@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a.ts]
 class C { get prop() { return 1; } }
@@ -50,11 +51,11 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /a.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -83,6 +84,9 @@ Input::
 {"compilerOptions":{"target":"es6","useDefineForClassFields":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...

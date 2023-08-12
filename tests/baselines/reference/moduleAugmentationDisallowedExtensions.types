@@ -1,9 +1,11 @@
-=== tests/cases/compiler/x0.ts ===
+//// [tests/cases/compiler/moduleAugmentationDisallowedExtensions.ts] ////
+
+=== x0.ts ===
 export let a = 1;
 >a : number
 >1 : 1
 
-=== tests/cases/compiler/x.ts ===
+=== x.ts ===
 namespace N1 {
 >N1 : typeof N1
 
@@ -13,7 +15,7 @@ namespace N1 {
 }
 
 declare module "./observable" {
->"./observable" : typeof import("tests/cases/compiler/observable")
+>"./observable" : typeof import("observable")
 
     var x: number;
 >x : number
@@ -71,14 +73,14 @@ declare module "./observable" {
 }
 
 declare module "./test" {
->"./test" : typeof import("tests/cases/compiler/test")
+>"./test" : typeof import("test")
 
     export = N1;
 >N1 : typeof N1
 }
 export {}
 
-=== tests/cases/compiler/observable.ts ===
+=== observable.ts ===
 export declare class Observable<T> {
 >Observable : Observable<T>
 
@@ -91,12 +93,12 @@ export var x = 1;
 >x : number
 >1 : 1
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 export let b = 1;
 >b : number
 >1 : 1
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { Observable } from "./observable"
 >Observable : typeof Observable
 
