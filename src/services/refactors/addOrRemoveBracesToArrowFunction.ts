@@ -109,7 +109,7 @@ function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, action
     let body: ConciseBody;
 
     if (actionName === addBracesAction.name) {
-        body = addBracesToArrowFunction(file, expression!)
+        body = addBracesToArrowFunction(file, expression!);
     }
     else if (actionName === removeBracesAction.name && returnStatement) {
         const actualExpression = expression || factory.createVoidZero();
