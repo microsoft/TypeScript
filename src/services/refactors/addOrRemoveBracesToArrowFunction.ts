@@ -1,6 +1,7 @@
 import {
     ApplicableRefactorInfo,
     ArrowFunction,
+    Block,
     ConciseBody,
     copyLeadingComments,
     copyTrailingAsLeadingComments,
@@ -91,7 +92,7 @@ function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): rea
 }
 
 /** @internal */
-export function addBracesToArrowFunction(file: SourceFile, returnExpression: Expression, extraStatements: readonly Statement[] = []) {
+export function addBracesToArrowFunction(file: SourceFile, returnExpression: Expression, extraStatements: readonly Statement[] = []): Block {
     const returnStatement = factory.createReturnStatement(returnExpression);
     const body = factory.createBlock([...extraStatements, returnStatement], /*multiLine*/ true);
     copyLeadingComments(returnExpression, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ true);
