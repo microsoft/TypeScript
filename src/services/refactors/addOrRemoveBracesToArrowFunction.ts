@@ -24,6 +24,7 @@ import {
     RefactorEditInfo,
     ReturnStatement,
     SourceFile,
+    Statement,
     SyntaxKind,
     textChanges,
 } from "../_namespaces/ts";
@@ -89,6 +90,14 @@ function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): rea
     return emptyArray;
 }
 
+/** @internal */
+export function addBracesToArrowFunction(file: SourceFile, returnExpression: Expression, extraStatements: readonly Statement[] = []) {
+    const returnStatement = factory.createReturnStatement(returnExpression);
+    const body = factory.createBlock([...extraStatements, returnStatement], /*multiLine*/ true);
+    copyLeadingComments(returnExpression, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ true);
+    return body;
+}
+
 function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
     const { file, startPosition } = context;
     const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
@@ -99,9 +108,7 @@ function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, action
     let body: ConciseBody;
 
     if (actionName === addBracesAction.name) {
-        const returnStatement = factory.createReturnStatement(expression);
-        body = factory.createBlock([returnStatement], /*multiLine*/ true);
-        copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ true);
+        body = addBracesToArrowFunction(file, expression!)
     }
     else if (actionName === removeBracesAction.name && returnStatement) {
         const actualExpression = expression || factory.createVoidZero();

@@ -1,6 +1,7 @@
 /* Generated file to emulate the ts.refactor namespace. */
 
 export * from "../refactorProvider";
+export * from "../refactors/addOrRemoveBracesToArrowFunction";
 export * from "../refactors/convertExport";
 export * from "../refactors/convertImport";
 export * from "../refactors/extractType";

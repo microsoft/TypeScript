@@ -3245,7 +3245,7 @@ export function getRenameLocation(edits: readonly FileTextChanges[], renameFilen
         Debug.assert(fileName === renameFilename);
         for (const change of textChanges) {
             const { span, newText } = change;
-            const index = indexInTextChange(newText, escapeString(name));
+            const index = (preferLastLocation ? lastIndexInTextChange : indexInTextChange)(newText, escapeString(name));
             if (index !== -1) {
                 lastPos = span.start + delta + index;
 
@@ -3310,6 +3310,15 @@ function indexInTextChange(change: string, name: string): number {
     let idx = change.indexOf(" " + name);
     if (idx === -1) idx = change.indexOf("." + name);
     if (idx === -1) idx = change.indexOf('"' + name);
+    return idx === -1 ? -1 : idx + 1;
+}
+
+function lastIndexInTextChange(change: string, name: string): number {
+    // Add a " " to avoid references inside words
+    let idx = change.lastIndexOf(" " + name);
+    if (idx === -1) idx = change.lastIndexOf("." + name);
+    if (idx === -1) idx = change.lastIndexOf('"' + name);
+    if (idx === -1 && startsWith(change, name)) return 0;
     return idx === -1 ? -1 : idx + 1;
 }
 

@@ -126,6 +126,7 @@ import {
     positionIsSynthesized,
     PropertyAccessExpression,
     rangeContainsStartEnd,
+    refactor,
     RefactorActionInfo,
     RefactorContext,
     RefactorEditInfo,
@@ -388,7 +389,6 @@ export namespace Messages {
     export const cannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
     export const cannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
     export const cannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
-    export const cannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
     export const cannotExtractFunctionsContainingThisToMethod = createMessage("Cannot extract functions containing this to method");
 }
 
@@ -832,8 +832,7 @@ function getStatementOrExpressionRange(node: Node): Statement[] | Expression | u
 }
 
 function isScope(node: Node): node is Scope {
-    return isArrowFunction(node) ? isFunctionBody(node.body) :
-        isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
+    return isArrowFunction(node) || isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
 }
 
 /**
@@ -1369,7 +1368,28 @@ function extractConstantInScope(
 
     const changeTracker = textChanges.ChangeTracker.fromContext(context);
 
-    if (isClassLike(scope)) {
+    if (isArrowFunction(scope) && !isFunctionBody(scope.body)) {
+        const localReference: Expression = factory.createIdentifier(localNameText);
+
+        const newVariableDeclaration = factory.createVariableDeclaration(localNameText, /*exclamationToken*/ undefined, variableType, getSynthesizedDeepClone(initializer));
+        const newVariableStatement = factory.createVariableStatement(
+            /*modifiers*/ undefined,
+            factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
+
+        const returnExpression = visitNode(
+            scope.body,
+            function visitor(n: Node): VisitResult<Node> {
+                if (n === node) {
+                    return localReference;
+                }
+                return visitEachChild(n, visitor, nullTransformationContext);
+            },
+            isExpression
+        );
+        const newBody = refactor.addBracesToArrowFunction(context.file, returnExpression, [newVariableStatement]);
+        changeTracker.replaceNode(context.file, scope.body, newBody);
+    }
+    else if (isClassLike(scope)) {
         Debug.assert(!isJS, "Cannot extract to a JS class"); // See CannotExtractToJSClass
         const modifiers: Modifier[] = [];
         modifiers.push(factory.createModifier(SyntaxKind.PrivateKeyword));
@@ -1849,10 +1869,6 @@ function collectReadsAndWrites(
         }
         if (isClassLike(scope) && isInJSFile(scope)) {
             constantErrors.push(createDiagnosticForNode(scope, Messages.cannotExtractToJSClass));
-        }
-        if (isArrowFunction(scope) && !isBlock(scope.body)) {
-            // TODO (https://github.com/Microsoft/TypeScript/issues/18924): allow this
-            constantErrors.push(createDiagnosticForNode(scope, Messages.cannotExtractToExpressionArrowFunction));
         }
         constantErrorsPerScope.push(constantErrors);
     }
