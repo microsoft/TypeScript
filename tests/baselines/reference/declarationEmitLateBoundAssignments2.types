@@ -179,13 +179,13 @@ arrow5["101"] = 0
 >0 : 0
 
 export const arrow6 = () => {}
->arrow6 : { (): void; 10: number; }
->() => {} : { (): void; 10: number; }
+>arrow6 : { (): void; "10": number; }
+>() => {} : { (): void; "10": number; }
 
 arrow6[numStr] = 0
 >arrow6[numStr] = 0 : 0
 >arrow6[numStr] : number
->arrow6 : { (): void; 10: number; }
+>arrow6 : { (): void; "10": number; }
 >numStr : "10"
 >0 : 0
 

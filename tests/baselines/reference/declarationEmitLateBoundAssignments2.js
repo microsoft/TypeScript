@@ -166,7 +166,7 @@ export declare const arrow5: {
 };
 export declare const arrow6: {
     (): void;
-    10: number;
+    "10": number;
 };
 export declare const arrow7: {
     (): void;

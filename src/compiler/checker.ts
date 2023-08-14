@@ -8090,6 +8090,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const type = checkExpression(name.expression);
                 return !!(type.flags & TypeFlags.StringLike);
             }
+            if (isElementAccessExpression(name)) {
+                const type = checkExpression(name.argumentExpression);
+                return !!(type.flags & TypeFlags.StringLike);
+            }
             return isStringLiteral(name);
         }
 
