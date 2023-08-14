@@ -4,6 +4,6 @@
 ////     return 1
 //// }
 
-verify.getInlayHints([], undefined, {
+verify.baselineInlayHints(undefined, {
     includeInlayFunctionLikeReturnTypeHints: true,
 });

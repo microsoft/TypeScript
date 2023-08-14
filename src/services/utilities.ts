@@ -3971,12 +3971,14 @@ export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTa
 /** @internal */
 export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean) {
     if (needsNameFromDeclaration(symbol)) {
-        // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
+        // Names for default exports:
+        // - export default foo => foo
+        // - export { foo as default } => foo
+        // - export default 0 => filename converted to camelCase
         return getDefaultLikeExportNameFromDeclaration(symbol)
             || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!preferCapitalized);
     }
     return symbol.name;
-
 }
 
 function needsNameFromDeclaration(symbol: Symbol) {
@@ -3984,11 +3986,18 @@ function needsNameFromDeclaration(symbol: Symbol) {
 }
 
 function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
-    return firstDefined(symbol.declarations, d =>
-        isExportAssignment(d)
-            ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text
-            : tryCast(getNameOfDeclaration(d), isIdentifier)?.text
-    );
+    return firstDefined(symbol.declarations, d => {
+        // "export default" in this case. See `ExportAssignment`for more details.
+        if (isExportAssignment(d)) {
+            return tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text;
+        }
+        // "export { ~ as default }"
+        if (isExportSpecifier(d) && d.symbol.flags === SymbolFlags.Alias) {
+            return tryCast(d.propertyName, isIdentifier)?.text;
+        }
+        // GH#52694
+        return tryCast(getNameOfDeclaration(d), isIdentifier)?.text;
+    });
 }
 
 function getSymbolParentOrFail(symbol: Symbol) {

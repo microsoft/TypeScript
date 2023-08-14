@@ -1,0 +1,10 @@
+usingDeclarations.14.ts(1,11): error TS2850: The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+  Property '[Symbol.dispose]' is missing in type '{}' but required in type 'Disposable'.
+
+
+==== usingDeclarations.14.ts (1 errors) ====
+    using x = {};
+              ~~
+!!! error TS2850: The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+!!! error TS2850:   Property '[Symbol.dispose]' is missing in type '{}' but required in type 'Disposable'.
+!!! related TS2728 lib.esnext.disposable.d.ts:--:--: '[Symbol.dispose]' is declared here.

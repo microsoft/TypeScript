@@ -22,16 +22,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var C = /** @class */ (function () {
     function C() {
     }
-    C_1 = C;
     C.prototype.method = function (x, y) { }; // <-- decorator y should be resolved at the class declaration, not the parameter.
-    var C_1;
     __decorate([
         y(null) // <-- y should resolve to the function declaration, not the parameter; T should resolve to the type parameter of the class
         ,
         __param(0, y)
     ], C.prototype, "method", null);
-    C = C_1 = __decorate([
-        y(1, C_1) // <-- T should be resolved to the type alias, not the type parameter of the class; C should resolve to the class
+    C = __decorate([
+        y(1, C) // <-- T should be resolved to the type alias, not the type parameter of the class; C should resolve to the class
     ], C);
     return C;
 }());

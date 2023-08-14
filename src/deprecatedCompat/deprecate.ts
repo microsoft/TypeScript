@@ -24,7 +24,7 @@ function formatDeprecationMessage(name: string, error: boolean | undefined, erro
     deprecationMessage += `'${name}' `;
     deprecationMessage += since ? `has been deprecated since v${since}` : "is deprecated";
     deprecationMessage += error ? " and can no longer be used." : errorAfter ? ` and will no longer be usable after v${errorAfter}.` : ".";
-    deprecationMessage += message ? ` ${formatStringFromArgs(message, [name], 0)}` : "";
+    deprecationMessage += message ? ` ${formatStringFromArgs(message, [name])}` : "";
     return deprecationMessage;
 }
 
@@ -62,6 +62,7 @@ export function createDeprecation(name: string, options: DeprecationOptions = {}
 function wrapFunction<F extends (...args: any[]) => any>(deprecation: () => void, func: F): F {
     return function (this: unknown) {
         deprecation();
+        // eslint-disable-next-line prefer-rest-params
         return func.apply(this, arguments);
     } as F;
 }
