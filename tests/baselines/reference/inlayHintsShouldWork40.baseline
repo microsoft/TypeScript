@@ -1,8 +1,0 @@
-    foo() {
-         ^
-{
-  "text": ": number",
-  "position": 19,
-  "kind": "Type",
-  "whitespaceBefore": true
-}
