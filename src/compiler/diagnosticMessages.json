@@ -6737,6 +6737,10 @@
         "category": "Error",
         "code": 17020
     },
+    "Unicode escape sequence cannot appear here.": {
+        "category": "Error",
+        "code": 17021
+    },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000

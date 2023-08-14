@@ -104,8 +104,6 @@
         ],
 
         // Todo: For each of these, investigate whether we want to enable them ✨
-        "prefer-rest-params": "off",
-        "prefer-spread": "off",
         "@typescript-eslint/no-unused-vars": "off",
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
