@@ -586,7 +586,7 @@ export const watchLocal = task({
     name: "watch-local",
     description: "Watches the full compiler and services",
     hiddenFromTaskList: true,
-    dependencies: [localize, watchTsc, watchTsserver, lssl, watchServices, watchOtherOutputs, dts, watchSrc],
+    dependencies: [localize, watchTsc, watchTsserver, watchServices, lssl, watchOtherOutputs, dts, watchSrc],
 });
 
 const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
