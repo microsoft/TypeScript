@@ -1,4 +1,3 @@
-import * as compiler from "../_namespaces/compiler";
 import * as documents from "../_namespaces/documents";
 import * as fakes from "../_namespaces/fakes";
 import * as Harness from "../_namespaces/Harness";
@@ -18,21 +17,6 @@ describe("unittests:: Public APIs", () => {
 
         it("should be acknowledged when they change", () => {
             Harness.Baseline.runBaseline(api, fileContent, { PrintDiff: true });
-        });
-
-        it("should compile", () => {
-            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
-            fs.linkSync(`${vfs.builtFolder}/${fileName}`, `${vfs.srcFolder}/${fileName}`);
-            const sys = new fakes.System(fs);
-            const options: ts.CompilerOptions = {
-                ...ts.getDefaultCompilerOptions(),
-                strict: true,
-                exactOptionalPropertyTypes: true,
-                lib: ["lib.es2018.d.ts"],
-            };
-            const host = new fakes.CompilerHost(sys, options);
-            const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], options);
-            assert(!result.diagnostics || !result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
         });
     }
 
