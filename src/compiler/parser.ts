@@ -8973,6 +8973,7 @@ namespace Parser {
                     case "arg":
                     case "argument":
                     case "param":
+                    case "parameter": // TODO(jakebailey): why is this missing?
                         return parseParameterOrPropertyTag(start, tagName, PropertyLikeParse.Parameter, margin);
                     case "return":
                     case "returns":

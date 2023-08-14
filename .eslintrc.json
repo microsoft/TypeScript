@@ -16,7 +16,7 @@
         "plugin:@typescript-eslint/stylistic"
     ],
     "plugins": [
-        "@typescript-eslint", "no-null", "eslint-plugin-local", "simple-import-sort", "jsdoc"
+        "@typescript-eslint", "no-null", "eslint-plugin-local", "simple-import-sort"
     ],
     "ignorePatterns": [
         "**/node_modules/**",
@@ -90,8 +90,6 @@
         "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
         "@typescript-eslint/no-var-requires": "off",
 
-        // Solely for marking things as used for the purposes of the no-unused-vars rule.
-        "jsdoc/no-undefined-types": ["error", { "disableReporting": true }],
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/ban-types": [
@@ -123,6 +121,8 @@
         "local/debug-assert": "error",
         "local/no-keywords": "error",
         "local/jsdoc-format": "error",
+        // Solely for marking things as used for the purposes of the no-unused-vars rule.
+        "local/mark-jsdoc-types-used": "error",
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
