@@ -509,6 +509,7 @@ import {
     TaggedTemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
+    TemplateLiteralToken,
     TemplateLiteralTypeSpan,
     TemplateSpan,
     TextRange,
@@ -5801,11 +5802,15 @@ function escapeTemplateSubstitution(str: string): string {
     return str.replace(templateSubstitutionRegExp, "\\${");
 }
 
+function containsInvalidEscapeFlag(node: TemplateLiteralToken): boolean {
+    return !!((node.templateFlags || 0) & TokenFlags.ContainsInvalidEscape);
+}
+
 /** @internal */
 export function hasInvalidEscape(template: TemplateLiteral): boolean {
     return template && !!(isNoSubstitutionTemplateLiteral(template)
-        ? !!((template.templateFlags || 0) & TokenFlags.ContainsInvalidEscape)
-        : (!!((template.head.templateFlags || 0) & TokenFlags.ContainsInvalidEscape) || some(template.templateSpans, span => !!((span.literal.templateFlags || 0) & TokenFlags.ContainsInvalidEscape))));
+        ? containsInvalidEscapeFlag(template)
+        : (containsInvalidEscapeFlag(template.head) || some(template.templateSpans, span => containsInvalidEscapeFlag(span.literal))));
 }
 
 // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
