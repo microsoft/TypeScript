@@ -97,3 +97,7 @@ body:
       description: What you expected to happen instead, and why
     validations:
       required: true
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: Additional information about the issue
