@@ -1,7 +1,11 @@
 function c2 () { foo2(1, 2); }
                       ^
 {
-  "text": [
+  "text": "",
+  "position": 293,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "c",
       "span": {
@@ -13,16 +17,17 @@ function c2 () { foo2(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 293,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c2 () { foo2(1, 2); }
                          ^
 {
-  "text": [
+  "text": "",
+  "position": 296,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "d",
       "span": {
@@ -34,16 +39,17 @@ function c2 () { foo2(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 296,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c3 () { foo3(1, 2); }
                       ^
 {
-  "text": [
+  "text": "",
+  "position": 324,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "e",
       "span": {
@@ -55,16 +61,17 @@ function c3 () { foo3(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 324,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c3 () { foo3(1, 2); }
                          ^
 {
-  "text": [
+  "text": "",
+  "position": 327,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "f",
       "span": {
@@ -76,16 +83,17 @@ function c3 () { foo3(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 327,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c4 () { foo4(1, 2); }
                       ^
 {
-  "text": [
+  "text": "",
+  "position": 355,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "g",
       "span": {
@@ -97,16 +105,17 @@ function c4 () { foo4(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 355,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 function c4 () { foo4(1, 2); }
                          ^
 {
-  "text": [
+  "text": "",
+  "position": 358,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "h",
       "span": {
@@ -118,8 +127,5 @@ function c4 () { foo4(1, 2); }
     {
       "text": ":"
     }
-  ],
-  "position": 358,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

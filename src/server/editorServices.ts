@@ -387,7 +387,7 @@ export interface TypesMapFile {
 const defaultTypeSafeList: SafeList = {
     "jquery": {
         // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-        match: /jquery(-[\d\.]+)?(\.intellisense)?(\.min)?\.js$/i,
+        match: /jquery(-[\d.]+)?(\.intellisense)?(\.min)?\.js$/i,
         types: ["jquery"]
     },
     "WinJS": {
@@ -4008,7 +4008,7 @@ export class ProjectService {
     }
 
     /** Makes a filename safe to insert in a RegExp */
-    private static readonly filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
+    private static readonly filenameEscapeRegexp = /[-/\\^$*+?.()|[\]{}]/g;
     private static escapeFilenameForRegex(filename: string) {
         return filename.replace(this.filenameEscapeRegexp, "\\$&");
     }
@@ -4113,7 +4113,7 @@ export class ProjectService {
                 }
                 if (!exclude) {
                     // Exclude any minified files that get this far
-                    if (/^.+[\.-]min\.js$/.test(normalizedNames[i])) {
+                    if (/^.+[.-]min\.js$/.test(normalizedNames[i])) {
                         excludedFiles.push(normalizedNames[i]);
                     }
                     else {
