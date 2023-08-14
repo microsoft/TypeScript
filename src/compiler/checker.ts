@@ -17148,7 +17148,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function shouldDeferIndexType(type: Type, indexFlags = IndexFlags.None) {
         return !!(type.flags & TypeFlags.InstantiableNonPrimitive ||
             isGenericTupleType(type) ||
-            isGenericMappedType(type) && (!hasDistributiveNameType(type) || !(indexFlags & IndexFlags.NoRemappingMappedTypeDeferral) && getMappedTypeNameTypeKind(type) & MappedTypeNameTypeKind.Remapping) ||
+            isGenericMappedType(type) && (!hasDistributiveNameType(type) || getMappedTypeNameTypeKind(type) & MappedTypeNameTypeKind.Remapping) ||
             type.flags & TypeFlags.Union && !(indexFlags & IndexFlags.NoReducibleCheck) && isGenericReducibleType(type) ||
             type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable) && some((type as IntersectionType).types, isEmptyAnonymousObjectType));
     }
@@ -39012,7 +39012,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Check if the index type is assignable to 'keyof T' for the object type.
         const objectType = (type as IndexedAccessType).objectType;
         const indexType = (type as IndexedAccessType).indexType;
-        if (isTypeAssignableTo(indexType, getIndexType(objectType, IndexFlags.NoRemappingMappedTypeDeferral))) {
+        // skip index type deferral on remapping mapped types
+        const objectIndexType = isGenericMappedType(objectType) && getMappedTypeNameTypeKind(objectType) & MappedTypeNameTypeKind.Remapping
+            ? getIndexTypeForMappedType(objectType, IndexFlags.None)
+            : getIndexType(objectType, IndexFlags.None);
+        if (isTypeAssignableTo(indexType, objectIndexType)) {
             if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                 getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(objectType as MappedType) & MappedTypeModifiers.IncludeReadonly) {
                 error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
