@@ -5804,8 +5804,8 @@ function escapeTemplateSubstitution(str: string): string {
 /** @internal */
 export function hasInvalidEscape(template: TemplateLiteral): boolean {
     return template && !!(isNoSubstitutionTemplateLiteral(template)
-        ? template.templateFlags
-        : (template.head.templateFlags || some(template.templateSpans, span => !!span.literal.templateFlags)));
+        ? !!((template.templateFlags || 0) & TokenFlags.ContainsInvalidEscape)
+        : (!!((template.head.templateFlags || 0) & TokenFlags.ContainsInvalidEscape) || some(template.templateSpans, span => !!((span.literal.templateFlags || 0) & TokenFlags.ContainsInvalidEscape))));
 }
 
 // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
