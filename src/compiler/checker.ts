@@ -10408,16 +10408,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isTypeAny(parentType)) {
             return parentType;
         }
+        parentType = getAdjustedParentTypeForBindingElement(declaration, parentType);
         const pattern = declaration.parent;
-        // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
-        if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
-            parentType = getNonNullableType(parentType);
-        }
-        // Filter `undefined` from the type we check against if the parent has an initializer and that initializer is not possibly `undefined`
-        else if (strictNullChecks && pattern.parent.initializer && !(getTypeFacts(getTypeOfInitializer(pattern.parent.initializer)) & TypeFacts.EQUndefined)) {
-            parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
-        }
-
         let type: Type | undefined;
         if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
             if (declaration.dotDotDotToken) {
@@ -10476,6 +10468,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return strictNullChecks && !(getTypeFacts(checkDeclarationInitializer(declaration, CheckMode.Normal)) & TypeFacts.IsUndefined) ? getNonUndefinedType(type) : type;
         }
         return widenTypeInferredFromInitializer(declaration, getUnionType([getNonUndefinedType(type), checkDeclarationInitializer(declaration, CheckMode.Normal)], UnionReduction.Subtype));
+    }
+
+    function getAdjustedParentTypeForBindingElement(declaration: BindingElement, parentType: Type) {
+        const pattern = declaration.parent;
+        // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
+        if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
+            parentType = getNonNullableType(parentType);
+        }
+        // Filter `undefined` from the type we check against if the parent has an initializer and that initializer is not possibly `undefined`
+        else if (strictNullChecks && pattern.parent.initializer && !(getTypeFacts(getTypeOfInitializer(pattern.parent.initializer)) & TypeFacts.EQUndefined)) {
+            parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
+        }
+        return parentType;
     }
 
     function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -28894,9 +28899,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getContextualTypeForBindingElement(declaration: BindingElement, contextFlags: ContextFlags | undefined): Type | undefined {
         const parent = declaration.parent.parent;
         const name = declaration.propertyName || declaration.name;
-        const parentType = getContextualTypeForVariableLikeDeclaration(parent, contextFlags) ||
+        let parentType = getContextualTypeForVariableLikeDeclaration(parent, contextFlags) ||
             parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent, declaration.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal);
         if (!parentType || isBindingPattern(name) || isComputedNonLiteralName(name)) return undefined;
+        parentType = getAdjustedParentTypeForBindingElement(declaration, parentType);
         if (parent.name.kind === SyntaxKind.ArrayBindingPattern) {
             const index = indexOfNode(declaration.parent.elements, declaration);
             if (index < 0) return undefined;

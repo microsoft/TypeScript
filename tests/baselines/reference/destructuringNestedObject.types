@@ -1,0 +1,145 @@
+=== tests/cases/compiler/destructuringNestedObject.ts ===
+interface Props {
+    innerObject?: {
+>innerObject : { innerObject2?: { name?: string | undefined; email?: string | undefined; } | undefined; } | undefined
+
+        innerObject2?: {
+>innerObject2 : { name?: string | undefined; email?: string | undefined; } | undefined
+
+            name?: string;
+>name : string | undefined
+
+            email?: string;
+>email : string | undefined
+        }
+    };
+}
+
+export const nestedDestructure1 = (props: Props) => {
+>nestedDestructure1 : (props: Props) => void
+>(props: Props) => {    const {        innerObject: {            innerObject2: { name, email } = {}  // should ok        } = {}    } = props;    console.log(name, email);} : (props: Props) => void
+>props : Props
+
+    const {
+        innerObject: {
+>innerObject : any
+
+            innerObject2: { name, email } = {}  // should ok
+>innerObject2 : any
+>name : string | undefined
+>email : string | undefined
+>{} : {}
+
+        } = {}
+>{} : {}
+
+    } = props;
+>props : Props
+
+    console.log(name, email);
+>console.log(name, email) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>name : string | undefined
+>email : string | undefined
+
+};
+
+export const nestedDestructure2 = (props: Props) => {
+>nestedDestructure2 : (props: Props) => void
+>(props: Props) => {    const {        innerObject: {            innerObject2: { name, email }   // should error        } = {}    } = props;    console.log(name, email);} : (props: Props) => void
+>props : Props
+
+    const {
+        innerObject: {
+>innerObject : any
+
+            innerObject2: { name, email }   // should error
+>innerObject2 : any
+>name : any
+>email : any
+
+        } = {}
+>{} : {}
+
+    } = props;
+>props : Props
+
+    console.log(name, email);
+>console.log(name, email) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>name : any
+>email : any
+
+};
+
+export const nestedDestructure3 = (props: Props) => {
+>nestedDestructure3 : (props: Props) => void
+>(props: Props) => {    const {        innerObject: {            innerObject2: { name, email } = {}        }      // should error    } = props;    console.log(name, email);} : (props: Props) => void
+>props : Props
+
+    const {
+        innerObject: {
+>innerObject : any
+
+            innerObject2: { name, email } = {}
+>innerObject2 : any
+>name : any
+>email : any
+>{} : { name: any; email: any; }
+
+        }      // should error
+    } = props;
+>props : Props
+
+    console.log(name, email);
+>console.log(name, email) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>name : any
+>email : any
+
+};
+
+type NestedTuple = [[[string | undefined] | undefined] | undefined]
+>NestedTuple : [[[string | undefined] | undefined] | undefined]
+
+
+export const nestedTupleDestructure1 = (props: NestedTuple) => {
+>nestedTupleDestructure1 : (props: NestedTuple) => void
+>(props: NestedTuple) => {    const [[[s] = []] = []] = props;  // should ok} : (props: NestedTuple) => void
+>props : NestedTuple
+
+    const [[[s] = []] = []] = props;  // should ok
+>s : string | undefined
+>[] : []
+>[] : []
+>props : NestedTuple
+}
+
+export const nestedTupleDestructure2 = (props: NestedTuple) => {
+>nestedTupleDestructure2 : (props: NestedTuple) => void
+>(props: NestedTuple) => {    const [[[s]] = []] = props; // should error} : (props: NestedTuple) => void
+>props : NestedTuple
+
+    const [[[s]] = []] = props; // should error
+>s : any
+>[] : []
+>props : NestedTuple
+}
+
+export const nestedTupleDestructure3 = (props: NestedTuple) => {
+>nestedTupleDestructure3 : (props: NestedTuple) => void
+>(props: NestedTuple) => {    const [[[s]]] = props; // should error} : (props: NestedTuple) => void
+>props : NestedTuple
+
+    const [[[s]]] = props; // should error
+>s : any
+>props : NestedTuple
+}
+
+

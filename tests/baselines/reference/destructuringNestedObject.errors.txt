@@ -1,0 +1,76 @@
+tests/cases/compiler/destructuringNestedObject.ts(22,29): error TS2339: Property 'name' does not exist on type '{ name?: string | undefined; email?: string | undefined; } | undefined'.
+tests/cases/compiler/destructuringNestedObject.ts(22,35): error TS2339: Property 'email' does not exist on type '{ name?: string | undefined; email?: string | undefined; } | undefined'.
+tests/cases/compiler/destructuringNestedObject.ts(31,13): error TS2339: Property 'innerObject2' does not exist on type '{ innerObject2?: { name?: string | undefined; email?: string | undefined; } | undefined; } | undefined'.
+tests/cases/compiler/destructuringNestedObject.ts(31,29): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/compiler/destructuringNestedObject.ts(31,35): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/compiler/destructuringNestedObject.ts(45,13): error TS2461: Type '[string | undefined] | undefined' is not an array type.
+tests/cases/compiler/destructuringNestedObject.ts(49,12): error TS2461: Type '[[string | undefined] | undefined] | undefined' is not an array type.
+
+
+==== tests/cases/compiler/destructuringNestedObject.ts (7 errors) ====
+    interface Props {
+        innerObject?: {
+            innerObject2?: {
+                name?: string;
+                email?: string;
+            }
+        };
+    }
+    
+    export const nestedDestructure1 = (props: Props) => {
+        const {
+            innerObject: {
+                innerObject2: { name, email } = {}  // should ok
+            } = {}
+        } = props;
+        console.log(name, email);
+    };
+    
+    export const nestedDestructure2 = (props: Props) => {
+        const {
+            innerObject: {
+                innerObject2: { name, email }   // should error
+                                ~~~~
+!!! error TS2339: Property 'name' does not exist on type '{ name?: string | undefined; email?: string | undefined; } | undefined'.
+                                      ~~~~~
+!!! error TS2339: Property 'email' does not exist on type '{ name?: string | undefined; email?: string | undefined; } | undefined'.
+            } = {}
+        } = props;
+        console.log(name, email);
+    };
+    
+    export const nestedDestructure3 = (props: Props) => {
+        const {
+            innerObject: {
+                innerObject2: { name, email } = {}
+                ~~~~~~~~~~~~
+!!! error TS2339: Property 'innerObject2' does not exist on type '{ innerObject2?: { name?: string | undefined; email?: string | undefined; } | undefined; } | undefined'.
+                                ~~~~
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+                                      ~~~~~
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+            }      // should error
+        } = props;
+        console.log(name, email);
+    };
+    
+    type NestedTuple = [[[string | undefined] | undefined] | undefined]
+    
+    
+    export const nestedTupleDestructure1 = (props: NestedTuple) => {
+        const [[[s] = []] = []] = props;  // should ok
+    }
+    
+    export const nestedTupleDestructure2 = (props: NestedTuple) => {
+        const [[[s]] = []] = props; // should error
+                ~~~
+!!! error TS2461: Type '[string | undefined] | undefined' is not an array type.
+    }
+    
+    export const nestedTupleDestructure3 = (props: NestedTuple) => {
+        const [[[s]]] = props; // should error
+               ~~~~~
+!!! error TS2461: Type '[[string | undefined] | undefined] | undefined' is not an array type.
+    }
+    
+    
