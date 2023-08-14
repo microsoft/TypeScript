@@ -10345,6 +10345,6 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
 }
 
 /** @internal */
-export function isExpandoPropertyDeclarationCandidate(declaration: Declaration | undefined): declaration is PropertyAccessExpression | ElementAccessExpression | BinaryExpression {
-    return !!declaration && !!(isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration) || isBinaryExpression(declaration));
+export function isExpandoPropertyDeclaration(declaration: Declaration | undefined): declaration is PropertyAccessExpression | ElementAccessExpression | BinaryExpression {
+    return !!declaration && (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration) || isBinaryExpression(declaration));
 }

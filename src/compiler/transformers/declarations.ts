@@ -102,7 +102,7 @@ import {
     isDeclaration,
     isEntityName,
     isEntityNameExpression,
-    isExpandoPropertyDeclarationCandidate,
+    isExpandoPropertyDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExpressionWithTypeArguments,
@@ -1523,7 +1523,7 @@ export function transformDeclarations(context: TransformationContext) {
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                        if (!isExpandoPropertyDeclarationCandidate(p.valueDeclaration)) {
+                        if (!isExpandoPropertyDeclaration(p.valueDeclaration)) {
                             return undefined;
                         }
                         const nameStr = unescapeLeadingUnderscores(p.escapedName);

@@ -506,7 +506,7 @@ import {
     isEnumDeclaration,
     isEnumMember,
     isExclusivelyTypeOnlyImportOrExport,
-    isExpandoPropertyDeclarationCandidate,
+    isExpandoPropertyDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExportsIdentifier,
@@ -46520,7 +46520,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!symbol || !(symbol.flags & SymbolFlags.Function)) {
             return false;
         }
-        return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && isExpandoPropertyDeclarationCandidate(p.valueDeclaration));
+        return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && isExpandoPropertyDeclaration(p.valueDeclaration));
     }
 
     function getPropertiesOfContainerFunction(node: Declaration): Symbol[] {
