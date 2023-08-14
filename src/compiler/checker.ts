@@ -27467,6 +27467,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const right = expr.right;
             const rightType = getTypeOfExpression(right);
+            if (!isTypeDerivedFrom(rightType, globalObjectType)) {
+                return type;
+            }
             const instanceType = mapType(rightType, t => getInstanceType(t, left, type, right));
             // Don't narrow from `any` if the target type is exactly `Object` or `Function`, and narrow
             // in the false branch only if the target is a non-empty object type.
@@ -27486,7 +27489,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const syntheticCall = createSyntheticHasInstanceMethodCall(left, leftType, right, constructorType, hasInstanceMethodType);
                 const signature = getEffectsSignature(syntheticCall);
                 const predicate = signature && getTypePredicateOfSignature(signature);
-                if (predicate && predicate.kind == TypePredicateKind.Identifier && predicate.parameterIndex == 0) {
+                if (predicate && predicate.kind === TypePredicateKind.Identifier && predicate.parameterIndex === 0) {
                     return predicate.type;
                 }
                 if (!isTypeDerivedFrom(constructorType, globalFunctionType)) {

@@ -5144,6 +5144,7 @@ declare namespace ts {
         readonly isSpread: boolean;
         readonly type: Type;
         readonly tupleNameSource?: ParameterDeclaration | NamedTupleMember;
+        readonly thisArgument?: LeftHandSideExpression;
     }
     type ExponentiationOperator = SyntaxKind.AsteriskAsteriskToken;
     type MultiplicativeOperator = SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken;

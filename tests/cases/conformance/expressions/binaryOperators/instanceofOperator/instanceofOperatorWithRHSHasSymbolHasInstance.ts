@@ -90,3 +90,29 @@ lhs4 instanceof Rhs9 && lhs4;
 lhs4 instanceof Rhs10 && lhs4;
 lhs4 instanceof Rhs11 && lhs4;
 lhs4 instanceof Rhs12 && lhs4;
+
+declare class A {
+    #x: number;
+
+    // approximation of `getInstanceType` behavior, with one caveat: the checker versions unions the return types of
+    // all construct signatures, but we have no way of extracting individual construct signatures from a type.
+    static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
+        T extends globalThis.Function ?
+            T extends { readonly prototype: infer U } ?
+                boolean extends (U extends never ? true : false) ? // <- tests whether 'U' is 'any'
+                    T extends (abstract new (...args: any) => infer V) ? V : {} :
+                U :
+            never :
+        never
+    );
+}
+
+declare class B extends A { #y: number; }
+
+declare const obj: unknown;
+if (obj instanceof A) {
+    obj; // A
+}
+if (obj instanceof B) {
+    obj; // B
+}
