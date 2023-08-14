@@ -455,7 +455,13 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         compilerHost.getModuleResolutionCache = () => moduleResolutionCache;
     }
     if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
-        typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+        typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(
+            compilerHost.getCurrentDirectory(),
+            compilerHost.getCanonicalFileName,
+            /*options*/ undefined,
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+            moduleResolutionCache?.optionsToRedirectsKey,
+        );
         compilerHost.resolveTypeReferenceDirectiveReferences = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile) =>
             loadWithModeAwareCache(
                 typeDirectiveNames,
