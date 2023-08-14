@@ -255,4 +255,4 @@ jobs:
     - run:  npm ci
 
     - name: Check project references
-      run: node ./scripts/checkProjectReferences.mjs src/**/*tsconfig*.json
+      run: node ./scripts/checkProjectReferences.mjs
