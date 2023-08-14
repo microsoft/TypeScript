@@ -3279,7 +3279,7 @@ export class TestState {
             assert.equal(action.description, options.description);
         }
         else if (Array.isArray(options.description)) {
-            const description = ts.formatStringFromArgs(options.description[0], options.description, 1);
+            const description = ts.formatStringFromArgs(options.description[0], options.description.slice(1));
             assert.equal(action.description, description);
         }
         else {
@@ -4333,7 +4333,7 @@ export class TestState {
     public toggleLineComment(newFileContent: string): void {
         const changes: ts.TextChange[] = [];
         for (const range of this.getRanges()) {
-            changes.push.apply(changes, this.languageService.toggleLineComment(this.activeFile.fileName, range));
+            changes.push(...this.languageService.toggleLineComment(this.activeFile.fileName, range));
         }
 
         this.applyEdits(this.activeFile.fileName, changes);
@@ -4344,7 +4344,7 @@ export class TestState {
     public toggleMultilineComment(newFileContent: string): void {
         const changes: ts.TextChange[] = [];
         for (const range of this.getRanges()) {
-            changes.push.apply(changes, this.languageService.toggleMultilineComment(this.activeFile.fileName, range));
+            changes.push(...this.languageService.toggleMultilineComment(this.activeFile.fileName, range));
         }
 
         this.applyEdits(this.activeFile.fileName, changes);
@@ -4355,7 +4355,7 @@ export class TestState {
     public commentSelection(newFileContent: string): void {
         const changes: ts.TextChange[] = [];
         for (const range of this.getRanges()) {
-            changes.push.apply(changes, this.languageService.commentSelection(this.activeFile.fileName, range));
+            changes.push(...this.languageService.commentSelection(this.activeFile.fileName, range));
         }
 
         this.applyEdits(this.activeFile.fileName, changes);
@@ -4366,7 +4366,7 @@ export class TestState {
     public uncommentSelection(newFileContent: string): void {
         const changes: ts.TextChange[] = [];
         for (const range of this.getRanges()) {
-            changes.push.apply(changes, this.languageService.uncommentSelection(this.activeFile.fileName, range));
+            changes.push(...this.languageService.uncommentSelection(this.activeFile.fileName, range));
         }
 
         this.applyEdits(this.activeFile.fileName, changes);

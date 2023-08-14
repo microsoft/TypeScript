@@ -8111,7 +8111,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return factory.createStringLiteral(name, !!singleQuote);
                     }
                     if (isNumericLiteralName(name) && startsWith(name, "-")) {
-                        return factory.createComputedPropertyName(factory.createNumericLiteral(+name));
+                        return factory.createComputedPropertyName(factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(+name))));
                     }
                     return createPropertyNameNodeForIdentifierOrLiteral(name, getEmitScriptTarget(compilerOptions));
                 }
@@ -16457,7 +16457,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
-        const templates = filter(types, t => !!(t.flags & TypeFlags.TemplateLiteral) && isPatternLiteralType(t)) as TemplateLiteralType[];
+        const templates = filter(types, t =>
+            !!(t.flags & TypeFlags.TemplateLiteral) &&
+            isPatternLiteralType(t) &&
+            (t as TemplateLiteralType).types.every(t => !(t.flags & TypeFlags.Intersection) || !areIntersectedTypesAvoidingPrimitiveReduction((t as IntersectionType).types))
+        ) as TemplateLiteralType[];
         if (templates.length) {
             let i = types.length;
             while (i > 0) {
@@ -16966,8 +16970,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return reduceLeft(types, (n, t) => n + getConstituentCount(t), 0);
     }
 
-    function areIntersectedTypesAvoidingPrimitiveReduction(t1: Type, t2: Type) {
-        return !!(t1.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) && t2 === emptyTypeLiteralType;
+    function areIntersectedTypesAvoidingPrimitiveReduction(types: Type[], primitiveFlags = TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt): boolean {
+        if (types.length !== 2) {
+            return false;
+        }
+        const [t1, t2] = types;
+        return !!(t1.flags & primitiveFlags) && t2 === emptyTypeLiteralType || !!(t2.flags & primitiveFlags) && t1 === emptyTypeLiteralType;
     }
 
     function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
@@ -16975,7 +16983,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.resolvedType) {
             const aliasSymbol = getAliasSymbolForTypeNode(node);
             const types = map(node.types, getTypeFromTypeNode);
-            const noSupertypeReduction = types.length === 2 && (areIntersectedTypesAvoidingPrimitiveReduction(types[0], types[1]) || areIntersectedTypesAvoidingPrimitiveReduction(types[1], types[0]));
+            const noSupertypeReduction = areIntersectedTypesAvoidingPrimitiveReduction(types);
             links.resolvedType = getIntersectionType(types, aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol), noSupertypeReduction);
         }
         return links.resolvedType;
@@ -19836,7 +19844,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const childrenPropName = childPropName === undefined ? "children" : unescapeLeadingUnderscores(childPropName);
                 const childrenTargetType = getIndexedAccessType(target, getStringLiteralType(childrenPropName));
                 const diagnostic = Diagnostics._0_components_don_t_accept_text_as_child_elements_Text_in_JSX_has_the_type_string_but_the_expected_type_of_1_is_2;
-                invalidTextDiagnostic = { ...diagnostic, key: "!!ALREADY FORMATTED!!", message: formatMessage(/*dummy*/ undefined, diagnostic, tagNameText, childrenPropName, typeToString(childrenTargetType)) };
+                invalidTextDiagnostic = { ...diagnostic, key: "!!ALREADY FORMATTED!!", message: formatMessage(diagnostic, tagNameText, childrenPropName, typeToString(childrenTargetType)) };
             }
             return invalidTextDiagnostic;
         }
@@ -20369,6 +20377,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let expandingFlags = ExpandingFlags.None;
         let overflow = false;
         let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
+        let skipParentCounter = 0; // How many errors should be skipped 'above' in the elaboration pyramid
         let lastSkippedInfo: [Type, Type] | undefined;
         let incompatibleStack: DiagnosticAndArguments[] | undefined;
 
@@ -20430,6 +20439,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             lastSkippedInfo = saved.lastSkippedInfo;
             incompatibleStack = saved.incompatibleStack;
             overrideNextErrorInfo = saved.overrideNextErrorInfo;
+            skipParentCounter = saved.skipParentCounter;
             relatedInfo = saved.relatedInfo;
         }
 
@@ -20439,6 +20449,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 lastSkippedInfo,
                 incompatibleStack: incompatibleStack?.slice(),
                 overrideNextErrorInfo,
+                skipParentCounter,
                 relatedInfo: relatedInfo?.slice() as [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined,
             };
         }
@@ -20561,7 +20572,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             Debug.assert(!!errorNode);
             if (incompatibleStack) reportIncompatibleStack();
             if (message.elidedInCompatabilityPyramid) return;
-            errorInfo = chainDiagnosticMessages(errorInfo, message, ...args);
+            if (skipParentCounter === 0) {
+                errorInfo = chainDiagnosticMessages(errorInfo, message, ...args);
+            }
+            else {
+                skipParentCounter--;
+            }
+        }
+
+        function reportParentSkippedError(message: DiagnosticMessage, ...args: DiagnosticArguments): void {
+            reportError(message, ...args);
+            skipParentCounter++;
         }
 
         function associateRelatedInfo(info: DiagnosticRelatedInformation) {
@@ -20958,11 +20979,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     }
                                 }
                                 if (suggestion !== undefined) {
-                                    reportError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
+                                    reportParentSkippedError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
                                         symbolToString(prop), typeToString(errorTarget), suggestion);
                                 }
                                 else {
-                                    reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                    reportParentSkippedError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                         symbolToString(prop), typeToString(errorTarget));
                                 }
                             }
@@ -24349,12 +24370,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
             return true;
         }
+        if (target.flags & TypeFlags.Intersection) {
+            return every((target as IntersectionType).types, t => t === emptyTypeLiteralType || isValidTypeForTemplateLiteralPlaceholder(source, t));
+        }
         if (source.flags & TypeFlags.StringLiteral) {
             const value = (source as StringLiteralType).value;
             return !!(target.flags & TypeFlags.Number && isValidNumberString(value, /*roundTripOnly*/ false) ||
                 target.flags & TypeFlags.BigInt && isValidBigIntString(value, /*roundTripOnly*/ false) ||
                 target.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && value === (target as IntrinsicType).intrinsicName ||
-                target.flags & TypeFlags.StringMapping && isMemberOfStringMapping(getStringLiteralType(value), target));
+                target.flags & TypeFlags.StringMapping && isMemberOfStringMapping(getStringLiteralType(value), target) ||
+                target.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, target as TemplateLiteralType));
         }
         if (source.flags & TypeFlags.TemplateLiteral) {
             const texts = (source as TemplateLiteralType).texts;
@@ -29234,7 +29259,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (t.flags & TypeFlags.StructuredType) {
                 const prop = getPropertyOfType(t, name);
                 if (prop) {
-                    return isCircularMappedProperty(prop) ? undefined : getTypeOfSymbol(prop);
+                    return isCircularMappedProperty(prop) ? undefined : removeMissingType(getTypeOfSymbol(prop), !!(prop && prop.flags & SymbolFlags.Optional));
                 }
                 if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
                     const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
@@ -29311,7 +29336,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If index is before any spread element and within the fixed part of the contextual tuple type, return
                 // the type of the contextual tuple element.
                 if ((firstSpreadIndex === undefined || index < firstSpreadIndex) && index < t.target.fixedLength) {
-                    return getTypeArguments(t)[index];
+                    return removeMissingType(getTypeArguments(t)[index], !!(t.target.elementFlags[index] && ElementFlags.Optional));
                 }
                 // When the length is known and the index is after all spread elements we compute the offset from the element
                 // to the end and the number of ending fixed elements in the contextual tuple type.
@@ -30680,15 +30705,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!isErrorType(intrinsicElementsType)) {
                 // Property case
                 if (!isIdentifier(node.tagName) && !isJsxNamespacedName(node.tagName)) return Debug.fail();
-                const intrinsicProp = getPropertyOfType(intrinsicElementsType, isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText);
+                const propName = isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText;
+                const intrinsicProp = getPropertyOfType(intrinsicElementsType, propName);
                 if (intrinsicProp) {
                     links.jsxFlags |= JsxFlags.IntrinsicNamedElement;
                     return links.resolvedSymbol = intrinsicProp;
                 }
 
                 // Intrinsic string indexer case
-                const indexSignatureType = getIndexTypeOfType(intrinsicElementsType, stringType);
-                if (indexSignatureType) {
+                const indexSymbol = getApplicableIndexSymbol(intrinsicElementsType, getStringLiteralType(unescapeLeadingUnderscores(propName)));
+                if (indexSymbol) {
+                    links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
+                    return links.resolvedSymbol = indexSymbol;
+                }
+
+                if (getTypeOfPropertyOrIndexSignatureOfType(intrinsicElementsType, propName)) {
                     links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
                     return links.resolvedSymbol = intrinsicElementsType.symbol;
                 }
@@ -30916,8 +30947,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return links.resolvedJsxElementAttributesType = getTypeOfSymbol(symbol) || errorType;
             }
             else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
+                const propName = isJsxNamespacedName(node.tagName) ? getEscapedTextOfJsxNamespacedName(node.tagName) : node.tagName.escapedText;
                 return links.resolvedJsxElementAttributesType =
-                    getIndexTypeOfType(getJsxType(JsxNames.IntrinsicElements, node), stringType) || errorType;
+                    getApplicableIndexInfoForName(getJsxType(JsxNames.IntrinsicElements, node), propName)?.type || errorType;
             }
             else {
                 return links.resolvedJsxElementAttributesType = errorType;
@@ -37986,9 +38018,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return hasSkipDirectInferenceFlag(node) ?
                     wildcardType :
                     getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
-            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.NumericLiteral: {
                 checkGrammarNumericLiteral(node as NumericLiteral);
-                return getFreshTypeOfLiteralType(getNumberLiteralType(+(node as NumericLiteral).text));
+                const value = +(node as NumericLiteral).text;
+                if (!isFinite(value)) {
+                    return numberType;
+                }
+                return getFreshTypeOfLiteralType(getNumberLiteralType(value));
+            }
             case SyntaxKind.BigIntLiteral:
                 checkGrammarBigIntLiteral(node as BigIntLiteral);
                 return getFreshTypeOfLiteralType(getBigIntLiteralType({
@@ -45709,33 +45746,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (name.kind === SyntaxKind.PropertyAccessExpression) {
                     checkPropertyAccessExpression(name, CheckMode.Normal);
                     if (!links.resolvedSymbol) {
-                        const expressionType = checkExpressionCached(name.expression);
-                        const infos = getApplicableIndexInfos(expressionType, getLiteralTypeFromPropertyName(name.name));
-                        if (infos.length && (expressionType as ObjectType).members) {
-                            const resolved = resolveStructuredTypeMembers(expressionType as ObjectType);
-                            const symbol = resolved.members.get(InternalSymbolName.Index);
-                            if (infos === getIndexInfosOfType(expressionType)) {
-                                links.resolvedSymbol = symbol;
-                            }
-                            else if (symbol) {
-                                const symbolLinks = getSymbolLinks(symbol);
-                                const declarationList = mapDefined(infos, i => i.declaration);
-                                const nodeListId = map(declarationList, getNodeId).join(",");
-                                if (!symbolLinks.filteredIndexSymbolCache) {
-                                    symbolLinks.filteredIndexSymbolCache = new Map();
-                                }
-                                if (symbolLinks.filteredIndexSymbolCache.has(nodeListId)) {
-                                    links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
-                                }
-                                else {
-                                    const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
-                                    copy.declarations = mapDefined(infos, i => i.declaration);
-                                    copy.parent = expressionType.aliasSymbol ? expressionType.aliasSymbol : expressionType.symbol ? expressionType.symbol : getSymbolAtLocation(copy.declarations[0].parent);
-                                    symbolLinks.filteredIndexSymbolCache.set(nodeListId, copy);
-                                    links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
-                                }
-                            }
-                        }
+                        links.resolvedSymbol = getApplicableIndexSymbol(checkExpressionCached(name.expression), getLiteralTypeFromPropertyName(name.name));
                     }
                 }
                 else {
@@ -45760,6 +45771,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         return undefined;
+    }
+
+    function getApplicableIndexSymbol(type: Type, keyType: Type) {
+        const infos = getApplicableIndexInfos(type, keyType);
+        if (infos.length && (type as ObjectType).members) {
+            const symbol = getIndexSymbolFromSymbolTable(resolveStructuredTypeMembers(type as ObjectType).members);
+            if (infos === getIndexInfosOfType(type)) {
+                return symbol;
+            }
+            else if (symbol) {
+                const symbolLinks = getSymbolLinks(symbol);
+                const declarationList = mapDefined(infos, i => i.declaration);
+                const nodeListId = map(declarationList, getNodeId).join(",");
+                if (!symbolLinks.filteredIndexSymbolCache) {
+                    symbolLinks.filteredIndexSymbolCache = new Map();
+                }
+                if (symbolLinks.filteredIndexSymbolCache.has(nodeListId)) {
+                    return symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
+                }
+                else {
+                    const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
+                    copy.declarations = mapDefined(infos, i => i.declaration);
+                    copy.parent = type.aliasSymbol ? type.aliasSymbol : type.symbol ? type.symbol : getSymbolAtLocation(copy.declarations[0].parent);
+                    symbolLinks.filteredIndexSymbolCache.set(nodeListId, copy);
+                    return copy;
+                }
+            }
+        }
     }
 
     /**
@@ -46760,8 +46799,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (enumResult) return enumResult;
         const literalValue = (type as LiteralType).value;
         return typeof literalValue === "object" ? factory.createBigIntLiteral(literalValue) :
-            typeof literalValue === "number" ? factory.createNumericLiteral(literalValue) :
-            factory.createStringLiteral(literalValue);
+            typeof literalValue === "string" ? factory.createStringLiteral(literalValue) :
+            literalValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(literalValue))) :
+            factory.createNumericLiteral(literalValue);
     }
 
     function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker) {
