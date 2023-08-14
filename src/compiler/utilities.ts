@@ -2712,13 +2712,16 @@ export function isCommonJsExportPropertyAssignment(node: Node) {
 /** @internal */
 export function getValidESSymbolDeclaration(node: Node): Node | undefined {
     while (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
+        if (isCommonJsExportPropertyAssignment(node)) {
+            return node;
+        }
         node = node.parent;
     }
-    if ((isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+    if (isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
         isPropertyDeclaration(node) ? hasEffectiveReadonlyModifier(node) && hasStaticModifier(node) :
-        isPropertySignature(node) && hasEffectiveReadonlyModifier(node)) || isCommonJsExportPropertyAssignment(node)) {
+        isPropertySignature(node) && hasEffectiveReadonlyModifier(node)) {
         return node;
-    };
+    }
     return undefined;
 }
 
