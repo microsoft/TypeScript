@@ -21746,6 +21746,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
                     instantiateType(source, reportUnreliableMapper);
                 }
+                if (isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(target) && isTypeAssignableTo(source, stringType) && isTypeAssignableTo(target.types[0], stringType)) {
+                    return isRelatedTo(source, target.types[0], RecursionFlags.Both, reportErrors);
+                }
                 if (isTypeMatchedByTemplateLiteralType(source, target as TemplateLiteralType)) {
                     return Ternary.True;
                 }
@@ -21789,6 +21792,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (sourceFlags & TypeFlags.TemplateLiteral && !(targetFlags & TypeFlags.Object)) {
                 if (!(targetFlags & TypeFlags.TemplateLiteral)) {
+                    if (isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(source) && isTypeAssignableTo(source.types[0], stringType) && isTypeAssignableTo(target, stringType)) {
+                        return isRelatedTo(source.types[0], target, RecursionFlags.Both, reportErrors);
+                    }
                     const constraint = getBaseConstraintOfType(source);
                     if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
                         return result;
@@ -24366,6 +24372,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
+    function isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(type: Type): type is TemplateLiteralType {
+        if (!(type.flags & TypeFlags.TemplateLiteral)) {
+            return false;
+        }
+        const texts = (type as TemplateLiteralType).texts;
+        return texts.length === 2 && texts[0] === "" && texts[1] === "";
+    }
+
     function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
         if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
             return true;
@@ -24381,9 +24395,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 target.flags & TypeFlags.StringMapping && isMemberOfStringMapping(getStringLiteralType(value), target) ||
                 target.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, target as TemplateLiteralType));
         }
-        if (source.flags & TypeFlags.TemplateLiteral) {
-            const texts = (source as TemplateLiteralType).texts;
-            return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo((source as TemplateLiteralType).types[0], target);
+        if (isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(source)) {
+            return isTypeAssignableTo(source.types[0], target);
         }
         return isTypeAssignableTo(source, target);
     }
