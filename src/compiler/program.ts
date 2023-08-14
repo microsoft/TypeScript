@@ -883,7 +883,7 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
  * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
  * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
  * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
- * `moduleResolution` is `node16`+.
+ * `module` is `node16`+.
  * @param file The file the import or import-like reference is contained within
  * @param usage The module reference string
  * @returns The final resolution mode of the import
@@ -1315,9 +1315,9 @@ export function getImpliedNodeFormatForFileWorker(
     host: ModuleResolutionHost,
     options: CompilerOptions,
 ) {
-    switch (getEmitModuleResolutionKind(options)) {
-        case ModuleResolutionKind.Node16:
-        case ModuleResolutionKind.NodeNext:
+    switch (getEmitModuleKind(options)) {
+        case ModuleKind.Node16:
+        case ModuleKind.NodeNext:
             return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
                 fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
                 fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :

@@ -70,8 +70,10 @@ export function getFsContentsForNode10Result(): FsContents {
             import { foo2 } from "foo2";
             import { bar2 } from "bar2";
         `,
+        "/lib/lib.es2022.full.d.ts": libFile.content,
         "/home/src/projects/project/tsconfig.json": JSON.stringify({
             compilerOptions: {
+                module: "node16",
                 moduleResolution: "node16",
                 traceResolution: true,
                 incremental: true,
@@ -80,6 +82,6 @@ export function getFsContentsForNode10Result(): FsContents {
             },
             files: ["index.mts"]
         }),
-        [libFile.path]: libFile.content,
+        [libFile.path.replace("lib.d.ts", "lib.es2022.full.d.ts")]: libFile.content,
     };
 }
