@@ -240,6 +240,11 @@ const o4: Context = {
     }
 };
 
+// https://github.com/microsoft/TypeScript/issues/35896
+let revision: symbol
+const rev = revision = Symbol();
+
+
 //// [uniqueSymbolsDeclarations.js]
 // declarations with call initializer
 const constCall = Symbol();
@@ -406,6 +411,9 @@ const o4 = {
         return p;
     }
 };
+// https://github.com/microsoft/TypeScript/issues/35896
+let revision;
+const rev = revision = Symbol();
 
 
 //// [uniqueSymbolsDeclarations.d.ts]
@@ -541,3 +549,5 @@ interface Context {
     method5(p?: typeof s): typeof s;
 }
 declare const o4: Context;
+declare let revision: symbol;
+declare const rev: unique symbol;

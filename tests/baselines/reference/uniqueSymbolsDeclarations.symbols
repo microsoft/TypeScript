@@ -796,3 +796,13 @@ const o4: Context = {
 >p : Symbol(p, Decl(uniqueSymbolsDeclarations.ts, 234, 12))
     }
 };
+
+// https://github.com/microsoft/TypeScript/issues/35896
+let revision: symbol
+>revision : Symbol(revision, Decl(uniqueSymbolsDeclarations.ts, 240, 3))
+
+const rev = revision = Symbol();
+>rev : Symbol(rev, Decl(uniqueSymbolsDeclarations.ts, 241, 5))
+>revision : Symbol(revision, Decl(uniqueSymbolsDeclarations.ts, 240, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+

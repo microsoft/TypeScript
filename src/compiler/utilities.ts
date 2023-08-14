@@ -2710,10 +2710,16 @@ export function isCommonJsExportPropertyAssignment(node: Node) {
 }
 
 /** @internal */
-export function isValidESSymbolDeclaration(node: Node): boolean {
-    return (isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
+export function getValidESSymbolDeclaration(node: Node): Node | undefined {
+    while (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
+        node = node.parent;
+    }
+    if ((isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
         isPropertyDeclaration(node) ? hasEffectiveReadonlyModifier(node) && hasStaticModifier(node) :
-        isPropertySignature(node) && hasEffectiveReadonlyModifier(node)) || isCommonJsExportPropertyAssignment(node);
+        isPropertySignature(node) && hasEffectiveReadonlyModifier(node)) || isCommonJsExportPropertyAssignment(node)) {
+        return node;
+    };
+    return undefined;
 }
 
 /** @internal */

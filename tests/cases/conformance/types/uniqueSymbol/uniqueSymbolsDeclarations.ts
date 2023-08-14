@@ -241,3 +241,7 @@ const o4: Context = {
         return p;
     }
 };
+
+// https://github.com/microsoft/TypeScript/issues/35896
+let revision: symbol
+const rev = revision = Symbol();
