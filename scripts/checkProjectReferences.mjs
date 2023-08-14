@@ -1,3 +1,4 @@
+import assert from "assert";
 import fs from "fs";
 import glob from "glob";
 import JSONC from "jsonc-parser";
@@ -30,26 +31,44 @@ function getTsconfigPath(p) {
  * @param {string} p
  */
 function getReferences(p) {
-    const tsconfigPath = getTsconfigPath(p);
-    const dir = path.dirname(tsconfigPath);
-    const contents = JSONC.parse(fs.readFileSync(tsconfigPath, "utf8"));
-    const references = new Set();
-    for (const r of contents.references || []) {
-        references.add(path.resolve(dir, r.path));
-    }
+    const result = getReferencesWorker(p, new Set());
+    assert(result);
+    return result;
 
-    const transitiveReferences = new Set();
-    for (const r of references) {
-        const [references, parentTransitiveReferences] = getReferences(r);
+    /**
+     * @param {string} p
+     * @param {Set<string>} seen
+     */
+    function getReferencesWorker(p, seen) {
+        const tsconfigPath = getTsconfigPath(p);
+        if (seen.has(tsconfigPath)) {
+            return undefined;
+        }
+        seen.add(tsconfigPath);
+
+        const dir = path.dirname(tsconfigPath);
+        const contents = JSONC.parse(fs.readFileSync(tsconfigPath, "utf8"));
+        const references = new Set();
+        for (const r of contents.references || []) {
+            references.add(path.resolve(dir, r.path));
+        }
+
+        const transitiveReferences = new Set();
         for (const r of references) {
-            transitiveReferences.add(r);
-        }
-        for (const r of parentTransitiveReferences) {
-            transitiveReferences.add(r);
-        }
-    }
+            const result = getReferencesWorker(r, seen);
+            if (!result) continue;
 
-    return [references, transitiveReferences];
+            const [otherReferences, otherTransitiveReferences] = result;
+            for (const r of otherReferences) {
+                transitiveReferences.add(r);
+            }
+            for (const r of otherTransitiveReferences) {
+                transitiveReferences.add(r);
+            }
+        }
+
+        return [references, transitiveReferences];
+    }
 }
 
 const paths = glob.sync("src/**/*tsconfig*.json", { cwd: path.resolve(__dirname, "..") });
