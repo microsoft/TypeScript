@@ -18,7 +18,7 @@ import {
 //
 // NOTE: We differ here in that we allow X and X.Y, with missing parts having the default
 // value of `0`.
-const versionRegExp = /^(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:\-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
+const versionRegExp = /^(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
 
 // https://semver.org/#spec-item-9
 // > A pre-release version MAY be denoted by appending a hyphen and a series of dot separated

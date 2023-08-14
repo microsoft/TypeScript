@@ -1845,20 +1845,19 @@ export class Session<TMessage = string> implements EventSender {
         const hints = project.getLanguageService().provideInlayHints(file, args, this.getPreferences(file));
 
         return hints.map(hint => {
-            const { text, position } = hint;
-            const hintText = typeof text === "string" ? text : text.map(({ text, span, file }) => ({
-                text,
-                span: span && {
-                    start: scriptInfo.positionToLineOffset(span.start),
-                    end: scriptInfo.positionToLineOffset(span.start + span.length),
-                    file: file!
-                }
-            }));
+            const { position, displayParts } = hint;
 
             return {
                 ...hint,
                 position: scriptInfo.positionToLineOffset(position),
-                text: hintText
+                displayParts: displayParts?.map(({ text, span, file }) => ({
+                    text,
+                    span: span && {
+                        start: scriptInfo.positionToLineOffset(span.start),
+                        end: scriptInfo.positionToLineOffset(span.start + span.length),
+                        file: file!
+                    }
+                })),
             };
         });
     }

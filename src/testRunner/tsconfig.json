@@ -14,7 +14,6 @@
         { "path": "../typingsInstallerCore" },
         { "path": "../deprecatedCompat" },
         { "path": "../harness" },
-        { "path": "../loggedIO" }
     ],
     "include": ["**/*"]
 }

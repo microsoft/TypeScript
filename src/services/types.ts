@@ -866,11 +866,13 @@ export const enum InlayHintKind {
 }
 
 export interface InlayHint {
-    text: string | InlayHintDisplayPart[];
+    /** This property will be the empty string when displayParts is set. */
+    text: string;
     position: number;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+    displayParts?: InlayHintDisplayPart[];
 }
 
 export interface InlayHintDisplayPart {

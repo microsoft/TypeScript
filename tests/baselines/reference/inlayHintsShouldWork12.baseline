@@ -1,7 +1,11 @@
     return a(1) + 2
              ^
 {
-  "text": [
+  "text": "",
+  "position": 54,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "b",
       "span": {
@@ -13,16 +17,17 @@
     {
       "text": ":"
     }
-  ],
-  "position": 54,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 foo((c: number) => c + 1);
     ^
 {
-  "text": [
+  "text": "",
+  "position": 67,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "a",
       "span": {
@@ -34,8 +39,5 @@ foo((c: number) => c + 1);
     {
       "text": ":"
     }
-  ],
-  "position": 67,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

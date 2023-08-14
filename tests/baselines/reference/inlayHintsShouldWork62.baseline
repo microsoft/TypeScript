@@ -1,7 +1,11 @@
 trace(`${1}`);
       ^
 {
-  "text": [
+  "text": "",
+  "position": 41,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "message",
       "span": {
@@ -13,16 +17,17 @@ trace(`${1}`);
     {
       "text": ":"
     }
-  ],
-  "position": 41,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }
 
 trace(``);
       ^
 {
-  "text": [
+  "text": "",
+  "position": 56,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
     {
       "text": "message",
       "span": {
@@ -34,8 +39,5 @@ trace(``);
     {
       "text": ":"
     }
-  ],
-  "position": 56,
-  "kind": "Parameter",
-  "whitespaceAfter": true
+  ]
 }

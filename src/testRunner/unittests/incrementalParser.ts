@@ -249,7 +249,7 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Strict mode 1", () => {
-        const source = "foo1();\r\nfoo1();\r\nfoo1();\r\package();";
+        const source = "foo1();\r\nfoo1();\r\nfoo1();\r\npackage();";
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withInsert(oldText, 0, "'strict';\r\n");
@@ -258,7 +258,7 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Strict mode 2", () => {
-        const source = "foo1();\r\nfoo1();\r\nfoo1();\r\package();";
+        const source = "foo1();\r\nfoo1();\r\nfoo1();\r\npackage();";
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withInsert(oldText, 0, "'use strict';\r\n");
