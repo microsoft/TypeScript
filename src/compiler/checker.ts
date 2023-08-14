@@ -27143,7 +27143,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const access = getDiscriminantPropertyAccess(expr, type);
             if (access) {
-                return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy, true));
+                return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy, /*strictTruthy*/ true));
             }
             return type;
         }
