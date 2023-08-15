@@ -452,6 +452,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolutionHost.getCanonicalFileName,
         resolutionHost.getCompilationSettings(),
         moduleResolutionCache.getPackageJsonInfoCache(),
+        moduleResolutionCache.optionsToRedirectsKey,
     );
 
     const resolvedLibraries = new Map<string, CachedResolvedModuleWithFailedLookupLocations>();
