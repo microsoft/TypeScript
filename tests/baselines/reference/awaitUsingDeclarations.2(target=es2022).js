@@ -11,7 +11,7 @@ export {};
 //// [awaitUsingDeclarations.2.js]
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
-        if (typeof value !== "object") throw new TypeError("Object expected.");
+        if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
         var dispose;
         if (async) {
             if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");

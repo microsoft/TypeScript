@@ -22,7 +22,7 @@ verify.moveToFile({
 import { p } from './a';
 
 
-import { b } from "./other";
+import { b } from './other';
 
 
 const y: Date = p + b;

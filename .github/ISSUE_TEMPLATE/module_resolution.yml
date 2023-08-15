@@ -1,6 +1,6 @@
-name: Module Resolution
+name: Module resolution
 description: Report a problem with module resolution
-title: "Module Resolution:"
+title: "Module resolution:"
 labels: []
 body:
   - type: markdown

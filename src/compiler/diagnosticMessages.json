@@ -199,6 +199,10 @@
         "category": "Error",
         "code": 1064
     },
+    "The return type of an async function or method must be the global Promise<T> type.": {
+        "category": "Error",
+        "code": 1065
+    },
     "In ambient enum declarations member initializer must be constant expression.": {
         "category": "Error",
         "code": 1066
@@ -6556,6 +6560,10 @@
         "category": "Error",
         "code": 8016
     },
+    "Signature declarations can only be used in TypeScript files.": {
+        "category": "Error",
+        "code": 8017
+    },
     "Report errors in .js files.": {
         "category": "Message",
         "code": 8019
@@ -6728,6 +6736,10 @@
     "'{0}' at the start of a type is not valid TypeScript syntax. Did you mean to write '{1}'?": {
         "category": "Error",
         "code": 17020
+    },
+    "Unicode escape sequence cannot appear here.": {
+        "category": "Error",
+        "code": 17021
     },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",

@@ -9,6 +9,7 @@ import {
     CommandLineOption,
     comparePaths,
     Comparison,
+    CompilerHost,
     CompilerOptions,
     concatenate,
     contains,
@@ -35,10 +36,13 @@ import {
     forEach,
     forEachAncestorDirectory,
     formatMessage,
+    getAllowJSCompilerOption,
+    getAnyExtensionFromPath,
     getBaseFileName,
     GetCanonicalFileName,
     getCommonSourceDirectory,
     getCompilerOptionValue,
+    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     GetEffectiveTypeRootsHost,
     getEmitModuleKind,
@@ -98,6 +102,7 @@ import {
     startsWith,
     stringContains,
     supportedDeclarationExtensions,
+    supportedJSExtensionsFlat,
     supportedTSImplementationExtensions,
     toPath,
     tryExtractTSExtension,
@@ -110,9 +115,8 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
-export function trace(host: ModuleResolutionHost): void {
-    host.trace!(formatMessage.apply(undefined, arguments));
+export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void {
+    host.trace!(formatMessage(message, ...args));
 }
 
 /** @internal */
@@ -191,6 +195,15 @@ function formatExtensions(extensions: Extensions) {
     if (extensions & Extensions.Declaration) result.push("Declaration");
     if (extensions & Extensions.Json) result.push("JSON");
     return result.join(", ");
+}
+
+function extensionsToExtensionsArray(extensions: Extensions) {
+    const result: Extension[] = [];
+    if (extensions & Extensions.TypeScript) result.push(...supportedTSImplementationExtensions);
+    if (extensions & Extensions.JavaScript) result.push(...supportedJSExtensionsFlat);
+    if (extensions & Extensions.Declaration) result.push(...supportedDeclarationExtensions);
+    if (extensions & Extensions.Json) result.push(Extension.Json);
+    return result;
 }
 
 interface PathAndPackageId {
@@ -841,6 +854,7 @@ export interface PerNonRelativeNameCache<T> {
 export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
     getPackageJsonInfoCache(): PackageJsonInfoCache;
     /** @internal */ clearAllExceptPackageJsonInfoCache(): void;
+    /** @internal */ optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>;
 }
 
 /**
@@ -892,10 +906,11 @@ export interface CacheWithRedirects<K, V> {
 }
 
 /** @internal */
-export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined): CacheWithRedirects<K, V> {
-    type RedirectsCacheKey = string & { __compilerOptionsKey: any; };
+export type RedirectsCacheKey = string & { __compilerOptionsKey: any; };
+
+/** @internal */
+export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined, optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>): CacheWithRedirects<K, V> {
     const redirectsMap = new Map<CompilerOptions, Map<K, V>>();
-    const optionsToRedirectsKey = new Map<CompilerOptions, RedirectsCacheKey>();
     const redirectsKeyToMap = new Map<RedirectsCacheKey, Map<K, V>>();
     let ownMap = new Map<K, V>();
     if (ownOptions) redirectsMap.set(ownOptions, ownMap);
@@ -998,8 +1013,13 @@ function getOrCreateCache<K, V>(cacheWithRedirects: CacheWithRedirects<K, V>, re
     return result;
 }
 
-function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, options: CompilerOptions | undefined): PerDirectoryResolutionCache<T> {
-    const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options);
+function createPerDirectoryResolutionCache<T>(
+    currentDirectory: string,
+    getCanonicalFileName: GetCanonicalFileName,
+    options: CompilerOptions | undefined,
+    optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>,
+): PerDirectoryResolutionCache<T> {
+    const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options, optionsToRedirectsKey);
     return {
         getFromDirectoryCache,
         getOrCreateCacheForDirectory,
@@ -1101,8 +1121,9 @@ function createNonRelativeNameResolutionCache<T>(
     getCanonicalFileName: (s: string) => string,
     options: CompilerOptions | undefined,
     getResolvedFileName: (result: T) => string | undefined,
+    optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>,
 ): NonRelativeNameResolutionCache<T> {
-    const moduleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, PerNonRelativeNameCache<T>>(options);
+    const moduleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, PerNonRelativeNameCache<T>>(options, optionsToRedirectsKey);
     return {
         getFromNonRelativeNameCache,
         getOrCreateCacheForNonRelativeName,
@@ -1203,6 +1224,7 @@ function createNonRelativeNameResolutionCache<T>(
 interface ModuleOrTypeReferenceResolutionCache<T> extends PerDirectoryResolutionCache<T>, NonRelativeNameResolutionCache<T>, PackageJsonInfoCache {
     getPackageJsonInfoCache(): PackageJsonInfoCache;
     clearAllExceptPackageJsonInfoCache(): void;
+    optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>;
 }
 function createModuleOrTypeReferenceResolutionCache<T>(
     currentDirectory: string,
@@ -1210,13 +1232,21 @@ function createModuleOrTypeReferenceResolutionCache<T>(
     options: CompilerOptions | undefined,
     packageJsonInfoCache: PackageJsonInfoCache | undefined,
     getResolvedFileName: (result: T) => string | undefined,
+    optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey> | undefined,
 ): ModuleOrTypeReferenceResolutionCache<T> {
-    const perDirectoryResolutionCache = createPerDirectoryResolutionCache<T>(currentDirectory, getCanonicalFileName, options);
+    optionsToRedirectsKey ??= new Map();
+    const perDirectoryResolutionCache = createPerDirectoryResolutionCache<T>(
+        currentDirectory,
+        getCanonicalFileName,
+        options,
+        optionsToRedirectsKey,
+    );
     const nonRelativeNameResolutionCache = createNonRelativeNameResolutionCache(
         currentDirectory,
         getCanonicalFileName,
         options,
         getResolvedFileName,
+        optionsToRedirectsKey,
     );
     packageJsonInfoCache ??= createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
@@ -1228,6 +1258,7 @@ function createModuleOrTypeReferenceResolutionCache<T>(
         update,
         getPackageJsonInfoCache: () => packageJsonInfoCache!,
         clearAllExceptPackageJsonInfoCache,
+        optionsToRedirectsKey,
     };
 
     function clear() {
@@ -1251,6 +1282,21 @@ export function createModuleResolutionCache(
     getCanonicalFileName: (s: string) => string,
     options?: CompilerOptions,
     packageJsonInfoCache?: PackageJsonInfoCache,
+): ModuleResolutionCache;
+/** @internal */
+export function createModuleResolutionCache(
+    currentDirectory: string,
+    getCanonicalFileName: (s: string) => string,
+    options?: CompilerOptions,
+    packageJsonInfoCache?: PackageJsonInfoCache,
+    optionsToRedirectsKey?: Map<CompilerOptions, RedirectsCacheKey>,
+): ModuleResolutionCache;
+export function createModuleResolutionCache(
+    currentDirectory: string,
+    getCanonicalFileName: (s: string) => string,
+    options?: CompilerOptions,
+    packageJsonInfoCache?: PackageJsonInfoCache,
+    optionsToRedirectsKey?: Map<CompilerOptions, RedirectsCacheKey>,
 ): ModuleResolutionCache {
     const result = createModuleOrTypeReferenceResolutionCache(
         currentDirectory,
@@ -1258,6 +1304,7 @@ export function createModuleResolutionCache(
         options,
         packageJsonInfoCache,
         getOriginalOrResolvedModuleFileName,
+        optionsToRedirectsKey,
     ) as ModuleResolutionCache;
     result.getOrCreateCacheForModuleName = (nonRelativeName, mode, redirectedReference) => result.getOrCreateCacheForNonRelativeName(nonRelativeName, mode, redirectedReference);
     return result;
@@ -1268,13 +1315,29 @@ export function createTypeReferenceDirectiveResolutionCache(
     getCanonicalFileName: (s: string) => string,
     options?: CompilerOptions,
     packageJsonInfoCache?: PackageJsonInfoCache,
+): TypeReferenceDirectiveResolutionCache;
+/** @internal */
+export function createTypeReferenceDirectiveResolutionCache(
+    currentDirectory: string,
+    getCanonicalFileName: (s: string) => string,
+    options?: CompilerOptions,
+    packageJsonInfoCache?: PackageJsonInfoCache,
+    optionsToRedirectsKey?: Map<CompilerOptions, RedirectsCacheKey>,
+): TypeReferenceDirectiveResolutionCache;
+export function createTypeReferenceDirectiveResolutionCache(
+    currentDirectory: string,
+    getCanonicalFileName: (s: string) => string,
+    options?: CompilerOptions,
+    packageJsonInfoCache?: PackageJsonInfoCache,
+    optionsToRedirectsKey?: Map<CompilerOptions, RedirectsCacheKey>,
 ): TypeReferenceDirectiveResolutionCache {
     return createModuleOrTypeReferenceResolutionCache(
         currentDirectory,
         getCanonicalFileName,
         options,
         packageJsonInfoCache,
-        getOriginalOrResolvedTypeReferenceFileName
+        getOriginalOrResolvedTypeReferenceFileName,
+        optionsToRedirectsKey,
     );
 }
 
@@ -2085,10 +2148,15 @@ function loadNodeModuleFromDirectory(extensions: Extensions, candidate: string, 
 }
 
 /** @internal */
+export interface GetPackageJsonEntrypointsHost extends ModuleResolutionHost {
+    readDirectory: CompilerHost["readDirectory"];
+}
+
+/** @internal */
 export function getEntrypointsFromPackageJsonInfo(
     packageJsonInfo: PackageJsonInfo,
     options: CompilerOptions,
-    host: ModuleResolutionHost,
+    host: GetPackageJsonEntrypointsHost,
     cache: ModuleResolutionCache | undefined,
     resolveJs?: boolean,
 ): string[] | false {
@@ -2119,7 +2187,7 @@ export function getEntrypointsFromPackageJsonInfo(
             arrayIsEqualTo
         );
         for (const conditions of conditionSets) {
-            const loadPackageJsonExportsState = { ...loadPackageJsonMainState, failedLookupLocations: [], conditions };
+            const loadPackageJsonExportsState = { ...loadPackageJsonMainState, failedLookupLocations: [], conditions, host };
             const exportResolutions = loadEntrypointsFromExportMap(
                 packageJsonInfo,
                 packageJsonInfo.contents.packageJsonContent.exports,
@@ -2139,7 +2207,7 @@ export function getEntrypointsFromPackageJsonInfo(
 function loadEntrypointsFromExportMap(
     scope: PackageJsonInfo,
     exports: object,
-    state: ModuleResolutionState,
+    state: ModuleResolutionState & { host: GetPackageJsonEntrypointsHost },
     extensions: Extensions,
 ): PathAndExtension[] | undefined {
     let entrypoints: PathAndExtension[] | undefined;
@@ -2160,17 +2228,37 @@ function loadEntrypointsFromExportMap(
     return entrypoints;
 
     function loadEntrypointsFromTargetExports(target: unknown): boolean | undefined {
-        if (typeof target === "string" && startsWith(target, "./") && target.indexOf("*") === -1) {
-            const partsAfterFirst = getPathComponents(target).slice(2);
-            if (partsAfterFirst.indexOf("..") >= 0 || partsAfterFirst.indexOf(".") >= 0 || partsAfterFirst.indexOf("node_modules") >= 0) {
-                return false;
+        if (typeof target === "string" && startsWith(target, "./")) {
+            if (target.indexOf("*") >= 0 && state.host.readDirectory) {
+                if (target.indexOf("*") !== target.lastIndexOf("*")) {
+                    return false;
+                }
+
+                state.host.readDirectory(
+                    scope.packageDirectory,
+                    extensionsToExtensionsArray(extensions),
+                    /*excludes*/ undefined,
+                    [changeAnyExtension(target.replace("*", "**/*"), getDeclarationEmitExtensionForPath(target))]
+                ).forEach(entry => {
+                    entrypoints = appendIfUnique(entrypoints, {
+                        path: entry,
+                        ext: getAnyExtensionFromPath(entry),
+                        resolvedUsingTsExtension: undefined
+                    });
+                });
             }
-            const resolvedTarget = combinePaths(scope.packageDirectory, target);
-            const finalPath = getNormalizedAbsolutePath(resolvedTarget, state.host.getCurrentDirectory?.());
-            const result = loadFileNameFromPackageJsonField(extensions, finalPath, /*onlyRecordFailures*/ false, state);
-            if (result) {
-                entrypoints = appendIfUnique(entrypoints, result, (a, b) => a.path === b.path);
-                return true;
+            else {
+                const partsAfterFirst = getPathComponents(target).slice(2);
+                if (partsAfterFirst.indexOf("..") >= 0 || partsAfterFirst.indexOf(".") >= 0 || partsAfterFirst.indexOf("node_modules") >= 0) {
+                    return false;
+                }
+                const resolvedTarget = combinePaths(scope.packageDirectory, target);
+                const finalPath = getNormalizedAbsolutePath(resolvedTarget, state.host.getCurrentDirectory?.());
+                const result = loadFileNameFromPackageJsonField(extensions, finalPath, /*onlyRecordFailures*/ false, state);
+                if (result) {
+                    entrypoints = appendIfUnique(entrypoints, result, (a, b) => a.path === b.path);
+                    return true;
+                }
             }
         }
         else if (Array.isArray(target)) {
@@ -2420,7 +2508,16 @@ function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: str
     // in order to be consistent with (non-self) library-name loading in
     // `loadModuleFromNearestNodeModulesDirectoryWorker`, which uses two passes in order
     // to prioritize `@types` packages higher up the directory tree over untyped
-    // implementation packages.
+    // implementation packages. See the selfNameModuleAugmentation.ts test for why this
+    // matters.
+    //
+    // However, there's an exception. If the user has `allowJs` and `declaration`, we need
+    // to ensure that self-name imports of their own package can resolve back to their
+    // input JS files via `tryLoadInputFileForPath` at a higher priority than their output
+    // declaration files, so we need to do a single pass with all extensions for that case.
+    if (getAllowJSCompilerOption(state.compilerOptions) && !pathContainsNodeModules(directory)) {
+        return loadModuleFromExports(scope, extensions, subpath, state, cache, redirectedReference);
+    }
     const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
     const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
     return loadModuleFromExports(scope, priorityExtensions, subpath, state, cache, redirectedReference)
@@ -2675,12 +2772,6 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
             return ensureTrailingDirectorySeparator(combinePaths(root, dir));
         }
 
-        function useCaseSensitiveFileNames() {
-            return !state.host.useCaseSensitiveFileNames ? true :
-                typeof state.host.useCaseSensitiveFileNames === "boolean" ? state.host.useCaseSensitiveFileNames :
-                state.host.useCaseSensitiveFileNames();
-        }
-
         function tryLoadInputFileForPath(finalPath: string, entry: string, packagePath: string, isImports: boolean) {
             // Replace any references to outputs for files in the program with the input files to support package self-names used with outDir
             // PROBLEM: We don't know how to calculate the output paths yet, because the "common source directory" we use as the base of the file structure
@@ -2690,13 +2781,13 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
             if (!state.isConfigLookup
                 && (state.compilerOptions.declarationDir || state.compilerOptions.outDir)
                 && finalPath.indexOf("/node_modules/") === -1
-                && (state.compilerOptions.configFile ? containsPath(scope.packageDirectory, toAbsolutePath(state.compilerOptions.configFile.fileName), !useCaseSensitiveFileNames()) : true)
+                && (state.compilerOptions.configFile ? containsPath(scope.packageDirectory, toAbsolutePath(state.compilerOptions.configFile.fileName), !useCaseSensitiveFileNames(state)) : true)
             ) {
                 // So that all means we'll only try these guesses for files outside `node_modules` in a directory where the `package.json` and `tsconfig.json` are siblings.
                 // Even with all that, we still don't know if the root of the output file structure will be (relative to the package file)
                 // `.`, `./src` or any other deeper directory structure. (If project references are used, it's definitely `.` by fiat, so that should be pretty common.)
 
-                const getCanonicalFileName = hostGetCanonicalFileName({ useCaseSensitiveFileNames });
+                const getCanonicalFileName = hostGetCanonicalFileName({ useCaseSensitiveFileNames: () => useCaseSensitiveFileNames(state) });
                 const commonSourceDirGuesses: string[] = [];
                 // A `rootDir` compiler option strongly indicates the root location
                 // A `composite` project is using project references and has it's common src dir set to `.`, so it shouldn't need to check any other locations
@@ -2751,7 +2842,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                 for (const commonSourceDirGuess of commonSourceDirGuesses) {
                     const candidateDirectories = getOutputDirectoriesForBaseDirectory(commonSourceDirGuess);
                     for (const candidateDir of candidateDirectories) {
-                        if (containsPath(candidateDir, finalPath, !useCaseSensitiveFileNames())) {
+                        if (containsPath(candidateDir, finalPath, !useCaseSensitiveFileNames(state))) {
                             // The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
                             const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory seperator
                             const possibleInputBase = combinePaths(commonSourceDirGuess, pathFragment);
@@ -2761,7 +2852,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                                     const inputExts = getPossibleOriginalInputExtensionForExtension(possibleInputBase);
                                     for (const possibleExt of inputExts) {
                                         if (!extensionIsOk(extensions, possibleExt)) continue;
-                                        const possibleInputWithInputExtension = changeAnyExtension(possibleInputBase, possibleExt, ext, !useCaseSensitiveFileNames());
+                                        const possibleInputWithInputExtension = changeAnyExtension(possibleInputBase, possibleExt, ext, !useCaseSensitiveFileNames(state));
                                         if (state.host.fileExists(possibleInputWithInputExtension)) {
                                             return toSearchResult(withPackageId(scope, loadFileNameFromPackageJsonField(extensions, possibleInputWithInputExtension, /*onlyRecordFailures*/ false, state)));
                                         }
@@ -3192,4 +3283,10 @@ function traceIfEnabled(state: ModuleResolutionState, diagnostic: DiagnosticMess
     if (state.traceEnabled) {
         trace(state.host, diagnostic, ...args);
     }
+}
+
+function useCaseSensitiveFileNames(state: ModuleResolutionState) {
+    return !state.host.useCaseSensitiveFileNames ? true :
+        typeof state.host.useCaseSensitiveFileNames === "boolean" ? state.host.useCaseSensitiveFileNames :
+        state.host.useCaseSensitiveFileNames();
 }

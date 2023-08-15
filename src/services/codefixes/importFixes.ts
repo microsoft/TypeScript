@@ -5,6 +5,7 @@ import {
     arrayFrom,
     CancellationToken,
     cast,
+    changeAnyExtension,
     CodeAction,
     CodeFixAction,
     CodeFixContextBase,
@@ -42,10 +43,13 @@ import {
     getExportInfoMap,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
+    getModeForUsageLocation,
     getNameForExportedSymbol,
     getNodeId,
+    getOutputExtension,
     getQuoteFromPreference,
     getQuotePreference,
+    getResolvedModule,
     getSourceFileOfNode,
     getSymbolId,
     getTokenAtPosition,
@@ -194,7 +198,7 @@ export interface ImportAdder {
     hasFixes(): boolean;
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
     addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) => void;
-    writeFixes: (changeTracker: textChanges.ChangeTracker) => void;
+    writeFixes: (changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) => void;
 }
 
 /** @internal */
@@ -345,8 +349,15 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
         }
     }
 
-    function writeFixes(changeTracker: textChanges.ChangeTracker) {
-        const quotePreference = getQuotePreference(sourceFile, preferences);
+    function writeFixes(changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) {
+        let quotePreference: QuotePreference;
+        if (sourceFile.imports.length === 0 && oldFileQuotePreference !== undefined) {
+            // If the target file has no imports, we must use the same quote preference as the file we are importing from.
+            quotePreference = oldFileQuotePreference;
+        }
+        else {
+            quotePreference = getQuotePreference(sourceFile, preferences);
+        }
         for (const fix of addToNamespace) {
             addNamespaceQualifier(changeTracker, sourceFile, fix);
         }
@@ -803,14 +814,19 @@ function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
         return getEmitModuleKind(compilerOptions) < ModuleKind.ES2015;
     }
 
-    // 4. Match the first other JS file in the program that's unambiguously CJS or ESM
+    // 4. In --module nodenext, assume we're not emitting JS -> JS, so use
+    //    whatever syntax Node expects based on the detected module kind
+    if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) return true;
+    if (sourceFile.impliedNodeFormat === ModuleKind.ESNext) return false;
+
+    // 5. Match the first other JS file in the program that's unambiguously CJS or ESM
     for (const otherFile of program.getSourceFiles()) {
         if (otherFile === sourceFile || !isSourceFileJS(otherFile) || program.isSourceFileFromExternalLibrary(otherFile)) continue;
         if (otherFile.commonJsModuleIndicator && !otherFile.externalModuleIndicator) return true;
         if (otherFile.externalModuleIndicator && !otherFile.commonJsModuleIndicator) return false;
     }
 
-    // 5. Literally nothing to go on
+    // 6. Literally nothing to go on
     return true;
 }
 
@@ -1344,6 +1360,15 @@ function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaratio
 
     function promoteImportClause(importClause: ImportClause) {
         changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(importClause, sourceFile));
+        // Change .ts extension to .js if necessary
+        if (!compilerOptions.allowImportingTsExtensions) {
+            const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
+            const resolvedModule = moduleSpecifier && getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
+            if (resolvedModule?.resolvedUsingTsExtension) {
+                const changedExtension = changeAnyExtension(moduleSpecifier!.text, getOutputExtension(moduleSpecifier!.text, compilerOptions));
+                changes.replaceNode(sourceFile, moduleSpecifier!, factory.createStringLiteral(changedExtension));
+            }
+        }
         if (convertExistingToTypeOnly) {
             const namedImports = tryCast(importClause.namedBindings, isNamedImports);
             if (namedImports && namedImports.elements.length > 1) {

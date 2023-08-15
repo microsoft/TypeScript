@@ -61,7 +61,7 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToConvertToTypeOnlyImport(context) {
-        const fixedImportDeclarations: Set<ImportDeclaration> = new Set();
+        const fixedImportDeclarations = new Set<ImportDeclaration>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const errorDeclaration = getDeclaration(diag.file, diag.start);
             if (errorDeclaration?.kind === SyntaxKind.ImportDeclaration && !fixedImportDeclarations.has(errorDeclaration)) {
