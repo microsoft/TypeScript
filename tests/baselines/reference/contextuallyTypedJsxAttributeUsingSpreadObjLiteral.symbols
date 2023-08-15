@@ -91,3 +91,22 @@ declare const rowData: OrderRow[];
 
 />;
 
+const search = '';
+>search : Symbol(search, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 40, 5))
+
+<OrderHistoryTable
+>OrderHistoryTable : Symbol(OrderHistoryTable, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 21, 3))
+
+  data={rowData}
+>data : Symbol(data, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 41, 18))
+>rowData : Symbol(rowData, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 27, 13))
+
+  {...{ search }}
+>search : Symbol(search, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 43, 7))
+
+  onSearchChange={(value) => {}} 
+>onSearchChange : Symbol(onSearchChange, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 43, 17))
+>value : Symbol(value, Decl(contextuallyTypedJsxAttributeUsingSpreadObjLiteral.tsx, 44, 19))
+
+/>;
+

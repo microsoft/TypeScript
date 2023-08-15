@@ -90,3 +90,26 @@ declare const rowData: OrderRow[];
 
 />;
 
+const search = '';
+>search : ""
+>'' : ""
+
+<OrderHistoryTable
+><OrderHistoryTable  data={rowData}  {...{ search }}  onSearchChange={(value) => {}} /> : JSX.Element
+>OrderHistoryTable : (props: OrderHistoryTableProps) => null
+
+  data={rowData}
+>data : OrderRow[]
+>rowData : OrderRow[]
+
+  {...{ search }}
+>{ search } : { search: string; }
+>search : string
+
+  onSearchChange={(value) => {}} 
+>onSearchChange : (value: string) => void
+>(value) => {} : (value: string) => void
+>value : string
+
+/>;
+

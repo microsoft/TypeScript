@@ -42,3 +42,10 @@ declare const rowData: OrderRow[];
   data={rowData}
   {...{ search: '', onSearchChange: (value) => {} }}
 />;
+
+const search = '';
+<OrderHistoryTable
+  data={rowData}
+  {...{ search }}
+  onSearchChange={(value) => {}} 
+/>;
