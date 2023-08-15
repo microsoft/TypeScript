@@ -1222,7 +1222,8 @@ function isShiftOperator(kind: SyntaxKind): kind is ShiftOperator {
         || kind === SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
 }
 
-function isShiftOperatorOrHigher(kind: SyntaxKind): kind is ShiftOperatorOrHigher {
+/** @internal */
+export function isShiftOperatorOrHigher(kind: SyntaxKind): kind is ShiftOperatorOrHigher {
     return isShiftOperator(kind)
         || isAdditiveOperatorOrHigher(kind);
 }
