@@ -25,11 +25,20 @@
   "whitespaceAfter": true
 }
 
+foo3({}, 1);
+         ^
+{
+  "text": "b:",
+  "position": 161,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
 const C1 = class extends foo3(1) { }
                               ^
 {
   "text": "a:",
-  "position": 180,
+  "position": 229,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -38,7 +47,7 @@ class C2 extends foo3(1) { }
                       ^
 {
   "text": "a:",
-  "position": 209,
+  "position": 258,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -47,7 +56,7 @@ foo4(1, +1, -1, +"1");
      ^
 {
   "text": "a:",
-  "position": 282,
+  "position": 331,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -56,7 +65,7 @@ foo4(1, +1, -1, +"1");
         ^
 {
   "text": "b:",
-  "position": 285,
+  "position": 334,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -65,7 +74,7 @@ foo4(1, +1, -1, +"1");
             ^
 {
   "text": "c:",
-  "position": 289,
+  "position": 338,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -74,7 +83,7 @@ foo4(1, +1, -1, +"1");
                 ^
 {
   "text": "d:",
-  "position": 293,
+  "position": 342,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -83,7 +92,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "a:",
-  "position": 484,
+  "position": 533,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -92,7 +101,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "b:",
-  "position": 497,
+  "position": 546,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -101,7 +110,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "c:",
-  "position": 512,
+  "position": 561,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -110,7 +119,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "d:",
-  "position": 522,
+  "position": 571,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -119,7 +128,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "e:",
-  "position": 532,
+  "position": 581,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -128,7 +137,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "f:",
-  "position": 543,
+  "position": 592,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -137,7 +146,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "g:",
-  "position": 557,
+  "position": 606,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -146,7 +155,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "h:",
-  "position": 572,
+  "position": 621,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -155,7 +164,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "i:",
-  "position": 581,
+  "position": 630,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -164,7 +173,7 @@ foo4(1, +1, -1, +"1");
     ^
 {
   "text": "j:",
-  "position": 595,
+  "position": 644,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -173,7 +182,7 @@ trace(`${1}`);
       ^
 {
   "text": "message:",
-  "position": 694,
+  "position": 743,
   "kind": "Parameter",
   "whitespaceAfter": true
 }
@@ -182,7 +191,7 @@ trace(``);
       ^
 {
   "text": "message:",
-  "position": 709,
+  "position": 758,
   "kind": "Parameter",
   "whitespaceAfter": true
 }

@@ -247,11 +247,13 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        let signatureParamPos = 0;
         const sourceFile = shouldUseInteractiveInlayHints(preferences) ? expr.getSourceFile() : undefined;
+
+        let signatureParamPos = 0;
         for (const originalArg of args) {
             const arg = skipParentheses(originalArg);
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
+                signatureParamPos++;
                 continue;
             }
 
