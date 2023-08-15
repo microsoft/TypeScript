@@ -14,7 +14,7 @@ import util from "util";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
-import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
+import { localBaseline, refBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
 import { Debouncer, Deferred, exec, getDiffTool, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
@@ -404,27 +404,50 @@ export const watchMin = task({
 
 
 
-const { main: lssl, build: buildLssl, watch: watchLssl } = entrypointBuildTask({
+// This is technically not enough to make tsserverlibrary loadable in the
+// browser, but it's unlikely that anyone has actually been doing that.
+const lsslJs = `
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = require("./typescript.js");
+}
+else {
+    throw new Error("tsserverlibrary requires CommonJS; use typescript.js instead");
+}
+`;
+
+const lsslDts = `
+import ts = require("./typescript.js");
+export = ts;
+`;
+
+const lsslDtsInternal = `
+import ts = require("./typescript.internal.js");
+export = ts;
+`;
+
+/**
+ * @param {string} contents
+ */
+async function fileContentsWithCopyright(contents) {
+    return await copyright() + contents.trim().replace(/\r\n/g, "\n") + "\n";
+}
+
+const lssl = task({
     name: "lssl",
     description: "Builds language service server library",
-    buildDeps: [generateDiagnostics],
-    project: "src/tsserverlibrary",
-    srcEntrypoint: "./src/tsserverlibrary/tsserverlibrary.ts",
-    builtEntrypoint: "./built/local/tsserverlibrary/tsserverlibrary.js",
-    output: "./built/local/tsserverlibrary.js",
-    mainDeps: [generateLibs],
-    bundlerOptions: { exportIsTsObject: true },
+    dependencies: [services],
+    run: async () => {
+        await fs.promises.writeFile("./built/local/tsserverlibrary.js", await fileContentsWithCopyright(lsslJs));
+    }
 });
-export { lssl, watchLssl };
 
 export const dtsLssl = task({
     name: "dts-lssl",
     description: "Bundles tsserverlibrary.d.ts",
-    dependencies: [buildLssl],
+    dependencies: [dtsServices],
     run: async () => {
-        if (needsUpdate("./built/local/tsserverlibrary/tsconfig.tsbuildinfo", ["./built/local/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.internal.d.ts"])) {
-            await runDtsBundler("./built/local/tsserverlibrary/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.d.ts");
-        }
+        await fs.promises.writeFile("./built/local/tsserverlibrary.d.ts", await fileContentsWithCopyright(lsslDts));
+        await fs.promises.writeFile("./built/local/tsserverlibrary.internal.d.ts", await fileContentsWithCopyright(lsslDtsInternal));
     }
 });
 
@@ -563,7 +586,7 @@ export const watchLocal = task({
     name: "watch-local",
     description: "Watches the full compiler and services",
     hiddenFromTaskList: true,
-    dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts, watchSrc],
+    dependencies: [localize, watchTsc, watchTsserver, watchServices, lssl, watchOtherOutputs, dts, watchSrc],
 });
 
 const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
@@ -740,12 +763,6 @@ export const diff = task({
     run: () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true, waitForExit: false }),
 });
 
-export const diffRwc = task({
-    name: "diff-rwc",
-    description: "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable",
-    run: () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true, waitForExit: false }),
-});
-
 /**
  * @param {string} localBaseline Path to the local copy of the baselines
  * @param {string} refBaseline Path to the reference copy of the baselines
@@ -780,12 +797,6 @@ export const baselineAccept = task({
     run: baselineAcceptTask(localBaseline, refBaseline),
 });
 
-export const baselineAcceptRwc = task({
-    name: "baseline-accept-rwc",
-    description: "Makes the most recent rwc test results the new baseline, overwriting the old baseline",
-    run: baselineAcceptTask(localRwcBaseline, refRwcBaseline),
-});
-
 // TODO(rbuckton): Determine if we still need this task. Depending on a relative
 //                 path here seems like a bad idea.
 export const updateSublime = task({
@@ -797,13 +808,6 @@ export const updateSublime = task({
             await fs.promises.copyFile(file, path.resolve("../TypeScript-Sublime-Plugin/tsserver/", path.basename(file)));
         }
     }
-});
-
-// TODO(rbuckton): Should the path to DefinitelyTyped be configurable via an environment variable?
-export const importDefinitelyTypedTests = task({
-    name: "importDefinitelyTypedTests",
-    description: "Runs the importDefinitelyTypedTests script to copy DT's tests to the TS-internal RWC tests",
-    run: () => exec(process.execPath, ["scripts/importDefinitelyTypedTests.mjs", "./", "../DefinitelyTyped"]),
 });
 
 

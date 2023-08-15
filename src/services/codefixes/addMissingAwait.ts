@@ -268,7 +268,7 @@ function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: r
 }
 
 function isInsideAwaitableBody(node: Node) {
-    return node.kind & NodeFlags.AwaitContext || !!findAncestor(node, ancestor =>
+    return node.flags & NodeFlags.AwaitContext || !!findAncestor(node, ancestor =>
         ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
         isBlock(ancestor) && (
             ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||

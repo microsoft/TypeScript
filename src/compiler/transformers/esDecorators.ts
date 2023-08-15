@@ -47,6 +47,7 @@ import {
     getAllDecoratorsOfClassElement,
     getCommentRange,
     getEffectiveBaseTypeNode,
+    getEmitScriptTarget,
     getFirstConstructorWithBody,
     getHeritageClause,
     getNonAssignmentOperatorForCompoundAssignment,
@@ -62,6 +63,7 @@ import {
     injectClassNamedEvaluationHelperBlockIfMissing,
     injectClassThisAssignmentIfMissing,
     InternalEmitFlags,
+    isAccessExpression,
     isAmbientPropertyDeclaration,
     isArrayBindingOrAssignmentElement,
     isArrayLiteralExpression,
@@ -289,6 +291,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         hoistVariableDeclaration,
     } = context;
 
+    const languageVersion = getEmitScriptTarget(context.getCompilerOptions());
     let top: LexicalEnvironmentStackEntry | undefined;
     let classInfo: ClassInfo | undefined;
     let classThis: Identifier | undefined;
@@ -2147,6 +2150,13 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     function transformDecorator(decorator: Decorator) {
         const expression = visitNode(decorator.expression, visitor, isExpression);
         setEmitFlags(expression, EmitFlags.NoComments);
+
+        // preserve the 'this' binding for an access expression
+        const innerExpression = skipOuterExpressions(expression);
+        if (isAccessExpression(innerExpression)) {
+            const { target, thisArg } = factory.createCallBinding(expression, hoistVariableDeclaration, languageVersion, /*cacheIdentifiers*/ true);
+            return factory.restoreOuterExpressions(expression, factory.createFunctionBindCall(target, thisArg, []));
+        }
         return expression;
     }
 

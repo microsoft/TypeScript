@@ -1516,7 +1516,7 @@ export function createScanner(languageVersion: ScriptTarget,
             case CharacterCodes.r:
                 return "\r";
             case CharacterCodes.singleQuote:
-                return "\'";
+                return "'";
             case CharacterCodes.doubleQuote:
                 return "\"";
             case CharacterCodes.u:

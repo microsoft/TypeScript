@@ -141,8 +141,8 @@ export function createLoggerWritingToConsole(host: TestServerHost): Logger {
 
 function sanitizeLog(s: string): string {
     s = s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms");
-    s = s.replace(/\"updateGraphDurationMs\"\:\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`);
-    s = s.replace(/\"createAutoImportProviderProgramDurationMs\"\:\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`);
+    s = s.replace(/"updateGraphDurationMs":\s*\d+(?:\.\d+)?/g, `"updateGraphDurationMs": *`);
+    s = s.replace(/"createAutoImportProviderProgramDurationMs":\s*\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs": *`);
     s = replaceAll(s, ts.version, "FakeVersion");
     s = s.replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`);
     s = s.replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`);
@@ -155,7 +155,7 @@ function sanitizeLog(s: string): string {
     s = s.replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`);
     s = s.replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`);
     s = s.replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`);
-    s = s.replace(/\"exportMapKey\"\:\s*\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`));
+    s = s.replace(/"exportMapKey":\s*"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`));
     return s;
 }
 
