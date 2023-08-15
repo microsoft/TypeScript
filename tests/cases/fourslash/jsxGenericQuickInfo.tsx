@@ -28,7 +28,7 @@
 
 verify.quickInfoAt("0", "(property) PropsA<number>.renderItem: (item: number) => string");
 verify.quickInfoAt("1", "(parameter) item: number");
-verify.quickInfoAt("2", `(property) PropsA<T>.name: "A"`, 'comments for A');
+verify.quickInfoAt("2", `(property) PropsA<number>.name: "A"`, 'comments for A');
 verify.quickInfoAt("3", "(property) PropsA<number>.renderItem: (item: number) => string");
 verify.quickInfoAt("4", "(parameter) item: number");
-verify.quickInfoAt("5", `(property) PropsA<T>.name: "A"`, 'comments for A');
+verify.quickInfoAt("5", `(property) PropsA<number>.name: "A"`, 'comments for A');

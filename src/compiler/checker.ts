@@ -18803,11 +18803,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
         const links = getSymbolLinks(symbol);
-        if (links.type && !couldContainTypeVariables(links.type)) {
-            // If the type of the symbol is already resolved, and if that type could not possibly
-            // be affected by instantiation, simply return the symbol itself.
-            return symbol;
-        }
         if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
             // If symbol being instantiated is itself a instantiation, fetch the original target and combine the
             // type mappers. This ensures that original type identities are properly preserved and that aliases
