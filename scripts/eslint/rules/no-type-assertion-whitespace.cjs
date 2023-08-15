@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: ``,
-            recommended: "error",
         },
         messages: {
             noTypeAssertionWhitespace: `Excess trailing whitespace found around type assertion`,

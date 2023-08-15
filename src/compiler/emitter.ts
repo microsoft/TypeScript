@@ -254,8 +254,10 @@ import {
     isUnparsedNode,
     isUnparsedPrepend,
     isUnparsedSource,
+    isVarAwaitUsing,
     isVarConst,
     isVariableStatement,
+    isVarUsing,
     JSDoc,
     JSDocAugmentsTag,
     JSDocCallbackTag,
@@ -2491,9 +2493,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitPlaceholder(hint: EmitHint, node: Node, snippet: Placeholder) {
-        nonEscapingWrite(`\$\{${snippet.order}:`); // `${2:`
+        nonEscapingWrite(`$\{${snippet.order}:`); // `${2:`
         pipelineEmitWithHintWorker(hint, node, /*allowSnippets*/ false); // `...`
-        nonEscapingWrite(`\}`); // `}`
+        nonEscapingWrite(`}`); // `}`
         // `${2:...}`
     }
 
@@ -2503,7 +2505,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             `A tab stop cannot be attached to a node of kind ${Debug.formatSyntaxKind(node.kind)}.`);
         Debug.assert(hint !== EmitHint.EmbeddedStatement,
             `A tab stop cannot be attached to an embedded statement.`);
-        nonEscapingWrite(`\$${snippet.order}`);
+        nonEscapingWrite(`$${snippet.order}`);
     }
 
     //
@@ -3059,11 +3061,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 && !stringContains(text, String.fromCharCode(CharacterCodes.e));
         }
         else if (isAccessExpression(expression)) {
-            // check if constant enum value is integer
+            // check if constant enum value is a non-negative integer
             const constantValue = getConstantValue(expression);
             // isFinite handles cases when constantValue is undefined
             return typeof constantValue === "number" && isFinite(constantValue)
-                && Math.floor(constantValue) === constantValue;
+                && constantValue >= 0 && Math.floor(constantValue) === constantValue;
         }
     }
 
@@ -3685,7 +3687,18 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitVariableDeclarationList(node: VariableDeclarationList) {
-        writeKeyword(isLet(node) ? "let" : isVarConst(node) ? "const" : "var");
+        if (isVarAwaitUsing(node)) {
+            writeKeyword("await");
+            writeSpace();
+            writeKeyword("using");
+        }
+        else {
+            const head = isLet(node) ? "let" :
+                isVarConst(node) ? "const" :
+                isVarUsing(node) ? "using" :
+                "var";
+            writeKeyword(head);
+        }
         writeSpace();
         emitList(node, node.declarations, ListFormat.VariableDeclarationList);
     }

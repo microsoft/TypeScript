@@ -1,7 +1,7 @@
 plainJSGrammarErrors.js(3,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
 plainJSGrammarErrors.js(5,9): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
 plainJSGrammarErrors.js(10,15): error TS2803: Cannot assign to private method '#m'. Private methods are not writable.
-plainJSGrammarErrors.js(14,13): error TS18038: 'For await' loops cannot be used inside a class static block.
+plainJSGrammarErrors.js(14,13): error TS18038: 'for await' loops cannot be used inside a class static block.
 plainJSGrammarErrors.js(17,9): error TS18041: A 'return' statement cannot be used inside a class static block.
 plainJSGrammarErrors.js(20,5): error TS1089: 'static' modifier cannot appear on a constructor declaration.
 plainJSGrammarErrors.js(21,5): error TS1089: 'async' modifier cannot appear on a constructor declaration.
@@ -77,7 +77,7 @@ plainJSGrammarErrors.js(120,7): error TS1182: A destructuring declaration must h
 plainJSGrammarErrors.js(121,7): error TS1155: 'const' declarations must be initialized.
 plainJSGrammarErrors.js(122,5): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
 plainJSGrammarErrors.js(122,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
-plainJSGrammarErrors.js(124,5): error TS1157: 'let' declarations can only be declared inside a block.
+plainJSGrammarErrors.js(124,5): error TS1156: 'let' declarations can only be declared inside a block.
 plainJSGrammarErrors.js(126,5): error TS1156: 'const' declarations can only be declared inside a block.
 plainJSGrammarErrors.js(131,6): error TS1106: The left-hand side of a 'for...of' statement may not be 'async'.
 plainJSGrammarErrors.js(134,12): error TS1190: The variable declaration of a 'for...of' statement cannot have an initializer.
@@ -124,7 +124,7 @@ plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot
         static {
             for await (const x of [1,2,3]) {
                 ~~~~~
-!!! error TS18038: 'For await' loops cannot be used inside a class static block.
+!!! error TS18038: 'for await' loops cannot be used inside a class static block.
                 console.log(x)
             }
             return null
@@ -386,7 +386,7 @@ plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot
     if (true)
         let onlyBlockLet = 17;
         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1157: 'let' declarations can only be declared inside a block.
+!!! error TS1156: 'let' declarations can only be declared inside a block.
     if (true)
         const onlyBlockConst = 18;
         ~~~~~~~~~~~~~~~~~~~~~~~~~~

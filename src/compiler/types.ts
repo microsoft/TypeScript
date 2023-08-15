@@ -217,6 +217,7 @@ export const enum SyntaxKind {
     UndefinedKeyword,
     UniqueKeyword,
     UnknownKeyword,
+    UsingKeyword,
     FromKeyword,
     GlobalKeyword,
     BigIntKeyword,
@@ -662,6 +663,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.UndefinedKeyword
     | SyntaxKind.UniqueKeyword
     | SyntaxKind.UnknownKeyword
+    | SyntaxKind.UsingKeyword
     | SyntaxKind.VarKeyword
     | SyntaxKind.VoidKeyword
     | SyntaxKind.WhileKeyword
@@ -790,25 +792,27 @@ export const enum NodeFlags {
     None               = 0,
     Let                = 1 << 0,  // Variable declaration
     Const              = 1 << 1,  // Variable declaration
-    NestedNamespace    = 1 << 2,  // Namespace declaration
-    Synthesized        = 1 << 3,  // Node was synthesized during transformation
-    Namespace          = 1 << 4,  // Namespace declaration
-    OptionalChain      = 1 << 5,  // Chained MemberExpression rooted to a pseudo-OptionalExpression
-    ExportContext      = 1 << 6,  // Export context (initialized by binding)
-    ContainsThis       = 1 << 7,  // Interface contains references to "this"
-    HasImplicitReturn  = 1 << 8,  // If function implicitly returns on one of codepaths (initialized by binding)
-    HasExplicitReturn  = 1 << 9,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-    GlobalAugmentation = 1 << 10,  // Set if module declaration is an augmentation for the global scope
-    HasAsyncFunctions  = 1 << 11, // If the file has async functions (initialized by binding)
-    DisallowInContext  = 1 << 12, // If node was parsed in a context where 'in-expressions' are not allowed
-    YieldContext       = 1 << 13, // If node was parsed in the 'yield' context created when parsing a generator
-    DecoratorContext   = 1 << 14, // If node was parsed as part of a decorator
-    AwaitContext       = 1 << 15, // If node was parsed in the 'await' context created when parsing an async function
-    DisallowConditionalTypesContext = 1 << 16, // If node was parsed in a context where conditional types are not allowed
-    ThisNodeHasError   = 1 << 17, // If the parser encountered an error when parsing the code that created this node
-    JavaScriptFile     = 1 << 18, // If node was parsed in a JavaScript
-    ThisNodeOrAnySubNodesHasError = 1 << 19, // If this node or any of its children had an error
-    HasAggregatedChildData = 1 << 20, // If we've computed data from children and cached it in this node
+    Using              = 1 << 2,  // Variable declaration
+    AwaitUsing         = Const | Using, // Variable declaration (NOTE: on a single node these flags would otherwise be mutually exclusive)
+    NestedNamespace    = 1 << 3,  // Namespace declaration
+    Synthesized        = 1 << 4,  // Node was synthesized during transformation
+    Namespace          = 1 << 5,  // Namespace declaration
+    OptionalChain      = 1 << 6,  // Chained MemberExpression rooted to a pseudo-OptionalExpression
+    ExportContext      = 1 << 7,  // Export context (initialized by binding)
+    ContainsThis       = 1 << 8,  // Interface contains references to "this"
+    HasImplicitReturn  = 1 << 9,  // If function implicitly returns on one of codepaths (initialized by binding)
+    HasExplicitReturn  = 1 << 10,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+    GlobalAugmentation = 1 << 11,  // Set if module declaration is an augmentation for the global scope
+    HasAsyncFunctions  = 1 << 12, // If the file has async functions (initialized by binding)
+    DisallowInContext  = 1 << 13, // If node was parsed in a context where 'in-expressions' are not allowed
+    YieldContext       = 1 << 14, // If node was parsed in the 'yield' context created when parsing a generator
+    DecoratorContext   = 1 << 15, // If node was parsed as part of a decorator
+    AwaitContext       = 1 << 16, // If node was parsed in the 'await' context created when parsing an async function
+    DisallowConditionalTypesContext = 1 << 17, // If node was parsed in a context where conditional types are not allowed
+    ThisNodeHasError   = 1 << 18, // If the parser encountered an error when parsing the code that created this node
+    JavaScriptFile     = 1 << 19, // If node was parsed in a JavaScript
+    ThisNodeOrAnySubNodesHasError = 1 << 20, // If this node or any of its children had an error
+    HasAggregatedChildData = 1 << 21, // If we've computed data from children and cached it in this node
 
     // These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
     // walking the tree if the flags are not set. However, these flags are just a approximation
@@ -819,17 +823,18 @@ export const enum NodeFlags {
     // removal, it is likely that users will add the import anyway.
     // The advantage of this approach is its simplicity. For the case of batch compilation,
     // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-    /** @internal */ PossiblyContainsDynamicImport = 1 << 21,
-    /** @internal */ PossiblyContainsImportMeta    = 1 << 22,
+    /** @internal */ PossiblyContainsDynamicImport = 1 << 22,
+    /** @internal */ PossiblyContainsImportMeta    = 1 << 23,
 
-    JSDoc                                          = 1 << 23, // If node was parsed inside jsdoc
-    /** @internal */ Ambient                       = 1 << 24, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-    /** @internal */ InWithStatement               = 1 << 25, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-    JsonFile                                       = 1 << 26, // If node was parsed in a Json
-    /** @internal */ TypeCached                    = 1 << 27, // If a type was cached for node at any point
-    /** @internal */ Deprecated                    = 1 << 28, // If has '@deprecated' JSDoc tag
+    JSDoc                                          = 1 << 24, // If node was parsed inside jsdoc
+    /** @internal */ Ambient                       = 1 << 25, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+    /** @internal */ InWithStatement               = 1 << 26, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+    JsonFile                                       = 1 << 27, // If node was parsed in a Json
+    /** @internal */ TypeCached                    = 1 << 28, // If a type was cached for node at any point
+    /** @internal */ Deprecated                    = 1 << 29, // If has '@deprecated' JSDoc tag
 
-    BlockScoped = Let | Const,
+    BlockScoped = Let | Const | Using,
+    Constant = Const | Using,
 
     ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
     ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
@@ -3258,7 +3263,6 @@ export type JsxAttributeValue =
 
 export interface JsxSpreadAttribute extends ObjectLiteralElement {
     readonly kind: SyntaxKind.JsxSpreadAttribute;
-    readonly name: PropertyName;
     readonly parent: JsxAttributes;
     readonly expression: Expression;
 }
@@ -3809,8 +3813,8 @@ export type TypeOnlyImportDeclaration =
 
 export type TypeOnlyExportDeclaration =
     | ExportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } })
-    | ExportDeclaration & { readonly isTypeOnly: true } // export * from "mod"
-    | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } // export * as ns from "mod"
+    | ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression } // export * from "mod"
+    | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression } } // export * as ns from "mod"
     ;
 
 export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
@@ -4557,7 +4561,7 @@ export interface ScriptReferenceHost {
     getCurrentDirectory(): string;
 }
 
-export interface ParseConfigHost {
+export interface ParseConfigHost extends ModuleResolutionHost {
     useCaseSensitiveFileNames: boolean;
 
     readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
@@ -4987,7 +4991,7 @@ export interface TypeChecker {
      * @internal
      */
     getParameterType(signature: Signature, parameterIndex: number): Type;
-    /** @internal */ getParameterIdentifierNameAtPosition(signature: Signature, parameterIndex: number): [parameterName: __String, isRestParameter: boolean] | undefined;
+    /** @internal */ getParameterIdentifierInfoAtPosition(signature: Signature, parameterIndex: number): { parameter: Identifier, parameterName: __String, isRestParameter: boolean } | undefined;
     getNullableType(type: Type, flags: TypeFlags): Type;
     getNonNullableType(type: Type): Type;
     /** @internal */ getNonOptionalType(type: Type): Type;
@@ -5873,7 +5877,7 @@ export interface SymbolLinks {
     deferralParent?: Type;                      // Source union/intersection of a deferred type
     cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
     typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
-    typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
+    typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
     typeOnlyExportStarName?: __String;          // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
     isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
@@ -6017,15 +6021,13 @@ export const enum NodeCheckFlags {
     ContainsCapturedBlockScopeBinding        = 1 << 13,  // Part of a loop that contains block scoped variable captured in closure
     CapturedBlockScopedBinding               = 1 << 14,  // Block-scoped binding that is captured in some function
     BlockScopedBindingInLoop                 = 1 << 15,  // Block-scoped binding with declaration nested inside iteration statement
-    ClassWithBodyScopedClassBinding          = 1 << 16,  // Decorated class that contains a binding to itself inside of the class body.
-    BodyScopedClassBinding                   = 1 << 17,  // Binding to a decorated class inside of the class's body.
-    NeedsLoopOutParameter                    = 1 << 18,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
-    AssignmentsMarked                        = 1 << 19,  // Parameter assignments have been marked
-    ClassWithConstructorReference            = 1 << 20,  // Class that contains a binding to its constructor inside of the class body.
-    ConstructorReferenceInClass              = 1 << 21,  // Binding to a class constructor inside of the class's body.
-    ContainsClassWithPrivateIdentifiers      = 1 << 22,  // Marked on all block-scoped containers containing a class with private identifiers.
-    ContainsSuperPropertyInStaticInitializer = 1 << 23,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
-    InCheckIdentifier                        = 1 << 24,
+    NeedsLoopOutParameter                    = 1 << 16,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
+    AssignmentsMarked                        = 1 << 17,  // Parameter assignments have been marked
+    ContainsConstructorReference             = 1 << 18,  // Class or class element that contains a binding that references the class constructor.
+    ConstructorReference                     = 1 << 29,  // Binding to a class constructor inside of the class's body.
+    ContainsClassWithPrivateIdentifiers      = 1 << 20,  // Marked on all block-scoped containers containing a class with private identifiers.
+    ContainsSuperPropertyInStaticInitializer = 1 << 21,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
+    InCheckIdentifier                        = 1 << 22,
 }
 
 /** @internal */
@@ -6429,7 +6431,7 @@ export interface TupleType extends GenericType {
     hasRestElement: boolean;
     combinedFlags: ElementFlags;
     readonly: boolean;
-    labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
+    labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration | undefined)[];
 }
 
 export interface TupleTypeReference extends TypeReference {
@@ -6719,11 +6721,12 @@ export const enum SignatureFlags {
     IsOuterCallChain = 1 << 4,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
     IsUntypedSignatureInJSFile = 1 << 5, // Indicates signature is from a js file and has no types
     IsNonInferrable = 1 << 6,           // Indicates signature comes from a non-inferrable type
+    IsSignatureCandidateForOverloadFailure = 1 << 7,
 
     // We do not propagate `IsInnerCallChain` or `IsOuterCallChain` to instantiated signatures, as that would result in us
     // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
     // instantiating the return type.
-    PropagatingFlags = HasRestParameter | HasLiteralTypes | Abstract | IsUntypedSignatureInJSFile,
+    PropagatingFlags = HasRestParameter | HasLiteralTypes | Abstract | IsUntypedSignatureInJSFile | IsSignatureCandidateForOverloadFailure,
 
     CallChainFlags = IsInnerCallChain | IsOuterCallChain,
 }
@@ -6834,8 +6837,8 @@ export interface InferenceInfo {
 /** @internal */
 export const enum InferenceFlags {
     None            =      0,  // No special inference behaviors
-    NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
-    AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
+    NoDefault       = 1 << 0,  // Infer silentNeverType for no inferences (otherwise anyType or unknownType)
+    AnyDefault      = 1 << 1,  // Infer anyType (in JS files) for no inferences (otherwise unknownType)
     SkippedGenericFunction = 1 << 2, // A generic function was skipped during inference
 }
 
@@ -7945,10 +7948,11 @@ export interface SourceMapSource {
 }
 
 /** @internal */
+// NOTE: Any new properties should be accounted for in `mergeEmitNode` in factory/nodeFactory.ts
 export interface EmitNode {
-    annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
     flags: EmitFlags;                        // Flags that customize emit
     internalFlags: InternalEmitFlags;        // Internal flags that customize emit
+    annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
     leadingComments?: SynthesizedComment[];  // Synthesized leading comments
     trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
     commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
@@ -7961,7 +7965,8 @@ export interface EmitNode {
     startsOnNewLine?: boolean;               // If the node should begin on a new line
     snippetElement?: SnippetElement;         // Snippet element of the node
     typeNode?: TypeNode;                     // VariableDeclaration type
-    classThis?: Identifier;                  // Identifier that points to the final class constructor after decorators are applied
+    classThis?: Identifier;                  // Identifier that points to a captured static `this` for a class which may be updated after decorators are applied
+    assignedName?: Expression;               // Expression used as the assigned name of a class or function
     identifierTypeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized identifiers. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
     autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers and private identifiers.
     generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
@@ -8093,9 +8098,10 @@ export const enum ExternalEmitHelpers {
     CreateBinding = 1 << 22,        // __createBinding (use by the module transform for (re)exports and namespace imports)
     SetFunctionName = 1 << 23,      // __setFunctionName (used by class fields and ECMAScript decorators)
     PropKey = 1 << 24,              // __propKey (used by class fields and ECMAScript decorators)
+    AddDisposableResourceAndDisposeResources = 1 << 25, // __addDisposableResource and __disposeResources (used by ESNext transformations)
 
     FirstEmitHelper = Extends,
-    LastEmitHelper = PropKey,
+    LastEmitHelper = AddDisposableResourceAndDisposeResources,
 
     // Helpers included by ES2015 for..of
     ForOfIncludes = Values,
@@ -8190,7 +8196,8 @@ export type WrappedExpression<T extends Expression> =
     | T
     ;
 
-export type TypeOfTag = "undefined" | "number" | "bigint" | "boolean" | "string" | "symbol" | "object" | "function";
+/** @internal */
+export type TypeOfTag = "null" | "undefined" | "number" | "bigint" | "boolean" | "string" | "symbol" | "object" | "function";
 
 /** @internal */
 export interface CallBinding {
@@ -8237,6 +8244,7 @@ export interface ParenthesizerRules {
 export interface NodeConverters {
     convertToFunctionBlock(node: ConciseBody, multiLine?: boolean): Block;
     convertToFunctionExpression(node: FunctionDeclaration): FunctionExpression;
+    convertToClassExpression(node: ClassDeclaration): ClassExpression;
     convertToArrayAssignmentElement(element: ArrayBindingOrAssignmentElement): Expression;
     convertToObjectAssignmentElement(element: ObjectBindingOrAssignmentElement): ObjectLiteralElementLike;
     convertToAssignmentPattern(node: BindingOrAssignmentPattern): AssignmentPattern;
@@ -8254,11 +8262,15 @@ export interface GeneratedNamePart {
     suffix?: string;
 }
 
+export type ImmediatelyInvokedFunctionExpression = CallExpression & { readonly expression: FunctionExpression; };
+export type ImmediatelyInvokedArrowFunction = CallExpression & { readonly expression: ParenthesizedExpression & { readonly expression: ArrowFunction; }; };
+
 export interface NodeFactory {
     /** @internal */ readonly parenthesizer: ParenthesizerRules;
     /** @internal */ readonly converters: NodeConverters;
     /** @internal */ readonly baseFactory: BaseNodeFactory;
     /** @internal */ readonly flags: NodeFactoryFlags;
+
     createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
     //
@@ -8877,8 +8889,8 @@ export interface NodeFactory {
 
     createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
     createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
-    createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
-    createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): ImmediatelyInvokedArrowFunction;
+    createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): ImmediatelyInvokedArrowFunction;
 
 
     createVoidZero(): VoidExpression;
@@ -8886,6 +8898,7 @@ export interface NodeFactory {
     createExternalModuleExport(exportName: Identifier): ExportDeclaration;
 
     /** @internal */ createTypeCheck(value: Expression, tag: TypeOfTag): Expression;
+    /** @internal */ createIsNotTypeCheck(value: Expression, tag: TypeOfTag): Expression;
     /** @internal */ createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]): CallExpression;
     /** @internal */ createGlobalMethodCall(globalObjectName: string, globalMethodName: string, argumentsList: readonly Expression[]): CallExpression;
     /** @internal */ createFunctionBindCall(target: Expression, thisArg: Expression, argumentsList: readonly Expression[]): CallExpression;
@@ -9970,6 +9983,7 @@ export interface UserPreferences {
     readonly includeInlayPropertyDeclarationTypeHints?: boolean;
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
     readonly includeInlayEnumMemberValueHints?: boolean;
+    readonly interactiveInlayHints?: boolean;
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
     readonly organizeImportsIgnoreCase?: "auto" | boolean;

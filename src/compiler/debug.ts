@@ -193,6 +193,7 @@ export namespace Debug {
     }
 
     export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
+        // eslint-disable-next-line no-debugger
         debugger;
         const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
         if ((Error as any).captureStackTrace) {
@@ -365,7 +366,7 @@ export namespace Debug {
         }
         else {
             const text = Function.prototype.toString.call(func);
-            const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
+            const match = /^function\s+([\w$]+)\s*\(/.exec(text);
             return match ? match[1] : "";
         }
     }

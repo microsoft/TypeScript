@@ -58,7 +58,7 @@ exports.C = void 0;
 var _0_1 = require("./0");
 var _0_2 = require("./0");
 /* Comment on the Class Declaration */
-var C = exports.C = /** @class */ (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C(prop) {
         return _super.call(this) || this;
@@ -68,3 +68,4 @@ var C = exports.C = /** @class */ (function (_super) {
     ], C);
     return C;
 }(_0_1.base));
+exports.C = C;

@@ -129,8 +129,8 @@ var Bs = /** @class */ (function (_super) {
 var Cs = /** @class */ (function (_super) {
     __extends(Cs, _super);
     function Cs() {
-        "use strict";
         var _this = _super.call(this) || this;
+        "use strict";
         return _this;
     }
     Cs.s = 9;
@@ -139,10 +139,10 @@ var Cs = /** @class */ (function (_super) {
 var Ds = /** @class */ (function (_super) {
     __extends(Ds, _super);
     function Ds() {
-        "use strict";
         var _this = this;
         var x = 1; // no Error
         _this = _super.call(this) || this;
+        "use strict";
         return _this;
     }
     Ds.s = 9;
