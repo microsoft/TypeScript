@@ -2150,19 +2150,16 @@ export function createDiagnosticForNodeArrayFromMessageChain(sourceFile: SourceF
     return createFileDiagnosticFromMessageChain(sourceFile, start, nodes.end - start, messageChain, relatedInformation);
 }
 
-function assertDiagnosticLocation(file: SourceFile | undefined, start: number, length: number) {
+function assertDiagnosticLocation(sourceText: string, start: number, length: number) {
     Debug.assertGreaterThanOrEqual(start, 0);
     Debug.assertGreaterThanOrEqual(length, 0);
-
-    if (file) {
-        Debug.assertLessThanOrEqual(start, file.text.length);
-        Debug.assertLessThanOrEqual(start + length, file.text.length);
-    }
+    Debug.assertLessThanOrEqual(start, sourceText.length);
+    Debug.assertLessThanOrEqual(start + length, sourceText.length);
 }
 
 /** @internal */
 export function createFileDiagnosticFromMessageChain(file: SourceFile, start: number, length: number, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
-    assertDiagnosticLocation(file, start, length);
+    assertDiagnosticLocation(file.text, start, length);
     return {
         file,
         start,
@@ -8152,8 +8149,12 @@ export function getLocaleSpecificMessage(message: DiagnosticMessage) {
 }
 
 /** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation {
-    assertDiagnosticLocation(/*file*/ undefined, start, length);
+export function createDetachedDiagnostic(fileName: string, sourceText: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation {
+    if ((start + length) > sourceText.length) {
+        length = sourceText.length - start;
+    }
+
+    assertDiagnosticLocation(sourceText, start, length);
     let text = getLocaleSpecificMessage(message);
 
     if (some(args)) {
@@ -8222,7 +8223,7 @@ export function attachFileToDiagnostics(diagnostics: DiagnosticWithDetachedLocat
 
 /** @internal */
 export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
-    assertDiagnosticLocation(file, start, length);
+    assertDiagnosticLocation(file.text, start, length);
 
     let text = getLocaleSpecificMessage(message);
 
