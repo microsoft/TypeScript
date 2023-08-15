@@ -509,6 +509,7 @@ import {
     TaggedTemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
+    TemplateLiteralToken,
     TemplateLiteralTypeSpan,
     TemplateSpan,
     TextRange,
@@ -2149,19 +2150,16 @@ export function createDiagnosticForNodeArrayFromMessageChain(sourceFile: SourceF
     return createFileDiagnosticFromMessageChain(sourceFile, start, nodes.end - start, messageChain, relatedInformation);
 }
 
-function assertDiagnosticLocation(file: SourceFile | undefined, start: number, length: number) {
+function assertDiagnosticLocation(sourceText: string, start: number, length: number) {
     Debug.assertGreaterThanOrEqual(start, 0);
     Debug.assertGreaterThanOrEqual(length, 0);
-
-    if (file) {
-        Debug.assertLessThanOrEqual(start, file.text.length);
-        Debug.assertLessThanOrEqual(start + length, file.text.length);
-    }
+    Debug.assertLessThanOrEqual(start, sourceText.length);
+    Debug.assertLessThanOrEqual(start + length, sourceText.length);
 }
 
 /** @internal */
 export function createFileDiagnosticFromMessageChain(file: SourceFile, start: number, length: number, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
-    assertDiagnosticLocation(file, start, length);
+    assertDiagnosticLocation(file.text, start, length);
     return {
         file,
         start,
@@ -5801,11 +5799,15 @@ function escapeTemplateSubstitution(str: string): string {
     return str.replace(templateSubstitutionRegExp, "\\${");
 }
 
+function containsInvalidEscapeFlag(node: TemplateLiteralToken): boolean {
+    return !!((node.templateFlags || 0) & TokenFlags.ContainsInvalidEscape);
+}
+
 /** @internal */
 export function hasInvalidEscape(template: TemplateLiteral): boolean {
     return template && !!(isNoSubstitutionTemplateLiteral(template)
-        ? template.templateFlags
-        : (template.head.templateFlags || some(template.templateSpans, span => !!span.literal.templateFlags)));
+        ? containsInvalidEscapeFlag(template)
+        : (containsInvalidEscapeFlag(template.head) || some(template.templateSpans, span => containsInvalidEscapeFlag(span.literal))));
 }
 
 // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
@@ -8121,8 +8123,8 @@ export function setObjectAllocator(alloc: ObjectAllocator) {
 }
 
 /** @internal */
-export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
-    return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index + baseIndex]));
+export function formatStringFromArgs(text: string, args: DiagnosticArguments): string {
+    return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index]));
 }
 
 let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -8147,14 +8149,16 @@ export function getLocaleSpecificMessage(message: DiagnosticMessage) {
 }
 
 /** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation;
-/** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage): DiagnosticWithDetachedLocation {
-    assertDiagnosticLocation(/*file*/ undefined, start, length);
+export function createDetachedDiagnostic(fileName: string, sourceText: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation {
+    if ((start + length) > sourceText.length) {
+        length = sourceText.length - start;
+    }
+
+    assertDiagnosticLocation(sourceText, start, length);
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 4) {
-        text = formatStringFromArgs(text, arguments, 4);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return {
@@ -8218,15 +8222,13 @@ export function attachFileToDiagnostics(diagnostics: DiagnosticWithDetachedLocat
 }
 
 /** @internal */
-export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation;
-/** @internal */
-export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
-    assertDiagnosticLocation(file, start, length);
+export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
+    assertDiagnosticLocation(file.text, start, length);
 
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 4) {
-        text = formatStringFromArgs(text, arguments, 4);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return {
@@ -8243,26 +8245,22 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
 }
 
 /** @internal */
-export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: DiagnosticArguments): string;
-/** @internal */
-export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
+export function formatMessage(message: DiagnosticMessage, ...args: DiagnosticArguments): string {
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 2) {
-        text = formatStringFromArgs(text, arguments, 2);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return text;
 }
 
 /** @internal */
-export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic;
-/** @internal */
-export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
+export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 1) {
-        text = formatStringFromArgs(text, arguments, 1);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return {
@@ -8293,13 +8291,11 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
 }
 
 /** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain;
-/** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
+export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain {
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 2) {
-        text = formatStringFromArgs(text, arguments, 2);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
     return {
         messageText: text,

@@ -3061,11 +3061,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 && !stringContains(text, String.fromCharCode(CharacterCodes.e));
         }
         else if (isAccessExpression(expression)) {
-            // check if constant enum value is integer
+            // check if constant enum value is a non-negative integer
             const constantValue = getConstantValue(expression);
             // isFinite handles cases when constantValue is undefined
             return typeof constantValue === "number" && isFinite(constantValue)
-                && Math.floor(constantValue) === constantValue;
+                && constantValue >= 0 && Math.floor(constantValue) === constantValue;
         }
     }
 

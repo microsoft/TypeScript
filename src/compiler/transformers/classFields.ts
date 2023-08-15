@@ -154,6 +154,7 @@ import {
     Modifier,
     ModifierFlags,
     ModifierLike,
+    modifiersToFlags,
     moveRangePastModifiers,
     moveRangePos,
     newPrivateEnvironment,
@@ -896,6 +897,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
     }
 
+    function getClassThis() {
+        const lex = getClassLexicalEnvironment();
+        const classThis = lex.classThis ?? lex.classConstructor ?? currentClassContainer?.name;
+        return Debug.checkDefined(classThis);
+    }
+
     function transformAutoAccessor(node: AutoAccessorPropertyDeclaration): VisitResult<Node> {
         // transforms:
         //      accessor x = 1;
@@ -935,12 +942,15 @@ export function transformClassFields(context: TransformationContext): (x: Source
         setEmitFlags(backingField, EmitFlags.NoComments);
         setSourceMapRange(backingField, sourceMapRange);
 
-        const getter = createAccessorPropertyGetRedirector(factory, node, modifiers, getterName);
+        const receiver = isStatic(node) ? getClassThis() : factory.createThis();
+        const getter = createAccessorPropertyGetRedirector(factory, node, modifiers, getterName, receiver);
         setOriginalNode(getter, node);
         setCommentRange(getter, commentRange);
         setSourceMapRange(getter, sourceMapRange);
 
-        const setter = createAccessorPropertySetRedirector(factory, node, modifiers, setterName);
+        // create a fresh copy of the modifiers so that we don't duplicate comments
+        const setterModifiers = factory.createModifiersFromModifierFlags(modifiersToFlags(modifiers));
+        const setter = createAccessorPropertySetRedirector(factory, node, setterModifiers, setterName, receiver);
         setOriginalNode(setter, node);
         setEmitFlags(setter, EmitFlags.NoComments);
         setSourceMapRange(setter, sourceMapRange);
@@ -1692,9 +1702,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
         let containsInstanceAutoAccessors = false;
         for (const member of node.members) {
             if (isStatic(member)) {
-                if (member.name &&
-                    (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) &&
+                if (member.name && (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) &&
                     shouldTransformPrivateElementsOrClassStaticBlocks) {
+                    facts |= ClassFacts.NeedsClassConstructorReference;
+                }
+                else if (isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name && !node.emitNode?.classThis) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
                 if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
@@ -1718,6 +1730,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 }
                 else if (isPrivateIdentifierClassElementDeclaration(member)) {
                     containsInstancePrivateElements = true;
+                    if (resolver.getNodeCheckFlags(member) & NodeCheckFlags.ContainsConstructorReference) {
+                        facts |= ClassFacts.NeedsClassConstructorReference;
+                    }
                 }
                 else if (isPropertyDeclaration(member)) {
                     containsPublicInstanceFields = true;
@@ -1843,12 +1858,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
                 pendingClassReferenceAssignment = factory.createAssignment(temp, factory.getInternalName(node));
             }
-
-            if (node.emitNode?.classThis) {
-                getClassLexicalEnvironment().classThis = node.emitNode.classThis;
-            }
         }
 
+        if (node.emitNode?.classThis) {
+            getClassLexicalEnvironment().classThis = node.emitNode.classThis;
+        }
+
+        const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsConstructorReference;
         const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
         const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
         let modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
@@ -1887,6 +1903,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
             ));
         }
 
+        const alias = getClassLexicalEnvironment().classConstructor;
+        if (isClassWithConstructorReference && alias) {
+            enableSubstitutionForClassAliases();
+            classAliases[getOriginalNodeId(node)] = alias;
+        }
+
         const classDecl = factory.updateClassDeclaration(
             node,
             modifiers,
@@ -1918,7 +1940,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // these statements after the class expression variable statement.
         const isDecoratedClassDeclaration = !!(facts & ClassFacts.ClassWasDecorated);
         const staticPropertiesOrClassStaticBlocks = getStaticPropertiesAndClassStaticBlock(node);
-        const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
+        const classCheckFlags = resolver.getNodeCheckFlags(node);
+        const isClassWithConstructorReference = classCheckFlags & NodeCheckFlags.ContainsConstructorReference;
 
         let temp: Identifier | undefined;
         function createClassTempVar() {
@@ -1935,7 +1958,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return getClassLexicalEnvironment().classConstructor = node.emitNode.classThis;
             }
 
-            const classCheckFlags = resolver.getNodeCheckFlags(node);
             const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
             const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
             getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
@@ -3236,7 +3258,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
     function trySubstituteClassAlias(node: Identifier): Expression | undefined {
         if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassAliases) {
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReferenceInClass) {
+            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReference) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
