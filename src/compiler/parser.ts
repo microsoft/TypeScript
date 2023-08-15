@@ -7633,7 +7633,10 @@ namespace Parser {
             const savedDisallowIn = inDisallowInContext();
             setDisallowInContext(inForStatementInitializer);
 
-            declarations = parseDelimitedList(ParsingContext.VariableDeclarations, inForStatementInitializer ? parseVariableDeclaration : parseVariableDeclarationAllowExclamation);
+            declarations = parseDelimitedList(
+                ParsingContext.VariableDeclarations,
+                inForStatementInitializer ? parseVariableDeclaration : parseVariableDeclarationAllowExclamation,
+            );
 
             setDisallowInContext(savedDisallowIn);
         }

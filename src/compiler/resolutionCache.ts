@@ -232,8 +232,8 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
     if (
         pathComponents[0] !== directorySeparator &&
         !isDosStyle && // Non dos style paths
-        pathComponents[1].search(/[a-zA-Z]\$$/) === 0
-    ) { // Dos style nextPart
+        pathComponents[1].search(/[a-zA-Z]\$$/) === 0 // Dos style nextPart
+    ) {
         // ignore "//vda1cs4850/c$/folderAtRoot"
         if (length === 2) return 2;
         userCheckIndex = 2;

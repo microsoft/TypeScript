@@ -998,11 +998,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const saveExceptionTarget = currentExceptionTarget;
             const saveActiveLabelList = activeLabelList;
             const saveHasExplicitReturn = hasExplicitReturn;
-            const isImmediatelyInvoked = (containerFlags & ContainerFlags.IsFunctionExpression &&
+            const isImmediatelyInvoked = (
+                containerFlags & ContainerFlags.IsFunctionExpression &&
                 !hasSyntacticModifier(node, ModifierFlags.Async) &&
                 !(node as FunctionLikeDeclaration).asteriskToken &&
-                !!getImmediatelyInvokedFunctionExpression(node)) ||
-                node.kind === SyntaxKind.ClassStaticBlockDeclaration;
+                !!getImmediatelyInvokedFunctionExpression(node)
+            ) || node.kind === SyntaxKind.ClassStaticBlockDeclaration;
             // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
             // similarly to break statements that exit to a label just past the statement body.
             if (!isImmediatelyInvoked) {
@@ -2298,7 +2299,11 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     function declareModuleSymbol(node: ModuleDeclaration): ModuleInstanceState {
         const state = getModuleInstanceState(node);
         const instantiated = state !== ModuleInstanceState.NonInstantiated;
-        declareSymbolAndAddToSymbolTable(node, instantiated ? SymbolFlags.ValueModule : SymbolFlags.NamespaceModule, instantiated ? SymbolFlags.ValueModuleExcludes : SymbolFlags.NamespaceModuleExcludes);
+        declareSymbolAndAddToSymbolTable(
+            node,
+            instantiated ? SymbolFlags.ValueModule : SymbolFlags.NamespaceModule,
+            instantiated ? SymbolFlags.ValueModuleExcludes : SymbolFlags.NamespaceModuleExcludes,
+        );
         return state;
     }
 

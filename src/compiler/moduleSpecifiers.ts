@@ -705,7 +705,9 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
         const topNamespace = getTopNamespace(d);
         if (
             !(topNamespace?.parent?.parent
-                && isModuleBlock(topNamespace.parent) && isAmbientModule(topNamespace.parent.parent) && isSourceFile(topNamespace.parent.parent.parent))
+                && isModuleBlock(topNamespace.parent)
+                && isAmbientModule(topNamespace.parent.parent)
+                && isSourceFile(topNamespace.parent.parent.parent))
         ) return;
         const exportAssignment = (topNamespace.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment)?.expression as PropertyAccessExpression | Identifier;
         if (!exportAssignment) return;

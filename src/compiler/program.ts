@@ -4326,8 +4326,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             options.outDir || // there is --outDir specified
             options.rootDir || // there is --rootDir specified
             options.sourceRoot || // there is --sourceRoot specified
-            options.mapRoot
-        ) { // there is --mapRoot specified
+            options.mapRoot // there is --mapRoot specified
+        ) {
             // Precalculate and cache the common source directory
             const dir = getCommonSourceDirectory();
 

@@ -36,7 +36,14 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
+export function getFileEmitOutput(
+    program: Program,
+    sourceFile: SourceFile,
+    emitOnlyDtsFiles: boolean,
+    cancellationToken?: CancellationToken,
+    customTransformers?: CustomTransformers,
+    forceDtsEmit?: boolean,
+): EmitOutput {
     const outputFiles: OutputFile[] = [];
     const { emitSkipped, diagnostics } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
     return { outputFiles, emitSkipped, diagnostics };
