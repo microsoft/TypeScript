@@ -9,7 +9,7 @@ import { ArgType, parseArgs } from "./utils/cli-parser";
 
 
 (ts as any).Debug.enableDebugInfo();
-type CancellationToken = { isCancelled: boolean }
+interface CancellationToken { isCancelled: boolean }
 
 const { value: parsedArgs, printUsageOnErrors } = parseArgs(process.argv.slice(2), {
     default: ArgType.StringArray(),

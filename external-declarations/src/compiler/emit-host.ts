@@ -6,7 +6,7 @@ import { getDeclarationExtension, getDirectoryPath, getRelativePathFromDirectory
 import { IsolatedEmitHost } from "./types";
 import { getNodeId } from "./utils";
 
-export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], options: ts.CompilerOptions) {
+export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], options: ts.CompilerOptions): IsolatedEmitHost {
     const getCompilerOptions = () => options;
     const getCurrentDirectory = () => ".";
     const getCommonSourceDirectory = () => ".";
@@ -18,6 +18,7 @@ export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], 
     const tsLibFileSet = new Set(tsLibFiles);
 
     return {
+        redirectTargetsMap: new Map(),
         getSourceFiles() {
             throw new Error("Not needed");
         },
@@ -34,14 +35,14 @@ export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], 
             }
             return {
                 fileName: ref.fileName,
-            };
+            } as ts.SourceFile;
         },
         getSourceFileFromReference(referencingFile, ref) {
             if(ref.fileName.startsWith("node_modules/") || ref.fileName.indexOf("/node_modules/") !== -1) {
                 return undefined;
             }
             if(isJavaScriptFile(ref.fileName) && !options.allowJs) {
-                return;
+                return undefined;
             }
             let resolvedFile: string | undefined = resolvePath(getDirectoryPath(referencingFile.fileName), ref.fileName);
             let resolvedFileId = projectFileMap.get(resolvedFile);
@@ -65,8 +66,11 @@ export function createEmitHost(allProjectFiles: string[], tsLibFiles: string[], 
                     resolvedDeclarationFile,
                     /*ignoreCase*/ false
                 ),
-                id: resolvedFileId,
-            };
+                id: resolvedFileId!,
+            } as any as ts.SourceFile;
         },
-    } as Partial<IsolatedEmitHost> as IsolatedEmitHost;
+        isSourceOfProjectReferenceRedirect(fileName) {
+            return false;
+        },
+    };
 }
