@@ -7,4 +7,9 @@
 //// /**/
 
 goTo.marker("");
-verify.completions();
+verify.completions({
+    excludes: ["f"],
+    preferences: {
+      includeCompletionsForModuleExports: true
+    }
+  });
