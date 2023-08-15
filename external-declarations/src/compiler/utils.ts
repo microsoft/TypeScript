@@ -1,5 +1,5 @@
 import { BindingPattern, CallExpression, canHaveModifiers, ClassDeclaration, ClassLikeDeclaration, CompilerOptions, Declaration, DeclarationName, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, ExpressionWithTypeArguments, Extension, FunctionDeclaration, FunctionLikeDeclaration, getJSDocDeprecatedTag, getJSDocOverrideTagNoCache, getJSDocPrivateTag, getJSDocProtectedTag, getJSDocPublicTag, getJSDocReadonlyTag, getJSDocTypeTag, getNameOfDeclaration, HasType, Identifier, ImportDeclaration, ImportEqualsDeclaration, ImportTypeNode, InterfaceDeclaration, isElementAccessExpression, isExpressionWithTypeArguments, isHeritageClause, isIdentifier, isModuleDeclaration, isNumericLiteral, isParameter, isParenthesizedExpression, isPrefixUnaryExpression, isSourceFile, isStringLiteralLike, isVariableStatement,JSDocTemplateTag, JsxEmit, ModifierFlags, ModifierLike, ModuleDeclaration, ModuleKind, ModuleResolutionKind, NamedDeclaration, NewLineKind, Node, NodeFlags, NumericLiteral, OuterExpressionKinds, PrefixUnaryExpression, PrinterOptions, PropertyAccessExpression, QualifiedName, ScriptTarget, SignatureDeclaration, SourceFile, StringLiteralLike, SyntaxKind, sys, TsConfigSourceFile, TypeAliasDeclaration, TypeAssertion, TypeParameterDeclaration, VariableStatement } from "typescript";
-
+import * as ts from "typescript";
 import { Debug } from "./debug";
 import { clone, contains, flatten, some } from "./lang-utils";
 import { fileExtensionIs, fileExtensionIsOneOf } from "./path-utils";
@@ -180,15 +180,10 @@ function identifierIsThisKeyword(id: Identifier): boolean {
 }
 
 
-let nextNodeId = 0;
 /** @internal */
 export function getNodeId(node: Node): number;
 export function getNodeId(node: any): number {
-    if (!node.id) {
-        nextNodeId++;
-        node.id = nextNodeId;
-    }
-    return node.id;
+    return (ts as any).getNodeId(node);
 }
 
 /** @internal */

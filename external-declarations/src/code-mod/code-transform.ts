@@ -1,7 +1,6 @@
 import * as ts from "typescript";
 import { NodeBuilderFlags } from "typescript";
 
-import { hasProperty } from "../compiler/lang-utils";
 import { SymbolTracker } from "../compiler/types";
 
 const declarationEmitNodeBuilderFlags =

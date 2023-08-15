@@ -4,12 +4,12 @@ import * as ts from "typescript";
 
 import { normalizePath } from "./compiler/path-utils";
 import { installTracer, tracer } from "./compiler/perf-tracer";
-import { CancellationToken, transformProject } from "./compiler/transform-project";
+import { transformProject } from "./compiler/transform-project";
 import { ArgType, parseArgs } from "./utils/cli-parser";
 
 
 (ts as any).Debug.enableDebugInfo();
-
+type CancellationToken = { isCancelled: boolean }
 
 const { value: parsedArgs, printUsageOnErrors } = parseArgs(process.argv.slice(2), {
     default: ArgType.StringArray(),
@@ -84,7 +84,7 @@ async function main(cancellationToken: CancellationToken, msDelay: number) {
         options.declarationDir = parsedArgs.declarationDir;
     }
     const host = ts.createCompilerHost(options, /*setParentNodes*/ true);
-    const rootDir = await transformProject(path.dirname(projectConfig), /*files*/ undefined, options, host, cancellationToken);
+    const rootDir = await transformProject(path.dirname(projectConfig), /*files*/ undefined, options, host);
     console.log(tracer.current?.times);
     watch(rootDir);
     if(cancellationToken.isCancelled) return;

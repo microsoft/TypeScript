@@ -7,19 +7,17 @@ import { transformFile } from "./transform-file";
 
 
 
-export interface CancellationToken { isCancelled: boolean }
 export function transformProject(
     projectPath: string,
     files: string[] | undefined,
     options: ts.CompilerOptions,
-    host: ts.CompilerHost,
-    cancellationToken: CancellationToken
+    host: ts.CompilerHost
 ) {
     tracer.current?.start("readFiles");
     const rootDir = options.rootDir ? normalizePath(path.resolve(path.join(projectPath, options.rootDir))) : normalizePath(projectPath);
     files ??= host.readDirectory!(rootDir, [".ts", ".tsx"], ["**/*.d.ts"], []);
     tracer.current?.end("readFiles");
-    transformProjectFiles(rootDir, files, host, options, cancellationToken);
+    transformProjectFiles(rootDir, files, host, options);
     return rootDir;
 }
 
@@ -34,32 +32,41 @@ function ensureDirRecursive(dirPath: string, host: ts.CompilerHost) {
 function joinToRootIfNeeded(rootDir: string, existingPath: string) {
     return normalizePath(path.isAbsolute(existingPath) ? existingPath : path.resolve(path.join(rootDir, existingPath)));
 }
-export function transformProjectFiles(rootDir: string, files: string[], host: ts.CompilerHost, options: ts.CompilerOptions, cancellationToken: CancellationToken) {
 
-    const declarationDir =
+export function projectFilesTransformer(rootDir: string, options: ts.CompilerOptions) {
+    const declarationDir = 
         options.declarationDir? joinToRootIfNeeded(rootDir, options.declarationDir) :
         options.outDir? joinToRootIfNeeded(rootDir,options.outDir) :
         undefined;
-    for (const file of files.map(normalizePath)) {
-        try {
-            tracer.current?.start("parse");
-            const source = host.getSourceFile(file, options.target ?? ts.ScriptTarget.ES2015);
-            tracer.current?.end("parse");
-            if(cancellationToken.isCancelled) return;
-            if(!source) continue;
+    rootDir = normalizePath(rootDir);
+    return (file: string, host: ts.CompilerHost) => {
+        file = normalizePath(file);
+        tracer.current?.start("parse")
+        const source = host.getSourceFile(file, options.target ?? ts.ScriptTarget.ES2015);
+        tracer.current?.end("parse")
+        
+        if(!source) return;
 
-            const actualDeclaration = transformFile(source, [], [], options, ts.ModuleKind.ESNext);
-            const output =
-                declarationDir? changeAnyExtension(file.replace(rootDir, declarationDir), ".d.ts"):
-                changeAnyExtension(file, ".d.ts");
-            const dirPath = path.dirname(output);
-            ensureDirRecursive(dirPath, host);
-            tracer.current?.start("write");
-            host.writeFile(output, actualDeclaration.code, /*writeByteOrderMark*/ false);
-            tracer.current?.end("write");
-        }
-        catch (e) {
-            console.error(`Failed to transform: ${file}`, e);
+        const actualDeclaration = transformFile(source, [], [], options, ts.ModuleKind.ESNext);
+        const output = 
+            declarationDir? changeAnyExtension(file.replace(rootDir, declarationDir), ".d.ts"):
+            changeAnyExtension(file, ".d.ts");
+        const dirPath = path.dirname(output);
+        ensureDirRecursive(dirPath, host)
+        tracer.current?.start("write")
+        host.writeFile(output, actualDeclaration.code, false);
+        tracer.current?.end("write")
+        return output;
+    }
+}
+
+export function transformProjectFiles(rootDir: string, files: string[], host: ts.CompilerHost, options: ts.CompilerOptions) {
+    const transformer = projectFilesTransformer(rootDir, options);
+    for (let file of files) {
+        try {
+            transformer(file, host);
+        } catch (e) {
+            console.error(`Failed to transform: ${file}`, e)
         }
     }
     return { rootDir };
