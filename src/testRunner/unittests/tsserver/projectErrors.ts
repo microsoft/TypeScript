@@ -709,7 +709,8 @@ console.log(blabla);`
             content: JSON.stringify({
                 compilerOptions: {
                     resolveJsonModule: true,
-                    composite: true
+                    composite: true,
+                    outDir: "dist"
                 },
                 include
             })
