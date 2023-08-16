@@ -76,7 +76,7 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
         },
         count() {
             return cache ? cache.size : 0;
-        }
+        },
     };
     if (Debug.isDebugging) {
         Object.defineProperty(result, "__cache", { get: () => cache });

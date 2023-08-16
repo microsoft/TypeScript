@@ -47,12 +47,12 @@ const addBracesAction = {
 const removeBracesAction = {
     name: "Remove braces from arrow function",
     description: getLocaleSpecificMessage(Diagnostics.Remove_braces_from_arrow_function),
-    kind: "refactor.rewrite.arrow.braces.remove"
+    kind: "refactor.rewrite.arrow.braces.remove",
 };
 registerRefactor(refactorName, {
     kinds: [removeBracesAction.kind],
     getEditsForAction: getRefactorEditsToRemoveFunctionBraces,
-    getAvailableActions: getRefactorActionsToRemoveFunctionBraces
+    getAvailableActions: getRefactorActionsToRemoveFunctionBraces,
 });
 
 interface FunctionBracesInfo {
@@ -72,8 +72,8 @@ function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): rea
             name: refactorName,
             description: refactorDescription,
             actions: [
-                info.addBraces ? addBracesAction : removeBracesAction
-            ]
+                info.addBraces ? addBracesAction : removeBracesAction,
+            ],
         }];
     }
 
@@ -84,7 +84,7 @@ function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): rea
             actions: [
                 { ...addBracesAction, notApplicableReason: info.error },
                 { ...removeBracesAction, notApplicableReason: info.error },
-            ]
+            ],
         }];
     }
 
@@ -135,13 +135,13 @@ function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: 
 
     if (!func) {
         return {
-            error: getLocaleSpecificMessage(Diagnostics.Could_not_find_a_containing_arrow_function)
+            error: getLocaleSpecificMessage(Diagnostics.Could_not_find_a_containing_arrow_function),
         };
     }
 
     if (!isArrowFunction(func)) {
         return {
-            error: getLocaleSpecificMessage(Diagnostics.Containing_function_is_not_an_arrow_function)
+            error: getLocaleSpecificMessage(Diagnostics.Containing_function_is_not_an_arrow_function),
         };
     }
 
