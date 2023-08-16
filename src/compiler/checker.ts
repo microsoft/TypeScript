@@ -35120,7 +35120,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (declaration.type) {
                 const typeNode = getEffectiveTypeAnnotationNode(declaration);
                 if (typeNode) {
-                    inferTypes(inferenceContext.inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
+                    const source = addOptionality(getTypeFromTypeNode(typeNode), /*isProperty*/ false, hasQuestionToken(declaration));
+                    const target = getTypeAtPosition(context, i);
+                    inferTypes(inferenceContext.inferences, source, target);
                 }
             }
         }
