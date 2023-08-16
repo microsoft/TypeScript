@@ -8456,7 +8456,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
                         const chain = lookupSymbolChainWorker(sym, context, meaning);
                         if (!(sym.flags & SymbolFlags.Property)) {
-                            includePrivateSymbol(chain[0]);
+                            // Only include referenced privates in the same file. Weird JS aliases may expose privates
+                            // from other files - assume JS transforms will make those available via expected means
+                            const root = chain[0];
+                            const contextFile = getSourceFileOfNode(oldcontext.enclosingDeclaration);
+                            if (some(root.declarations, d => getSourceFileOfNode(d) === contextFile)) {
+                                includePrivateSymbol(root);
+                            }
                         }
                     }
                     else if (oldcontext.tracker.inner?.trackSymbol) {
