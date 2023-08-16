@@ -128,33 +128,7 @@
 
         // eslint-plugin-simple-import-sort
         "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error",
-
-        // Formatting rules; remove once a formatter enforces these.
-        "curly": ["error", "multi-line"],
-        "linebreak-style": ["error", "windows"],
-        "max-statements-per-line": ["error", { "max": 1 }],
-        "new-parens": "error",
-        "no-trailing-spaces": "error",
-        "quote-props": ["error", "consistent-as-needed"],
-        "space-in-parens": "error",
-        "@typescript-eslint/brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
-        "@typescript-eslint/no-extra-semi": "error",
-        "@typescript-eslint/quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
-        "@typescript-eslint/semi": "error",
-        "@typescript-eslint/space-before-function-paren": [
-            "error",
-            {
-                "asyncArrow": "always",
-                "anonymous": "always",
-                "named": "never"
-            }
-        ],
-        "local/object-literal-surrounding-space": "error",
-        "local/no-type-assertion-whitespace": "error",
-        "local/type-operator-spacing": "error",
-        "local/no-double-space": "error",
-        "local/simple-indent": "error"
+        "simple-import-sort/exports": "error"
     },
     "overrides": [
         // By default, the ESLint CLI only looks at .js files. But, it will also look at

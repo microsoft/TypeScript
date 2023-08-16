@@ -58,14 +58,24 @@ export function getAllRules(): RuleSpec[] {
     const keywords = tokenRangeFromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
     const binaryOperators = tokenRangeFromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
     const binaryKeywordOperators = [
-        SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword,
-        SyntaxKind.OfKeyword, SyntaxKind.AsKeyword,
-        SyntaxKind.IsKeyword, SyntaxKind.SatisfiesKeyword,
+        SyntaxKind.InKeyword,
+        SyntaxKind.InstanceOfKeyword,
+        SyntaxKind.OfKeyword,
+        SyntaxKind.AsKeyword,
+        SyntaxKind.IsKeyword,
+        SyntaxKind.SatisfiesKeyword,
     ];
     const unaryPrefixOperators = [SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken];
     const unaryPrefixExpressions = [
-        SyntaxKind.NumericLiteral, SyntaxKind.BigIntLiteral, SyntaxKind.Identifier, SyntaxKind.OpenParenToken,
-        SyntaxKind.OpenBracketToken, SyntaxKind.OpenBraceToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
+        SyntaxKind.NumericLiteral,
+        SyntaxKind.BigIntLiteral,
+        SyntaxKind.Identifier,
+        SyntaxKind.OpenParenToken,
+        SyntaxKind.OpenBracketToken,
+        SyntaxKind.OpenBraceToken,
+        SyntaxKind.ThisKeyword,
+        SyntaxKind.NewKeyword,
+    ];
     const unaryPreincrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
     const unaryPostincrementExpressions = [SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword];
     const unaryPredecrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
@@ -216,13 +226,15 @@ export function getAllRules(): RuleSpec[] {
             ],
             anyToken,
             [isNonJsxSameLineTokenContext],
-            RuleAction.InsertSpace),
+            RuleAction.InsertSpace,
+        ),
         rule(
             "SpaceBeforeCertainTypeScriptKeywords",
             anyToken,
             [SyntaxKind.ExtendsKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.FromKeyword],
             [isNonJsxSameLineTokenContext],
-            RuleAction.InsertSpace),
+            RuleAction.InsertSpace,
+        ),
         // Treat string literals in module names as identifiers, and add a space between the literal and the opening Brace braces, e.g.: module "m2" {
         rule("SpaceAfterModuleName", SyntaxKind.StringLiteral, SyntaxKind.OpenBraceToken, [isModuleDeclContext], RuleAction.InsertSpace),
 
@@ -245,15 +257,16 @@ export function getAllRules(): RuleSpec[] {
         rule("NoSpaceAfterCloseAngularBracket", SyntaxKind.GreaterThanToken, [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken], [
             isNonJsxSameLineTokenContext,
             isTypeArgumentOrParameterOrAssertionContext,
-            isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/,
-            isNonTypeAssertionContext
+            isNotFunctionDeclContext, /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/
+            isNonTypeAssertionContext,
         ], RuleAction.DeleteSpace),
 
         // decorators
         rule("SpaceBeforeAt", [SyntaxKind.CloseParenToken, SyntaxKind.Identifier], SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
         rule("NoSpaceAfterAt", SyntaxKind.AtToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         // Insert space after @ in decorator
-        rule("SpaceAfterDecorator",
+        rule(
+            "SpaceAfterDecorator",
             anyToken,
             [
                 SyntaxKind.AbstractKeyword,
@@ -271,7 +284,8 @@ export function getAllRules(): RuleSpec[] {
                 SyntaxKind.AsteriskToken,
             ],
             [isEndOfDecoratorContextOnSameLine],
-            RuleAction.InsertSpace),
+            RuleAction.InsertSpace,
+        ),
 
         rule("NoSpaceBeforeNonNullAssertionOperator", anyToken, SyntaxKind.ExclamationToken, [isNonJsxSameLineTokenContext, isNonNullAssertionContext], RuleAction.DeleteSpace),
         rule("NoSpaceAfterNewKeywordOnConstructorSignature", SyntaxKind.NewKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isConstructorSignatureContext], RuleAction.DeleteSpace),
@@ -391,7 +405,8 @@ export function getAllRules(): RuleSpec[] {
             [SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword],
             anyToken,
             [isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNotForContext],
-            RuleAction.InsertSpace),
+            RuleAction.InsertSpace,
+        ),
         // This low-pri rule takes care of "try {", "catch {" and "finally {" in case the rule SpaceBeforeOpenBraceInControl didn't execute on FormatOnEnter.
         rule("SpaceAfterTryCatchFinally", [SyntaxKind.TryKeyword, SyntaxKind.CatchKeyword, SyntaxKind.FinallyKeyword], SyntaxKind.OpenBraceToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
     ];
@@ -449,27 +464,27 @@ function tokenRangeFromRange(from: SyntaxKind, to: SyntaxKind, except: readonly 
 ///
 
 function optionEquals<K extends keyof FormatCodeSettings>(optionName: K, optionValue: FormatCodeSettings[K]): (context: FormattingContext) => boolean {
-    return (context) => context.options && context.options[optionName] === optionValue;
+    return context => context.options && context.options[optionName] === optionValue;
 }
 
 function isOptionEnabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => context.options && hasProperty(context.options, optionName) && !!context.options[optionName];
+    return context => context.options && hasProperty(context.options, optionName) && !!context.options[optionName];
 }
 
 function isOptionDisabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => context.options && hasProperty(context.options, optionName) && !context.options[optionName];
+    return context => context.options && hasProperty(context.options, optionName) && !context.options[optionName];
 }
 
 function isOptionDisabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName];
+    return context => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName];
 }
 
 function isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
+    return context => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
 }
 
 function isOptionEnabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-    return (context) => !context.options || !hasProperty(context.options, optionName) || !!context.options[optionName];
+    return context => !context.options || !hasProperty(context.options, optionName) || !!context.options[optionName];
 }
 
 function isForContext(context: FormattingContext): boolean {
@@ -548,7 +563,7 @@ function isTypeAnnotationContext(context: FormattingContext): boolean {
 
 function isConditionalOperatorContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ConditionalExpression ||
-            context.contextNode.kind === SyntaxKind.ConditionalType;
+        context.contextNode.kind === SyntaxKind.ConditionalType;
 }
 
 function isSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolean {
@@ -835,7 +850,6 @@ function isTypeArgumentOrParameterOrAssertion(token: TextRangeWithKind, parent: 
             return true;
         default:
             return false;
-
     }
 }
 
@@ -891,7 +905,8 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
             ? findNextToken(
                 context.currentTokenParent,
                 findAncestor(context.currentTokenParent, a => !a.parent)!,
-                context.sourceFile)
+                context.sourceFile,
+            )
             : context.nextTokenParent.getFirstToken(context.sourceFile);
         if (!nextRealToken) {
             return true;
@@ -907,13 +922,15 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
             || nextTokenKind === SyntaxKind.EndOfFileToken;
     }
 
-    if (nextTokenKind === SyntaxKind.SemicolonClassElement ||
+    if (
+        nextTokenKind === SyntaxKind.SemicolonClassElement ||
         nextTokenKind === SyntaxKind.SemicolonToken
     ) {
         return false;
     }
 
-    if (context.contextNode.kind === SyntaxKind.InterfaceDeclaration ||
+    if (
+        context.contextNode.kind === SyntaxKind.InterfaceDeclaration ||
         context.contextNode.kind === SyntaxKind.TypeAliasDeclaration
     ) {
         // Can't remove semicolon after `foo`; it would parse as a method declaration:
