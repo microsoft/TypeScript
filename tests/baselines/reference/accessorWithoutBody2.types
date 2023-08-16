@@ -2,8 +2,8 @@
 
 === accessorWithoutBody2.ts ===
 var v = { set foo(a) }
->v : { foo: any; }
->{ set foo(a) } : { foo: any; }
+>v : { set foo(a: any); }
+>{ set foo(a) } : { set foo(a: any); }
 >foo : any
 >a : any
 

@@ -2,7 +2,7 @@
 
 === objectLiteralMemberWithModifiers2.ts ===
 var v = { public get foo() { } }
->v : { readonly foo: void; }
->{ public get foo() { } } : { readonly foo: void; }
+>v : { get foo(): void; }
+>{ public get foo() { } } : { get foo(): void; }
 >foo : void
 

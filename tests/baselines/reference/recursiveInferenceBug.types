@@ -17,8 +17,8 @@ function f(x: number) {
 
 
 var zz = {
->zz : { g: () => void; readonly f: string; }
->{    g: () =>{ },    get f() { return "abc"; },} : { g: () => void; readonly f: string; }
+>zz : { g: () => void; get f(): string; }
+>{    g: () =>{ },    get f() { return "abc"; },} : { g: () => void; get f(): string; }
 
     g: () =>{ },
 >g : () => void

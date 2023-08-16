@@ -9,8 +9,8 @@ class C {
 >1 : 1
 }
 var y = { get foo() { return 3; } };
->y : { readonly foo: number; }
->{ get foo() { return 3; } } : { readonly foo: number; }
+>y : { get foo(): number; }
+>{ get foo() { return 3; } } : { get foo(): number; }
 >foo : number
 >3 : 3
 

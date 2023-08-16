@@ -2,8 +2,8 @@
 
 === symbolDeclarationEmit10.ts ===
 var obj = {
->obj : { [Symbol.isConcatSpreadable]: string; }
->{    get [Symbol.isConcatSpreadable]() { return '' },    set [Symbol.isConcatSpreadable](x) { }} : { [Symbol.isConcatSpreadable]: string; }
+>obj : { get [Symbol.isConcatSpreadable](): string; set [Symbol.isConcatSpreadable](x: string); }
+>{    get [Symbol.isConcatSpreadable]() { return '' },    set [Symbol.isConcatSpreadable](x) { }} : { get [Symbol.isConcatSpreadable](): string; set [Symbol.isConcatSpreadable](x: string); }
 
     get [Symbol.isConcatSpreadable]() { return '' },
 >[Symbol.isConcatSpreadable] : string

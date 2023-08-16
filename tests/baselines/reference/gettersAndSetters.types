@@ -104,7 +104,7 @@ c.Baz = "bazv";
 var o : {Foo:number;} = {get Foo() {return 0;}, set Foo(val:number){val}}; // o
 >o : { Foo: number; }
 >Foo : number
->{get Foo() {return 0;}, set Foo(val:number){val}} : { Foo: number; }
+>{get Foo() {return 0;}, set Foo(val:number){val}} : { get Foo(): number; set Foo(val: number); }
 >Foo : number
 >0 : 0
 >Foo : number
@@ -156,8 +156,8 @@ if (typeof x === "string") {
 >"string" : "string"
 
   let obj = {
->obj : { prop: any; method(): string; }
->{    set prop(_: any) { x.toUpperCase(); },    get prop() { return x.toUpperCase() },    method() { return x.toUpperCase() }  } : { prop: any; method(): string; }
+>obj : { get prop(): any; set prop(_: any); method(): string; }
+>{    set prop(_: any) { x.toUpperCase(); },    get prop() { return x.toUpperCase() },    method() { return x.toUpperCase() }  } : { get prop(): any; set prop(_: any); method(): string; }
 
     set prop(_: any) { x.toUpperCase(); },
 >prop : any

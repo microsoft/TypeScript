@@ -7210,17 +7210,50 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
-            if (modifiers) {
-                context.approximateLength += 9;
+            if (propertySymbol.flags & SymbolFlags.Accessor) {
+                if (propertySymbol.flags & SymbolFlags.GetAccessor) {
+                    const getAccessorDecl = find(propertySymbol.declarations, decl => decl.kind === SyntaxKind.GetAccessor) as GetAccessorDeclaration;
+                    const getAccessorSignature = factory.createGetAccessorDeclaration(
+                        /*modifiers*/ undefined,
+                        propertyName,
+                        [],
+                        propertyTypeNode,
+                        /*body*/ undefined);
+                    setCommentRange(getAccessorSignature, getAccessorDecl);
+                    typeElements.push(getAccessorSignature);
+                }
+                if (propertySymbol.flags & SymbolFlags.SetAccessor) {
+                    const setAccessorDecl = find(propertySymbol.declarations, decl => decl.kind === SyntaxKind.SetAccessor) as SetAccessorDeclaration;
+                    const parameterName = setAccessorDecl?.parameters?.length > 0 ? setAccessorDecl.parameters[0].name : "arg";
+                    const writePropertyTypeNode = serializeTypeForDeclaration(context, getNonMissingWriteTypeOfSymbol(propertySymbol), propertySymbol, saveEnclosingDeclaration);
+                    const setAccessorSignature = factory.createSetAccessorDeclaration(
+                        /*modifiers*/ undefined,
+                        propertyName,
+                        [factory.createParameterDeclaration(
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
+                            parameterName,
+                            /*questionToken*/ undefined,
+                            writePropertyTypeNode
+                        )],
+                        /*body*/ undefined);
+                    setCommentRange(setAccessorSignature, setAccessorDecl);
+                    typeElements.push(setAccessorSignature);
+                }
             }
-            const propertySignature = factory.createPropertySignature(
-                modifiers,
-                propertyName,
-                optionalToken,
-                propertyTypeNode);
+            else {
+                const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
+                if (modifiers) {
+                    context.approximateLength += 9;
+                }
+                const propertySignature = factory.createPropertySignature(
+                    modifiers,
+                    propertyName,
+                    optionalToken,
+                    propertyTypeNode);
 
-            typeElements.push(preserveCommentsOn(propertySignature));
+                typeElements.push(preserveCommentsOn(propertySignature));
+            }
 
             function preserveCommentsOn<T extends Node>(node: T) {
                 if (some(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)) {
@@ -11586,6 +11619,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getNonMissingTypeOfSymbol(symbol: Symbol) {
         return removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
+    }
+
+    function getNonMissingWriteTypeOfSymbol(symbol: Symbol) {
+        return removeMissingType(getWriteTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
     }
 
     function isReferenceToType(type: Type, target: Type) {

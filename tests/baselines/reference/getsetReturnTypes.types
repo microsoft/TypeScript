@@ -2,11 +2,11 @@
 
 === getsetReturnTypes.ts ===
 function makePoint(x: number) { 
->makePoint : (x: number) => { readonly x: number; }
+>makePoint : (x: number) => { get x(): number; }
 >x : number
 
  return { 
->{   get x() { return x; }  } : { readonly x: number; }
+>{   get x() { return x; }  } : { get x(): number; }
 
   get x() { return x; } 
 >x : number
@@ -16,16 +16,16 @@ function makePoint(x: number) {
 var x = makePoint(2).x;
 >x : number
 >makePoint(2).x : number
->makePoint(2) : { readonly x: number; }
->makePoint : (x: number) => { readonly x: number; }
+>makePoint(2) : { get x(): number; }
+>makePoint : (x: number) => { get x(): number; }
 >2 : 2
 >x : number
 
 var y: number = makePoint(2).x;
 >y : number
 >makePoint(2).x : number
->makePoint(2) : { readonly x: number; }
->makePoint : (x: number) => { readonly x: number; }
+>makePoint(2) : { get x(): number; }
+>makePoint : (x: number) => { get x(): number; }
 >2 : 2
 >x : number
 

@@ -2,8 +2,8 @@
 
 === constructorNameInObjectLiteralAccessor.ts ===
 const c1 = {
->c1 : { constructor: void; }
->{    get constructor() { return },    set constructor(value) {}} : { constructor: void; }
+>c1 : { get constructor(): void; set constructor(value: void); }
+>{    get constructor() { return },    set constructor(value) {}} : { get constructor(): void; set constructor(value: void); }
 
     get constructor() { return },
 >constructor : void

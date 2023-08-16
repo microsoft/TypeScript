@@ -69,7 +69,7 @@ const t5 = <Comp
 >div : any
 
     {...{ get wrong() { return <div>x</div>; }}}
->{ get wrong() { return <div>x</div>; }} : { readonly wrong: any; }
+>{ get wrong() { return <div>x</div>; }} : { get wrong(): any; }
 >wrong : any
 ><div>x</div> : any
 >div : any
@@ -88,7 +88,7 @@ const t6 = <Comp
 >div : any
 
     {...{ set wrong(s) { let a = <div>x</div>; }}}
->{ set wrong(s) { let a = <div>x</div>; }} : { wrong: any; }
+>{ set wrong(s) { let a = <div>x</div>; }} : { set wrong(s: any); }
 >wrong : any
 >s : any
 >a : any

@@ -2,8 +2,8 @@
 
 === t1.ts ===
 let set = {
->set : { foo: number; }
->{    set foo(x: number) {    }} : { foo: number; }
+>set : { set foo(x: number); }
+>{    set foo(x: number) {    }} : { set foo(x: number); }
 
     set foo(x: number) {
 >foo : number
@@ -15,7 +15,7 @@ let get = 10;
 >10 : 10
 
 export { set, get };
->set : { foo: number; }
+>set : { set foo(x: number); }
 >get : number
 
 === t2.ts ===
@@ -24,8 +24,8 @@ import * as set from "./t1";
 
 === t3.ts ===
 import { set as yield } from "./t1";
->set : { foo: number; }
->yield : { foo: number; }
+>set : { set foo(x: number); }
+>yield : { set foo(x: number); }
 
 === t4.ts ===
 import { get } from "./t1";

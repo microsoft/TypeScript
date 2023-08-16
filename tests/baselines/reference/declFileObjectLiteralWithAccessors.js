@@ -29,10 +29,12 @@ point. /*3*/x = 30;
 //// [declFileObjectLiteralWithAccessors.d.ts]
 declare function makePoint(x: number): {
     b: number;
-    x: number;
+    get x(): number;
+    set x(a: number);
 };
 declare var /*4*/ point: {
     b: number;
-    x: number;
+    get x(): number;
+    set x(a: number);
 };
 declare var /*2*/ x: number;

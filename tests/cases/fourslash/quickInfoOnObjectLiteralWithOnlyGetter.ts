@@ -9,9 +9,9 @@
 ////var /*2*/x = point./*3*/x;
 
 verify.quickInfos({
-    1: "function makePoint(x: number): {\n    readonly x: number;\n}",
+    1: "function makePoint(x: number): {\n    get x(): number;\n}",
     2: "var x: number",
-    4: "var point: {\n    readonly x: number;\n}",
+    4: "var point: {\n    get x(): number;\n}",
 });
 
 verify.completions({ marker: "3", exact: { name: "x", text: "(property) x: number" } });

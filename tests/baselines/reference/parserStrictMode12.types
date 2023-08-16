@@ -5,8 +5,8 @@
 >"use strict" : "use strict"
 
 var v = { set foo(eval) { } }
->v : { foo: any; }
->{ set foo(eval) { } } : { foo: any; }
+>v : { set foo(eval: any); }
+>{ set foo(eval) { } } : { set foo(eval: any); }
 >foo : any
 >eval : any
 

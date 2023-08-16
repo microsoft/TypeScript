@@ -12,10 +12,10 @@
 ////point./*3*/x = 30;
 
 verify.quickInfos({
-    1: "function makePoint(x: number): {\n    b: number;\n    x: number;\n}",
+    1: "function makePoint(x: number): {\n    b: number;\n    get x(): number;\n    set x(a: number);\n}",
     2: "var x: number",
     3: "(property) x: number",
-    4: "var point: {\n    b: number;\n    x: number;\n}",
+    4: "var point: {\n    b: number;\n    get x(): number;\n    set x(a: number);\n}",
 });
 
 verify.completions({

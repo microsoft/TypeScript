@@ -2,8 +2,8 @@
 
 === objectLiteralWithSemicolons5.ts ===
 var v = { foo() { }; a: b; get baz() { }; }
->v : { foo(): void; a: any; readonly baz: void; }
->{ foo() { }; a: b; get baz() { }; } : { foo(): void; a: any; readonly baz: void; }
+>v : { foo(): void; a: any; get baz(): void; }
+>{ foo() { }; a: b; get baz() { }; } : { foo(): void; a: any; get baz(): void; }
 >foo : () => void
 >a : any
 >b : any

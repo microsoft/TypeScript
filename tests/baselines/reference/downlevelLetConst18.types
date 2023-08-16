@@ -55,8 +55,8 @@ for (let x; ;) {
 >x : any
 
     ({ get foo() { return x } })
->({ get foo() { return x } }) : { readonly foo: any; }
->{ get foo() { return x } } : { readonly foo: any; }
+>({ get foo() { return x } }) : { get foo(): any; }
+>{ get foo() { return x } } : { get foo(): any; }
 >foo : any
 >x : any
 }
@@ -65,8 +65,8 @@ for (let x; ;) {
 >x : any
 
     ({ set foo(v) { x } })
->({ set foo(v) { x } }) : { foo: any; }
->{ set foo(v) { x } } : { foo: any; }
+>({ set foo(v) { x } }) : { set foo(v: any); }
+>{ set foo(v) { x } } : { set foo(v: any); }
 >foo : any
 >v : any
 >x : any

@@ -2,8 +2,8 @@
 
 === parserAccessors10.ts ===
 var v = {
->v : { readonly foo: void; }
->{  public get foo() { }} : { readonly foo: void; }
+>v : { get foo(): void; }
+>{  public get foo() { }} : { get foo(): void; }
 
   public get foo() { }
 >foo : void

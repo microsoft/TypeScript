@@ -117,8 +117,8 @@ class C {
 }
 
 var o = {
->o : { readonly a: number; b: number; }
->{    get a() { return 1 },    get b() { return 1 },    set b(value) { }} : { readonly a: number; b: number; }
+>o : { get a(): number; get b(): number; set b(value: number); }
+>{    get a() { return 1 },    get b() { return 1 },    set b(value) { }} : { get a(): number; get b(): number; set b(value: number); }
 
     get a() { return 1 },
 >a : number
@@ -136,14 +136,14 @@ var o = {
 o.a = 1;  // Error
 >o.a = 1 : 1
 >o.a : any
->o : { readonly a: number; b: number; }
+>o : { get a(): number; get b(): number; set b(value: number); }
 >a : any
 >1 : 1
 
 o.b = 1;
 >o.b = 1 : 1
 >o.b : number
->o : { readonly a: number; b: number; }
+>o : { get a(): number; get b(): number; set b(value: number); }
 >b : number
 >1 : 1
 

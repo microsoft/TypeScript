@@ -2,8 +2,8 @@
 
 === computedPropertyNamesSourceMap2_ES5.ts ===
 var v = {
->v : { hello(): void; readonly goodbye: number; }
->{    ["hello"]() {        debugger;	},    get ["goodbye"]() {		return 0;	}} : { hello(): void; readonly goodbye: number; }
+>v : { hello(): void; get goodbye(): number; }
+>{    ["hello"]() {        debugger;	},    get ["goodbye"]() {		return 0;	}} : { hello(): void; get goodbye(): number; }
 
     ["hello"]() {
 >["hello"] : () => void

@@ -4,19 +4,19 @@
 // Repro from #6000
 
 const a = {
->a : { b: { foo: string; }; foo: string; }
->{    b: {        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    },    foo: ''} : { b: { foo: string; }; foo: string; }
+>a : { b: { get foo(): string; set foo(value: string); }; foo: string; }
+>{    b: {        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    },    foo: ''} : { b: { get foo(): string; set foo(value: string); }; foo: string; }
 
     b: {
->b : { foo: string; }
->{        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    } : { foo: string; }
+>b : { get foo(): string; set foo(value: string); }
+>{        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    } : { get foo(): string; set foo(value: string); }
 
         get foo(): string {
 >foo : string
 
             return a.foo;
 >a.foo : string
->a : { b: { foo: string; }; foo: string; }
+>a : { b: { get foo(): string; set foo(value: string); }; foo: string; }
 >foo : string
 
         },
@@ -27,7 +27,7 @@ const a = {
             a.foo = value;
 >a.foo = value : string
 >a.foo : string
->a : { b: { foo: string; }; foo: string; }
+>a : { b: { get foo(): string; set foo(value: string); }; foo: string; }
 >foo : string
 >value : string
         }
