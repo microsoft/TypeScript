@@ -9601,7 +9601,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 [factory.createParameterDeclaration(
                                     /*modifiers*/ undefined,
                                     /*dotDotDotToken*/ undefined,
-                                    "arg",
+                                    unescapeLeadingUnderscores(p.escapedName),
                                     /*questionToken*/ undefined,
                                     isPrivate ? undefined : serializeTypeForDeclaration(context, getTypeOfSymbol(p), p, enclosingDeclaration, includePrivateSymbol, bundled)
                                 )],
