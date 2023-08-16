@@ -1,5 +1,10 @@
 import * as Utils from "../../_namespaces/Utils";
-import { getFsConentsForNode10ResultAtTypesPackageJson, getFsContentsForNode10Result, getFsContentsForNode10ResultDts, getFsContentsForNode10ResultPackageJson } from "../helpers/node10Result";
+import {
+    getFsConentsForNode10ResultAtTypesPackageJson,
+    getFsContentsForNode10Result,
+    getFsContentsForNode10ResultDts,
+    getFsContentsForNode10ResultPackageJson,
+} from "../helpers/node10Result";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
@@ -24,32 +29,34 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                         module: "Node16",
                         outDir: "../out",
                         traceResolution: true,
-                    }
-                })
+                    },
+                }),
             };
             const packageFile: File = {
                 path: `/user/username/projects/myproject/package.json`,
-                content: packageFileContents
+                content: packageFileContents,
             };
             const fileA: File = {
                 path: `/user/username/projects/myproject/src/fileA.ts`,
                 content: Utils.dedent`
                         import { foo } from "./fileB.mjs";
                         foo();
-                    `
+                    `,
             };
             const fileB: File = {
                 path: `/user/username/projects/myproject/src/fileB.mts`,
                 content: Utils.dedent`
                         export function foo() {
                         }
-                    `
+                    `,
             };
             const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
             const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([fileA], session);
             return {
-                host, session, packageFile,
+                host,
+                session,
+                packageFile,
                 verifyErr: () => verifyGetErrRequest({ files: [fileA], session }),
             };
         }
@@ -57,9 +64,14 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             const { host, session, packageFile, verifyErr } = setup(JSON.stringify({ name: "app", version: "1.0.0" }));
 
             session.logger.info("Modify package json file to add type module");
-            host.writeFile(packageFile.path, JSON.stringify({
-                name: "app", version: "1.0.0", type: "module",
-            }));
+            host.writeFile(
+                packageFile.path,
+                JSON.stringify({
+                    name: "app",
+                    version: "1.0.0",
+                    type: "module",
+                }),
+            );
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
@@ -77,9 +89,14 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             verifyErr();
 
             session.logger.info("Modify package json file to add type module");
-            host.writeFile(packageFile.path, JSON.stringify({
-                name: "app", version: "1.0.0", type: "module",
-            }));
+            host.writeFile(
+                packageFile.path,
+                JSON.stringify({
+                    name: "app",
+                    version: "1.0.0",
+                    type: "module",
+                }),
+            );
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
@@ -95,7 +112,9 @@ describe("unittests:: tsserver:: moduleResolution", () => {
 
         it("package json file is edited when package json with type module exists", () => {
             const { host, session, packageFile, verifyErr } = setup(JSON.stringify({
-                name: "app", version: "1.0.0", type: "module",
+                name: "app",
+                version: "1.0.0",
+                type: "module",
             }));
 
             session.logger.info("Modify package json file to remove type module");

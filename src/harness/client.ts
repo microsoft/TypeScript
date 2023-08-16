@@ -149,7 +149,7 @@ export class SessionClient implements LanguageService {
         const lineOffset = computeLineAndCharacterOfPosition(this.getLineMap(fileName), position);
         return {
             line: lineOffset.line + 1,
-            offset: lineOffset.character + 1
+            offset: lineOffset.character + 1,
         };
     }
 
@@ -162,7 +162,7 @@ export class SessionClient implements LanguageService {
             seq: this.sequence,
             type: "request",
             arguments: args,
-            command
+            command,
         };
         this.sequence++;
 
@@ -263,7 +263,7 @@ export class SessionClient implements LanguageService {
             textSpan: this.decodeSpan(body, fileName),
             displayParts: [{ kind: "text", text: body.displayString }],
             documentation: typeof body.documentation === "string" ? [{ kind: "text", text: body.documentation }] : body.documentation,
-            tags: this.decodeLinkDisplayParts(body.tags)
+            tags: this.decodeLinkDisplayParts(body.tags),
         };
     }
 
@@ -275,7 +275,7 @@ export class SessionClient implements LanguageService {
 
         return {
             configFileName: response.body!.configFileName, // TODO: GH#18217
-            fileNames: response.body!.fileNames
+            fileNames: response.body!.fileNames,
         };
     }
 
@@ -296,8 +296,8 @@ export class SessionClient implements LanguageService {
                     return res;
                 }
 
-                return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
-            })
+                return entry as { name: string; kind: ScriptElementKind; kindModifiers: string; sortText: string; }; // TODO: GH#18217
+            }),
         };
     }
 
@@ -317,7 +317,7 @@ export class SessionClient implements LanguageService {
     getNavigateToItems(searchValue: string): NavigateToItem[] {
         const args: protocol.NavtoRequestArgs = {
             searchValue,
-            file: this.host.getScriptFileNames()[0]
+            file: this.host.getScriptFileNames()[0],
         };
 
         const request = this.processRequest<protocol.NavtoRequest>(protocol.CommandTypes.Navto, args);
@@ -338,7 +338,6 @@ export class SessionClient implements LanguageService {
 
     getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): TextChange[] {
         const args: protocol.FormatRequestArgs = this.createFileLocationRequestArgsWithEndLineAndOffset(file, start, end);
-
 
         // TODO: handle FormatCodeOptions
         const request = this.processRequest<protocol.FormatRequest>(protocol.CommandTypes.Format, args);
@@ -373,7 +372,7 @@ export class SessionClient implements LanguageService {
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             kind: ScriptElementKind.unknown,
-            name: ""
+            name: "",
         }));
     }
 
@@ -394,7 +393,7 @@ export class SessionClient implements LanguageService {
                 name: "",
                 unverified: entry.unverified,
             })),
-            textSpan: this.decodeSpan(body.textSpan, request.arguments.file)
+            textSpan: this.decodeSpan(body.textSpan, request.arguments.file),
         };
     }
 
@@ -410,7 +409,7 @@ export class SessionClient implements LanguageService {
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             kind: ScriptElementKind.unknown,
-            name: ""
+            name: "",
         }));
     }
 
@@ -441,7 +440,7 @@ export class SessionClient implements LanguageService {
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             kind: ScriptElementKind.unknown,
-            displayParts: []
+            displayParts: [],
         }));
     }
 
@@ -501,8 +500,7 @@ export class SessionClient implements LanguageService {
         const fakeSourceFile = { fileName: file, text: sourceText } as SourceFile; // Warning! This is a huge lie!
 
         return (response.body as protocol.DiagnosticWithLinePosition[]).map((entry): DiagnosticWithLocation => {
-            const category = firstDefined(Object.keys(DiagnosticCategory), id =>
-                isString(id) && entry.category === id.toLowerCase() ? (DiagnosticCategory as any)[id] : undefined);
+            const category = firstDefined(Object.keys(DiagnosticCategory), id => isString(id) && entry.category === id.toLowerCase() ? (DiagnosticCategory as any)[id] : undefined);
             return {
                 file: fakeSourceFile,
                 start: entry.start,
@@ -537,7 +535,7 @@ export class SessionClient implements LanguageService {
                     ...(contextStart !== undefined ?
                         { contextSpan: this.decodeSpan({ start: contextStart, end: contextEnd! }, fileName) } :
                         undefined),
-                    ...prefixSuffixText
+                    ...prefixSuffixText,
                 });
             }
         }
@@ -571,25 +569,27 @@ export class SessionClient implements LanguageService {
     }
 
     findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences | boolean | undefined): RenameLocation[] {
-        if (!this.lastRenameEntry ||
+        if (
+            !this.lastRenameEntry ||
             this.lastRenameEntry.inputs.fileName !== fileName ||
             this.lastRenameEntry.inputs.position !== position ||
             this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
-            this.lastRenameEntry.inputs.findInComments !== findInComments) {
+            this.lastRenameEntry.inputs.findInComments !== findInComments
+        ) {
             const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences : preferences?.providePrefixAndSuffixTextForRename;
             const quotePreference = typeof preferences === "boolean" ? undefined : preferences?.quotePreference;
             if (providePrefixAndSuffixTextForRename !== undefined || quotePreference !== undefined) {
                 // User preferences have to be set through the `Configure` command
                 this.configure({ providePrefixAndSuffixTextForRename, quotePreference });
                 // Options argument is not used, so don't pass in options
-                this.getRenameInfo(fileName, position, /*preferences*/{}, findInStrings, findInComments);
+                this.getRenameInfo(fileName, position, /*preferences*/ {}, findInStrings, findInComments);
                 // Restore previous user preferences
                 if (this.preferences) {
                     this.configure(this.preferences);
                 }
             }
             else {
-                this.getRenameInfo(fileName, position, /*preferences*/{}, findInStrings, findInComments);
+                this.getRenameInfo(fileName, position, /*preferences*/ {}, findInStrings, findInComments);
             }
         }
 
@@ -609,7 +609,7 @@ export class SessionClient implements LanguageService {
             childItems: this.decodeNavigationBarItems(item.childItems, fileName, lineMap),
             indent: item.indent,
             bolded: false,
-            grayed: false
+            grayed: false,
         }));
     }
 
@@ -628,7 +628,7 @@ export class SessionClient implements LanguageService {
             kindModifiers: tree.kindModifiers,
             spans: tree.spans.map(span => this.decodeSpan(span, fileName, lineMap)),
             nameSpan: tree.nameSpan && this.decodeSpan(tree.nameSpan, fileName, lineMap),
-            childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap))
+            childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap)),
         };
     }
 
@@ -640,9 +640,9 @@ export class SessionClient implements LanguageService {
         return this.decodeNavigationTree(response.body!, file, lineMap); // TODO: GH#18217
     }
 
-    private decodeSpan(span: protocol.TextSpan & { file: string }): TextSpan;
+    private decodeSpan(span: protocol.TextSpan & { file: string; }): TextSpan;
     private decodeSpan(span: protocol.TextSpan, fileName: string, lineMap?: number[]): TextSpan;
-    private decodeSpan(span: protocol.TextSpan & { file: string }, fileName?: string, lineMap?: number[]): TextSpan {
+    private decodeSpan(span: protocol.TextSpan & { file: string; }, fileName?: string, lineMap?: number[]): TextSpan {
         if (span.start.line === 1 && span.start.offset === 1 && span.end.line === 1 && span.end.offset === 1) {
             return { start: 0, length: 0 };
         }
@@ -650,14 +650,17 @@ export class SessionClient implements LanguageService {
         lineMap = lineMap || this.getLineMap(fileName);
         return createTextSpanFromBounds(
             this.lineOffsetToPosition(fileName, span.start, lineMap),
-            this.lineOffsetToPosition(fileName, span.end, lineMap));
+            this.lineOffsetToPosition(fileName, span.end, lineMap),
+        );
     }
 
     private decodeLinkDisplayParts(tags: (protocol.JSDocTagInfo | JSDocTagInfo)[]): JSDocTagInfo[] {
-        return tags.map(tag => typeof tag.text === "string" ? {
-            ...tag,
-            text: [textPart(tag.text)]
-        } : (tag as JSDocTagInfo));
+        return tags.map(tag =>
+            typeof tag.text === "string" ? {
+                ...tag,
+                text: [textPart(tag.text)],
+            } : (tag as JSDocTagInfo)
+        );
     }
 
     getNameOrDottedNameSpan(_fileName: string, _startPos: number, _endPos: number): TextSpan {
@@ -696,7 +699,7 @@ export class SessionClient implements LanguageService {
             fileName: item.file,
             highlightSpans: item.highlightSpans.map(span => ({
                 textSpan: this.decodeSpan(span, item.file),
-                kind: span.kind
+                kind: span.kind,
             })),
         }));
     }
@@ -710,7 +713,7 @@ export class SessionClient implements LanguageService {
             hintSpan: this.decodeSpan(item.hintSpan, file),
             bannerText: item.bannerText,
             autoCollapse: item.autoCollapse,
-            kind: item.kind
+            kind: item.kind,
         }));
     }
 
@@ -745,7 +748,7 @@ export class SessionClient implements LanguageService {
         const response = this.processResponse<protocol.CodeFixResponse>(request);
 
         return response.body!.map<CodeFixAction>(({ fixName, description, changes, commands, fixId, fixAllDescription }) => // TODO: GH#18217
-            ({ fixName, description, changes: this.convertChanges(changes, file), commands: commands as CodeActionCommand[], fixId, fixAllDescription }));
+        ({ fixName, description, changes: this.convertChanges(changes, file), commands: commands as CodeActionCommand[], fixId, fixAllDescription }));
     }
 
     getCombinedCodeFix = notImplemented;
@@ -772,7 +775,7 @@ export class SessionClient implements LanguageService {
                         start: this.lineOffsetToPosition(span.file, span.start),
                         length: this.lineOffsetToPosition(span.file, span.end) - this.lineOffsetToPosition(span.file, span.start),
                     },
-                    file: span && span.file
+                    file: span && span.file,
                 })),
             });
         });
@@ -795,7 +798,7 @@ export class SessionClient implements LanguageService {
         return { file, startLine, startOffset, endLine, endOffset };
     }
 
-    private createFileLocationRequestArgsWithEndLineAndOffset(file: string, start: number, end: number): protocol.FileLocationRequestArgs & { endLine: number, endOffset: number } {
+    private createFileLocationRequestArgsWithEndLineAndOffset(file: string, start: number, end: number): protocol.FileLocationRequestArgs & { endLine: number; endOffset: number; } {
         const { line, offset } = this.positionToOneBasedLineOffset(file, start);
         const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(file, end);
         return { file, line, offset, endLine, endOffset };
@@ -807,7 +810,8 @@ export class SessionClient implements LanguageService {
         preferences: UserPreferences | undefined,
         triggerReason?: RefactorTriggerReason,
         kind?: string,
-        includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
+        includeInteractiveActions?: boolean,
+    ): ApplicableRefactorInfo[] {
         if (preferences) { // Temporarily set preferences
             this.configure(preferences);
         }
@@ -828,7 +832,7 @@ export class SessionClient implements LanguageService {
 
         const request = this.processRequest<protocol.GetMoveToRefactoringFileSuggestionsRequest>(protocol.CommandTypes.GetMoveToRefactoringFileSuggestions, args);
         const response = this.processResponse<protocol.GetMoveToRefactoringFileSuggestions>(request);
-        return { newFileName: response.body?.newFileName, files:response.body?.files }!;
+        return { newFileName: response.body?.newFileName, files: response.body?.files }!;
     }
 
     getEditsForRefactor(
@@ -838,12 +842,12 @@ export class SessionClient implements LanguageService {
         refactorName: string,
         actionName: string,
         preferences: UserPreferences | undefined,
-        interactiveRefactorArguments?: InteractiveRefactorArguments): RefactorEditInfo {
+        interactiveRefactorArguments?: InteractiveRefactorArguments,
+    ): RefactorEditInfo {
         if (preferences) { // Temporarily set preferences
             this.configure(preferences);
         }
-        const args =
-            this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
+        const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
         args.refactor = refactorName;
         args.action = actionName;
         args.interactiveRefactorArguments = interactiveRefactorArguments;
@@ -888,7 +892,7 @@ export class SessionClient implements LanguageService {
             const fileName = edit.fileName;
             return {
                 fileName,
-                textChanges: edit.textChanges.map(t => this.convertTextChangeToCodeEdit(t, fileName))
+                textChanges: edit.textChanges.map(t => this.convertTextChangeToCodeEdit(t, fileName)),
             };
         });
     }
@@ -896,14 +900,14 @@ export class SessionClient implements LanguageService {
     private convertChanges(changes: protocol.FileCodeEdits[], fileName: string): FileTextChanges[] {
         return changes.map(change => ({
             fileName: change.fileName,
-            textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
+            textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName)),
         }));
     }
 
     convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): TextChange {
         return {
             span: this.decodeSpan(change, fileName),
-            newText: change.newText ? change.newText : ""
+            newText: change.newText ? change.newText : "",
         };
     }
 
@@ -951,7 +955,7 @@ export class SessionClient implements LanguageService {
             kindModifiers: item.kindModifiers,
             containerName: item.containerName,
             span: this.decodeSpan(item.span, item.file),
-            selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
+            selectionSpan: this.decodeSpan(item.selectionSpan, item.file),
         };
     }
 
@@ -965,7 +969,7 @@ export class SessionClient implements LanguageService {
     private convertCallHierarchyIncomingCall(item: protocol.CallHierarchyIncomingCall): CallHierarchyIncomingCall {
         return {
             from: this.convertCallHierarchyItem(item.from),
-            fromSpans: item.fromSpans.map(span => this.decodeSpan(span, item.from.file))
+            fromSpans: item.fromSpans.map(span => this.decodeSpan(span, item.from.file)),
         };
     }
 
@@ -979,7 +983,7 @@ export class SessionClient implements LanguageService {
     private convertCallHierarchyOutgoingCall(file: string, item: protocol.CallHierarchyOutgoingCall): CallHierarchyOutgoingCall {
         return {
             to: this.convertCallHierarchyItem(item.to),
-            fromSpans: item.fromSpans.map(span => this.decodeSpan(span, file))
+            fromSpans: item.fromSpans.map(span => this.decodeSpan(span, file)),
         };
     }
 

@@ -18,7 +18,7 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>;
+    all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>;
 
     // see: lib.es2015.iterable.d.ts
     // all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>;
