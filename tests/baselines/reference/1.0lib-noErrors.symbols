@@ -57,10 +57,10 @@ declare function parseFloat(string: string): number;
 >string : Symbol(string, Decl(1.0lib-noErrors.ts, 43, 28))
 
 /**
-  * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number). 
-  * @param number A numeric value.
+  * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number) after being coerced to a number.
+  * @param number The value to be tested.
   */
-declare function isNaN(number: number): boolean;
+declare function isNaN(value: unknown): boolean;
 >isNaN : Symbol(isNaN, Decl(1.0lib-noErrors.ts, 43, 52))
 >number : Symbol(number, Decl(1.0lib-noErrors.ts, 49, 23))
 
