@@ -83,13 +83,14 @@ import {
 //
 
 /** @internal */
-let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // eslint-disable-line prefer-const
+let debugObjectHost: { CollectGarbage(): void; } = (function (this: any) { // eslint-disable-line prefer-const
     return this;
 })();
 
 // We need to use 'null' to interface with the managed side.
 /* eslint-disable local/no-in-operator */
 
+// dprint-ignore
 interface DiscoverTypingsInfo {
     fileNames: string[];                            // The file names that belong to the same project.
     projectRootPath: string;                        // The path to the project root directory
@@ -236,7 +237,7 @@ export interface LanguageServiceShim extends Shim {
     getEncodedSemanticClassifications(fileName: string, start: number, length: number, format?: SemanticClassificationFormat): string;
 
     getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined, formattingSettings: FormatCodeSettings | undefined): string;
-    getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined): string;
+    getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string /*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined): string;
 
     getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -333,11 +334,11 @@ export interface LanguageServiceShim extends Shim {
     getTodoComments(fileName: string, todoCommentDescriptors: string): string;
 
     getBraceMatchingAtPosition(fileName: string, position: number): string;
-    getIndentationAtPosition(fileName: string, position: number, options: string/*Services.EditorOptions*/): string;
+    getIndentationAtPosition(fileName: string, position: number, options: string /*Services.EditorOptions*/): string;
 
-    getFormattingEditsForRange(fileName: string, start: number, end: number, options: string/*Services.FormatCodeOptions*/): string;
-    getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string;
-    getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string;
+    getFormattingEditsForRange(fileName: string, start: number, end: number, options: string /*Services.FormatCodeOptions*/): string;
+    getFormattingEditsForDocument(fileName: string, options: string /*Services.FormatCodeOptions*/): string;
+    getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string /*Services.FormatCodeOptions*/): string;
 
     /**
      * Returns JSON-encoded value of the type TextInsertion.
@@ -413,7 +414,9 @@ class ScriptSnapshotShimAdapter implements IScriptSnapshot {
 
         const decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded!); // TODO: GH#18217
         return createTextChangeRange(
-            createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+            createTextSpan(decoded.span.start, decoded.span.length),
+            decoded.newLength,
+        );
     }
 
     public dispose(): void {
@@ -563,8 +566,7 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
     }
 
     public readDirectory(path: string, extensions?: readonly string[], exclude?: string[], include?: string[], depth?: number): string[] {
-        const pattern = getFileMatcherPatterns(path, exclude, include,
-            this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
+        const pattern = getFileMatcherPatterns(path, exclude, include, this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
         return JSON.parse(this.shimHost.readDirectory(
             path,
             JSON.stringify(extensions),
@@ -572,7 +574,7 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
             pattern.excludePattern,
             pattern.includeFilePattern,
             pattern.includeDirectoryPattern,
-            depth
+            depth,
         ));
     }
 
@@ -587,7 +589,6 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
 
 /** @internal */
 export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost, JsTyping.TypingResolutionHost {
-
     public directoryExists: (directoryName: string) => boolean;
     public realpath: (path: string) => string;
     public useCaseSensitiveFileNames: boolean;
@@ -609,8 +610,7 @@ export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResol
     }
 
     public readDirectory(rootDir: string, extensions: readonly string[], exclude: readonly string[], include: readonly string[], depth?: number): string[] {
-        const pattern = getFileMatcherPatterns(rootDir, exclude, include,
-            this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
+        const pattern = getFileMatcherPatterns(rootDir, exclude, include, this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
         return JSON.parse(this.shimHost.readDirectory(
             rootDir,
             JSON.stringify(extensions),
@@ -618,7 +618,7 @@ export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResol
             pattern.excludePattern,
             pattern.includeFilePattern,
             pattern.includeDirectoryPattern,
-            depth
+            depth,
         ));
     }
 
@@ -678,7 +678,6 @@ function forwardCall<T>(logger: Logger, actionDescription: string, returnJson: b
     }
 }
 
-
 class ShimBase implements Shim {
     constructor(private factory: ShimFactory) {
         factory.registerShim(this);
@@ -711,7 +710,7 @@ function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): RealizedDia
         category: diagnosticCategoryName(diagnostic),
         code: diagnostic.code,
         reportsUnnecessary: diagnostic.reportsUnnecessary,
-        reportsDeprecated: diagnostic.reportsDeprecated
+        reportsDeprecated: diagnostic.reportsDeprecated,
     };
 }
 
@@ -719,9 +718,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     private logger: Logger;
     private logPerformance = false;
 
-    constructor(factory: ShimFactory,
-        private host: LanguageServiceShimHost,
-        public languageService: LanguageService) {
+    constructor(factory: ShimFactory, private host: LanguageServiceShimHost, public languageService: LanguageService) {
         super(factory);
         this.logger = this.host;
     }
@@ -760,7 +757,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public refresh(throwOnError: boolean): void {
         this.forwardJSONCall(
             `refresh(${throwOnError})`,
-            () => null // eslint-disable-line no-null/no-null
+            () => null, // eslint-disable-line no-null/no-null
         );
     }
 
@@ -770,7 +767,8 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             () => {
                 this.languageService.cleanupSemanticCache();
                 return null; // eslint-disable-line no-null/no-null
-            });
+            },
+        );
     }
 
     private realizeDiagnostics(diagnostics: readonly Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
@@ -781,14 +779,14 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getSyntacticClassifications(fileName: string, start: number, length: number): string {
         return this.forwardJSONCall(
             `getSyntacticClassifications('${fileName}', ${start}, ${length})`,
-            () => this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length))
+            () => this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length)),
         );
     }
 
     public getSemanticClassifications(fileName: string, start: number, length: number): string {
         return this.forwardJSONCall(
             `getSemanticClassifications('${fileName}', ${start}, ${length})`,
-            () => this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length))
+            () => this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length)),
         );
     }
 
@@ -797,7 +795,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             `getEncodedSyntacticClassifications('${fileName}', ${start}, ${length})`,
             // directly serialize the spans out to a string.  This is much faster to decode
             // on the managed side versus a full JSON array.
-            () => convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length)))
+            () => convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length))),
         );
     }
 
@@ -806,7 +804,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             `getEncodedSemanticClassifications('${fileName}', ${start}, ${length})`,
             // directly serialize the spans out to a string.  This is much faster to decode
             // on the managed side versus a full JSON array.
-            () => convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)))
+            () => convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length))),
         );
     }
 
@@ -816,7 +814,8 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             () => {
                 const diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
                 return this.realizeDiagnostics(diagnostics);
-            });
+            },
+        );
     }
 
     public getSemanticDiagnostics(fileName: string): string {
@@ -825,7 +824,8 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             () => {
                 const diagnostics = this.languageService.getSemanticDiagnostics(fileName);
                 return this.realizeDiagnostics(diagnostics);
-            });
+            },
+        );
     }
 
     public getSuggestionDiagnostics(fileName: string): string {
@@ -838,7 +838,8 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             () => {
                 const diagnostics = this.languageService.getCompilerOptionsDiagnostics();
                 return this.realizeDiagnostics(diagnostics);
-            });
+            },
+        );
     }
 
     /// QUICKINFO
@@ -850,10 +851,9 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getQuickInfoAtPosition(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `getQuickInfoAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getQuickInfoAtPosition(fileName, position)
+            () => this.languageService.getQuickInfoAtPosition(fileName, position),
         );
     }
-
 
     /// NAMEORDOTTEDNAMESPAN
 
@@ -864,7 +864,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string {
         return this.forwardJSONCall(
             `getNameOrDottedNameSpan('${fileName}', ${startPos}, ${endPos})`,
-            () => this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos)
+            () => this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos),
         );
     }
 
@@ -875,7 +875,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getBreakpointStatementAtPosition(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `getBreakpointStatementAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getBreakpointStatementAtPosition(fileName, position)
+            () => this.languageService.getBreakpointStatementAtPosition(fileName, position),
         );
     }
 
@@ -884,7 +884,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): string {
         return this.forwardJSONCall(
             `getSignatureHelpItems('${fileName}', ${position})`,
-            () => this.languageService.getSignatureHelpItems(fileName, position, options)
+            () => this.languageService.getSignatureHelpItems(fileName, position, options),
         );
     }
 
@@ -897,7 +897,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getDefinitionAtPosition(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `getDefinitionAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getDefinitionAtPosition(fileName, position)
+            () => this.languageService.getDefinitionAtPosition(fileName, position),
         );
     }
 
@@ -908,7 +908,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getDefinitionAndBoundSpan(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `getDefinitionAndBoundSpan('${fileName}', ${position})`,
-            () => this.languageService.getDefinitionAndBoundSpan(fileName, position)
+            () => this.languageService.getDefinitionAndBoundSpan(fileName, position),
         );
     }
 
@@ -921,7 +921,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getTypeDefinitionAtPosition(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `getTypeDefinitionAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getTypeDefinitionAtPosition(fileName, position)
+            () => this.languageService.getTypeDefinitionAtPosition(fileName, position),
         );
     }
 
@@ -934,28 +934,28 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getImplementationAtPosition(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `getImplementationAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getImplementationAtPosition(fileName, position)
+            () => this.languageService.getImplementationAtPosition(fileName, position),
         );
     }
 
     public getRenameInfo(fileName: string, position: number, preferences: UserPreferences): string {
         return this.forwardJSONCall(
             `getRenameInfo('${fileName}', ${position})`,
-            () => this.languageService.getRenameInfo(fileName, position, preferences)
+            () => this.languageService.getRenameInfo(fileName, position, preferences),
         );
     }
 
     public getSmartSelectionRange(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `getSmartSelectionRange('${fileName}', ${position})`,
-            () => this.languageService.getSmartSelectionRange(fileName, position)
+            () => this.languageService.getSmartSelectionRange(fileName, position),
         );
     }
 
     public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences): string {
         return this.forwardJSONCall(
             `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
-            () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, preferences)
+            () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, preferences),
         );
     }
 
@@ -963,21 +963,21 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getBraceMatchingAtPosition(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `getBraceMatchingAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getBraceMatchingAtPosition(fileName, position)
+            () => this.languageService.getBraceMatchingAtPosition(fileName, position),
         );
     }
 
     public isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string {
         return this.forwardJSONCall(
             `isValidBraceCompletionAtPosition('${fileName}', ${position}, ${openingBrace})`,
-            () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace)
+            () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace),
         );
     }
 
     public getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string {
         return this.forwardJSONCall(
             `getSpanOfEnclosingComment('${fileName}', ${position})`,
-            () => this.languageService.getSpanOfEnclosingComment(fileName, position, onlyMultiLine)
+            () => this.languageService.getSpanOfEnclosingComment(fileName, position, onlyMultiLine),
         );
     }
 
@@ -988,7 +988,8 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             () => {
                 const localOptions: EditorOptions = JSON.parse(options);
                 return this.languageService.getIndentationAtPosition(fileName, position, localOptions);
-            });
+            },
+        );
     }
 
     /// GET REFERENCES
@@ -996,21 +997,21 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getReferencesAtPosition(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `getReferencesAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getReferencesAtPosition(fileName, position)
+            () => this.languageService.getReferencesAtPosition(fileName, position),
         );
     }
 
     public findReferences(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `findReferences('${fileName}', ${position})`,
-            () => this.languageService.findReferences(fileName, position)
+            () => this.languageService.findReferences(fileName, position),
         );
     }
 
     public getFileReferences(fileName: string) {
         return this.forwardJSONCall(
             `getFileReferences('${fileName})`,
-            () => this.languageService.getFileReferences(fileName)
+            () => this.languageService.getFileReferences(fileName),
         );
     }
 
@@ -1022,7 +1023,8 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
                 // workaround for VS document highlighting issue - keep only items from the initial file
                 const normalizedName = toFileNameLowerCase(normalizeSlashes(fileName));
                 return filter(results, r => toFileNameLowerCase(normalizeSlashes(r.fileName)) === normalizedName);
-            });
+            },
+        );
     }
 
     /// COMPLETION LISTS
@@ -1035,52 +1037,55 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined, formattingSettings: FormatCodeSettings | undefined) {
         return this.forwardJSONCall(
             `getCompletionsAtPosition('${fileName}', ${position}, ${preferences}, ${formattingSettings})`,
-            () => this.languageService.getCompletionsAtPosition(fileName, position, preferences, formattingSettings)
+            () => this.languageService.getCompletionsAtPosition(fileName, position, preferences, formattingSettings),
         );
     }
 
     /** Get a string based representation of a completion list entry details */
-    public getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined) {
+    public getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string /*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined) {
         return this.forwardJSONCall(
             `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
             () => {
                 const localOptions: FormatCodeOptions = formatOptions === undefined ? undefined : JSON.parse(formatOptions);
                 return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source, preferences, data);
-            }
+            },
         );
     }
 
-    public getFormattingEditsForRange(fileName: string, start: number, end: number, options: string/*Services.FormatCodeOptions*/): string {
+    public getFormattingEditsForRange(fileName: string, start: number, end: number, options: string /*Services.FormatCodeOptions*/): string {
         return this.forwardJSONCall(
             `getFormattingEditsForRange('${fileName}', ${start}, ${end})`,
             () => {
                 const localOptions: FormatCodeOptions = JSON.parse(options);
                 return this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
-            });
+            },
+        );
     }
 
-    public getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string {
+    public getFormattingEditsForDocument(fileName: string, options: string /*Services.FormatCodeOptions*/): string {
         return this.forwardJSONCall(
             `getFormattingEditsForDocument('${fileName}')`,
             () => {
                 const localOptions: FormatCodeOptions = JSON.parse(options);
                 return this.languageService.getFormattingEditsForDocument(fileName, localOptions);
-            });
+            },
+        );
     }
 
-    public getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string {
+    public getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string /*Services.FormatCodeOptions*/): string {
         return this.forwardJSONCall(
             `getFormattingEditsAfterKeystroke('${fileName}', ${position}, '${key}')`,
             () => {
                 const localOptions: FormatCodeOptions = JSON.parse(options);
                 return this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
-            });
+            },
+        );
     }
 
     public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions, formatOptions?: FormatCodeSettings): string {
         return this.forwardJSONCall(
             `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options, formatOptions)
+            () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options, formatOptions),
         );
     }
 
@@ -1090,35 +1095,35 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): string {
         return this.forwardJSONCall(
             `getNavigateToItems('${searchValue}', ${maxResultCount}, ${fileName})`,
-            () => this.languageService.getNavigateToItems(searchValue, maxResultCount, fileName)
+            () => this.languageService.getNavigateToItems(searchValue, maxResultCount, fileName),
         );
     }
 
     public getNavigationBarItems(fileName: string): string {
         return this.forwardJSONCall(
             `getNavigationBarItems('${fileName}')`,
-            () => this.languageService.getNavigationBarItems(fileName)
+            () => this.languageService.getNavigationBarItems(fileName),
         );
     }
 
     public getNavigationTree(fileName: string): string {
         return this.forwardJSONCall(
             `getNavigationTree('${fileName}')`,
-            () => this.languageService.getNavigationTree(fileName)
+            () => this.languageService.getNavigationTree(fileName),
         );
     }
 
     public getOutliningSpans(fileName: string): string {
         return this.forwardJSONCall(
             `getOutliningSpans('${fileName}')`,
-            () => this.languageService.getOutliningSpans(fileName)
+            () => this.languageService.getOutliningSpans(fileName),
         );
     }
 
     public getTodoComments(fileName: string, descriptors: string): string {
         return this.forwardJSONCall(
             `getTodoComments('${fileName}')`,
-            () => this.languageService.getTodoComments(fileName, JSON.parse(descriptors))
+            () => this.languageService.getTodoComments(fileName, JSON.parse(descriptors)),
         );
     }
 
@@ -1127,28 +1132,28 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     public prepareCallHierarchy(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `prepareCallHierarchy('${fileName}', ${position})`,
-            () => this.languageService.prepareCallHierarchy(fileName, position)
+            () => this.languageService.prepareCallHierarchy(fileName, position),
         );
     }
 
     public provideCallHierarchyIncomingCalls(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `provideCallHierarchyIncomingCalls('${fileName}', ${position})`,
-            () => this.languageService.provideCallHierarchyIncomingCalls(fileName, position)
+            () => this.languageService.provideCallHierarchyIncomingCalls(fileName, position),
         );
     }
 
     public provideCallHierarchyOutgoingCalls(fileName: string, position: number): string {
         return this.forwardJSONCall(
             `provideCallHierarchyOutgoingCalls('${fileName}', ${position})`,
-            () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position)
+            () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position),
         );
     }
 
     public provideInlayHints(fileName: string, span: TextSpan, preference: UserPreferences | undefined): string {
         return this.forwardJSONCall(
             `provideInlayHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`,
-            () => this.languageService.provideInlayHints(fileName, span, preference)
+            () => this.languageService.provideInlayHints(fileName, span, preference),
         );
     }
 
@@ -1159,7 +1164,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             () => {
                 const { diagnostics, ...rest } = this.languageService.getEmitOutput(fileName);
                 return { ...rest, diagnostics: this.realizeDiagnostics(diagnostics) };
-            }
+            },
         );
     }
 
@@ -1169,39 +1174,40 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
             `getEmitOutput('${fileName}')`,
             /*returnJson*/ false,
             () => this.languageService.getEmitOutput(fileName),
-            this.logPerformance) as EmitOutput;
+            this.logPerformance,
+        ) as EmitOutput;
     }
 
     public toggleLineComment(fileName: string, textRange: TextRange): string {
         return this.forwardJSONCall(
             `toggleLineComment('${fileName}', '${JSON.stringify(textRange)}')`,
-            () => this.languageService.toggleLineComment(fileName, textRange)
+            () => this.languageService.toggleLineComment(fileName, textRange),
         );
     }
 
     public toggleMultilineComment(fileName: string, textRange: TextRange): string {
         return this.forwardJSONCall(
             `toggleMultilineComment('${fileName}', '${JSON.stringify(textRange)}')`,
-            () => this.languageService.toggleMultilineComment(fileName, textRange)
+            () => this.languageService.toggleMultilineComment(fileName, textRange),
         );
     }
 
     public commentSelection(fileName: string, textRange: TextRange): string {
         return this.forwardJSONCall(
             `commentSelection('${fileName}', '${JSON.stringify(textRange)}')`,
-            () => this.languageService.commentSelection(fileName, textRange)
+            () => this.languageService.commentSelection(fileName, textRange),
         );
     }
 
     public uncommentSelection(fileName: string, textRange: TextRange): string {
         return this.forwardJSONCall(
             `uncommentSelection('${fileName}', '${JSON.stringify(textRange)}')`,
-            () => this.languageService.uncommentSelection(fileName, textRange)
+            () => this.languageService.uncommentSelection(fileName, textRange),
         );
     }
 }
 
-function convertClassifications(classifications: Classifications): { spans: string, endOfLineState: EndOfLineState } {
+function convertClassifications(classifications: Classifications): { spans: string; endOfLineState: EndOfLineState; } {
     return { spans: classifications.spans.join(","), endOfLineState: classifications.endOfLineState };
 }
 
@@ -1215,9 +1221,7 @@ class ClassifierShimObject extends ShimBase implements ClassifierShim {
     }
 
     public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent = false): string {
-        return forwardJSONCall(this.logger, "getEncodedLexicalClassifications",
-            () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)),
-            this.logPerformance);
+        return forwardJSONCall(this.logger, "getEncodedLexicalClassifications", () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)), this.logPerformance);
     }
 
     /// COLORIZATION
@@ -1269,7 +1273,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             return {
                 resolvedFileName: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.resolvedFileName : undefined,
                 primary: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.primary : true,
-                failedLookupLocations: result.failedLookupLocations
+                failedLookupLocations: result.failedLookupLocations,
             };
         });
     }
@@ -1286,9 +1290,10 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
                     ambientExternalModules: result.ambientExternalModules,
                     isLibFile: result.isLibFile,
                     typeReferenceDirectives: this.convertFileReferences(result.typeReferenceDirectives),
-                    libReferenceDirectives: this.convertFileReferences(result.libReferenceDirectives)
+                    libReferenceDirectives: this.convertFileReferences(result.libReferenceDirectives),
                 };
-            });
+            },
+        );
     }
 
     public getAutomaticTypeDirectiveNames(compilerOptionsJson: string): string {
@@ -1297,7 +1302,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             () => {
                 const compilerOptions = JSON.parse(compilerOptionsJson) as CompilerOptions;
                 return getAutomaticTypeDirectiveNames(compilerOptions, this.host);
-            }
+            },
         );
     }
 
@@ -1310,7 +1315,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             result.push({
                 path: normalizeSlashes(ref.fileName),
                 position: ref.pos,
-                length: ref.end - ref.pos
+                length: ref.end - ref.pos,
             });
         }
         return result;
@@ -1329,15 +1334,16 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
                     typeAcquisition: configFile.typeAcquisition,
                     files: configFile.fileNames,
                     raw: configFile.raw,
-                    errors: realizeDiagnostics([...result.parseDiagnostics, ...configFile.errors], "\r\n")
+                    errors: realizeDiagnostics([...result.parseDiagnostics, ...configFile.errors], "\r\n"),
                 };
-            });
+            },
+        );
     }
 
     public getDefaultCompilationSettings(): string {
         return this.forwardJSONCall(
             "getDefaultCompilationSettings()",
-            () => getDefaultCompilerOptions()
+            () => getDefaultCompilerOptions(),
         );
     }
 
@@ -1358,7 +1364,8 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
                 info.typeAcquisition,
                 info.unresolvedImports,
                 info.typesRegistry,
-                emptyOptions);
+                emptyOptions,
+            );
         });
     }
 }
