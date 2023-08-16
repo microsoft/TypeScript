@@ -79,8 +79,7 @@ export namespace tracingEnabled {
             fs.mkdirSync(traceDir, { recursive: true });
         }
 
-        const countPart =
-            mode === "build" ? `.${process.pid}-${++traceCount}`
+        const countPart = mode === "build" ? `.${process.pid}-${++traceCount}`
             : mode === "server" ? `.${process.pid}`
             : ``;
         const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
@@ -97,12 +96,12 @@ export namespace tracingEnabled {
 
         // Start with a prefix that contains some metadata that the devtools profiler expects (also avoids a warning on import)
         const meta = { cat: "__metadata", ph: "M", ts: 1000 * timestamp(), pid: 1, tid: 1 };
-        fs.writeSync(traceFd,
+        fs.writeSync(
+            traceFd,
             "[\n"
-            + [{ name: "process_name", args: { name: "tsc" }, ...meta },
-               { name: "thread_name", args: { name: "Main" }, ...meta },
-               { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
-                .map(v => JSON.stringify(v)).join(",\n"));
+                + [{ name: "process_name", args: { name: "tsc" }, ...meta }, { name: "thread_name", args: { name: "Main" }, ...meta }, { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
+                    .map(v => JSON.stringify(v)).join(",\n"),
+        );
     }
 
     /** Stops tracing for the in-progress project and dumps the type catalog. */
@@ -144,7 +143,7 @@ export namespace tracingEnabled {
         writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
-    const eventStack: { phase: Phase, name: string, args?: Args, time: number, separateBeginAndEnd: boolean }[] = [];
+    const eventStack: { phase: Phase; name: string; args?: Args; time: number; separateBeginAndEnd: boolean; }[] = [];
 
     /**
      * @param separateBeginAndEnd - used for special cases where we need the trace point even if the event
@@ -184,9 +183,7 @@ export namespace tracingEnabled {
         }
     }
 
-    function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string,
-                        time: number = 1000 * timestamp()) {
-
+    function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string, time: number = 1000 * timestamp()) {
         // In server mode, there's no easy way to dump type information, so we drop events that would require it.
         if (mode === "server" && phase === Phase.CheckTypes) return;
 

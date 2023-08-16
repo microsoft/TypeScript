@@ -386,9 +386,11 @@ export class CompilerHost implements ts.CompilerHost {
             while (fs.shadowRoot) {
                 try {
                     const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName) : undefined!; // TODO: GH#18217
-                    if (shadowRootStats.dev !== stats.dev ||
+                    if (
+                        shadowRootStats.dev !== stats.dev ||
                         shadowRootStats.ino !== stats.ino ||
-                        shadowRootStats.mtimeMs !== stats.mtimeMs) {
+                        shadowRootStats.mtimeMs !== stats.mtimeMs
+                    ) {
                         break;
                     }
 
@@ -425,7 +427,7 @@ export interface ExpectedDiagnosticRelatedInformation extends ExpectedDiagnostic
 
 export enum DiagnosticKind {
     Error = "Error",
-    Status = "Status"
+    Status = "Status",
 }
 export interface ExpectedErrorDiagnostic extends ExpectedDiagnosticRelatedInformation {
     relatedInformation?: ExpectedDiagnosticRelatedInformation[];
@@ -491,7 +493,7 @@ function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
         expectedErrorDiagnosticToText(errorOrStatus);
 }
 
-function diagnosticMessageChainToText({ messageText, next}: ts.DiagnosticMessageChain, indent = 0) {
+function diagnosticMessageChainToText({ messageText, next }: ts.DiagnosticMessageChain, indent = 0) {
     let text = indentedText(indent, messageText);
     if (next) {
         indent++;
@@ -588,18 +590,26 @@ export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuil
     assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]) {
         const actual = this.diagnostics.slice().map(diagnosticToText);
         const expected = expectedDiagnostics.map(expectedDiagnosticToText);
-        assert.deepEqual(actual, expected, `Diagnostic arrays did not match:
+        assert.deepEqual(
+            actual,
+            expected,
+            `Diagnostic arrays did not match:
 Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
-Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
+Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`,
+        );
     }
 
     assertErrors(...expectedDiagnostics: ExpectedErrorDiagnostic[]) {
         const actual = this.diagnostics.filter(d => d.kind === DiagnosticKind.Error).map(diagnosticToText);
         const expected = expectedDiagnostics.map(expectedDiagnosticToText);
-        assert.deepEqual(actual, expected, `Diagnostics arrays did not match:
+        assert.deepEqual(
+            actual,
+            expected,
+            `Diagnostics arrays did not match:
 Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
 Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}
-Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`);
+Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`,
+        );
     }
 
     printDiagnostics(header = "== Diagnostics ==") {
@@ -614,4 +624,3 @@ Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*
         return this.sys.now();
     }
 }
-
