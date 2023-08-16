@@ -38,7 +38,10 @@ import {
     TypeChecker,
     VariableDeclaration,
 } from "../_namespaces/ts";
-import { RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    RefactorErrorInfo,
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 const refactorName = "Inline variable";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable);
@@ -46,7 +49,7 @@ const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable
 const inlineVariableAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.inline.variable"
+    kind: "refactor.inline.variable",
 };
 
 interface InliningInfo {
@@ -64,7 +67,7 @@ registerRefactor(refactorName, {
             program,
             preferences,
             startPosition,
-            triggerReason
+            triggerReason,
         } = context;
 
         // tryWithReferenceToken is true below when triggerReason === "invoked", since we want to
@@ -79,7 +82,7 @@ registerRefactor(refactorName, {
             return [{
                 name: refactorName,
                 description: refactorDescription,
-                actions: [inlineVariableAction]
+                actions: [inlineVariableAction],
             }];
         }
 
@@ -89,8 +92,8 @@ registerRefactor(refactorName, {
                 description: refactorDescription,
                 actions: [{
                     ...inlineVariableAction,
-                    notApplicableReason: info.error
-                }]
+                    notApplicableReason: info.error,
+                }],
             }];
         }
 
@@ -118,7 +121,7 @@ registerRefactor(refactorName, {
         });
 
         return { edits };
-    }
+    },
 });
 
 function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferenceToken: boolean, program: Program): InliningInfo | RefactorErrorInfo | undefined {
@@ -132,7 +135,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
 
     // If triggered in a variable declaration, make sure it's not in a catch clause or for-loop
     // and that it has a value.
-    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent)) {
+    if (isInitializedVariable(parent) && isVariableDeclarationInVariableStatement(parent) && isIdentifier(parent.name)) {
         // Don't inline the variable if it has multiple declarations.
         if (checker.getMergedSymbol(parent.symbol).declarations?.length !== 1) {
             return { error: getLocaleSpecificMessage(Diagnostics.Variables_with_multiple_declarations_cannot_be_inlined) };

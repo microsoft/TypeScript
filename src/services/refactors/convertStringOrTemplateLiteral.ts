@@ -36,7 +36,9 @@ import {
     textChanges,
     Token,
 } from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 const refactorName = "Convert to template string";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
@@ -44,12 +46,12 @@ const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_temp
 const convertStringAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.rewrite.string"
+    kind: "refactor.rewrite.string",
 };
 registerRefactor(refactorName, {
     kinds: [convertStringAction.kind],
     getEditsForAction: getRefactorEditsToConvertToTemplateString,
-    getAvailableActions: getRefactorActionsToConvertToTemplateString
+    getAvailableActions: getRefactorActionsToConvertToTemplateString,
 });
 
 function getRefactorActionsToConvertToTemplateString(context: RefactorContext): readonly ApplicableRefactorInfo[] {
@@ -63,9 +65,7 @@ function getRefactorActionsToConvertToTemplateString(context: RefactorContext): 
         return [refactorInfo];
     }
     else if (context.preferences.provideRefactorNotApplicableReason) {
-        refactorInfo.actions.push({ ...convertStringAction,
-            notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation)
-        });
+        refactorInfo.actions.push({ ...convertStringAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation) });
         return [refactorInfo];
     }
     return emptyArray;
@@ -143,10 +143,9 @@ function getParentBinaryExpression(expr: Node) {
 }
 
 function treeToArray(current: Expression) {
-    const loop = (current: Node): { nodes: Expression[], operators: Token<BinaryOperator>[], hasString: boolean, validOperators: boolean} => {
+    const loop = (current: Node): { nodes: Expression[]; operators: Token<BinaryOperator>[]; hasString: boolean; validOperators: boolean; } => {
         if (!isBinaryExpression(current)) {
-            return { nodes: [current as Expression], operators: [], validOperators: true,
-                     hasString: isStringLiteral(current) || isNoSubstitutionTemplateLiteral(current) };
+            return { nodes: [current as Expression], operators: [], validOperators: true, hasString: isStringLiteral(current) || isNoSubstitutionTemplateLiteral(current) };
         }
         const { nodes, operators, hasString: leftHasString, validOperators: leftOperatorValid } = loop(current.left);
 
@@ -170,14 +169,13 @@ function treeToArray(current: Expression) {
 // "foo" + /* comment */ "bar"
 const copyTrailingOperatorComments = (operators: Token<BinaryOperator>[], file: SourceFile) => (index: number, targetNode: Node) => {
     if (index < operators.length) {
-         copyTrailingComments(operators[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+        copyTrailingComments(operators[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
     }
 };
 
 // to copy comments following the string
 // "foo" /* comment */ + "bar" /* comment */ + "bar2"
-const copyCommentFromMultiNode = (nodes: readonly Expression[], file: SourceFile, copyOperatorComments: (index: number, targetNode: Node) => void) =>
-(indexes: number[], targetNode: Node) => {
+const copyCommentFromMultiNode = (nodes: readonly Expression[], file: SourceFile, copyOperatorComments: (index: number, targetNode: Node) => void) => (indexes: number[], targetNode: Node) => {
     while (indexes.length > 0) {
         const index = indexes.shift()!;
         copyTrailingComments(nodes[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
@@ -224,7 +222,7 @@ function concatConsecutiveString(index: number, nodes: readonly Expression[]): [
     return [index, text, rawText, indexes];
 }
 
-function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[], operators: Token<BinaryOperator>[] }, file: SourceFile) {
+function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[]; operators: Token<BinaryOperator>[]; }, file: SourceFile) {
     const copyOperatorComments = copyTrailingOperatorComments(operators, file);
     const copyCommentFromStringLiterals = copyCommentFromMultiNode(nodes, file, copyOperatorComments);
     const [begin, headText, rawHeadText, headIndexes] = concatConsecutiveString(0, nodes);
@@ -253,9 +251,12 @@ function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[], o
                 const isLastSpan = index === currentNode.templateSpans.length - 1;
                 const text = span.literal.text + (isLastSpan ? subsequentText : "");
                 const rawText = getRawTextOfTemplate(span.literal) + (isLastSpan ? rawSubsequentText : "");
-                return factory.createTemplateSpan(span.expression, isLast && isLastSpan
-                    ? factory.createTemplateTail(text, rawText)
-                    : factory.createTemplateMiddle(text, rawText));
+                return factory.createTemplateSpan(
+                    span.expression,
+                    isLast && isLastSpan
+                        ? factory.createTemplateTail(text, rawText)
+                        : factory.createTemplateMiddle(text, rawText),
+                );
             });
             templateSpans.push(...spans);
         }

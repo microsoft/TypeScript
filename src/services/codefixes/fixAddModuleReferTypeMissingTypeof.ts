@@ -27,8 +27,7 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_typeof, fixId, Diagnostics.Add_missing_typeof)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-        doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start))),
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start))),
 });
 
 function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode {
