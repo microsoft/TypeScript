@@ -549,8 +549,7 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Modifier added to accessor", () => {
-        const source =
-            "class C {\
+        const source = "class C {\
     set Bar(bar:string) {}\
 }\
 var o2 = { set Foo(val:number) { } };";
@@ -563,8 +562,7 @@ var o2 = { set Foo(val:number) { } };";
     });
 
     it("Insert parameter ahead of parameter", () => {
-        const source =
-            "alert(100);\
+        const source = "alert(100);\
 \
 class OverloadedMonster {\
 constructor();\
@@ -579,8 +577,7 @@ constructor(name) { }\
     });
 
     it("Insert declare modifier before module", () => {
-        const source =
-            "module mAmbient {\
+        const source = "module mAmbient {\
 module m3 { }\
 }";
 
@@ -592,8 +589,7 @@ module m3 { }\
     });
 
     it("Insert function above arrow function with comment", () => {
-        const source =
-            "\
+        const source = "\
 () =>\
    // do something\
 0;";
@@ -702,7 +698,7 @@ module m3 { }\
     });
 
     it("Moving methods from object literal to class in strict mode", () => {
-        const source = "\"use strict\"; var v = { public A() { } public B() { } public C() { } }";
+        const source = '"use strict"; var v = { public A() { } public B() { } public C() { } }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "var v =".length, "class C");
@@ -719,7 +715,7 @@ module m3 { }\
         compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
     });
 
-    it("Do not move methods called \"constructor\" from object literal to class", () => {
+    it('Do not move methods called "constructor" from object literal to class', () => {
         const source = "var v = { public constructor() { } public constructor() { } public constructor() { } }";
 
         const oldText = ts.ScriptSnapshot.fromString(source);
@@ -738,7 +734,7 @@ module m3 { }\
     });
 
     it("Moving index signatures from class to interface in strict mode", () => {
-        const source = "\"use strict\"; class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }";
+        const source = '"use strict"; class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "class".length, "interface");
@@ -755,9 +751,8 @@ module m3 { }\
         compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
     });
 
-
     it("Moving index signatures from interface to class in strict mode", () => {
-        const source = "\"use strict\"; interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }";
+        const source = '"use strict"; interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "interface".length, "class");
@@ -783,9 +778,8 @@ module m3 { }\
         compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
     });
 
-
     it("Moving accessors from object literal to class in strict mode", () => {
-        const source = "\"use strict\"; var v = { public get A() { } public get B() { } public get C() { } }";
+        const source = '"use strict"; var v = { public get A() { } public get B() { } public get C() { } }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "var v =".length, "class C");
@@ -834,11 +828,13 @@ module m3 { }\
         insertCode(source, index, "Fo");
     });
 
-    for (const tsIgnoreComment of [
-        "// @ts-ignore",
-        "/* @ts-ignore */",
-        "/*\n  @ts-ignore */"
-    ]) {
+    for (
+        const tsIgnoreComment of [
+            "// @ts-ignore",
+            "/* @ts-ignore */",
+            "/*\n  @ts-ignore */",
+        ]
+    ) {
         describe(`${tsIgnoreComment} comment directives`, () => {
             const textWithIgnoreComment = `const x = 10;
     function foo() {

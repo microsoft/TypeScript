@@ -3,7 +3,10 @@ import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc";
-import { loadProjectFromDisk, replaceText } from "../helpers/vfs";
+import {
+    loadProjectFromDisk,
+    replaceText,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
     let projFs: vfs.FileSystem;
@@ -37,9 +40,12 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
         modifyFs: fs => {
             fs.rimrafSync("/src/src/hello.json");
             fs.writeFileSync("/src/src/index.json", JSON.stringify({ hello: "world" }));
-            fs.writeFileSync("/src/src/index.ts", `import hello from "./index.json"
+            fs.writeFileSync(
+                "/src/src/index.ts",
+                `import hello from "./index.json"
 
-export default hello.hello`);
+export default hello.hello`,
+            );
         },
     });
 
@@ -63,7 +69,7 @@ export default hello.hello`);
         fs: () => projFs,
         commandLineArgs: ["--b", "src/tsconfig_withFiles.json", "--verbose", "--explainFiles"],
         modifyFs: fs => replaceText(fs, "src/tsconfig_withFiles.json", `"composite": true,`, `"composite": true, "sourceMap": true,`),
-        edits: noChangeOnlyRuns
+        edits: noChangeOnlyRuns,
     });
 
     verifyTsc({
@@ -72,7 +78,7 @@ export default hello.hello`);
         fs: () => projFs,
         commandLineArgs: ["--b", "src/tsconfig_withFiles.json", "--verbose"],
         modifyFs: fs => replaceText(fs, "src/tsconfig_withFiles.json", `"outDir": "dist",`, ""),
-        edits: noChangeOnlyRuns
+        edits: noChangeOnlyRuns,
     });
 });
 
@@ -82,6 +88,6 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
         subScenario: "importing json module from project reference",
         fs: () => loadProjectFromDisk("tests/projects/importJsonFromProjectReference"),
         commandLineArgs: ["--b", "src/tsconfig.json", "--verbose", "--explainFiles"],
-        edits: noChangeOnlyRuns
+        edits: noChangeOnlyRuns,
     });
 });

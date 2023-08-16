@@ -118,7 +118,8 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
             typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
             throttleLimit,
-            log);
+            log,
+        );
         this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0], validateDefaultNpmLocation, this.installTypingHost);
 
         // If the NPM path contains spaces and isn't wrapped in quotes, do so.
@@ -172,7 +173,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
                 this.closeProject(req);
                 break;
             case "typesRegistry": {
-                const typesRegistry: { [key: string]: MapLike<string> } = {};
+                const typesRegistry: { [key: string]: MapLike<string>; } = {};
                 this.typesRegistry.forEach((value, key) => {
                     typesRegistry[key] = value;
                 });
@@ -272,7 +273,7 @@ process.on("disconnect", () => {
 });
 let installer: NodeTypingsInstaller | undefined;
 process.on("message", (req: TypingInstallerRequestUnion) => {
-    installer ??= new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
+    installer ??= new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/ 5, log); // TODO: GH#18217
     installer.handleRequest(req);
 });
 
