@@ -15,7 +15,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         ["H", "I"],
         ["I", "J"],
         ["J", "H"],
-        ["J", "E"]
+        ["J", "E"],
     ];
 
     before(() => {
@@ -80,11 +80,15 @@ describe("unittests:: tsbuild - graph-ordering", () => {
             fileSystem.mkdirpSync(`/project/${proj}`);
             fileSystem.writeFileSync(`/project/${proj}/${proj}.ts`, "export {}");
             const configFileName = getProjectFileName(proj);
-            const configContent = JSON.stringify({
-                compilerOptions: { composite: true },
-                files: [`./${proj}.ts`],
-                references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` }))
-            }, undefined, 2);
+            const configContent = JSON.stringify(
+                {
+                    compilerOptions: { composite: true },
+                    files: [`./${proj}.ts`],
+                    references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` })),
+                },
+                undefined,
+                2,
+            );
             fileSystem.writeFileSync(configFileName, configContent);
             projFileNames.push(configFileName);
         }

@@ -6,10 +6,14 @@ import {
     virtualFileSystemRoot,
 } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
-import { getNewLineCharacter } from "./_namespaces/ts";
+import {
+    getNewLineCharacter,
+} from "./_namespaces/ts";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
-import { incrementalVerifier } from "./incrementalUtils";
+import {
+    incrementalVerifier,
+} from "./incrementalUtils";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
@@ -59,7 +63,9 @@ export class ScriptInfo {
         this.editRanges.push({
             length: this.content.length,
             textChangeRange: ts.createTextChangeRange(
-                ts.createTextSpanFromBounds(start, end), newText.length)
+                ts.createTextSpanFromBounds(start, end),
+                newText.length,
+            ),
         });
 
         // Update version #
@@ -141,8 +147,7 @@ export abstract class LanguageServiceAdapterHost {
     public typesRegistry: Map<string, void> | undefined;
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
 
-    constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
-        protected settings = ts.getDefaultCompilerOptions()) {
+    constructor(protected cancellationToken = DefaultHostCancellationToken.instance, protected settings = ts.getDefaultCompilerOptions()) {
         this.scriptInfos = new collections.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
     }
 
@@ -234,7 +239,7 @@ export abstract class LanguageServiceAdapterHost {
         throw new Error("No script with name '" + fileName + "'");
     }
 
-    public openFile(_fileName: string, _content?: string, _scriptKindName?: string): void { /*overridden*/ }
+    public openFile(_fileName: string, _content?: string, _scriptKindName?: string): void {/*overridden*/}
 
     /**
      * @param line 0 based index
@@ -269,17 +274,25 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
 
     installPackage = ts.notImplemented;
 
-    getCompilationSettings() { return this.settings; }
+    getCompilationSettings() {
+        return this.settings;
+    }
 
-    getCancellationToken() { return this.cancellationToken; }
+    getCancellationToken() {
+        return this.cancellationToken;
+    }
 
     getDirectories(path: string): string[] {
         return this.sys.getDirectories(path);
     }
 
-    getCurrentDirectory(): string { return virtualFileSystemRoot; }
+    getCurrentDirectory(): string {
+        return virtualFileSystemRoot;
+    }
 
-    getDefaultLibFileName(): string { return Compiler.defaultLibFileName; }
+    getDefaultLibFileName(): string {
+        return Compiler.defaultLibFileName;
+    }
 
     getScriptFileNames(): string[] {
         return this.getFilenames().filter(ts.isAnySupportedFileExtension);
@@ -290,7 +303,9 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
         return script ? new ScriptSnapshot(script) : undefined;
     }
 
-    getScriptKind(): ts.ScriptKind { return ts.ScriptKind.Unknown; }
+    getScriptKind(): ts.ScriptKind {
+        return ts.ScriptKind.Unknown;
+    }
 
     getScriptVersion(fileName: string): string {
         const script = this.getScriptInfo(fileName);
@@ -331,10 +346,18 @@ export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         this.host = new NativeLanguageServiceHost(cancellationToken, options);
     }
-    getHost(): LanguageServiceAdapterHost { return this.host; }
-    getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
-    getClassifier(): ts.Classifier { return ts.createClassifier(); }
-    getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /*readImportFiles*/ true, ts.hasJSFileExtension(fileName)); }
+    getHost(): LanguageServiceAdapterHost {
+        return this.host;
+    }
+    getLanguageService(): ts.LanguageService {
+        return ts.createLanguageService(this.host);
+    }
+    getClassifier(): ts.Classifier {
+        return ts.createClassifier();
+    }
+    getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
+        return ts.preProcessFile(fileContents, /*readImportFiles*/ true, ts.hasJSFileExtension(fileName));
+    }
 }
 
 /// Shim adapter
@@ -356,9 +379,9 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
                     const scriptInfo = this.getScriptInfo(fileName);
                     return scriptInfo && scriptInfo.content;
                 },
-                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames()
+                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames(),
             };
-            this.getModuleResolutionsForFile = (fileName) => {
+            this.getModuleResolutionsForFile = fileName => {
                 const scriptInfo = this.getScriptInfo(fileName)!;
                 const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ true);
                 const imports: ts.MapLike<string> = {};
@@ -370,7 +393,7 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
                 }
                 return JSON.stringify(imports);
             };
-            this.getTypeReferenceDirectiveResolutionsForFile = (fileName) => {
+            this.getTypeReferenceDirectiveResolutionsForFile = fileName => {
                 const scriptInfo = this.getScriptInfo(fileName);
                 if (scriptInfo) {
                     const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
@@ -391,37 +414,73 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
         }
     }
 
-    override getFilenames(): string[] { return this.nativeHost.getFilenames(); }
-    override getScriptInfo(fileName: string): ScriptInfo | undefined { return this.nativeHost.getScriptInfo(fileName); }
-    override addScript(fileName: string, content: string, isRootFile: boolean): void { this.nativeHost.addScript(fileName, content, isRootFile); }
-    override editScript(fileName: string, start: number, end: number, newText: string): void { this.nativeHost.editScript(fileName, start, end, newText); }
-    override positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter { return this.nativeHost.positionToLineAndCharacter(fileName, position); }
+    override getFilenames(): string[] {
+        return this.nativeHost.getFilenames();
+    }
+    override getScriptInfo(fileName: string): ScriptInfo | undefined {
+        return this.nativeHost.getScriptInfo(fileName);
+    }
+    override addScript(fileName: string, content: string, isRootFile: boolean): void {
+        this.nativeHost.addScript(fileName, content, isRootFile);
+    }
+    override editScript(fileName: string, start: number, end: number, newText: string): void {
+        this.nativeHost.editScript(fileName, start, end, newText);
+    }
+    override positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
+        return this.nativeHost.positionToLineAndCharacter(fileName, position);
+    }
 
-    getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
-    getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
-    getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
-    getDirectories(path: string): string { return JSON.stringify(this.nativeHost.getDirectories(path)); }
-    getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
-    getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
+    getCompilationSettings(): string {
+        return JSON.stringify(this.nativeHost.getCompilationSettings());
+    }
+    getCancellationToken(): ts.HostCancellationToken {
+        return this.nativeHost.getCancellationToken();
+    }
+    getCurrentDirectory(): string {
+        return this.nativeHost.getCurrentDirectory();
+    }
+    getDirectories(path: string): string {
+        return JSON.stringify(this.nativeHost.getDirectories(path));
+    }
+    getDefaultLibFileName(): string {
+        return this.nativeHost.getDefaultLibFileName();
+    }
+    getScriptFileNames(): string {
+        return JSON.stringify(this.nativeHost.getScriptFileNames());
+    }
     getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
         const nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName)!; // TODO: GH#18217
         return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot);
     }
-    getScriptKind(): ts.ScriptKind { return this.nativeHost.getScriptKind(); }
-    getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
-    getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
+    getScriptKind(): ts.ScriptKind {
+        return this.nativeHost.getScriptKind();
+    }
+    getScriptVersion(fileName: string): string {
+        return this.nativeHost.getScriptVersion(fileName);
+    }
+    getLocalizedDiagnosticMessages(): string {
+        return JSON.stringify({});
+    }
 
     readDirectory = ts.notImplemented;
     readDirectoryNames = ts.notImplemented;
     readFileNames = ts.notImplemented;
-    override fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
+    override fileExists(fileName: string) {
+        return this.getScriptInfo(fileName) !== undefined;
+    }
     override readFile(fileName: string) {
         const snapshot = this.nativeHost.getScriptSnapshot(fileName);
         return snapshot && ts.getSnapshotText(snapshot);
     }
-    log(s: string): void { this.nativeHost.log(s); }
-    trace(s: string): void { this.nativeHost.trace(s); }
-    error(s: string): void { this.nativeHost.error(s); }
+    log(s: string): void {
+        this.nativeHost.log(s);
+    }
+    trace(s: string): void {
+        this.nativeHost.trace(s);
+    }
+    error(s: string): void {
+        this.nativeHost.error(s);
+    }
     override directoryExists(): boolean {
         // for tests pessimistically assume that directory always exists
         return true;
@@ -443,7 +502,7 @@ class ClassifierShimProxy implements ts.Classifier {
         for (; i < result.length - 1; i += 2) {
             const t = entries[i / 2] = {
                 length: parseInt(result[i]),
-                classification: parseInt(result[i + 1])
+                classification: parseInt(result[i + 1]),
             };
 
             assert.isTrue(t.length > 0, "Result length should be greater than 0, got :" + t.length);
@@ -455,7 +514,7 @@ class ClassifierShimProxy implements ts.Classifier {
 
         return {
             finalLexState,
-            entries
+            entries,
         };
     }
 }
@@ -618,7 +677,7 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
         throw new Error("Not supported on the shim.");
     }
-    getMoveToRefactoringFileSuggestions(): { newFileName: string, files: string[] } {
+    getMoveToRefactoringFileSuggestions(): { newFileName: string; files: string[]; } {
         throw new Error("Not supported on the shim.");
     }
     organizeImports(_args: ts.OrganizeImportsArgs, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
@@ -678,7 +737,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     uncommentSelection(fileName: string, textRange: ts.TextRange): ts.TextChange[] {
         return unwrapJSONCallResult(this.shim.uncommentSelection(fileName, textRange));
     }
-    dispose(): void { this.shim.dispose({}); }
+    dispose(): void {
+        this.shim.dispose({});
+    }
 }
 
 export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
@@ -688,9 +749,15 @@ export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
         this.host = new ShimLanguageServiceHost(preprocessToResolve, cancellationToken, options);
         this.factory = new ts.TypeScriptServicesFactory();
     }
-    getHost() { return this.host; }
-    getLanguageService(): ts.LanguageService { return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host)); }
-    getClassifier(): ts.Classifier { return new ClassifierShimProxy(this.factory.createClassifierShim(this.host)); }
+    getHost() {
+        return this.host;
+    }
+    getLanguageService(): ts.LanguageService {
+        return new LanguageServiceShimProxy(this.factory.createLanguageServiceShim(this.host));
+    }
+    getClassifier(): ts.Classifier {
+        return new ClassifierShimProxy(this.factory.createClassifierShim(this.host));
+    }
     getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo {
         const coreServicesShim = this.factory.createCoreServicesShim(this.host);
         const shimResult: {
@@ -706,14 +773,14 @@ export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
             ambientExternalModules: [],
             isLibFile: shimResult.isLibFile,
             typeReferenceDirectives: [],
-            libReferenceDirectives: []
+            libReferenceDirectives: [],
         };
 
         ts.forEach(shimResult.referencedFiles, refFile => {
             convertResult.referencedFiles.push({
                 fileName: refFile.path,
                 pos: refFile.position,
-                end: refFile.position + refFile.length
+                end: refFile.position + refFile.length,
             });
         });
 
@@ -721,7 +788,7 @@ export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
             convertResult.importedFiles.push({
                 fileName: importedFile.path,
                 pos: importedFile.position,
-                end: importedFile.position + importedFile.length
+                end: importedFile.position + importedFile.length,
             });
         });
 
@@ -729,7 +796,7 @@ export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
             convertResult.importedFiles.push({
                 fileName: typeRefDirective.path,
                 pos: typeRefDirective.position,
-                end: typeRefDirective.position + typeRefDirective.length
+                end: typeRefDirective.position + typeRefDirective.length,
             });
         });
         return convertResult;
@@ -863,8 +930,12 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
         return false;
     }
 
-    startGroup() { throw ts.notImplemented(); }
-    endGroup() { throw ts.notImplemented(); }
+    startGroup() {
+        throw ts.notImplemented();
+    }
+    endGroup() {
+        throw ts.notImplemented();
+    }
 
     perftrc(message: string): void {
         return this.host.log(message);
@@ -912,9 +983,9 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                             };
 
                             return proxy;
-                        }
+                        },
                     }),
-                    error: undefined
+                    error: undefined,
                 };
 
             // Throws during initialization
@@ -923,9 +994,9 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                     module: () => ({
                         create() {
                             throw new Error("I am not a well-behaved plugin");
-                        }
+                        },
                     }),
-                    error: undefined
+                    error: undefined,
                 };
 
             // Adds another diagnostic
@@ -943,14 +1014,14 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                                     code: 9999,
                                     length: 3,
                                     messageText: `Plugin diagnostic`,
-                                    start: 0
+                                    start: 0,
                                 });
                                 return prev;
                             };
                             return proxy;
-                        }
+                        },
                     }),
-                    error: undefined
+                    error: undefined,
                 };
 
             // Accepts configurations
@@ -970,7 +1041,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                                     code: 9999,
                                     length: 3,
                                     messageText: customMessage,
-                                    start: 0
+                                    start: 0,
                                 });
                                 return prev;
                             };
@@ -978,15 +1049,15 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                         },
                         onConfigurationChanged(config: any) {
                             customMessage = config.message;
-                        }
+                        },
                     }),
-                    error: undefined
+                    error: undefined,
                 };
 
             default:
                 return {
                     module: undefined,
-                    error: new Error("Could not resolve module")
+                    error: new Error("Could not resolve module"),
                 };
         }
     }
@@ -1024,7 +1095,6 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         };
         this.server = new FourslashSession(opts);
 
-
         // Fake the connection between the client and the server
         serverHost.writeMessage = client.onMessage.bind(client);
         clientHost.writeMessage = this.server.onMessage.bind(this.server);
@@ -1037,23 +1107,34 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         this.client = client;
         this.host = clientHost;
     }
-    getHost() { return this.host; }
-    getLanguageService(): ts.LanguageService { return this.client; }
-    getClassifier(): ts.Classifier { throw new Error("getClassifier is not available using the server interface."); }
-    getPreProcessedFileInfo(): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
+    getHost() {
+        return this.host;
+    }
+    getLanguageService(): ts.LanguageService {
+        return this.client;
+    }
+    getClassifier(): ts.Classifier {
+        throw new Error("getClassifier is not available using the server interface.");
+    }
+    getPreProcessedFileInfo(): ts.PreProcessedFileInfo {
+        throw new Error("getPreProcessedFileInfo is not available using the server interface.");
+    }
     assertTextConsistent(fileName: string) {
         const serverText = this.server.getText(fileName);
         const clientText = this.host.readFile(fileName);
-        ts.Debug.assert(serverText === clientText, [
-            "Server and client text are inconsistent.",
-            "",
-            "\x1b[1mServer\x1b[0m\x1b[31m:",
-            serverText,
-            "",
-            "\x1b[1mClient\x1b[0m\x1b[31m:",
-            clientText,
-            "",
-            "This probably means something is wrong with the fourslash infrastructure, not with the test."
-        ].join(ts.sys.newLine));
+        ts.Debug.assert(
+            serverText === clientText,
+            [
+                "Server and client text are inconsistent.",
+                "",
+                "\x1b[1mServer\x1b[0m\x1b[31m:",
+                serverText,
+                "",
+                "\x1b[1mClient\x1b[0m\x1b[31m:",
+                clientText,
+                "",
+                "This probably means something is wrong with the fourslash infrastructure, not with the test.",
+            ].join(ts.sys.newLine),
+        );
     }
 }

@@ -86,7 +86,7 @@ import {
     TransformationContext,
     unorderedRemoveItem,
     VariableDeclaration,
-    VariableStatement
+    VariableStatement,
 } from "../_namespaces/ts";
 
 /** @internal */
@@ -463,22 +463,36 @@ export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssi
 /** @internal */
 export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
     switch (kind) {
-        case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
-        case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
-        case SyntaxKind.AsteriskEqualsToken: return SyntaxKind.AsteriskToken;
-        case SyntaxKind.AsteriskAsteriskEqualsToken: return SyntaxKind.AsteriskAsteriskToken;
-        case SyntaxKind.SlashEqualsToken: return SyntaxKind.SlashToken;
-        case SyntaxKind.PercentEqualsToken: return SyntaxKind.PercentToken;
-        case SyntaxKind.LessThanLessThanEqualsToken: return SyntaxKind.LessThanLessThanToken;
-        case SyntaxKind.GreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanToken;
-        case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
-        case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
-        case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
-        case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
-        case SyntaxKind.BarBarEqualsToken: return SyntaxKind.BarBarToken;
-        case SyntaxKind.AmpersandAmpersandEqualsToken: return SyntaxKind.AmpersandAmpersandToken;
-        case SyntaxKind.QuestionQuestionEqualsToken: return SyntaxKind.QuestionQuestionToken;
-
+        case SyntaxKind.PlusEqualsToken:
+            return SyntaxKind.PlusToken;
+        case SyntaxKind.MinusEqualsToken:
+            return SyntaxKind.MinusToken;
+        case SyntaxKind.AsteriskEqualsToken:
+            return SyntaxKind.AsteriskToken;
+        case SyntaxKind.AsteriskAsteriskEqualsToken:
+            return SyntaxKind.AsteriskAsteriskToken;
+        case SyntaxKind.SlashEqualsToken:
+            return SyntaxKind.SlashToken;
+        case SyntaxKind.PercentEqualsToken:
+            return SyntaxKind.PercentToken;
+        case SyntaxKind.LessThanLessThanEqualsToken:
+            return SyntaxKind.LessThanLessThanToken;
+        case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+            return SyntaxKind.GreaterThanGreaterThanToken;
+        case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+            return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+        case SyntaxKind.AmpersandEqualsToken:
+            return SyntaxKind.AmpersandToken;
+        case SyntaxKind.BarEqualsToken:
+            return SyntaxKind.BarToken;
+        case SyntaxKind.CaretEqualsToken:
+            return SyntaxKind.CaretToken;
+        case SyntaxKind.BarBarEqualsToken:
+            return SyntaxKind.BarBarToken;
+        case SyntaxKind.AmpersandAmpersandEqualsToken:
+            return SyntaxKind.AmpersandAmpersandToken;
+        case SyntaxKind.QuestionQuestionEqualsToken:
+            return SyntaxKind.QuestionQuestionToken;
     }
 }
 
@@ -642,7 +656,7 @@ export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorato
 
     return {
         decorators,
-        parameters
+        parameters,
     };
 }
 
@@ -686,8 +700,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
     }
 
     const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, accessor);
-    const firstAccessorWithDecorators =
-        hasDecorators(firstAccessor) ? firstAccessor :
+    const firstAccessorWithDecorators = hasDecorators(firstAccessor) ? firstAccessor :
         secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
         undefined;
 
@@ -705,7 +718,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
         decorators,
         parameters,
         getDecorators: getAccessor && getDecorators(getAccessor),
-        setDecorators: setAccessor && getDecorators(setAccessor)
+        setDecorators: setAccessor && getDecorators(setAccessor),
     };
 }
 
@@ -737,7 +750,6 @@ function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorator
     const decorators = getDecorators(property);
     if (!some(decorators)) {
         return undefined;
-
     }
 
     return { decorators };
@@ -768,7 +780,7 @@ export interface LexicalEnvironment<in out TEnvData, TPrivateEnvData, TPrivateEn
 /** @internal */
 export function walkUpLexicalEnvironments<TEnvData, TPrivateEnvData, TPrivateEntry, U>(
     env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined,
-    cb: (env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry>) => U
+    cb: (env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry>) => U,
 ): U | undefined {
     while (env) {
         const result = cb(env);
@@ -785,7 +797,7 @@ export function newPrivateEnvironment<TData, TEntry>(data: TData): PrivateEnviro
 /** @internal */
 export function getPrivateIdentifier<TData, TEntry>(
     privateEnv: PrivateEnvironment<TData, TEntry> | undefined,
-    name: PrivateIdentifier
+    name: PrivateIdentifier,
 ) {
     return isGeneratedPrivateIdentifier(name) ?
         privateEnv?.generatedIdentifiers?.get(getNodeForGeneratedName(name)) :
@@ -796,7 +808,7 @@ export function getPrivateIdentifier<TData, TEntry>(
 export function setPrivateIdentifier<TData, TEntry>(
     privateEnv: PrivateEnvironment<TData, TEntry>,
     name: PrivateIdentifier,
-    entry: TEntry
+    entry: TEntry,
 ) {
     if (isGeneratedPrivateIdentifier(name)) {
         privateEnv.generatedIdentifiers ??= new Map();

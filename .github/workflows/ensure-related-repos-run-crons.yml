@@ -6,10 +6,10 @@
 name: Related Repo Commit Bumps
 
 on:
-    schedule:
-        # Monthly, https://crontab.guru/#0_0_*_1-12_*
-        - cron: '0 0 1 * *'
-    workflow_dispatch: {}
+  schedule:
+    # Monthly, https://crontab.guru/#0_0_*_1-12_*
+    - cron: '0 0 1 * *'
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -26,31 +26,31 @@ jobs:
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
-    - name: Configure git
-      run: |
-        git config --global user.email "typescriptbot@microsoft.com"
-        git config --global user.name "TypeScript Bot"
+      - name: Configure git
+        run: |
+          git config --global user.email "typescriptbot@microsoft.com"
+          git config --global user.name "TypeScript Bot"
 
-    - uses: actions/checkout@v3
-      with: 
-        repository: 'microsoft/TypeScript-Website'
-        path: 'ts-site'
+      - uses: actions/checkout@v3
+        with:
+          repository: 'microsoft/TypeScript-Website'
+          path: 'ts-site'
 
-    - name: Push Commit to TS Website
-      run:  |
-        cd ts-site
-        git commit --allow-empty -m "Monthly Bump"
-        git config --unset-all http.https://github.com/.extraheader
-        git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Website.git
+      - name: Push Commit to TS Website
+        run: |
+          cd ts-site
+          git commit --allow-empty -m "Monthly Bump"
+          git config --unset-all http.https://github.com/.extraheader
+          git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Website.git
 
-    - uses: actions/checkout@v3
-      with: 
-        repository: 'microsoft/TypeScript-Make-Monaco-Builds'
-        path: 'monaco-builds'
+      - uses: actions/checkout@v3
+        with:
+          repository: 'microsoft/TypeScript-Make-Monaco-Builds'
+          path: 'monaco-builds'
 
-    - name: Push Commit to TS Make Monaco Builds
-      run:  |
-        cd monaco-builds
-        git commit --allow-empty -m "Monthly Bump"
-        git config --unset-all http.https://github.com/.extraheader
-        git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Make-Monaco-Builds.git
+      - name: Push Commit to TS Make Monaco Builds
+        run: |
+          cd monaco-builds
+          git commit --allow-empty -m "Monthly Bump"
+          git config --unset-all http.https://github.com/.extraheader
+          git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Make-Monaco-Builds.git
