@@ -442,11 +442,11 @@ export class TestState {
             for (const k of keys) {
                 const key = k as keyof typeof ls;
                 if (cacheableMembers.indexOf(key) === -1) {
-                    proxy[key] = (...args: any[]) => (ls[key] as Function)(...args);
+                    proxy[key] = (...args: any[]) => (ls[key] as (...args: any[]) => any)(...args);
                     continue;
                 }
                 const memo = Utils.memoize(
-                    (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as Function)(...args),
+                    (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as (...args: any[]) => any)(...args),
                     (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|")
                 );
                 proxy[key] = (...args: any[]) => memo(
@@ -2411,7 +2411,7 @@ export class TestState {
             q1.marker.fileName === q1.marker.fileName
             ? (q1.marker.position > q2.marker.position ? -1 : 1)
             : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
-        const files: Map<string, string[]> = new Map();
+        const files = new Map<string, string[]>();
         let previous: T | undefined;
         for (const { marker, item } of sorted) {
             const span = (item ? getSpan(item) : undefined) ?? { start: marker.position, length: 1 };
@@ -3279,7 +3279,7 @@ export class TestState {
             assert.equal(action.description, options.description);
         }
         else if (Array.isArray(options.description)) {
-            const description = ts.formatStringFromArgs(options.description[0], options.description, 1);
+            const description = ts.formatStringFromArgs(options.description[0], options.description.slice(1));
             assert.equal(action.description, description);
         }
         else {
@@ -4333,7 +4333,7 @@ export class TestState {
     public toggleLineComment(newFileContent: string): void {
         const changes: ts.TextChange[] = [];
         for (const range of this.getRanges()) {
-            changes.push.apply(changes, this.languageService.toggleLineComment(this.activeFile.fileName, range));
+            changes.push(...this.languageService.toggleLineComment(this.activeFile.fileName, range));
         }
 
         this.applyEdits(this.activeFile.fileName, changes);
@@ -4344,7 +4344,7 @@ export class TestState {
     public toggleMultilineComment(newFileContent: string): void {
         const changes: ts.TextChange[] = [];
         for (const range of this.getRanges()) {
-            changes.push.apply(changes, this.languageService.toggleMultilineComment(this.activeFile.fileName, range));
+            changes.push(...this.languageService.toggleMultilineComment(this.activeFile.fileName, range));
         }
 
         this.applyEdits(this.activeFile.fileName, changes);
@@ -4355,7 +4355,7 @@ export class TestState {
     public commentSelection(newFileContent: string): void {
         const changes: ts.TextChange[] = [];
         for (const range of this.getRanges()) {
-            changes.push.apply(changes, this.languageService.commentSelection(this.activeFile.fileName, range));
+            changes.push(...this.languageService.commentSelection(this.activeFile.fileName, range));
         }
 
         this.applyEdits(this.activeFile.fileName, changes);
@@ -4366,7 +4366,7 @@ export class TestState {
     public uncommentSelection(newFileContent: string): void {
         const changes: ts.TextChange[] = [];
         for (const range of this.getRanges()) {
-            changes.push.apply(changes, this.languageService.uncommentSelection(this.activeFile.fileName, range));
+            changes.push(...this.languageService.uncommentSelection(this.activeFile.fileName, range));
         }
 
         this.applyEdits(this.activeFile.fileName, changes);
@@ -4912,7 +4912,7 @@ function toArray<T>(x: ArrayOrSingle<T>): readonly T[] {
 }
 
 function makeWhitespaceVisible(text: string) {
-    return text.replace(/ /g, "\u00B7").replace(/\r/g, "\u00B6").replace(/\n/g, "\u2193\n").replace(/\t/g, "\u2192\   ");
+    return text.replace(/ /g, "\u00B7").replace(/\r/g, "\u00B6").replace(/\n/g, "\u2193\n").replace(/\t/g, "\u2192   ");
 }
 
 function showTextDiff(expected: string, actual: string): string {

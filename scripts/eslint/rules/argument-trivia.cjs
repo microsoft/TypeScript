@@ -25,7 +25,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: ``,
-            recommended: "error",
         },
         messages: {
             argumentTriviaArgumentError: `Tag argument with parameter name`,
@@ -180,7 +179,7 @@ module.exports = createRule({
             }
 
             const getSignature = memoize(() => {
-                if (context.parserServices?.hasFullTypeInformation) {
+                if (context.parserServices?.program) {
                     const parserServices = ESLintUtils.getParserServices(context);
                     const checker = parserServices.program.getTypeChecker();
                     const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);

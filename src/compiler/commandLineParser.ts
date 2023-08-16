@@ -6,6 +6,7 @@ import {
     arrayToMap,
     assign,
     BuildOptions,
+    cast,
     changeExtension,
     CharacterCodes,
     combinePaths,
@@ -885,7 +886,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Default_catch_clause_variables_as_unknown_instead_of_any,
-        defaultValueDescription: false,
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "alwaysStrict",
@@ -2018,9 +2019,8 @@ export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
 }
 
 /** @internal */
-export function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
-    const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-    return diagnostic.messageText as string;
+export function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
+    return cast(createCompilerDiagnostic(message, ...args).messageText, isString);
 }
 
 export type DiagnosticReporter = (diagnostic: Diagnostic) => void;

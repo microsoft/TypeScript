@@ -1337,7 +1337,7 @@ export function getImpliedNodeFormatForFileWorker(
 }
 
 /** @internal */
-export const plainJSErrors: Set<number> = new Set([
+export const plainJSErrors = new Set<number>([
     // binder errors
     Diagnostics.Cannot_redeclare_block_scoped_variable_0.code,
     Diagnostics.A_module_cannot_have_multiple_default_exports.code,
@@ -1621,7 +1621,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             ).map(resolvedTypeReferenceDirective => ({ resolvedTypeReferenceDirective }));
     }
     else {
-        const typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+        const typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(
+            currentDirectory,
+            getCanonicalFileName,
+            /*options*/ undefined,
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+            moduleResolutionCache?.optionsToRedirectsKey,
+        );
         actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile) =>
             loadWithModeAwareCache(
                 typeDirectiveNames,

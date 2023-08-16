@@ -17,6 +17,7 @@ export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageS
     for (const k of Object.keys(langSvc)) {
         // eslint-disable-next-line local/only-arrow-functions
         proxy[k] = function () {
+            // eslint-disable-next-line prefer-spread, prefer-rest-params
             return langSvc[k].apply(langSvc, arguments);
         };
     }
@@ -901,6 +902,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                             const langSvc: any = info.languageService;
                             // eslint-disable-next-line local/only-arrow-functions
                             proxy.getQuickInfoAtPosition = function () {
+                                // eslint-disable-next-line prefer-spread, prefer-rest-params
                                 const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
                                 if (parts.displayParts.length > 0) {
                                     parts.displayParts[0].text = "Proxied";

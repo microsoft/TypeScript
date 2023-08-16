@@ -152,8 +152,6 @@ import {
     forEachChild,
     forEachChildRecursively,
     ForInOrOfStatement,
-    ForInStatement,
-    ForOfStatement,
     ForStatement,
     FunctionBody,
     FunctionDeclaration,
@@ -331,6 +329,7 @@ import {
     isQualifiedName,
     isRootedDiskPath,
     isSetAccessorDeclaration,
+    isShiftOperatorOrHigher,
     isShorthandPropertyAssignment,
     isSourceFile,
     isString,
@@ -416,6 +415,7 @@ import {
     noop,
     normalizePath,
     NoSubstitutionTemplateLiteral,
+    NumberLiteralType,
     NumericLiteral,
     ObjectFlags,
     ObjectFlagsType,
@@ -494,6 +494,7 @@ import {
     stringContains,
     StringLiteral,
     StringLiteralLike,
+    StringLiteralType,
     stringToToken,
     SuperCall,
     SuperExpression,
@@ -507,6 +508,7 @@ import {
     TaggedTemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
+    TemplateLiteralToken,
     TemplateLiteralTypeSpan,
     TemplateSpan,
     TextRange,
@@ -544,6 +546,7 @@ import {
     TypeReferenceNode,
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
+    UniqueESSymbolType,
     UserPreferences,
     ValidImportTypeNode,
     VariableDeclaration,
@@ -2146,19 +2149,16 @@ export function createDiagnosticForNodeArrayFromMessageChain(sourceFile: SourceF
     return createFileDiagnosticFromMessageChain(sourceFile, start, nodes.end - start, messageChain, relatedInformation);
 }
 
-function assertDiagnosticLocation(file: SourceFile | undefined, start: number, length: number) {
+function assertDiagnosticLocation(sourceText: string, start: number, length: number) {
     Debug.assertGreaterThanOrEqual(start, 0);
     Debug.assertGreaterThanOrEqual(length, 0);
-
-    if (file) {
-        Debug.assertLessThanOrEqual(start, file.text.length);
-        Debug.assertLessThanOrEqual(start + length, file.text.length);
-    }
+    Debug.assertLessThanOrEqual(start, sourceText.length);
+    Debug.assertLessThanOrEqual(start + length, sourceText.length);
 }
 
 /** @internal */
 export function createFileDiagnosticFromMessageChain(file: SourceFile, start: number, length: number, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
-    assertDiagnosticLocation(file, start, length);
+    assertDiagnosticLocation(file.text, start, length);
     return {
         file,
         start,
@@ -3417,9 +3417,9 @@ export function isInExpressionContext(node: Node): boolean {
                 forStatement.incrementor === node;
         case SyntaxKind.ForInStatement:
         case SyntaxKind.ForOfStatement:
-            const forInStatement = parent as ForInStatement | ForOfStatement;
-            return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
-                forInStatement.expression === node;
+            const forInOrOfStatement = parent as ForInOrOfStatement;
+            return (forInOrOfStatement.initializer === node && forInOrOfStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
+                forInOrOfStatement.expression === node;
         case SyntaxKind.TypeAssertionExpression:
         case SyntaxKind.AsExpression:
             return node === (parent as AssertionExpression).expression;
@@ -4467,23 +4467,29 @@ export const enum AssignmentKind {
     None, Definite, Compound
 }
 
-/** @internal */
-export function getAssignmentTargetKind(node: Node): AssignmentKind {
+type AssignmentTarget =
+    | BinaryExpression
+    | PrefixUnaryExpression
+    | PostfixUnaryExpression
+    | ForInOrOfStatement;
+
+function getAssignmentTarget(node: Node): AssignmentTarget | undefined {
     let parent = node.parent;
     while (true) {
         switch (parent.kind) {
             case SyntaxKind.BinaryExpression:
-                const binaryOperator = (parent as BinaryExpression).operatorToken.kind;
-                return isAssignmentOperator(binaryOperator) && (parent as BinaryExpression).left === node ?
-                    binaryOperator === SyntaxKind.EqualsToken || isLogicalOrCoalescingAssignmentOperator(binaryOperator) ? AssignmentKind.Definite : AssignmentKind.Compound :
-                    AssignmentKind.None;
+                const binaryExpression = parent as BinaryExpression;
+                const binaryOperator = binaryExpression.operatorToken.kind;
+                return isAssignmentOperator(binaryOperator) && binaryExpression.left === node ? binaryExpression : undefined;
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
-                const unaryOperator = (parent as PrefixUnaryExpression | PostfixUnaryExpression).operator;
-                return unaryOperator === SyntaxKind.PlusPlusToken || unaryOperator === SyntaxKind.MinusMinusToken ? AssignmentKind.Compound : AssignmentKind.None;
+                const unaryExpression = (parent as PrefixUnaryExpression | PostfixUnaryExpression);
+                const unaryOperator = unaryExpression.operator;
+                return unaryOperator === SyntaxKind.PlusPlusToken || unaryOperator === SyntaxKind.MinusMinusToken ? unaryExpression : undefined;
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
-                return (parent as ForInOrOfStatement).initializer === node ? AssignmentKind.Definite : AssignmentKind.None;
+                const forInOrOfStatement = parent as ForInOrOfStatement;
+                return forInOrOfStatement.initializer === node ? forInOrOfStatement : undefined;
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.SpreadElement:
@@ -4495,20 +4501,41 @@ export function getAssignmentTargetKind(node: Node): AssignmentKind {
                 break;
             case SyntaxKind.ShorthandPropertyAssignment:
                 if ((parent as ShorthandPropertyAssignment).name !== node) {
-                    return AssignmentKind.None;
+                    return undefined;
                 }
                 node = parent.parent;
                 break;
             case SyntaxKind.PropertyAssignment:
-                if ((parent as ShorthandPropertyAssignment).name === node) {
-                    return AssignmentKind.None;
+                if ((parent as PropertyAssignment).name === node) {
+                    return undefined;
                 }
                 node = parent.parent;
                 break;
             default:
-                return AssignmentKind.None;
+                return undefined;
         }
         parent = node.parent;
+    }
+}
+
+/** @internal */
+export function getAssignmentTargetKind(node: Node): AssignmentKind {
+    const target = getAssignmentTarget(node);
+    if (!target) {
+        return AssignmentKind.None;
+    }
+    switch (target.kind) {
+        case SyntaxKind.BinaryExpression:
+            const binaryOperator = target.operatorToken.kind;
+            return binaryOperator === SyntaxKind.EqualsToken || isLogicalOrCoalescingAssignmentOperator(binaryOperator) ?
+                AssignmentKind.Definite :
+                AssignmentKind.Compound;
+        case SyntaxKind.PrefixUnaryExpression:
+        case SyntaxKind.PostfixUnaryExpression:
+            return AssignmentKind.Compound;
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+            return AssignmentKind.Definite;
     }
 }
 
@@ -4518,7 +4545,18 @@ export function getAssignmentTargetKind(node: Node): AssignmentKind {
 // (Note that `p` is not a target in the above examples, only `a`.)
 /** @internal */
 export function isAssignmentTarget(node: Node): boolean {
-    return getAssignmentTargetKind(node) !== AssignmentKind.None;
+    return !!getAssignmentTarget(node);
+}
+
+function isCompoundLikeAssignment(assignment: AssignmentExpression<EqualsToken>): boolean {
+    const right = skipParentheses(assignment.right);
+    return right.kind === SyntaxKind.BinaryExpression && isShiftOperatorOrHigher((right as BinaryExpression).operatorToken.kind);
+}
+
+/** @internal */
+export function isInCompoundLikeAssignment(node: Node): boolean {
+    const target = getAssignmentTarget(node);
+    return !!target && isAssignmentExpression(target, /*excludeCompoundAssignment*/ true) && isCompoundLikeAssignment(target);
 }
 
 /** @internal */
@@ -4533,8 +4571,7 @@ export type NodeWithPossibleHoistedDeclaration =
     | DefaultClause
     | LabeledStatement
     | ForStatement
-    | ForInStatement
-    | ForOfStatement
+    | ForInOrOfStatement
     | DoStatement
     | WhileStatement
     | TryStatement
@@ -5798,11 +5835,15 @@ function escapeTemplateSubstitution(str: string): string {
     return str.replace(templateSubstitutionRegExp, "\\${");
 }
 
+function containsInvalidEscapeFlag(node: TemplateLiteralToken): boolean {
+    return !!((node.templateFlags || 0) & TokenFlags.ContainsInvalidEscape);
+}
+
 /** @internal */
 export function hasInvalidEscape(template: TemplateLiteral): boolean {
     return template && !!(isNoSubstitutionTemplateLiteral(template)
-        ? template.templateFlags
-        : (template.head.templateFlags || some(template.templateSpans, span => !!span.literal.templateFlags)));
+        ? containsInvalidEscapeFlag(template)
+        : (containsInvalidEscapeFlag(template.head) || some(template.templateSpans, span => containsInvalidEscapeFlag(span.literal))));
 }
 
 // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
@@ -5810,10 +5851,10 @@ export function hasInvalidEscape(template: TemplateLiteral): boolean {
 // the language service. These characters should be escaped when printing, and if any characters are added,
 // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
 // There is no reason for this other than that JSON.stringify does not handle it either.
-const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+const doubleQuoteEscapedCharsRegExp = /[\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+const singleQuoteEscapedCharsRegExp = /[\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
-const backtickQuoteEscapedCharsRegExp = /\r\n|[\\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
+const backtickQuoteEscapedCharsRegExp = /\r\n|[\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
 const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
@@ -5823,8 +5864,8 @@ const escapedCharsMap = new Map(Object.entries({
     "\n": "\\n",
     "\\": "\\\\",
     "\"": "\\\"",
-    "\'": "\\\'",
-    "\`": "\\\`",
+    "'": "\\'",
+    "`": "\\`",
     "\u2028": "\\u2028", // lineSeparator
     "\u2029": "\\u2029", // paragraphSeparator
     "\u0085": "\\u0085", // nextLine
@@ -5880,11 +5921,11 @@ export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubl
 // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
 // the language service. These characters should be escaped when printing, and if any characters are added,
 // the map below must be updated.
-const jsxDoubleQuoteEscapedCharsRegExp = /[\"\u0000-\u001f\u2028\u2029\u0085]/g;
-const jsxSingleQuoteEscapedCharsRegExp = /[\'\u0000-\u001f\u2028\u2029\u0085]/g;
+const jsxDoubleQuoteEscapedCharsRegExp = /["\u0000-\u001f\u2028\u2029\u0085]/g;
+const jsxSingleQuoteEscapedCharsRegExp = /['\u0000-\u001f\u2028\u2029\u0085]/g;
 const jsxEscapedCharsMap = new Map(Object.entries({
     "\"": "&quot;",
-    "\'": "&apos;"
+    "'": "&apos;"
 }));
 
 function encodeJsxCharacterEntity(charCode: number): string {
@@ -6423,6 +6464,16 @@ export function parameterIsThisKeyword(parameter: ParameterDeclaration): boolean
 /** @internal */
 export function isThisIdentifier(node: Node | undefined): boolean {
     return !!node && node.kind === SyntaxKind.Identifier && identifierIsThisKeyword(node as Identifier);
+}
+
+/** @internal */
+export function isInTypeQuery(node: Node): boolean {
+    // TypeScript 1.0 spec (April 2014): 3.6.3
+    // A type query consists of the keyword typeof followed by an expression.
+    // The expression is restricted to a single identifier or a sequence of identifiers separated by periods
+    return !!findAncestor(
+        node,
+        n => n.kind === SyntaxKind.TypeQuery ? true : n.kind === SyntaxKind.Identifier || n.kind === SyntaxKind.QualifiedName ? false : "quit");
 }
 
 /** @internal */
@@ -8108,8 +8159,8 @@ export function setObjectAllocator(alloc: ObjectAllocator) {
 }
 
 /** @internal */
-export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
-    return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index + baseIndex]));
+export function formatStringFromArgs(text: string, args: DiagnosticArguments): string {
+    return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index]));
 }
 
 let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -8134,14 +8185,16 @@ export function getLocaleSpecificMessage(message: DiagnosticMessage) {
 }
 
 /** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation;
-/** @internal */
-export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage): DiagnosticWithDetachedLocation {
-    assertDiagnosticLocation(/*file*/ undefined, start, length);
+export function createDetachedDiagnostic(fileName: string, sourceText: string, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithDetachedLocation {
+    if ((start + length) > sourceText.length) {
+        length = sourceText.length - start;
+    }
+
+    assertDiagnosticLocation(sourceText, start, length);
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 4) {
-        text = formatStringFromArgs(text, arguments, 4);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return {
@@ -8205,15 +8258,13 @@ export function attachFileToDiagnostics(diagnostics: DiagnosticWithDetachedLocat
 }
 
 /** @internal */
-export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation;
-/** @internal */
-export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
-    assertDiagnosticLocation(file, start, length);
+export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
+    assertDiagnosticLocation(file.text, start, length);
 
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 4) {
-        text = formatStringFromArgs(text, arguments, 4);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return {
@@ -8230,26 +8281,22 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
 }
 
 /** @internal */
-export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: DiagnosticArguments): string;
-/** @internal */
-export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
+export function formatMessage(message: DiagnosticMessage, ...args: DiagnosticArguments): string {
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 2) {
-        text = formatStringFromArgs(text, arguments, 2);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return text;
 }
 
 /** @internal */
-export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic;
-/** @internal */
-export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
+export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): Diagnostic {
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 1) {
-        text = formatStringFromArgs(text, arguments, 1);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
 
     return {
@@ -8280,13 +8327,11 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
 }
 
 /** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain;
-/** @internal */
-export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
+export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticMessageChain {
     let text = getLocaleSpecificMessage(message);
 
-    if (arguments.length > 2) {
-        text = formatStringFromArgs(text, arguments, 2);
+    if (some(args)) {
+        text = formatStringFromArgs(text, args);
     }
     return {
         messageText: text,
@@ -8654,6 +8699,11 @@ export function getUseDefineForClassFields(compilerOptions: CompilerOptions): bo
 }
 
 /** @internal */
+export function getEmitStandardClassFields(compilerOptions: CompilerOptions) {
+    return compilerOptions.useDefineForClassFields !== false && getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022;
+}
+
+/** @internal */
 export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
     return optionsHaveChanges(oldOptions, newOptions, semanticDiagnosticsOptionDeclarations);
 }
@@ -8830,7 +8880,7 @@ export function tryRemoveDirectoryPrefix(path: string, dirPath: string, getCanon
 // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
 // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
 // proof.
-const reservedCharacterPattern = /[^\w\s\/]/g;
+const reservedCharacterPattern = /[^\w\s/]/g;
 
 /** @internal */
 export function regExpEscape(text: string) {
@@ -10312,4 +10362,26 @@ export function getTextOfJsxNamespacedName(node: JsxNamespacedName) {
 /** @internal */
 export function intrinsicTagNameToString(node: Identifier | JsxNamespacedName) {
     return isIdentifier(node) ? idText(node) : getTextOfJsxNamespacedName(node);
+}
+
+/**
+ * Indicates whether a type can be used as a property name.
+ * @internal
+ */
+export function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType {
+    return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
+}
+
+/**
+ * Gets the symbolic name for a member from its type.
+ * @internal
+ */
+export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
+    if (type.flags & TypeFlags.UniqueESSymbol) {
+        return (type as UniqueESSymbolType).escapedName;
+    }
+    if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+        return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
+    }
+    return Debug.fail();
 }
