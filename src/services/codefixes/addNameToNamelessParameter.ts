@@ -44,6 +44,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
         "arg" + i,
         param.questionToken,
         param.dotDotDotToken ? factory.createArrayTypeNode(typeNode) : typeNode,
-        param.initializer);
+        param.initializer,
+    );
     changeTracker.replaceNode(sourceFile, param, replacement);
 }
