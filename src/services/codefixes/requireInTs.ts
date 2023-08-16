@@ -41,19 +41,24 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, context.program, diag.start);
-        if (info) {
-            doChange(changes, context.sourceFile, info);
-        }
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, context.program, diag.start);
+            if (info) {
+                doChange(changes, context.sourceFile, info);
+            }
+        }),
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info) {
     const { allowSyntheticDefaults, defaultImportName, namedImports, statement, required } = info;
-    changes.replaceNode(sourceFile, statement, defaultImportName && !allowSyntheticDefaults
-        ? factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))
-        : factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required, /*assertClause*/ undefined));
+    changes.replaceNode(
+        sourceFile,
+        statement,
+        defaultImportName && !allowSyntheticDefaults
+            ? factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))
+            : factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required, /*assertClause*/ undefined),
+    );
 }
 
 interface Info {
@@ -79,7 +84,7 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Info | 
             defaultImportName,
             namedImports,
             statement: cast(decl.parent.parent, isVariableStatement),
-            required: first(parent.arguments)
+            required: first(parent.arguments),
         };
     }
 }

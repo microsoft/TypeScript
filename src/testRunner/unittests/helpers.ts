@@ -4,7 +4,7 @@ const enum ChangedPart {
     none = 0,
     references = 1 << 0,
     importsAndExports = 1 << 1,
-    program = 1 << 2
+    program = 1 << 2,
 }
 
 export const newLine = "\r\n";
@@ -31,11 +31,7 @@ export interface TestCompilerHost extends ts.CompilerHost {
 export class SourceText implements ts.IScriptSnapshot {
     private fullText: string | undefined;
 
-    constructor(private references: string,
-        private importsAndExports: string,
-        private program: string,
-        private changedPart = ChangedPart.none,
-        private version = 0) {
+    constructor(private references: string, private importsAndExports: string, private program: string, private changedPart = ChangedPart.none, private version = 0) {
     }
 
     static New(references: string, importsAndExports: string, program: string): SourceText {

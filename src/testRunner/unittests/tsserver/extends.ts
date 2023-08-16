@@ -1,4 +1,6 @@
-import { getSymlinkedExtendsSys } from "../helpers/extends";
+import {
+    getSymlinkedExtendsSys,
+} from "../helpers/extends";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,

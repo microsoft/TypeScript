@@ -50,7 +50,7 @@ registerCodeFix({
             });
         }));
     },
-    fixIds: [fixId]
+    fixIds: [fixId],
 });
 
 interface Info {

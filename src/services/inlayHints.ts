@@ -441,7 +441,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return {
             text,
             span: createTextSpanFromNode(node, sourceFile),
-            file: sourceFile.fileName
+            file: sourceFile.fileName,
         };
     }
 }
