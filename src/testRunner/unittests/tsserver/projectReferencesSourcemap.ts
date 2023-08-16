@@ -27,11 +27,11 @@ export function fn2() { }
 export function fn3() { }
 export function fn4() { }
 export function fn5() { }
-`
+`,
     };
     const dependencyConfig: File = {
         path: `${dependecyLocation}/tsconfig.json`,
-        content: JSON.stringify({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } })
+        content: JSON.stringify({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } }),
     };
 
     const mainTs: File = {
@@ -49,23 +49,23 @@ fn2();
 fn3();
 fn4();
 fn5();
-`
+`,
     };
     const mainConfig: File = {
         path: `${mainLocation}/tsconfig.json`,
         content: JSON.stringify({
             compilerOptions: { composite: true, declarationMap: true },
-            references: [{ path: "../dependency" }]
-        })
+            references: [{ path: "../dependency" }],
+        }),
     };
 
     const randomFile: File = {
         path: `/user/username/projects/myproject/random/random.ts`,
-        content: "let a = 10;"
+        content: "let a = 10;",
     };
     const randomConfig: File = {
         path: `/user/username/projects/myproject/random/tsconfig.json`,
-        content: "{}"
+        content: "{}",
     };
     const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
     const dtsPath = dtsLocation.toLowerCase() as ts.Path;
@@ -80,29 +80,29 @@ fn5();
             host.readFile(dtsLocation)!.replace(
                 "//# sourceMappingURL=FnS.d.ts.map",
                 `export declare function fn6(): void;
-//# sourceMappingURL=FnS.d.ts.map`
-            )
+//# sourceMappingURL=FnS.d.ts.map`,
+            ),
         );
     }
 
     function changeDtsMapFile(host: TestServerHost) {
         host.writeFile(
             dtsMapLocation,
-            `{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}`
+            `{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}`,
         );
     }
 
     function goToDefFromMainTs(fn: number): TestSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest> {
         return {
             command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
-            arguments: { file: mainTs.path, line: fn + 8, offset: 1 }
+            arguments: { file: mainTs.path, line: fn + 8, offset: 1 },
         };
     }
 
     function renameFromDependencyTs(fn: number): TestSessionRequest<ts.server.protocol.RenameRequest> {
         return {
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: { file: dependencyTs.path, line: fn, offset: 17 }
+            arguments: { file: dependencyTs.path, line: fn, offset: 17 },
         };
     }
 
@@ -148,7 +148,7 @@ fn5();
         existingDocumentPositionMapper: ts.server.ScriptInfo["documentPositionMapper"],
         existingMapEqual: boolean,
         existingDocumentPositionMapperEqual: boolean,
-        skipMapPathInDtsInfo?: boolean
+        skipMapPathInDtsInfo?: boolean,
     ) {
         let sourceMapPath: ts.server.ScriptInfo["sourceMapFilePath"] | undefined;
         let dependencyMap: ts.server.ScriptInfo | undefined;
@@ -229,9 +229,12 @@ fn5();
     function createSessionWithoutProjectReferences(onHostCreate?: OnHostCreate) {
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         // Erase project reference
-        host.writeFile(mainConfig.path, JSON.stringify({
-            compilerOptions: { composite: true, declarationMap: true }
-        }));
+        host.writeFile(
+            mainConfig.path,
+            JSON.stringify({
+                compilerOptions: { composite: true, declarationMap: true },
+            }),
+        );
         onHostCreate?.(host);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         return { host, session };
@@ -247,14 +250,17 @@ fn5();
     function createSessionWithDisabledProjectReferences(onHostCreate?: OnHostCreate) {
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         // Erase project reference
-        host.writeFile(mainConfig.path, JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                declarationMap: true,
-                disableSourceOfProjectReferenceRedirect: true
-            },
-            references: [{ path: "../dependency" }]
-        }));
+        host.writeFile(
+            mainConfig.path,
+            JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    declarationMap: true,
+                    disableSourceOfProjectReferenceRedirect: true,
+                },
+                references: [{ path: "../dependency" }],
+            }),
+        );
         onHostCreate?.(host);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         return { host, session };
@@ -275,8 +281,8 @@ fn5();
                 offset: 1,
                 endLine: 14,
                 endOffset: 1,
-                insertString: "const x = 10;"
-            }
+                insertString: "const x = 10;",
+            },
         });
     }
 
@@ -289,11 +295,10 @@ fn5();
                 offset: 1,
                 endLine: 6,
                 endOffset: 1,
-                insertString: "const x = 10;"
-            }
+                insertString: "const x = 10;",
+            },
         });
     }
-
 
     describe("from project that uses dependency: goToDef", () => {
         function setupWithActionWith(setup: (onHostCreate?: OnHostCreate) => ReturnType<CreateSessionFn>, onHostCreate: OnHostCreate | undefined) {
@@ -319,7 +324,7 @@ fn5();
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/can go to definition correctly", session);
@@ -342,7 +347,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/usage file changes with timeout before request", session);
             });
@@ -360,7 +365,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/usage file changes", session);
             });
@@ -381,8 +386,8 @@ fn5();
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts changes with timeout before request", session);
             });
@@ -399,8 +404,8 @@ fn5();
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts changes", session);
             });
@@ -421,8 +426,8 @@ fn5();
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ false
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap changes with timeout before request", session);
             });
@@ -439,8 +444,8 @@ fn5();
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ false
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap changes", session);
             });
@@ -454,7 +459,7 @@ fn5();
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap not present", session);
@@ -473,7 +478,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap created", session);
@@ -489,7 +494,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dtsMap deleted", session);
@@ -504,7 +509,7 @@ fn5();
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts not present", session);
@@ -523,7 +528,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts created", session);
@@ -539,7 +544,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configHasNoReference/dependency dts deleted", session);
@@ -562,7 +567,7 @@ fn5();
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/can go to definition correctly", session);
@@ -584,8 +589,8 @@ fn5();
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/usage file changes with timeout before request", session);
             });
@@ -602,8 +607,8 @@ fn5();
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/usage file changes", session);
             });
@@ -624,8 +629,8 @@ fn5();
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts changes with timeout before request", session);
             });
@@ -643,7 +648,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts changes", session);
             });
@@ -665,7 +670,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap changes with timeout before request", session);
             });
@@ -682,8 +687,8 @@ fn5();
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap changes", session);
             });
@@ -697,7 +702,7 @@ fn5();
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap not present", session);
@@ -716,7 +721,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap created", session);
@@ -732,7 +737,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dtsMap deleted", session);
@@ -747,7 +752,7 @@ fn5();
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts not present", session);
@@ -766,7 +771,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts created", session);
@@ -782,7 +787,7 @@ fn5();
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency dts deleted", session);
@@ -793,8 +798,11 @@ fn5();
 
                 // change
                 // Make change, without rebuild of solution
-                host.writeFile(dependencyTs.path, `function fooBar() { }
-${dependencyTs.content}`);
+                host.writeFile(
+                    dependencyTs.path,
+                    `function fooBar() { }
+${dependencyTs.content}`,
+                );
                 host.runQueuedTimeoutCallbacks();
                 verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
 
@@ -805,7 +813,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency source changes with timeout before request", session);
             });
@@ -815,8 +823,11 @@ ${dependencyTs.content}`);
 
                 // change
                 // Make change, without rebuild of solution
-                host.writeFile(dependencyTs.path, `function fooBar() { }
-${dependencyTs.content}`);
+                host.writeFile(
+                    dependencyTs.path,
+                    `function fooBar() { }
+${dependencyTs.content}`,
+                );
 
                 // action
                 verifyAllFnAction(
@@ -825,7 +836,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/dependency source changes", session);
             });
@@ -840,7 +851,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/configWithReference/when projects are not built", session);
@@ -863,7 +874,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/can go to definition correctly", session);
@@ -886,7 +897,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/usage file changes with timeout before request", session);
             });
@@ -903,8 +914,8 @@ ${dependencyTs.content}`);
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/usage file changes", session);
             });
@@ -926,7 +937,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts changes with timeout before request", session);
             });
@@ -943,8 +954,8 @@ ${dependencyTs.content}`);
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts changes", session);
             });
@@ -966,7 +977,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap changes with timeout before request", session);
             });
@@ -984,7 +995,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap changes", session);
             });
@@ -998,7 +1009,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap not present", session);
@@ -1017,7 +1028,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap created", session);
@@ -1033,7 +1044,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dtsMap deleted", session);
@@ -1048,7 +1059,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts not present", session);
@@ -1067,7 +1078,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts created", session);
@@ -1083,7 +1094,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "usageProject/disabledSourceRef/dependency dts deleted", session);
@@ -1115,7 +1126,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/rename locations", session);
@@ -1138,7 +1149,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/usage file changes with timeout before request", session);
             });
@@ -1156,7 +1167,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/usage file changes", session);
             });
@@ -1177,8 +1188,8 @@ ${dependencyTs.content}`);
                     renameFromDependencyTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts changes with timeout before request", session);
             });
@@ -1196,7 +1207,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts changes", session);
             });
@@ -1217,8 +1228,8 @@ ${dependencyTs.content}`);
                     renameFromDependencyTs,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ false
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap changes with timeout before request", session);
             });
@@ -1236,7 +1247,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap changes", session);
             });
@@ -1250,7 +1261,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap not present", session);
@@ -1269,7 +1280,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap created", session);
@@ -1285,7 +1296,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dtsMap deleted", session);
@@ -1300,7 +1311,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts not present", session);
@@ -1319,7 +1330,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts created", session);
@@ -1335,7 +1346,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configHasNoReference/dependency dts deleted", session);
@@ -1358,7 +1369,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/rename locations", session);
@@ -1381,7 +1392,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/usage file changes with timeout before request", session);
             });
@@ -1398,8 +1409,8 @@ ${dependencyTs.content}`);
                     renameFromDependencyTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/usage file changes", session);
             });
@@ -1421,7 +1432,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts changes with timeout before request", session);
             });
@@ -1439,7 +1450,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts changes", session);
             });
@@ -1461,7 +1472,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap changes with timeout before request", session);
             });
@@ -1479,7 +1490,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap changes", session);
             });
@@ -1493,7 +1504,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap not present", session);
@@ -1512,7 +1523,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap created", session);
@@ -1528,7 +1539,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dtsMap deleted", session);
@@ -1543,7 +1554,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts not present", session);
@@ -1562,7 +1573,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts created", session);
@@ -1578,7 +1589,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency dts deleted", session);
@@ -1592,8 +1603,14 @@ ${dependencyTs.content}`);
                 session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
                     command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
-                        file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
-`}
+                        file: dependencyTs.path,
+                        line: 1,
+                        offset: 1,
+                        endLine: 1,
+                        endOffset: 1,
+                        insertString: `function fooBar() { }
+`,
+                    },
                 });
                 host.runQueuedTimeoutCallbacks();
                 verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
@@ -1605,7 +1622,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency source changes with timeout before request", session);
             });
@@ -1618,18 +1635,24 @@ ${dependencyTs.content}`);
                 session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
                     command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
-                        file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
-`}
+                        file: dependencyTs.path,
+                        line: 1,
+                        offset: 1,
+                        endLine: 1,
+                        endOffset: 1,
+                        insertString: `function fooBar() { }
+`,
+                    },
                 });
 
                 // action
                 verifyAllFnAction(
                     session,
                     renameFromDependencyTsWithDependencyChange,
-                   /*existingDependencyMap*/ undefined,
-                   /*existingDocumentPositionMapper*/ undefined,
-                   /*existingMapEqual*/ false,
-                   /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDependencyMap*/ undefined,
+                    /*existingDocumentPositionMapper*/ undefined,
+                    /*existingMapEqual*/ false,
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/dependency source changes", session);
             });
@@ -1644,7 +1667,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/configWithReference/when projects are not built", session);
@@ -1667,7 +1690,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/rename locations", session);
@@ -1690,7 +1713,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/usage file changes with timeout before request", session);
             });
@@ -1708,7 +1731,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/usage file changes", session);
             });
@@ -1730,7 +1753,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts changes with timeout before request", session);
             });
@@ -1748,7 +1771,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts changes", session);
             });
@@ -1770,7 +1793,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap changes with timeout before request", session);
             });
@@ -1788,7 +1811,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap changes", session);
             });
@@ -1802,7 +1825,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap not present", session);
@@ -1821,7 +1844,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap created", session);
@@ -1837,7 +1860,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dtsMap deleted", session);
@@ -1852,7 +1875,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts not present", session);
@@ -1871,7 +1894,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts created", session);
@@ -1887,7 +1910,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependency/disabledSourceRef/dependency dts deleted", session);
@@ -1920,7 +1943,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { dependencyMap, documentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -1929,7 +1952,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/goToDef and rename locations", session);
@@ -1953,7 +1976,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -1961,7 +1984,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/usage file changes with timeout before request", session);
             });
@@ -1980,7 +2003,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -1988,7 +2011,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/usage file changes", session);
             });
@@ -2010,7 +2033,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2018,7 +2041,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts changes with timeout before request", session);
             });
@@ -2036,7 +2059,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2044,7 +2067,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts changes", session);
             });
@@ -2066,7 +2089,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2075,7 +2098,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     newDocumentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap changes with timeout before request", session);
             });
@@ -2093,7 +2116,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2102,7 +2125,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     newDocumentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap changes", session);
             });
@@ -2116,7 +2139,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2124,7 +2147,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap not present", session);
@@ -2143,7 +2166,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2152,7 +2175,7 @@ ${dependencyTs.content}`);
                     newDependencyMap,
                     newDocumentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap created", session);
@@ -2168,7 +2191,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2177,7 +2200,7 @@ ${dependencyTs.content}`);
                     newDependencyMap,
                     newDocumentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dtsMap deleted", session);
@@ -2191,7 +2214,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2199,7 +2222,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts not present", session);
@@ -2218,7 +2241,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2227,7 +2250,7 @@ ${dependencyTs.content}`);
                     newDependencyMap,
                     newDocumentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts created", session);
@@ -2243,7 +2266,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2251,7 +2274,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configHasNoReference/dependency dts deleted", session);
@@ -2274,7 +2297,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2282,7 +2305,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/gotoDef and rename locations", session);
@@ -2305,16 +2328,16 @@ ${dependencyTs.content}`);
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
                     renameFromDependencyTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/usage file changes with timeout before request", session);
             });
@@ -2333,7 +2356,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2341,7 +2364,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/usage file changes", session);
             });
@@ -2362,16 +2385,16 @@ ${dependencyTs.content}`);
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
                     renameFromDependencyTs,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts changes with timeout before request", session);
             });
@@ -2389,7 +2412,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2397,7 +2420,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts changes", session);
             });
@@ -2419,7 +2442,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2427,7 +2450,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap changes with timeout before request", session);
             });
@@ -2444,16 +2467,16 @@ ${dependencyTs.content}`);
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
                     renameFromDependencyTs,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ false
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap changes", session);
             });
@@ -2467,7 +2490,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2475,7 +2498,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap not present", session);
@@ -2495,7 +2518,7 @@ ${dependencyTs.content}`);
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
                     /*existingDocumentPositionMapperEqual*/ true,
-                    /*skipMapPathInDtsInfo*/ true
+                    /*skipMapPathInDtsInfo*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2503,7 +2526,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap created", session);
@@ -2520,7 +2543,7 @@ ${dependencyTs.content}`);
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
                     /*existingDocumentPositionMapperEqual*/ false,
-                    /*skipMapPathInDtsInfo*/ true
+                    /*skipMapPathInDtsInfo*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2528,7 +2551,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dtsMap deleted", session);
@@ -2543,7 +2566,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2551,7 +2574,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts not present", session);
@@ -2570,7 +2593,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2578,7 +2601,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts created", session);
@@ -2594,7 +2617,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2602,7 +2625,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency dts deleted", session);
@@ -2616,8 +2639,14 @@ ${dependencyTs.content}`);
                 session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
                     command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
-                        file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
-`}
+                        file: dependencyTs.path,
+                        line: 1,
+                        offset: 1,
+                        endLine: 1,
+                        endOffset: 1,
+                        insertString: `function fooBar() { }
+`,
+                    },
                 });
                 host.runQueuedTimeoutCallbacks();
                 verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
@@ -2629,7 +2658,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2637,7 +2666,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency source changes with timeout before request", session);
             });
@@ -2650,8 +2679,14 @@ ${dependencyTs.content}`);
                 session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
                     command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
-                        file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
- `}
+                        file: dependencyTs.path,
+                        line: 1,
+                        offset: 1,
+                        endLine: 1,
+                        endOffset: 1,
+                        insertString: `function fooBar() { }
+ `,
+                    },
                 });
 
                 // action
@@ -2660,16 +2695,16 @@ ${dependencyTs.content}`);
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
                     renameFromDependencyTsWithDependencyChange,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/dependency source changes", session);
             });
@@ -2684,7 +2719,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2692,7 +2727,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/configWithReference/when projects are not built", session);
@@ -2715,7 +2750,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { dependencyMap, documentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2724,7 +2759,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/gotoDef and rename locations", session);
@@ -2747,16 +2782,16 @@ ${dependencyTs.content}`);
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
                     renameFromDependencyTs,
                     dependencyMap,
                     documentPositionMapper,
-                     /*existingMapEqual*/ true,
-                     /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/usage file changes with timeout before request", session);
             });
@@ -2774,16 +2809,16 @@ ${dependencyTs.content}`);
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
                     renameFromDependencyTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/usage file changes", session);
             });
@@ -2805,7 +2840,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2813,7 +2848,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts changes with timeout before request", session);
             });
@@ -2831,7 +2866,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2839,7 +2874,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts changes", session);
             });
@@ -2860,8 +2895,8 @@ ${dependencyTs.content}`);
                     goToDefFromMainTs,
                     dependencyMap,
                     documentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ false
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2869,8 +2904,8 @@ ${dependencyTs.content}`);
                     renameFromDependencyTs,
                     dependencyMap,
                     newDocumentPositionMapper,
-                   /*existingMapEqual*/ true,
-                   /*existingDocumentPositionMapperEqual*/ true
+                    /*existingMapEqual*/ true,
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap changes with timeout before request", session);
             });
@@ -2888,7 +2923,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2897,7 +2932,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     newDocumentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap changes", session);
             });
@@ -2911,7 +2946,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2919,7 +2954,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap not present", session);
@@ -2938,7 +2973,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2947,7 +2982,7 @@ ${dependencyTs.content}`);
                     newDependencyMap,
                     newDocumentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap created", session);
@@ -2963,7 +2998,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -2972,7 +3007,7 @@ ${dependencyTs.content}`);
                     newDependencyMap,
                     newDocumentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dtsMap deleted", session);
@@ -2987,7 +3022,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -2995,7 +3030,7 @@ ${dependencyTs.content}`);
                     /*existingDependencyMap*/ undefined,
                     /*existingDocumentPositionMapper*/ undefined,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts not present", session);
@@ -3014,7 +3049,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ false,
-                    /*existingDocumentPositionMapperEqual*/ false
+                    /*existingDocumentPositionMapperEqual*/ false,
                 );
                 const { dependencyMap: newDependencyMap, documentPositionMapper: newDocumentPositionMapper } = getDocumentPositionMapper(session);
                 verifyAllFnAction(
@@ -3023,7 +3058,7 @@ ${dependencyTs.content}`);
                     newDependencyMap,
                     newDocumentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts created", session);
@@ -3039,7 +3074,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyAllFnAction(
                     session,
@@ -3047,7 +3082,7 @@ ${dependencyTs.content}`);
                     dependencyMap,
                     documentPositionMapper,
                     /*existingMapEqual*/ true,
-                    /*existingDocumentPositionMapperEqual*/ true
+                    /*existingDocumentPositionMapperEqual*/ true,
                 );
                 verifyScriptInfoCollectionWith(session, [mainTs, dependencyTs]);
                 baselineTsserverLogs("projectReferencesSourcemap", "dependencyAndUsage/disabledSourceRef/dependency dts deleted", session);
