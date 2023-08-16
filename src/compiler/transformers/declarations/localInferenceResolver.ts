@@ -12,6 +12,9 @@ import { visitEachChild,visitNode, visitNodes } from "../../visitorPublic";
 enum NarrowBehavior {
     None = 0,
     AsConst = 1,
+    KeepLiterals = 2,
+    AsConstOrKeepLiterals = AsConst | KeepLiterals,
+    NotKeepLiterals = ~KeepLiterals,
 }
 
 enum LocalTypeInfoFlags {
@@ -131,9 +134,10 @@ export function createLocalInferenceResolver({
         return invalid(getAccessor ?? setAccessor!);
     }
     function localInference(node: Node, inferenceFlags: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
+        const nextInferenceFlags = inferenceFlags & NarrowBehavior.NotKeepLiterals;
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
-                return localInference((node as ParenthesizedExpression).expression, inferenceFlags);
+                return localInference((node as ParenthesizedExpression).expression, nextInferenceFlags);
             case SyntaxKind.Identifier: {
                 if ((node as Identifier).escapedText === "undefined") {
                     return createUndefinedTypeNode(node);
@@ -187,7 +191,7 @@ export function createLocalInferenceResolver({
             case SyntaxKind.PrefixUnaryExpression:
                 const prefixOp = node as PrefixUnaryExpression;
                 if (prefixOp.operator === SyntaxKind.MinusToken || prefixOp.operator === SyntaxKind.PlusToken) {
-                    if (NarrowBehavior.AsConst & inferenceFlags) {
+                    if (NarrowBehavior.AsConstOrKeepLiterals & inferenceFlags) {
                         switch (prefixOp.operand.kind) {
                             case SyntaxKind.NumericLiteral:
                                 switch (prefixOp.operator) {
@@ -246,7 +250,7 @@ export function createLocalInferenceResolver({
                         );
                     }
                     else {
-                        const elementType = localInference(element, inferenceFlags);
+                        const elementType = localInference(element, nextInferenceFlags);
                         inheritedArrayTypeFlags = mergeFlags(inheritedArrayTypeFlags, elementType.flags);
                         elementTypesInfo.push(elementType);
                     }
@@ -318,7 +322,7 @@ export function createLocalInferenceResolver({
                         const modifiers = inferenceFlags & NarrowBehavior.AsConst ?
                             [factory.createModifier(SyntaxKind.ReadonlyKeyword)] :
                             [];
-                        const { typeNode, flags: propTypeFlags } = localInference(prop.initializer, inferenceFlags);
+                        const { typeNode, flags: propTypeFlags } = localInference(prop.initializer, nextInferenceFlags);
                         inheritedObjectTypeFlags = mergeFlags(inheritedObjectTypeFlags, propTypeFlags);
                         newProp = factory.createPropertySignature(
                             modifiers,
@@ -395,7 +399,7 @@ export function createLocalInferenceResolver({
         }
     }
     function literal(node: Node, baseType: string | KeywordTypeSyntaxKind, narrowBehavior: NarrowBehavior, flags: LocalTypeInfoFlags = 0) {
-        if (narrowBehavior & NarrowBehavior.AsConst) {
+        if (narrowBehavior & NarrowBehavior.AsConstOrKeepLiterals) {
             return regular(factory.createLiteralTypeNode(
                 normalizeLiteralValue(node as LiteralExpression)
             ), node, flags);
@@ -486,7 +490,7 @@ export function createLocalInferenceResolver({
             localType = localInference(node.initializer);
         }
         else if (isVariableDeclaration(node) && node.initializer) {
-            localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.AsConst : NarrowBehavior.None);
+            localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.KeepLiterals : NarrowBehavior.None);
         }
         else if (isPropertyDeclaration(node) && node.initializer) {
             localType = localInference(node.initializer);
