@@ -2,7 +2,9 @@ import * as vfs from "../../_namespaces/vfs";
 import {
     verifyTsc,
 } from "../helpers/tsc";
-import { loadProjectFromDisk } from "../helpers/vfs";
+import {
+    loadProjectFromDisk,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild - empty files option in tsconfig", () => {
     let projFs: vfs.FileSystem;
