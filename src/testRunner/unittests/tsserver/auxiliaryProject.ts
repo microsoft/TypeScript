@@ -12,15 +12,15 @@ import {
 
 const aTs: File = {
     path: "/a.ts",
-    content: `import { B } from "./b";`
+    content: `import { B } from "./b";`,
 };
 const bDts: File = {
     path: "/b.d.ts",
-    content: `export declare class B {}`
+    content: `export declare class B {}`,
 };
 const bJs: File = {
     path: "/b.js",
-    content: `export class B {}`
+    content: `export class B {}`,
 };
 describe("unittests:: tsserver:: auxiliaryProject", () => {
     it("AuxiliaryProject does not remove scrips from InferredProject", () => {

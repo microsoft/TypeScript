@@ -325,7 +325,9 @@ import {
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
-import { createNewFileName } from "./_namespaces/ts.refactor";
+import {
+    createNewFileName,
+} from "./_namespaces/ts.refactor";
 import * as classifier from "./classifier";
 import * as classifier2020 from "./classifier2020";
 
@@ -335,8 +337,8 @@ export const servicesVersion = "0.8";
 function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
     const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
         kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
-            kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
-                new TokenObject(kind, pos, end);
+        kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
+        new TokenObject(kind, pos, end);
     node.parent = parent;
     node.flags = parent.flags & NodeFlags.ContextFlags;
     return node;
@@ -752,7 +754,7 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
-    /** @internal */typeArguments!: NodeArray<TypeNode>;
+    /** @internal */ typeArguments!: NodeArray<TypeNode>;
     constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(pos, end);
     }
@@ -1016,7 +1018,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public statements!: NodeArray<Statement>;
     public endOfFileToken!: Token<SyntaxKind.EndOfFileToken>;
 
-    public amdDependencies!: { name: string; path: string }[];
+    public amdDependencies!: { name: string; path: string; }[];
     public moduleName!: string;
     public referencedFiles!: FileReference[];
     public typeReferenceDirectives!: FileReference[];
@@ -1250,7 +1252,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
 
 class SourceMapSourceObject implements SourceMapSource {
     lineMap!: number[];
-    constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) { }
+    constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) {}
 
     public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
         return getLineAndCharacterOfPosition(this, pos);
@@ -1319,7 +1321,7 @@ export function getDefaultCompilerOptions(): CompilerOptions {
     // Always default to "ScriptTarget.ES5" for the language service
     return {
         target: ScriptTarget.ES5,
-        jsx: JsxEmit.Preserve
+        jsx: JsxEmit.Preserve,
     };
 }
 
@@ -1357,9 +1359,9 @@ class SyntaxTreeCache {
                     toPath(fileName, this.host.getCurrentDirectory(), this.host.getCompilerHost?.()?.getCanonicalFileName || hostGetCanonicalFileName(this.host)),
                     this.host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(),
                     this.host,
-                    this.host.getCompilationSettings()
+                    this.host.getCompilationSettings(),
                 ),
-                setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings())
+                setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings()),
             };
             sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind);
         }
@@ -1420,8 +1422,8 @@ export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSn
                 newText = prefix && suffix
                     ? prefix + changedText + suffix
                     : prefix
-                        ? (prefix + changedText)
-                        : (changedText + suffix);
+                    ? (prefix + changedText)
+                    : (changedText + suffix);
             }
 
             const newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
@@ -1595,7 +1597,7 @@ export function createLanguageService(
         readFile: maybeBind(host, host.readFile),
         getDocumentPositionMapper: maybeBind(host, host.getDocumentPositionMapper),
         getSourceFileLike: maybeBind(host, host.getSourceFileLike),
-        log
+        log,
     });
 
     function getValidSourceFile(fileName: string): SourceFile {
@@ -1693,7 +1695,7 @@ export function createLanguageService(
         const { getSourceFileWithCache } = changeCompilerHostLikeToUseCache(
             compilerHost,
             fileName => toPath(fileName, currentDirectory, getCanonicalFileName),
-            (...args) => originalGetSourceFile.call(compilerHost, ...args)
+            (...args) => originalGetSourceFile.call(compilerHost, ...args),
         );
         compilerHost.getSourceFile = getSourceFileWithCache!;
 
@@ -1737,7 +1739,7 @@ export function createLanguageService(
             options: newSettings,
             host: compilerHost,
             oldProgram: program,
-            projectReferences
+            projectReferences,
         };
         program = createProgram(options);
 
@@ -1943,8 +1945,7 @@ export function createLanguageService(
         if (program) {
             // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
             const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
-            forEach(program.getSourceFiles(), f =>
-                documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind, f.impliedNodeFormat));
+            forEach(program.getSourceFiles(), f => documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind, f.impliedNodeFormat));
             program = undefined!; // TODO: GH#18217
         }
     }
@@ -2012,7 +2013,8 @@ export function createLanguageService(
             options.triggerKind,
             cancellationToken,
             formattingSettings && formatting.getFormatContext(formattingSettings, host),
-            options.includeSymbol);
+            options.includeSymbol,
+        );
     }
 
     function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
@@ -2057,13 +2059,11 @@ export function createLanguageService(
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                 displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
                 documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
-                tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined
+                tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined,
             };
         }
 
-        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
-            SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo)
-        );
+        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo));
         return {
             kind: symbolKind,
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
@@ -2156,15 +2156,14 @@ export function createLanguageService(
                 return {
                     fileName: sourceFile.fileName,
                     textSpan,
-                    ...FindAllReferences.toContextSpan(textSpan, sourceFile, node.parent)
+                    ...FindAllReferences.toContextSpan(textSpan, sourceFile, node.parent),
                 };
             });
         }
         else {
             const quotePreference = getQuotePreference(sourceFile, preferences ?? emptyOptions);
             const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences : preferences?.providePrefixAndSuffixTextForRename;
-            return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, use: FindAllReferences.FindReferencesUse.Rename },
-                (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false, quotePreference));
+            return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, use: FindAllReferences.FindReferencesUse.Rename }, (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false, quotePreference));
         }
     }
 
@@ -2263,8 +2262,10 @@ export function createLanguageService(
                 // If this is name of a module declarations, check if this is right side of dotted module name
                 // If parent of the module declaration which is parent of this node is module declaration and its body is the module declaration that this node is name of
                 // Then this name is name from dotted module
-                if (nodeForStartPos.parent.parent.kind === SyntaxKind.ModuleDeclaration &&
-                    (nodeForStartPos.parent.parent as ModuleDeclaration).body === nodeForStartPos.parent) {
+                if (
+                    nodeForStartPos.parent.parent.kind === SyntaxKind.ModuleDeclaration &&
+                    (nodeForStartPos.parent.parent as ModuleDeclaration).body === nodeForStartPos.parent
+                ) {
                     // Use parent module declarations name for start pos
                     nodeForStartPos = (nodeForStartPos.parent.parent as ModuleDeclaration).name;
                 }
@@ -2534,13 +2535,12 @@ export function createLanguageService(
         }
         else {
             // determines if the cursor is in an element tag
-            const tag = findAncestor(token.parent,
-                n => {
-                    if (isJsxOpeningElement(n) || isJsxClosingElement(n)) {
-                        return true;
-                    }
-                    return false;
-                });
+            const tag = findAncestor(token.parent, n => {
+                if (isJsxOpeningElement(n) || isJsxClosingElement(n)) {
+                    return true;
+                }
+                return false;
+            });
             if (!tag) return undefined;
             Debug.assert(isJsxOpeningElement(tag) || isJsxClosingElement(tag), "tag should be opening or closing element");
 
@@ -2570,7 +2570,7 @@ export function createLanguageService(
         return {
             lineStarts: sourceFile.getLineStarts(),
             firstLine: sourceFile.getLineAndCharacterOfPosition(textRange.pos).line,
-            lastLine: sourceFile.getLineAndCharacterOfPosition(textRange.end).line
+            lastLine: sourceFile.getLineAndCharacterOfPosition(textRange.end).line,
         };
     }
 
@@ -2621,8 +2621,8 @@ export function createLanguageService(
                         newText: openComment,
                         span: {
                             length: 0,
-                            start: lineStarts[i] + leftMostPosition
-                        }
+                            start: lineStarts[i] + leftMostPosition,
+                        },
                     });
                 }
                 else if (sourceFile.text.substr(lineStarts[i] + lineTextStart, openComment.length) === openComment) {
@@ -2630,8 +2630,8 @@ export function createLanguageService(
                         newText: "",
                         span: {
                             length: openComment.length,
-                            start: lineStarts[i] + lineTextStart
-                        }
+                            start: lineStarts[i] + lineTextStart,
+                        },
                     });
                 }
             }
@@ -2704,8 +2704,8 @@ export function createLanguageService(
                     newText: openMultiline,
                     span: {
                         length: 0,
-                        start: firstPos
-                    }
+                        start: firstPos,
+                    },
                 });
             }
 
@@ -2716,8 +2716,8 @@ export function createLanguageService(
                         newText: closeMultiline,
                         span: {
                             length: 0,
-                            start: positions[i]
-                        }
+                            start: positions[i],
+                        },
                     });
                 }
 
@@ -2726,8 +2726,8 @@ export function createLanguageService(
                         newText: openMultiline,
                         span: {
                             length: 0,
-                            start: positions[i]
-                        }
+                            start: positions[i],
+                        },
                     });
                 }
             }
@@ -2738,8 +2738,8 @@ export function createLanguageService(
                     newText: closeMultiline,
                     span: {
                         length: 0,
-                        start: positions[positions.length - 1]
-                    }
+                        start: positions[positions.length - 1],
+                    },
                 });
             }
         }
@@ -2752,8 +2752,8 @@ export function createLanguageService(
                     newText: "",
                     span: {
                         length: openMultiline.length,
-                        start: pos - offset
-                    }
+                        start: pos - offset,
+                    },
                 });
             }
         }
@@ -2980,7 +2980,7 @@ export function createLanguageService(
             cancellationToken,
             preferences,
             triggerReason,
-            kind
+            kind,
         };
     }
 
@@ -3005,12 +3005,13 @@ export function createLanguageService(
         return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind), includeInteractiveActions);
     }
 
-    function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): { newFileName: string, files: string[] } {
+    function getMoveToRefactoringFileSuggestions(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): { newFileName: string; files: string[]; } {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const allFiles = Debug.checkDefined(program.getSourceFiles());
         const extension = extensionFromPath(fileName);
-        const files = mapDefined(allFiles, file => !program?.isSourceFileFromExternalLibrary(sourceFile) &&
+        const files = mapDefined(allFiles, file =>
+            !program?.isSourceFileFromExternalLibrary(sourceFile) &&
                 !(sourceFile === getValidSourceFile(file.fileName) || extension === Extension.Ts && extensionFromPath(file.fileName) === Extension.Dts || extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && extensionFromPath(file.fileName) === Extension.Dts)
                 && extension === extensionFromPath(file.fileName) ? file.fileName : undefined);
 
@@ -3232,14 +3233,14 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
 
         case SyntaxKind.Identifier:
             return isObjectLiteralElement(node.parent) &&
-                (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
-                node.parent.name === node ? node.parent : undefined;
+                    (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
+                    node.parent.name === node ? node.parent : undefined;
     }
     return undefined;
 }
 
 /** @internal */
-export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes };
+export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes; };
 
 function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
     const object = getContainingObjectLiteralElement(node);
@@ -3266,7 +3267,7 @@ export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementW
         return symbol ? [symbol] : emptyArray;
     }
 
-    const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectLiteralExpression(node.parent)|| isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
+    const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectLiteralExpression(node.parent) || isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
     if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
         const symbol = contextualType.getProperty(name);
         if (symbol) return [symbol];

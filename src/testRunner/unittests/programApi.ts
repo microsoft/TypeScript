@@ -17,7 +17,6 @@ function verifyMissingFilePaths(missingPaths: readonly ts.Path[], expected: read
 }
 
 describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
-
     const options: ts.CompilerOptions = {
         noLib: true,
     };
@@ -30,19 +29,22 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
     const referenceFileName = "reference.ts";
     const referenceFileRelativePath = "./" + referenceFileName;
 
-    const referenceFile = new documents.TextDocument(referenceFileName,
-        "/// <reference path=\"d:/imaginary/nonexistent1.ts\"/>\n" + // Absolute
-        "/// <reference path=\"./nonexistent2.ts\"/>\n" + // Relative
-        "/// <reference path=\"nonexistent3.ts\"/>\n" + // Unqualified
-        "/// <reference path=\"nonexistent4\"/>\n"   // No extension
+    const referenceFile = new documents.TextDocument(
+        referenceFileName,
+        '/// <reference path="d:/imaginary/nonexistent1.ts"/>\n' + // Absolute
+            '/// <reference path="./nonexistent2.ts"/>\n' + // Relative
+            '/// <reference path="nonexistent3.ts"/>\n' + // Unqualified
+            '/// <reference path="nonexistent4"/>\n', // No extension
     );
 
     const testCompilerHost = new fakes.CompilerHost(
         vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [emptyFile, referenceFile], cwd: "d:\\pretend\\" }),
-        { newLine: ts.NewLineKind.LineFeed });
+            { documents: [emptyFile, referenceFile], cwd: "d:\\pretend\\" },
+        ),
+        { newLine: ts.NewLineKind.LineFeed },
+    );
 
     it("handles no missing root files", () => {
         const program = ts.createProgram([emptyFileRelativePath], options, testCompilerHost);
@@ -99,7 +101,7 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
             // From no-extension reference
             "d:/pretend/nonexistent4.d.ts",
             "d:/pretend/nonexistent4.ts",
-            "d:/pretend/nonexistent4.tsx"
+            "d:/pretend/nonexistent4.tsx",
         ]);
     });
 
@@ -114,15 +116,21 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
                 return fileName === "test.ts" ? ts.createSourceFile(fileName, testSource, languageVersion) : undefined;
             },
             getDefaultLibFileName: () => "",
-            writeFile: (_fileName, _content) => { throw new Error("unsupported"); },
+            writeFile: (_fileName, _content) => {
+                throw new Error("unsupported");
+            },
             getCurrentDirectory: () => ts.sys.getCurrentDirectory(),
             getCanonicalFileName: fileName => ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase(),
             getNewLine: () => ts.sys.newLine,
             useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
             fileExists: fileName => fileName === "test.ts",
             readFile: fileName => fileName === "test.ts" ? testSource : undefined,
-            resolveModuleNames: (_moduleNames: string[], _containingFile: string) => { throw new Error("unsupported"); },
-            getDirectories: _path => { throw new Error("unsupported"); },
+            resolveModuleNames: (_moduleNames: string[], _containingFile: string) => {
+                throw new Error("unsupported");
+            },
+            getDirectories: _path => {
+                throw new Error("unsupported");
+            },
         };
 
         const program = ts.createProgram(["test.ts"], { module: ts.ModuleKind.ES2015 }, host);
@@ -197,7 +205,7 @@ describe("unittests:: programApi:: Program.getTypeChecker / Program.getSemanticD
         assert.isEmpty(diag);
     });
     it("getSymbolAtLocation does not cause additional error to be added on module resolution failure", () => {
-        const main = new documents.TextDocument("/main.ts", "import \"./module\";");
+        const main = new documents.TextDocument("/main.ts", 'import "./module";');
         const mod = new documents.TextDocument("/module.d.ts", "declare const foo: any;");
 
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
@@ -212,12 +220,12 @@ describe("unittests:: programApi:: Program.getTypeChecker / Program.getSemanticD
 
 describe("unittests:: programApi:: CompilerOptions relative paths", () => {
     it("resolves relative paths by getCurrentDirectory", () => {
-        const main = new documents.TextDocument("/main.ts", "import \"module\";");
+        const main = new documents.TextDocument("/main.ts", 'import "module";');
         const mod = new documents.TextDocument("/lib/module.ts", "declare const foo: any;");
 
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
         const program = ts.createProgram(["./main.ts"], {
-            paths: { "*": ["./lib/*"] }
+            paths: { "*": ["./lib/*"] },
         }, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));
 
         assert.isEmpty(program.getConfigFileParsingDiagnostics());

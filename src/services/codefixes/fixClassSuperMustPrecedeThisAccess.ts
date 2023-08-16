@@ -55,7 +55,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, co
     changes.delete(sourceFile, superCall);
 }
 
-function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration, readonly superCall: ExpressionStatement } | undefined {
+function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration; readonly superCall: ExpressionStatement; } | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (token.kind !== SyntaxKind.ThisKeyword) return undefined;
     const constructor = getContainingFunction(token) as ConstructorDeclaration;
@@ -65,10 +65,10 @@ function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: 
     return superCall && !superCall.expression.arguments.some(arg => isPropertyAccessExpression(arg) && arg.expression === token) ? { constructor, superCall } : undefined;
 }
 
-function findSuperCall(n: Node): ExpressionStatement & { expression: CallExpression } | undefined {
+function findSuperCall(n: Node): ExpressionStatement & { expression: CallExpression; } | undefined {
     return isExpressionStatement(n) && isSuperCall(n.expression)
-        ? n as ExpressionStatement & { expression: CallExpression }
+        ? n as ExpressionStatement & { expression: CallExpression; }
         : isFunctionLike(n)
-            ? undefined
-            : forEachChild(n, findSuperCall);
+        ? undefined
+        : forEachChild(n, findSuperCall);
 }

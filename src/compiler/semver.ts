@@ -109,20 +109,24 @@ export class Version {
 
     increment(field: "major" | "minor" | "patch") {
         switch (field) {
-            case "major": return new Version(this.major + 1, 0, 0);
-            case "minor": return new Version(this.major, this.minor + 1, 0);
-            case "patch": return new Version(this.major, this.minor, this.patch + 1);
-            default: return Debug.assertNever(field);
+            case "major":
+                return new Version(this.major + 1, 0, 0);
+            case "minor":
+                return new Version(this.major, this.minor + 1, 0);
+            case "patch":
+                return new Version(this.major, this.minor, this.patch + 1);
+            default:
+                return Debug.assertNever(field);
         }
     }
 
-    with(fields: { major?: number, minor?: number, patch?: number, prerelease?: string | readonly string[], build?: string | readonly string[] }) {
+    with(fields: { major?: number; minor?: number; patch?: number; prerelease?: string | readonly string[]; build?: string | readonly string[]; }) {
         const {
             major = this.major,
             minor = this.minor,
             patch = this.patch,
             prerelease = this.prerelease,
-            build = this.build
+            build = this.build,
         } = fields;
         return new Version(major, minor, patch, prerelease, build);
     }
@@ -147,7 +151,7 @@ function tryParseComponents(text: string) {
         minor: parseInt(minor, 10),
         patch: parseInt(patch, 10),
         prerelease,
-        build
+        build,
     };
 }
 
@@ -300,7 +304,8 @@ function parsePartial(text: string) {
         isWildcard(major) || isWildcard(minor) ? 0 : parseInt(minor, 10),
         isWildcard(major) || isWildcard(minor) || isWildcard(patch) ? 0 : parseInt(patch, 10),
         prerelease,
-        build);
+        build,
+    );
 
     return { version, major, minor, patch };
 }
@@ -319,8 +324,9 @@ function parseHyphen(left: string, right: string, comparators: Comparator[]) {
     if (!isWildcard(rightResult.major)) {
         comparators.push(
             isWildcard(rightResult.minor) ? createComparator("<", rightResult.version.increment("major")) :
-            isWildcard(rightResult.patch) ? createComparator("<", rightResult.version.increment("minor")) :
-            createComparator("<=", rightResult.version));
+                isWildcard(rightResult.patch) ? createComparator("<", rightResult.version.increment("minor")) :
+                createComparator("<=", rightResult.version),
+        );
     }
 
     return true;
@@ -335,29 +341,39 @@ function parseComparator(operator: string, text: string, comparators: Comparator
         switch (operator) {
             case "~":
                 comparators.push(createComparator(">=", version));
-                comparators.push(createComparator("<", version.increment(
-                    isWildcard(minor) ? "major" :
-                    "minor")));
+                comparators.push(createComparator(
+                    "<",
+                    version.increment(
+                        isWildcard(minor) ? "major" :
+                            "minor",
+                    ),
+                ));
                 break;
             case "^":
                 comparators.push(createComparator(">=", version));
-                comparators.push(createComparator("<", version.increment(
-                    version.major > 0 || isWildcard(minor) ? "major" :
-                    version.minor > 0 || isWildcard(patch) ? "minor" :
-                    "patch")));
+                comparators.push(createComparator(
+                    "<",
+                    version.increment(
+                        version.major > 0 || isWildcard(minor) ? "major" :
+                            version.minor > 0 || isWildcard(patch) ? "minor" :
+                            "patch",
+                    ),
+                ));
                 break;
             case "<":
             case ">=":
                 comparators.push(
                     isWildcard(minor) || isWildcard(patch) ? createComparator(operator, version.with({ prerelease: "0" })) :
-                    createComparator(operator, version));
+                        createComparator(operator, version),
+                );
                 break;
             case "<=":
             case ">":
                 comparators.push(
                     isWildcard(minor) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("major").with({ prerelease: "0" })) :
-                    isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor").with({ prerelease: "0" })) :
-                    createComparator(operator, version));
+                        isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor").with({ prerelease: "0" })) :
+                        createComparator(operator, version),
+                );
                 break;
             case "=":
             case undefined:
@@ -408,12 +424,18 @@ function testAlternative(version: Version, comparators: readonly Comparator[]) {
 function testComparator(version: Version, operator: Comparator["operator"], operand: Version) {
     const cmp = version.compareTo(operand);
     switch (operator) {
-        case "<": return cmp < 0;
-        case "<=": return cmp <= 0;
-        case ">": return cmp > 0;
-        case ">=": return cmp >= 0;
-        case "=": return cmp === 0;
-        default: return Debug.assertNever(operator);
+        case "<":
+            return cmp < 0;
+        case "<=":
+            return cmp <= 0;
+        case ">":
+            return cmp > 0;
+        case ">=":
+            return cmp >= 0;
+        case "=":
+            return cmp === 0;
+        default:
+            return Debug.assertNever(operator);
     }
 }
 
