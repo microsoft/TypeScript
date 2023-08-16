@@ -1,5 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import { defer } from "../../_namespaces/Utils";
+import {
+    defer,
+} from "../../_namespaces/Utils";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -7,7 +9,10 @@ import {
     createSession,
     openFilesForSession,
 } from "../helpers/tsserver";
-import { createServerHost, libFile } from "../helpers/virtualFileSystemWithWatch";
+import {
+    createServerHost,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
     function setup(globalPlugins: string[]) {
@@ -28,7 +33,7 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
                     pluginInvoked = true;
                     return { create: info => info.languageService };
                 }) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 
@@ -67,7 +72,7 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
                     session.logger.log(`invoke plugin ${moduleName}`);
                     return { create: info => info.languageService };
                 }) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 
@@ -93,13 +98,12 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
             await Promise.resolve(); // simulate at least a single turn delay
             return {
                 module: (() => ({ create: info => info.languageService })) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 
         openFilesForSession([{ file: "^memfs:/foo.ts", content: "" }], session);
         const projectService = session.getProjectService();
-
 
         await projectService.waitForPendingPlugins();
 
@@ -118,7 +122,7 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
                     create: info => info.languageService,
                     getExternalFiles: () => ["external.txt"],
                 })) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 
@@ -152,13 +156,12 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
             await projectClosed.promise;
             return {
                 module: (() => ({ create: info => info.languageService })) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 
         openFilesForSession([{ file: "^memfs:/foo.ts", content: "" }], session);
         const projectService = session.getProjectService();
-
 
         // wait for the plugin to start loading
         await pluginALoaded.promise;
