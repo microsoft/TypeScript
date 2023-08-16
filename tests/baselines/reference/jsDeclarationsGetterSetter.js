@@ -106,19 +106,19 @@ export class B {
     /**
      * @param {number} _arg
      */
-    set x(arg: number);
+    set x(x: number);
 }
 export class C {
-    set x(arg: number);
+    set x(x: number);
     get x(): number;
 }
 export class D {
     get x(): number;
 }
 export class E {
-    set x(arg: number);
+    set x(x: number);
 }
 export class F {
-    set x(arg: number);
+    set x(x: number);
     get x(): number;
 }

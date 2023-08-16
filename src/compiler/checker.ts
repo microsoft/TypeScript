@@ -9595,13 +9595,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (p.flags & SymbolFlags.Accessor && useAccessors) {
                         const result: AccessorDeclaration[] = [];
                         if (p.flags & SymbolFlags.SetAccessor) {
+                            const setter = getDeclarationOfKind<AccessorDeclaration>(p, SyntaxKind.SetAccessor)!;
+                            const setterSignature = getSignatureFromDeclaration(setter);
+                            const paramName = getParameterNameAtPosition(setterSignature, 0);
                             result.push(setTextRange(factory.createSetAccessorDeclaration(
                                 factory.createModifiersFromModifierFlags(flag),
                                 name,
                                 [factory.createParameterDeclaration(
                                     /*modifiers*/ undefined,
                                     /*dotDotDotToken*/ undefined,
-                                    unescapeLeadingUnderscores(p.escapedName),
+                                    unescapeLeadingUnderscores(paramName),
                                     /*questionToken*/ undefined,
                                     isPrivate ? undefined : serializeTypeForDeclaration(context, getTypeOfSymbol(p), p, enclosingDeclaration, includePrivateSymbol, bundled)
                                 )],
