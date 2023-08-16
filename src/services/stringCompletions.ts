@@ -629,8 +629,10 @@ function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, sc
     rootDirs = rootDirs.map(rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
 
     // Determine the path to the directory containing the script relative to the root directory it is contained within
-    const relativeDirectory = firstDefined(rootDirs, rootDirectory =>
-        containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length + 1) : undefined)!; // TODO: GH#18217
+    const relativeDirectory = firstDefined(rootDirs, rootDirectory => {
+        const rootDirectoryWithSlash = rootDirectory.endsWith("/") ? rootDirectory : (rootDirectory + "/");
+        return containsPath(rootDirectoryWithSlash, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectoryWithSlash.length) : undefined;
+    })!; // TODO: GH#18217
 
     // Now find a path for each potential directory that is to be merged with the one containing the script
     return deduplicate<string>(
