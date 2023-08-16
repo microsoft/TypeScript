@@ -489,9 +489,9 @@ export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration):
 /** @internal */
 export class ChangeTracker {
     private readonly changes: Change[] = [];
-    private newFileChanges?: MultiMap<string, NewFileInsertion> ;
-    private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
-    private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
+    private newFileChanges?: MultiMap<string, NewFileInsertion>;
+    private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression; readonly sourceFile: SourceFile; }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+    private readonly deletedNodes: { readonly sourceFile: SourceFile; readonly node: Node | NodeArray<TypeParameterDeclaration>; }[] = [];
 
     public static fromContext(context: TextChangesContext): ChangeTracker {
         return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
@@ -634,14 +634,16 @@ export class ChangeTracker {
     public insertNodesAtEndOfFile(
         sourceFile: SourceFile,
         newNodes: readonly Statement[],
-        blankLineBetween: boolean): void {
+        blankLineBetween: boolean,
+    ): void {
         this.insertAtEndOfFile(sourceFile, newNodes, blankLineBetween);
     }
 
     private insertAtEndOfFile(
         sourceFile: SourceFile,
         insert: readonly Statement[],
-        blankLineBetween: boolean): void {
+        blankLineBetween: boolean,
+    ): void {
         const pos = sourceFile.end + 1;
         const options = {
             prefix: this.newLineCharacter,
@@ -703,7 +705,7 @@ export class ChangeTracker {
             for (const jsdoc of node.jsDoc) {
                 this.deleteRange(sourceFile, {
                     pos: getLineStartPositionForPosition(jsdoc.getStart(sourceFile), sourceFile),
-                    end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {})
+                    end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {}),
                 });
             }
         }
@@ -713,8 +715,7 @@ export class ChangeTracker {
     }
 
     private createJSDocText(sourceFile: SourceFile, node: HasJSDoc) {
-        const comments = flatMap(node.jsDoc, jsDoc =>
-            isString(jsDoc.comment) ? factory.createJSDocText(jsDoc.comment) : jsDoc.comment) as JSDocComment[];
+        const comments = flatMap(node.jsDoc, jsDoc => isString(jsDoc.comment) ? factory.createJSDocText(jsDoc.comment) : jsDoc.comment) as JSDocComment[];
         const jsDoc = singleOrUndefined(node.jsDoc);
         return jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && length(comments) === 0 ? undefined :
             factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
@@ -726,11 +727,13 @@ export class ChangeTracker {
 
     public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
-        const unmergedNewTags = newTags.filter(newTag => !oldTags.some((tag, i) => {
-            const merged = tryMergeJsdocTags(tag, newTag);
-            if (merged) oldTags[i] = merged;
-            return !!merged;
-        }));
+        const unmergedNewTags = newTags.filter(newTag =>
+            !oldTags.some((tag, i) => {
+                const merged = tryMergeJsdocTags(tag, newTag);
+                if (merged) oldTags[i] = merged;
+                return !!merged;
+            })
+        );
         this.replaceJSDocComment(sourceFile, parent, [...oldTags, ...unmergedNewTags]);
     }
 
@@ -835,7 +838,7 @@ export class ChangeTracker {
         const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {});
         this.insertNodeAt(sourceFile, pos, newNode, {
             prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
-            suffix: this.newLineCharacter
+            suffix: this.newLineCharacter,
         });
     }
 
@@ -903,7 +906,7 @@ export class ChangeTracker {
         return {
             indentation,
             prefix: (insertLeadingComma ? "," : "") + this.newLineCharacter,
-            suffix: insertTrailingComma ? "," : isInterfaceDeclaration(node) && isEmpty ? ";" : ""
+            suffix: insertTrailingComma ? "," : isInterfaceDeclaration(node) && isEmpty ? ";" : "",
         };
     }
 
@@ -1015,7 +1018,8 @@ export class ChangeTracker {
                 sourceFile,
                 namedImports.elements[0],
                 importSpecifier,
-                !positionsAreOnSameLine(namedImports.elements[0].getStart(), namedImports.parent.parent.getStart(), sourceFile));
+                !positionsAreOnSameLine(namedImports.elements[0].getStart(), namedImports.parent.parent.getStart(), sourceFile),
+            );
         }
     }
 
@@ -1257,8 +1261,7 @@ namespace changesToText {
             const normalized = stableSort(changesInFile, (a, b) => (a.range.pos - b.range.pos) || (a.range.end - b.range.end));
             // verify that change intervals do not overlap, except possibly at end points.
             for (let i = 0; i < normalized.length - 1; i++) {
-                Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
-                    `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
+                Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () => `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
             }
 
             const textChanges = mapDefined(normalized, c => {
@@ -1308,7 +1311,7 @@ namespace changesToText {
         // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
         const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, targetSourceFile) === pos) ? text : text.replace(/^\s+/, "");
         return (options.prefix || "") + noIndent
-             + ((!options.suffix || endsWith(noIndent, options.suffix))
+            + ((!options.suffix || endsWith(noIndent, options.suffix))
                 ? "" : options.suffix);
     }
 
@@ -1317,10 +1320,9 @@ namespace changesToText {
         const { node, text } = getNonformattedText(nodeIn, targetSourceFile, newLineCharacter);
         if (validate) validate(node, text);
         const formatOptions = getFormatCodeSettingsForWriting(formatContext, targetSourceFile);
-        const initialIndentation =
-            indentation !== undefined
-                ? indentation
-                : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, targetSourceFile) === pos);
+        const initialIndentation = indentation !== undefined
+            ? indentation
+            : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, targetSourceFile) === pos);
         if (delta === undefined) {
             delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
         }
@@ -1329,21 +1331,21 @@ namespace changesToText {
             text,
             getLineAndCharacterOfPosition(pos) {
                 return getLineAndCharacterOfPosition(this, pos);
-            }
+            },
         };
         const changes = formatting.formatNodeGivenIndentation(node, file, targetSourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
         return applyChanges(text, changes);
     }
 
     /** Note: output node may be mutated input node. */
-    export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
+    export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string; node: Node; } {
         const writer = createWriter(newLineCharacter);
         const newLine = getNewLineKind(newLineCharacter);
         createPrinter({
             newLine,
             neverAsciiEscape: true,
             preserveSourceNewlines: true,
-            terminateUnterminatedLiterals: true
+            terminateUnterminatedLiterals: true,
         }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
         return { text: writer.getText(), node: assignPositionsToNode(node) };
     }
@@ -1368,7 +1370,8 @@ const textChangesTransformationContext: TransformationContext = {
     ...nullTransformationContext,
     factory: createNodeFactory(
         nullTransformationContext.factory.flags | NodeFactoryFlags.NoParenthesizerRules,
-        nullTransformationContext.factory.baseFactory),
+        nullTransformationContext.factory.baseFactory,
+    ),
 };
 
 /** @internal */
@@ -1563,7 +1566,7 @@ export function createWriter(newLine: string): TextChangesWriter {
         isAtStartOfLine,
         hasTrailingComment: () => writer.hasTrailingComment(),
         hasTrailingWhitespace: () => writer.hasTrailingWhitespace(),
-        clear
+        clear,
     };
 }
 
@@ -1664,9 +1667,11 @@ namespace deleteDeclaration {
         switch (node.kind) {
             case SyntaxKind.Parameter: {
                 const oldFunction = node.parent;
-                if (isArrowFunction(oldFunction) &&
+                if (
+                    isArrowFunction(oldFunction) &&
                     oldFunction.parameters.length === 1 &&
-                    !findChildOfKind(oldFunction, SyntaxKind.OpenParenToken, sourceFile)) {
+                    !findChildOfKind(oldFunction, SyntaxKind.OpenParenToken, sourceFile)
+                ) {
                     // Lambdas with exactly one parameter are special because, after removal, there
                     // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
                     // case if the parameter is simply removed (e.g. in `x => 1`).

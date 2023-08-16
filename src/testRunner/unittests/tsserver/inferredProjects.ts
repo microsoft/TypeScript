@@ -1,5 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import { commonFile1 } from "../helpers/tscWatch";
+import {
+    commonFile1,
+} from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -23,12 +25,12 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             content: `
                 import {f} from "./module"
                 console.log(f)
-                `
+                `,
         };
 
         const moduleFile: File = {
             path: `/user/username/projects/myproject/module.d.ts`,
-            content: `export let x: number`
+            content: `export let x: number`,
         };
         const host = createServerHost([appFile, moduleFile, libFile]);
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -39,7 +41,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
     it("should use only one inferred project if 'useOneInferredProject' is set", () => {
         const file1 = {
             path: `/user/username/projects/myproject/a/b/main.ts`,
-            content: "let x =1;"
+            content: "let x =1;",
         };
         const configFile: File = {
             path: `/user/username/projects/myproject/a/b/tsconfig.json`,
@@ -48,16 +50,16 @@ describe("unittests:: tsserver:: inferredProjects", () => {
                         "target": "es6"
                     },
                     "files": [ "main.ts" ]
-                }`
+                }`,
         };
         const file2 = {
             path: `/user/username/projects/myproject/a/c/main.ts`,
-            content: "let x =1;"
+            content: "let x =1;",
         };
 
         const file3 = {
             path: `/user/username/projects/myproject/a/d/main.ts`,
-            content: "let x =1;"
+            content: "let x =1;",
         };
 
         const host = createServerHost([file1, file2, file3, libFile]);
@@ -74,7 +76,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
     it("disable inferred project", () => {
         const file1 = {
             path: "/a/b/f1.ts",
-            content: "let x =1;"
+            content: "let x =1;",
         };
 
         const host = createServerHost([file1]);
@@ -89,11 +91,11 @@ describe("unittests:: tsserver:: inferredProjects", () => {
     it("project settings for inferred projects", () => {
         const file1 = {
             path: "/a/b/app.ts",
-            content: `import {x} from "mod"`
+            content: `import {x} from "mod"`,
         };
         const modFile = {
             path: "/a/mod.ts",
-            content: "export let x: number"
+            content: "export let x: number",
         };
         const host = createServerHost([file1, modFile]);
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -109,7 +111,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
     it("should support files without extensions", () => {
         const f = {
             path: "/a/compile",
-            content: "let x = 1"
+            content: "let x = 1",
         };
         const host = createServerHost([f]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -127,41 +129,41 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         const session = createSession(host, {
             useSingleInferredProject: true,
             useInferredProjectPerProjectRoot: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         setCompilerOptionsForInferredProjectsRequestForSession({
             allowJs: true,
-            target: ts.ScriptTarget.ESNext
+            target: ts.ScriptTarget.ESNext,
         }, session);
         setCompilerOptionsForInferredProjectsRequestForSession({
             options: {
                 allowJs: true,
-                target: ts.ScriptTarget.ES2015
+                target: ts.ScriptTarget.ES2015,
             },
-            projectRootPath: "/b"
+            projectRootPath: "/b",
         }, session);
         openFilesForSession([{
             file: file1.path,
             content: file1.content,
             scriptKindName: "JS",
-            projectRootPath: file1.projectRootPath
+            projectRootPath: file1.projectRootPath,
         }], session);
         openFilesForSession([{
             file: file2.path,
             content: file2.content,
             scriptKindName: "JS",
-            projectRootPath: file2.projectRootPath
+            projectRootPath: file2.projectRootPath,
         }], session);
         openFilesForSession([{
             file: file3.path,
             content: file3.content,
             scriptKindName: "JS",
-            projectRootPath: file3.projectRootPath
+            projectRootPath: file3.projectRootPath,
         }], session);
         openFilesForSession([{
             file: file4.path,
             content: file4.content,
-            scriptKindName: "JS"
+            scriptKindName: "JS",
         }], session);
 
         const projectService = session.getProjectService();
@@ -177,20 +179,20 @@ describe("unittests:: tsserver:: inferredProjects", () => {
                 { path: "/a/file1.ts", content: "let x = 1;" },
                 { path: "/A/file2.ts", content: "let y = 2;" },
                 { path: "/b/file2.ts", content: "let x = 3;" },
-                { path: "/c/file3.ts", content: "let z = 4;" }
+                { path: "/c/file3.ts", content: "let z = 4;" },
             ];
             const host = createServerHost(files, { useCaseSensitiveFileNames });
             const session = createSession(host, { useSingleInferredProject: true, useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
             setCompilerOptionsForInferredProjectsRequestForSession({
                 allowJs: true,
-                target: ts.ScriptTarget.ESNext
+                target: ts.ScriptTarget.ESNext,
             }, session);
             setCompilerOptionsForInferredProjectsRequestForSession({
                 options: {
                     allowJs: true,
-                    target: ts.ScriptTarget.ES2015
+                    target: ts.ScriptTarget.ES2015,
                 },
-                projectRootPath: "/a"
+                projectRootPath: "/a",
             }, session);
 
             openClientFiles(["/a", "/a", "/b", undefined]);
@@ -202,9 +204,9 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             setCompilerOptionsForInferredProjectsRequestForSession({
                 options: {
                     allowJs: true,
-                    target: ts.ScriptTarget.ES2017
+                    target: ts.ScriptTarget.ES2017,
                 },
-                projectRootPath: "/A"
+                projectRootPath: "/A",
             }, session);
 
             openClientFiles(["/a", "/a", "/b", undefined]);
@@ -215,9 +217,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             baselineTsserverLogs("inferredProjects", subScenario, session);
 
             function openClientFiles(projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined]) {
-                files.forEach((file, index) =>
-                    openFilesForSession([{ file: file.path, content: file.content, scriptKindName: "JS", projectRootPath: projectRoots[index] }], session)
-                );
+                files.forEach((file, index) => openFilesForSession([{ file: file.path, content: file.content, scriptKindName: "JS", projectRootPath: projectRoots[index] }], session));
             }
 
             function closeClientFiles() {
@@ -232,19 +232,19 @@ describe("unittests:: tsserver:: inferredProjects", () => {
     it("should still retain configured project created while opening the file", () => {
         const appFile: File = {
             path: `/user/username/projects/myproject/app.ts`,
-            content: `const app = 20;`
+            content: `const app = 20;`,
         };
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const jsFile1: File = {
             path: `/user/username/projects/myproject/jsFile1.js`,
-            content: `const jsFile1 = 10;`
+            content: `const jsFile1 = 10;`,
         };
         const jsFile2: File = {
             path: `/user/username/projects/myproject/jsFile2.js`,
-            content: `const jsFile2 = 10;`
+            content: `const jsFile2 = 10;`,
         };
         const host = createServerHost([appFile, libFile, config, jsFile1, jsFile2]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -284,7 +284,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         setCompilerOptionsForInferredProjectsRequestForSession({
             allowJs: true,
-            target: ts.ScriptTarget.ES2015
+            target: ts.ScriptTarget.ES2015,
         }, session);
         session.testhost.logTimeoutQueueLength();
         baselineTsserverLogs("inferredProjects", "Setting compiler options for inferred projects when there are no open files should not schedule any refresh", session);
