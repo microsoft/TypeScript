@@ -90,7 +90,6 @@ import {
     pathIsBareSpecifier,
     pathIsRelative,
     PropertyAccessExpression,
-    readJson,
     removeExtension,
     removeFileExtension,
     removeSuffix,
@@ -894,11 +893,11 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
     }
     const packageJsonPath = combinePaths(ancestorDirectoryWithPackageJson, "package.json");
     const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
-    if (typeof cachedPackageJson !== "object" && cachedPackageJson !== undefined) {
+    if (typeof cachedPackageJson !== "object" && cachedPackageJson !== undefined || !host.fileExists(packageJsonPath)) {
         return undefined;
     }
-    const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || readJson(packageJsonPath, host as { readFile(fileName: string): string | undefined });
-    const imports = (packageJsonContent as any).imports;
+    const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || JSON.parse(host.readFile(packageJsonPath)!);
+    const imports = packageJsonContent?.imports;
     if (!imports) {
         return undefined;
     }
