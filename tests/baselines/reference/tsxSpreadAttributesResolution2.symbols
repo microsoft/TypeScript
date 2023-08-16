@@ -68,3 +68,10 @@ let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
 >y : Symbol(y, Decl(file.tsx, 23, 29))
 >X : Symbol(X, Decl(file.tsx, 23, 38))
 
+let w2 = <Poisoned {...{x: 'foo', y: "2"}} X="hi" />;
+>w2 : Symbol(w2, Decl(file.tsx, 24, 3))
+>Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
+>x : Symbol(x, Decl(file.tsx, 24, 24))
+>y : Symbol(y, Decl(file.tsx, 24, 33))
+>X : Symbol(X, Decl(file.tsx, 24, 42))
+

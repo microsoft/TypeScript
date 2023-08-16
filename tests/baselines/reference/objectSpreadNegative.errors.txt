@@ -1,8 +1,8 @@
 objectSpreadNegative.ts(13,21): error TS2339: Property 'x' does not exist on type '{}'.
-objectSpreadNegative.ts(16,5): error TS2322: Type '{ sn?: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
-  Types of property 'sn' are incompatible.
-    Type 'string | number | undefined' is not assignable to type 'string | number'.
-      Type 'undefined' is not assignable to type 'string | number'.
+objectSpreadNegative.ts(16,46): error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
+  Type 'undefined' is not assignable to type 'string | number'.
+objectSpreadNegative.ts(16,65): error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+  Type 'undefined' is not assignable to type 'string | number'.
 objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
 objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
 objectSpreadNegative.ts(28,20): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
@@ -24,9 +24,14 @@ objectSpreadNegative.ts(59,1): error TS2349: This expression is not callable.
 objectSpreadNegative.ts(63,1): error TS2322: Type '12' is not assignable to type 'undefined'.
 objectSpreadNegative.ts(69,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
 objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on type '{}'.
+objectSpreadNegative.ts(79,37): error TS2322: Type 'string | null | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+objectSpreadNegative.ts(84,31): error TS2322: Type 'number' is not assignable to type 'boolean'.
+objectSpreadNegative.ts(84,38): error TS2322: Type 'string | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
 
 
-==== objectSpreadNegative.ts (22 errors) ====
+==== objectSpreadNegative.ts (26 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -45,11 +50,14 @@ objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on typ
     declare let optionalString: { sn?: string };
     declare let optionalNumber: { sn?: number };
     let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
-        ~~~~~~~~~~~
-!!! error TS2322: Type '{ sn?: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
-!!! error TS2322:   Types of property 'sn' are incompatible.
-!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number'.
-!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+                                                 ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string | number'.
+!!! related TS6500 objectSpreadNegative.ts:16:20: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
+                                                                    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string | number'.
+!!! related TS6500 objectSpreadNegative.ts:16:20: The expected type comes from property 'sn' which is declared here on type '{ sn: string | number; }'
     // error, 'sn' is optional in source, required in target
     
     // assignability as target
@@ -158,4 +166,25 @@ objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on typ
     spreadObj.a; // error 'a' is not in {}
               ~
 !!! error TS2339: Property 'a' does not exist on type '{}'.
+    
+    // repro from #51376
+    type Item = { attribute: string; };
+    declare const result: Partial<Record<'attribute', string | null>>;
+    const item: Item = { attribute: "", ...result }; // error reported only on spread and not on the compatible property
+                                        ~~~~~~~~~
+!!! error TS2322: Type 'string | null | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 objectSpreadNegative.ts:77:15: The expected type comes from property 'attribute' which is declared here on type 'Item'
+    
+    // repro from #52850#discussion_r1136291508
+    interface A { a?: string; }
+    declare var a: A;
+    const o5: { a: boolean; } = { a: 12, ...a }; // error reported on both spread and the overriden property
+                                  ~
+!!! error TS2322: Type 'number' is not assignable to type 'boolean'.
+!!! related TS6500 objectSpreadNegative.ts:84:13: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
+                                         ~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
+!!! related TS6500 objectSpreadNegative.ts:84:13: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
     

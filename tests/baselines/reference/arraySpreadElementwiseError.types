@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/es6/spread/arraySpreadElementwiseError.ts] ////
+
+=== arraySpreadElementwiseError.ts ===
+// https://github.com/microsoft/TypeScript/issues/55340
+
+declare const a: Array<number | string>;
+>a : (string | number)[]
+
+const b: Array<number> = [...a, 1];
+>b : number[]
+>[...a, 1] : (string | number)[]
+>...a : string | number
+>a : (string | number)[]
+>1 : 1
+

@@ -22,7 +22,7 @@ file.tsx(11,10): error TS2741: Property 'AnotherProperty1' is missing in type '{
     interface AnotherComponentProps {
         property1: string;
         AnotherProperty1: string;
-        property2: boolean;
+        property2: number;
     }
     
     function AnotherComponent({ property1 }: AnotherComponentProps) {

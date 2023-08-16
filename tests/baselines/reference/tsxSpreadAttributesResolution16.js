@@ -18,7 +18,7 @@ export default function Component(props: ComponentProps) {
 interface AnotherComponentProps {
     property1: string;
     AnotherProperty1: string;
-    property2: boolean;
+    property2: number;
 }
 
 function AnotherComponent({ property1 }: AnotherComponentProps) {
