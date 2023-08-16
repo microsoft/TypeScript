@@ -12,7 +12,7 @@ export const enum FourSlashTestType {
     Native,
     Shims,
     ShimsWithPreprocess,
-    Server
+    Server,
 }
 
 // Represents a parsed source file with metadata
@@ -86,9 +86,9 @@ export interface TextSpan {
 // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
 const enum MetadataOptionNames {
     baselineFile = "baselinefile",
-    emitThisFile = "emitthisfile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
+    emitThisFile = "emitthisfile", // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
     fileName = "filename",
-    resolveReference = "resolvereference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
+    resolveReference = "resolvereference", // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
     symlink = "symlink",
 }
 
@@ -199,7 +199,7 @@ function createScriptSnapShot(sourceText: string): ts.IScriptSnapshot {
 const enum CallHierarchyItemDirection {
     Root,
     Incoming,
-    Outgoing
+    Outgoing,
 }
 
 export class TestState {
@@ -224,7 +224,7 @@ export class TestState {
 
     public formatCodeSettings: ts.FormatCodeSettings;
 
-    private inputFiles = new Map<string, string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
+    private inputFiles = new Map<string, string>(); // Map between inputFile's fileName and its content for easily looking up when resolving references
 
     private static getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[] | undefined) {
         let result = "";
@@ -370,8 +370,7 @@ export class TestState {
 
             // Check if no-default-lib flag is false and if so add default library
             if (!resolvedResult.isLibFile) {
-                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
-                    Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
+                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
 
                 compilationOptions.lib?.forEach(fileName => {
                     const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
@@ -447,16 +446,17 @@ export class TestState {
                 }
                 const memo = Utils.memoize(
                     (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string | undefined, ...args: any[]) => (ls[key] as (...args: any[]) => any)(...args),
-                    (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|")
+                    (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|"),
                 );
-                proxy[key] = (...args: any[]) => memo(
-                    target.languageServiceAdapterHost.getScriptInfo(target.activeFile.fileName)!.version,
-                    target.activeFile.fileName,
-                    target.currentCaretPosition,
-                    target.selectionEnd,
-                    target.lastKnownMarker,
-                    ...args
-                );
+                proxy[key] = (...args: any[]) =>
+                    memo(
+                        target.languageServiceAdapterHost.getScriptInfo(target.activeFile.fileName)!.version,
+                        target.activeFile.fileName,
+                        target.currentCaretPosition,
+                        target.selectionEnd,
+                        target.lastKnownMarker,
+                        ...args,
+                    );
             }
             return proxy;
         }
@@ -570,8 +570,7 @@ export class TestState {
     public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, shouldExist: boolean) {
         const startMarker = this.getMarkerByName(startMarkerName);
         const endMarker = this.getMarkerByName(endMarkerName);
-        const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) =>
-            ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
+        const predicate = (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) => ((errorMinChar === startPos) && (errorLimChar === endPos)) ? true : false;
 
         const exists = this.anyErrorInRange(predicate, startMarker, endMarker);
 
@@ -627,12 +626,10 @@ export class TestState {
         let predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) => boolean;
 
         if (after) {
-            predicate = (errorMinChar: number, errorLimChar: number, startPos: number) =>
-                ((errorMinChar >= startPos) && (errorLimChar >= startPos)) ? true : false;
+            predicate = (errorMinChar: number, errorLimChar: number, startPos: number) => ((errorMinChar >= startPos) && (errorLimChar >= startPos)) ? true : false;
         }
         else {
-            predicate = (errorMinChar: number, errorLimChar: number, startPos: number) =>
-                ((errorMinChar <= startPos) && (errorLimChar <= startPos)) ? true : false;
+            predicate = (errorMinChar: number, errorLimChar: number, startPos: number) => ((errorMinChar <= startPos) && (errorLimChar <= startPos)) ? true : false;
         }
 
         const exists = this.anyErrorInRange(predicate, marker);
@@ -645,8 +642,7 @@ export class TestState {
     }
 
     private anyErrorInRange(predicate: (errorMinChar: number, errorLimChar: number, startPos: number, endPos: number | undefined) => boolean, startMarker: Marker, endMarker?: Marker): boolean {
-        return this.getDiagnostics(startMarker.fileName).some(({ start, length }) =>
-            predicate(start!, start! + length!, startMarker.position, endMarker === undefined ? undefined : endMarker.position)); // TODO: GH#18217
+        return this.getDiagnostics(startMarker.fileName).some(({ start, length }) => predicate(start!, start! + length!, startMarker.position, endMarker === undefined ? undefined : endMarker.position)); // TODO: GH#18217
     }
 
     private printErrorLog(expectErrors: boolean, errors: readonly ts.Diagnostic[]): void {
@@ -658,8 +654,10 @@ export class TestState {
         }
 
         for (const { start, length, messageText, file } of errors) {
-            Harness.IO.log("  " + this.formatRange(file, start!, length!) + // TODO: GH#18217
-                ", message: " + ts.flattenDiagnosticMessageText(messageText, Harness.IO.newLine()) + "\n");
+            Harness.IO.log(
+                "  " + this.formatRange(file, start!, length!) + // TODO: GH#18217
+                    ", message: " + ts.flattenDiagnosticMessageText(messageText, Harness.IO.newLine()) + "\n",
+            );
         }
     }
 
@@ -687,11 +685,13 @@ export class TestState {
 
     public verifyNoErrors() {
         ts.forEachKey(this.inputFiles, fileName => {
-            if (!ts.isAnySupportedFileExtension(fileName)
+            if (
+                !ts.isAnySupportedFileExtension(fileName)
                 || Harness.getConfigNameFromFileName(fileName)
                 // Can't get a Program in Server tests
                 || this.testType !== FourSlashTestType.Server && !ts.getAllowJSCompilerOption(this.getProgram().getCompilerOptions()) && !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))
-                || ts.getBaseFileName(fileName) === "package.json") return;
+                || ts.getBaseFileName(fileName) === "package.json"
+            ) return;
             const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
             if (errors.length) {
                 this.printErrorLog(/*expectErrors*/ false, errors);
@@ -710,7 +710,8 @@ export class TestState {
                 code === code &&
                 (!expectedMessage || expectedMessage === messageText) &&
                 ts.isNumber(start) && ts.isNumber(length) &&
-                ts.textSpansEqual(span, { start, length }));
+                ts.textSpansEqual(span, { start, length }),
+        );
 
         if (!hasMatchingError) {
             this.raiseError(`No error with code ${code} found at provided range.`);
@@ -749,7 +750,7 @@ export class TestState {
         return this.languageService.getDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition)!;
     }
 
-    private renderMarkers(markers: { text: string, fileName: string, position: number }[], useTerminalBoldSequence = true) {
+    private renderMarkers(markers: { text: string; fileName: string; position: number; }[], useTerminalBoldSequence = true) {
         const filesToDisplay = ts.deduplicate(markers.map(m => m.fileName), ts.equateValues);
         return filesToDisplay.map(fileName => {
             const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
@@ -790,13 +791,17 @@ export class TestState {
             baseline += "\n\n";
             baseline += indentJsonBaseline(
                 "// === Details ===\n" +
-                JSON.stringify(definitions.map(def => ({
-                    defId: defIdMap.get(def),
-                    ...def,
-                    fileName: undefined,
-                    textSpan: undefined,
-                    contextSpan: undefined,
-                })), undefined, " ")
+                    JSON.stringify(
+                        definitions.map(def => ({
+                            defId: defIdMap.get(def),
+                            ...def,
+                            fileName: undefined,
+                            textSpan: undefined,
+                            contextSpan: undefined,
+                        })),
+                        undefined,
+                        " ",
+                    ),
             );
         }
         return baseline;
@@ -822,8 +827,10 @@ export class TestState {
         });
     }
 
-    public baselineInlayHints(span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preferences?: ts.UserPreferences): void{
-        interface HasPosition { position: number; }
+    public baselineInlayHints(span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preferences?: ts.UserPreferences): void {
+        interface HasPosition {
+            position: number;
+        }
         const sortHints = (a: HasPosition, b: HasPosition) => {
             return a.position - b.position;
         };
@@ -860,7 +867,7 @@ export class TestState {
                 return {
                     andApplyCodeAction: () => {
                         this.raiseError(`Cannot apply code action when multiple markers are specified.`);
-                    }
+                    },
                 };
             }
             this.goToMarker(options.marker);
@@ -890,7 +897,8 @@ export class TestState {
             assert.deepEqual(
                 actualCompletions.optionalReplacementSpan && actualCompletions.optionalReplacementSpan,
                 options.optionalReplacementSpan && ts.createTextSpanFromRange(options.optionalReplacementSpan),
-                "Expected 'optionalReplacementSpan' properties to match");
+                "Expected 'optionalReplacementSpan' properties to match",
+            );
         }
 
         const nameToEntries = new Map<string, ts.CompletionEntry[]>();
@@ -901,13 +909,15 @@ export class TestState {
                 nameToEntries.set(entry.name, [entry]);
             }
             else {
-                if (entries.some(e =>
-                    e.source === entry.source &&
-                    e.data?.exportName === entry.data?.exportName &&
-                    e.data?.fileName === entry.data?.fileName &&
-                    e.data?.moduleSpecifier === entry.data?.moduleSpecifier &&
-                    e.data?.ambientModuleName === entry.data?.ambientModuleName
-                )) {
+                if (
+                    entries.some(e =>
+                        e.source === entry.source &&
+                        e.data?.exportName === entry.data?.exportName &&
+                        e.data?.fileName === entry.data?.fileName &&
+                        e.data?.moduleSpecifier === entry.data?.moduleSpecifier &&
+                        e.data?.ambientModuleName === entry.data?.ambientModuleName
+                    )
+                ) {
                     this.raiseError(`Duplicate completions for ${entry.name}`);
                 }
                 entries.push(entry);
@@ -967,11 +977,11 @@ export class TestState {
 
         return {
             andApplyCodeAction: (options: {
-                name: string,
-                source: string,
-                description: string,
-                newFileContent?: string,
-                newRangeContent?: string,
+                name: string;
+                source: string;
+                description: string;
+                newFileContent?: string;
+                newRangeContent?: string;
             }) => {
                 const { name, source, description, newFileContent, newRangeContent } = options;
                 const data = nameAndSourceToData.get(`${options.name}|${options.source}`);
@@ -982,7 +992,7 @@ export class TestState {
                     this.raiseError(`No completion entry found for '${options.name}' from '${options.source}'`);
                 }
                 this.applyCodeActionFromCompletion(/*markerName*/ undefined, { name, source, data, description, newFileContent, newRangeContent, preferences });
-            }
+            },
         };
     }
 
@@ -1020,15 +1030,18 @@ export class TestState {
         assert.equal(
             actual.filterText,
             expected.filterText,
-            `At entry ${actual.name}: Completion 'filterText' not match: ${showTextDiff(expected.filterText || "", actual.filterText || "")}`);
+            `At entry ${actual.name}: Completion 'filterText' not match: ${showTextDiff(expected.filterText || "", actual.filterText || "")}`,
+        );
         assert.equal(
             actual.labelDetails?.description,
             expected.labelDetails?.description,
-            `At entry ${actual.name}: Completion 'labelDetails.description' did not match: ${showTextDiff(expected.labelDetails?.description || "", actual.labelDetails?.description || "")}`);
+            `At entry ${actual.name}: Completion 'labelDetails.description' did not match: ${showTextDiff(expected.labelDetails?.description || "", actual.labelDetails?.description || "")}`,
+        );
         assert.equal(
             actual.labelDetails?.detail,
             expected.labelDetails?.detail,
-            `At entry ${actual.name}: Completion 'labelDetails.detail' did not match: ${showTextDiff(expected.labelDetails?.detail || "", actual.labelDetails?.detail || "")}`);
+            `At entry ${actual.name}: Completion 'labelDetails.detail' did not match: ${showTextDiff(expected.labelDetails?.detail || "", actual.labelDetails?.detail || "")}`,
+        );
         assert.equal(actual.hasAction, expected.hasAction, `At entry ${actual.name}: Expected 'hasAction' properties to match`);
         assert.equal(actual.isRecommended, expected.isRecommended, `At entry ${actual.name}: Expected 'isRecommended' properties to match'`);
         assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);
@@ -1079,7 +1092,8 @@ export class TestState {
             assert.deepEqual(
                 plusArgument,
                 expected.filter(entry => plusArgument.includes(entry)),
-                `At marker ${JSON.stringify(marker)}: Argument to '${plusFunctionName}' was incorrectly sorted.`);
+                `At marker ${JSON.stringify(marker)}: Argument to '${plusFunctionName}' was incorrectly sorted.`,
+            );
         }
     }
 
@@ -1188,8 +1202,7 @@ export class TestState {
                 done = baselineArrayOrSingle(command, command.markerOrRange, worker);
             }
             if (command.rangeText !== undefined) {
-                toArray(command.rangeText).forEach(text =>
-                    done = baselineArrayOrSingle(command, this.rangesByText().get(text)!, worker) || done);
+                toArray(command.rangeText).forEach(text => done = baselineArrayOrSingle(command, this.rangesByText().get(text)!, worker) || done);
             }
             if (!done) {
                 baselineArrayOrSingle(command, this.getRanges(), worker);
@@ -1216,20 +1229,22 @@ export class TestState {
                 case "goToDefinition":
                     return baselineEachMarkerOrRange(
                         command,
-                        markerOrRange => this.baselineGoToDefs(
-                            "/*GOTO DEF*/",
-                            markerOrRange,
-                            () => this.getGoToDefinitionAndBoundSpan(),
-                        ),
+                        markerOrRange =>
+                            this.baselineGoToDefs(
+                                "/*GOTO DEF*/",
+                                markerOrRange,
+                                () => this.getGoToDefinitionAndBoundSpan(),
+                            ),
                     );
                 case "getDefinitionAtPosition":
                     return baselineEachMarkerOrRange(
                         command,
-                        markerOrRange => this.baselineGoToDefs(
-                            "/*GOTO DEF POS*/",
-                            markerOrRange,
-                            () => this.getGoToDefinition(),
-                        ),
+                        markerOrRange =>
+                            this.baselineGoToDefs(
+                                "/*GOTO DEF POS*/",
+                                markerOrRange,
+                                () => this.getGoToDefinition(),
+                            ),
                     );
                 case "goToSourceDefinition":
                     if (this.testType !== FourSlashTestType.Server) {
@@ -1237,30 +1252,34 @@ export class TestState {
                     }
                     return baselineEachMarkerOrRange(
                         command,
-                        markerOrRange => this.baselineGoToDefs(
-                            "/*GOTO SOURCE DEF*/",
-                            markerOrRange,
-                            () => (this.languageService as ts.server.SessionClient)
-                                .getSourceDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition),
-                        ),
+                        markerOrRange =>
+                            this.baselineGoToDefs(
+                                "/*GOTO SOURCE DEF*/",
+                                markerOrRange,
+                                () =>
+                                    (this.languageService as ts.server.SessionClient)
+                                        .getSourceDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition),
+                            ),
                     );
                 case "goToType":
                     return baselineEachMarkerOrRange(
                         command,
-                        markerOrRange => this.baselineGoToDefs(
-                            "/*GOTO TYPE*/",
-                            markerOrRange,
-                            () => this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition),
-                        ),
+                        markerOrRange =>
+                            this.baselineGoToDefs(
+                                "/*GOTO TYPE*/",
+                                markerOrRange,
+                                () => this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition),
+                            ),
                     );
                 case "goToImplementation":
                     return baselineEachMarkerOrRange(
                         command,
-                        markerOrRange => this.baselineGoToDefs(
-                            "/*GOTO IMPL*/",
-                            markerOrRange,
-                            () => this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition),
-                        ),
+                        markerOrRange =>
+                            this.baselineGoToDefs(
+                                "/*GOTO IMPL*/",
+                                markerOrRange,
+                                () => this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition),
+                            ),
                     );
                 case "documentHighlights":
                     return baselineEachMarkerOrRange(
@@ -1318,23 +1337,27 @@ export class TestState {
             baseline += "\n\n";
             baseline += indentJsonBaseline(
                 "// === Definitions ===\n" +
-                this.getBaselineForDocumentSpansWithFileContents(
-                    references.map(r => r.definition),
-                    {
-                        markerInfo,
-                        documentSpanId: defIdMap.size ? def => `defId: ${defIdMap.get(def)}` : undefined,
-                        skipDocumentSpanDetails: true,
-                        skipDocumentContainingOnlyMarker: true,
-                    }
-                ) +
-                "\n\n// === Details ===\n" +
-                JSON.stringify(references.map(r => ({
-                    defId: defIdMap.get(r.definition),
-                    ...r.definition,
-                    fileName: undefined,
-                    textSpan: undefined,
-                    contextSpan: undefined,
-                })), undefined, " ")
+                    this.getBaselineForDocumentSpansWithFileContents(
+                        references.map(r => r.definition),
+                        {
+                            markerInfo,
+                            documentSpanId: defIdMap.size ? def => `defId: ${defIdMap.get(def)}` : undefined,
+                            skipDocumentSpanDetails: true,
+                            skipDocumentContainingOnlyMarker: true,
+                        },
+                    ) +
+                    "\n\n// === Details ===\n" +
+                    JSON.stringify(
+                        references.map(r => ({
+                            defId: defIdMap.get(r.definition),
+                            ...r.definition,
+                            fileName: undefined,
+                            textSpan: undefined,
+                            contextSpan: undefined,
+                        })),
+                        undefined,
+                        " ",
+                    ),
             );
         }
         return baseline;
@@ -1374,8 +1397,8 @@ export class TestState {
             ts.isString(markerInfo.markerOrRange) ?
                 this.getMarkerByName(markerInfo.markerOrRange) :
                 isMarker(markerInfo.markerOrRange) ?
-                    markerInfo.markerOrRange :
-                    { fileName: markerInfo.markerOrRange.fileName, position: markerInfo.markerOrRange.pos } :
+                markerInfo.markerOrRange :
+                { fileName: markerInfo.markerOrRange.fileName, position: markerInfo.markerOrRange.pos } :
             undefined;
         const fileBaselines: string[] = [];
         let foundMarker = false;
@@ -1537,7 +1560,7 @@ export class TestState {
             });
         }
         const lineStarts = ts.computeLineStarts(content);
-        let posLineInfo: { pos: number, line: number } | undefined;
+        let posLineInfo: { pos: number; line: number; } | undefined;
         // Our preferred way to write marker is
         // /*MARKER*/[| some text |]
         // [| some /*MARKER*/ text |]
@@ -1551,8 +1574,10 @@ export class TestState {
                 // If this is marker position and its same as textEnd and/or contextEnd we want to write marker after those
                 for (let matchingEndPosIndex = index + 1; matchingEndPosIndex < sortedDetails.length; matchingEndPosIndex++) {
                     // Defer after the location if its same as rangeEnd
-                    if (sortedDetails[matchingEndPosIndex].location === location &&
-                        sortedDetails[matchingEndPosIndex].type!.endsWith("End")) {
+                    if (
+                        sortedDetails[matchingEndPosIndex].location === location &&
+                        sortedDetails[matchingEndPosIndex].type!.endsWith("End")
+                    ) {
                         deferredMarkerIndex = matchingEndPosIndex;
                     }
                     // Dont defer further than already determined
@@ -1627,8 +1652,10 @@ export class TestState {
                 // first nLinesContext and last nLinesContext
                 if (locationLine - posLine > nLines) {
                     if (newContent) {
-                        readableContents = readableContents + "\n" + readableJsoncBaseline(newContent + content.slice(pos, lineStarts[posLine + TestState.nLinesContext]) +
-                            `--- (line: ${isLibFile ? "--" : posLine + TestState.nLinesContext + 1}) skipped ---`);
+                        readableContents = readableContents + "\n" + readableJsoncBaseline(
+                            newContent + content.slice(pos, lineStarts[posLine + TestState.nLinesContext]) +
+                                `--- (line: ${isLibFile ? "--" : posLine + TestState.nLinesContext + 1}) skipped ---`,
+                        );
                         if (location !== undefined) readableContents += "\n";
                         newContent = "";
                     }
@@ -1681,7 +1708,6 @@ export class TestState {
             this.raiseError(`${msgPrefix} ${displayExpectedAndActualString(stringify(fullExpected), stringify(fullActual))}`);
         }
         recur(fullActual, fullExpected, "");
-
     }
 
     private configure(preferences: ts.UserPreferences) {
@@ -1698,7 +1724,8 @@ export class TestState {
             this.activeFile.fileName,
             this.currentCaretPosition,
             options,
-            this.formatCodeSettings);
+            this.formatCodeSettings,
+        );
     }
 
     private getCompletionEntryDetails(entryName: string, source: string | undefined, data: ts.CompletionEntryData | undefined, preferences?: ts.UserPreferences): ts.CompletionEntryDetails | undefined {
@@ -1727,30 +1754,33 @@ export class TestState {
     }
 
     private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {
-        assert.deepEqual(ts.realizeDiagnostics(diagnostics, "\n"), expected.map((e): ts.RealizedDiagnostic => {
-            const range = e.range || this.getRangesInFile()[0];
-            if (!range) {
-                this.raiseError("Must provide a range for each expected diagnostic, or have one range in the fourslash source.");
-            }
-            return {
-                message: e.message,
-                category,
-                code: e.code,
-                ...ts.createTextSpanFromRange(range),
-                reportsUnnecessary: e.reportsUnnecessary,
-                reportsDeprecated: e.reportsDeprecated
-            };
-        }));
+        assert.deepEqual(
+            ts.realizeDiagnostics(diagnostics, "\n"),
+            expected.map((e): ts.RealizedDiagnostic => {
+                const range = e.range || this.getRangesInFile()[0];
+                if (!range) {
+                    this.raiseError("Must provide a range for each expected diagnostic, or have one range in the fourslash source.");
+                }
+                return {
+                    message: e.message,
+                    category,
+                    code: e.code,
+                    ...ts.createTextSpanFromRange(range),
+                    reportsUnnecessary: e.reportsUnnecessary,
+                    reportsDeprecated: e.reportsDeprecated,
+                };
+            }),
+        );
     }
 
-    public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string, expectedTags?: {name: string; text: string;}[]) {
+    public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
         if (typeof markerName === "string") this.goToMarker(markerName);
         else this.goToRangeStart(markerName);
 
         this.verifyQuickInfoString(expectedText, expectedDocumentation, expectedTags);
     }
 
-    public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
+    public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string]; }) {
         for (const name in namesAndTexts) {
             if (ts.hasProperty(namesAndTexts, name)) {
                 const text = namesAndTexts[name];
@@ -1791,12 +1821,7 @@ export class TestState {
         }
     }
 
-    public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: TextSpan,
-        displayParts: ts.SymbolDisplayPart[],
-        documentation: ts.SymbolDisplayPart[],
-        tags: ts.JSDocTagInfo[] | undefined
-    ) {
-
+    public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: TextSpan, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[] | undefined) {
         const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
         assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
         assert.equal(actualQuickInfo.kindModifiers, kindModifiers, this.messageAtLastKnownMarker("QuickInfo kindModifiers"));
@@ -1819,13 +1844,13 @@ export class TestState {
         const { fileName, position } = ts.isString(markerOrRange) ?
             this.getMarkerByName(markerOrRange) :
             isMarker(markerOrRange) ?
-                markerOrRange :
-                { fileName: markerOrRange.fileName, position: markerOrRange.pos };
+            markerOrRange :
+            { fileName: markerOrRange.fileName, position: markerOrRange.pos };
         const {
             findInStrings = false,
             findInComments = false,
             providePrefixAndSuffixTextForRename = true,
-            quotePreference = "double"
+            quotePreference = "double",
         } = options || {};
         const locations = this.languageService.findRenameLocations(
             fileName,
@@ -1854,7 +1879,7 @@ export class TestState {
                 startMarkerPrefix: span => span.prefixText ? `/*START PREFIX*/${span.prefixText}` : "",
                 endMarkerSuffix: span => span.suffixText ? `${span.suffixText}/*END SUFFIX*/` : "",
                 ignoredDocumentSpanProperties: ["prefixText", "suffixText"],
-            }
+            },
         );
     }
 
@@ -1922,8 +1947,10 @@ export class TestState {
         if (options.text !== undefined) {
             assert.equal(
                 ts.displayPartsToString(selectedItem.prefixDisplayParts) +
-                selectedItem.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(selectedItem.separatorDisplayParts)) +
-                ts.displayPartsToString(selectedItem.suffixDisplayParts), options.text);
+                    selectedItem.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(selectedItem.separatorDisplayParts)) +
+                    ts.displayPartsToString(selectedItem.suffixDisplayParts),
+                options.text,
+            );
         }
         if (options.parameterName !== undefined) {
             assert.equal(currentParameter!.name, options.parameterName);
@@ -1945,7 +1972,7 @@ export class TestState {
 
         const actualTags = selectedItem.tags;
         assert.equal(actualTags.length, (options.tags || ts.emptyArray).length, this.assertionMessageAtLastKnownMarker("signature help tags"));
-        ts.zipWith((options.tags || ts.emptyArray), actualTags, (expectedTag, actualTag) => {
+        ts.zipWith(options.tags || ts.emptyArray, actualTags, (expectedTag, actualTag) => {
             assert.equal(actualTag.name, expectedTag.name);
             assert.deepEqual(actualTag.text, expectedTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
         });
@@ -1963,7 +1990,7 @@ export class TestState {
             "isVariadic",
             "tags",
             "argumentCount",
-            "overrideSelectedItemIndex"
+            "overrideSelectedItemIndex",
         ];
         for (const key in options) {
             if (!ts.contains(allKeys, key)) {
@@ -1985,7 +2012,8 @@ export class TestState {
         kindModifiers: string | undefined,
         fileToRename: string | undefined,
         expectedRange: Range | undefined,
-        preferences: ts.UserPreferences | undefined): void {
+        preferences: ts.UserPreferences | undefined,
+    ): void {
         const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, preferences || { allowRenameOfImportPath: true });
         if (!renameInfo.canRename) {
             throw this.raiseError("Rename did not succeed");
@@ -2004,10 +2032,14 @@ export class TestState {
             expectedRange = this.getRanges()[0];
         }
 
-        if (renameInfo.triggerSpan.start !== expectedRange.pos ||
-            ts.textSpanEnd(renameInfo.triggerSpan) !== expectedRange.end) {
-            this.raiseError("Expected triggerSpan [" + expectedRange.pos + "," + expectedRange.end + ").  Got [" +
-                renameInfo.triggerSpan.start + "," + ts.textSpanEnd(renameInfo.triggerSpan) + ") instead.");
+        if (
+            renameInfo.triggerSpan.start !== expectedRange.pos ||
+            ts.textSpanEnd(renameInfo.triggerSpan) !== expectedRange.end
+        ) {
+            this.raiseError(
+                "Expected triggerSpan [" + expectedRange.pos + "," + expectedRange.end + ").  Got [" +
+                    renameInfo.triggerSpan.start + "," + ts.textSpanEnd(renameInfo.triggerSpan) + ") instead.",
+            );
         }
     }
 
@@ -2173,7 +2205,7 @@ export class TestState {
 
     private getEmitFiles(): readonly FourSlashFile[] {
         // Find file to be emitted
-        const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
+        const emitFiles: FourSlashFile[] = []; // List of FourSlashFile that has emitThisFile flag on
 
         const allFourSlashFiles = this.testData.files;
         for (const file of allFourSlashFiles) {
@@ -2254,7 +2286,8 @@ export class TestState {
 
     private getCompilerTestFiles() {
         return ts.map(this.testData.files, ({ content, fileName }) => ({
-            content, unitName: fileName
+            content,
+            unitName: fileName,
         }));
     }
 
@@ -2268,9 +2301,7 @@ export class TestState {
     }
 
     private getSyntacticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
-        const diagnostics = ts.flatMap(files,
-            file => this.languageService.getSyntacticDiagnostics(file.unitName)
-        );
+        const diagnostics = ts.flatMap(files, file => this.languageService.getSyntacticDiagnostics(file.unitName));
         const result = `Syntactic Diagnostics for file '${this.originalInputFileName}':`
             + Harness.IO.newLine()
             + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
@@ -2278,9 +2309,7 @@ export class TestState {
     }
 
     private getSemanticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
-        const diagnostics = ts.flatMap(files,
-            file => this.languageService.getSemanticDiagnostics(file.unitName)
-        );
+        const diagnostics = ts.flatMap(files, file => this.languageService.getSemanticDiagnostics(file.unitName));
         const result = `Semantic Diagnostics for file '${this.originalInputFileName}':`
             + Harness.IO.newLine()
             + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
@@ -2291,7 +2320,7 @@ export class TestState {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
-            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
+            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position),
         }));
         const annotations = this.annotateContentWithTooltips(
             result,
@@ -2300,8 +2329,9 @@ export class TestState {
             ({ displayParts, documentation, tags }) => [
                 ...(displayParts ? displayParts.map(p => p.text).join("").split("\n") : []),
                 ...(documentation?.length ? documentation.map(p => p.text).join("").split("\n") : []),
-                ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : [])
-            ]);
+                ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : []),
+            ],
+        );
         Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
 
@@ -2309,7 +2339,7 @@ export class TestState {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
-            item: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
+            item: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined),
         }));
         const annotations = this.annotateContentWithTooltips(
             result,
@@ -2335,7 +2365,7 @@ export class TestState {
                     }
                 }
                 return tooltip;
-            }
+            },
         );
         Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
@@ -2351,19 +2381,22 @@ export class TestState {
                     ...completions,
                     entries: completions?.entries.map(entry => ({
                         ...entry,
-                        ...this.getCompletionEntryDetails(entry.name, entry.source, entry.data, preferences)
+                        ...this.getCompletionEntryDetails(entry.name, entry.source, entry.data, preferences),
                     })),
-                }
+                },
             };
         });
         const annotations = this.annotateContentWithTooltips(
             result,
             "completions",
             item => item.optionalReplacementSpan,
-            item => item.entries?.flatMap(
-                entry => entry.displayParts
-                    ? entry.displayParts.map(p => p.text).join("").split("\n")
-                    : [`(${entry.kindModifiers}${entry.kind}) ${entry.name}`])
+            item =>
+                item.entries?.flatMap(
+                    entry =>
+                        entry.displayParts
+                            ? entry.displayParts.map(p => p.text).join("").split("\n")
+                            : [`(${entry.kindModifiers}${entry.kind}) ${entry.name}`],
+                ),
         );
         for (const r of result) {
             for (const entry of r.item.entries ?? ts.emptyArray) {
@@ -2381,36 +2414,43 @@ export class TestState {
                 }
             }
         }
-        Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result, (key, value) => {
-            return key === "exportMapKey"
-                ? value.replace(/\|[0-9]+/g, "|*")
-                : value;
-        }));
+        Harness.Baseline.runBaseline(
+            baselineFile,
+            annotations + "\n\n" + stringify(result, (key, value) => {
+                return key === "exportMapKey"
+                    ? value.replace(/\|[0-9]+/g, "|*")
+                    : value;
+            }),
+        );
     }
 
-    private annotateContentWithTooltips<T extends ts.QuickInfo | ts.SignatureHelpItems | {
-            optionalReplacementSpan?: ts.TextSpan,
+    private annotateContentWithTooltips<
+        T extends ts.QuickInfo | ts.SignatureHelpItems | {
+            optionalReplacementSpan?: ts.TextSpan;
             entries?: {
-                name: string,
-                kind: string,
-                kindModifiers?: string,
-                displayParts?: unknown,
-            }[]
-    }>(
+                name: string;
+                kind: string;
+                kindModifiers?: string;
+                displayParts?: unknown;
+            }[];
+        },
+    >(
         items: ({
-            marker: Marker & { name: string },
-            item: T | undefined
+            marker: Marker & { name: string; };
+            item: T | undefined;
         })[],
         opName: "completions" | "quickinfo" | "signature help",
         getSpan: (t: T) => ts.TextSpan | undefined,
-        getToolTipContents: (t: T, prev: T | undefined) => string[] | undefined): string {
+        getToolTipContents: (t: T, prev: T | undefined) => string[] | undefined,
+    ): string {
         const bar = "-".repeat(70);
         const sorted = items.slice();
         // sort by file, then *backwards* by position in the file so I can insert multiple times on a line without counting
         sorted.sort((q1, q2) =>
             q1.marker.fileName === q1.marker.fileName
-            ? (q1.marker.position > q2.marker.position ? -1 : 1)
-            : (q1.marker.fileName > q1.marker.fileName ? 1 : -1));
+                ? (q1.marker.position > q2.marker.position ? -1 : 1)
+                : (q1.marker.fileName > q1.marker.fileName ? 1 : -1)
+        );
         const files = new Map<string, string[]>();
         let previous: T | undefined;
         for (const { marker, item } of sorted) {
@@ -2493,15 +2533,16 @@ export class TestState {
             errorList.forEach(err => {
                 Harness.IO.log(
                     "start: " + err.start +
-                    ", length: " + err.length +
-                    ", message: " + ts.flattenDiagnosticMessageText(err.messageText, Harness.IO.newLine()));
+                        ", length: " + err.length +
+                        ", message: " + ts.flattenDiagnosticMessageText(err.messageText, Harness.IO.newLine()),
+                );
             });
         }
     }
 
     public printCurrentFileState(showWhitespace: boolean, makeCaretVisible: boolean) {
         for (const file of this.testData.files) {
-            const active = (this.activeFile === file);
+            const active = this.activeFile === file;
             Harness.IO.log(`=== Script (${file.fileName}) ${(active ? "(active, cursor at |)" : "")} ===`);
             let content = this.getFileContent(file.fileName);
             if (active) {
@@ -2531,7 +2572,7 @@ export class TestState {
 
     private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
         return this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition, {
-            triggerReason
+            triggerReason,
         });
     }
 
@@ -2645,8 +2686,8 @@ export class TestState {
                     this.languageService.getSignatureHelpItems(this.activeFile.fileName, offset, {
                         triggerReason: {
                             kind: "characterTyped",
-                            triggerCharacter: ch
-                        }
+                            triggerCharacter: ch,
+                        },
                     });
                 }
                 else if (prevChar === " " && /A-Za-z_/.test(ch)) {
@@ -2686,7 +2727,6 @@ export class TestState {
             }
         }
 
-
         this.checkPostEditInvariants();
     }
 
@@ -2711,12 +2751,17 @@ export class TestState {
                 ts.toPath(this.activeFile.fileName, this.languageServiceAdapterHost.sys.getCurrentDirectory(), ts.hostGetCanonicalFileName(this.languageServiceAdapterHost)),
                 /*packageJsonInfoCache*/ undefined,
                 this.languageServiceAdapterHost,
-                this.languageService.getProgram()?.getCompilerOptions() || {}
+                this.languageService.getProgram()?.getCompilerOptions() || {},
             ),
             setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
         };
         const referenceSourceFile = ts.createLanguageServiceSourceFile(
-            this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents*/ false);
+            this.activeFile.fileName,
+            createScriptSnapShot(content),
+            options,
+            /*version:*/ "0",
+            /*setNodeParents*/ false,
+        );
         const referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 
         Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
@@ -2917,7 +2962,7 @@ export class TestState {
     public verifyCurrentNameOrDottedNameSpanText(text: string) {
         const span = this.languageService.getNameOrDottedNameSpan(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition);
         if (!span) {
-            return this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" + displayExpectedAndActualString("\"" + text + "\"", "undefined"));
+            return this.raiseError("verifyCurrentNameOrDottedNameSpanText\n" + displayExpectedAndActualString('"' + text + '"', "undefined"));
         }
 
         const actual = this.getFileContent(this.activeFile.fileName).substring(span.start, ts.textSpanEnd(span));
@@ -2933,15 +2978,15 @@ export class TestState {
     public baselineCurrentFileNameOrDottedNameSpans() {
         Harness.Baseline.runBaseline(
             this.testData.globalOptions[MetadataOptionNames.baselineFile],
-            this.baselineCurrentFileLocations(pos => this.getNameOrDottedNameSpan(pos)!));
+            this.baselineCurrentFileLocations(pos => this.getNameOrDottedNameSpan(pos)!),
+        );
     }
 
     public printNameOrDottedNameSpans(pos: number) {
         Harness.IO.log(this.spanInfoToString(this.getNameOrDottedNameSpan(pos)!, "**"));
     }
 
-    private classificationToIdentifier(classification: number){
-
+    private classificationToIdentifier(classification: number) {
         const tokenTypes: string[] = [];
         tokenTypes[ts.classifier.v2020.TokenType.class] = "class";
         tokenTypes[ts.classifier.v2020.TokenType.enum] = "enum";
@@ -2964,7 +3009,6 @@ export class TestState {
         tokenModifiers[ts.classifier.v2020.TokenModifier.local] = "local";
         tokenModifiers[ts.classifier.v2020.TokenModifier.defaultLibrary] = "defaultLibrary";
 
-
         function getTokenTypeFromClassification(tsClassification: number): number | undefined {
             if (tsClassification > ts.classifier.v2020.TokenEncodingConsts.modifierMask) {
                 return (tsClassification >> ts.classifier.v2020.TokenEncodingConsts.typeOffset) - 1;
@@ -2982,22 +3026,26 @@ export class TestState {
         return [tokenTypes[typeIdx], ...tokenModifiers.filter((_, i) => modSet & 1 << i)].join(".");
     }
 
-    private verifyClassifications(expected: { classificationType: string | number, text?: string; textSpan?: TextSpan }[], actual: (ts.ClassifiedSpan | ts.ClassifiedSpan2020)[] , sourceFileText: string) {
+    private verifyClassifications(expected: { classificationType: string | number; text?: string; textSpan?: TextSpan; }[], actual: (ts.ClassifiedSpan | ts.ClassifiedSpan2020)[], sourceFileText: string) {
         if (actual.length !== expected.length) {
-            this.raiseError("verifyClassifications failed - expected total classifications to be " + expected.length +
-                ", but was " + actual.length +
-                jsonMismatchString());
+            this.raiseError(
+                "verifyClassifications failed - expected total classifications to be " + expected.length +
+                    ", but was " + actual.length +
+                    jsonMismatchString(),
+            );
         }
 
         ts.zipWith(expected, actual, (expectedClassification, actualClassification) => {
             const expectedType = expectedClassification.classificationType;
-            const actualType = typeof actualClassification.classificationType === "number"  ? this.classificationToIdentifier(actualClassification.classificationType) : actualClassification.classificationType;
+            const actualType = typeof actualClassification.classificationType === "number" ? this.classificationToIdentifier(actualClassification.classificationType) : actualClassification.classificationType;
 
             if (expectedType !== actualType) {
-                this.raiseError("verifyClassifications failed - expected classifications type to be " +
-                    expectedType + ", but was " +
-                    actualType +
-                    jsonMismatchString());
+                this.raiseError(
+                    "verifyClassifications failed - expected classifications type to be " +
+                        expectedType + ", but was " +
+                        actualType +
+                        jsonMismatchString(),
+                );
             }
 
             const expectedSpan = expectedClassification.textSpan;
@@ -3007,25 +3055,28 @@ export class TestState {
                 const expectedLength = expectedSpan.end - expectedSpan.start;
 
                 if (expectedSpan.start !== actualSpan.start || expectedLength !== actualSpan.length) {
-                    this.raiseError("verifyClassifications failed - expected span of text to be " +
-                        "{start=" + expectedSpan.start + ", length=" + expectedLength + "}, but was " +
-                        "{start=" + actualSpan.start + ", length=" + actualSpan.length + "}" +
-                        jsonMismatchString());
+                    this.raiseError(
+                        "verifyClassifications failed - expected span of text to be " +
+                            "{start=" + expectedSpan.start + ", length=" + expectedLength + "}, but was " +
+                            "{start=" + actualSpan.start + ", length=" + actualSpan.length + "}" +
+                            jsonMismatchString(),
+                    );
                 }
             }
 
             const actualText = this.activeFile.content.substr(actualSpan.start, actualSpan.length);
             if (expectedClassification.text !== actualText) {
-                this.raiseError("verifyClassifications failed - expected classified text to be " +
-                    expectedClassification.text + ", but was " +
-                    actualText +
-                    jsonMismatchString());
+                this.raiseError(
+                    "verifyClassifications failed - expected classified text to be " +
+                        expectedClassification.text + ", but was " +
+                        actualText +
+                        jsonMismatchString(),
+                );
             }
         });
 
         function jsonMismatchString() {
-            const showActual = actual.map(({ classificationType, textSpan }) =>
-                ({ classificationType, text: sourceFileText.slice(textSpan.start, textSpan.start + textSpan.length) }));
+            const showActual = actual.map(({ classificationType, textSpan }) => ({ classificationType, text: sourceFileText.slice(textSpan.start, textSpan.start + textSpan.length) }));
             return Harness.IO.newLine() +
                 "expected: '" + Harness.IO.newLine() + stringify(expected) + "'" + Harness.IO.newLine() +
                 "actual:   '" + Harness.IO.newLine() + stringify(showActual) + "'";
@@ -3036,21 +3087,20 @@ export class TestState {
         if (this.testType === FourSlashTestType.Server) {
             const actual = (this.languageService as ts.server.SessionClient).getProjectInfo(
                 this.activeFile.fileName,
-                /*needFileNameList*/ true
+                /*needFileNameList*/ true,
             );
             assert.equal(
                 expected.join(","),
                 actual.fileNames!.map(file => {
                     return file.replace(this.basePath + "/", "");
-                }).join(",")
+                }).join(","),
             );
         }
     }
 
     public replaceWithSemanticClassifications(format: ts.SemanticClassificationFormat.TwentyTwenty) {
-        const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
-            ts.createTextSpan(0, this.activeFile.content.length), format);
-        const replacement = [`const c2 = classification("2020");`,`verify.semanticClassificationsAre("2020",`];
+        const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName, ts.createTextSpan(0, this.activeFile.content.length), format);
+        const replacement = [`const c2 = classification("2020");`, `verify.semanticClassificationsAre("2020",`];
         for (const a of actual) {
             const identifier = this.classificationToIdentifier(a.classificationType as number);
             const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
@@ -3081,15 +3131,13 @@ export class TestState {
         }
     }
 
-    public verifySemanticClassifications(format: ts.SemanticClassificationFormat, expected: { classificationType: string | number; text?: string }[]) {
-        const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
-            ts.createTextSpan(0, this.activeFile.content.length), format);
+    public verifySemanticClassifications(format: ts.SemanticClassificationFormat, expected: { classificationType: string | number; text?: string; }[]) {
+        const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName, ts.createTextSpan(0, this.activeFile.content.length), format);
         this.verifyClassifications(expected, actual, this.activeFile.content);
     }
 
-    public verifySyntacticClassifications(expected: { classificationType: string; text: string }[]) {
-        const actual = this.languageService.getSyntacticClassifications(this.activeFile.fileName,
-            ts.createTextSpan(0, this.activeFile.content.length));
+    public verifySyntacticClassifications(expected: { classificationType: string; text: string; }[]) {
+        const actual = this.languageService.getSyntacticClassifications(this.activeFile.fileName, ts.createTextSpan(0, this.activeFile.content.length));
 
         this.verifyClassifications(expected, actual, this.activeFile.content);
     }
@@ -3102,7 +3150,7 @@ export class TestState {
     }
 
     private printOutliningSpansInline(spans: ts.OutliningSpan[]) {
-        const allSpanInsets = [] as { text: string, pos: number }[];
+        const allSpanInsets = [] as { text: string; pos: number; }[];
         let annotated = this.activeFile.content;
         ts.forEach(spans, span => {
             allSpanInsets.push({ text: "[|", pos: span.textSpan.start });
@@ -3111,7 +3159,7 @@ export class TestState {
 
         const reverseSpans = allSpanInsets.sort((l, r) => r.pos - l.pos);
         ts.forEach(reverseSpans, span => {
-           annotated = annotated.slice(0, span.pos) + span.text + annotated.slice(span.pos);
+            annotated = annotated.slice(0, span.pos) + span.text + annotated.slice(span.pos);
         });
         Harness.IO.log(`\nMockup:\n${annotated}`);
     }
@@ -3149,8 +3197,7 @@ export class TestState {
     }
 
     public verifyTodoComments(descriptors: string[], spans: Range[]) {
-        const actual = this.languageService.getTodoComments(this.activeFile.fileName,
-            descriptors.map(d => ({ text: d, priority: 0 })));
+        const actual = this.languageService.getTodoComments(this.activeFile.fileName, descriptors.map(d => ({ text: d, priority: 0 })));
 
         if (actual.length !== spans.length) {
             this.raiseError(`verifyTodoComments failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
@@ -3248,8 +3295,7 @@ export class TestState {
 
     public verifyCodeFixAll({ fixId, fixAllDescription, newFileContent, commands: expectedCommands }: FourSlashInterface.VerifyCodeFixAllOptions): void {
         const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
-        ts.Debug.assert(fixWithId !== undefined, "No available code fix has the expected id. Fix All is not available if there is only one potentially fixable diagnostic present.", () =>
-            `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")}`);
+        ts.Debug.assert(fixWithId !== undefined, "No available code fix has the expected id. Fix All is not available if there is only one potentially fixable diagnostic present.", () => `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")}`);
         ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
 
         const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
@@ -3361,7 +3407,7 @@ export class TestState {
         const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
             start: diagnostic.start,
             length: diagnostic.length,
-            code: diagnostic.code
+            code: diagnostic.code,
         }));
 
         return ts.flatMap(ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties), diagnostic => {
@@ -3477,7 +3523,6 @@ export class TestState {
     }
 
     public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
-
         const openBraceMap = new Map(Object.entries<ts.CharacterCodes>({
             "(": ts.CharacterCodes.openParen,
             "{": ts.CharacterCodes.openBrace,
@@ -3485,7 +3530,7 @@ export class TestState {
             "'": ts.CharacterCodes.singleQuote,
             '"': ts.CharacterCodes.doubleQuote,
             "`": ts.CharacterCodes.backtick,
-            "<": ts.CharacterCodes.lessThan
+            "<": ts.CharacterCodes.lessThan,
         }));
 
         const charCode = openBraceMap.get(openingBrace);
@@ -3514,7 +3559,7 @@ export class TestState {
             includeCompletionsWithInsertText: true,
             allowIncompleteCompletions: true,
             includeCompletionsWithSnippetText: true,
-            ...preferences
+            ...preferences,
         };
 
         this.goToMarker(marker);
@@ -3579,7 +3624,7 @@ export class TestState {
         Harness.Baseline.runBaseline(baselineFile, baselineText);
     }
 
-    public verifyJsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
+    public verifyJsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined; }): void {
         for (const markerName in map) {
             this.goToMarker(markerName);
             const actual = this.languageService.getJsxClosingTagAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -3587,7 +3632,7 @@ export class TestState {
         }
     }
 
-    public verifyLinkedEditingRange(map: { [markerName: string]: ts.LinkedEditingInfo | undefined }): void {
+    public verifyLinkedEditingRange(map: { [markerName: string]: ts.LinkedEditingInfo | undefined; }): void {
         for (const markerName in map) {
             this.goToMarker(markerName);
             const actual = this.languageService.getLinkedEditingRangeAtPosition(this.activeFile.fileName, this.currentCaretPosition);
@@ -3615,7 +3660,7 @@ export class TestState {
 
             // get linkedEdit at every position in the file, then group positions by their linkedEdit
             const linkedEditsInFile = new Map<string, number[]>();
-            for(let pos = 0; pos < activeFile.content.length; pos++) {
+            for (let pos = 0; pos < activeFile.content.length; pos++) {
                 const linkedEditAtPosition = languageService.getLinkedEditingRangeAtPosition(fileName, pos);
                 if (!linkedEditAtPosition) continue;
 
@@ -3629,7 +3674,7 @@ export class TestState {
                 return { baselineContent: baselineContent + activeFile.content + `\n\n--No linked edits found--`, offset };
             }
 
-            let inlineLinkedEditBaselines: { start: number, end: number, index: number }[] = [];
+            let inlineLinkedEditBaselines: { start: number; end: number; index: number; }[] = [];
             let linkedEditInfoBaseline = "";
             for (const edit of linkedEditsByRange) {
                 const [linkedEdit, positions] = edit;
@@ -3713,29 +3758,32 @@ export class TestState {
     public verifyNavigateTo(options: readonly FourSlashInterface.VerifyNavigateToOptions[]): void {
         for (const { pattern, expected, fileName } of options) {
             const items = this.languageService.getNavigateToItems(pattern, /*maxResultCount*/ undefined, fileName);
-            this.assertObjectsEqual(items, expected.map((e): ts.NavigateToItem => ({
-                name: e.name,
-                kind: e.kind,
-                kindModifiers: e.kindModifiers || "",
-                matchKind: e.matchKind || "exact",
-                isCaseSensitive: e.isCaseSensitive === undefined ? true : e.isCaseSensitive,
-                fileName: e.range.fileName,
-                textSpan: ts.createTextSpanFromRange(e.range),
-                containerName: e.containerName || "",
-                containerKind: e.containerKind || ts.ScriptElementKind.unknown,
-            })));
+            this.assertObjectsEqual(
+                items,
+                expected.map((e): ts.NavigateToItem => ({
+                    name: e.name,
+                    kind: e.kind,
+                    kindModifiers: e.kindModifiers || "",
+                    matchKind: e.matchKind || "exact",
+                    isCaseSensitive: e.isCaseSensitive === undefined ? true : e.isCaseSensitive,
+                    fileName: e.range.fileName,
+                    textSpan: ts.createTextSpanFromRange(e.range),
+                    containerName: e.containerName || "",
+                    containerKind: e.containerKind || ts.ScriptElementKind.unknown,
+                })),
+            );
         }
     }
 
-    public verifyNavigationBar(json: any, options: { checkSpans?: boolean } | undefined) {
+    public verifyNavigationBar(json: any, options: { checkSpans?: boolean; } | undefined) {
         this.verifyNavigationTreeOrBar(json, this.languageService.getNavigationBarItems(this.activeFile.fileName), "Bar", options);
     }
 
-    public verifyNavigationTree(json: any, options: { checkSpans?: boolean } | undefined) {
+    public verifyNavigationTree(json: any, options: { checkSpans?: boolean; } | undefined) {
         this.verifyNavigationTreeOrBar(json, this.languageService.getNavigationTree(this.activeFile.fileName), "Tree", options);
     }
 
-    private verifyNavigationTreeOrBar(json: any, tree: any, name: "Tree" | "Bar", options: { checkSpans?: boolean } | undefined) {
+    private verifyNavigationTreeOrBar(json: any, tree: any, name: "Tree" | "Bar", options: { checkSpans?: boolean; } | undefined) {
         if (JSON.stringify(tree, replacer) !== JSON.stringify(json)) {
             this.raiseError(`verifyNavigation${name} failed - \n${showTextDiff(stringify(json), stringify(tree, replacer))}`);
         }
@@ -3833,7 +3881,7 @@ export class TestState {
                 `Expected to find a fix with the name '${fixName}', but none exists.` +
                     availableFixes.length
                     ? ` Available fixes: ${availableFixes.map(fix => `${fix.fixName} (${fix.fixId ? "with" : "without"} fix-all)`).join(", ")}`
-                    : ""
+                    : "",
             );
         }
     }
@@ -3851,7 +3899,7 @@ export class TestState {
     private getSelection(): ts.TextRange {
         return {
             pos: this.currentCaretPosition,
-            end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd
+            end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd,
         };
     }
 
@@ -3946,7 +3994,6 @@ export class TestState {
                 ts.Debug.assert(rp === undefined);
             }
             this.verifyFileContent(fileName, newContent);
-
         }
 
         if (renamePosition === undefined) {
@@ -3962,7 +4009,7 @@ export class TestState {
         }
     }
 
-    private static parseNewContent(newContentWithRenameMarker: string): { readonly renamePosition: number | undefined, readonly newContent: string } {
+    private static parseNewContent(newContentWithRenameMarker: string): { readonly renamePosition: number | undefined; readonly newContent: string; } {
         const renamePosition = newContentWithRenameMarker.indexOf("/*RENAME*/");
         if (renamePosition === -1) {
             return { renamePosition: undefined, newContent: newContentWithRenameMarker };
@@ -4009,7 +4056,7 @@ export class TestState {
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 
-    private testNewFileContents(edits: readonly ts.FileTextChanges[], newFileContents: { [fileName: string]: string }, description: string): void {
+    private testNewFileContents(edits: readonly ts.FileTextChanges[], newFileContents: { [fileName: string]: string; }, description: string): void {
         for (const { fileName, textChanges } of edits) {
             const newContent = newFileContents[fileName];
             if (newContent === undefined) {
@@ -4042,8 +4089,8 @@ export class TestState {
         expectedContent: string,
         refactorNameToApply: string,
         actionName: string,
-        formattingOptions?: ts.FormatCodeSettings) {
-
+        formattingOptions?: ts.FormatCodeSettings,
+    ) {
         formattingOptions = formattingOptions || this.formatCodeSettings;
         const marker = this.getMarkerByName(markerName);
 
@@ -4097,15 +4144,13 @@ export class TestState {
         const alreadySeen = seen.has(key);
         seen.set(key, true);
 
-        const incomingCalls =
-            direction === CallHierarchyItemDirection.Outgoing ? { result: "skip" } as const :
-                alreadySeen ? { result: "seen" } as const :
-                    { result: "show", values: this.languageService.provideCallHierarchyIncomingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
+        const incomingCalls = direction === CallHierarchyItemDirection.Outgoing ? { result: "skip" } as const :
+            alreadySeen ? { result: "seen" } as const :
+            { result: "show", values: this.languageService.provideCallHierarchyIncomingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
 
-        const outgoingCalls =
-            direction === CallHierarchyItemDirection.Incoming ? { result: "skip" } as const :
-                alreadySeen ? { result: "seen" } as const :
-                    { result: "show", values: this.languageService.provideCallHierarchyOutgoingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
+        const outgoingCalls = direction === CallHierarchyItemDirection.Incoming ? { result: "skip" } as const :
+            alreadySeen ? { result: "seen" } as const :
+            { result: "show", values: this.languageService.provideCallHierarchyOutgoingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
 
         let text = "";
         text += `${prefix}╭ name: ${callHierarchyItem.name}\n`;
@@ -4117,9 +4162,13 @@ export class TestState {
         text += `${prefix}├ span:\n`;
         text += this.formatCallHierarchyItemSpan(file, callHierarchyItem.span, `${prefix}│ `);
         text += `${prefix}├ selectionSpan:\n`;
-        text += this.formatCallHierarchyItemSpan(file, callHierarchyItem.selectionSpan, `${prefix}│ `,
+        text += this.formatCallHierarchyItemSpan(
+            file,
+            callHierarchyItem.selectionSpan,
+            `${prefix}│ `,
             incomingCalls.result !== "skip" || outgoingCalls.result !== "skip" ? `${prefix}│ ` :
-                `${trailingPrefix}╰ `);
+                `${trailingPrefix}╰ `,
+        );
 
         if (incomingCalls.result === "seen") {
             if (outgoingCalls.result === "skip") {
@@ -4146,10 +4195,14 @@ export class TestState {
                     text += `${prefix}│ ╭ from:\n`;
                     text += this.formatCallHierarchyItem(file, incomingCall.from, CallHierarchyItemDirection.Incoming, seen, `${prefix}│ │ `);
                     text += `${prefix}│ ├ fromSpans:\n`;
-                    text += this.formatCallHierarchyItemSpans(file, incomingCall.fromSpans, `${prefix}│ │ `,
+                    text += this.formatCallHierarchyItemSpans(
+                        file,
+                        incomingCall.fromSpans,
+                        `${prefix}│ │ `,
                         i < incomingCalls.values.length - 1 ? `${prefix}│ ╰ ` :
                             outgoingCalls.result !== "skip" ? `${prefix}│ ╰ ` :
-                                `${trailingPrefix}╰ ╰ `);
+                            `${trailingPrefix}╰ ╰ `,
+                    );
                 }
             }
         }
@@ -4168,9 +4221,13 @@ export class TestState {
                     text += `${prefix}│ ╭ to:\n`;
                     text += this.formatCallHierarchyItem(this.findFile(outgoingCall.to.file), outgoingCall.to, CallHierarchyItemDirection.Outgoing, seen, `${prefix}│ │ `);
                     text += `${prefix}│ ├ fromSpans:\n`;
-                    text += this.formatCallHierarchyItemSpans(file, outgoingCall.fromSpans, `${prefix}│ │ `,
+                    text += this.formatCallHierarchyItemSpans(
+                        file,
+                        outgoingCall.fromSpans,
+                        `${prefix}│ │ `,
                         i < outgoingCalls.values.length - 1 ? `${prefix}│ ╰ ` :
-                            `${trailingPrefix}╰ ╰ `);
+                            `${trailingPrefix}╰ ╰ `,
+                    );
                 }
             }
         }
@@ -4222,10 +4279,12 @@ export class TestState {
 
     // Get the text of the entire line the caret is currently at
     private getCurrentLineContent() {
-        return this.getLineContent(this.languageServiceAdapterHost.positionToLineAndCharacter(
-            this.activeFile.fileName,
-            this.currentCaretPosition,
-        ).line);
+        return this.getLineContent(
+            this.languageServiceAdapterHost.positionToLineAndCharacter(
+                this.activeFile.fileName,
+                this.currentCaretPosition,
+            ).line,
+        );
     }
 
     private findFile(indexOrName: string | number): FourSlashFile {
@@ -4280,7 +4339,7 @@ export class TestState {
     public getMarkerByName(markerName: string) {
         const markerPos = this.testData.markerPositions.get(markerName);
         if (markerPos === undefined) {
-            throw new Error(`Unknown marker "${markerName}" Available markers: ${this.getMarkerNames().map(m => "\"" + m + "\"").join(", ")}`);
+            throw new Error(`Unknown marker "${markerName}" Available markers: ${this.getMarkerNames().map(m => '"' + m + '"').join(", ")}`);
         }
         else {
             return markerPos;
@@ -4296,7 +4355,7 @@ export class TestState {
     }
 
     public getEditsForFileRename({ oldPath, newPath, newFileContents, preferences }: FourSlashInterface.GetEditsForFileRenameOptions): void {
-        const test = (fileContents: { readonly [fileName: string]: string }, description: string): void => {
+        const test = (fileContents: { readonly [fileName: string]: string; }, description: string): void => {
             const changes = this.languageService.getEditsForFileRename(oldPath, newPath, this.formatCodeSettings, preferences);
             this.testNewFileContents(changes, fileContents, description);
         };
@@ -4402,11 +4461,11 @@ function forEachTextChange(changes: readonly ts.TextChange[], cb: (change: ts.Te
 
 function updatePosition(position: number, editStart: number, editEnd: number, { length }: string): number {
     // If inside the edit, return -1 to mark as invalid
-    return position <= editStart ? position : position < editEnd ? -1 : position + length - + (editEnd - editStart);
+    return position <= editStart ? position : position < editEnd ? -1 : position + length - +(editEnd - editStart);
 }
 
-function renameKeys<T>(obj: { readonly [key: string]: T }, renameKey: (key: string) => string): { readonly [key: string]: T } {
-    const res: { [key: string]: T } = {};
+function renameKeys<T>(obj: { readonly [key: string]: T; }, renameKey: (key: string) => string): { readonly [key: string]: T; } {
+    const res: { [key: string]: T; } = {};
     for (const key in obj) {
         res[renameKey(key)] = obj[key];
     }
@@ -4441,7 +4500,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
 
     type SourceMapSupportModule = typeof import("source-map-support") & {
         // TODO(rbuckton): This is missing from the DT definitions and needs to be added.
-        resetRetrieveHandlers(): void
+        resetRetrieveHandlers(): void;
     };
 
     // Provide the content of the current test to 'source-map-support' so that it can give us the correct source positions
@@ -4458,7 +4517,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
         retrieveFile: path => {
             return path === generatedFile ? wrappedCode :
                 undefined!;
-        }
+        },
     });
 
     try {
@@ -4520,7 +4579,7 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
     let currentFileContent: string | undefined;
     let currentFileName = fileName;
     let currentFileSymlinks: string[] | undefined;
-    let currentFileOptions: { [s: string]: string } = {};
+    let currentFileOptions: { [s: string]: string; } = {};
 
     function nextFile() {
         if (currentFileContent === undefined) return;
@@ -4614,7 +4673,7 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
         globalOptions,
         files,
         symlinks,
-        ranges
+        ranges,
     };
 }
 
@@ -4626,7 +4685,7 @@ function getNonFileNameOptionInFileList(files: FourSlashFile[]): string | undefi
     return ts.forEach(files, f => getNonFileNameOptionInObject(f.fileOptions));
 }
 
-function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): string | undefined {
+function getNonFileNameOptionInObject(optionObject: { [s: string]: string; }): string | undefined {
     for (const option in optionObject) {
         switch (option) {
             case MetadataOptionNames.fileName:
@@ -4643,7 +4702,7 @@ function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): st
 const enum State {
     none,
     inSlashStarMarker,
-    inObjectMarker
+    inObjectMarker,
 }
 
 function reportError(fileName: string, line: number, col: number, message: string): never {
@@ -4655,7 +4714,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
     let markerValue;
     try {
         // Attempt to parse the marker value as JSON
-        markerValue = JSON.parse("{ " + text + " }") as { name?: unknown };
+        markerValue = JSON.parse("{ " + text + " }") as { name?: unknown; };
     }
     catch (e) {
         reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text " + e.message);
@@ -4668,7 +4727,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
     const marker: Marker = {
         fileName,
         position: location.position,
-        data: markerValue
+        data: markerValue,
     };
 
     // Object markers can be anonymous
@@ -4684,7 +4743,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
 function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
     const marker: Marker = {
         fileName,
-        position: location.position
+        position: location.position,
     };
 
     // Verify markers for uniqueness
@@ -4764,7 +4823,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
                             fileName,
                             pos: rangeStart.position,
                             end: (i - 1) - difference,
-                            marker: rangeStart.marker
+                            marker: rangeStart.marker,
                         };
                         localRanges.push(range);
 
@@ -4935,8 +4994,8 @@ function stripWhitespace(s: string): string {
 function displayExpectedAndActualString(expected: string, actual: string, quoted = false) {
     const expectMsg = "\x1b[1mExpected\x1b[0m\x1b[31m";
     const actualMsg = "\x1b[1mActual\x1b[0m\x1b[31m";
-    const expectedString = quoted ? "\"" + expected + "\"" : expected;
-    const actualString = quoted ? "\"" + actual + "\"" : actual;
+    const expectedString = quoted ? '"' + expected + '"' : expected;
+    const actualString = quoted ? '"' + actual + '"' : actual;
     return `\n${expectMsg}:\n${expectedString}\n\n${actualMsg}:\n${highlightDifferenceBetweenStrings(expected, actualString)}`;
 }
 
@@ -4945,7 +5004,7 @@ function templateToRegExp(template: string) {
 }
 
 function rangesOfDiffBetweenTwoStrings(source: string, target: string) {
-    const ranges = [] as { start: number; length: number }[];
+    const ranges = [] as { start: number; length: number; }[];
 
     const addToIndex = (index: number) => {
         const closestIndex = ranges[ranges.length - 1];
@@ -4954,9 +5013,9 @@ function rangesOfDiffBetweenTwoStrings(source: string, target: string) {
             if (doesAddToIndex) {
                 closestIndex.length = closestIndex.length + 1;
             }
-        else {
-            ranges.push({ start: index - 1, length: 1 });
-        }
+            else {
+                ranges.push({ start: index - 1, length: 1 });
+            }
         }
         else {
             ranges.push({ start: index - 1, length: 1 });
@@ -4983,7 +5042,7 @@ function highlightDifferenceBetweenStrings(source: string, target: string) {
         const before = emTarget.slice(0, range.start + 1 + additionalOffset);
         const between = emTarget.slice(
             range.start + 1 + additionalOffset,
-            range.start + range.length + 1 + additionalOffset
+            range.start + range.length + 1 + additionalOffset,
         );
         const after = emTarget.slice(range.start + range.length + 1 + additionalOffset, emTarget.length);
         emTarget = before + lhs + between + rhs + after;

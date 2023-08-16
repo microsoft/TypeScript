@@ -67,7 +67,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     describe("parses command line null for tsconfig only option", () => {
         interface VerifyNull {
-            subScenario: string,
+            subScenario: string;
             optionName: string;
             nonNullValue?: string;
             workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics;
@@ -77,32 +77,32 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                 assertParseResult(
                     `${subScenario} allows setting it to null`,
                     [`--${optionName}`, "null", "0.ts"],
-                    workerDiagnostic
+                    workerDiagnostic,
                 );
                 if (nonNullValue) {
                     assertParseResult(
                         `${subScenario} errors if non null value is passed`,
                         [`--${optionName}`, nonNullValue, "0.ts"],
-                        workerDiagnostic
+                        workerDiagnostic,
                     );
                 }
 
                 assertParseResult(
                     `${subScenario} errors if its followed by another option`,
                     ["0.ts", "--strictNullChecks", `--${optionName}`],
-                    workerDiagnostic
+                    workerDiagnostic,
                 );
 
                 assertParseResult(
                     `${subScenario} errors if its last option`,
                     ["0.ts", `--${optionName}`],
-                    workerDiagnostic
+                    workerDiagnostic,
                 );
             });
         }
 
         interface VerifyNullNonIncludedOption {
-            subScenario: string,
+            subScenario: string;
             type: () => "string" | "number" | Map<string, number | string>;
             nonNullValue?: string;
         }
@@ -121,14 +121,14 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                             category: ts.Diagnostics.Backwards_Compatibility,
                             description: ts.Diagnostics.Enable_project_compilation,
                             defaultValueDescription: undefined,
-                        }
+                        },
                     ];
                     return {
                         ...ts.compilerOptionsDidYouMeanDiagnostics,
                         optionDeclarations,
-                        getOptionsNameMap: () => ts.createOptionNameMap(optionDeclarations)
+                        getOptionsNameMap: () => ts.createOptionNameMap(optionDeclarations),
                     };
-                }
+                },
             });
         }
 
@@ -158,22 +158,23 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         verifyNullNonIncludedOption({
             subScenario: "option of type string",
             type: () => "string",
-            nonNullValue: "hello"
+            nonNullValue: "hello",
         });
 
         verifyNullNonIncludedOption({
             subScenario: "option of type number",
             type: () => "number",
-            nonNullValue: "10"
+            nonNullValue: "10",
         });
 
         verifyNullNonIncludedOption({
             subScenario: "option of type custom map",
-            type: () => new Map(Object.entries({
-                node: ts.ModuleResolutionKind.Node10,
-                classic: ts.ModuleResolutionKind.Classic,
-            })),
-            nonNullValue: "node"
+            type: () =>
+                new Map(Object.entries({
+                    node: ts.ModuleResolutionKind.Node10,
+                    classic: ts.ModuleResolutionKind.Classic,
+                })),
+            nonNullValue: "node",
         });
     });
 
