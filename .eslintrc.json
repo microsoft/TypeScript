@@ -84,18 +84,26 @@
         "@typescript-eslint/class-literal-property-style": "off",
         "@typescript-eslint/consistent-indexed-object-style": "off",
         "@typescript-eslint/no-duplicate-enum-values": "off",
+        "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-namespace": "off",
         "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/no-empty-interface": "off",
         "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/ban-types": [
+            "error",
+            {
+                "extendDefaults": true,
+                "types": {
+                    // This is theoretically good, but ts-eslint appears to mistake our declaration of Symbol for the global Symbol type.
+                    // See: https://github.com/typescript-eslint/typescript-eslint/issues/7306
+                    "Symbol": false,
+                    "{}": false // {} is a totally useful and valid type.
+                }
+            }
+        ],
 
         // Todo: For each of these, investigate whether we want to enable them ✨
-        "@typescript-eslint/ban-types": "off",
-        "no-useless-escape": "off",
-        "prefer-rest-params": "off",
-        "prefer-spread": "off",
-        "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-unused-vars": "off",
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
@@ -120,33 +128,7 @@
 
         // eslint-plugin-simple-import-sort
         "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error",
-
-        // Formatting rules; remove once a formatter enforces these.
-        "curly": ["error", "multi-line"],
-        "linebreak-style": ["error", "windows"],
-        "max-statements-per-line": ["error", { "max": 1 }],
-        "new-parens": "error",
-        "no-trailing-spaces": "error",
-        "quote-props": ["error", "consistent-as-needed"],
-        "space-in-parens": "error",
-        "@typescript-eslint/brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
-        "@typescript-eslint/no-extra-semi": "error",
-        "@typescript-eslint/quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
-        "@typescript-eslint/semi": "error",
-        "@typescript-eslint/space-before-function-paren": [
-            "error",
-            {
-                "asyncArrow": "always",
-                "anonymous": "always",
-                "named": "never"
-            }
-        ],
-        "local/object-literal-surrounding-space": "error",
-        "local/no-type-assertion-whitespace": "error",
-        "local/type-operator-spacing": "error",
-        "local/no-double-space": "error",
-        "local/simple-indent": "error"
+        "simple-import-sort/exports": "error"
     },
     "overrides": [
         // By default, the ESLint CLI only looks at .js files. But, it will also look at

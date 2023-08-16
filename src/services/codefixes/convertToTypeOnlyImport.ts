@@ -47,12 +47,13 @@ registerCodeFix({
                     ? [Diagnostics.Use_type_0, declaration.propertyName?.text ?? declaration.name.text]
                     : Diagnostics.Use_import_type,
                 fixId,
-                Diagnostics.Fix_all_with_type_only_imports);
+                Diagnostics.Fix_all_with_type_only_imports,
+            );
 
             if (some(importDeclarationChanges)) {
                 return [
                     createCodeFixActionWithoutFixAll(fixId, importDeclarationChanges, Diagnostics.Use_import_type),
-                    mainAction
+                    mainAction,
                 ];
             }
             return [mainAction];
@@ -68,7 +69,8 @@ registerCodeFix({
                 doChange(changes, diag.file, errorDeclaration);
                 fixedImportDeclarations.add(errorDeclaration);
             }
-            else if (errorDeclaration?.kind === SyntaxKind.ImportSpecifier
+            else if (
+                errorDeclaration?.kind === SyntaxKind.ImportSpecifier
                 && !fixedImportDeclarations.has(errorDeclaration.parent.parent.parent)
                 && canConvertImportDeclarationForSpecifier(errorDeclaration, diag.file, context.program)
             ) {
@@ -79,14 +81,13 @@ registerCodeFix({
                 doChange(changes, diag.file, errorDeclaration);
             }
         });
-    }
+    },
 });
 
 function getDeclaration(sourceFile: SourceFile, pos: number) {
     const { parent } = getTokenAtPosition(sourceFile, pos);
     return isImportSpecifier(parent) || isImportDeclaration(parent) && parent.importClause ? parent : undefined;
 }
-
 
 function canConvertImportDeclarationForSpecifier(specifier: ImportSpecifier, sourceFile: SourceFile, program: Program): boolean {
     if (specifier.parent.parent.name) {
@@ -138,10 +139,10 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
             const newNamedBindings = importClause.namedBindings?.kind === SyntaxKind.NamedImports
                 ? factory.updateNamedImports(
                     importClause.namedBindings,
-                    sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)))
+                    sameMap(importClause.namedBindings.elements, e => factory.updateImportSpecifier(e, /*isTypeOnly*/ false, e.propertyName, e.name)),
+                )
                 : importClause.namedBindings;
-            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers,
-                factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.assertClause);
+            const importDeclaration = factory.updateImportDeclaration(declaration, declaration.modifiers, factory.updateImportClause(importClause, /*isTypeOnly*/ true, importClause.name, newNamedBindings), declaration.moduleSpecifier, declaration.assertClause);
             changes.replaceNode(sourceFile, declaration, importDeclaration);
         }
     }
