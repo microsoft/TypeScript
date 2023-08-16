@@ -9786,7 +9786,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 const id = getNameOfDeclaration(d);
                                 return !!id && isIdentifier(id) && idText(id) === "set";
                             });
-                            const setterSignature = setter && getSignatureFromDeclaration(setter);
+                            const paramSymbol = setter && getSignatureFromDeclaration(setter)?.parameters[0];
                             result.push(setTextRange(
                                 factory.createSetAccessorDeclaration(
                                     factory.createModifiersFromModifierFlags(flag),
@@ -9794,7 +9794,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     [factory.createParameterDeclaration(
                                         /*modifiers*/ undefined,
                                         /*dotDotDotToken*/ undefined,
-                                        (setterSignature?.parameters[0].valueDeclaration as BindingName | undefined) || "arg",
+                                        paramSymbol ? symbolToParameterDeclaration(paramSymbol, context).name : "arg",
                                         /*questionToken*/ undefined,
                                         isPrivate ? undefined : serializeTypeForDeclaration(context, getTypeOfSymbol(p), p, enclosingDeclaration, includePrivateSymbol, bundled),
                                     )],
