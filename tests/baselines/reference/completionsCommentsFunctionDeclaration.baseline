@@ -76,7 +76,7 @@
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
-// | function isNaN(number: number): boolean
+// | function isNaN(value: unknown): boolean
 // | interface JSON
 // | var JSON: JSON
 // | let
@@ -217,7 +217,7 @@
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
-// | function isNaN(number: number): boolean
+// | function isNaN(value: unknown): boolean
 // | interface JSON
 // | var JSON: JSON
 // | let
@@ -349,7 +349,7 @@
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
-// | function isNaN(number: number): boolean
+// | function isNaN(value: unknown): boolean
 // | interface JSON
 // | var JSON: JSON
 // | let
@@ -2633,7 +2633,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "number",
+              "text": "value",
               "kind": "parameterName"
             },
             {
@@ -2645,7 +2645,7 @@
               "kind": "space"
             },
             {
-              "text": "number",
+              "text": "unknown",
               "kind": "keyword"
             },
             {
@@ -6749,7 +6749,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "number",
+              "text": "value",
               "kind": "parameterName"
             },
             {
@@ -6761,7 +6761,7 @@
               "kind": "space"
             },
             {
-              "text": "number",
+              "text": "unknown",
               "kind": "keyword"
             },
             {
@@ -10469,7 +10469,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "number",
+              "text": "value",
               "kind": "parameterName"
             },
             {
@@ -10481,7 +10481,7 @@
               "kind": "space"
             },
             {
-              "text": "number",
+              "text": "unknown",
               "kind": "keyword"
             },
             {
