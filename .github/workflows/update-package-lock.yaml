@@ -1,11 +1,11 @@
 name: Update package-lock.json
 
 on:
-    schedule:
-        # This is probably 6am UTC, which is 10pm PST or 11pm PDT
-        # Alternatively, 6am local is also fine
-        - cron: '0 6 * * *'
-    workflow_dispatch: {}
+  schedule:
+    # This is probably 6am UTC, which is 10pm PST or 11pm PDT
+    # Alternatively, 6am local is also fine
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -25,31 +25,31 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
-    - run: |
-        npm --version
-        # corepack enable npm
-        npm install -g $(jq -r '.packageManager' < package.json)
-        npm --version
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
 
-    - name: Update package-lock.json and push
-      run: |
-        rm package-lock.json
-        npm install
+      - name: Update package-lock.json and push
+        run: |
+          rm package-lock.json
+          npm install
 
-        if git diff --exit-code --name-only package-lock.json; then
-          echo "No change."
-        else
-          npm test
-          npx hereby lkg
-          git config user.email "typescriptbot@microsoft.com"
-          git config user.name "TypeScript Bot"
-          git add -f package-lock.json
-          git commit -m "Update package-lock.json"
-          git push
-        fi
+          if git diff --exit-code --name-only package-lock.json; then
+            echo "No change."
+          else
+            npm test
+            npx hereby lkg
+            git config user.email "typescriptbot@microsoft.com"
+            git config user.name "TypeScript Bot"
+            git add -f package-lock.json
+            git commit -m "Update package-lock.json"
+            git push
+          fi

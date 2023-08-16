@@ -5,7 +5,7 @@ import {
 import {
     appendText,
     loadProjectFromDisk,
-    replaceText
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
@@ -43,13 +43,13 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         edits: [
             {
                 caption: "incremental-declaration-changes",
-                edit: changeBarParam
+                edit: changeBarParam,
             },
             {
                 caption: "incremental-declaration-changes",
                 edit: changeBarParamBack,
             },
-        ]
+        ],
     });
 
     verifyTsc({
@@ -59,14 +59,18 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         commandLineArgs: ["--b", "/src", "--verbose"],
         modifyFs: fs => {
             changeToIsolatedModules(fs);
-            appendText(fs, "/src/lazyIndex.ts", `
+            appendText(
+                fs,
+                "/src/lazyIndex.ts",
+                `
 import { default as bar } from './bar';
-bar("hello");`);
+bar("hello");`,
+            );
         },
         edits: [
             {
                 caption: "incremental-declaration-changes",
-                edit: changeBarParam
+                edit: changeBarParam,
             },
             {
                 caption: "incremental-declaration-changes",
@@ -74,13 +78,13 @@ bar("hello");`);
             },
             {
                 caption: "incremental-declaration-changes",
-                edit: changeBarParam
+                edit: changeBarParam,
             },
             {
                 caption: "Fix Error",
-                edit: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
+                edit: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()"),
             },
-        ]
+        ],
     });
 });
 

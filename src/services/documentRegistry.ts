@@ -159,7 +159,7 @@ export interface ExternalDocumentCache {
     getDocument(key: DocumentRegistryBucketKeyWithMode, path: Path): SourceFile | undefined;
 }
 
-export type DocumentRegistryBucketKey = string & { __bucketKey: any };
+export type DocumentRegistryBucketKey = string & { __bucketKey: any; };
 
 /** @internal */
 export interface DocumentRegistryEntry {
@@ -194,13 +194,13 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
     function reportStats() {
         const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
             const entries = buckets.get(name)!;
-            const sourceFiles: { name: string; scriptKind: ScriptKind, refCount: number; }[] = [];
+            const sourceFiles: { name: string; scriptKind: ScriptKind; refCount: number; }[] = [];
             entries.forEach((entry, name) => {
                 if (isDocumentRegistryEntry(entry)) {
                     sourceFiles.push({
                         name,
                         scriptKind: entry.sourceFile.scriptKind,
-                        refCount: entry.languageServiceRefCount
+                        refCount: entry.languageServiceRefCount,
                     });
                 }
                 else {
@@ -210,7 +210,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             sourceFiles.sort((x, y) => y.refCount - x.refCount);
             return {
                 bucket: name,
-                sourceFiles
+                sourceFiles,
             };
         });
         return JSON.stringify(bucketInfoArray, undefined, 2);
@@ -269,7 +269,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             {
                 languageVersion: scriptTarget,
                 impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
-                setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings)
+                setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
             };
         sourceFileOptions.languageVersion = scriptTarget;
         const oldBucketCount = buckets.size;
@@ -301,7 +301,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
                 Debug.assert(acquiring);
                 entry = {
                     sourceFile,
-                    languageServiceRefCount: 0
+                    languageServiceRefCount: 0,
                 };
                 setBucketEntry();
             }
@@ -324,8 +324,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
             // return it as is.
             if (entry.sourceFile.version !== version) {
-                entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
-                    scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot!)); // TODO: GH#18217
+                entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot!)); // TODO: GH#18217
                 if (externalCache) {
                     externalCache.setDocument(keyWithMode, path, entry.sourceFile);
                 }

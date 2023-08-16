@@ -4,7 +4,7 @@ import {
 } from "../helpers/tsc";
 import {
     loadProjectFromDisk,
-    replaceText
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
@@ -46,9 +46,14 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true"
         edits: [
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: fs => replaceText(fs, "/src/src/a.ts", "export interface A {", `class C { }
-export interface A {`),
-
+                edit: fs =>
+                    replaceText(
+                        fs,
+                        "/src/src/a.ts",
+                        "export interface A {",
+                        `class C { }
+export interface A {`,
+                    ),
             },
             {
                 caption: "incremental-declaration-changes",
