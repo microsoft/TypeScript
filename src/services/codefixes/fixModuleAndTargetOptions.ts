@@ -60,5 +60,5 @@ registerCodeFix({
         }
 
         return codeFixes.length ? codeFixes : undefined;
-    }
+    },
 });
