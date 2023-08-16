@@ -194,8 +194,10 @@ function getEncodedRootLength(path: string): number {
             // special case interpreted as "the machine from which the URL is being interpreted".
             const scheme = path.slice(0, schemeEnd);
             const authority = path.slice(authorityStart, authorityEnd);
-            if (scheme === "file" && (authority === "" || authority === "localhost") &&
-                isVolumeCharacter(path.charCodeAt(authorityEnd + 1))) {
+            if (
+                scheme === "file" && (authority === "" || authority === "localhost") &&
+                isVolumeCharacter(path.charCodeAt(authorityEnd + 1))
+            ) {
                 const volumeSeparatorEnd = getFileUrlVolumeSeparatorEnd(path, authorityEnd + 2);
                 if (volumeSeparatorEnd !== -1) {
                     if (path.charCodeAt(volumeSeparatorEnd) === CharacterCodes.slash) {
@@ -452,7 +454,7 @@ function pathComponents(path: string, rootLength: number) {
 }
 
 /** @internal */
-export type PathPathComponents = Path[] & { __pathComponensBrand: any };
+export type PathPathComponents = Path[] & { __pathComponensBrand: any; };
 
 /**
  * Parse a path into an array containing a root component (at index 0) and zero or more path
@@ -950,7 +952,7 @@ export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, rela
         resolvePath(currentDirectory, directoryPathOrUrl),
         resolvePath(currentDirectory, relativeOrAbsolutePath),
         equateStringsCaseSensitive,
-        getCanonicalFileName
+        getCanonicalFileName,
     );
 
     const firstComponent = pathComponents[0];

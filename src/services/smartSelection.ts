@@ -51,11 +51,12 @@ import {
 /** @internal */
 export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {
     let selectionRange: SelectionRange = {
-        textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd())
+        textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd()),
     };
 
     let parentNode: Node = sourceFile;
-    outer: while (true) {
+    outer:
+    while (true) {
         const children = getSelectionChildren(parentNode);
         if (!children.length) break;
         for (let i = 0; i < children.length; i++) {
@@ -73,8 +74,10 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
             }
 
             if (positionShouldSnapToNode(sourceFile, pos, node)) {
-                if (isFunctionBody(node)
-                    && isFunctionLikeDeclaration(parentNode) && !positionsAreOnSameLine(node.getStart(sourceFile), node.getEnd(), sourceFile)) {
+                if (
+                    isFunctionBody(node)
+                    && isFunctionLikeDeclaration(parentNode) && !positionsAreOnSameLine(node.getStart(sourceFile), node.getEnd(), sourceFile)
+                ) {
                     pushSelectionRange(node.getStart(sourceFile), node.getEnd());
                 }
 
@@ -84,13 +87,15 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
                 // 3. A VariableStatement's children are just a VaraiableDeclarationList and a semicolon.
                 // 4. A lone VariableDeclaration in a VaraibleDeclaration feels redundant with the VariableStatement.
                 // Dive in without pushing a selection range.
-                if (isBlock(node)
+                if (
+                    isBlock(node)
                     || isTemplateSpan(node) || isTemplateHead(node) || isTemplateTail(node)
                     || prevNode && isTemplateHead(prevNode)
                     || isVariableDeclarationList(node) && isVariableStatement(parentNode)
                     || isSyntaxList(node) && isVariableDeclarationList(parentNode)
                     || isVariableDeclaration(node) && isSyntaxList(parentNode) && children.length === 1
-                    || isJSDocTypeExpression(node) || isJSDocSignature(node) || isJSDocTypeLiteral(node)) {
+                    || isJSDocTypeExpression(node) || isJSDocSignature(node) || isJSDocTypeLiteral(node)
+                ) {
                     parentNode = node;
                     break;
                 }
@@ -150,12 +155,14 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
         // Skip empty ranges
         if (start !== end) {
             const textSpan = createTextSpanFromBounds(start, end);
-            if (!selectionRange || (
-                // Skip ranges that are identical to the parent
-                !textSpansEqual(textSpan, selectionRange.textSpan) &&
-                // Skip ranges that don't contain the original position
-                textSpanIntersectsWithPosition(textSpan, pos)
-            )) {
+            if (
+                !selectionRange || (
+                    // Skip ranges that are identical to the parent
+                    !textSpansEqual(textSpan, selectionRange.textSpan) &&
+                    // Skip ranges that don't contain the original position
+                    textSpanIntersectsWithPosition(textSpan, pos)
+                )
+            ) {
                 selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
             }
         }
@@ -235,8 +242,7 @@ function getSelectionChildren(node: Node): readonly Node[] {
         const groupedWithBrackets = groupChildren(groupedWithPlusMinusTokens, ({ kind }) =>
             kind === SyntaxKind.OpenBracketToken ||
             kind === SyntaxKind.TypeParameter ||
-            kind === SyntaxKind.CloseBracketToken
-        );
+            kind === SyntaxKind.CloseBracketToken);
         return [
             openBraceToken,
             // Pivot on `:`
@@ -247,20 +253,17 @@ function getSelectionChildren(node: Node): readonly Node[] {
 
     // Group modifiers and property name, then pivot on `:`.
     if (isPropertySignature(node)) {
-        const children = groupChildren(node.getChildren(), child =>
-            child === node.name || contains(node.modifiers, child));
+        const children = groupChildren(node.getChildren(), child => child === node.name || contains(node.modifiers, child));
         const firstJSDocChild = children[0]?.kind === SyntaxKind.JSDoc ? children[0] : undefined;
-        const withJSDocSeparated = firstJSDocChild? children.slice(1) : children;
+        const withJSDocSeparated = firstJSDocChild ? children.slice(1) : children;
         const splittedChildren = splitChildren(withJSDocSeparated, ({ kind }) => kind === SyntaxKind.ColonToken);
-        return firstJSDocChild? [firstJSDocChild, createSyntaxList(splittedChildren)] : splittedChildren;
+        return firstJSDocChild ? [firstJSDocChild, createSyntaxList(splittedChildren)] : splittedChildren;
     }
 
     // Group the parameter name with its `...`, then that group with its `?`, then pivot on `=`.
     if (isParameter(node)) {
-        const groupedDotDotDotAndName = groupChildren(node.getChildren(), child =>
-            child === node.dotDotDotToken || child === node.name);
-        const groupedWithQuestionToken = groupChildren(groupedDotDotDotAndName, child =>
-            child === groupedDotDotDotAndName[0] || child === node.questionToken);
+        const groupedDotDotDotAndName = groupChildren(node.getChildren(), child => child === node.dotDotDotToken || child === node.name);
+        const groupedWithQuestionToken = groupChildren(groupedDotDotDotAndName, child => child === groupedDotDotDotAndName[0] || child === node.questionToken);
         return splitChildren(groupedWithQuestionToken, ({ kind }) => kind === SyntaxKind.EqualsToken);
     }
 

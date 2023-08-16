@@ -1,6 +1,12 @@
 import * as ts from "../../_namespaces/ts";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createProjectService } from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: Text storage", () => {
     const f = {
@@ -10,7 +16,7 @@ describe("unittests:: tsserver:: Text storage", () => {
                 let y = 2;
                 function bar(a: number) {
                     return a + 1;
-                }`
+                }`,
     };
 
     function getDummyScriptInfo(fileName: string) {
@@ -18,7 +24,6 @@ describe("unittests:: tsserver:: Text storage", () => {
     }
 
     it("text based storage should be have exactly the same as script version cache", () => {
-
         const host = createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
         const ts1 = new ts.server.TextStorage(host, getDummyScriptInfo(ts.server.asNormalizedPath(f.path)));
@@ -38,8 +43,8 @@ describe("unittests:: tsserver:: Text storage", () => {
                 assert.strictEqual(pos1, pos2, `lineOffsetToPosition ${line + 1}-${offset + 1}: expected ${pos1} to equal ${pos2}`);
             }
 
-            const {start: start1, length: length1 } = ts1.lineToTextSpan(line);
-            const {start: start2, length: length2 } = ts2.lineToTextSpan(line);
+            const { start: start1, length: length1 } = ts1.lineToTextSpan(line);
+            const { start: start2, length: length2 } = ts2.lineToTextSpan(line);
             assert.strictEqual(start1, start2, `lineToTextSpan ${line}::start:: expected ${start1} to equal ${start2}`);
             assert.strictEqual(length1, length2, `lineToTextSpan ${line}::length:: expected ${length1} to equal ${length2}`);
         }
@@ -103,7 +108,7 @@ describe("unittests:: tsserver:: Text storage", () => {
     it("should be able to return the file size when a JS file is too large to load into text", () => {
         const largeFile = {
             path: "/a/large.js",
-            content: " ".repeat(ts.server.maxFileSize + 1)
+            content: " ".repeat(ts.server.maxFileSize + 1),
         };
 
         const host = createServerHost([largeFile]);
@@ -128,7 +133,7 @@ describe("unittests:: tsserver:: Text storage", () => {
 
         const changingFile = {
             path: "/a/changing.ts",
-            content: oldText
+            content: oldText,
         };
 
         const host = createServerHost([changingFile]);
