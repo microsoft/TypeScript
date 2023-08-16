@@ -107,7 +107,7 @@ const unprefixedNodeCoreModuleList = [
     "vm",
     "wasi",
     "worker_threads",
-    "zlib"
+    "zlib",
 ];
 
 /** @internal */
@@ -167,9 +167,8 @@ export function discoverTypings(
     typeAcquisition: TypeAcquisition,
     unresolvedImports: readonly string[],
     typesRegistry: ReadonlyMap<string, MapLike<string>>,
-    compilerOptions: CompilerOptions):
-    { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
-
+    compilerOptions: CompilerOptions,
+): { cachedTypingPaths: string[]; newTypingNames: string[]; filesToWatch: string[]; } {
     if (!typeAcquisition || !typeAcquisition.enable) {
         return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
     }
@@ -194,13 +193,13 @@ export function discoverTypings(
     if (!compilerOptions.types) {
         const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
         possibleSearchDirs.add(projectRootPath);
-        possibleSearchDirs.forEach((searchDir) => {
+        possibleSearchDirs.forEach(searchDir => {
             getTypingNames(searchDir, "bower.json", "bower_components", filesToWatch);
             getTypingNames(searchDir, "package.json", "node_modules", filesToWatch);
         });
     }
 
-    if(!typeAcquisition.disableFilenameBasedTypeAcquisition) {
+    if (!typeAcquisition.disableFilenameBasedTypeAcquisition) {
         getTypingNamesFromSourceFileNames(fileNames);
     }
     // add typings for unresolved imports
@@ -208,7 +207,8 @@ export function discoverTypings(
         const module = deduplicate<string>(
             unresolvedImports.map(nonRelativeModuleNameForTypingCache),
             equateStringsCaseSensitive,
-            compareStringsCaseSensitive);
+            compareStringsCaseSensitive,
+        );
         addInferredTypings(module, "Inferred typings from unresolved imports");
     }
     // Add the cached typing locations for inferred typings that are already installed
@@ -383,7 +383,7 @@ export const enum NameValidationResult {
     NameTooLong,
     NameStartsWithDot,
     NameStartsWithUnderscore,
-    NameContainsNonURISafeCharacters
+    NameContainsNonURISafeCharacters,
 }
 
 const maxPackageNameLength = 214;

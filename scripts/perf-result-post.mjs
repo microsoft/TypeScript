@@ -1,9 +1,10 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 import assert from "assert";
 import ado from "azure-devops-node-api";
 import fs from "fs";
 import fetch from "node-fetch";
-
 
 async function main() {
     const source = process.env.SOURCE_ISSUE;
@@ -52,7 +53,7 @@ async function main() {
             issue_number: +source,
             owner: "Microsoft",
             repo: "TypeScript",
-            body: `@${requester}\nThe results of the perf run you requested are in!\n<details><summary> Here they are:</summary><p>\n${outputTableText}\n</p>${benchmarkText}</details>`
+            body: `@${requester}\nThe results of the perf run you requested are in!\n<details><summary> Here they are:</summary><p>\n${outputTableText}\n</p>${benchmarkText}</details>`,
         });
 
         console.log(`Results posted!`);
@@ -60,14 +61,14 @@ async function main() {
         const comment = await gh.issues.getComment({
             owner: "Microsoft",
             repo: "TypeScript",
-            comment_id: +postedComment
+            comment_id: +postedComment,
         });
         const newBody = `${comment.data.body}\n\nUpdate: [The results are in!](${newCommentUrl})`;
         await gh.issues.updateComment({
             owner: "Microsoft",
             repo: "TypeScript",
             comment_id: +postedComment,
-            body: newBody
+            body: newBody,
         });
     }
     catch (e) {
@@ -76,7 +77,7 @@ async function main() {
             issue_number: +source,
             owner: "Microsoft",
             repo: "TypeScript",
-            body: `Hey @${requester}, something went wrong when publishing results. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${buildId}&_a=summary)).`
+            body: `Hey @${requester}, something went wrong when publishing results. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${buildId}&_a=summary)).`,
         });
     }
 }
