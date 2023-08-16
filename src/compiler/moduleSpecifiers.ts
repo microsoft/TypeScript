@@ -908,7 +908,7 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
         const mode = endsWith(k, "/") ? MatchingMode.Directory
             : stringContains(k, "*") ? MatchingMode.Pattern
             : MatchingMode.Exact;
-        return tryGetModuleNameFromExportsOrImports(options, moduleFileName, sourceDirectory, k, (imports as MapLike<unknown>)[k], conditions, mode);
+        return tryGetModuleNameFromExportsOrImports(options, moduleFileName, ancestorDirectoryWithPackageJson, k, (imports as MapLike<unknown>)[k], conditions, mode);
     })?.moduleFileToTry;
 }
 
