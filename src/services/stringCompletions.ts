@@ -630,7 +630,7 @@ function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, sc
 
     // Determine the path to the directory containing the script relative to the root directory it is contained within
     const relativeDirectory = firstDefined(rootDirs, rootDirectory => {
-        const rootDirectoryWithSlash = rootDirectory.endsWith("/") ? rootDirectory : (rootDirectory + "/");
+        const rootDirectoryWithSlash = rootDirectory.endsWith("/") ? rootDirectory : rootDirectory + "/";
         return containsPath(rootDirectoryWithSlash, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectoryWithSlash.length) : undefined;
     })!; // TODO: GH#18217
 
