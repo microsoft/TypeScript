@@ -45,10 +45,10 @@ declare function parseInt(s: string, radix?: number): number;
 declare function parseFloat(string: string): number;
 
 /**
-  * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number). 
-  * @param number A numeric value.
+  * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number) after being coerced to a number.
+  * @param number The value to be tested.
   */
-declare function isNaN(number: number): boolean;
+declare function isNaN(value: unknown): boolean;
 
 /** 
   * Determines whether a supplied number is finite.
@@ -1141,4 +1141,4 @@ declare var Array: {
     <T>(...items: T[]): T[];
     isArray(arg: any): boolean;
     prototype: Array<any>;
-}
+}
