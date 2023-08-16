@@ -9595,15 +9595,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (p.flags & SymbolFlags.Accessor && useAccessors) {
                         const result: AccessorDeclaration[] = [];
                         if (p.flags & SymbolFlags.SetAccessor) {
-                            const setter = getDeclarationOfKind<AccessorDeclaration>(p, SyntaxKind.SetAccessor)!;
-                            const setterSignature = getSignatureFromDeclaration(setter);
+                            const setter = p.declarations?.find((d): d is SignatureDeclaration => {
+                                if (d.kind === SyntaxKind.SetAccessor) {
+                                    return true;
+                                }
+                                const id = getNameOfDeclaration(d);
+                                return !!id && isIdentifier(id) && idText(id) === "set";
+                            });
+                            const setterSignature = setter && getSignatureFromDeclaration(setter);
                             result.push(setTextRange(factory.createSetAccessorDeclaration(
                                 factory.createModifiersFromModifierFlags(flag),
                                 name,
                                 [factory.createParameterDeclaration(
                                     /*modifiers*/ undefined,
                                     /*dotDotDotToken*/ undefined,
-                                    (setterSignature.parameters[0].valueDeclaration as BindingName | undefined) || "arg",
+                                   (setterSignature?.parameters[0].valueDeclaration as BindingName | undefined) || "arg",
                                     /*questionToken*/ undefined,
                                     isPrivate ? undefined : serializeTypeForDeclaration(context, getTypeOfSymbol(p), p, enclosingDeclaration, includePrivateSymbol, bundled)
                                 )],
