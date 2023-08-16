@@ -174,6 +174,7 @@ declare namespace ts {
                 ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
                 ProvideInlayHints = "provideInlayHints",
                 WatchChange = "watchChange",
+                MapCode = "mapCode",
             }
             /**
              * A TypeScript Server message
@@ -2152,6 +2153,23 @@ declare namespace ts {
             interface InlayHintsResponse extends Response {
                 body?: InlayHintItem[];
             }
+            interface MapCodeRequestArgs {
+                mappings: MapCodeRequestDocumentMapping[];
+                updates?: FileCodeEdits[];
+            }
+            interface MapCodeRequestDocumentMapping {
+                file?: string;
+                projectFileName?: string;
+                contents: string[];
+                focusLocations?: FileSpan[][];
+            }
+            interface MapCodeRequest extends Request {
+                command: CommandTypes.MapCode;
+                arguments: MapCodeRequestArgs;
+            }
+            interface MapCodeResponse extends Response {
+                body: FileCodeEdits[];
+            }
             /**
              * Synchronous request for semantic diagnostics of one file.
              */
@@ -4029,6 +4047,7 @@ declare namespace ts {
             private getLinkedEditingRange;
             private getDocumentHighlights;
             private provideInlayHints;
+            private mapCode;
             private setCompilerOptionsForInferredProjects;
             private getProjectInfo;
             private getProjectInfoWorker;
@@ -10659,6 +10678,7 @@ declare namespace ts {
         commentSelection(fileName: string, textRange: TextRange): TextChange[];
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
+        mapCode(mappings: MapCodeDocumentMapping[], formatOptions: FormatCodeSettings, preferences: UserPreferences, updates?: FileTextChanges[]): FileTextChanges[];
         dispose(): void;
     }
     interface JsxClosingTagInfo {
@@ -11332,6 +11352,11 @@ declare namespace ts {
          * Classification of the contents of the span
          */
         kind: OutliningSpanKind;
+    }
+    interface MapCodeDocumentMapping {
+        fileName?: string;
+        focusLocations?: TextSpan[][];
+        contents: string[];
     }
     enum OutliningSpanKind {
         /** Single or multi-line comments */

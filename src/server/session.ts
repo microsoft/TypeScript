@@ -86,6 +86,7 @@ import {
     LineAndCharacter,
     LinkedEditingInfo,
     map,
+    MapCodeDocumentMapping,
     mapDefined,
     mapDefinedIterator,
     mapIterator,
@@ -1905,6 +1906,71 @@ export class Session<TMessage = string> implements EventSender {
         });
     }
 
+    private mapCode(args: protocol.MapCodeRequestArgs): protocol.FileCodeEdits[] {
+        const formatOptions = this.getHostFormatOptions();
+        const preferences = this.getHostPreferences();
+        const projects = new Map<Project, MapCodeDocumentMapping[]>();
+        args.mappings.forEach(mapping => {
+            if (!mapping.file) {
+                return { contents: mapping.contents };
+            }
+            const { file, project } = this.getFileAndProjectWorker(mapping.file, mapping.projectFileName);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const focusLocations = mapping.focusLocations?.map(spans => {
+                return spans.map(loc => {
+                    const start = scriptInfo.lineOffsetToPosition(loc.start.line, loc.start.offset);
+                    const end = scriptInfo.lineOffsetToPosition(loc.end.line, loc.end.offset);
+                    return {
+                        start,
+                        length: end - start,
+                    };
+                });
+            });
+            if (!projects.has(project)) {
+                projects.set(project, []);
+            }
+            projects.get(project)!.push({
+                contents: mapping.contents,
+                fileName: file,
+                focusLocations,
+            });
+        });
+        const updates = args.updates?.map(edit => {
+            const file = this.getFileAndProjectWorker(edit.fileName, /*projectFileName*/ undefined).file;
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            return {
+                fileName: edit.fileName,
+                textChanges: edit.textChanges.map(({ start, end, newText }) => {
+                    const newStart = scriptInfo.lineOffsetToPosition(start.line, start.offset);
+                    const newEnd = scriptInfo.lineOffsetToPosition(end.line, end.offset);
+                    return {
+                        span: { start: newStart, length: newEnd - newStart },
+                        newText,
+                    };
+                }),
+            };
+        });
+
+        return [...projects.entries()].map(([project, mappings]) => {
+            return project.getLanguageService().mapCode(mappings, formatOptions, preferences, updates);
+        }).filter(x => x).flatMap(changes => {
+            return changes.map(change => {
+                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(toNormalizedPath(change.fileName))!;
+                return {
+                    fileName: change.fileName,
+                    textChanges: change.textChanges.map(({ span, newText }) => {
+                        const newSpan = toProtocolTextSpan(span, scriptInfo);
+                        return {
+                            start: newSpan.start,
+                            end: newSpan.end,
+                            newText,
+                        };
+                    }),
+                };
+            });
+        });
+    }
+
     private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
         this.projectService.setCompilerOptionsForInferredProjects(args.options, args.projectRootPath);
     }
@@ -3582,6 +3648,9 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
             return this.requiredResponse(this.provideInlayHints(request.arguments));
+        },
+        [protocol.CommandTypes.MapCode]: (request: protocol.MapCodeRequest) => {
+            return this.requiredResponse(this.mapCode(request.arguments));
         },
     }));
 

@@ -32,6 +32,8 @@ import * as GoToDefinition from "./ts.GoToDefinition";
 export { GoToDefinition };
 import * as InlayHints from "./ts.InlayHints";
 export { InlayHints };
+import * as MapCode from "./ts.MapCode";
+export { MapCode };
 import * as JsDoc from "./ts.JsDoc";
 export { JsDoc };
 import * as NavigateTo from "./ts.NavigateTo";

@@ -208,6 +208,8 @@ import {
     LinkedEditingInfo,
     LiteralType,
     map,
+    MapCode,
+    MapCodeDocumentMapping,
     mapDefined,
     MapLike,
     mapOneOrMany,
@@ -3090,6 +3092,23 @@ export function createLanguageService(
         return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
     }
 
+    function mapCode(mappings: MapCodeDocumentMapping[], formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions, updates?: FileTextChanges[]): FileTextChanges[] {
+        synchronizeHostData();
+        return MapCode.mapCode(
+            mappings.map(mapping => ({
+                sourceFile: mapping.fileName ? getValidSourceFile(mapping.fileName) : undefined,
+                contents: mapping.contents,
+                focusLocations: mapping.focusLocations,
+            })),
+            program,
+            host,
+            formatting.getFormatContext(formatOptions, host),
+            preferences,
+            sourceMapper,
+            updates,
+        );
+    }
+
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
@@ -3160,6 +3179,7 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
+        mapCode,
     };
 
     switch (languageServiceMode) {

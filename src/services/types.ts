@@ -683,6 +683,8 @@ export interface LanguageService {
 
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
+    mapCode(mappings: MapCodeDocumentMapping[], formatOptions: FormatCodeSettings, preferences: UserPreferences, updates?: FileTextChanges[]): FileTextChanges[];
+
     dispose(): void;
 }
 
@@ -1124,6 +1126,12 @@ export interface EditorSettings {
     trimTrailingWhitespace?: boolean;
 }
 
+// export interface PrioritizedSpan {
+//     fileName: string,
+//     textSpan: TextSpan,
+//     priority: number,
+// }
+
 /** @deprecated - consider using FormatCodeSettings instead */
 export interface FormatCodeOptions extends EditorOptions {
     InsertSpaceAfterCommaDelimiter: boolean;
@@ -1499,6 +1507,12 @@ export interface OutliningSpan {
      * Classification of the contents of the span
      */
     kind: OutliningSpanKind;
+}
+
+export interface MapCodeDocumentMapping {
+    fileName?: string;
+    focusLocations?: TextSpan[][];
+    contents: string[];
 }
 
 export const enum OutliningSpanKind {
