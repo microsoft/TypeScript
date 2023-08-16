@@ -1,8 +1,11 @@
-import { getCommandLineArgsForLibResolution, getSysForLibResolution } from "../helpers/libraryResolution";
+import {
+    getCommandLineArgsForLibResolution,
+    getSysForLibResolution,
+} from "../helpers/libraryResolution";
 import {
     TscWatchCompileChange,
     TscWatchSystem,
-    verifyTscWatch
+    verifyTscWatch,
 } from "../helpers/tscWatch";
 
 describe("unittests:: tsc-watch:: libraryResolution", () => {
@@ -14,31 +17,38 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
         return withoutConfig ? [] : [
             {
                 caption: "change program options to update module resolution",
-                edit: sys => sys.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-                    compilerOptions: {
-                        composite: true,
-                        typeRoots: ["./typeroot1", "./typeroot2"],
-                        lib: ["es5", "dom"],
-                        traceResolution: true,
-                    },
-                })),
+                edit: sys =>
+                    sys.writeFile(
+                        "/home/src/projects/project1/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: {
+                                composite: true,
+                                typeRoots: ["./typeroot1", "./typeroot2"],
+                                lib: ["es5", "dom"],
+                                traceResolution: true,
+                            },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "change program options to update module resolution and also update lib file",
                 edit: sys => {
-                    sys.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                            typeRoots: ["./typeroot1"],
-                            lib: ["es5", "dom"],
-                            traceResolution: true,
-                        },
-                    }));
+                    sys.writeFile(
+                        "/home/src/projects/project1/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: {
+                                composite: true,
+                                typeRoots: ["./typeroot1"],
+                                lib: ["es5", "dom"],
+                                traceResolution: true,
+                            },
+                        }),
+                    );
                     changeLib(sys);
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
+            },
         ];
     }
     function verify(withoutConfig?: true) {
@@ -54,7 +64,7 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 {
                     caption: "edit index",
@@ -78,14 +88,14 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 {
                     caption: "delete redirect file webworker",
                     edit: sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts"),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
-            ]
+            ],
         });
 
         verifyTscWatch({
@@ -115,7 +125,7 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 ...editOptions(withoutConfig, sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts")),
                 {
@@ -129,9 +139,9 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
-            ]
+            ],
         });
     }
     verify();

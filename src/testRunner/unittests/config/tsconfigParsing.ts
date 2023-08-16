@@ -2,7 +2,9 @@ import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import { baselineParseConfig } from "./helpers";
+import {
+    baselineParseConfig,
+} from "./helpers";
 
 describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () => {
     function formatErrors(errors: readonly ts.Diagnostic[]) {
@@ -38,26 +40,30 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         baselineParseConfig({
             scenario: "tsconfigParsing",
             subScenario,
-            input: () => scenario().map(({ jsonText, configFileName, basePath, allFileList }) => ({
-                createHost: () => {
-                    const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
-                    files[ts.combinePaths(basePath, configFileName)] = jsonText;
-                    return new fakes.ParseConfigHost(new vfs.FileSystem(
-                        /*ignoreCase*/ false,
-                        {
-                            cwd: basePath,
-                            files: { "/": {}, ...files }
-                        }));
-                },
-                jsonText,
-                configFileName,
-                basePath,
-                baselineParsed: (baseline, parsed) => {
-                    baseline.push("FileNames::");
-                    baseline.push(parsed.fileNames.join());
-                },
-            })),
-            skipJson
+            input: () =>
+                scenario().map(({ jsonText, configFileName, basePath, allFileList }) => ({
+                    createHost: () => {
+                        const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
+                        files[ts.combinePaths(basePath, configFileName)] = jsonText;
+                        return new fakes.ParseConfigHost(
+                            new vfs.FileSystem(
+                                /*ignoreCase*/ false,
+                                {
+                                    cwd: basePath,
+                                    files: { "/": {}, ...files },
+                                },
+                            ),
+                        );
+                    },
+                    jsonText,
+                    configFileName,
+                    basePath,
+                    baselineParsed: (baseline, parsed) => {
+                        baseline.push("FileNames::");
+                        baseline.push(parsed.fileNames.join());
+                    },
+                })),
+            skipJson,
         });
     }
 
@@ -72,7 +78,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     ]);
 
     baselineParseResult("returns empty config when config is empty object", () => [
-        "{}"
+        "{}",
     ]);
 
     baselineParseResult("returns config object without comments", () => [
@@ -166,14 +172,12 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     }]);
 
     baselinedParsed("exclude outDir unless overridden", () => {
-        const tsconfigWithoutExclude =
-            `{
+        const tsconfigWithoutExclude = `{
                 "compilerOptions": {
                     "outDir": "bin"
                 }
             }`;
-        const tsconfigWithExclude =
-            `{
+        const tsconfigWithExclude = `{
                 "compilerOptions": {
                     "outDir": "bin"
                 },
@@ -188,14 +192,12 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     baselinedParsed("exclude declarationDir unless overridden", () => {
-        const tsconfigWithoutExclude =
-            `{
+        const tsconfigWithoutExclude = `{
                 "compilerOptions": {
                     "declarationDir": "declarations"
                 }
             }`;
-        const tsconfigWithExclude =
-            `{
+        const tsconfigWithExclude = `{
                 "compilerOptions": {
                     "declarationDir": "declarations"
                 },
@@ -322,9 +324,9 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             files: [{
                 compilerOptions: {
                     experimentalDecorators: true,
-                    allowJs: true
-                }
-            }]
+                    allowJs: true,
+                },
+            }],
         }),
         configFileName: "/apath/tsconfig.json",
         basePath: "tests/cases/unittests",
@@ -334,8 +336,8 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     baselinedParsed("generates errors when include is not string", () => [{
         jsonText: JSON.stringify({
             include: [
-                ["./**/*.ts"]
-            ]
+                ["./**/*.ts"],
+            ],
         }),
         configFileName: "/apath/tsconfig.json",
         basePath: "tests/cases/unittests",
@@ -346,32 +348,34 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         jsonText: JSON.stringify({
             compilerOptions: {
                 help: true,
-            }
+            },
         }),
         configFileName: "/apath/tsconfig.json",
         basePath: "tests/cases/unittests",
         allFileList: ["/apath/a.ts"],
     }]);
 
-    function baselineWildcards(subScenario: string, scenario: () => { configFileName: string, jsonText: string, basePath: string }[]) {
+    function baselineWildcards(subScenario: string, scenario: () => { configFileName: string; jsonText: string; basePath: string; }[]) {
         baselineParseConfig({
             scenario: "tsconfigParsing",
             subScenario,
-            input: () => scenario().map(({ jsonText, configFileName, basePath }) => ({
-                createHost: () => new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, {
-                    cwd: basePath,
-                    files: { [configFileName]: jsonText }
+            input: () =>
+                scenario().map(({ jsonText, configFileName, basePath }) => ({
+                    createHost: () =>
+                        new fakes.ParseConfigHost(
+                            new vfs.FileSystem(/*ignoreCase*/ false, {
+                                cwd: basePath,
+                                files: { [configFileName]: jsonText },
+                            }),
+                        ),
+                    jsonText,
+                    configFileName,
+                    basePath,
+                    baselineParsed: (baseline, parsed) => {
+                        baseline.push("Wildcards::");
+                        ts.getOwnKeys(parsed.wildcardDirectories!).forEach(dir => baseline.push(`${dir}: WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`));
+                    },
                 })),
-                jsonText,
-                configFileName,
-                basePath,
-                baselineParsed: (baseline, parsed) => {
-                    baseline.push("Wildcards::");
-                    ts.getOwnKeys(parsed.wildcardDirectories!).forEach(dir =>
-                        baseline.push(`${dir}: WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`)
-                    );
-                },
-            })),
             skipErrors: true,
         });
     }
@@ -379,7 +383,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     baselineWildcards("parses wildcard directories even when parent directories have dots", () => [{
         configFileName: "/foo.bar/tsconfig.json",
         jsonText: JSON.stringify({
-            include: ["src"]
+            include: ["src"],
         }),
         basePath: "/foo.bar",
     }]);
@@ -387,7 +391,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     baselineWildcards("correctly parses wild card directories from implicit glob when two keys differ only in directory seperator", () => [{
         configFileName: "/foo.bar/tsconfig.json",
         jsonText: JSON.stringify({
-            include: ["./", "./**/*.json"]
+            include: ["./", "./**/*.json"],
         }),
         basePath: "/foo",
     }]);
