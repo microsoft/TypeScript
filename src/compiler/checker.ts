@@ -45014,7 +45014,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return grammarErrorOnNode(
                     declaration.assertClause,
                     moduleKind === ModuleKind.NodeNext
-                        ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_transpile_to_commonjs_require_calls
+                        ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_transpile_to_CommonJS_require_calls
                         : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext,
                 );
             }
