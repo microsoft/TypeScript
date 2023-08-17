@@ -5111,10 +5111,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const absoluteRef = getNormalizedAbsolutePath(moduleReference, getDirectoryPath(currentSourceFile.path));
                     const suggestedExt = suggestedExtensions.find(([actualExt, _importExt]) => host.fileExists(absoluteRef + actualExt))?.[1];
                     if (suggestedExt) {
-                        error(errorNode, Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_node16_or_nodenext_Did_you_mean_0, moduleReference + suggestedExt);
+                        error(errorNode, Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_ECMAScript_imports_when_moduleResolution_is_node16_or_nodenext_Did_you_mean_0, moduleReference + suggestedExt);
                     }
                     else {
-                        error(errorNode, Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_node16_or_nodenext_Consider_adding_an_extension_to_the_import_path);
+                        error(errorNode, Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_ECMAScript_imports_when_moduleResolution_is_node16_or_nodenext_Consider_adding_an_extension_to_the_import_path);
                     }
                 }
                 else {
@@ -9419,7 +9419,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         // We don't know how to serialize this (nested?) binding element
                         Debug.failBadSyntaxKind(node.parent?.parent || node, "Unhandled binding element grandparent kind in declaration serialization");
-                        break;
                     case SyntaxKind.ShorthandPropertyAssignment:
                         if (node.parent?.parent?.kind === SyntaxKind.BinaryExpression) {
                             // module.exports = { SomeClass }
@@ -10398,7 +10397,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case TypeSystemPropertyName.ParameterInitializerContainsUndefined:
                 return getNodeLinks(target as ParameterDeclaration).parameterInitializerContainsUndefined !== undefined;
         }
-        return Debug.assertNever(propertyName);
     }
 
     /**
@@ -34625,7 +34623,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxSelfClosingElement:
                 return resolveJsxOpeningLikeElement(node, candidatesOutArray, checkMode);
         }
-        Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
     }
 
     /**
@@ -36853,7 +36850,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return getUnaryResultType(operandType);
         }
-        return errorType;
     }
 
     function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
@@ -45014,7 +45010,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return grammarErrorOnNode(
                     declaration.assertClause,
                     moduleKind === ModuleKind.NodeNext
-                        ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_transpile_to_commonjs_require_calls
+                        ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_transpile_to_CommonJS_require_calls
                         : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext,
                 );
             }
