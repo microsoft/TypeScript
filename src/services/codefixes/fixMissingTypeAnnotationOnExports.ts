@@ -1,5 +1,6 @@
 import {
     Diagnostics,
+    ExportAssignment,
     factory,
     FunctionDeclaration,
     GetAccessorDeclaration,
@@ -8,6 +9,7 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
+    NodeFlags,
     ParameterDeclaration,
     PropertyDeclaration,
     SignatureDeclaration,
@@ -35,6 +37,7 @@ const canHaveExplicitTypeAnnotation = new Set<SyntaxKind>([
     SyntaxKind.FunctionDeclaration,
     SyntaxKind.VariableDeclaration,
     SyntaxKind.Parameter,
+    SyntaxKind.ExportAssignment,
 ]);
 
 const declarationEmitNodeBuilderFlags =
@@ -168,6 +171,22 @@ function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | N
                     getAccessor.body,
                 );
             }
+        }
+        break;
+    case SyntaxKind.ExportAssignment:
+        const defaultExport = node as ExportAssignment;
+        if(!defaultExport.isExportEquals) {
+            const type = typeChecker.getTypeAtLocation(defaultExport.expression);
+            const typeNode = typeToTypeNode(type, node, typeChecker);
+            return [
+                factory.createVariableStatement(/*modifiers*/ undefined,
+                    factory.createVariableDeclarationList(
+                        [factory.createVariableDeclaration(
+                            "__default", /*exclamationToken*/ undefined,
+                            typeNode, defaultExport.expression)],
+                        NodeFlags.Const)),
+                factory.updateExportAssignment(defaultExport, defaultExport?.modifiers, factory.createIdentifier("__default")),
+            ];
         }
         break;
     default:
