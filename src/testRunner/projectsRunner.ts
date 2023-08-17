@@ -109,11 +109,13 @@ class ProjectParseConfigHost extends fakes.ParseConfigHost {
     public override readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
         const result = super.readDirectory(path, extensions, excludes, includes, depth);
         const projectRoot = vpath.resolve(vfs.srcFolder, this._testCase.projectRoot);
-        return result.map(item => vpath.relative(
-            projectRoot,
-            vpath.resolve(projectRoot, item),
-            this.vfs.ignoreCase
-        ));
+        return result.map(item =>
+            vpath.relative(
+                projectRoot,
+                vpath.resolve(projectRoot, item),
+                this.vfs.ignoreCase,
+            )
+        );
     }
 }
 
@@ -208,7 +210,7 @@ class ProjectTestCase {
 
         return [
             { name: `@module: commonjs`, payload: { testCase, moduleKind: ts.ModuleKind.CommonJS, vfs: fs } },
-            { name: `@module: amd`, payload: { testCase, moduleKind: ts.ModuleKind.AMD, vfs: fs } }
+            { name: `@module: amd`, payload: { testCase, moduleKind: ts.ModuleKind.AMD, vfs: fs } },
         ];
     }
 
@@ -219,8 +221,9 @@ class ProjectTestCase {
         resolutionInfo.resolvedInputFiles = this.compilerResult.program!.getSourceFiles()
             .map(({ fileName: input }) =>
                 vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? Utils.removeTestPathPrefixes(input) :
-                vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
-                input);
+                    vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
+                    input
+            );
 
         resolutionInfo.emittedFiles = this.compilerResult.outputFiles!
             .map(output => output.meta.get("fileName") || output.file)
@@ -318,11 +321,7 @@ class ProjectTestCase {
         return url;
     }
 
-    private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[],
-        getInputFiles: () => readonly string[],
-        compilerHost: ts.CompilerHost,
-        compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
-
+    private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[], getInputFiles: () => readonly string[], compilerHost: ts.CompilerHost, compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
         const program = ts.createProgram(getInputFiles(), compilerOptions, compilerHost);
         const errors = ts.getPreEmitDiagnostics(program);
 
@@ -334,7 +333,7 @@ class ProjectTestCase {
                 data.sourceMap = {
                     ...data.sourceMap,
                     sources: data.sourceMap.sources.map(source => this.cleanProjectUrl(source)),
-                    sourceRoot: data.sourceMap.sourceRoot && this.cleanProjectUrl(data.sourceMap.sourceRoot)
+                    sourceRoot: data.sourceMap.sourceRoot && this.cleanProjectUrl(data.sourceMap.sourceRoot),
                 };
             }
         }
@@ -344,7 +343,7 @@ class ProjectTestCase {
             moduleKind,
             program,
             errors: ts.concatenate(errors, emitDiagnostics),
-            sourceMapData
+            sourceMapData,
         };
     }
 
@@ -393,7 +392,7 @@ class ProjectTestCase {
 
         const _vfs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
             documents: allInputFiles,
-            cwd: vpath.combine(vfs.srcFolder, this.testCase.projectRoot)
+            cwd: vpath.combine(vfs.srcFolder, this.testCase.projectRoot),
         });
 
         // Dont allow config files since we are compiling existing source options
@@ -425,7 +424,7 @@ function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
         unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
             Harness.RunnerBase.removeFullPaths(sourceFile.fileName) :
             sourceFile.fileName,
-        content: sourceFile.text
+        content: sourceFile.text,
     }));
 
     return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
@@ -445,7 +444,7 @@ function createCompilerOptions(testCase: ProjectRunnerTestCase & ts.CompilerOpti
 
         sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot
             ? vpath.resolve(vfs.srcFolder, testCase.sourceRoot)
-            : testCase.sourceRoot
+            : testCase.sourceRoot,
     };
 
     // Set the values specified using json
