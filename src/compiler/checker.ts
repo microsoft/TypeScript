@@ -32046,7 +32046,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return isErrorType(apparentType) ? errorType : apparentType;
             }
-            prop = getPropertyOfType(apparentType, right.escapedText, /*skipObjectFunctionPropertyAugment*/ false, /*includeTypeOnlyMembers*/ node.kind === SyntaxKind.QualifiedName);
+            prop = getPropertyOfType(apparentType, right.escapedText, /*skipObjectFunctionPropertyAugment*/ isConstEnumObjectType(apparentType), /*includeTypeOnlyMembers*/ node.kind === SyntaxKind.QualifiedName);
         }
         // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
         // `Foo` is also not referenced in `enum FooCopy { Bar = Foo.Bar }`, because the enum member value gets inlined
