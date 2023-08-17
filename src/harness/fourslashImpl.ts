@@ -839,6 +839,15 @@ export class TestState {
         const fileName = this.activeFile.fileName;
         const hints = this.languageService.provideInlayHints(fileName, span, preferences);
         const annotations = ts.map(hints.sort(sortHints), hint => {
+            if (hint.displayParts) {
+                hint.displayParts = ts.map(hint.displayParts, part => {
+                    if (part.file && /lib(?:.*)\.d\.ts$/.test(part.file)) {
+                        part.span!.start = -1;
+                    }
+                    return part;
+                });
+            }
+
             const span = { start: hint.position, length: hint.text.length };
             const { character, line } = this.languageServiceAdapterHost.positionToLineAndCharacter(fileName, span.start);
             const underline = " ".repeat(character) + "^";
