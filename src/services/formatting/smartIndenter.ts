@@ -60,9 +60,8 @@ import {
 
 /** @internal */
 export namespace SmartIndenter {
-
     const enum Value {
-        Unknown = -1
+        Unknown = -1,
     }
 
     /**
@@ -245,7 +244,8 @@ export namespace SmartIndenter {
         indentationDelta: number,
         sourceFile: SourceFile,
         isNextChild: boolean,
-        options: EditorSettings): number {
+        options: EditorSettings,
+    ): number {
         let parent = current.parent;
 
         // Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
@@ -259,8 +259,7 @@ export namespace SmartIndenter {
             }
 
             const containingListOrParentStart = getContainingListOrParentStart(parent, current, sourceFile);
-            const parentAndChildShareLine =
-                containingListOrParentStart.line === currentStart.line ||
+            const parentAndChildShareLine = containingListOrParentStart.line === currentStart.line ||
                 childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
             if (useActualIndentation) {
@@ -309,8 +308,7 @@ export namespace SmartIndenter {
             // Instead, when at an argument, we unspoof the starting position of the enclosing call expression
             // *after* applying indentation for the argument.
 
-            const useTrueStart =
-                isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
+            const useTrueStart = isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
 
             current = parent;
             parent = current.parent;
@@ -344,18 +342,11 @@ export namespace SmartIndenter {
     /*
      * Function returns Value.Unknown if actual indentation for node should not be used (i.e because node is nested expression)
      */
-    function getActualIndentationForNode(current: Node,
-        parent: Node,
-        currentLineAndChar: LineAndCharacter,
-        parentAndChildShareLine: boolean,
-        sourceFile: SourceFile,
-        options: EditorSettings): number {
-
+    function getActualIndentationForNode(current: Node, parent: Node, currentLineAndChar: LineAndCharacter, parentAndChildShareLine: boolean, sourceFile: SourceFile, options: EditorSettings): number {
         // actual indentation is used for statements\declarations if one of cases below is true:
         // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
         // - parent and child are not on the same line
-        const useActualIndentation =
-            (isDeclaration(current) || isStatementButNotDeclaration(current)) &&
+        const useActualIndentation = (isDeclaration(current) || isStatementButNotDeclaration(current)) &&
             (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
         if (!useActualIndentation) {
@@ -368,7 +359,7 @@ export namespace SmartIndenter {
     const enum NextTokenKind {
         Unknown,
         OpenBrace,
-        CloseBrace
+        CloseBrace,
     }
 
     function nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken: Node, current: Node, lineAtPosition: number, sourceFile: SourceFile): NextTokenKind {
