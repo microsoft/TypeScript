@@ -49807,7 +49807,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getEffectivePropertyNameForPropertyNameNode(node: PropertyName) {
         const name = getPropertyNameForPropertyNameNode(node);
         return name ? name :
-            isComputedPropertyName(node) && isEntityNameExpression(node.expression) ? tryGetNameFromEntityNameExpression(node.expression) : undefined;
+            isComputedPropertyName(node) ? tryGetNameFromType(getTypeOfExpression(node.expression)) : undefined;
     }
 
     function getCombinedModifierFlagsCached(node: Declaration) {
