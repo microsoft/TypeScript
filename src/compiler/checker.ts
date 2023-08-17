@@ -9808,13 +9808,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 factory.createSetAccessorDeclaration(
                                     factory.createModifiersFromModifierFlags(flag),
                                     name,
-                                    [factory.createParameterDeclaration(
-                                        /*modifiers*/ undefined,
-                                        /*dotDotDotToken*/ undefined,
-                                        paramSymbol ? symbolToParameterDeclaration(paramSymbol, context).name : "arg",
-                                        /*questionToken*/ undefined,
-                                        isPrivate ? undefined : serializeTypeForDeclaration(context, getTypeOfSymbol(p), p, enclosingDeclaration, includePrivateSymbol, bundled),
-                                    )],
+                                    [symbolToParameterDeclaration(paramSymbol, context)],
                                     /*body*/ undefined,
                                 ),
                                 p.declarations?.find(isSetAccessor) || firstPropertyLikeDecl,
