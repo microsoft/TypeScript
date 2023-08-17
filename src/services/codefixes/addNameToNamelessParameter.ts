@@ -66,8 +66,10 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
 
 function tryGetNextParam(sourceFile: SourceFile, param: ParameterDeclaration) {
     const nextToken = findNextToken(param.name, param.parent, sourceFile);
-    if (nextToken && nextToken.kind === SyntaxKind.OpenBracketToken
-        && isArrayBindingPattern(nextToken.parent) && isParameter(nextToken.parent.parent)) {
+    if (
+        nextToken && nextToken.kind === SyntaxKind.OpenBracketToken
+        && isArrayBindingPattern(nextToken.parent) && isParameter(nextToken.parent.parent)
+    ) {
         return nextToken.parent.parent;
     }
     return undefined;

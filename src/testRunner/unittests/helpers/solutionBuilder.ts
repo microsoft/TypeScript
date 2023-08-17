@@ -1,6 +1,8 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
-import { commandLineCallbacks } from "./baseline";
+import {
+    commandLineCallbacks,
+} from "./baseline";
 import {
     makeSystemReadyForBaseline,
     TscCompileSystem,
@@ -17,15 +19,11 @@ import {
 export function createSolutionBuilderHostForBaseline(
     sys: TscCompileSystem | TestServerHost,
     versionToWrite?: string,
-    originalRead?: (TscCompileSystem | TestServerHost)["readFile"]
+    originalRead?: (TscCompileSystem | TestServerHost)["readFile"],
 ) {
     if (sys instanceof fakes.System) makeSystemReadyForBaseline(sys, versionToWrite);
     const { cb } = commandLineCallbacks(sys, originalRead);
-    const host = ts.createSolutionBuilderHost(sys,
-        /*createProgram*/ undefined,
-        ts.createDiagnosticReporter(sys, /*pretty*/ true),
-        ts.createBuilderStatusReporter(sys, /*pretty*/ true)
-    );
+    const host = ts.createSolutionBuilderHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true));
     host.afterProgramEmitAndDiagnostics = cb;
     host.afterEmitBundle = cb;
     return host;
@@ -47,9 +45,13 @@ export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: re
     const originalWrite = sys.write;
     const originalWriteFile = sys.writeFile;
     ts.Debug.assert(sys.writtenFiles === undefined);
-    const solutionBuilder = createSolutionBuilder(changeToHostTrackingWrittenFiles(
-        fakes.patchHostForBuildInfoReadWrite(sys)
-    ), solutionRoots, originalRead);
+    const solutionBuilder = createSolutionBuilder(
+        changeToHostTrackingWrittenFiles(
+            fakes.patchHostForBuildInfoReadWrite(sys),
+        ),
+        solutionRoots,
+        originalRead,
+    );
     solutionBuilder.build();
     sys.readFile = originalReadFile;
     sys.write = originalWrite;

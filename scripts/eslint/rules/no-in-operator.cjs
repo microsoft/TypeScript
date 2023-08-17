@@ -6,7 +6,6 @@ module.exports = createRule({
     meta: {
         docs: {
             description: ``,
-            recommended: "error",
         },
         messages: {
             noInOperatorError: `Don't use the 'in' keyword - use 'hasProperty' to check for key presence instead`,
@@ -19,7 +18,7 @@ module.exports = createRule({
     create(context) {
         const IN_OPERATOR = "in";
         /** @type {(node: TSESTree.BinaryExpression) => void} */
-        const checkInOperator = (node) => {
+        const checkInOperator = node => {
             if (node.operator === IN_OPERATOR) {
                 context.report({ messageId: "noInOperatorError", node });
             }
