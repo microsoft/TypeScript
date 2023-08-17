@@ -1,6 +1,6 @@
 import { Debug } from "../../debug";
 import { Diagnostics } from "../../diagnosticInformationMap.generated";
-import { isComputedPropertyName, isExportAssignment, isGetAccessorDeclaration, isIdentifier, isLiteralTypeNode, isMethodDeclaration, isNoSubstitutionTemplateLiteral, isNumericLiteral, isOmittedExpression, isParameter, isPropertyAccessExpression, isPropertyAssignment, isPropertyDeclaration, isSetAccessorDeclaration, isShorthandPropertyAssignment, isSpreadAssignment, isSpreadElement, isStringLiteral, isTypeParameterDeclaration, isTypeReferenceNode, isVariableDeclaration } from "../../factory/nodeTests";
+import { isComputedPropertyName, isConstructSignatureDeclaration, isExportAssignment, isGetAccessorDeclaration, isIdentifier, isLiteralTypeNode, isMethodDeclaration, isMethodSignature, isNoSubstitutionTemplateLiteral, isNumericLiteral, isOmittedExpression, isParameter, isPropertyAccessExpression, isPropertyAssignment, isPropertyDeclaration, isSetAccessorDeclaration, isShorthandPropertyAssignment, isSpreadAssignment, isSpreadElement, isStringLiteral, isTypeParameterDeclaration, isTypeReferenceNode, isVariableDeclaration } from "../../factory/nodeTests";
 import { setTextRange } from "../../factory/utilitiesPublic";
 import { forEachChildRecursively } from "../../parser";
 import { nullTransformationContext } from "../../transformer";
@@ -56,7 +56,6 @@ export function createLocalInferenceResolver({
                 if (localType !== undefined) {
                     return localType;
                 }
-                reportIsolatedDeclarationError(node);
                 return makeInvalidType();
             }
             finally {
@@ -484,7 +483,7 @@ export function createLocalInferenceResolver({
     function localInferenceFromInitializer(node: HasInferredType | ExportAssignment): TypeNode | undefined {
         let localType;
         if (isExportAssignment(node) && node.expression) {
-            localType = localInference(node.expression);
+            localType = localInference(node.expression, NarrowBehavior.KeepLiterals);
         }
         else if (isParameter(node) && node.initializer) {
             localType = localInference(node.initializer);
@@ -494,6 +493,12 @@ export function createLocalInferenceResolver({
         }
         else if (isPropertyDeclaration(node) && node.initializer) {
             localType = localInference(node.initializer);
+        }
+        else if(isMethodSignature(node) || isConstructSignatureDeclaration(node)) {
+            return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        }
+        else {
+            reportIsolatedDeclarationError(node);
         }
         if(!localType || localType.flags & LocalTypeInfoFlags.Invalid) {
             return undefined;
