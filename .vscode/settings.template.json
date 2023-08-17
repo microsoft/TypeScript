@@ -4,7 +4,7 @@
     // To use the locally built compiler, after 'npm run build':
     // "typescript.tsdk": "built/local"
 
-    "[typescript][javascript][yaml]": {
+    "[typescript][javascript][yaml][github-actions-workflow]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "dprint.dprint"
     },
