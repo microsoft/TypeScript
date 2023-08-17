@@ -9779,27 +9779,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (p.flags & SymbolFlags.Accessor && useAccessors) {
                         const result: AccessorDeclaration[] = [];
                         if (p.flags & SymbolFlags.SetAccessor) {
-                            let setter: Declaration | undefined;
-
-                            if (p.declarations) {
-                                for (const d of p.declarations) {
-                                    if (d.kind === SyntaxKind.SetAccessor) {
-                                        setter = d;
-                                        break;
-                                    }
-                                    if (isCallExpression(d) && isBindableObjectDefinePropertyCall(d)) {
-                                        const found = d.arguments[2].properties.find(p => {
-                                            const id = getNameOfDeclaration(p);
-                                            return !!id && isIdentifier(id) && idText(id) === "set";
-                                        });
-                                        if (found) {
-                                            setter = found;
-                                            break;
-                                        }
-                                        continue;
-                                    }
+                            const setter = p.declarations && forEach(p.declarations, d => {
+                                if (d.kind === SyntaxKind.SetAccessor) {
+                                    return d as SetAccessorDeclaration;
                                 }
-                            }
+                                if (isCallExpression(d) && isBindableObjectDefinePropertyCall(d)) {
+                                    return forEach(d.arguments[2].properties, propDecl => {
+                                        const id = getNameOfDeclaration(propDecl);
+                                        if (!!id && isIdentifier(id) && idText(id) === "set") {
+                                            return propDecl;
+                                        }
+                                    });
+                                }
+                            });
 
                             Debug.assert(setter && isFunctionLikeDeclaration(setter));
                             const paramSymbol = getSignatureFromDeclaration(setter).parameters[0];
