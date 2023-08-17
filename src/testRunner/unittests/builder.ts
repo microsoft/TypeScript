@@ -81,7 +81,7 @@ describe("unittests:: builder", () => {
 });
 
 function makeAssertChanges(getProgram: () => ts.Program): (fileNames: readonly string[]) => void {
-    const host: ts.BuilderProgramHost = { };
+    const host: ts.BuilderProgramHost = {};
     let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     return fileNames => {
         const program = getProgram();
@@ -95,7 +95,7 @@ function makeAssertChanges(getProgram: () => ts.Program): (fileNames: readonly s
 }
 
 function makeAssertChangesWithCancellationToken(getProgram: () => ts.Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
-    const host: ts.BuilderProgramHost = { };
+    const host: ts.BuilderProgramHost = {};
     let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     let cancel = false;
     const cancellationToken: ts.CancellationToken = {
@@ -118,7 +118,8 @@ function makeAssertChangesWithCancellationToken(getProgram: () => ts.Program): (
                 if (outputFileNames.length === cancelAfterEmitLength) {
                     cancel = true;
                 }
-            } while (builderProgram.emitNextAffectedFile(fileName => outputFileNames.push(fileName), cancellationToken));
+            }
+            while (builderProgram.emitNextAffectedFile(fileName => outputFileNames.push(fileName), cancellationToken));
         }
         catch (e) {
             assert.isFalse(operationWasCancelled);

@@ -15,16 +15,16 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-    - name: Get repo name
-      run: R=${GITHUB_REPOSITORY%?wiki}; echo "BASENAME=${R##*/}" >> $GITHUB_ENV
-    - name: Checkout ${{ env.BASENAME }}-wiki
-      uses: actions/checkout@v3
-      with:
-        repository: "${{ GITHUB.repository_owner }}/${{ env.BASENAME }}-wiki"
-        token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-        fetch-depth: 0
-    - name: Run sync
-      run: ./.github/workflows/sync
-      env:
-        PUSHER: typescript-bot <bot@typescriptlang.org>
-        AUTH: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+      - name: Get repo name
+        run: R=${GITHUB_REPOSITORY%?wiki}; echo "BASENAME=${R##*/}" >> $GITHUB_ENV
+      - name: Checkout ${{ env.BASENAME }}-wiki
+        uses: actions/checkout@v3
+        with:
+          repository: '${{ GITHUB.repository_owner }}/${{ env.BASENAME }}-wiki'
+          token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          fetch-depth: 0
+      - name: Run sync
+        run: ./.github/workflows/sync
+        env:
+          PUSHER: typescript-bot <bot@typescriptlang.org>
+          AUTH: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
