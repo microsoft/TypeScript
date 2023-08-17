@@ -107,7 +107,7 @@ export namespace DocumentHighlights {
         return {
             fileName: sourceFile.fileName,
             textSpan: createTextSpanFromNode(node, sourceFile),
-            kind: HighlightSpanKind.none
+            kind: HighlightSpanKind.none,
         };
     }
 
@@ -186,8 +186,7 @@ export namespace DocumentHighlights {
         }
 
         function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
-            return useParent(node.parent, nodeTest, decl => mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d =>
-                nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
+            return useParent(node.parent, nodeTest, decl => mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
         }
 
         function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined): HighlightSpan[] | undefined {
@@ -211,7 +210,8 @@ export namespace DocumentHighlights {
             // Exceptions thrown within a try block lacking a catch clause are "owned" in the current context.
             return concatenate(
                 node.catchClause ? aggregateOwnedThrowStatements(node.catchClause) : node.tryBlock && aggregateOwnedThrowStatements(node.tryBlock),
-                node.finallyBlock && aggregateOwnedThrowStatements(node.finallyBlock));
+                node.finallyBlock && aggregateOwnedThrowStatements(node.finallyBlock),
+            );
         }
         // Do not cross function boundaries.
         return isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateOwnedThrowStatements);
@@ -386,7 +386,6 @@ export namespace DocumentHighlights {
                     return getLoopBreakContinueOccurrences(owner as IterationStatement);
                 case SyntaxKind.SwitchStatement:
                     return getSwitchCaseDefaultOccurrences(owner as SwitchStatement);
-
             }
         }
 
@@ -494,7 +493,6 @@ export namespace DocumentHighlights {
             });
         });
 
-
         return keywords;
     }
 
@@ -550,7 +548,7 @@ export namespace DocumentHighlights {
                     result.push({
                         fileName: sourceFile.fileName,
                         textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
-                        kind: HighlightSpanKind.reference
+                        kind: HighlightSpanKind.reference,
                     });
                     i++; // skip the next keyword
                     continue;
