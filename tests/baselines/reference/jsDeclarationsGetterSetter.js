@@ -116,9 +116,9 @@ export class D {
     get x(): number;
 }
 export class E {
-    set x(arg: number);
+    set x(_arg: number);
 }
 export class F {
-    set x(arg: number);
+    set x(_arg: number);
     get x(): number;
 }

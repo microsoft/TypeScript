@@ -9779,14 +9779,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (p.flags & SymbolFlags.Accessor && useAccessors) {
                         const result: AccessorDeclaration[] = [];
                         if (p.flags & SymbolFlags.SetAccessor) {
-                            const setter = p.declarations?.find((d): d is SignatureDeclaration => {
-                                if (d.kind === SyntaxKind.SetAccessor) {
-                                    return true;
+                            let setter: Declaration | undefined;
+
+                            if (p.declarations) {
+                                for (const d of p.declarations) {
+                                    if (d.kind === SyntaxKind.SetAccessor) {
+                                        setter = d;
+                                        break;
+                                    }
+                                    if (isCallExpression(d) && isBindableObjectDefinePropertyCall(d)) {
+                                        const found = d.arguments[2].properties.find(p => {
+                                            const id = getNameOfDeclaration(p);
+                                            return !!id && isIdentifier(id) && idText(id) === "set";
+                                        });
+                                        if (found) {
+                                            setter = found;
+                                            break;
+                                        }
+                                        continue;
+                                    }
                                 }
-                                const id = getNameOfDeclaration(d);
-                                return !!id && isIdentifier(id) && idText(id) === "set";
-                            });
-                            const paramSymbol = setter && getSignatureFromDeclaration(setter)?.parameters[0];
+                            }
+
+                            Debug.assert(setter && isFunctionLikeDeclaration(setter));
+                            const paramSymbol = getSignatureFromDeclaration(setter).parameters[0];
+
                             result.push(setTextRange(
                                 factory.createSetAccessorDeclaration(
                                     factory.createModifiersFromModifierFlags(flag),
