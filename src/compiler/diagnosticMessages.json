@@ -3583,15 +3583,15 @@
         "category": "Error",
         "code": 2833
     },
-    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.": {
+    "Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.": {
         "category": "Error",
         "code": 2834
     },
-    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?": {
+    "Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?": {
         "category": "Error",
         "code": 2835
     },
-    "Import assertions are not allowed on statements that transpile to commonjs 'require' calls.": {
+    "Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 2836
     },
