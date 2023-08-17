@@ -1,4 +1,6 @@
-import { reportDocumentRegistryStats } from "../../../harness/incrementalUtils";
+import {
+    reportDocumentRegistryStats,
+} from "../../../harness/incrementalUtils";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
@@ -19,15 +21,15 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
     const importModuleContent = `import {a} from "./module1"`;
     const file: File = {
         path: `/user/username/projects/myproject/index.ts`,
-        content: importModuleContent
+        content: importModuleContent,
     };
     const moduleFile: File = {
         path: `/user/username/projects/myproject/module1.d.ts`,
-        content: "export const a: number;"
+        content: "export const a: number;",
     };
     const configFile: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
-        content: JSON.stringify({ files: ["index.ts"] })
+        content: JSON.stringify({ files: ["index.ts"] }),
     };
 
     function getProject(service: TestProjectService) {
@@ -127,18 +129,18 @@ describe("unittests:: tsserver:: documentRegistry:: works when reusing orphan sc
                     textChanges: [{
                         newText,
                         start: { line: 1, offset: 1 },
-                        end: { line: 2, offset: newText.length + 1 } // Remove the import so that structure is not reused
-                    }]
+                        end: { line: 2, offset: newText.length + 1 }, // Remove the import so that structure is not reused
+                    }],
                 }],
                 openFiles: [
                     {
                         file: "^/inmemory/model/4",
                         fileContent: newText,
                         projectRootPath: "/users/user/projects/san", // Add same document with different script kind
-                        scriptKindName: "TS"
+                        scriptKindName: "TS",
                     },
-                ]
-            }
+                ],
+            },
         });
         baselineTsserverLogs("documentRegistry", "works when reusing orphan script info with different scriptKind", session);
     });

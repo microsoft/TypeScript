@@ -61,6 +61,7 @@
         "chokidar": "^3.5.3",
         "del": "^6.1.1",
         "diff": "^5.1.0",
+        "dprint": "^0.40.2",
         "esbuild": "^0.19.0",
         "eslint": "^8.22.0",
         "eslint-formatter-autolinkable-stylish": "^1.2.0",
@@ -96,6 +97,7 @@
         "clean": "hereby clean",
         "gulp": "hereby",
         "lint": "hereby lint",
+        "format": "dprint fmt",
         "setup-hooks": "node scripts/link-hooks.mjs"
     },
     "browser": {
