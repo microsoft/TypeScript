@@ -34,39 +34,40 @@ function joinToRootIfNeeded(rootDir: string, existingPath: string) {
 }
 
 export function projectFilesTransformer(rootDir: string, options: ts.CompilerOptions) {
-    const declarationDir = 
+    const declarationDir =
         options.declarationDir? joinToRootIfNeeded(rootDir, options.declarationDir) :
         options.outDir? joinToRootIfNeeded(rootDir,options.outDir) :
         undefined;
     rootDir = normalizePath(rootDir);
     return (file: string, host: ts.CompilerHost) => {
         file = normalizePath(file);
-        tracer.current?.start("parse")
+        tracer.current?.start("parse");
         const source = host.getSourceFile(file, options.target ?? ts.ScriptTarget.ES2015);
-        tracer.current?.end("parse")
-        
+        tracer.current?.end("parse");
+
         if(!source) return;
 
         const actualDeclaration = transformFile(source, [], [], options, ts.ModuleKind.ESNext);
-        const output = 
+        const output =
             declarationDir? changeAnyExtension(file.replace(rootDir, declarationDir), ".d.ts"):
             changeAnyExtension(file, ".d.ts");
         const dirPath = path.dirname(output);
-        ensureDirRecursive(dirPath, host)
-        tracer.current?.start("write")
-        host.writeFile(output, actualDeclaration.code, false);
-        tracer.current?.end("write")
+        ensureDirRecursive(dirPath, host);
+        tracer.current?.start("write");
+        host.writeFile(output, actualDeclaration.code, /*writeByteOrderMark*/ false);
+        tracer.current?.end("write");
         return output;
-    }
+    };
 }
 
 export function transformProjectFiles(rootDir: string, files: string[], host: ts.CompilerHost, options: ts.CompilerOptions) {
     const transformer = projectFilesTransformer(rootDir, options);
-    for (let file of files) {
+    for (const file of files) {
         try {
             transformer(file, host);
-        } catch (e) {
-            console.error(`Failed to transform: ${file}`, e)
+        }
+        catch (e) {
+            console.error(`Failed to transform: ${file}`, e);
         }
     }
     return { rootDir };

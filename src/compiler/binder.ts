@@ -305,7 +305,6 @@ import {
     tryParsePattern,
     TryStatement,
     TypeLiteralNode,
-    TypeNode,
     TypeOfExpression,
     TypeParameterDeclaration,
     unescapeLeadingUnderscores,
@@ -489,12 +488,7 @@ function initFlowNode<T extends FlowNode>(node: T) {
     return node;
 }
 
-const { bindSourceFile: binder, bindSyntheticTypeNode: typeNodeBinder } = /* @__PURE__ */ createBinder();
-
-/** @internal */
-export function bindSyntheticTypeNode(node: TypeNode, location: Node, opts: CompilerOptions) {
-    typeNodeBinder(node, location, opts);
-}
+const binder = /* @__PURE__ */ createBinder();
 
 /** @internal */
 export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
@@ -506,10 +500,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
     performance.measure("Bind", "beforeBind", "afterBind");
 }
 
-function createBinder(): {
-    bindSourceFile: (file: SourceFile, options: CompilerOptions) => void,
-    bindSyntheticTypeNode: (node: TypeNode, location: Node, opts: CompilerOptions) => void
- } {
+function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
@@ -558,7 +549,7 @@ function createBinder(): {
     var bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
     /* eslint-enable no-var */
 
-    return { bindSourceFile, bindSyntheticTypeNode };
+    return bindSourceFile;
 
     /**
      * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
@@ -569,38 +560,6 @@ function createBinder(): {
         return createDiagnosticForNodeInSourceFile(getSourceFileOfNode(node) || file, node, message, ...args);
     }
 
-    function bindSyntheticTypeNode(node: TypeNode, location: Node, opts: CompilerOptions) {
-        file = getSourceFileOfNode(location);
-        options = opts;
-        parent = location;
-        currentFlow = initFlowNode({ flags: FlowFlags.Start });
-        bind(node);
-        bindCleanup();
-    }
-
-    function bindCleanup() {
-        file = undefined!;
-        options = undefined!;
-        languageVersion = undefined!;
-        parent = undefined!;
-        container = undefined!;
-        thisParentContainer = undefined!;
-        blockScopeContainer = undefined!;
-        lastContainer = undefined!;
-        delayedTypeAliases = undefined!;
-        seenThisKeyword = false;
-        currentFlow = undefined!;
-        currentBreakTarget = undefined;
-        currentContinueTarget = undefined;
-        currentReturnTarget = undefined;
-        currentTrueTarget = undefined;
-        currentFalseTarget = undefined;
-        currentExceptionTarget = undefined;
-        activeLabelList = undefined;
-        hasExplicitReturn = false;
-        inAssignmentPattern = false;
-        emitFlags = NodeFlags.None;
-    }
     function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
         file = f;
         options = opts;
@@ -623,7 +582,28 @@ function createBinder(): {
             file.classifiableNames = classifiableNames;
             delayedBindJSDocTypedefTag();
         }
-        bindCleanup();
+
+        file = undefined!;
+        options = undefined!;
+        languageVersion = undefined!;
+        parent = undefined!;
+        container = undefined!;
+        thisParentContainer = undefined!;
+        blockScopeContainer = undefined!;
+        lastContainer = undefined!;
+        delayedTypeAliases = undefined!;
+        seenThisKeyword = false;
+        currentFlow = undefined!;
+        currentBreakTarget = undefined;
+        currentContinueTarget = undefined;
+        currentReturnTarget = undefined;
+        currentTrueTarget = undefined;
+        currentFalseTarget = undefined;
+        currentExceptionTarget = undefined;
+        activeLabelList = undefined;
+        hasExplicitReturn = false;
+        inAssignmentPattern = false;
+        emitFlags = NodeFlags.None;
     }
 
     function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {

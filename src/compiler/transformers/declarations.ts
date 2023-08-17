@@ -298,7 +298,6 @@ export function transformDeclarations(context: TransformationContext) {
     let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment | undefined>>;
     let suppressNewDiagnosticContexts: boolean;
     let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
-    let localInferenceTargetNode: Node | undefined;
 
     const { factory } = context;
     const host = context.getEmitHost();
@@ -332,11 +331,6 @@ export function transformDeclarations(context: TransformationContext) {
         setEnclosingDeclarations(node) {
             const oldNode = enclosingDeclaration;
             enclosingDeclaration = node;
-            return oldNode;
-        },
-        setLocalInferenceTargetNode(node) {
-            const oldNode = localInferenceTargetNode;
-            localInferenceTargetNode = node;
             return oldNode;
         },
         checkEntityNameVisibility(name, container) {
@@ -394,10 +388,6 @@ export function transformDeclarations(context: TransformationContext) {
             // TODO: Do all these accessibility checks inside/after the first pass in the checker when declarations are enabled, if possible
         }
         else {
-            if(localInferenceTargetNode) {
-                reportIsolatedDeclarationError(localInferenceTargetNode);
-                return true;
-            }
             // Report error
             const errorInfo = getSymbolAccessibilityDiagnostic(symbolAccessibilityResult);
             if (errorInfo) {

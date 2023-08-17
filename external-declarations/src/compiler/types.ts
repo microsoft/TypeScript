@@ -1,4 +1,4 @@
-import { AsExpression, BinaryExpression, ClassDeclaration, CompilerOptions, ComputedPropertyName, Declaration, Diagnostic, DiagnosticMessage, DiagnosticWithLocation, ElementAccessExpression, EntityNameExpression, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, FileReference, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedDeclaration, Node, NonNullExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SatisfiesExpression, SignatureDeclaration, SourceFile, StringLiteralLike, Symbol, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, TypeAssertion, TypeNode, UnparsedSource, VariableDeclaration, VariableStatement } from "typescript";
+import { AsExpression, BinaryExpression, ClassDeclaration, CompilerOptions, ComputedPropertyName, Declaration, Diagnostic, DiagnosticMessage, DiagnosticWithLocation, ElementAccessExpression, EntityNameExpression, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, FileReference, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedDeclaration, Node, NonNullExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SatisfiesExpression, SignatureDeclaration, SourceFile, StringLiteralLike, Symbol, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, TypeAssertion, TypeNode, VariableDeclaration, VariableStatement, Path } from "typescript";
 
 import { AnyImportSyntax } from "./utils";
 
@@ -21,8 +21,9 @@ export interface IsolatedEmitHost extends ModuleSpecifierResolutionHost, Resolve
     getCommonSourceDirectory(): string
     getCompilerOptions(): CompilerOptions
     getSourceFiles(): SourceFile[]
-    /** @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
+    /** @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
     /** @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
+    isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 }
 
 export interface IsolatedEmitResolver {
@@ -66,8 +67,10 @@ export interface SymbolTracker {
 
 /** @internal */
 interface ModuleSpecifierResolutionHost {
-
+    readonly redirectTargetsMap: RedirectTargetsMap;
 }
+
+export type RedirectTargetsMap = ReadonlyMap<Path, readonly string[]>;
 
 /** @internal */
 export interface SymbolVisibilityResult {
