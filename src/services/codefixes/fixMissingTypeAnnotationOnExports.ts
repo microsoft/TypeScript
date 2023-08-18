@@ -1,8 +1,11 @@
 import {
+    ClassDeclaration,
     Diagnostics,
     ExportAssignment,
+    ExpressionWithTypeArguments,
     factory,
     FunctionDeclaration,
+    GeneratedIdentifierFlags,
     GetAccessorDeclaration,
     getTokenAtPosition,
     MethodDeclaration,
@@ -38,7 +41,7 @@ const canHaveExplicitTypeAnnotation = new Set<SyntaxKind>([
     SyntaxKind.VariableDeclaration,
     SyntaxKind.Parameter,
     SyntaxKind.ExportAssignment,
-    SyntaxKind.HeritageClause,
+    SyntaxKind.ExpressionWithTypeArguments,
 ]);
 
 const declarationEmitNodeBuilderFlags =
@@ -68,7 +71,7 @@ registerCodeFix({
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, typeChecker: TypeChecker, nodeWithDiag: Node): void {
     const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag);
-    addTypeAnnotationOnNode(nodeWithNoType, sourceFile, typeChecker, changes);
+    fixupForIsolatedDeclarations(nodeWithNoType, sourceFile, typeChecker, changes);
 }
 
 // Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation
@@ -79,7 +82,11 @@ function findNearestParentWithTypeAnnotation(node: Node): Node {
     return node;
 }
 
-function addTypeAnnotationOnNode(node: Node, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
+/**
+ * Fixes up to support IsolatedDeclaration by either adding types when possible, or splitting statements and add type annotations
+ * for the places that cannot have type annotations (e.g. HeritageClause, default exports, ...)
+ */
+function fixupForIsolatedDeclarations(node: Node, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
     switch (node.kind) {
     case SyntaxKind.Parameter:
         const parameter = node as ParameterDeclaration;
@@ -194,6 +201,32 @@ function addTypeAnnotationOnNode(node: Node, sourceFile: SourceFile, typeChecker
             ]);
         }
         break;
+    // Handling expression like heritage clauses e.g. class A extends mixin(B) ..
+    case SyntaxKind.ExpressionWithTypeArguments:
+        const expression = node as ExpressionWithTypeArguments;
+        const classDecl = expression.parent.parent as unknown as ClassDeclaration;
+        const heritageTypeNode = typeToTypeNode(
+            typeChecker.getTypeAtLocation(expression.expression),
+            expression.expression,
+            typeChecker);
+        const heritageVariableName = factory.createUniqueName(
+            classDecl.name? classDecl.name.text + "Base" : "Anonymous", GeneratedIdentifierFlags.Optimistic);
+        // e.g. const Point3DBase: typeof Point2D = mixin(Point2D);
+        const heritageVariable = factory.createVariableStatement(
+            /*modifiers*/ undefined,
+            factory.createVariableDeclarationList(
+                [factory.createVariableDeclaration(
+                    heritageVariableName,
+                    /*exclamationToken*/ undefined,
+                    heritageTypeNode,
+                    expression,
+                    )],
+                NodeFlags.Const,
+            )
+        );
+        changes.insertNodeAt(sourceFile, classDecl.getFullStart(), heritageVariable, { prefix: "\n" });
+        return changes.replaceNodeWithNodes(sourceFile, expression,
+            [factory.createExpressionWithTypeArguments(heritageVariableName, [])]);
     default:
         break;
     }
