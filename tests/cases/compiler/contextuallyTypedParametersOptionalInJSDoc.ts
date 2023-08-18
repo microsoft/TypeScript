@@ -5,6 +5,12 @@
 // @filename: index.js
 
 /**
+ * 
+ * @param {number} num 
+ */
+function acceptNum(num) {}
+
+/**
  * @typedef {(a: string, b: number) => void} Fn
  */
 
@@ -14,7 +20,7 @@ const fn1 =
    * @param [b]
    */
   function self(a, b) {
-    b;
+    acceptNum(b); // error
     self("");
     self("", undefined);
   };
@@ -25,7 +31,7 @@ const fn2 =
    * @param {number} [b]
    */
   function self(a, b) {
-    b;
+    acceptNum(b); // error
     self("");
     self("", undefined);
   };

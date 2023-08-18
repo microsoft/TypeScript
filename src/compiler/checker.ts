@@ -14713,7 +14713,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (iife) {
             return !node.type &&
                 !node.dotDotDotToken &&
-                node.parent.parameters.indexOf(node) >= iife.arguments.length;
+                node.parent.parameters.indexOf(node) >= getEffectiveCallArguments(iife).length;
         }
 
         return false;
@@ -35287,14 +35287,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeOfParameter(symbol: Symbol) {
-        const type = getTypeOfSymbol(symbol);
-        if (strictNullChecks) {
-            const declaration = symbol.valueDeclaration;
-            if (declaration && (hasInitializer(declaration) || isOptionalDeclaration(declaration))) {
-                return getOptionalType(type);
-            }
-        }
-        return type;
+        const declaration = symbol.valueDeclaration;
+        return addOptionality(
+            getTypeOfSymbol(symbol),
+            /*isProperty*/ false,
+            /*isOptional*/ !!declaration && (hasInitializer(declaration) || isOptionalDeclaration(declaration)),
+        );
     }
 
     function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember): __String;
@@ -35587,11 +35585,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function assignParameterType(parameter: Symbol, type?: Type) {
+    function assignParameterType(parameter: Symbol, contextualType?: Type) {
         const links = getSymbolLinks(parameter);
         if (!links.type) {
             const declaration = parameter.valueDeclaration as ParameterDeclaration | undefined;
-            links.type = type || (declaration ? getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true) : getTypeOfSymbol(parameter));
+            links.type = addOptionality(
+                contextualType || (declaration ? getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true) : getTypeOfSymbol(parameter)),
+                /*isProperty*/ false,
+                /*isOptional*/ declaration && !declaration.initializer && isOptionalDeclaration(declaration),
+            );
             if (declaration && declaration.name.kind !== SyntaxKind.Identifier) {
                 // if inference didn't come up with anything but unknown, fall back to the binding pattern if present.
                 if (links.type === unknownType) {
@@ -35600,8 +35602,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 assignBindingElementTypes(declaration.name, links.type);
             }
         }
-        else if (type) {
-            Debug.assertEqual(links.type, type, "Parameter symbol already has a cached type which differs from newly assigned type");
+        else if (contextualType) {
+            Debug.assertEqual(links.type, contextualType, "Parameter symbol already has a cached type which differs from newly assigned type");
         }
     }
 
