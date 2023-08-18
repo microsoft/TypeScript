@@ -49,6 +49,14 @@ Object.defineProperty(F.prototype, "x", {
     set(_arg) {}
 });
 
+export class G {}
+Object.defineProperty(G.prototype, "x", {
+    /**
+     * @param {number[]} args
+     */
+    set(...args) {}
+});
+
 
 //// [index.js]
 export class A {
@@ -96,6 +104,14 @@ Object.defineProperty(F.prototype, "x", {
      */
     set(_arg) { }
 });
+export class G {
+}
+Object.defineProperty(G.prototype, "x", {
+    /**
+     * @param {number[]} args
+     */
+    set(...args) { }
+});
 
 
 //// [index.d.ts]
@@ -121,4 +137,7 @@ export class E {
 export class F {
     set x(_arg: number);
     get x(): number;
+}
+export class G {
+    set x(args: number);
 }

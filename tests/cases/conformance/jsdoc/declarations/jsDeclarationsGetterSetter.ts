@@ -51,3 +51,11 @@ Object.defineProperty(F.prototype, "x", {
      */
     set(_arg) {}
 });
+
+export class G {}
+Object.defineProperty(G.prototype, "x", {
+    /**
+     * @param {number[]} args
+     */
+    set(...args) {}
+});
