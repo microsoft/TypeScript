@@ -38,6 +38,7 @@ const canHaveExplicitTypeAnnotation = new Set<SyntaxKind>([
     SyntaxKind.VariableDeclaration,
     SyntaxKind.Parameter,
     SyntaxKind.ExportAssignment,
+    SyntaxKind.HeritageClause,
 ]);
 
 const declarationEmitNodeBuilderFlags =
@@ -67,8 +68,7 @@ registerCodeFix({
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, typeChecker: TypeChecker, nodeWithDiag: Node): void {
     const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag);
-    const replacedNodes = addTypeAnnotationOnNode(nodeWithNoType, typeChecker);
-    changes.replaceNodeWithNodes(sourceFile, nodeWithNoType, Array.isArray(replacedNodes) ? replacedNodes : [replacedNodes]);
+    addTypeAnnotationOnNode(nodeWithNoType, sourceFile, typeChecker, changes);
 }
 
 // Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation
@@ -79,13 +79,13 @@ function findNearestParentWithTypeAnnotation(node: Node): Node {
     return node;
 }
 
-function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | Node[] {
+function addTypeAnnotationOnNode(node: Node, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
     switch (node.kind) {
     case SyntaxKind.Parameter:
         const parameter = node as ParameterDeclaration;
         const newNode = addTypeToParameterDeclaration(parameter, typeChecker);
         if (newNode) {
-            return newNode;
+            return changes.replaceNodeWithNodes(sourceFile, node, [newNode]);
         }
         break;
     case SyntaxKind.VariableDeclaration:
@@ -93,13 +93,14 @@ function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | N
         if (!variableDeclaration.type) {
             const type = typeChecker.getTypeAtLocation(variableDeclaration);
             const typeNode = typeToTypeNode(type, variableDeclaration, typeChecker);
-            return factory.updateVariableDeclaration(
-                variableDeclaration,
-                variableDeclaration.name,
-                /*exclamationToken*/ undefined,
-                typeNode,
-                variableDeclaration.initializer
-            );
+            return changes.replaceNodeWithNodes(sourceFile, node,
+                [factory.updateVariableDeclaration(
+                    variableDeclaration,
+                    variableDeclaration.name,
+                    /*exclamationToken*/ undefined,
+                    typeNode,
+                    variableDeclaration.initializer
+                )]);
         }
         break;
     case SyntaxKind.FunctionDeclaration:
@@ -108,7 +109,8 @@ function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | N
             const type = tryGetReturnType(typeChecker, functionDecl);
             if(type) {
                 const typeNode = typeToTypeNode(type, functionDecl, typeChecker);
-                return factory.updateFunctionDeclaration(
+                return changes.replaceNodeWithNodes(sourceFile, node,
+                    [factory.updateFunctionDeclaration(
                     functionDecl,
                     functionDecl.modifiers,
                     functionDecl.asteriskToken,
@@ -116,7 +118,7 @@ function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | N
                     functionDecl.typeParameters,
                     updateTypesInNodeArray(functionDecl.parameters, typeChecker),
                     typeNode,
-                    functionDecl.body
+                    functionDecl.body)]
                 );
             }
         }
@@ -126,13 +128,14 @@ function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | N
         if(!propDecl.type) {
             const type = typeChecker.getTypeAtLocation(node);
             const typeNode = typeToTypeNode(type, propDecl, typeChecker);
-            return factory.updatePropertyDeclaration(
-                propDecl,
-                propDecl.modifiers,
-                propDecl.name,
-                propDecl.questionToken ?? propDecl.exclamationToken,
-                typeNode,
-                propDecl.initializer
+            return changes.replaceNodeWithNodes(sourceFile, node,
+                    [factory.updatePropertyDeclaration(
+                        propDecl,
+                        propDecl.modifiers,
+                        propDecl.name,
+                        propDecl.questionToken ?? propDecl.exclamationToken,
+                        typeNode,
+                        propDecl.initializer)]
             );
         }
         break;
@@ -142,16 +145,17 @@ function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | N
             const type = tryGetReturnType(typeChecker, methodDeclaration);
             if(type) {
                 const typeNode = typeToTypeNode(type, node, typeChecker);
-                return factory.updateMethodDeclaration(
-                    methodDeclaration,
-                    methodDeclaration.modifiers,
-                    methodDeclaration.asteriskToken,
-                    methodDeclaration.name,
-                    methodDeclaration.questionToken,
-                    methodDeclaration.typeParameters,
-                    updateTypesInNodeArray(methodDeclaration.parameters, typeChecker),
-                    typeNode,
-                    methodDeclaration.body,
+                return changes.replaceNodeWithNodes(sourceFile, node,
+                    [factory.updateMethodDeclaration(
+                        methodDeclaration,
+                        methodDeclaration.modifiers,
+                        methodDeclaration.asteriskToken,
+                        methodDeclaration.name,
+                        methodDeclaration.questionToken,
+                        methodDeclaration.typeParameters,
+                        updateTypesInNodeArray(methodDeclaration.parameters, typeChecker),
+                        typeNode,
+                        methodDeclaration.body)]
                 );
             }
         }
@@ -162,13 +166,14 @@ function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | N
             const returnType = tryGetReturnType(typeChecker, getAccessor);
             if(returnType) {
                 const typeNode = typeToTypeNode(returnType, node, typeChecker);
-                return factory.updateGetAccessorDeclaration(
-                    getAccessor,
-                    getAccessor.modifiers,
-                    getAccessor.name,
-                    updateTypesInNodeArray(getAccessor.parameters, typeChecker),
-                    typeNode,
-                    getAccessor.body,
+                return changes.replaceNodeWithNodes(sourceFile, node,
+                        [factory.updateGetAccessorDeclaration(
+                            getAccessor,
+                            getAccessor.modifiers,
+                            getAccessor.name,
+                            updateTypesInNodeArray(getAccessor.parameters, typeChecker),
+                            typeNode,
+                            getAccessor.body)]
                 );
             }
         }
@@ -178,7 +183,7 @@ function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | N
         if(!defaultExport.isExportEquals) {
             const type = typeChecker.getTypeAtLocation(defaultExport.expression);
             const typeNode = typeToTypeNode(type, node, typeChecker);
-            return [
+            return changes.replaceNodeWithNodes(sourceFile, node, [
                 factory.createVariableStatement(/*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
                         [factory.createVariableDeclaration(
@@ -186,7 +191,7 @@ function addTypeAnnotationOnNode(node: Node, typeChecker: TypeChecker): Node | N
                             typeNode, defaultExport.expression)],
                         NodeFlags.Const)),
                 factory.updateExportAssignment(defaultExport, defaultExport?.modifiers, factory.createIdentifier("__default")),
-            ];
+            ]);
         }
         break;
     default:
