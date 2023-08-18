@@ -165,7 +165,7 @@ function isRegionDelimiter(lineText: string) {
     // We trim the leading whitespace and // without the regex since the
     // multiple potential whitespace matches can make for some gnarly backtracking behavior
     lineText = trimStringStart(lineText);
-    if (!startsWith(lineText, "\/\/")) {
+    if (!startsWith(lineText, "//")) {
         return null; // eslint-disable-line no-null/no-null
     }
     lineText = trimString(lineText.slice(2));
