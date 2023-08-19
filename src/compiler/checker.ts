@@ -27428,7 +27428,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
-            const type = declaredType.flags & TypeFlags.Union ? declaredType : computedType;
+            const type = !(computedType.flags & TypeFlags.Union) && declaredType.flags & TypeFlags.Union ? declaredType : computedType;
             if (type.flags & TypeFlags.Union) {
                 const access = getCandidateDiscriminantPropertyAccess(expr);
                 if (access) {
