@@ -35592,7 +35592,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links.type = addOptionality(
                 contextualType || (declaration ? getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true) : getTypeOfSymbol(parameter)),
                 /*isProperty*/ false,
-                /*isOptional*/ declaration && !declaration.initializer && isOptionalDeclaration(declaration),
+                /*isOptional*/ !!declaration && !declaration.initializer && isOptionalDeclaration(declaration),
             );
             if (declaration && declaration.name.kind !== SyntaxKind.Identifier) {
                 // if inference didn't come up with anything but unknown, fall back to the binding pattern if present.
