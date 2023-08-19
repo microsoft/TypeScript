@@ -594,11 +594,17 @@ export function getDeclarationsOfKind<T extends Declaration>(symbol: Symbol, kin
 }
 
 /** @internal */
-export function createSymbolTable(symbols?: Iterable<Symbol>): SymbolTable {
+export function createSymbolTable(symbols: Iterable<Symbol>, excludes?: SymbolFlags): SymbolTable;
+/** @internal */
+export function createSymbolTable(symbols?: Iterable<Symbol>): SymbolTable;
+/** @internal */
+export function createSymbolTable(symbols?: Iterable<Symbol>, excludes: SymbolFlags = 0): SymbolTable {
     const result = new Map<__String, Symbol>();
     if (symbols) {
         for (const symbol of symbols) {
-            result.set(symbol.escapedName, symbol);
+            if (!(symbol.flags & excludes)) {
+                result.set(symbol.escapedName, symbol);
+            }
         }
     }
     return result;
