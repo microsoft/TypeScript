@@ -57,6 +57,11 @@ Object.defineProperty(G.prototype, "x", {
     set(...args) {}
 });
 
+export class H {}
+Object.defineProperty(H.prototype, "x", {
+    set() {}
+});
+
 
 //// [index.js]
 export class A {
@@ -112,6 +117,11 @@ Object.defineProperty(G.prototype, "x", {
      */
     set(...args) { }
 });
+export class H {
+}
+Object.defineProperty(H.prototype, "x", {
+    set() { }
+});
 
 
 //// [index.d.ts]
@@ -140,4 +150,7 @@ export class F {
 }
 export class G {
     set x(args: number);
+}
+export class H {
+    set x(value: any);
 }

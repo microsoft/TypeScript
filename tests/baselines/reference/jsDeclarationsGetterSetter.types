@@ -137,3 +137,22 @@ Object.defineProperty(G.prototype, "x", {
 
 });
 
+export class H {}
+>H : H
+
+Object.defineProperty(H.prototype, "x", {
+>Object.defineProperty(H.prototype, "x", {    set() {}}) : H
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>H.prototype : H
+>H : typeof H
+>prototype : H
+>"x" : "x"
+>{    set() {}} : { set(): void; }
+
+    set() {}
+>set : () => void
+
+});
+

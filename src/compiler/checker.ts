@@ -9805,7 +9805,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             });
 
                             Debug.assert(setter && isFunctionLikeDeclaration(setter));
-                            const paramSymbol = getSignatureFromDeclaration(setter).parameters[0];
+                            const paramSymbol: Symbol | undefined = getSignatureFromDeclaration(setter).parameters[0];
 
                             result.push(setTextRange(
                                 factory.createSetAccessorDeclaration(
@@ -9814,7 +9814,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     [factory.createParameterDeclaration(
                                         /*modifiers*/ undefined,
                                         /*dotDotDotToken*/ undefined,
-                                        parameterToParameterDeclarationName(paramSymbol, getEffectiveParameterDeclaration(paramSymbol), context),
+                                        paramSymbol ? parameterToParameterDeclarationName(paramSymbol, getEffectiveParameterDeclaration(paramSymbol), context) : "value",
                                         /*questionToken*/ undefined,
                                         isPrivate ? undefined : serializeTypeForDeclaration(context, getTypeOfSymbol(p), p, enclosingDeclaration, includePrivateSymbol, bundled),
                                     )],

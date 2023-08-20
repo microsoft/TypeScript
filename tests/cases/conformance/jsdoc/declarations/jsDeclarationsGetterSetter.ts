@@ -59,3 +59,8 @@ Object.defineProperty(G.prototype, "x", {
      */
     set(...args) {}
 });
+
+export class H {}
+Object.defineProperty(H.prototype, "x", {
+    set() {}
+});
