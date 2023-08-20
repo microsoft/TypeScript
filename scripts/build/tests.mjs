@@ -159,7 +159,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     }
 
     await fs.promises.rm("test.config", rf);
-    await fs.promises.rm(path.join(localBaseline, "projectOutput/"), rf);
+    await fs.promises.rm(path.join(localBaseline, "projectOutput"), rf);
 
     if (error !== undefined) {
         if (error instanceof CancelError) {
