@@ -6960,9 +6960,9 @@ export enum ModuleResolutionKind {
     NodeJs = 2,
     Node10 = 2,
     // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
-    // to better support ecmascript modules and their use within node - however more features are still being added.
+    // to better support ECMAScript modules and their use within node - however more features are still being added.
     // TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
-    // version that supports both pattern trailers - *but*, Node 16 is the first version that also supports ECMASCript 2022.
+    // version that supports both pattern trailers - *but*, Node 16 is the first version that also supports ECMAScript 2022.
     // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
     Node16 = 3,
     NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
