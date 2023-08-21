@@ -87,10 +87,10 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor3", () => {
                     {
                         file: "^/untitled/ts-nul-authority/Untitled-1",
                         fileContent: "interface Function {readonly name: string;}\r\nclass Foo {}\r\ndelete Foo.name;",
-                        scriptKindName: "TS"
-                    }
-                ]
-            }
+                        scriptKindName: "TS",
+                    },
+                ],
+            },
         });
         session.executeCommandSeq<ts.server.protocol.EncodedSemanticClassificationsRequest>({
             command: ts.server.protocol.CommandTypes.EncodedSemanticClassificationsFull,
@@ -98,8 +98,8 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor3", () => {
                 file: "^/untitled/ts-nul-authority/Untitled-1",
                 start: 0,
                 length: 128,
-                format: "2020"
-            }
+                format: "2020",
+            },
         });
         verifyGetErrRequest({ session, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
         baselineTsserverLogs("inconsistentErrorInEditor3", "should not error", session);
