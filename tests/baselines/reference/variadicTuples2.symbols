@@ -12,14 +12,14 @@ type V01 = [...string[], number];
 type V03 = [number, ...string[], number];
 >V03 : Symbol(V03, Decl(variadicTuples2.ts, 3, 33))
 
-type V10 = [number, ...string[], ...boolean[]];  // Error
->V10 : Symbol(V10, Decl(variadicTuples2.ts, 4, 41))
+type V04 = [number, ...string[], ...boolean[]];
+>V04 : Symbol(V04, Decl(variadicTuples2.ts, 4, 41))
 
-type V11 = [number, ...string[], boolean?];  // Error
->V11 : Symbol(V11, Decl(variadicTuples2.ts, 6, 47))
+type V10 = [number, ...string[], boolean?];  // Error
+>V10 : Symbol(V10, Decl(variadicTuples2.ts, 5, 47))
 
-type V12 = [number, string?, boolean];  // Error
->V12 : Symbol(V12, Decl(variadicTuples2.ts, 7, 43))
+type V11 = [number, string?, boolean];  // Error
+>V11 : Symbol(V11, Decl(variadicTuples2.ts, 7, 43))
 
 // Normalization
 

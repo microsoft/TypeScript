@@ -855,10 +855,6 @@
         "category": "Error",
         "code": 1264
     },
-    "A rest element cannot follow another rest element.": {
-        "category": "Error",
-        "code": 1265
-    },
     "An optional element cannot follow a rest element.": {
         "category": "Error",
         "code": 1266

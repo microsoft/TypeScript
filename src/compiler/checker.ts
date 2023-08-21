@@ -16307,6 +16307,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
+    function isTupleNormalizable(node: TupleTypeNode) {
+        let hasSeenRest = false;
+        for (const element of node.elements) {
+            const flags = getTupleElementFlags(element);
+            if (flags & ElementFlags.Variadic) {
+                return true;
+            }
+            if (flags & ElementFlags.Rest) {
+                if (hasSeenRest) {
+                    return true;
+                }
+                hasSeenRest = true;
+            }
+        }
+        return false;
+    }
+
     function getTypeFromArrayOrTupleTypeNode(node: ArrayTypeNode | TupleTypeNode): Type {
         const links = getNodeLinks(node);
         if (!links.resolvedType) {
@@ -16314,7 +16331,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (target === emptyGenericType) {
                 links.resolvedType = emptyObjectType;
             }
-            else if (!(node.kind === SyntaxKind.TupleType && some(node.elements, e => !!(getTupleElementFlags(e) & ElementFlags.Variadic))) && isDeferredTypeReferenceNode(node)) {
+            else if (!(node.kind === SyntaxKind.TupleType && isTupleNormalizable(node)) && isDeferredTypeReferenceNode(node)) {
                 links.resolvedType = node.kind === SyntaxKind.TupleType && node.elements.length === 0 ? target :
                     createDeferredTypeReference(target, node, /*mapper*/ undefined);
             }
@@ -39410,10 +39427,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (flags & ElementFlags.Rest) {
-                if (seenRestElement) {
-                    grammarErrorOnNode(e, Diagnostics.A_rest_element_cannot_follow_another_rest_element);
-                    break;
-                }
                 seenRestElement = true;
             }
             else if (flags & ElementFlags.Optional) {

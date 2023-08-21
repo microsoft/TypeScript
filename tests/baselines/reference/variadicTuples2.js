@@ -6,10 +6,10 @@
 type V00 = [number, ...string[]];
 type V01 = [...string[], number];
 type V03 = [number, ...string[], number];
+type V04 = [number, ...string[], ...boolean[]];
 
-type V10 = [number, ...string[], ...boolean[]];  // Error
-type V11 = [number, ...string[], boolean?];  // Error
-type V12 = [number, string?, boolean];  // Error
+type V10 = [number, ...string[], boolean?];  // Error
+type V11 = [number, string?, boolean];  // Error
 
 // Normalization
 
@@ -239,9 +239,9 @@ var e1 = foo('blah1', 'blah2', 1, 2, 3); // Error
 type V00 = [number, ...string[]];
 type V01 = [...string[], number];
 type V03 = [number, ...string[], number];
-type V10 = [number, ...string[], ...boolean[]];
-type V11 = [number, ...string[], boolean?];
-type V12 = [number, string?, boolean];
+type V04 = [number, ...string[], ...boolean[]];
+type V10 = [number, ...string[], boolean?];
+type V11 = [number, string?, boolean];
 type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
 type V20 = Tup3<[number], string[], [number]>;
 type V21 = Tup3<[number], [string?], [boolean]>;

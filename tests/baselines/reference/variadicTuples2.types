@@ -12,14 +12,14 @@ type V01 = [...string[], number];
 type V03 = [number, ...string[], number];
 >V03 : [number, ...string[], number]
 
-type V10 = [number, ...string[], ...boolean[]];  // Error
->V10 : [number, ...string[], ...boolean[]]
+type V04 = [number, ...string[], ...boolean[]];
+>V04 : [number, ...(string | boolean)[]]
 
-type V11 = [number, ...string[], boolean?];  // Error
->V11 : [number, ...string[], (boolean | undefined)?]
+type V10 = [number, ...string[], boolean?];  // Error
+>V10 : [number, ...string[], (boolean | undefined)?]
 
-type V12 = [number, string?, boolean];  // Error
->V12 : [number, (string | undefined)?, boolean]
+type V11 = [number, string?, boolean];  // Error
+>V11 : [number, (string | undefined)?, boolean]
 
 // Normalization
 

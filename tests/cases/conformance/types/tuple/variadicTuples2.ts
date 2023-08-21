@@ -6,10 +6,10 @@
 type V00 = [number, ...string[]];
 type V01 = [...string[], number];
 type V03 = [number, ...string[], number];
+type V04 = [number, ...string[], ...boolean[]];
 
-type V10 = [number, ...string[], ...boolean[]];  // Error
-type V11 = [number, ...string[], boolean?];  // Error
-type V12 = [number, string?, boolean];  // Error
+type V10 = [number, ...string[], boolean?];  // Error
+type V11 = [number, string?, boolean];  // Error
 
 // Normalization
 
