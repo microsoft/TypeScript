@@ -12836,6 +12836,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         symbolTable.set(symbol.escapedName, symbol);
                     }
                 }
+                members = symbolTable;
             }
             setStructuredTypeMembers(type, members, callSignatures, constructSignatures, indexInfos);
             const thisArgument = lastOrUndefined(typeArguments);
