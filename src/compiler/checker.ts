@@ -12829,7 +12829,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const baseTypes = getBaseTypes(source);
         if (baseTypes.length) {
             if (source.symbol && members === getMembersOfSymbol(source.symbol)) {
-                members = createSymbolTable(members.values(), SymbolFlags.TypeParameter);
+                const symbolTable = createSymbolTable();
+                // copy all symbols (except type parameters), including the ones with internal names like `InternalSymbolName.Index`
+                for (const symbol of members.values()) {
+                    if (!(symbol.flags & SymbolFlags.TypeParameter)) {
+                        symbolTable.set(symbol.escapedName, symbol);
+                    }
+                }
             }
             setStructuredTypeMembers(type, members, callSignatures, constructSignatures, indexInfos);
             const thisArgument = lastOrUndefined(typeArguments);
