@@ -4404,23 +4404,36 @@ namespace Parser {
         return type;
     }
 
-    function isNextTokenColonOrQuestionColon() {
-        return nextToken() === SyntaxKind.ColonToken || (token() === SyntaxKind.QuestionToken && nextToken() === SyntaxKind.ColonToken);
+    function isTokenColonOrQuestionColon() {
+        return token() === SyntaxKind.ColonToken || (token() === SyntaxKind.QuestionToken && nextToken() === SyntaxKind.ColonToken);
     }
 
     function isTupleElementName() {
         if (token() === SyntaxKind.DotDotDotToken) {
-            return tokenIsIdentifierOrKeyword(nextToken()) && isNextTokenColonOrQuestionColon();
+            nextToken();
         }
-        return tokenIsIdentifierOrKeyword(token()) && isNextTokenColonOrQuestionColon();
+        if (token() === SyntaxKind.TemplateHead) {
+            parseTemplateType();
+            return isTokenColonOrQuestionColon();
+        }
+        if (tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.NoSubstitutionTemplateLiteral) {
+            nextToken();
+            return isTokenColonOrQuestionColon();
+        }
+        return false;
     }
 
     function parseTupleElementNameOrTupleElementType() {
+        // TODO: optimize this so we don't have to do lookahead
         if (lookAhead(isTupleElementName)) {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
-            const name = parseIdentifierName();
+            const name = token() === SyntaxKind.NoSubstitutionTemplateLiteral
+                ? (parseLiteralLikeNode(token()) as NoSubstitutionTemplateLiteral)
+                : token() === SyntaxKind.TemplateHead
+                ? parseTemplateType()
+                : parseIdentifierName();
             const questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             parseExpected(SyntaxKind.ColonToken);
             const type = parseTupleElementType();

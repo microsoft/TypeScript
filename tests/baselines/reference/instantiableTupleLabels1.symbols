@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/types/tuple/instantiableTupleLabels1.ts] ////
+
+=== instantiableTupleLabels1.ts ===
+type T1 = [`wow`: boolean];
+>T1 : Symbol(T1, Decl(instantiableTupleLabels1.ts, 0, 0))
+
+type T2 = [number, `wow`: boolean];
+>T2 : Symbol(T2, Decl(instantiableTupleLabels1.ts, 0, 27))
+
+type T3 = [number, ...`wow`: boolean[]];
+>T3 : Symbol(T3, Decl(instantiableTupleLabels1.ts, 1, 35))
+
+type T4 = [number, `wow`: ...boolean[]]; // error
+>T4 : Symbol(T4, Decl(instantiableTupleLabels1.ts, 2, 40))
+
+type Prefix = 'pre';
+>Prefix : Symbol(Prefix, Decl(instantiableTupleLabels1.ts, 3, 40))
+
+type T5 = [`${Prefix}wow`: boolean];
+>T5 : Symbol(T5, Decl(instantiableTupleLabels1.ts, 5, 20))
+>Prefix : Symbol(Prefix, Decl(instantiableTupleLabels1.ts, 3, 40))
+
+type T6 = [number, `${Prefix}wow`: boolean];
+>T6 : Symbol(T6, Decl(instantiableTupleLabels1.ts, 7, 36))
+>Prefix : Symbol(Prefix, Decl(instantiableTupleLabels1.ts, 3, 40))
+
+type T7 = [number, ...`${Prefix}wow`: boolean[]];
+>T7 : Symbol(T7, Decl(instantiableTupleLabels1.ts, 8, 44))
+>Prefix : Symbol(Prefix, Decl(instantiableTupleLabels1.ts, 3, 40))
+
+type T8 = [number, `${never}wontfly`: boolean]; // no label displayed
+>T8 : Symbol(T8, Decl(instantiableTupleLabels1.ts, 9, 49))
+
+type T9 = [number, `${any}wontfly`: boolean]; // no label displayed
+>T9 : Symbol(T9, Decl(instantiableTupleLabels1.ts, 11, 47))
+
+type T11 = [number, `${"a" | "b"}wontfly`: boolean]; // no label displayed
+>T11 : Symbol(T11, Decl(instantiableTupleLabels1.ts, 12, 45))
+
+type T12 = [number, `${unknown}wontfly`: boolean]; // error
+>T12 : Symbol(T12, Decl(instantiableTupleLabels1.ts, 13, 52))
+
+type MakeTuple1<T1 extends string, T2 extends string> = [number, `second-${T1}`: string, ...`rest-${T2}`: boolean[]];
+>MakeTuple1 : Symbol(MakeTuple1, Decl(instantiableTupleLabels1.ts, 14, 50))
+>T1 : Symbol(T1, Decl(instantiableTupleLabels1.ts, 16, 16))
+>T2 : Symbol(T2, Decl(instantiableTupleLabels1.ts, 16, 34))
+>T1 : Symbol(T1, Decl(instantiableTupleLabels1.ts, 16, 16))
+>T2 : Symbol(T2, Decl(instantiableTupleLabels1.ts, 16, 34))
+
+type MakeTuple2<T1, T2> = [number, `second-${T1}`: string, ...`rest-${T2}`: boolean[]]; // error
+>MakeTuple2 : Symbol(MakeTuple2, Decl(instantiableTupleLabels1.ts, 16, 117))
+>T1 : Symbol(T1, Decl(instantiableTupleLabels1.ts, 17, 16))
+>T2 : Symbol(T2, Decl(instantiableTupleLabels1.ts, 17, 19))
+>T1 : Symbol(T1, Decl(instantiableTupleLabels1.ts, 17, 16))
+>T2 : Symbol(T2, Decl(instantiableTupleLabels1.ts, 17, 19))
+
+type T13 = MakeTuple1<"awesome", "tail">;
+>T13 : Symbol(T13, Decl(instantiableTupleLabels1.ts, 17, 87))
+>MakeTuple1 : Symbol(MakeTuple1, Decl(instantiableTupleLabels1.ts, 14, 50))
+
+type T14 = MakeTuple1<any, "tail">;
+>T14 : Symbol(T14, Decl(instantiableTupleLabels1.ts, 19, 41))
+>MakeTuple1 : Symbol(MakeTuple1, Decl(instantiableTupleLabels1.ts, 14, 50))
+
+type T15 = MakeTuple1<"a" | "b", "tail">;
+>T15 : Symbol(T15, Decl(instantiableTupleLabels1.ts, 20, 35))
+>MakeTuple1 : Symbol(MakeTuple1, Decl(instantiableTupleLabels1.ts, 14, 50))
+

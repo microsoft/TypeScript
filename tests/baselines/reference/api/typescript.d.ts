@@ -5196,10 +5196,11 @@ declare namespace ts {
         readonly kind: SyntaxKind.TupleType;
         readonly elements: NodeArray<TypeNode | NamedTupleMember>;
     }
+    type NamedTupleMemberName = Identifier | NoSubstitutionTemplateLiteral | TemplateLiteralTypeNode;
     interface NamedTupleMember extends TypeNode, Declaration, JSDocContainer {
         readonly kind: SyntaxKind.NamedTupleMember;
         readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
-        readonly name: Identifier;
+        readonly name: NamedTupleMemberName;
         readonly questionToken?: Token<SyntaxKind.QuestionToken>;
         readonly type: TypeNode;
     }
@@ -7932,8 +7933,8 @@ declare namespace ts {
         updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode;
         createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]): TupleTypeNode;
         updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]): TupleTypeNode;
-        createNamedTupleMember(dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember;
-        updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember;
+        createNamedTupleMember(dotDotDotToken: DotDotDotToken | undefined, name: NamedTupleMemberName, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember;
+        updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: NamedTupleMemberName, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember;
         createOptionalTypeNode(type: TypeNode): OptionalTypeNode;
         updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode;
         createRestTypeNode(type: TypeNode): RestTypeNode;

@@ -403,6 +403,7 @@ import {
     NamedExports,
     NamedImports,
     NamedImportsOrExports,
+    NamedTupleMemberName,
     NamespaceExport,
     NamespaceImport,
     NewExpression,
@@ -10433,4 +10434,9 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
         return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
     }
     return Debug.fail();
+}
+
+/** @internal */
+export function isNamedTupleMemberName(node: Node): node is NamedTupleMemberName {
+    return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.TemplateLiteralType || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
 }
