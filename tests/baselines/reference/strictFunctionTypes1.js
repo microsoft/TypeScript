@@ -82,7 +82,7 @@ declare function fs(x: string): void;
 declare function fx(f: (x: "def") => void): void;
 declare const x1: (x: string) => void;
 declare const x2 = "abc";
-declare const x3: string;
+declare const x3: "def" | "abc";
 declare const x4: Func<string>;
 declare const never: never;
 declare const x10: string;

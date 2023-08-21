@@ -74,5 +74,5 @@ declare const c9: {
 declare const c10: number[];
 declare const c11: string;
 declare const c12: number;
-declare const c13: string;
-declare const c14: number;
+declare const c13: "abc" | "def";
+declare const c14: 123 | 456;
