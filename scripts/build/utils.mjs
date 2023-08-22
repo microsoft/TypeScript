@@ -72,12 +72,18 @@ export class ExecError extends Error {
 }
 
 /**
- * Reads JSON data with optional comments using the LKG TypeScript compiler
+ * Reads JSON data with optional comments
  * @param {string} jsonPath
  */
 export function readJson(jsonPath) {
     const jsonText = fs.readFileSync(jsonPath, "utf8");
-    return JSONC.parse(jsonText);
+    /** @type {JSONC.ParseError[]} */
+    const errors = [];
+    const result = JSONC.parse(jsonText, errors);
+    if (errors.length) {
+        throw new Error(`Error parsing ${jsonPath}`);
+    }
+    return result;
 }
 
 /**
