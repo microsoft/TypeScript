@@ -190,7 +190,6 @@ export function findIterator<T>(iter: Iterable<T>, predicate: (element: T, index
     return undefined;
 }
 
-
 /** @internal */
 export function findLast<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
 /** @internal */
