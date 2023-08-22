@@ -1,32 +1,15 @@
 import * as ts from "typescript";
-import { NodeBuilderFlags } from "typescript";
 
 import { SymbolTracker } from "../compiler/types";
 
 const declarationEmitNodeBuilderFlags =
-    NodeBuilderFlags.MultilineObjectLiterals |
-    NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
-    NodeBuilderFlags.UseTypeOfFunction |
-    NodeBuilderFlags.UseStructuralFallback |
-    NodeBuilderFlags.AllowEmptyTuple |
-    NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
-    NodeBuilderFlags.NoTruncation;
-
-function sortDiagnostics(a: ts.Diagnostic, b: ts.Diagnostic) {
-    if (a.start! < b.start!) {
-        return -1;
-    }
-    if (a.start! === b.start!) {
-        if (a.length === b.length) {
-            return 0;
-        }
-        if (a.length! < b.length!){
-            return -1;
-        }
-        return 1;
-    }
-    return 1;
-}
+    ts.NodeBuilderFlags.MultilineObjectLiterals |
+    ts.NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
+    ts.NodeBuilderFlags.UseTypeOfFunction |
+    ts.NodeBuilderFlags.UseStructuralFallback |
+    ts.NodeBuilderFlags.AllowEmptyTuple |
+    ts.NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
+    ts.NodeBuilderFlags.NoTruncation;
 
 function tryGetReturnType(typeChecker: ts.TypeChecker, node: ts.SignatureDeclaration): ts.Type | undefined {
     const signature = typeChecker.getSignatureFromDeclaration(node);
@@ -34,17 +17,40 @@ function tryGetReturnType(typeChecker: ts.TypeChecker, node: ts.SignatureDeclara
         return typeChecker.getReturnTypeOfSignature(signature);
     }
 }
+const canHaveExplicitTypeAnnotation = new Set<ts.SyntaxKind>([
+    ts.SyntaxKind.GetAccessor,
+    ts.SyntaxKind.MethodDeclaration,
+    ts.SyntaxKind.PropertyDeclaration,
+    ts.SyntaxKind.FunctionDeclaration,
+    ts.SyntaxKind.VariableDeclaration,
+    ts.SyntaxKind.Parameter,
+    ts.SyntaxKind.ExportAssignment,
+    ts.SyntaxKind.ClassDeclaration,
+    ts.SyntaxKind.ObjectBindingPattern,
+    ts.SyntaxKind.ArrayBindingPattern,
+]);
+
+// Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation
+function findNearestParentWithTypeAnnotation(node: ts.Node): ts.Node {
+    while (((ts.isObjectBindingPattern(node) || ts.isArrayBindingPattern(node)) && !ts.isVariableDeclaration(node.parent)) ||
+          !canHaveExplicitTypeAnnotation.has(node.kind)) {
+        node = node.parent;
+    }
+    return node;
+}
 
 // Define a transformer function
 export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program: ts.Program, moduleResolutionHost?: ts.ModuleResolutionHost) {
     const typeChecker = program.getTypeChecker();
-    const sortedDiags = program.getDeclarationDiagnostics(sourceFile)
-                               .filter((diag) => diag.code === 9007)
-                               .sort(sortDiagnostics).
-                                map((diag) => { return { start: diag.start!, end: diag.start! + diag.length! };});
+    const nodesToFix = new Map(program.getDeclarationDiagnostics(sourceFile).
+                                filter((diag) => diag.code === 9007).
+                                map((diag) => {
+                                    const nodeWithDiag = (ts as any).getTokenAtPosition(sourceFile, diag.start)! as ts.Node;
+                                    return [findNearestParentWithTypeAnnotation(nodeWithDiag), nodeWithDiag];
+                                }));
 
     return (context: ts.TransformationContext) => {
-        if (!sortedDiags) return (node: ts.Node) => node;
+        if (!nodesToFix) return (node: ts.Node) => node;
         let hasError = false;
         const reportError = () => {
             hasError = true;
@@ -79,7 +85,6 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
             }
             return typeNode;
         }
-        let diagIndex = 0;
         // Return a visitor function
         return (rootNode: ts.Node) => {
             function updateTypesInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T>): ts.NodeArray<T>;
@@ -95,16 +100,9 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
 
             // Define a visitor function
             function visit(node: ts.Node): ts.Node | ts.Node[] {
-                // Only visit descendants when there's diagnostics on this location.
-                while (diagIndex < sortedDiags.length && sortedDiags[diagIndex].start < node.getStart()) {
-                    ++diagIndex;
-                }
-                if (diagIndex >= sortedDiags.length) {
-                    return node;
-                }
-                if ((node.getStart() !== sortedDiags[diagIndex].start || node.getEnd() !== sortedDiags[diagIndex].end) &&
-                    sortedDiags[diagIndex].end > node.getEnd()) {
-                    return node;
+                const originalNodeWithDiag = nodesToFix.has(node);
+                if (!originalNodeWithDiag) {
+                    return ts.visitEachChild(node, visit, context);
                 }
 
                 switch (node.kind) {
