@@ -17114,7 +17114,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getLiteralTypeFromProperties(type: Type, include: TypeFlags, includeOrigin: boolean) {
         const origin = includeOrigin && (getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference) || type.aliasSymbol) ? createOriginIndexType(type) : undefined;
-        const propertyTypes = map(getPropertiesOfType(type), prop => getLiteralTypeFromProperty(prop, include));
+        const propertyTypes = map(getPropertiesOfType(type), prop => (prop.flags & SymbolFlags.Prototype) ? neverType : getLiteralTypeFromProperty(prop, include));
         const indexKeyTypes = map(getIndexInfosOfType(type), info => info !== enumNumberIndexInfo && isKeyTypeIncluded(info.keyType, include) ?
             info.keyType === stringType && include & TypeFlags.Number ? stringOrNumberType : info.keyType : neverType);
         return getUnionType(concatenate(propertyTypes, indexKeyTypes), UnionReduction.Literal,
