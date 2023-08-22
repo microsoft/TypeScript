@@ -11,7 +11,11 @@ const b = {
     array: [1, 2, 3],
     fn(value: string): number { return 0; }
 } as const;
-export const c = {
+export const c: {
+    value: number;
+    array: number[];
+    fn(value: string): number;
+} = {
     value: 0,
     array: [1, 2, 3],
     fn(value: string): number { return 0; }

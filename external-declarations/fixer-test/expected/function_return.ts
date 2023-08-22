@@ -10,7 +10,7 @@ function foo2(a: number) {
     }
     return String(a);
 }
-export function singleReturn() {
+export function singleReturn(): number {
     return 42;
 }
 function singleReturn2() {
@@ -22,7 +22,7 @@ export function singleReturnNonLiteral(): string | 42 {
 function singleReturnNonLiteral2() {
     return foo(2);
 }
-export function multipleReturn(a: number) {
+export function multipleReturn(a: number): 42 | 43 {
     if (a === 0) {
         return 42;
     }
@@ -46,7 +46,10 @@ export function returnObjectLiteral(): {
         Button: makeResource("Label")
     };
 }
-export function returnObjectLiteral2() {
+export function returnObjectLiteral2(): {
+    Label: number;
+    Button: string;
+} {
     return {
         Label: 42,
         Button: "42"

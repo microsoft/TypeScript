@@ -36,6 +36,10 @@ function findNearestParentWithTypeAnnotation(node: ts.Node): ts.Node {
           !canHaveExplicitTypeAnnotation.has(node.kind)) {
         node = node.parent;
     }
+    if (ts.isObjectBindingPattern(node) || ts.isArrayBindingPattern(node)) {
+        // return VariableStatement
+        return node.parent.parent.parent;
+    }
     return node;
 }
 
@@ -144,7 +148,7 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
             | {kind: ExpressionType.ARRAY_ACCESS, arrayIndex: number}
             | {kind: ExpressionType.IDENTIFIER, identifier: ts.Identifier};
 
-        function transformDestructuringPatterns(bindingPattern: ts.BindingPattern) {
+        function transformDestructuringPatterns(variableStatement: ts.VariableStatement, bindingPattern: ts.BindingPattern) {
             const enclosingVarStmt = bindingPattern.parent.parent.parent as ts.VariableStatement;
             const tempHolderForReturn = ts.factory.createUniqueName("dest", ts.GeneratedIdentifierFlags.Optimistic);
             const baseExpr: ExpressionReverseChain = { expression: { kind: ExpressionType.IDENTIFIER, identifier: tempHolderForReturn } };
@@ -458,9 +462,8 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                 // Handling expression like heritage clauses e.g. class A extends mixin(B) ..
                 case ts.SyntaxKind.ClassDeclaration:
                     return handleClassDeclaration(node as ts.ClassDeclaration, nodeWithDiag.parent.parent as ts.ExpressionWithTypeArguments);
-                case ts.SyntaxKind.ObjectBindingPattern:
-                case ts.SyntaxKind.ArrayBindingPattern:
-                    return transformDestructuringPatterns(node as ts.BindingPattern);
+                case ts.SyntaxKind.VariableStatement:
+                    return transformDestructuringPatterns(node as ts.VariableStatement, findOuterMostBindingPattern(nodeWithDiag));
                 default:
                     break;
                 }
@@ -472,4 +475,11 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
             return ts.visitNode(rootNode, visit)!;
         };
     };
+}
+
+function findOuterMostBindingPattern(node: ts.Node) {
+    while (!ts.isVariableDeclaration(node.parent)) {
+        node = node.parent;
+    }
+    return node as ts.BindingPattern;
 }
