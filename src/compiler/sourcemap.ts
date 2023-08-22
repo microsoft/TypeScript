@@ -81,16 +81,12 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         addMapping,
         appendSourceMap,
         toJSON,
-        toString: () => JSON.stringify(toJSON())
+        toString: () => JSON.stringify(toJSON()),
     };
 
     function addSource(fileName: string) {
         enter();
-        const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-            fileName,
-            host.getCurrentDirectory(),
-            host.getCanonicalFileName,
-            /*isAbsolutePathAnUrl*/ true);
+        const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath, fileName, host.getCurrentDirectory(), host.getCanonicalFileName, /*isAbsolutePathAnUrl*/ true);
 
         let sourceIndex = sourceToSourceIndexMap.get(source);
         if (sourceIndex === undefined) {
@@ -153,8 +149,10 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         Debug.assert(sourceCharacter === undefined || sourceCharacter >= 0, "sourceCharacter cannot be negative");
         enter();
         // If this location wasn't recorded or the location in source is going backwards, record the mapping
-        if (isNewGeneratedPosition(generatedLine, generatedCharacter) ||
-            isBacktrackingSourcePosition(sourceIndex, sourceLine, sourceCharacter)) {
+        if (
+            isNewGeneratedPosition(generatedLine, generatedCharacter) ||
+            isBacktrackingSourcePosition(sourceIndex, sourceLine, sourceCharacter)
+        ) {
             commitPendingMapping();
             pendingGeneratedLine = generatedLine;
             pendingGeneratedCharacter = generatedCharacter;
@@ -185,15 +183,21 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         let nameIndexToNewNameIndexMap: number[] | undefined;
         const mappingIterator = decodeMappings(map.mappings);
         for (const raw of mappingIterator) {
-            if (end && (
-                raw.generatedLine > end.line ||
-                (raw.generatedLine === end.line && raw.generatedCharacter > end.character))) {
+            if (
+                end && (
+                    raw.generatedLine > end.line ||
+                    (raw.generatedLine === end.line && raw.generatedCharacter > end.character)
+                )
+            ) {
                 break;
             }
 
-            if (start && (
-                raw.generatedLine < start.line ||
-                (start.line === raw.generatedLine && raw.generatedCharacter < start.character))) {
+            if (
+                start && (
+                    raw.generatedLine < start.line ||
+                    (start.line === raw.generatedLine && raw.generatedCharacter < start.character)
+                )
+            ) {
                 continue;
             }
             // Then reencode all the updated mappings into the overall map
@@ -350,7 +354,8 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
                 currentDigit = currentDigit | 32;
             }
             appendMappingCharCode(base64FormatEncode(currentDigit));
-        } while (inValue > 0);
+        }
+        while (inValue > 0);
     }
 }
 
@@ -373,7 +378,7 @@ export interface LineInfo {
 export function getLineInfo(text: string, lineStarts: readonly number[]): LineInfo {
     return {
         getLineCount: () => lineStarts.length,
-        getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1])
+        getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1]),
     };
 }
 
@@ -468,9 +473,15 @@ export function decodeMappings(mappings: string): MappingsDecoder {
 
     // TODO(jakebailey): can we implement this without writing next ourselves?
     return {
-        get pos() { return pos; },
-        get error() { return error; },
-        get state() { return captureMapping(/*hasSource*/ true, /*hasName*/ true); },
+        get pos() {
+            return pos;
+        },
+        get error() {
+            return error;
+        },
+        get state() {
+            return captureMapping(/*hasSource*/ true, /*hasName*/ true);
+        },
         next() {
             while (!done && pos < mappings.length) {
                 const ch = mappings.charCodeAt(pos);
@@ -529,7 +540,7 @@ export function decodeMappings(mappings: string): MappingsDecoder {
         },
         [Symbol.iterator]() {
             return this;
-        }
+        },
     };
 
     function captureMapping(hasSource: true, hasName: true): Required<Mapping>;
@@ -541,11 +552,11 @@ export function decodeMappings(mappings: string): MappingsDecoder {
             sourceIndex: hasSource ? sourceIndex : undefined,
             sourceLine: hasSource ? sourceLine : undefined,
             sourceCharacter: hasSource ? sourceCharacter : undefined,
-            nameIndex: hasName ? nameIndex : undefined
+            nameIndex: hasName ? nameIndex : undefined,
         };
     }
 
-    function stopIterating(): { value: never, done: true } {
+    function stopIterating(): { value: never; done: true; } {
         done = true;
         return { value: undefined!, done: true };
     }
@@ -610,11 +621,11 @@ export function decodeMappings(mappings: string): MappingsDecoder {
 export function sameMapping<T extends Mapping>(left: T, right: T) {
     return left === right
         || left.generatedLine === right.generatedLine
-        && left.generatedCharacter === right.generatedCharacter
-        && left.sourceIndex === right.sourceIndex
-        && left.sourceLine === right.sourceLine
-        && left.sourceCharacter === right.sourceCharacter
-        && left.nameIndex === right.nameIndex;
+            && left.generatedCharacter === right.generatedCharacter
+            && left.sourceIndex === right.sourceIndex
+            && left.sourceLine === right.sourceLine
+            && left.sourceCharacter === right.sourceCharacter
+            && left.nameIndex === right.nameIndex;
 }
 
 /** @internal */
@@ -700,7 +711,7 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
 
     return {
         getSourcePosition,
-        getGeneratedPosition
+        getGeneratedPosition,
     };
 
     function processMapping(mapping: Mapping): MappedPosition {
@@ -721,7 +732,7 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
             source,
             sourceIndex: mapping.sourceIndex,
             sourcePosition,
-            nameIndex: mapping.nameIndex
+            nameIndex: mapping.nameIndex,
         };
     }
 
@@ -810,5 +821,5 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
 /** @internal */
 export const identitySourceMapConsumer: DocumentPositionMapper = {
     getSourcePosition: identity,
-    getGeneratedPosition: identity
+    getGeneratedPosition: identity,
 };

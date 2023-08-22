@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/jsFileCompilationMethodOverloadSyntax.ts] ////
+
+=== a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+  foo();
+>foo : Symbol(A.foo, Decl(a.js, 0, 9))
+}
+
