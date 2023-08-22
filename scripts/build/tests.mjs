@@ -14,9 +14,9 @@ import cmdLineOptions from "./options.mjs";
 import {
     exec,
     ExecError,
+    rimraf,
 } from "./utils.mjs";
 
-const rf = { recursive: true, force: true };
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
@@ -48,16 +48,14 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
         }
         await cleanTestDirs();
-        await fs.promises.rm(coverageDir, rf);
+        await rimraf(coverageDir);
 
         if (options.token?.signaled) {
             return;
         }
     }
 
-    if (fs.existsSync(testConfigFile)) {
-        fs.unlinkSync(testConfigFile);
-    }
+    await rimraf(testConfigFile);
 
     let workerCount, taskConfigsFolder;
     if (runInParallel) {
@@ -158,8 +156,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         process.env.NODE_ENV = savedNodeEnv;
     }
 
-    await fs.promises.rm("test.config", rf);
-    await fs.promises.rm(path.join(localBaseline, "projectOutput"), rf);
+    await rimraf("test.config");
+    await rimraf(path.join(localBaseline, "projectOutput"));
 
     if (error !== undefined) {
         if (error instanceof CancelError) {
@@ -177,7 +175,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 }
 
 export async function cleanTestDirs() {
-    await fs.promises.rm(localBaseline, rf);
+    await rimraf(localBaseline);
     await fs.promises.mkdir(localBaseline, { recursive: true });
 }
 

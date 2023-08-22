@@ -38,6 +38,7 @@ import {
     memoize,
     needsUpdate,
     readJson,
+    rimraf,
 } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
@@ -105,8 +106,8 @@ const cleanDiagnostics = task({
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     hiddenFromTaskList: true,
     run: async () => {
-        await fs.promises.rm(diagnosticInformationMapTs, { recursive: true, force: true });
-        await fs.promises.rm(diagnosticMessagesGeneratedJson, { recursive: true, force: true });
+        await rimraf(diagnosticInformationMapTs);
+        await rimraf(diagnosticMessagesGeneratedJson);
     },
 });
 
@@ -811,7 +812,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
             const out = localPathToRefPath(p).replace(/\.delete$/, "");
-            await fs.promises.rm(out, { force: true });
+            await rimraf(out);
         }
     };
 }

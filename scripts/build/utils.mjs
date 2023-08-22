@@ -232,3 +232,11 @@ export function memoize(fn) {
         return value;
     };
 }
+
+/**
+ * @param {fs.PathLike} p
+ */
+export function rimraf(p) {
+    // Node's recursive rm is just vendored rimraf, but without a different maxRetries default on Windows.
+    return fs.promises.rm(p, { recursive: true, force: true, maxRetries: process.platform === "win32" ? 10 : 0 });
+}
