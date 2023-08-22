@@ -85,6 +85,222 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
             }
             return typeNode;
         }
+
+        function handleClassDeclaration(classDecl: ts.ClassDeclaration, heritageExpression: ts.ExpressionWithTypeArguments) {
+            if (heritageExpression.kind !== ts.SyntaxKind.ExpressionWithTypeArguments){
+                throw new Error(`Hey + ${heritageExpression.kind}`);
+            }
+            const heritageTypeNode = typeToTypeNode(
+                typeChecker.getTypeAtLocation(heritageExpression.expression),
+                heritageExpression.expression);
+            const heritageVariableName = ts.factory.createUniqueName(
+                classDecl.name? classDecl.name.text + "Base" : "Anonymous", ts.GeneratedIdentifierFlags.Optimistic);
+            // e.g. const Point3DBase: typeof Point2D = mixin(Point2D);
+            const heritageVariable = ts.factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                ts.factory.createVariableDeclarationList(
+                    [ts.factory.createVariableDeclaration(
+                        heritageVariableName,
+                        /*exclamationToken*/ undefined,
+                        heritageTypeNode,
+                        heritageExpression,
+                        )],
+                    ts.NodeFlags.Const,
+                )
+            );
+            return [heritageVariable,
+                    ts.factory.updateClassDeclaration(
+                        classDecl,
+                        classDecl.modifiers,
+                        classDecl.name,
+                        classDecl.typeParameters,
+                        classDecl.heritageClauses?.map(
+                            (node) => {
+                                if (node === heritageExpression.parent) {
+                                    return ts.factory.updateHeritageClause(node,
+                                        [ts.factory.createExpressionWithTypeArguments(heritageVariableName, [])]
+                                    );
+                                }
+                                return node;
+                            }),
+                        classDecl.members)
+                    ];
+        }
+
+        const enum ExpressionType {
+            TEXT = 0,
+            COMPUTED = 1,
+            ARRAY_ACCESS = 2,
+            IDENTIFIER = 3,
+        }
+        interface ExpressionReverseChain {
+            element?: ts.BindingElement;
+            parent?: ExpressionReverseChain;
+            expression: SubExpression;
+        }
+
+        type SubExpression = {kind: ExpressionType.TEXT, text: string}
+            | {kind: ExpressionType.COMPUTED, computed: ts.Expression}
+            | {kind: ExpressionType.ARRAY_ACCESS, arrayIndex: number}
+            | {kind: ExpressionType.IDENTIFIER, identifier: ts.Identifier};
+
+        function transformDestructuringPatterns(bindingPattern: ts.BindingPattern) {
+            const enclosingVarStmt = bindingPattern.parent.parent.parent as ts.VariableStatement;
+            const tempHolderForReturn = ts.factory.createUniqueName("dest", ts.GeneratedIdentifierFlags.Optimistic);
+            const baseExpr: ExpressionReverseChain = { expression: { kind: ExpressionType.IDENTIFIER, identifier: tempHolderForReturn } };
+            const bindingElements: ExpressionReverseChain[] = [];
+            if (ts.isArrayBindingPattern(bindingPattern)) {
+                addArrayBindingPatterns(bindingPattern, bindingElements, baseExpr);
+            }
+            else {
+                addObjectBindingPatterns(bindingPattern, bindingElements, baseExpr);
+            }
+
+            const expressionToVar = new Map<ts.Expression, ts.Identifier>();
+            const newNodes: ts.Node[] = [
+                ts.factory.createVariableStatement(
+                    /*modifiers*/ undefined,
+                    ts.factory.createVariableDeclarationList(
+                        [ts.factory.createVariableDeclaration(
+                            tempHolderForReturn,
+                            /*exclamationToken*/ undefined,
+                            /*type*/ undefined,
+                            enclosingVarStmt.declarationList.declarations[0].initializer)],
+                        ts.NodeFlags.Const
+                    )
+                )
+            ];
+            let i = 0;
+            while (i < bindingElements.length) {
+                const bindingElement = bindingElements[i];
+
+                if (bindingElement.element!.propertyName && ts.isComputedPropertyName(bindingElement.element!.propertyName)) {
+                    const computedExpression = bindingElement.element!.propertyName.expression;
+                    const identifierForComputedProperty = ts.factory.getGeneratedNameForNode(computedExpression);
+                    const variableDecl = ts.factory.createVariableDeclaration(
+                        identifierForComputedProperty, /*exclamationToken*/ undefined, /*type*/ undefined, computedExpression);
+                    const variableList = ts.factory.createVariableDeclarationList([variableDecl], ts.NodeFlags.Const);
+                    const variableStatement = ts.factory.createVariableStatement(/*modifiers*/ undefined, variableList);
+                    newNodes.push(variableStatement);
+                    expressionToVar.set(computedExpression, identifierForComputedProperty);
+                }
+
+                // Name is the RHS of : in case colon exists, otherwise it's just the name of the destructuring
+                const name = bindingElement.element!.name;
+                // isBindingPattern
+                if (ts.isArrayBindingPattern(name)) {
+                    addArrayBindingPatterns(name, bindingElements, bindingElement);
+                }
+                else if (ts.isObjectBindingPattern(name)) {
+                    addObjectBindingPatterns(name, bindingElements, bindingElement);
+                }
+                else {
+                    const typeNode = typeToTypeNode(typeChecker.getTypeAtLocation(name), name);
+                    let variableInitializer = createChainedExpression(bindingElement, expressionToVar);
+                    if (bindingElement.element!.initializer) {
+                        const tempName = ts.factory.createUniqueName("temp", ts.GeneratedIdentifierFlags.Optimistic);
+                        newNodes.push(ts.factory.createVariableStatement(
+                            /*modifiers*/ undefined,
+                            ts.factory.createVariableDeclarationList(
+                                [ts.factory.createVariableDeclaration(
+                                    tempName, /*exclamationToken*/ undefined, /*type*/ undefined, variableInitializer)],
+                                    ts.NodeFlags.Const)));
+                        variableInitializer = ts.factory.createConditionalExpression(
+                            ts.factory.createBinaryExpression(
+                                tempName,
+                                ts.factory.createToken(ts.SyntaxKind.EqualsEqualsEqualsToken),
+                                ts.factory.createIdentifier("undefined"),
+                            ),
+                            ts.factory.createToken(ts.SyntaxKind.QuestionToken),
+                            bindingElement.element!.initializer,
+                            ts.factory.createToken(ts.SyntaxKind.ColonToken),
+                            variableInitializer,);
+                    }
+                    newNodes.push(ts.factory.createVariableStatement(
+                        [ts.factory.createToken(ts.SyntaxKind.ExportKeyword)],
+                        ts.factory.createVariableDeclarationList(
+                            [ts.factory.createVariableDeclaration(
+                                name, /*exclamationToken*/ undefined, typeNode, variableInitializer)],
+                            ts.NodeFlags.Const)));
+                }
+                ++i;
+            }
+            return newNodes;
+        }
+
+        function addArrayBindingPatterns(bindingPattern: ts.ArrayBindingPattern, bindingElements: ExpressionReverseChain[], parent: ExpressionReverseChain) {
+            for (let i = 0 ; i < bindingPattern.elements.length ; ++i) {
+                const element = bindingPattern.elements[i];
+                if (ts.isOmittedExpression(element)) {
+                    continue;
+                }
+                bindingElements.push({
+                    element,
+                    parent,
+                    expression: { kind: ExpressionType.ARRAY_ACCESS, arrayIndex: i },
+                });
+            }
+        }
+
+        function addObjectBindingPatterns(bindingPattern: ts.ObjectBindingPattern, bindingElements: ExpressionReverseChain[], parent: ExpressionReverseChain) {
+            for (const bindingElement of bindingPattern.elements) {
+                let name: string;
+                if (bindingElement.propertyName) {
+                    if (ts.isComputedPropertyName(bindingElement.propertyName)) {
+                        bindingElements.push({
+                            element: bindingElement,
+                            parent,
+                            expression: { kind: ExpressionType.COMPUTED, computed: bindingElement.propertyName.expression },
+                        });
+                        continue;
+                    }
+                    else {
+                        name = bindingElement.propertyName.text;
+                    }
+                }
+                else {
+                    name = (bindingElement.name as ts.Identifier).text;
+                }
+                bindingElements.push({
+                    element: bindingElement,
+                    parent,
+                    expression: { kind: ExpressionType.TEXT, text: name },
+                });
+            }
+        }
+
+        function createChainedExpression(expression: ExpressionReverseChain, expressionToVar: Map<ts.Expression, ts.Identifier>): ts.Expression {
+            const reverseTraverse: ExpressionReverseChain[] = [expression];
+            while (expression.parent) {
+                expression = expression.parent;
+                reverseTraverse.push(expression);
+            }
+            let chainedExpression: ts.Expression = ((reverseTraverse[reverseTraverse.length - 1]).expression as {identifier: ts.Identifier}).identifier;
+            for (let i = reverseTraverse.length -2 ; i>= 0; --i) {
+                const nextSubExpr = reverseTraverse[i].expression;
+                if (nextSubExpr.kind === ExpressionType.TEXT) {
+                    chainedExpression = ts.factory.createPropertyAccessChain(
+                        chainedExpression,
+                        /*questionDotToken*/ undefined,
+                        ts.factory.createIdentifier(nextSubExpr.text)
+                    );
+                }
+                else if (nextSubExpr.kind === ExpressionType.COMPUTED) {
+                    chainedExpression = ts.factory.createElementAccessExpression(
+                        chainedExpression,
+                        expressionToVar.get(nextSubExpr.computed)!
+                    );
+                }
+                else if (nextSubExpr.kind === ExpressionType.ARRAY_ACCESS) {
+                    chainedExpression = ts.factory.createElementAccessExpression(
+                        chainedExpression,
+                        nextSubExpr.arrayIndex
+                    );
+                }
+            }
+            return chainedExpression;
+        }
+
         // Return a visitor function
         return (rootNode: ts.Node) => {
             function updateTypesInNodeArray<T extends ts.Node>(nodeArray: ts.NodeArray<T>): ts.NodeArray<T>;
@@ -100,8 +316,8 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
 
             // Define a visitor function
             function visit(node: ts.Node): ts.Node | ts.Node[] {
-                const originalNodeWithDiag = nodesToFix.has(node);
-                if (!originalNodeWithDiag) {
+                const nodeWithDiag = nodesToFix.get(node);
+                if (!nodeWithDiag) {
                     return ts.visitEachChild(node, visit, context);
                 }
 
@@ -223,6 +439,28 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                         }
                     }
                     break;
+                case ts.SyntaxKind.ExportAssignment:
+                    const defaultExport = node as ts.ExportAssignment;
+                    if(!defaultExport.isExportEquals) {
+                        const type = typeChecker.getTypeAtLocation(defaultExport.expression);
+                        const typeNode = typeToTypeNode(type, node);
+                        return [
+                            ts.factory.createVariableStatement(/*modifiers*/ undefined,
+                                ts.factory.createVariableDeclarationList(
+                                    [ts.factory.createVariableDeclaration(
+                                        "__default", /*exclamationToken*/ undefined,
+                                        typeNode, defaultExport.expression)],
+                                    ts.NodeFlags.Const)),
+                            ts.factory.updateExportAssignment(defaultExport, defaultExport?.modifiers, ts.factory.createIdentifier("__default")),
+                        ];
+                    }
+                    break;
+                // Handling expression like heritage clauses e.g. class A extends mixin(B) ..
+                case ts.SyntaxKind.ClassDeclaration:
+                    return handleClassDeclaration(node as ts.ClassDeclaration, nodeWithDiag.parent.parent as ts.ExpressionWithTypeArguments);
+                case ts.SyntaxKind.ObjectBindingPattern:
+                case ts.SyntaxKind.ArrayBindingPattern:
+                    return transformDestructuringPatterns(node as ts.BindingPattern);
                 default:
                     break;
                 }
