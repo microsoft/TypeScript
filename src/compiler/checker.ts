@@ -7594,11 +7594,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return typeParameterToDeclarationWithConstraint(type, context, constraintNode);
         }
 
-        function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext, preserveModifierFlags?: boolean, privateSymbolVisitor?: (s: Symbol) => void, bundledImports?: boolean): ParameterDeclaration {
-            let parameterDeclaration: ParameterDeclaration | JSDocParameterTag | undefined = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
-            if (!parameterDeclaration && !isTransientSymbol(parameterSymbol)) {
-                parameterDeclaration = getDeclarationOfKind<JSDocParameterTag>(parameterSymbol, SyntaxKind.JSDocParameterTag);
+        function getEffectiveParameterDeclaration(parameterSymbol: Symbol): ParameterDeclaration | JSDocParameterTag | undefined {
+            const parameterDeclaration: ParameterDeclaration | JSDocParameterTag | undefined = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
+            if (parameterDeclaration) {
+                return parameterDeclaration;
             }
+            if (!isTransientSymbol(parameterSymbol)) {
+                return getDeclarationOfKind<JSDocParameterTag>(parameterSymbol, SyntaxKind.JSDocParameterTag);
+            }
+        }
+
+        function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext, preserveModifierFlags?: boolean, privateSymbolVisitor?: (s: Symbol) => void, bundledImports?: boolean): ParameterDeclaration {
+            const parameterDeclaration = getEffectiveParameterDeclaration(parameterSymbol);
 
             let parameterType = getTypeOfSymbol(parameterSymbol);
             if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
@@ -7609,12 +7616,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && canHaveModifiers(parameterDeclaration) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
             const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
             const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
-            const name = parameterDeclaration ? parameterDeclaration.name ?
-                parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(factory.cloneNode(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
-                    parameterDeclaration.name.kind === SyntaxKind.QualifiedName ? setEmitFlags(factory.cloneNode(parameterDeclaration.name.right), EmitFlags.NoAsciiEscaping) :
-                    cloneBindingName(parameterDeclaration.name) :
-                symbolName(parameterSymbol) :
-                symbolName(parameterSymbol);
+            const name = parameterToParameterDeclarationName(parameterSymbol, parameterDeclaration, context);
             const isOptional = parameterDeclaration && isOptionalParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.OptionalParameter;
             const questionToken = isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
             const parameterNode = factory.createParameterDeclaration(
@@ -7627,6 +7629,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             );
             context.approximateLength += symbolName(parameterSymbol).length + 3;
             return parameterNode;
+        }
+
+        function parameterToParameterDeclarationName(parameterSymbol: Symbol, parameterDeclaration: ParameterDeclaration | JSDocParameterTag | undefined, context: NodeBuilderContext) {
+            return parameterDeclaration ? parameterDeclaration.name ?
+                parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(factory.cloneNode(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                    parameterDeclaration.name.kind === SyntaxKind.QualifiedName ? setEmitFlags(factory.cloneNode(parameterDeclaration.name.right), EmitFlags.NoAsciiEscaping) :
+                    cloneBindingName(parameterDeclaration.name) :
+                symbolName(parameterSymbol) :
+                symbolName(parameterSymbol);
 
             function cloneBindingName(node: BindingName): BindingName {
                 return elideInitializerAndSetEmitFlags(node) as BindingName;
@@ -9779,6 +9790,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (p.flags & SymbolFlags.Accessor && useAccessors) {
                         const result: AccessorDeclaration[] = [];
                         if (p.flags & SymbolFlags.SetAccessor) {
+                            const setter = p.declarations && forEach(p.declarations, d => {
+                                if (d.kind === SyntaxKind.SetAccessor) {
+                                    return d as SetAccessorDeclaration;
+                                }
+                                if (isCallExpression(d) && isBindableObjectDefinePropertyCall(d)) {
+                                    return forEach(d.arguments[2].properties, propDecl => {
+                                        const id = getNameOfDeclaration(propDecl);
+                                        if (!!id && isIdentifier(id) && idText(id) === "set") {
+                                            return propDecl;
+                                        }
+                                    });
+                                }
+                            });
+
+                            Debug.assert(setter && isFunctionLikeDeclaration(setter));
+                            const paramSymbol: Symbol | undefined = getSignatureFromDeclaration(setter).parameters[0];
+
                             result.push(setTextRange(
                                 factory.createSetAccessorDeclaration(
                                     factory.createModifiersFromModifierFlags(flag),
@@ -9786,7 +9814,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     [factory.createParameterDeclaration(
                                         /*modifiers*/ undefined,
                                         /*dotDotDotToken*/ undefined,
-                                        "arg",
+                                        paramSymbol ? parameterToParameterDeclarationName(paramSymbol, getEffectiveParameterDeclaration(paramSymbol), context) : "value",
                                         /*questionToken*/ undefined,
                                         isPrivate ? undefined : serializeTypeForDeclaration(context, getTypeOfSymbol(p), p, enclosingDeclaration, includePrivateSymbol, bundled),
                                     )],

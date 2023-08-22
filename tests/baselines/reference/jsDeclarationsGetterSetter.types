@@ -114,3 +114,45 @@ Object.defineProperty(F.prototype, "x", {
 
 });
 
+export class G {}
+>G : G
+
+Object.defineProperty(G.prototype, "x", {
+>Object.defineProperty(G.prototype, "x", {    /**     * @param {number[]} args     */    set(...args) {}}) : G
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>G.prototype : G
+>G : typeof G
+>prototype : G
+>"x" : "x"
+>{    /**     * @param {number[]} args     */    set(...args) {}} : { set(...args: number[]): void; }
+
+    /**
+     * @param {number[]} args
+     */
+    set(...args) {}
+>set : (...args: number[]) => void
+>args : number[]
+
+});
+
+export class H {}
+>H : H
+
+Object.defineProperty(H.prototype, "x", {
+>Object.defineProperty(H.prototype, "x", {    set() {}}) : H
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>H.prototype : H
+>H : typeof H
+>prototype : H
+>"x" : "x"
+>{    set() {}} : { set(): void; }
+
+    set() {}
+>set : () => void
+
+});
+
