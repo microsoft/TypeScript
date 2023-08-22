@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultValueInConstructorOverload1.ts ===
+//// [tests/cases/compiler/defaultValueInConstructorOverload1.ts] ////
+
+=== defaultValueInConstructorOverload1.ts ===
 class C {
 >C : Symbol(C, Decl(defaultValueInConstructorOverload1.ts, 0, 0))
 

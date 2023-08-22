@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileClassWithStaticMethodReturningConstructor.ts] ////
+
 //// [declFileClassWithStaticMethodReturningConstructor.ts]
 export class Enhancement {
     public static getType() {

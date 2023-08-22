@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayFrom.ts] ////
+
 //// [arrayFrom.ts]
 // Tests fix for #20432, ensures Array.from accepts all valid inputs
 // Also tests for #19682

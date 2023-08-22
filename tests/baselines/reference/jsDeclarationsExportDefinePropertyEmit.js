@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportDefinePropertyEmit.ts] ////
+
 //// [index.js]
 Object.defineProperty(module.exports, "a", { value: function a() {} });
 

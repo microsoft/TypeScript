@@ -1,4 +1,4 @@
-name: "typescript-error-deltas Watchdog"
+name: 'typescript-error-deltas Watchdog'
 
 on:
   workflow_dispatch:
@@ -7,6 +7,12 @@ on:
 
 permissions:
   contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
 
 jobs:
   check-for-recent:
@@ -17,23 +23,23 @@ jobs:
       issues: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      TAGS: "@navya9singh @RyanCavanaugh @DanielRosenwasser"
+      TAGS: '@navya9singh @RyanCavanaugh @DanielRosenwasser'
     steps:
-    - name: NewErrors
-      run: | # --json and --jq prints exactly one issue number per line of output
-        DATE=$(date --date="7 days ago" --iso-8601)
-        gh issue list --repo microsoft/typescript --search "[NewErrors] created:>=$DATE" --state all --json number --jq ".[].number" \
-        | grep -qe "[0-9]" \
-        || gh issue create --repo ${{ github.repository }} --title "No NewErrors issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=48)."
-    - name: ServerErrors TS
-      run: |
-        DATE=$(date --date="7 days ago" --iso-8601)
-        gh issue list --repo microsoft/typescript --search "[ServerErrors][TypeScript] created:>=$DATE" --state all --json number --jq ".[].number" \
-        | grep -qe "[0-9]" \
-        || gh issue create --repo ${{ github.repository }} --title "No TypeScript ServerErrors issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=59)."
-    - name: ServerErrors JS
-      run: |
-        DATE=$(date --date="7 days ago" --iso-8601)
-        gh issue list --repo microsoft/typescript --search "[ServerErrors][JavaScript] created:>=$DATE" --state all --json number --jq ".[].number" \
-        | grep -qe "[0-9]" \
-        || gh issue create --repo ${{ github.repository }} --title "No JavaScript ServerErrors issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=58)."
+      - name: NewErrors
+        run: | # --json and --jq prints exactly one issue number per line of output
+          DATE=$(date --date="7 days ago" --iso-8601)
+          gh issue list --repo microsoft/typescript --search "[NewErrors] created:>=$DATE" --state all --json number --jq ".[].number" \
+          | grep -qe "[0-9]" \
+          || gh issue create --repo ${{ github.repository }} --title "No NewErrors issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=48)."
+      - name: ServerErrors TS
+        run: |
+          DATE=$(date --date="7 days ago" --iso-8601)
+          gh issue list --repo microsoft/typescript --search "[ServerErrors][TypeScript] created:>=$DATE" --state all --json number --jq ".[].number" \
+          | grep -qe "[0-9]" \
+          || gh issue create --repo ${{ github.repository }} --title "No TypeScript ServerErrors issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=59)."
+      - name: ServerErrors JS
+        run: |
+          DATE=$(date --date="7 days ago" --iso-8601)
+          gh issue list --repo microsoft/typescript --search "[ServerErrors][JavaScript] created:>=$DATE" --state all --json number --jq ".[].number" \
+          | grep -qe "[0-9]" \
+          || gh issue create --repo ${{ github.repository }} --title "No JavaScript ServerErrors issue since $DATE" --body "$TAGS Please check the [pipeline](https://typescript.visualstudio.com/TypeScript/_build?definitionId=58)."

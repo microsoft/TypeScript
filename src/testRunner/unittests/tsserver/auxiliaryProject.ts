@@ -1,26 +1,26 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 const aTs: File = {
     path: "/a.ts",
-    content: `import { B } from "./b";`
+    content: `import { B } from "./b";`,
 };
 const bDts: File = {
     path: "/b.d.ts",
-    content: `export declare class B {}`
+    content: `export declare class B {}`,
 };
 const bJs: File = {
     path: "/b.js",
-    content: `export class B {}`
+    content: `export class B {}`,
 };
 describe("unittests:: tsserver:: auxiliaryProject", () => {
     it("AuxiliaryProject does not remove scrips from InferredProject", () => {

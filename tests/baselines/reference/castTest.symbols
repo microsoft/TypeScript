@@ -1,4 +1,6 @@
-=== tests/cases/compiler/castTest.ts ===
+//// [tests/cases/compiler/castTest.ts] ////
+
+=== castTest.ts ===
 var x : any = 0;
 >x : Symbol(x, Decl(castTest.ts, 0, 3))
 

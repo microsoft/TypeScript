@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override1.ts] ////
+
 //// [override1.ts]
 class B {
     foo (v: string) {}

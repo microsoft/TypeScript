@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportNonInitializedVariablesES6.ts] ////
+
 //// [exportNonInitializedVariablesES6.ts]
 var;
 let;

@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: refactors", () => {
     it("use formatting options", () => {
@@ -90,8 +90,111 @@ describe("unittests:: tsserver:: refactors", () => {
                 endOffset: aTs.content.length,
                 refactor: "Move to a new file",
                 action: "Move to a new file",
-            }
+            },
         });
         baselineTsserverLogs("refactors", "handles canonicalization of tsconfig path", session);
+    });
+
+    it("handles moving statement to an existing file", () => {
+        const aTs: File = { path: "/Foo/a.ts", content: "const x = 0;" };
+        const bTs: File = {
+            path: "/Foo/b.ts",
+            content: `import {} from "./bar";
+    const a = 1;`,
+        };
+        const tsconfig: File = { path: "/Foo/tsconfig.json", content: `{ "files": ["./a.ts", "./b.ts"] }` };
+        const host = createServerHost([aTs, bTs, tsconfig]);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([aTs], session);
+
+        session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
+            command: ts.server.protocol.CommandTypes.GetEditsForRefactor,
+            arguments: {
+                file: aTs.path,
+                startLine: 1,
+                startOffset: 1,
+                endLine: 2,
+                endOffset: aTs.content.length,
+                refactor: "Move to file",
+                action: "Move to file",
+                interactiveRefactorArguments: { targetFile: "/Foo/b.ts" },
+            },
+        });
+        baselineTsserverLogs("refactors", "handles moving statement to an existing file", session);
+    });
+
+    it("handles moving statements to a non-TS file", () => {
+        const aTs: File = {
+            path: "/Foo/a.ts",
+            content: "const x = 0;",
+        };
+        const bTxt: File = {
+            path: "/Foo/b.txt",
+            content: "",
+        };
+        const tsconfig: File = {
+            path: "/Foo/tsconfig.json",
+            content: `{ "files": ["./a.ts"] }`,
+        };
+        const host = createServerHost([aTs, bTxt, tsconfig]);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([aTs], session);
+
+        session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
+            command: ts.server.protocol.CommandTypes.GetEditsForRefactor,
+            arguments: {
+                file: aTs.path,
+                startLine: 1,
+                startOffset: 1,
+                endLine: 2,
+                endOffset: aTs.content.length,
+                refactor: "Move to file",
+                action: "Move to file",
+                interactiveRefactorArguments: { targetFile: "/Foo/b.txt" },
+            },
+        });
+        baselineTsserverLogs("refactors", "handles moving statements to a non-TS file", session);
+    });
+
+    it("handles moving statements to a TS file that is not included in the TS project", () => {
+        const fooATs: File = {
+            path: "/Foo/a.ts",
+            content: "",
+        };
+        const fooTsconfig: File = {
+            path: "/Foo/tsconfig.json",
+            content: `{ "files": ["./a.ts"] }`,
+        };
+
+        const barATs: File = {
+            path: "/Bar/a.ts",
+            content: [
+                "const a = 1;",
+                "const b = 2;",
+                "console.log(a, b);",
+            ].join("\n"),
+        };
+        const barTsconfig: File = {
+            path: "/Bar/tsconfig.json",
+            content: `{ "files": ["./a.ts"] }`,
+        };
+        const host = createServerHost([fooATs, fooTsconfig, barATs, barTsconfig]);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([barATs], session);
+
+        session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
+            command: ts.server.protocol.CommandTypes.GetEditsForRefactor,
+            arguments: {
+                file: barATs.path,
+                startLine: 1,
+                startOffset: 1,
+                endLine: 1,
+                endOffset: 13,
+                refactor: "Move to file",
+                action: "Move to file",
+                interactiveRefactorArguments: { targetFile: "/Foo/a.ts" },
+            },
+        });
+        baselineTsserverLogs("refactors", "handles moving statements to a TS file that is not included in the TS project", session);
     });
 });

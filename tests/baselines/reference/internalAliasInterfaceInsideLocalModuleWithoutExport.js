@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExport.ts] ////
+
 //// [internalAliasInterfaceInsideLocalModuleWithoutExport.ts]
 export module a {
     export interface I {
@@ -17,16 +19,16 @@ define(["require", "exports"], function (require, exports) {
     exports.c = void 0;
     var c;
     (function (c) {
-    })(c = exports.c || (exports.c = {}));
+    })(c || (exports.c = c = {}));
 });
 
 
 //// [internalAliasInterfaceInsideLocalModuleWithoutExport.d.ts]
-export declare module a {
+export declare namespace a {
     interface I {
     }
 }
-export declare module c {
+export declare namespace c {
     import b = a.I;
     var x: b;
 }

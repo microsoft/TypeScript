@@ -1,4 +1,6 @@
-=== tests/cases/compiler/intersectionTypeWithLeadingOperator.ts ===
+//// [tests/cases/compiler/intersectionTypeWithLeadingOperator.ts] ////
+
+=== intersectionTypeWithLeadingOperator.ts ===
 type A = & string;
 >A : Symbol(A, Decl(intersectionTypeWithLeadingOperator.ts, 0, 0))
 

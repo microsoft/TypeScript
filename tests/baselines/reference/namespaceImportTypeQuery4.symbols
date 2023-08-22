@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/externalModules/typeOnly/namespaceImportTypeQuery4.ts] ////
+
+=== /a.ts ===
+import type { A } from './z'; // unresolved
+>A : Symbol(A, Decl(a.ts, 0, 13), Decl(a.ts, 0, 29))
+
+type A = 0;
+>A : Symbol(A, Decl(a.ts, 0, 13), Decl(a.ts, 0, 29))
+
+export { A };
+>A : Symbol(A, Decl(a.ts, 2, 8))
+
+export class B {};
+>B : Symbol(B, Decl(a.ts, 2, 13))
+
+=== /b.ts ===
+import * as types from './a';
+>types : Symbol(types, Decl(b.ts, 0, 6))
+
+let t: typeof types = {
+>t : Symbol(t, Decl(b.ts, 1, 3))
+>types : Symbol(types, Decl(b.ts, 0, 6))
+
+  A: undefined as any, // error
+>A : Symbol(A, Decl(b.ts, 1, 23))
+>undefined : Symbol(undefined)
+
+  B: undefined as any,
+>B : Symbol(B, Decl(b.ts, 2, 22))
+>undefined : Symbol(undefined)
+}
+

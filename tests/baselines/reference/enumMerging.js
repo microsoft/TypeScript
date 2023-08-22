@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumMerging.ts] ////
+
 //// [enumMerging.ts]
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module

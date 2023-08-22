@@ -96,13 +96,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
-/b/user.ts: *new*
-  {}
 /a/node_modules/foo/package.json: *new*
   {}
 /b/node_modules/foo/package.json: *new*
+  {}
+/b/user.ts: *new*
+  {}
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -147,11 +147,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
-  {}
 /a/node_modules/foo/package.json:
   {}
 /b/node_modules/foo/package.json:
+  {}
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::

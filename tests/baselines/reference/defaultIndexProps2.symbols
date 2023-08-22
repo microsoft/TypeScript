@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultIndexProps2.ts ===
+//// [tests/cases/compiler/defaultIndexProps2.ts] ////
+
+=== defaultIndexProps2.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(defaultIndexProps2.ts, 0, 0))
 

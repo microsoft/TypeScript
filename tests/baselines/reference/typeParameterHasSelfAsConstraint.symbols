@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterHasSelfAsConstraint.ts ===
+//// [tests/cases/compiler/typeParameterHasSelfAsConstraint.ts] ////
+
+=== typeParameterHasSelfAsConstraint.ts ===
 function foo<T extends T>(x: T): number {
 >foo : Symbol(foo, Decl(typeParameterHasSelfAsConstraint.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterHasSelfAsConstraint.ts, 0, 13))

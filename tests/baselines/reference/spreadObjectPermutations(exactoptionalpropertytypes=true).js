@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadObjectPermutations.ts] ////
+
 //// [spreadObjectPermutations.ts]
 declare const a: { x: string | number };
 declare const b: { x?: string | number };

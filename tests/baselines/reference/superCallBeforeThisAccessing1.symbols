@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing1.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing1.ts] ////
+
+=== superCallBeforeThisAccessing1.ts ===
 declare var Factory: any
 >Factory : Symbol(Factory, Decl(superCallBeforeThisAccessing1.ts, 0, 11))
 

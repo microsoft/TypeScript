@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externalModuleQualification.ts ===
+//// [tests/cases/compiler/externalModuleQualification.ts] ////
+
+=== externalModuleQualification.ts ===
 export var ID = "test";
 >ID : string
 >"test" : "test"

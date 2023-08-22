@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndParenthesizedExpressions01.ts] ////
+
 //// [stringLiteralTypesAndParenthesizedExpressions01.ts]
 declare function myRandBool(): boolean;
 

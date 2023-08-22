@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts ===
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName2.ts] ////
+
+=== duplicateObjectLiteralProperty_computedName2.ts ===
 const n = 1;
 >n : Symbol(n, Decl(duplicateObjectLiteralProperty_computedName2.ts, 0, 5))
 

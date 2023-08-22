@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd-augmentation-2.ts] ////
+
+=== a.ts ===
 /// <reference path="node_modules/math2d/index.d.ts" />
 /// <reference path="math2d-augment.d.ts" />
 let v = new Math2d.Vector(3, 2);
@@ -34,7 +36,7 @@ var t = p.x;
 >p : Symbol(p, Decl(a.ts, 4, 3))
 >x : Symbol(Math2d.Point.x, Decl(index.d.ts, 2, 24))
 
-=== tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
+=== node_modules/math2d/index.d.ts ===
 export as namespace Math2d;
 >Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
 
@@ -74,7 +76,7 @@ export function getLength(p: Vector): number;
 >p : Symbol(p, Decl(index.d.ts, 15, 26))
 >Vector : Symbol(Vector, Decl(index.d.ts, 5, 1), Decl(math2d-augment.d.ts, 2, 25))
 
-=== tests/cases/conformance/externalModules/math2d-augment.d.ts ===
+=== math2d-augment.d.ts ===
 import * as Math2d from 'math2d';
 >Math2d : Symbol(Math2d, Decl(math2d-augment.d.ts, 0, 6))
 

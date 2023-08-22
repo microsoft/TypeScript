@@ -1,16 +1,16 @@
-tests/cases/compiler/b.ts(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/b.ts(10,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/b.ts(15,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/compiler/b.ts(20,5): error TS1117: An object literal cannot have multiple properties with the same name.
+b.ts(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
+b.ts(10,5): error TS1117: An object literal cannot have multiple properties with the same name.
+b.ts(15,5): error TS1117: An object literal cannot have multiple properties with the same name.
+b.ts(20,5): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
-==== tests/cases/compiler/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     export const n = 1;
     export const s = "s";
     export enum E1 { A = "ENUM_KEY" }
     export enum E2 { B }
     
-==== tests/cases/compiler/b.ts (4 errors) ====
+==== b.ts (4 errors) ====
     import * as keys from "./a";
     
     const t1 = {

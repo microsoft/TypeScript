@@ -1,21 +1,21 @@
-tests/cases/conformance/jsdoc/importer.js(3,5): error TS2339: Property 'other' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
-tests/cases/conformance/jsdoc/importer.js(4,5): error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
-tests/cases/conformance/jsdoc/importer.js(11,5): error TS2339: Property 'other' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
-tests/cases/conformance/jsdoc/importer.js(12,5): error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
-tests/cases/conformance/jsdoc/importer.js(13,5): error TS2540: Cannot assign to 'bad1' because it is a read-only property.
-tests/cases/conformance/jsdoc/importer.js(14,5): error TS2540: Cannot assign to 'bad2' because it is a read-only property.
-tests/cases/conformance/jsdoc/importer.js(15,5): error TS2540: Cannot assign to 'bad3' because it is a read-only property.
+importer.js(3,5): error TS2339: Property 'other' does not exist on type 'typeof import("mod1")'.
+importer.js(4,5): error TS2339: Property 'prop' does not exist on type 'typeof import("mod1")'.
+importer.js(11,5): error TS2339: Property 'other' does not exist on type 'typeof import("mod1")'.
+importer.js(12,5): error TS2339: Property 'prop' does not exist on type 'typeof import("mod1")'.
+importer.js(13,5): error TS2540: Cannot assign to 'bad1' because it is a read-only property.
+importer.js(14,5): error TS2540: Cannot assign to 'bad2' because it is a read-only property.
+importer.js(15,5): error TS2540: Cannot assign to 'bad3' because it is a read-only property.
 
 
-==== tests/cases/conformance/jsdoc/importer.js (7 errors) ====
+==== importer.js (7 errors) ====
     const mod = require("./mod1");
     mod.thing;
     mod.other;
         ~~~~~
-!!! error TS2339: Property 'other' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+!!! error TS2339: Property 'other' does not exist on type 'typeof import("mod1")'.
     mod.prop;
         ~~~~
-!!! error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+!!! error TS2339: Property 'prop' does not exist on type 'typeof import("mod1")'.
     mod.bad1;
     mod.bad2;
     mod.bad3;
@@ -24,10 +24,10 @@ tests/cases/conformance/jsdoc/importer.js(15,5): error TS2540: Cannot assign to 
     mod.thing = 0;
     mod.other = 0;
         ~~~~~
-!!! error TS2339: Property 'other' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+!!! error TS2339: Property 'other' does not exist on type 'typeof import("mod1")'.
     mod.prop = 0;
         ~~~~
-!!! error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+!!! error TS2339: Property 'prop' does not exist on type 'typeof import("mod1")'.
     mod.bad1 = 0;
         ~~~~
 !!! error TS2540: Cannot assign to 'bad1' because it is a read-only property.
@@ -38,7 +38,7 @@ tests/cases/conformance/jsdoc/importer.js(15,5): error TS2540: Cannot assign to 
         ~~~~
 !!! error TS2540: Cannot assign to 'bad3' because it is a read-only property.
     
-==== tests/cases/conformance/jsdoc/mod1.js (0 errors) ====
+==== mod1.js (0 errors) ====
     const obj = { value: 42, writable: true };
     Object.defineProperty(exports, "thing", obj);
     

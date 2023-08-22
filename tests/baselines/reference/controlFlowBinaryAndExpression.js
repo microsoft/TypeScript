@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowBinaryAndExpression.ts] ////
+
 //// [controlFlowBinaryAndExpression.ts]
 let x: string | number | boolean;
 let cond: boolean;

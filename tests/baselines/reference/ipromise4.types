@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ipromise4.ts ===
+//// [tests/cases/compiler/ipromise4.ts] ////
+
+=== ipromise4.ts ===
 declare module Windows.Foundation {
     export interface IPromise<T> {
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts] ////
+
 //// [genericObjectCreationWithoutTypeArgs.ts]
 class SS<T>{
 

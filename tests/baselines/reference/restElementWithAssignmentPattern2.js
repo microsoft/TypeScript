@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern2.ts] ////
+
 //// [restElementWithAssignmentPattern2.ts]
 var a: string, b: number;
 [...{ 0: a = "", b }] = ["", 1];

@@ -6,16 +6,18 @@ type ClassMemberDecoratorContext =
     | ClassGetterDecoratorContext
     | ClassSetterDecoratorContext
     | ClassFieldDecoratorContext
-    | ClassAccessorDecoratorContext
-    ;
+    | ClassAccessorDecoratorContext;
 
 /**
  * The decorator context types provided to any decorator.
  */
 type DecoratorContext =
     | ClassDecoratorContext
-    | ClassMemberDecoratorContext
-    ;
+    | ClassMemberDecoratorContext;
+
+type DecoratorMetadataObject = Record<PropertyKey, unknown> & object;
+
+type DecoratorMetadata = typeof globalThis extends { Symbol: { readonly metadata: symbol; }; } ? DecoratorMetadataObject : DecoratorMetadataObject | undefined;
 
 /**
  * Context provided to a class decorator.
@@ -48,6 +50,8 @@ interface ClassDecoratorContext<
      * ```
      */
     addInitializer(initializer: (this: Class) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**
@@ -112,6 +116,8 @@ interface ClassMethodDecoratorContext<
      * ```
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**
@@ -157,6 +163,8 @@ interface ClassGetterDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**
@@ -202,6 +210,8 @@ interface ClassSetterDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**
@@ -256,6 +266,8 @@ interface ClassAccessorDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
 
 /**
@@ -351,4 +363,6 @@ interface ClassFieldDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+
+    readonly metadata: DecoratorMetadata;
 }
