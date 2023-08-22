@@ -20305,7 +20305,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
                 const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
                 const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
-                    (getOnlyTypeFacts(sourceType, TypeFacts.IsUndefinedOrNull)) === (getOnlyTypeFacts(targetType, TypeFacts.IsUndefinedOrNull));
+                    (getTypeFacts(sourceType, TypeFacts.IsUndefinedOrNull)) === (getTypeFacts(targetType, TypeFacts.IsUndefinedOrNull));
                 let related = callbacks ?
                     compareSignaturesRelated(targetSig, sourceSig, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
                     !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
@@ -26110,16 +26110,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             resolved.members.get("bind" as __String) && isTypeSubtypeOf(type, globalFunctionType));
     }
 
-    // function getTypeFacts(type: Type): TypeFacts {
-    //     return getTypeFactsWorker(type, TypeFacts.All);
-    // }
-
-    function getOnlyTypeFacts(type: Type, mask: TypeFacts): TypeFacts {
+    function getTypeFacts(type: Type, mask: TypeFacts): TypeFacts {
         return getTypeFactsWorker(type, mask) & mask;
     }
 
     function hasTypeFacts(type: Type, mask: TypeFacts): boolean {
-        return getOnlyTypeFacts(type, mask) !== 0;
+        return getTypeFacts(type, mask) !== 0;
     }
 
     function getTypeFactsWorker(type: Type, callerOnlyNeeds: TypeFacts): TypeFacts {
@@ -27831,7 +27827,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (hasDefaultClause) {
                 // In the default clause we filter constituents down to those that are not-equal to all handled cases.
                 const notEqualFacts = getNotEqualFactsFromTypeofSwitch(clauseStart, clauseEnd, witnesses);
-                return filterType(type, t => getOnlyTypeFacts(t, notEqualFacts) === notEqualFacts);
+                return filterType(type, t => getTypeFacts(t, notEqualFacts) === notEqualFacts);
             }
             // In the non-default cause we create a union of the type narrowed by each of the listed cases.
             const clauseWitnesses = witnesses.slice(clauseStart, clauseEnd);
@@ -31836,7 +31832,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.Object_is_of_type_unknown);
             return errorType;
         }
-        const facts = getOnlyTypeFacts(type, TypeFacts.IsUndefinedOrNull);
+        const facts = getTypeFacts(type, TypeFacts.IsUndefinedOrNull);
         if (facts & TypeFacts.IsUndefinedOrNull) {
             reportError(node, facts);
             const t = getNonNullableType(type);
@@ -36298,7 +36294,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return (TypeFacts.AllTypeofNE & notEqualFacts) === TypeFacts.AllTypeofNE;
             }
             // A missing not-equal flag indicates that the type wasn't handled by some case.
-            return !someType(operandConstraint, t => getOnlyTypeFacts(t, notEqualFacts) === notEqualFacts);
+            return !someType(operandConstraint, t => getTypeFacts(t, notEqualFacts) === notEqualFacts);
         }
         const type = checkExpressionCached(node.expression);
         if (!isLiteralType(type)) {
@@ -36860,7 +36856,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getUnaryResultType(operandType);
             case SyntaxKind.ExclamationToken:
                 checkTruthinessOfType(operandType, node.operand);
-                const facts = getOnlyTypeFacts(operandType, TypeFacts.Truthy | TypeFacts.Falsy);
+                const facts = getTypeFacts(operandType, TypeFacts.Truthy | TypeFacts.Falsy);
                 return facts === TypeFacts.Truthy ? falseType :
                     facts === TypeFacts.Falsy ? trueType :
                     booleanType;
