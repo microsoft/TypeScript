@@ -5,7 +5,7 @@
 //// function foo() {
 ////     return { x: 1, y: 1};
 //// }
-//// export const { x, y = 0} = foo();
+//// export const { x, y = 0} = foo(), z= 42;
 
 verify.codeFixAvailable([
     { description: ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.message },
@@ -22,5 +22,5 @@ verify.codeFix({
 const dest = foo();
 export const x: number = dest.x;
 const temp = dest.y;
-export const y: number = temp === undefined ? 0 : dest.y;`
-});
+export const y: number = temp === undefined ? 0 : dest.y;
+export const z = 42;`});

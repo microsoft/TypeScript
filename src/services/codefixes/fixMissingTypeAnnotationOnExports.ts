@@ -53,7 +53,7 @@ const canHaveExplicitTypeAnnotation = new Set<SyntaxKind>([
     SyntaxKind.VariableDeclaration,
     SyntaxKind.Parameter,
     SyntaxKind.ExportAssignment,
-    SyntaxKind.ExpressionWithTypeArguments,
+    SyntaxKind.ClassDeclaration,
     SyntaxKind.ObjectBindingPattern,
     SyntaxKind.ArrayBindingPattern,
 ]);
@@ -85,7 +85,7 @@ registerCodeFix({
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, typeChecker: TypeChecker, nodeWithDiag: Node): void {
     const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag);
-    fixupForIsolatedDeclarations(nodeWithNoType, sourceFile, typeChecker, changes);
+    fixupForIsolatedDeclarations(nodeWithNoType, nodeWithDiag, sourceFile, typeChecker, changes);
 }
 
 // Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation
@@ -101,7 +101,7 @@ function findNearestParentWithTypeAnnotation(node: Node): Node {
  * Fixes up to support IsolatedDeclaration by either adding types when possible, or splitting statements and add type annotations
  * for the places that cannot have type annotations (e.g. HeritageClause, default exports, ...)
  */
-function fixupForIsolatedDeclarations(node: Node, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
+function fixupForIsolatedDeclarations(node: Node, nodeWithDiag: Node, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
     switch (node.kind) {
     case SyntaxKind.Parameter:
         const parameter = node as ParameterDeclaration;
@@ -217,31 +217,8 @@ function fixupForIsolatedDeclarations(node: Node, sourceFile: SourceFile, typeCh
         }
         break;
     // Handling expression like heritage clauses e.g. class A extends mixin(B) ..
-    case SyntaxKind.ExpressionWithTypeArguments:
-        const expression = node as ExpressionWithTypeArguments;
-        const classDecl = expression.parent.parent as unknown as ClassDeclaration;
-        const heritageTypeNode = typeToTypeNode(
-            typeChecker.getTypeAtLocation(expression.expression),
-            expression.expression,
-            typeChecker);
-        const heritageVariableName = factory.createUniqueName(
-            classDecl.name? classDecl.name.text + "Base" : "Anonymous", GeneratedIdentifierFlags.Optimistic);
-        // e.g. const Point3DBase: typeof Point2D = mixin(Point2D);
-        const heritageVariable = factory.createVariableStatement(
-            /*modifiers*/ undefined,
-            factory.createVariableDeclarationList(
-                [factory.createVariableDeclaration(
-                    heritageVariableName,
-                    /*exclamationToken*/ undefined,
-                    heritageTypeNode,
-                    expression,
-                    )],
-                NodeFlags.Const,
-            )
-        );
-        changes.insertNodeAt(sourceFile, classDecl.getFullStart(), heritageVariable, { prefix: "\n" });
-        return changes.replaceNodeWithNodes(sourceFile, expression,
-            [factory.createExpressionWithTypeArguments(heritageVariableName, [])]);
+    case SyntaxKind.ClassDeclaration:
+        return handleClassDeclaration(node as ClassDeclaration, nodeWithDiag.parent.parent as ExpressionWithTypeArguments, sourceFile, changes, typeChecker);
     case SyntaxKind.ObjectBindingPattern:
     case SyntaxKind.ArrayBindingPattern:
         return transformDestructuringPatterns(node as BindingPattern, sourceFile, typeChecker, changes);
@@ -251,6 +228,48 @@ function fixupForIsolatedDeclarations(node: Node, sourceFile: SourceFile, typeCh
     throw new Error(`Cannot find a fix for the given node ${node.kind}`);
 }
 
+function handleClassDeclaration(classDecl: ClassDeclaration, heritageExpression: ExpressionWithTypeArguments, sourceFile: SourceFile, changes: textChanges.ChangeTracker, typeChecker: TypeChecker) {
+    if (heritageExpression.kind !== SyntaxKind.ExpressionWithTypeArguments){
+        throw new Error(`Hey + ${heritageExpression.kind}`);
+    }
+    const heritageTypeNode = typeToTypeNode(
+        typeChecker.getTypeAtLocation(heritageExpression.expression),
+        heritageExpression.expression,
+        typeChecker);
+    const heritageVariableName = factory.createUniqueName(
+        classDecl.name? classDecl.name.text + "Base" : "Anonymous", GeneratedIdentifierFlags.Optimistic);
+    // e.g. const Point3DBase: typeof Point2D = mixin(Point2D);
+    const heritageVariable = factory.createVariableStatement(
+        /*modifiers*/ undefined,
+        factory.createVariableDeclarationList(
+            [factory.createVariableDeclaration(
+                heritageVariableName,
+                /*exclamationToken*/ undefined,
+                heritageTypeNode,
+                heritageExpression,
+                )],
+            NodeFlags.Const,
+        )
+    );
+    changes.replaceNodeWithNodes(sourceFile, classDecl,
+        [heritageVariable,
+            factory.updateClassDeclaration(
+                classDecl,
+                classDecl.modifiers,
+                classDecl.name,
+                classDecl.typeParameters,
+                classDecl.heritageClauses?.map(
+                    (node) => {
+                        if (node === heritageExpression.parent) {
+                            return factory.updateHeritageClause(node,
+                                [factory.createExpressionWithTypeArguments(heritageVariableName, [])]
+                            );
+                        }
+                        return node;
+                    }),
+                classDecl.members)
+            ]);
+}
 
 interface ExpressionReverseChain {
     element?: BindingElement;
@@ -353,6 +372,17 @@ function transformDestructuringPatterns(bindingPattern: BindingPattern,
                     NodeFlags.Const)));
         }
         ++i;
+    }
+
+    if (enclosingVarStmt.declarationList.declarations.length > 1) {
+        newNodes.push(factory.updateVariableStatement(
+            enclosingVarStmt,
+            enclosingVarStmt.modifiers,
+            factory.updateVariableDeclarationList(
+                enclosingVarStmt.declarationList,
+                enclosingVarStmt.declarationList.declarations.filter((node) => node !== bindingPattern.parent),
+                )
+        ));
     }
     changes.replaceNodeWithNodes(sourceFile, enclosingVarStmt, newNodes);
 }
