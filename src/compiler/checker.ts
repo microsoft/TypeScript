@@ -8525,11 +8525,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ...oldcontext,
                 usedSymbolNames: new Set(oldcontext.usedSymbolNames),
                 remappedSymbolNames: new Map(),
+                remappedSymbolRefernces: new Map(oldcontext.remappedSymbolRefernces?.entries()),
                 tracker: undefined!,
             };
             const tracker: SymbolTracker = {
                 ...oldcontext.tracker.inner,
                 trackSymbol: (sym, decl, meaning) => {
+                    if (context.remappedSymbolNames?.has(getSymbolId(sym))) return false; // If the context has a remapped name for the symbol, it *should* mean its been made visible
                     const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*shouldComputeAliasesToMakeVisible*/ false);
                     if (accessibleResult.accessibility === SymbolAccessibility.Accessible) {
                         // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
@@ -8782,9 +8784,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If it's a property: emit `export default _default` with a `_default` prop
             // If it's a class/interface/function: emit a class/interface/function with a `default` modifier
             // These forms can merge, eg (`export default 12; export default interface A {}`)
-            function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean): void {
-                const symbolName = unescapeLeadingUnderscores(symbol.escapedName);
-                const isDefault = symbol.escapedName === InternalSymbolName.Default;
+            function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean, escapedSymbolName = symbol.escapedName): void {
+                const symbolName = unescapeLeadingUnderscores(escapedSymbolName);
+                const isDefault = escapedSymbolName === InternalSymbolName.Default;
                 if (isPrivate && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier) && isStringANonContextualKeyword(symbolName) && !isDefault) {
                     // Oh no. We cannot use this symbol's name as it's name... It's likely some jsdoc had an invalid name like `export` or `default` :(
                     context.encounteredError = true;
@@ -8803,7 +8805,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const modifierFlags = (!isPrivate ? ModifierFlags.Export : 0) | (isDefault && !needsPostExportDefault ? ModifierFlags.Default : 0);
                 const isConstMergedWithNS = symbol.flags & SymbolFlags.Module &&
                     symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property) &&
-                    symbol.escapedName !== InternalSymbolName.ExportEquals;
+                    escapedSymbolName !== InternalSymbolName.ExportEquals;
                 const isConstMergedWithNSPrintableAsSignatureMerge = isConstMergedWithNS && isTypeRepresentableAsFunctionNamespaceMerge(getTypeOfSymbol(symbol), symbol);
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) || isConstMergedWithNSPrintableAsSignatureMerge) {
                     serializeAsFunctionNamespaceMerge(getTypeOfSymbol(symbol), symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
@@ -8815,7 +8817,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // symbol of name `export=` which needs to be handled like an alias. It's not great, but it is what it is.
                 if (
                     symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property | SymbolFlags.Accessor)
-                    && symbol.escapedName !== InternalSymbolName.ExportEquals
+                    && escapedSymbolName !== InternalSymbolName.ExportEquals
                     && !(symbol.flags & SymbolFlags.Prototype)
                     && !(symbol.flags & SymbolFlags.Class)
                     && !(symbol.flags & SymbolFlags.Method)
@@ -8831,7 +8833,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else {
                         const type = getTypeOfSymbol(symbol);
                         const localName = getInternalSymbolName(symbol, symbolName);
-                        if (!(symbol.flags & SymbolFlags.Function) && isTypeRepresentableAsFunctionNamespaceMerge(type, symbol)) {
+                        if (type.symbol && type.symbol !== symbol && type.symbol.flags & SymbolFlags.Function && some(type.symbol.declarations, isFunctionExpressionOrArrowFunction) && (type.symbol.members?.size || type.symbol.exports?.size)) {
+                            // assignment of a anonymous expando/class-like function, the func/ns/merge branch below won't trigger,
+                            // and the assignment form has to reference the unreachable anonymous type so will error.
+                            // Instead, serialzie the type's symbol, but with the current symbol's name, rather than the anonymous one.
+                            if (!context.remappedSymbolRefernces) {
+                                context.remappedSymbolRefernces = new Map();
+                            }
+                            context.remappedSymbolRefernces.set(getSymbolId(type.symbol), symbol); // save name remapping as local name for target symbol
+                            serializeSymbolWorker(type.symbol, isPrivate, propertyAsAlias, escapedSymbolName);
+                            context.remappedSymbolRefernces.delete(getSymbolId(type.symbol));
+                        }
+                        else if (!(symbol.flags & SymbolFlags.Function) && isTypeRepresentableAsFunctionNamespaceMerge(type, symbol)) {
                             // If the type looks like a function declaration + ns could represent it, and it's type is sourced locally, rewrite it into a function declaration + ns
                             serializeAsFunctionNamespaceMerge(type, symbol, localName, modifierFlags);
                         }
@@ -10134,6 +10147,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * It will also use a representation of a number as written instead of a decimal form, e.g. `0o11` instead of `9`.
      */
     function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): string {
+        if (context?.remappedSymbolRefernces?.has(getSymbolId(symbol))) {
+            symbol = context.remappedSymbolRefernces.get(getSymbolId(symbol))!;
+        }
         if (
             context && symbol.escapedName === InternalSymbolName.Default && !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope) &&
             // If it's not the first part of an entity name, it must print as `default`
@@ -49929,6 +49945,7 @@ interface NodeBuilderContext {
     typeParameterNamesByTextNextNameCount?: Map<string, number>;
     usedSymbolNames?: Set<string>;
     remappedSymbolNames?: Map<SymbolId, string>;
+    remappedSymbolRefernces?: Map<SymbolId, Symbol>;
     reverseMappedStack?: ReverseMappedSymbol[];
 }
 
