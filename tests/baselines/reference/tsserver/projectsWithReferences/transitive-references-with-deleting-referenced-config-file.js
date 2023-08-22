@@ -116,6 +116,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -163,31 +165,33 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/b/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/a/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject: *new*
   {}
+/user/username/projects/myproject/a/index.ts: *new*
+  {}
+/user/username/projects/myproject/a/tsconfig.json: *new*
+  {}
 /user/username/projects/myproject/b/index.ts: *new*
   {}
-/user/username/projects/myproject/a/index.ts: *new*
+/user/username/projects/myproject/b/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/c/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/refs/a.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
 
 FsWatchesRecursive::
+/user/username/projects/myproject/a: *new*
+  {}
 /user/username/projects/myproject/b: *new*
   {}
 /user/username/projects/myproject/refs: *new*
-  {}
-/user/username/projects/myproject/a: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
@@ -247,21 +251,23 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/b/index.ts:
-  {}
 /user/username/projects/myproject/a/index.ts:
   {}
-/user/username/projects/myproject/refs/a.d.ts:
+/user/username/projects/myproject/b/index.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -375,29 +381,31 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/c/tsconfig.json:
-  {}
-/user/username/projects/myproject/b/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject:
   {}
-/user/username/projects/myproject/b/index.ts:
-  {}
 /user/username/projects/myproject/a/index.ts:
-  {}
-/user/username/projects/myproject/refs/a.d.ts:
-  {}
-/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/a/tsconfig.json: *new*
   {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
 
 FsWatchesRecursive::
+/user/username/projects/myproject/a: *new*
+  {}
 /user/username/projects/myproject/b:
   {}
 /user/username/projects/myproject/refs:
-  {}
-/user/username/projects/myproject/a: *new*
   {}

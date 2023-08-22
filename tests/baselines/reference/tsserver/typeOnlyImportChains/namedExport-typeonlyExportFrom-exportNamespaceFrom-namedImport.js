@@ -79,13 +79,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/c.ts: *new*
-  {}
-/b.ts: *new*
-  {}
 /a.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
+  {}
+/b.ts: *new*
+  {}
+/c.ts: *new*
   {}
 
 Before request

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/globalThisAmbientModules.ts] ////
+
 //// [globalThisAmbientModules.ts]
 declare module "ambientModule" {
     export type typ = 1

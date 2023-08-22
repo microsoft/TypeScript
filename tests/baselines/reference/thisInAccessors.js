@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInAccessors.ts] ////
+
 //// [thisInAccessors.ts]
 // this capture only in getter
 class GetterOnly {

@@ -1,10 +1,10 @@
-tests/cases/conformance/externalModules/typeOnly/a.js(1,10): error TS8006: 'import...type' declarations can only be used in TypeScript files.
+a.js(1,10): error TS8006: 'import...type' declarations can only be used in TypeScript files.
 
 
-==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
+==== ./a.ts (0 errors) ====
     export interface A {}
     
-==== tests/cases/conformance/externalModules/typeOnly/a.js (1 errors) ====
+==== ./a.js (1 errors) ====
     import { type A } from "./a";
              ~~~~~~
 !!! error TS8006: 'import...type' declarations can only be used in TypeScript files.

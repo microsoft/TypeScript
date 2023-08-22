@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/addMoreCallSignaturesToBaseSignature2.ts] ////
+
 //// [addMoreCallSignaturesToBaseSignature2.ts]
 interface Foo {
     (bar:number): string;

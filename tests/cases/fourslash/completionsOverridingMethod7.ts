@@ -9,7 +9,7 @@
 ////}
 ////
 ////abstract class Derived extends Base {
-////    [|abstract|] /*a*/
+////    abstract /*a*/
 ////}
 
 verify.completions({
@@ -23,11 +23,11 @@ verify.completions({
     includes: [
         {
             name: "M",
-            sortText: completion.SortText.ClassMemberSnippets,
-            replacementSpan: test.ranges()[0],
+            sortText: completion.SortText.LocationPriority,
             insertText:
 `abstract M<T>(t: T): void;
 abstract M<T>(t: T, x: number): void;`,
+            filterText: "M",
         },
     ],
 });

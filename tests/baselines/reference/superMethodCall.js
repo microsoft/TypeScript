@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/superMethodCall.ts] ////
+
 //// [superMethodCall.ts]
 class Base {
     method?() { }

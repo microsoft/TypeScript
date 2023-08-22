@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileGenericClassWithGenericExtendedClass.ts] ////
+
 //// [declFileGenericClassWithGenericExtendedClass.ts]
 interface IFoo {
     baz: Baz;

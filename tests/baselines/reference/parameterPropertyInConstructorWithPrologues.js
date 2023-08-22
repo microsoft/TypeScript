@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterPropertyInConstructorWithPrologues.ts] ////
+
 //// [parameterPropertyInConstructorWithPrologues.ts]
 // https://github.com/microsoft/TypeScript/issues/48671
 

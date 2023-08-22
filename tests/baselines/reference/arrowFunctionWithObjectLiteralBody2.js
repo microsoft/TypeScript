@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionWithObjectLiteralBody2.ts] ////
+
 //// [arrowFunctionWithObjectLiteralBody2.ts]
 var v = a => <any><any>{}
 

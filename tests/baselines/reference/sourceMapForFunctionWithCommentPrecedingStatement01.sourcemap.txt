@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapForFunctionWithCommentPrecedingStatement01.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapForFunctionWithCommentPrecedingStatement01.js
+emittedFile:sourceMapForFunctionWithCommentPrecedingStatement01.js
 sourceFile:sourceMapForFunctionWithCommentPrecedingStatement01.ts
 -------------------------------------------------------------------
 >>>function P() {

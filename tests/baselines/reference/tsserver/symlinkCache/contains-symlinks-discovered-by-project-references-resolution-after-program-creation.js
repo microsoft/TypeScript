@@ -87,11 +87,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/app/dep
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/app/dep 1 undefined Project: /packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/app/src 1 undefined Project: /packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/app/src 1 undefined Project: /packages/app/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/app/node_modules 1 undefined Project: /packages/app/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/app/node_modules 1 undefined Project: /packages/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /packages/app/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/app/node_modules/@types 1 undefined Project: /packages/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/app/node_modules/@types 1 undefined Project: /packages/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -116,11 +112,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/packages/app/dep: *new*
-  {"pollingInterval":500}
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
-/packages/app/node_modules/@types: *new*
+/packages/app/dep: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -132,9 +126,7 @@ FsWatches::
 FsWatchesRecursive::
 /packages/app: *new*
   {}
-/packages/dep: *new*
-  {}
 /packages/app/src: *new*
   {}
-/packages/app/node_modules: *new*
+/packages/dep: *new*
   {}

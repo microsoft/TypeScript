@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentOnArrayElement14.ts ===
+//// [tests/cases/compiler/commentOnArrayElement14.ts] ////
+
+=== commentOnArrayElement14.ts ===
 const array = [1 /* comment */];
 >array : Symbol(array, Decl(commentOnArrayElement14.ts, 0, 5))
 

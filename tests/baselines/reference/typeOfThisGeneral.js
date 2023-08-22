@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts] ////
+
 //// [typeOfThisGeneral.ts]
 class MyTestClass {
     private canary: number;

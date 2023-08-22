@@ -1,4 +1,6 @@
-=== tests/cases/compiler/truthinessCallExpressionCoercion1.ts ===
+//// [tests/cases/compiler/truthinessCallExpressionCoercion1.ts] ////
+
+=== truthinessCallExpressionCoercion1.ts ===
 function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
 >onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean) => void
 >required : () => boolean

@@ -17,10 +17,7 @@
   //     export interface Bar { }
   //     export module Bar { export interface Baz { } }
   //     export function Bar() { }
-  // }
-  // 
-  // // module
-  // import a1 = Foo;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [
@@ -67,10 +64,7 @@
   //     export interface Bar { }
   //     export module Bar { export interface Baz { } }
   //     export function Bar() { }
-  // }
-  // 
-  // // module
-  // import a1 = Foo;
+  // --- (line: 6) skipped ---
 
   // === Details ===
   [

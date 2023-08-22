@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/modules/defaultExportsCannotMerge04.ts] ////
+
 //// [defaultExportsCannotMerge04.ts]
 export default function Foo() {
 }
@@ -19,4 +21,4 @@ function Foo() {
 }
 exports.default = Foo;
 (function (Foo) {
-})(Foo || (Foo = {}));
+})(exports.Foo || (exports.Foo = {}));

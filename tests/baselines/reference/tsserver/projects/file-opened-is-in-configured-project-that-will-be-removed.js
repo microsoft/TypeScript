@@ -63,6 +63,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/playground/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/playground/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -96,19 +98,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/myproject/playground/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/playground/tsconfig-json/src/src.ts: *new*
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/playground/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -139,21 +143,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/myproject/playground/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/playground/tsconfig.json:
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tests.ts: *new*
   {}
 /user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/playground/tests.ts: *new*
+/user/username/projects/myproject/playground/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -193,6 +199,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/playground/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -232,6 +240,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/playground/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/playground/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/playground/tests.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -247,27 +257,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/playground/tsconfig-json/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json: *new*
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/playground/tsconfig.json:
+/user/username/projects/myproject/playground/tests.ts:
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts:
   {}
-/user/username/projects/myproject/playground/tests.ts:
+/user/username/projects/myproject/playground/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -313,6 +325,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/playground/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -372,31 +386,33 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/playground/node_modules/@types:
-  {"pollingInterval":500}
+/user/username/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/playground/tsconfig-json/tests/tsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/tests/jsconfig.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/playground/tsconfig-json/jsconfig.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/playground/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/tsconfig.json: *new*
+/user/username/projects/myproject/playground/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/jsconfig.json: *new*
+/user/username/projects/myproject/playground/tsconfig-json/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/tests/jsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/playground/tsconfig-json/tests/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/playground/tsconfig-json/tests/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/playground/tsconfig-json/src/src.ts:
   {}
 /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json:
   {}

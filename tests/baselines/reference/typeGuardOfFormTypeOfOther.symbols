@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts] ////
+
+=== typeGuardOfFormTypeOfOther.ts ===
 class C { private p: string };
 >C : Symbol(C, Decl(typeGuardOfFormTypeOfOther.ts, 0, 0))
 >p : Symbol(C.p, Decl(typeGuardOfFormTypeOfOther.ts, 0, 9))

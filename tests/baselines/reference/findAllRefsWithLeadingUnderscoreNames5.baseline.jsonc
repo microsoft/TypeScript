@@ -22,11 +22,7 @@
   //     public ____bar;
   // }
   // 
-  // var x: Foo;
-  // x._bar;
-  // x.__bar;
-  // x.___bar;
-  // x.____bar;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [
@@ -106,11 +102,7 @@
   //     public ____bar;
   // }
   // 
-  // var x: Foo;
-  // x._bar;
-  // x.__bar;
-  // x.___bar;
-  // x.____bar;
+  // --- (line: 8) skipped ---
 
   // === Details ===
   [

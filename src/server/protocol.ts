@@ -4,6 +4,7 @@ import type {
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
+    InteractiveRefactorArguments,
     MapLike,
     OutliningSpanKind,
     OutputFile,
@@ -23,6 +24,7 @@ import type {
 
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
+    LinkedEditingRange = "linkedEditingRange",
     Brace = "brace",
     /** @internal */
     BraceFull = "brace-full",
@@ -141,6 +143,7 @@ export const enum CommandTypes {
 
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
+    GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
@@ -169,7 +172,7 @@ export const enum CommandTypes {
     PrepareCallHierarchy = "prepareCallHierarchy",
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-    ProvideInlayHints = "provideInlayHints"
+    ProvideInlayHints = "provideInlayHints",
 }
 
 /**
@@ -292,8 +295,8 @@ export interface FileRequestArgs {
     file: string;
 
     /*
-    * Optional name of project that contains file
-    */
+     * Optional name of project that contains file
+     */
     projectFileName?: string;
 }
 
@@ -585,6 +588,14 @@ export interface GetApplicableRefactorsRequest extends Request {
 export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
     triggerReason?: RefactorTriggerReason;
     kind?: string;
+    /**
+     * Include refactor actions that require additional arguments to be passed when
+     * calling 'GetEditsForRefactor'. When true, clients should inspect the
+     * `isInteractive` property of each returned `RefactorActionInfo`
+     * and ensure they are able to collect the appropriate arguments for any
+     * interactive refactor before offering it.
+     */
+    includeInteractiveActions?: boolean;
 };
 
 export type RefactorTriggerReason = "implicit" | "invoked";
@@ -595,6 +606,27 @@ export type RefactorTriggerReason = "implicit" | "invoked";
  */
 export interface GetApplicableRefactorsResponse extends Response {
     body?: ApplicableRefactorInfo[];
+}
+
+/**
+ * Request refactorings at a given position or selection area to move to an existing file.
+ */
+export interface GetMoveToRefactoringFileSuggestionsRequest extends Request {
+    command: CommandTypes.GetMoveToRefactoringFileSuggestions;
+    arguments: GetMoveToRefactoringFileSuggestionsRequestArgs;
+}
+export type GetMoveToRefactoringFileSuggestionsRequestArgs = FileLocationOrRangeRequestArgs & {
+    kind?: string;
+};
+/**
+ * Response is a list of available files.
+ * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+ */
+export interface GetMoveToRefactoringFileSuggestions extends Response {
+    body: {
+        newFileName: string;
+        files: string[];
+    };
 }
 
 /**
@@ -649,6 +681,12 @@ export interface RefactorActionInfo {
      * The hierarchical dotted name of the refactor action.
      */
     kind?: string;
+
+    /**
+     * Indicates that the action requires additional arguments to be passed
+     * when calling 'GetEditsForRefactor'.
+     */
+    isInteractive?: boolean;
 }
 
 export interface GetEditsForRefactorRequest extends Request {
@@ -665,8 +703,9 @@ export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
     refactor: string;
     /* The 'name' property from the refactoring action */
     action: string;
+    /* Arguments for interactive action */
+    interactiveRefactorArguments?: InteractiveRefactorArguments;
 };
-
 
 export interface GetEditsForRefactorResponse extends Response {
     body?: RefactorEditInfo;
@@ -681,6 +720,7 @@ export interface RefactorEditInfo {
      */
     renameLocation?: Location;
     renameFilename?: string;
+    notApplicableReason?: string;
 }
 
 /**
@@ -751,7 +791,7 @@ export interface ApplyCodeActionCommandRequest extends Request {
 }
 
 // All we need is the `success` and `message` fields of Response.
-export interface ApplyCodeActionCommandResponse extends Response { }
+export interface ApplyCodeActionCommandResponse extends Response {}
 
 export interface FileRangeRequestArgs extends FileRequestArgs {
     /**
@@ -894,12 +934,12 @@ export interface EncodedSemanticClassificationsRequestArgs extends FileRequestAr
      * Optional parameter for the semantic highlighting response, if absent it
      * defaults to "original".
      */
-    format?: "original" | "2020"
+    format?: "original" | "2020";
 }
 
 /** The response for a EncodedSemanticClassificationsRequest */
 export interface EncodedSemanticClassificationsResponse extends Response {
-    body?: EncodedSemanticClassificationsResponseBody
+    body?: EncodedSemanticClassificationsResponseBody;
 }
 
 /**
@@ -1095,12 +1135,24 @@ export interface JsxClosingTagRequest extends FileLocationRequest {
     readonly arguments: JsxClosingTagRequestArgs;
 }
 
-export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs { }
+export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
 
 export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
 }
 
+export interface LinkedEditingRangeRequest extends FileLocationRequest {
+    readonly command: CommandTypes.LinkedEditingRange;
+}
+
+export interface LinkedEditingRangesBody {
+    ranges: TextSpan[];
+    wordPattern?: string;
+}
+
+export interface LinkedEditingRangeResponse extends Response {
+    readonly body: LinkedEditingRangesBody;
+}
 
 /**
  * Get document highlights request; value of command field is
@@ -1525,12 +1577,10 @@ export interface ChangedOpenFile {
     changes: TextChange[];
 }
 
-
 /**
  * Information found in a configure request.
  */
 export interface ConfigureRequestArguments {
-
     /**
      * Information about the host, for example 'Emacs 24.4' or
      * 'Sublime Text version 3075'
@@ -2284,6 +2334,11 @@ export interface CompletionEntry {
      */
     insertText?: string;
     /**
+     * A string that should be used when filtering a set of
+     * completion items.
+     */
+    filterText?: string;
+    /**
      * `insertText` should be interpreted as a snippet if true.
      */
     isSnippet?: true;
@@ -2433,7 +2488,6 @@ export interface CompletionDetailsResponse extends Response {
  * Signature help information for a single parameter
  */
 export interface SignatureHelpParameter {
-
     /**
      * The parameter's name
      */
@@ -2459,7 +2513,6 @@ export interface SignatureHelpParameter {
  * Represents a single signature to show in signature help.
  */
 export interface SignatureHelpItem {
-
     /**
      * Whether the signature accepts a variable number of arguments.
      */
@@ -2500,7 +2553,6 @@ export interface SignatureHelpItem {
  * Signature help items found in the response of a signature help request.
  */
 export interface SignatureHelpItems {
-
     /**
      * The signature help items.
      */
@@ -2617,11 +2669,18 @@ export interface InlayHintsRequest extends Request {
 }
 
 export interface InlayHintItem {
+    /** This property will be the empty string when displayParts is set. */
     text: string;
     position: Location;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+    displayParts?: InlayHintItemDisplayPart[];
+}
+
+export interface InlayHintItemDisplayPart {
+    text: string;
+    span?: FileSpan;
 }
 
 export interface InlayHintsResponse extends Response {
@@ -2961,7 +3020,7 @@ export interface LargeFileReferencedEventBody {
 
 /** @internal */
 export type AnyEvent =
-    RequestCompletedEvent
+    | RequestCompletedEvent
     | DiagnosticEvent
     | ConfigFileDiagnosticEvent
     | ProjectLanguageServiceStateEvent
@@ -3323,7 +3382,7 @@ export interface NavTreeResponse extends Response {
 export interface CallHierarchyItem {
     name: string;
     kind: ScriptElementKind;
-    kindModifiers?: string
+    kindModifiers?: string;
     file: string;
     span: TextSpan;
     selectionSpan: TextSpan;
@@ -3405,6 +3464,7 @@ export interface FormatCodeSettings extends EditorSettings {
     placeOpenBraceOnNewLineForControlBlocks?: boolean;
     insertSpaceBeforeTypeAnnotation?: boolean;
     semicolons?: SemicolonPreference;
+    indentSwitchCase?: boolean;
 }
 
 export interface UserPreferences {
@@ -3471,12 +3531,14 @@ export interface UserPreferences {
 
     readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
     readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-    readonly includeInlayFunctionParameterTypeHints?: boolean,
+    readonly includeInlayFunctionParameterTypeHints?: boolean;
     readonly includeInlayVariableTypeHints?: boolean;
     readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
     readonly includeInlayPropertyDeclarationTypeHints?: boolean;
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
     readonly includeInlayEnumMemberValueHints?: boolean;
+    readonly interactiveInlayHints?: boolean;
+
     readonly autoImportFileExcludePatterns?: string[];
 
     /**
@@ -3627,7 +3689,7 @@ export const enum ModuleKind {
     System = "System",
     ES6 = "ES6",
     ES2015 = "ES2015",
-    ESNext = "ESNext"
+    ESNext = "ESNext",
 }
 
 export const enum ModuleResolutionKind {
@@ -3652,7 +3714,7 @@ export const enum ScriptTarget {
     ES2020 = "ES2020",
     ES2021 = "ES2021",
     ES2022 = "ES2022",
-    ESNext = "ESNext"
+    ESNext = "ESNext",
 }
 
 export const enum ClassificationType {

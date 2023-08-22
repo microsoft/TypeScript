@@ -1,10 +1,10 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(1,11): error TS2310: Type 'Foo' recursively references itself as a base type.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(4,11): error TS2310: Type 'Foo2<T>' recursively references itself as a base type.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(7,11): error TS2310: Type 'Foo3<T>' recursively references itself as a base type.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts(10,15): error TS1176: Interface declaration cannot have 'implements' clause.
+interfaceThatInheritsFromItself.ts(1,11): error TS2310: Type 'Foo' recursively references itself as a base type.
+interfaceThatInheritsFromItself.ts(4,11): error TS2310: Type 'Foo2<T>' recursively references itself as a base type.
+interfaceThatInheritsFromItself.ts(7,11): error TS2310: Type 'Foo3<T>' recursively references itself as a base type.
+interfaceThatInheritsFromItself.ts(10,15): error TS1176: Interface declaration cannot have 'implements' clause.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts (4 errors) ====
+==== interfaceThatInheritsFromItself.ts (4 errors) ====
     interface Foo extends Foo { // error
               ~~~
 !!! error TS2310: Type 'Foo' recursively references itself as a base type.

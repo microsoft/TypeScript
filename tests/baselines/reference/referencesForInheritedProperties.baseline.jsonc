@@ -38,11 +38,7 @@
   // }
   // 
   // class class2 extends class1 {
-  // 
-  // }
-  // 
-  // var v: class2;
-  // v.doStuff();
+  // --- (line: 16) skipped ---
 
   // === Details ===
   [
@@ -261,11 +257,7 @@
   // }
   // 
   // class class2 extends class1 {
-  // 
-  // }
-  // 
-  // var v: class2;
-  // v.doStuff();
+  // --- (line: 16) skipped ---
 
   // === Details ===
   [
@@ -484,11 +476,7 @@
   // }
   // 
   // class class2 extends class1 {
-  // 
-  // }
-  // 
-  // var v: class2;
-  // v.doStuff();
+  // --- (line: 16) skipped ---
 
   // === Details ===
   [

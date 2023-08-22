@@ -1,9 +1,11 @@
 import * as vfs from "../../_namespaces/vfs";
 import {
+    verifyTsc,
+} from "../helpers/tsc";
+import {
     loadProjectFromDisk,
     replaceText,
-    verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
     let projFs: vfs.FileSystem;
@@ -44,9 +46,14 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true"
         edits: [
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: fs => replaceText(fs, "/src/src/a.ts", "export interface A {", `class C { }
-export interface A {`),
-
+                edit: fs =>
+                    replaceText(
+                        fs,
+                        "/src/src/a.ts",
+                        "export interface A {",
+                        `class C { }
+export interface A {`,
+                    ),
             },
             {
                 caption: "incremental-declaration-changes",

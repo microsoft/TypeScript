@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsInMethod2.ts] ////
+
 //// [unusedLocalsInMethod2.ts]
 class greeter {
     public function1() {

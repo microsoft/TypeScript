@@ -1,0 +1,9 @@
+awaitUsingDeclarations.12.ts(2,21): error TS2851: The initializer of an 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+
+
+==== awaitUsingDeclarations.12.ts (1 errors) ====
+    async function f() {
+        await using x = {};
+                        ~~
+!!! error TS2851: The initializer of an 'await using' declaration must be either an object with a '[Symbol.asyncDispose]()' or '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
+    }

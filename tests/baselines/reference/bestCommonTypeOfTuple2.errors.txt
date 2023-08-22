@@ -1,11 +1,11 @@
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(17,14): error TS2493: Tuple type '[C, base]' of length '2' has no element at index '4'.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(18,14): error TS2493: Tuple type '[C, D]' of length '2' has no element at index '4'.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(19,14): error TS2493: Tuple type '[C1, D1]' of length '2' has no element at index '4'.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(20,14): error TS2493: Tuple type '[base1, C1]' of length '2' has no element at index '2'.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(21,14): error TS2493: Tuple type '[C1, F]' of length '2' has no element at index '2'.
+bestCommonTypeOfTuple2.ts(17,14): error TS2493: Tuple type '[C, base]' of length '2' has no element at index '4'.
+bestCommonTypeOfTuple2.ts(18,14): error TS2493: Tuple type '[C, D]' of length '2' has no element at index '4'.
+bestCommonTypeOfTuple2.ts(19,14): error TS2493: Tuple type '[C1, D1]' of length '2' has no element at index '4'.
+bestCommonTypeOfTuple2.ts(20,14): error TS2493: Tuple type '[base1, C1]' of length '2' has no element at index '2'.
+bestCommonTypeOfTuple2.ts(21,14): error TS2493: Tuple type '[C1, F]' of length '2' has no element at index '2'.
 
 
-==== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts (5 errors) ====
+==== bestCommonTypeOfTuple2.ts (5 errors) ====
     interface base { }
     interface base1 { i }
     class C implements base { c }

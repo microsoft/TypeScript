@@ -1,4 +1,6 @@
-=== tests/cases/compiler/switchCaseCircularRefeference.ts ===
+//// [tests/cases/compiler/switchCaseCircularRefeference.ts] ////
+
+=== switchCaseCircularRefeference.ts ===
 // Repro from #9507
 
 function f(x: {a: "A", b} | {a: "C", e}) {

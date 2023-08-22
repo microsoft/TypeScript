@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/parseThrowsTag.ts ===
+//// [tests/cases/conformance/jsdoc/parseThrowsTag.ts] ////
+
+=== parseThrowsTag.ts ===
 /** @throws {Error} comment */
 function f() {}
 >f : Symbol(f, Decl(parseThrowsTag.ts, 0, 0))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfNotEqualHasNoEffect.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfNotEqualHasNoEffect.ts] ////
+
+=== typeGuardOfFormTypeOfNotEqualHasNoEffect.ts ===
 class C { private p: string };
 >C : Symbol(C, Decl(typeGuardOfFormTypeOfNotEqualHasNoEffect.ts, 0, 0))
 >p : Symbol(C.p, Decl(typeGuardOfFormTypeOfNotEqualHasNoEffect.ts, 0, 9))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveTypes1.ts ===
+//// [tests/cases/compiler/recursiveTypes1.ts] ////
+
+=== recursiveTypes1.ts ===
 interface Entity<T extends Entity<T>> {
 >Entity : Symbol(Entity, Decl(recursiveTypes1.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveTypes1.ts, 0, 17))

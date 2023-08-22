@@ -1,14 +1,6 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// function SFC1(prop: { x: number }) {
-//     return <div>hello </div>;
-// };
+// --- (line: 9) skipped ---
 // function SFC2(prop: { x: boolean }) {
 //     return <h1>World </h1>;
 // }
@@ -17,15 +9,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
-  //     interface Element { }
-  //     interface IntrinsicElements {
-  //     }
-  //     interface ElementAttributesProperty { props; }
-  // }
-  // function SFC1(prop: { x: number }) {
-  //     return <div>hello </div>;
-  // };
+  // --- (line: 9) skipped ---
   // function SFC2(prop: { x: boolean }) {
   //     return <h1>World </h1>;
   // }
@@ -264,15 +248,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// function SFC1(prop: { x: number }) {
-//     return <div>hello </div>;
-// };
+// --- (line: 9) skipped ---
 // function SFC2(prop: { x: boolean }) {
 //     return <h1>World </h1>;
 // }
@@ -281,15 +257,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
-  //     interface Element { }
-  //     interface IntrinsicElements {
-  //     }
-  //     interface ElementAttributesProperty { props; }
-  // }
-  // function SFC1(prop: { x: number }) {
-  //     return <div>hello </div>;
-  // };
+  // --- (line: 9) skipped ---
   // function SFC2(prop: { x: boolean }) {
   //     return <h1>World </h1>;
   // }
@@ -528,16 +496,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// function SFC1(prop: { x: number }) {
-//     return <div>hello </div>;
-// };
-// function SFC2(prop: { x: boolean }) {
+// --- (line: 10) skipped ---
 //     return <h1>World </h1>;
 // }
 // var SFCComp = SFC1 || SFC2;
@@ -547,15 +506,7 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
-//     interface ElementAttributesProperty { props; }
-// }
-// function SFC1(prop: { x: number }) {
-//     return <div>hello </div>;
-// };
+// --- (line: 9) skipped ---
 // function SFC2(prop: { x: boolean }) {
 //     return <h1>World </h1>;
 // }
@@ -564,15 +515,7 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/file.tsx ===
-  // declare module JSX {
-  //     interface Element { }
-  //     interface IntrinsicElements {
-  //     }
-  //     interface ElementAttributesProperty { props; }
-  // }
-  // function SFC1(prop: { x: number }) {
-  //     return <div>hello </div>;
-  // };
+  // --- (line: 9) skipped ---
   // function SFC2(prop: { x: boolean }) {
   //     return <h1>World </h1>;
   // }

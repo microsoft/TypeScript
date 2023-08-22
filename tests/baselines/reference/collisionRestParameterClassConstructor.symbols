@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionRestParameterClassConstructor.ts ===
+//// [tests/cases/compiler/collisionRestParameterClassConstructor.ts] ////
+
+=== collisionRestParameterClassConstructor.ts ===
 // Constructors
 class c1 {
 >c1 : Symbol(c1, Decl(collisionRestParameterClassConstructor.ts, 0, 0))

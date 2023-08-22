@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/listFailure.ts] ////
+
 //// [listFailure.ts]
 module Editor {
 

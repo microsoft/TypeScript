@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveCloduleReference.ts ===
+//// [tests/cases/compiler/recursiveCloduleReference.ts] ////
+
+=== recursiveCloduleReference.ts ===
 module M
 >M : typeof M
 {

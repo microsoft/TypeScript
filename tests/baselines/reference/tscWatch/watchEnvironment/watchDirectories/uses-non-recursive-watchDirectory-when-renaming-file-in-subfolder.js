@@ -49,15 +49,15 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json: *new*
-  {}
-/a/username/project/src/file1.ts: *new*
-  {}
 /a/lib/lib.d.ts: *new*
   {}
 /a/username/project: *new*
   {}
 /a/username/project/src: *new*
+  {}
+/a/username/project/src/file1.ts: *new*
+  {}
+/a/username/project/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -103,8 +103,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /a/username/project:
@@ -112,6 +110,8 @@ FsWatches::
 /a/username/project/src:
   {}
 /a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::
