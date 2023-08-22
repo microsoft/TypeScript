@@ -21,6 +21,6 @@ verify.codeFix({
 }
 const dest = foo();
 export const x: number = dest.x;
-const temp: number = dest.y;
+const temp = dest.y;
 export const y: number = temp === undefined ? 0 : dest.y;`
 });

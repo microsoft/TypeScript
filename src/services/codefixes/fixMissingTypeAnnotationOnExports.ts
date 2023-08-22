@@ -265,10 +265,10 @@ const enum ExpressionType {
     IDENTIFIER = 3,
 }
 
-type SubExpression = {kind: ExpressionType.TEXT, text: string} |
-                     {kind: ExpressionType.COMPUTED, computed: Expression} |
-                     {kind: ExpressionType.ARRAY_ACCESS, arrayIndex: number} |
-                     {kind: ExpressionType.IDENTIFIER, identifier: Identifier} ;
+type SubExpression = {kind: ExpressionType.TEXT, text: string}
+    | {kind: ExpressionType.COMPUTED, computed: Expression}
+    | {kind: ExpressionType.ARRAY_ACCESS, arrayIndex: number}
+    | {kind: ExpressionType.IDENTIFIER, identifier: Identifier};
 
 function transformDestructuringPatterns(bindingPattern: BindingPattern,
                                         sourceFile: SourceFile,
@@ -332,7 +332,7 @@ function transformDestructuringPatterns(bindingPattern: BindingPattern,
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
                         [factory.createVariableDeclaration(
-                            tempName, /*exclamationToken*/ undefined, typeNode, variableInitializer)],
+                            tempName, /*exclamationToken*/ undefined, /*type*/ undefined, variableInitializer)],
                         NodeFlags.Const)));
                 variableInitializer = factory.createConditionalExpression(
                     factory.createBinaryExpression(
