@@ -7604,6 +7604,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
+        function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext, preserveModifierFlags?: boolean, privateSymbolVisitor?: (s: Symbol) => void, bundledImports?: boolean): ParameterDeclaration {
+            const parameterDeclaration = getEffectiveParameterDeclaration(parameterSymbol);
+
+            let parameterType = getTypeOfSymbol(parameterSymbol);
+            if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
+                parameterType = getOptionalType(parameterType);
+            }
+            const parameterTypeNode = serializeTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
+
+            const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && canHaveModifiers(parameterDeclaration) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
+            const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
+            const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
+            const name = parameterToParameterDeclarationName(parameterSymbol, parameterDeclaration, context);
+            const isOptional = parameterDeclaration && isOptionalParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.OptionalParameter;
+            const questionToken = isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
+            const parameterNode = factory.createParameterDeclaration(
+                modifiers,
+                dotDotDotToken,
+                name,
+                questionToken,
+                parameterTypeNode,
+                /*initializer*/ undefined,
+            );
+            context.approximateLength += symbolName(parameterSymbol).length + 3;
+            return parameterNode;
+        }
+
         function parameterToParameterDeclarationName(parameterSymbol: Symbol, parameterDeclaration: ParameterDeclaration | JSDocParameterTag | undefined, context: NodeBuilderContext) {
             return parameterDeclaration ? parameterDeclaration.name ?
                 parameterDeclaration.name.kind === SyntaxKind.Identifier ? setEmitFlags(factory.cloneNode(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
@@ -7634,33 +7661,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return setEmitFlags(visited, EmitFlags.SingleLine | EmitFlags.NoAsciiEscaping);
                 }
             }
-        }
-
-        function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext, preserveModifierFlags?: boolean, privateSymbolVisitor?: (s: Symbol) => void, bundledImports?: boolean): ParameterDeclaration {
-            const parameterDeclaration = getEffectiveParameterDeclaration(parameterSymbol);
-
-            let parameterType = getTypeOfSymbol(parameterSymbol);
-            if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
-                parameterType = getOptionalType(parameterType);
-            }
-            const parameterTypeNode = serializeTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
-
-            const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && canHaveModifiers(parameterDeclaration) ? map(getModifiers(parameterDeclaration), factory.cloneNode) : undefined;
-            const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
-            const dotDotDotToken = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined;
-            const name = parameterToParameterDeclarationName(parameterSymbol, parameterDeclaration, context);
-            const isOptional = parameterDeclaration && isOptionalParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.OptionalParameter;
-            const questionToken = isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
-            const parameterNode = factory.createParameterDeclaration(
-                modifiers,
-                dotDotDotToken,
-                name,
-                questionToken,
-                parameterTypeNode,
-                /*initializer*/ undefined,
-            );
-            context.approximateLength += symbolName(parameterSymbol).length + 3;
-            return parameterNode;
         }
 
         function trackComputedName(accessExpression: EntityNameOrEntityNameExpression, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
