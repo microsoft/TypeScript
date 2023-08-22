@@ -272,8 +272,8 @@ export namespace BuilderState {
             for (const declaration of symbol.declarations) {
                 const declarationSourceFile = getSourceFileOfNode(declaration);
                 if (
-                    declarationSourceFile &&
-                    declarationSourceFile !== sourceFile
+                    declarationSourceFile
+                    && declarationSourceFile !== sourceFile
                 ) {
                     addReferencedFile(declarationSourceFile.resolvedPath);
                 }
@@ -299,8 +299,8 @@ export namespace BuilderState {
         const fileInfos = new Map<Path, FileInfo>();
         const options = newProgram.getCompilerOptions();
         const isOutFile = options.outFile;
-        const referencedMap = options.module !== ModuleKind.None && !isOutFile ?
-            createManyToManyPathMap() : undefined;
+        const referencedMap = options.module !== ModuleKind.None && !isOutFile
+            ? createManyToManyPathMap() : undefined;
         const useOldState = canReuseOldState(referencedMap, oldState);
 
         // Ensure source files have parent pointers set
@@ -310,9 +310,9 @@ export namespace BuilderState {
         for (const sourceFile of newProgram.getSourceFiles()) {
             const version = Debug.checkDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
             const oldUncommittedSignature = useOldState ? oldState!.oldSignatures?.get(sourceFile.resolvedPath) : undefined;
-            const signature = oldUncommittedSignature === undefined ?
-                useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath)?.signature : undefined :
-                oldUncommittedSignature || undefined;
+            const signature = oldUncommittedSignature === undefined
+                ? useOldState ? oldState!.fileInfos.get(sourceFile.resolvedPath)?.signature : undefined
+                : oldUncommittedSignature || undefined;
             if (referencedMap) {
                 const newReferences = getReferencedFiles(newProgram, sourceFile, newProgram.getCanonicalFileName);
                 if (newReferences) {
@@ -531,8 +531,8 @@ export namespace BuilderState {
      * Return true if the file will invalidate all files because it affectes global scope
      */
     function isFileAffectingGlobalScope(sourceFile: SourceFile) {
-        return containsGlobalScopeAugmentation(sourceFile) ||
-            !isExternalOrCommonJsModule(sourceFile) && !isJsonSourceFile(sourceFile) && !containsOnlyAmbientModules(sourceFile);
+        return containsGlobalScopeAugmentation(sourceFile)
+            || !isExternalOrCommonJsModule(sourceFile) && !isJsonSourceFile(sourceFile) && !containsOnlyAmbientModules(sourceFile);
     }
 
     /**

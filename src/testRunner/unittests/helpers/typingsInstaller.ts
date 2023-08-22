@@ -105,11 +105,11 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         testTypingInstaller.session.host.ensureFileOrFolder({
             path: getTypesRegistryFileLocation(testTypingInstaller.globalTypingsCacheLocation),
             content: jsonToReadableText(createTypesRegistryFileContent(
-                testTypingInstaller.typesRegistry ?
-                    ts.isString(testTypingInstaller.typesRegistry) ?
-                        [testTypingInstaller.typesRegistry] :
-                        testTypingInstaller.typesRegistry :
-                    ts.emptyArray,
+                testTypingInstaller.typesRegistry
+                    ? ts.isString(testTypingInstaller.typesRegistry)
+                        ? [testTypingInstaller.typesRegistry]
+                        : testTypingInstaller.typesRegistry
+                    : ts.emptyArray,
             )),
         });
         this.log.writeLine(`Updated ${typesRegistryPackageName} npm package`);
@@ -196,9 +196,9 @@ export class TestTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapt
         const globalTypingsCacheLocation = options.globalTypingsCacheLocation || options.host.getHostSpecificPath("/a/data");
         super(
             /*telemetryEnabled*/ false,
-            options.throttledRequests === undefined ?
-                { ...options.logger!, hasLevel: ts.returnFalse } :
-                options.logger!,
+            options.throttledRequests === undefined
+                ? { ...options.logger!, hasLevel: ts.returnFalse }
+                : options.logger!,
             options.host,
             globalTypingsCacheLocation,
             (...args) => this.session.event(...args),

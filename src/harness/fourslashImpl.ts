@@ -418,9 +418,9 @@ export class TestState {
             this.inputFiles.forEach((file, fileName) => {
                 if (!Harness.isDefaultLibraryFile(fileName)) {
                     // all files if config file not specified, otherwise root files from the config and typings cache files are root files
-                    const isRootFile = !configParseResult ||
-                        ts.contains(configParseResult.fileNames, fileName) ||
-                        (ts.isDeclarationFileName(fileName) && ts.containsPath("/Library/Caches/typescript", fileName));
+                    const isRootFile = !configParseResult
+                        || ts.contains(configParseResult.fileNames, fileName)
+                        || (ts.isDeclarationFileName(fileName) && ts.containsPath("/Library/Caches/typescript", fileName));
                     this.languageServiceAdapterHost.addScript(fileName, file, isRootFile);
                 }
             });
@@ -549,9 +549,9 @@ export class TestState {
     }
 
     private goToMarkerOrNameOrRange(markerOrRange: MarkerOrNameOrRange) {
-        return ts.isString(markerOrRange) || isMarker(markerOrRange) ?
-            this.goToMarker(markerOrRange) :
-            this.goToRangeStart(markerOrRange);
+        return ts.isString(markerOrRange) || isMarker(markerOrRange)
+            ? this.goToMarker(markerOrRange)
+            : this.goToRangeStart(markerOrRange);
     }
 
     public goToEachMarker(markers: readonly Marker[], action: (marker: Marker, index: number) => void) {
@@ -717,8 +717,8 @@ export class TestState {
 
         for (const { start, length, messageText, file } of errors) {
             Harness.IO.log(
-                "  " + this.formatRange(file, start!, length!) + // TODO: GH#18217
-                    ", message: " + ts.flattenDiagnosticMessageText(messageText, Harness.IO.newLine()) + "\n",
+                "  " + this.formatRange(file, start!, length!) // TODO: GH#18217
+                    + ", message: " + ts.flattenDiagnosticMessageText(messageText, Harness.IO.newLine()) + "\n",
             );
         }
     }
@@ -769,10 +769,10 @@ export class TestState {
         const hasMatchingError = ts.some(
             this.getDiagnostics(range.fileName),
             ({ code, messageText, start, length }) =>
-                code === code &&
-                (!expectedMessage || expectedMessage === messageText) &&
-                ts.isNumber(start) && ts.isNumber(length) &&
-                ts.textSpansEqual(span, { start, length }),
+                code === code
+                && (!expectedMessage || expectedMessage === messageText)
+                && ts.isNumber(start) && ts.isNumber(length)
+                && ts.textSpansEqual(span, { start, length }),
         );
 
         if (!hasMatchingError) {
@@ -852,8 +852,8 @@ export class TestState {
         if (definitions?.length) {
             baseline += "\n\n";
             baseline += indentJsonBaseline(
-                "// === Details ===\n" +
-                    JSON.stringify(
+                "// === Details ===\n"
+                    + JSON.stringify(
                         definitions.map(def => ({
                             defId: defIdMap.get(def),
                             ...def,
@@ -1046,11 +1046,11 @@ export class TestState {
             else {
                 if (
                     entries.some(e =>
-                        e.source === entry.source &&
-                        e.data?.exportName === entry.data?.exportName &&
-                        e.data?.fileName === entry.data?.fileName &&
-                        e.data?.moduleSpecifier === entry.data?.moduleSpecifier &&
-                        e.data?.ambientModuleName === entry.data?.ambientModuleName
+                        e.source === entry.source
+                        && e.data?.exportName === entry.data?.exportName
+                        && e.data?.fileName === entry.data?.fileName
+                        && e.data?.moduleSpecifier === entry.data?.moduleSpecifier
+                        && e.data?.ambientModuleName === entry.data?.ambientModuleName
                     )
                 ) {
                     this.raiseError(`Duplicate completions for ${entry.name}`);
@@ -1390,8 +1390,8 @@ export class TestState {
             if (references?.length) {
                 baseline += "\n\n";
                 baseline += indentJsonBaseline(
-                    "// === Definitions ===\n" +
-                        this.getBaselineForDocumentSpansWithFileContents(
+                    "// === Definitions ===\n"
+                        + this.getBaselineForDocumentSpansWithFileContents(
                             references.map(r => r.definition),
                             {
                                 markerInfo,
@@ -1399,9 +1399,9 @@ export class TestState {
                                 skipDocumentSpanDetails: true,
                                 skipDocumentContainingOnlyMarker: true,
                             },
-                        ) +
-                        "\n\n// === Details ===\n" +
-                        JSON.stringify(
+                        )
+                        + "\n\n// === Details ===\n"
+                        + JSON.stringify(
                             references.map(r => ({
                                 defId: defIdMap.get(r.definition),
                                 ...r.definition,
@@ -1450,13 +1450,13 @@ export class TestState {
             skipDocumentContainingOnlyMarker,
             additionalSpan,
         } = options;
-        const marker: Marker | undefined = markerInfo !== undefined ?
-            ts.isString(markerInfo.markerOrRange) ?
-                this.getMarkerByName(markerInfo.markerOrRange) :
-                isMarker(markerInfo.markerOrRange) ?
-                markerInfo.markerOrRange :
-                { fileName: markerInfo.markerOrRange.fileName, position: markerInfo.markerOrRange.pos } :
-            undefined;
+        const marker: Marker | undefined = markerInfo !== undefined
+            ? ts.isString(markerInfo.markerOrRange)
+                ? this.getMarkerByName(markerInfo.markerOrRange)
+                : isMarker(markerInfo.markerOrRange)
+                ? markerInfo.markerOrRange
+                : { fileName: markerInfo.markerOrRange.fileName, position: markerInfo.markerOrRange.pos }
+            : undefined;
         const fileBaselines: string[] = [];
         let foundMarker = false;
         let foundAdditionalSpan = false;
@@ -1480,9 +1480,9 @@ export class TestState {
                     let baseline = `// === ${group[0].fileName} ===\n// Unavailable file content:\n`;
                     for (const span of group) {
                         baseline += `// textSpan: ${JSON.stringify(span.textSpan)}${span.contextSpan ? `, contextSpan: ${JSON.stringify(span.contextSpan)}` : ""}`;
-                        const text = !skipDocumentSpanDetails ?
-                            convertDocumentSpanToString(span, documentSpanId?.(span)) :
-                            documentSpanId?.(span);
+                        const text = !skipDocumentSpanDetails
+                            ? convertDocumentSpanToString(span, documentSpanId?.(span))
+                            : documentSpanId?.(span);
                         if (text) baseline += ` ${text}`;
                         baseline += "\n";
                     }
@@ -1632,8 +1632,8 @@ export class TestState {
                 for (let matchingEndPosIndex = index + 1; matchingEndPosIndex < sortedDetails.length; matchingEndPosIndex++) {
                     // Defer after the location if its same as rangeEnd
                     if (
-                        sortedDetails[matchingEndPosIndex].location === location &&
-                        sortedDetails[matchingEndPosIndex].type!.endsWith("End")
+                        sortedDetails[matchingEndPosIndex].location === location
+                        && sortedDetails[matchingEndPosIndex].type!.endsWith("End")
                     ) {
                         deferredMarkerIndex = matchingEndPosIndex;
                     }
@@ -1652,9 +1652,9 @@ export class TestState {
             if (span) {
                 switch (type) {
                     case "textStart":
-                        let text = !skipDocumentSpanDetails ?
-                            convertDocumentSpanToString(span, documentSpanId?.(span), ignoredDocumentSpanProperties) :
-                            documentSpanId?.(span);
+                        let text = !skipDocumentSpanDetails
+                            ? convertDocumentSpanToString(span, documentSpanId?.(span), ignoredDocumentSpanProperties)
+                            : documentSpanId?.(span);
                         if (span === groupedSpanForAdditionalSpan) {
                             text = `textSpan: true` + (text ? `, ${text}` : "");
                         }
@@ -1710,15 +1710,15 @@ export class TestState {
                 if (locationLine - posLine > nLines) {
                     if (newContent) {
                         readableContents = readableContents + "\n" + readableJsoncBaseline(
-                            newContent + content.slice(pos, lineStarts[posLine + TestState.nLinesContext]) +
-                                `--- (line: ${isLibFile ? "--" : posLine + TestState.nLinesContext + 1}) skipped ---`,
+                            newContent + content.slice(pos, lineStarts[posLine + TestState.nLinesContext])
+                                + `--- (line: ${isLibFile ? "--" : posLine + TestState.nLinesContext + 1}) skipped ---`,
                         );
                         if (location !== undefined) readableContents += "\n";
                         newContent = "";
                     }
                     if (location !== undefined) {
-                        newContent += `--- (line: ${isLibFile ? "--" : locationLine - TestState.nLinesContext + 1}) skipped ---\n` +
-                            content.slice(lineStarts[locationLine - TestState.nLinesContext + 1], location);
+                        newContent += `--- (line: ${isLibFile ? "--" : locationLine - TestState.nLinesContext + 1}) skipped ---\n`
+                            + content.slice(lineStarts[locationLine - TestState.nLinesContext + 1], location);
                     }
                     return;
                 }
@@ -1903,11 +1903,11 @@ export class TestState {
         options: FourSlashInterface.RenameOptions | undefined,
     ) {
         this.baselineEachMarkerOrRangeArrayOrSingle("findRenameLocations", markerOrRange, rangeText, markerOrRange => {
-            const { fileName, position } = ts.isString(markerOrRange) ?
-                this.getMarkerByName(markerOrRange) :
-                isMarker(markerOrRange) ?
-                markerOrRange :
-                { fileName: markerOrRange.fileName, position: markerOrRange.pos };
+            const { fileName, position } = ts.isString(markerOrRange)
+                ? this.getMarkerByName(markerOrRange)
+                : isMarker(markerOrRange)
+                ? markerOrRange
+                : { fileName: markerOrRange.fileName, position: markerOrRange.pos };
             const {
                 findInStrings = false,
                 findInComments = false,
@@ -1926,12 +1926,12 @@ export class TestState {
                 this.raiseError(`baselineRename failed. Could not rename at the provided position.`);
             }
 
-            const renameOptions = options ?
-                (options.findInStrings !== undefined ? `// @findInStrings: ${findInStrings}\n` : "") +
-                (options.findInComments !== undefined ? `// @findInComments: ${findInComments}\n` : "") +
-                (options.providePrefixAndSuffixTextForRename !== undefined ? `// @providePrefixAndSuffixTextForRename: ${providePrefixAndSuffixTextForRename}\n` : "") +
-                (options.quotePreference !== undefined ? `// @quotePreference: ${quotePreference}\n` : "") :
-                "";
+            const renameOptions = options
+                ? (options.findInStrings !== undefined ? `// @findInStrings: ${findInStrings}\n` : "")
+                    + (options.findInComments !== undefined ? `// @findInComments: ${findInComments}\n` : "")
+                    + (options.providePrefixAndSuffixTextForRename !== undefined ? `// @providePrefixAndSuffixTextForRename: ${providePrefixAndSuffixTextForRename}\n` : "")
+                    + (options.quotePreference !== undefined ? `// @quotePreference: ${quotePreference}\n` : "")
+                : "";
 
             return renameOptions + (renameOptions ? "\n" : "") + this.getBaselineForDocumentSpansWithFileContents(
                 locations,
@@ -2009,9 +2009,9 @@ export class TestState {
 
         if (options.text !== undefined) {
             assert.equal(
-                ts.displayPartsToString(selectedItem.prefixDisplayParts) +
-                    selectedItem.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(selectedItem.separatorDisplayParts)) +
-                    ts.displayPartsToString(selectedItem.suffixDisplayParts),
+                ts.displayPartsToString(selectedItem.prefixDisplayParts)
+                    + selectedItem.parameters.map(p => ts.displayPartsToString(p.displayParts)).join(ts.displayPartsToString(selectedItem.separatorDisplayParts))
+                    + ts.displayPartsToString(selectedItem.suffixDisplayParts),
                 options.text,
             );
         }
@@ -2096,12 +2096,12 @@ export class TestState {
         }
 
         if (
-            renameInfo.triggerSpan.start !== expectedRange.pos ||
-            ts.textSpanEnd(renameInfo.triggerSpan) !== expectedRange.end
+            renameInfo.triggerSpan.start !== expectedRange.pos
+            || ts.textSpanEnd(renameInfo.triggerSpan) !== expectedRange.end
         ) {
             this.raiseError(
-                "Expected triggerSpan [" + expectedRange.pos + "," + expectedRange.end + ").  Got [" +
-                    renameInfo.triggerSpan.start + "," + ts.textSpanEnd(renameInfo.triggerSpan) + ") instead.",
+                "Expected triggerSpan [" + expectedRange.pos + "," + expectedRange.end + ").  Got ["
+                    + renameInfo.triggerSpan.start + "," + ts.textSpanEnd(renameInfo.triggerSpan) + ") instead.",
             );
         }
     }
@@ -2596,9 +2596,9 @@ export class TestState {
         if (errorList.length) {
             errorList.forEach(err => {
                 Harness.IO.log(
-                    "start: " + err.start +
-                        ", length: " + err.length +
-                        ", message: " + ts.flattenDiagnosticMessageText(err.messageText, Harness.IO.newLine()),
+                    "start: " + err.start
+                        + ", length: " + err.length
+                        + ", message: " + ts.flattenDiagnosticMessageText(err.messageText, Harness.IO.newLine()),
                 );
             });
         }
@@ -2625,8 +2625,8 @@ export class TestState {
     }
 
     private getBaselineFileNameForContainingTestFile(ext = ".baseline") {
-        return this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
-            ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ext);
+        return this.testData.globalOptions[MetadataOptionNames.baselineFile]
+            || ts.getBaseFileName(this.originalInputFileName).replace(ts.Extension.Ts, ext);
     }
 
     private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
@@ -3089,9 +3089,9 @@ export class TestState {
     private verifyClassifications(expected: { classificationType: string | number; text?: string; textSpan?: TextSpan; }[], actual: (ts.ClassifiedSpan | ts.ClassifiedSpan2020)[], sourceFileText: string) {
         if (actual.length !== expected.length) {
             this.raiseError(
-                "verifyClassifications failed - expected total classifications to be " + expected.length +
-                    ", but was " + actual.length +
-                    jsonMismatchString(),
+                "verifyClassifications failed - expected total classifications to be " + expected.length
+                    + ", but was " + actual.length
+                    + jsonMismatchString(),
             );
         }
 
@@ -3101,10 +3101,10 @@ export class TestState {
 
             if (expectedType !== actualType) {
                 this.raiseError(
-                    "verifyClassifications failed - expected classifications type to be " +
-                        expectedType + ", but was " +
-                        actualType +
-                        jsonMismatchString(),
+                    "verifyClassifications failed - expected classifications type to be "
+                        + expectedType + ", but was "
+                        + actualType
+                        + jsonMismatchString(),
                 );
             }
 
@@ -3116,10 +3116,10 @@ export class TestState {
 
                 if (expectedSpan.start !== actualSpan.start || expectedLength !== actualSpan.length) {
                     this.raiseError(
-                        "verifyClassifications failed - expected span of text to be " +
-                            "{start=" + expectedSpan.start + ", length=" + expectedLength + "}, but was " +
-                            "{start=" + actualSpan.start + ", length=" + actualSpan.length + "}" +
-                            jsonMismatchString(),
+                        "verifyClassifications failed - expected span of text to be "
+                            + "{start=" + expectedSpan.start + ", length=" + expectedLength + "}, but was "
+                            + "{start=" + actualSpan.start + ", length=" + actualSpan.length + "}"
+                            + jsonMismatchString(),
                     );
                 }
             }
@@ -3127,19 +3127,19 @@ export class TestState {
             const actualText = this.activeFile.content.substr(actualSpan.start, actualSpan.length);
             if (expectedClassification.text !== actualText) {
                 this.raiseError(
-                    "verifyClassifications failed - expected classified text to be " +
-                        expectedClassification.text + ", but was " +
-                        actualText +
-                        jsonMismatchString(),
+                    "verifyClassifications failed - expected classified text to be "
+                        + expectedClassification.text + ", but was "
+                        + actualText
+                        + jsonMismatchString(),
                 );
             }
         });
 
         function jsonMismatchString() {
             const showActual = actual.map(({ classificationType, textSpan }) => ({ classificationType, text: sourceFileText.slice(textSpan.start, textSpan.start + textSpan.length) }));
-            return Harness.IO.newLine() +
-                "expected: '" + Harness.IO.newLine() + stringify(expected) + "'" + Harness.IO.newLine() +
-                "actual:   '" + Harness.IO.newLine() + stringify(showActual) + "'";
+            return Harness.IO.newLine()
+                + "expected: '" + Harness.IO.newLine() + stringify(expected) + "'" + Harness.IO.newLine()
+                + "actual:   '" + Harness.IO.newLine() + stringify(showActual) + "'";
         }
     }
 
@@ -3906,9 +3906,9 @@ export class TestState {
                 const highlights = this.getDocumentHighlightsAtCurrentPosition(ts.map(options?.filesToSearch, ts.normalizePath) || [this.activeFile.fileName]);
 
                 // Write input files
-                const filesToSearch = options ? "// filesToSearch:\n" +
-                    options.filesToSearch.map(f => "//   " + f).join("\n") + "\n\n" :
-                    "";
+                const filesToSearch = options ? "// filesToSearch:\n"
+                    + options.filesToSearch.map(f => "//   " + f).join("\n") + "\n\n"
+                    : "";
                 const baselineContent = this.getBaselineForGroupedDocumentSpansWithFileContents(
                     highlights?.map(h => h.highlightSpans.map(s => s.fileName ? s as ts.DocumentSpan : { ...s, fileName: h.fileName })) || ts.emptyArray,
                     { markerInfo: { markerOrRange, markerName: "/*HIGHLIGHTS*/" } },
@@ -3954,8 +3954,8 @@ export class TestState {
             }
 
             this.raiseError(
-                `Expected to find a fix with the name '${fixName}', but none exists.` +
-                    availableFixes.length
+                `Expected to find a fix with the name '${fixName}', but none exists.`
+                    + availableFixes.length
                     ? ` Available fixes: ${availableFixes.map(fix => `${fix.fixName} (${fix.fixId ? "with" : "without"} fix-all)`).join(", ")}`
                     : "",
             );
@@ -4220,13 +4220,13 @@ export class TestState {
         const alreadySeen = seen.has(key);
         seen.set(key, true);
 
-        const incomingCalls = direction === CallHierarchyItemDirection.Outgoing ? { result: "skip" } as const :
-            alreadySeen ? { result: "seen" } as const :
-            { result: "show", values: this.languageService.provideCallHierarchyIncomingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
+        const incomingCalls = direction === CallHierarchyItemDirection.Outgoing ? { result: "skip" } as const
+            : alreadySeen ? { result: "seen" } as const
+            : { result: "show", values: this.languageService.provideCallHierarchyIncomingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
 
-        const outgoingCalls = direction === CallHierarchyItemDirection.Incoming ? { result: "skip" } as const :
-            alreadySeen ? { result: "seen" } as const :
-            { result: "show", values: this.languageService.provideCallHierarchyOutgoingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
+        const outgoingCalls = direction === CallHierarchyItemDirection.Incoming ? { result: "skip" } as const
+            : alreadySeen ? { result: "seen" } as const
+            : { result: "show", values: this.languageService.provideCallHierarchyOutgoingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
 
         let text = "";
         text += `${prefix}╭ name: ${callHierarchyItem.name}\n`;
@@ -4242,8 +4242,8 @@ export class TestState {
             file,
             callHierarchyItem.selectionSpan,
             `${prefix}│ `,
-            incomingCalls.result !== "skip" || outgoingCalls.result !== "skip" ? `${prefix}│ ` :
-                `${trailingPrefix}╰ `,
+            incomingCalls.result !== "skip" || outgoingCalls.result !== "skip" ? `${prefix}│ `
+                : `${trailingPrefix}╰ `,
         );
 
         if (incomingCalls.result === "seen") {
@@ -4275,9 +4275,9 @@ export class TestState {
                         file,
                         incomingCall.fromSpans,
                         `${prefix}│ │ `,
-                        i < incomingCalls.values.length - 1 ? `${prefix}│ ╰ ` :
-                            outgoingCalls.result !== "skip" ? `${prefix}│ ╰ ` :
-                            `${trailingPrefix}╰ ╰ `,
+                        i < incomingCalls.values.length - 1 ? `${prefix}│ ╰ `
+                            : outgoingCalls.result !== "skip" ? `${prefix}│ ╰ `
+                            : `${trailingPrefix}╰ ╰ `,
                     );
                 }
             }
@@ -4301,8 +4301,8 @@ export class TestState {
                         file,
                         outgoingCall.fromSpans,
                         `${prefix}│ │ `,
-                        i < outgoingCalls.values.length - 1 ? `${prefix}│ ╰ ` :
-                            `${trailingPrefix}╰ ╰ `,
+                        i < outgoingCalls.values.length - 1 ? `${prefix}│ ╰ `
+                            : `${trailingPrefix}╰ ╰ `,
                     );
                 }
             }
@@ -4596,8 +4596,8 @@ function runCode(code: string, state: TestState, fileName: string): void {
 
     sourceMapSupportModule?.install({
         retrieveFile: path => {
-            return path === generatedFile ? wrappedCode :
-                undefined!;
+            return path === generatedFile ? wrappedCode
+                : undefined!;
         },
     });
 

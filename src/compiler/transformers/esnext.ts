@@ -324,12 +324,12 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         factory.createVariableDeclaration(temp),
                     ], NodeFlags.Const),
                     node.expression,
-                    isBlock(node.statement) ?
-                        factory.updateBlock(node.statement, [
+                    isBlock(node.statement)
+                        ? factory.updateBlock(node.statement, [
                             usingVarStatement,
                             ...node.statement.statements,
-                        ]) :
-                        factory.createBlock([
+                        ])
+                        : factory.createBlock([
                             usingVarStatement,
                             node.statement,
                         ], /*multiLine*/ true),
@@ -850,9 +850,9 @@ function isUsingVariableDeclarationList(node: Node): node is VariableDeclaration
 }
 
 function getUsingKindOfVariableDeclarationList(node: VariableDeclarationList) {
-    return (node.flags & NodeFlags.BlockScoped) === NodeFlags.AwaitUsing ? UsingKind.Async :
-        (node.flags & NodeFlags.BlockScoped) === NodeFlags.Using ? UsingKind.Sync :
-        UsingKind.None;
+    return (node.flags & NodeFlags.BlockScoped) === NodeFlags.AwaitUsing ? UsingKind.Async
+        : (node.flags & NodeFlags.BlockScoped) === NodeFlags.Using ? UsingKind.Sync
+        : UsingKind.None;
 }
 
 function getUsingKindOfVariableStatement(node: VariableStatement) {

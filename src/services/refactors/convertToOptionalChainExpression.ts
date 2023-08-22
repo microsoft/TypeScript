@@ -158,8 +158,8 @@ function getConditionalInfo(expression: ConditionalExpression, checker: TypeChec
     }
     else if (isBinaryExpression(condition)) {
         const occurrences = getOccurrencesInExpression(finalExpression.expression, condition);
-        return occurrences ? { finalExpression, occurrences, expression } :
-            { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
+        return occurrences ? { finalExpression, occurrences, expression }
+            : { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
     }
 }
 
@@ -172,8 +172,8 @@ function getBinaryInfo(expression: BinaryExpression): OptionalChainInfo | Refact
     if (!finalExpression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
 
     const occurrences = getOccurrencesInExpression(finalExpression.expression, expression.left);
-    return occurrences ? { finalExpression, occurrences, expression } :
-        { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
+    return occurrences ? { finalExpression, occurrences, expression }
+        : { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
 }
 
 /**
@@ -218,8 +218,8 @@ function chainStartsWith(chain: Node, subchain: Node): boolean {
     }
     // check that the chains match at each access. Call chains in subchain are not valid.
     while (
-        (isPropertyAccessExpression(chain) && isPropertyAccessExpression(subchain)) ||
-        (isElementAccessExpression(chain) && isElementAccessExpression(subchain))
+        (isPropertyAccessExpression(chain) && isPropertyAccessExpression(subchain))
+        || (isElementAccessExpression(chain) && isElementAccessExpression(subchain))
     ) {
         if (getTextOfChainNode(chain) !== getTextOfChainNode(subchain)) return false;
         chain = chain.expression;
@@ -313,19 +313,19 @@ function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurre
         const isOccurrence = lastOccurrence?.getText() === toConvert.expression.getText();
         if (isOccurrence) occurrences.pop();
         if (isCallExpression(toConvert)) {
-            return isOccurrence ?
-                factory.createCallChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.typeArguments, toConvert.arguments) :
-                factory.createCallChain(chain, toConvert.questionDotToken, toConvert.typeArguments, toConvert.arguments);
+            return isOccurrence
+                ? factory.createCallChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.typeArguments, toConvert.arguments)
+                : factory.createCallChain(chain, toConvert.questionDotToken, toConvert.typeArguments, toConvert.arguments);
         }
         else if (isPropertyAccessExpression(toConvert)) {
-            return isOccurrence ?
-                factory.createPropertyAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name) :
-                factory.createPropertyAccessChain(chain, toConvert.questionDotToken, toConvert.name);
+            return isOccurrence
+                ? factory.createPropertyAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name)
+                : factory.createPropertyAccessChain(chain, toConvert.questionDotToken, toConvert.name);
         }
         else if (isElementAccessExpression(toConvert)) {
-            return isOccurrence ?
-                factory.createElementAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.argumentExpression) :
-                factory.createElementAccessChain(chain, toConvert.questionDotToken, toConvert.argumentExpression);
+            return isOccurrence
+                ? factory.createElementAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.argumentExpression)
+                : factory.createElementAccessChain(chain, toConvert.questionDotToken, toConvert.argumentExpression);
         }
     }
     return toConvert;

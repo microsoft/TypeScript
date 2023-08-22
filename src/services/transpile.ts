@@ -168,8 +168,8 @@ let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
  */
 export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
     // Lazily create this value to fix module loading errors.
-    commandLineOptionsStringToEnum = commandLineOptionsStringToEnum ||
-        filter(optionDeclarations, o => typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number")) as CommandLineOptionOfCustomType[];
+    commandLineOptionsStringToEnum = commandLineOptionsStringToEnum
+        || filter(optionDeclarations, o => typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number")) as CommandLineOptionOfCustomType[];
 
     options = cloneCompilerOptions(options);
 

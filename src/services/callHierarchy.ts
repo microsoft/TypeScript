@@ -233,15 +233,15 @@ function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclarati
         return { text: `${prefix}static {}`, pos, end };
     }
 
-    const declName = isAssignedExpression(node) ? node.parent.name :
-        Debug.checkDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
+    const declName = isAssignedExpression(node) ? node.parent.name
+        : Debug.checkDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
 
-    let text = isIdentifier(declName) ? idText(declName) :
-        isStringOrNumericLiteralLike(declName) ? declName.text :
-        isComputedPropertyName(declName) ?
-        isStringOrNumericLiteralLike(declName.expression) ? declName.expression.text :
-            undefined :
-        undefined;
+    let text = isIdentifier(declName) ? idText(declName)
+        : isStringOrNumericLiteralLike(declName) ? declName.text
+        : isComputedPropertyName(declName)
+        ? isStringOrNumericLiteralLike(declName.expression) ? declName.expression.text
+            : undefined
+        : undefined;
     if (text === undefined) {
         const typeChecker = program.getTypeChecker();
         const symbol = typeChecker.getSymbolAtLocation(declName);
@@ -332,9 +332,9 @@ function findImplementationOrAllInitialDeclarations(typeChecker: TypeChecker, no
         return node;
     }
     if (isFunctionLikeDeclaration(node)) {
-        return findImplementation(typeChecker, node) ??
-            findAllInitialDeclarations(typeChecker, node) ??
-            node;
+        return findImplementation(typeChecker, node)
+            ?? findAllInitialDeclarations(typeChecker, node)
+            ?? node;
     }
     return findAllInitialDeclarations(typeChecker, node) ?? node;
 }
@@ -485,11 +485,11 @@ export function getIncomingCalls(program: Program, declaration: CallHierarchyDec
 
 function createCallSiteCollector(program: Program, callSites: CallSite[]): (node: Node | undefined) => void {
     function recordCallSite(node: CallExpression | NewExpression | TaggedTemplateExpression | PropertyAccessExpression | ElementAccessExpression | Decorator | JsxOpeningLikeElement | ClassStaticBlockDeclaration) {
-        const target = isTaggedTemplateExpression(node) ? node.tag :
-            isJsxOpeningLikeElement(node) ? node.tagName :
-            isAccessExpression(node) ? node :
-            isClassStaticBlockDeclaration(node) ? node :
-            node.expression;
+        const target = isTaggedTemplateExpression(node) ? node.tag
+            : isJsxOpeningLikeElement(node) ? node.tagName
+            : isAccessExpression(node) ? node
+            : isClassStaticBlockDeclaration(node) ? node
+            : node.expression;
         const declaration = resolveCallHierarchyDeclaration(program, target);
         if (declaration) {
             const range = createTextRangeFromNode(target, node.getSourceFile());

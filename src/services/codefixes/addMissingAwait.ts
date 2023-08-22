@@ -150,10 +150,10 @@ function isMissingAwaitError(sourceFile: SourceFile, errorCode: number, span: Te
     const checker = program.getTypeChecker();
     const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
     return some(diagnostics, ({ start, length, relatedInformation, code }) =>
-        isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
-        code === errorCode &&
-        !!relatedInformation &&
-        some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
+        isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span)
+        && code === errorCode
+        && !!relatedInformation
+        && some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
 }
 
 interface AwaitableInitializer {
@@ -190,13 +190,13 @@ function findAwaitableInitializers(
         const variableName = declaration && tryCast(declaration.name, isIdentifier);
         const variableStatement = getAncestor(declaration, SyntaxKind.VariableStatement);
         if (
-            !declaration || !variableStatement ||
-            declaration.type ||
-            !declaration.initializer ||
-            variableStatement.getSourceFile() !== sourceFile ||
-            hasSyntacticModifier(variableStatement, ModifierFlags.Export) ||
-            !variableName ||
-            !isInsideAwaitableBody(declaration.initializer)
+            !declaration || !variableStatement
+            || declaration.type
+            || !declaration.initializer
+            || variableStatement.getSourceFile() !== sourceFile
+            || hasSyntacticModifier(variableStatement, ModifierFlags.Export)
+            || !variableName
+            || !isInsideAwaitableBody(declaration.initializer)
         ) {
             isCompleteFix = false;
             continue;
@@ -253,14 +253,14 @@ function getIdentifiersFromErrorSpanExpression(expression: Node, checker: TypeCh
 }
 
 function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: readonly Diagnostic[], sourceFile: SourceFile, checker: TypeChecker) {
-    const errorNode = isPropertyAccessExpression(reference.parent) ? reference.parent.name :
-        isBinaryExpression(reference.parent) ? reference.parent :
-        reference;
+    const errorNode = isPropertyAccessExpression(reference.parent) ? reference.parent.name
+        : isBinaryExpression(reference.parent) ? reference.parent
+        : reference;
     const diagnostic = find(diagnostics, diagnostic =>
-        diagnostic.start === errorNode.getStart(sourceFile) &&
-        (diagnostic.start + diagnostic.length!) === errorNode.getEnd());
+        diagnostic.start === errorNode.getStart(sourceFile)
+        && (diagnostic.start + diagnostic.length!) === errorNode.getEnd());
 
-    return diagnostic && contains(errorCodes, diagnostic.code) ||
+    return diagnostic && contains(errorCodes, diagnostic.code)
         // A Promise is usually not correct in a binary expression (it's not valid
         // in an arithmetic expression and an equality comparison seems unusual),
         // but if the other side of the binary expression has an error, the side
@@ -268,17 +268,17 @@ function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: r
         // Promise as an invalid operand. So if the whole binary expression is
         // typed `any` as a result, there is a strong likelihood that this Promise
         // is accidentally missing `await`.
-        checker.getTypeAtLocation(errorNode).flags & TypeFlags.Any;
+        || checker.getTypeAtLocation(errorNode).flags & TypeFlags.Any;
 }
 
 function isInsideAwaitableBody(node: Node) {
     return node.flags & NodeFlags.AwaitContext || !!findAncestor(node, ancestor =>
-        ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
-        isBlock(ancestor) && (
-                ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
-                ancestor.parent.kind === SyntaxKind.FunctionExpression ||
-                ancestor.parent.kind === SyntaxKind.ArrowFunction ||
-                ancestor.parent.kind === SyntaxKind.MethodDeclaration
+        ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor
+        || isBlock(ancestor) && (
+                ancestor.parent.kind === SyntaxKind.FunctionDeclaration
+                || ancestor.parent.kind === SyntaxKind.FunctionExpression
+                || ancestor.parent.kind === SyntaxKind.ArrowFunction
+                || ancestor.parent.kind === SyntaxKind.MethodDeclaration
             ));
 }
 

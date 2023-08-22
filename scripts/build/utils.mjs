@@ -39,8 +39,8 @@ export async function exec(cmd, args, options = {}) {
                     resolve({ exitCode: exitCode ?? undefined });
                 }
                 else {
-                    const reason = options.token?.signaled ? options.token.reason ?? new CancelError() :
-                        new ExecError(exitCode);
+                    const reason = options.token?.signaled ? options.token.reason ?? new CancelError()
+                        : new ExecError(exitCode);
                     reject(reason);
                 }
                 subscription?.unsubscribe();

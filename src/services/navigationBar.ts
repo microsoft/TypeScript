@@ -445,8 +445,8 @@ function addChildrenRecursively(node: Node | undefined): void {
 
         case SyntaxKind.ExportAssignment: {
             const expression = (node as ExportAssignment).expression;
-            const child = isObjectLiteralExpression(expression) || isCallExpression(expression) ? expression :
-                isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
+            const child = isObjectLiteralExpression(expression) || isCallExpression(expression) ? expression
+                : isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
             if (child) {
                 startNode(node);
                 addChildrenRecursively(child);
@@ -479,9 +479,9 @@ function addChildrenRecursively(node: Node | undefined): void {
                     const binaryExpression = node as BinaryExpression;
                     const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
 
-                    const prototypeAccess = special === AssignmentDeclarationKind.PrototypeProperty ?
-                        assignmentTarget.expression as PropertyAccessExpression :
-                        assignmentTarget;
+                    const prototypeAccess = special === AssignmentDeclarationKind.PrototypeProperty
+                        ? assignmentTarget.expression as PropertyAccessExpression
+                        : assignmentTarget;
 
                     let depth = 0;
                     let className: PropertyNameLiteral;
@@ -517,9 +517,9 @@ function addChildrenRecursively(node: Node | undefined): void {
                 case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                 case AssignmentDeclarationKind.ObjectDefinePrototypeProperty: {
                     const defineCall = node as BindableObjectDefinePropertyCall;
-                    const className = special === AssignmentDeclarationKind.ObjectDefinePropertyValue ?
-                        defineCall.arguments[0] :
-                        (defineCall.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression;
+                    const className = special === AssignmentDeclarationKind.ObjectDefinePropertyValue
+                        ? defineCall.arguments[0]
+                        : (defineCall.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression;
 
                     const memberName = defineCall.arguments[1];
                     const [depth, classNameIdentifier] = startNestedNodes(node, className);
@@ -536,8 +536,8 @@ function addChildrenRecursively(node: Node | undefined): void {
                     const assignmentTarget = binaryExpression.left as PropertyAccessExpression | BindableElementAccessExpression;
                     const targetFunction = assignmentTarget.expression;
                     if (
-                        isIdentifier(targetFunction) && getElementOrPropertyAccessName(assignmentTarget) !== "prototype" &&
-                        trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)
+                        isIdentifier(targetFunction) && getElementOrPropertyAccessName(assignmentTarget) !== "prototype"
+                        && trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)
                     ) {
                         if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
                             addNodeWithRecursiveChild(node, binaryExpression.right, targetFunction);
@@ -628,13 +628,13 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
     function isPossibleConstructor(node: Node) {
         return isFunctionExpression(node) || isFunctionDeclaration(node) || isVariableDeclaration(node);
     }
-    const bAssignmentDeclarationKind = isBinaryExpression(b.node) || isCallExpression(b.node) ?
-        getAssignmentDeclarationKind(b.node) :
-        AssignmentDeclarationKind.None;
+    const bAssignmentDeclarationKind = isBinaryExpression(b.node) || isCallExpression(b.node)
+        ? getAssignmentDeclarationKind(b.node)
+        : AssignmentDeclarationKind.None;
 
-    const aAssignmentDeclarationKind = isBinaryExpression(a.node) || isCallExpression(a.node) ?
-        getAssignmentDeclarationKind(a.node) :
-        AssignmentDeclarationKind.None;
+    const aAssignmentDeclarationKind = isBinaryExpression(a.node) || isCallExpression(a.node)
+        ? getAssignmentDeclarationKind(a.node)
+        : AssignmentDeclarationKind.None;
 
     // We treat this as an es5 class and merge the nodes in in one of several cases
     if (
@@ -652,9 +652,9 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
             (!isClassDeclaration(a.node) && !isClassDeclaration(b.node)) // If neither outline node is a class
             || isPossibleConstructor(a.node) || isPossibleConstructor(b.node) // If either function is a constructor function
         ) {
-            const ctorFunction = isPossibleConstructor(a.node) ? a.node :
-                isPossibleConstructor(b.node) ? b.node :
-                undefined;
+            const ctorFunction = isPossibleConstructor(a.node) ? a.node
+                : isPossibleConstructor(b.node) ? b.node
+                : undefined;
 
             if (ctorFunction !== undefined) {
                 const ctorNode = setTextRange(

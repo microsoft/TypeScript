@@ -336,8 +336,8 @@ function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk:
                 // only continue trying to consumer pattern parts if the last part and this
                 // part are both upper case.
                 if (
-                    !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan - 1].start)) ||
-                    !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan].start))
+                    !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan - 1].start))
+                    || !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan].start))
                 ) {
                     break;
                 }
@@ -507,11 +507,11 @@ function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
         const hasTransitionFromUpperToLower = word && transitionFromUpperToLower(identifier, i, wordStart);
 
         if (
-            charIsPunctuation(identifier.charCodeAt(i - 1)) ||
-            charIsPunctuation(identifier.charCodeAt(i)) ||
-            lastIsDigit !== currentIsDigit ||
-            hasTransitionFromLowerToUpper ||
-            hasTransitionFromUpperToLower
+            charIsPunctuation(identifier.charCodeAt(i - 1))
+            || charIsPunctuation(identifier.charCodeAt(i))
+            || lastIsDigit !== currentIsDigit
+            || hasTransitionFromLowerToUpper
+            || hasTransitionFromUpperToLower
         ) {
             if (!isAllPunctuation(identifier, wordStart, i)) {
                 result.push(createTextSpan(wordStart, i - wordStart));

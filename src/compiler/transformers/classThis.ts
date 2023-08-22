@@ -76,11 +76,11 @@ export function isClassThisAssignmentBlock(node: Node): node is ClassThisAssignm
     }
 
     const statement = node.body.statements[0];
-    return isExpressionStatement(statement) &&
-        isAssignmentExpression(statement.expression, /*excludeCompoundAssignment*/ true) &&
-        isIdentifier(statement.expression.left) &&
-        node.emitNode?.classThis === statement.expression.left &&
-        statement.expression.right.kind === SyntaxKind.ThisKeyword;
+    return isExpressionStatement(statement)
+        && isAssignmentExpression(statement.expression, /*excludeCompoundAssignment*/ true)
+        && isIdentifier(statement.expression.left)
+        && node.emitNode?.classThis === statement.expression.left
+        && statement.expression.right.kind === SyntaxKind.ThisKeyword;
 }
 
 /**
@@ -126,16 +126,16 @@ export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaratio
     const members = factory.createNodeArray([staticBlock, ...node.members]);
     setTextRange(members, node.members);
 
-    const updatedNode = isClassDeclaration(node) ?
-        factory.updateClassDeclaration(
+    const updatedNode = isClassDeclaration(node)
+        ? factory.updateClassDeclaration(
             node,
             node.modifiers,
             node.name,
             node.typeParameters,
             node.heritageClauses,
             members,
-        ) :
-        factory.updateClassExpression(
+        )
+        : factory.updateClassExpression(
             node,
             node.modifiers,
             node.name,

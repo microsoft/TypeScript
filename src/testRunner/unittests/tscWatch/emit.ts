@@ -70,9 +70,9 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
                 const configFile: File = {
                     path: "/a/b/project/tsconfig.json",
                     content: jsonToReadableText({
-                        compilerOptions: useOutFile ?
-                            { outFile: "../output/common.js", target: "es5" } :
-                            { outDir: "../output", target: "es5" },
+                        compilerOptions: useOutFile
+                            ? { outFile: "../output/common.js", target: "es5" }
+                            : { outDir: "../output", target: "es5" },
                         files: [file1.path, file2.path, file3.path, file4.path],
                     }),
                 };
@@ -144,9 +144,9 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                 const additionalFiles = getAdditionalFileOrFolder?.() || ts.emptyArray;
                 const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
                 return createWatchedSystem(
-                    firstReloadFileList ?
-                        ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!) :
-                        files,
+                    firstReloadFileList
+                        ? ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!)
+                        : files,
                 );
             },
             edits: changes,

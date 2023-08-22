@@ -253,9 +253,9 @@ export function formatSelection(start: number, end: number, sourceFile: SourceFi
 function findImmediatelyPrecedingTokenOfKind(end: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node | undefined {
     const precedingToken = findPrecedingToken(end, sourceFile);
 
-    return precedingToken && precedingToken.kind === expectedTokenKind && end === precedingToken.getEnd() ?
-        precedingToken :
-        undefined;
+    return precedingToken && precedingToken.kind === expectedTokenKind && end === precedingToken.getEnd()
+        ? precedingToken
+        : undefined;
 }
 
 /**
@@ -274,10 +274,10 @@ function findImmediatelyPrecedingTokenOfKind(end: number, expectedTokenKind: Syn
 function findOutermostNodeWithinListLevel(node: Node | undefined) {
     let current = node;
     while (
-        current &&
-        current.parent &&
-        current.parent.end === node!.end &&
-        !isListElement(current.parent, current)
+        current
+        && current.parent
+        && current.parent.end === node!.end
+        && !isListElement(current.parent, current)
     ) {
         current = current.parent;
     }
@@ -549,9 +549,9 @@ function formatSpanWorker(
         // inclusive. We would expect a format-selection would delete the space (if rules apply),
         // but in order to do that, we need to process the pair ["{", "}"], but we stopped processing
         // just before getting there. This block handles this trailing edit.
-        const tokenInfo = formattingScanner.isOnEOF() ? formattingScanner.readEOFTokenRange() :
-            formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(enclosingNode).token :
-            undefined;
+        const tokenInfo = formattingScanner.isOnEOF() ? formattingScanner.readEOFTokenRange()
+            : formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(enclosingNode).token
+            : undefined;
 
         if (tokenInfo && tokenInfo.pos === previousRangeTriviaEnd!) {
             // We need to check that tokenInfo and previousRange are contiguous: the `originalRange`
@@ -591,8 +591,8 @@ function formatSpanWorker(
      */
     function tryComputeIndentationForListItem(startPos: number, endPos: number, parentStartLine: number, range: TextRange, inheritedIndentation: number): number {
         if (
-            rangeOverlapsWithStartEnd(range, startPos, endPos) ||
-            rangeContainsStartEnd(range, startPos, endPos) /* Not to miss zero-range nodes e.g. JsxText */
+            rangeOverlapsWithStartEnd(range, startPos, endPos)
+            || rangeContainsStartEnd(range, startPos, endPos) /* Not to miss zero-range nodes e.g. JsxText */
         ) {
             if (inheritedIndentation !== Constants.Unknown) {
                 return inheritedIndentation;
@@ -639,9 +639,9 @@ function formatSpanWorker(
                 return { indentation: indentationOnLastIndentedLine, delta: parentDynamicIndentation.getDelta(node) };
             }
             else if (
-                SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile) ||
-                SmartIndenter.childIsUnindentedBranchOfConditionalExpression(parent, node, startLine, sourceFile) ||
-                SmartIndenter.argumentStartsOnSameLineAsPreviousArgument(parent, node, startLine, sourceFile)
+                SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)
+                || SmartIndenter.childIsUnindentedBranchOfConditionalExpression(parent, node, startLine, sourceFile)
+                || SmartIndenter.argumentStartsOnSameLineAsPreviousArgument(parent, node, startLine, sourceFile)
             ) {
                 return { indentation: parentDynamicIndentation.getIndentation(), delta };
             }
@@ -1013,9 +1013,9 @@ function formatSpanWorker(
             }
 
             if (indentToken) {
-                const tokenIndentation = (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) ?
-                    dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container, !!isListEndToken) :
-                    Constants.Unknown;
+                const tokenIndentation = (isTokenInRange && !rangeContainsError(currentTokenInfo.token))
+                    ? dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container, !!isListEndToken)
+                    : Constants.Unknown;
 
                 let indentNextTokenOrTrivia = true;
                 if (currentTokenInfo.leadingTrivia) {
@@ -1395,7 +1395,7 @@ export function getRangeOfEnclosingComment(
     const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(tokenAtPosition, sourceFile);
     const commentRanges = concatenate(trailingRangesOfPreviousToken, leadingCommentRangesOfNextToken);
     return commentRanges && find(commentRanges, range =>
-        rangeContainsPositionExclusive(range, position) ||
+        rangeContainsPositionExclusive(range, position)
         // The end marker of a single-line comment does not include the newline character.
         // With caret at `^`, in the following case, we are inside a comment (^ denotes the cursor position):
         //
@@ -1409,7 +1409,7 @@ export function getRangeOfEnclosingComment(
         //
         // Internally, we represent the end of the comment at the newline and closing '/', respectively.
         //
-        position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()));
+        || position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()));
 }
 
 function getOpenTokenForList(node: Node, list: readonly Node[]) {

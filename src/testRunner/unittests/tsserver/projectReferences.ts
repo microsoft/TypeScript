@@ -381,9 +381,9 @@ function foo() {
             const aConfig = config("A", extraOptions, ["../B"]);
             const bConfig = config("B", extraOptions);
             const files = [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
-            const host = alreadyBuilt ?
-                createHostWithSolutionBuild(files, [aConfig.path]) :
-                createServerHost(files);
+            const host = alreadyBuilt
+                ? createHostWithSolutionBuild(files, [aConfig.path])
+                : createServerHost(files);
 
             // Create symlink in node module
             const session = new TestSession(host);
@@ -1626,10 +1626,10 @@ const b: B = new B();`,
             dtsMapPresent: boolean,
         ) {
             // Mangled to stay under windows path length limit
-            const subScenario = `when proj ${projectAlreadyLoaded ? "is" : "is not"} loaded` +
-                ` and refd proj loading is ${disableReferencedProjectLoad ? "disabled" : "enabled"}` +
-                ` and proj ref redirects are ${disableSourceOfProjectReferenceRedirect ? "disabled" : "enabled"}` +
-                ` and a decl map is ${dtsMapPresent ? "present" : "missing"}`;
+            const subScenario = `when proj ${projectAlreadyLoaded ? "is" : "is not"} loaded`
+                + ` and refd proj loading is ${disableReferencedProjectLoad ? "disabled" : "enabled"}`
+                + ` and proj ref redirects are ${disableSourceOfProjectReferenceRedirect ? "disabled" : "enabled"}`
+                + ` and a decl map is ${dtsMapPresent ? "present" : "missing"}`;
             const compilerOptions: ts.CompilerOptions = {
                 disableReferencedProjectLoad,
                 disableSourceOfProjectReferenceRedirect,

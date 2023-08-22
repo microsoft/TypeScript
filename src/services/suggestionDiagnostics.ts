@@ -69,10 +69,10 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
     const isCommonJSFile = sourceFile.impliedNodeFormat === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]);
 
     if (
-        !isCommonJSFile &&
-        sourceFile.commonJsModuleIndicator &&
-        (programContainsEsModules(program) || compilerOptionsIndicateEsModules(program.getCompilerOptions())) &&
-        containsTopLevelCommonjs(sourceFile)
+        !isCommonJSFile
+        && sourceFile.commonJsModuleIndicator
+        && (programContainsEsModules(program) || compilerOptionsIndicateEsModules(program.getCompilerOptions()))
+        && containsTopLevelCommonjs(sourceFile)
     ) {
         diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module));
     }
@@ -107,10 +107,10 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
         }
         else {
             if (
-                isVariableStatement(node) &&
-                node.parent === sourceFile &&
-                node.declarationList.flags & NodeFlags.Const &&
-                node.declarationList.declarations.length === 1
+                isVariableStatement(node)
+                && node.parent === sourceFile
+                && node.declarationList.flags & NodeFlags.Const
+                && node.declarationList.declarations.length === 1
             ) {
                 const init = node.declarationList.declarations[0].initializer;
                 if (init && isRequireCall(init, /*requireStringLiteralLikeArgument*/ true)) {
@@ -182,11 +182,11 @@ function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, che
 }
 
 function isConvertibleFunction(node: FunctionLikeDeclaration, checker: TypeChecker) {
-    return !isAsyncFunction(node) &&
-        node.body &&
-        isBlock(node.body) &&
-        hasReturnStatementWithPromiseHandler(node.body, checker) &&
-        returnsPromise(node, checker);
+    return !isAsyncFunction(node)
+        && node.body
+        && isBlock(node.body)
+        && hasReturnStatementWithPromiseHandler(node.body, checker)
+        && returnsPromise(node, checker);
 }
 
 /** @internal */
@@ -235,9 +235,9 @@ export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boole
 
 function isPromiseHandler(node: Node): node is CallExpression & { readonly expression: PropertyAccessExpression; } {
     return isCallExpression(node) && (
-        hasPropertyAccessExpressionWithName(node, "then") ||
-        hasPropertyAccessExpressionWithName(node, "catch") ||
-        hasPropertyAccessExpressionWithName(node, "finally")
+        hasPropertyAccessExpressionWithName(node, "then")
+        || hasPropertyAccessExpressionWithName(node, "catch")
+        || hasPropertyAccessExpressionWithName(node, "finally")
     );
 }
 
@@ -272,8 +272,8 @@ function isFixablePromiseArgument(arg: Expression, checker: TypeChecker): boolea
             if (!symbol) {
                 return false;
             }
-            return checker.isUndefinedSymbol(symbol) ||
-                some(skipAlias(symbol, checker).declarations, d => isFunctionLike(d) || hasInitializer(d) && !!d.initializer && isFunctionLike(d.initializer));
+            return checker.isUndefinedSymbol(symbol)
+                || some(skipAlias(symbol, checker).declarations, d => isFunctionLike(d) || hasInitializer(d) && !!d.initializer && isFunctionLike(d.initializer));
         }
         default:
             return false;

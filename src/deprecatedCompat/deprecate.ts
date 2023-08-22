@@ -54,9 +54,9 @@ export function createDeprecation(name: string, options: DeprecationOptions = {}
     const since = typeof options.since === "string" ? new Version(options.since) : options.since ?? warnAfter;
     const error = options.error || errorAfter && version.compareTo(errorAfter) >= 0;
     const warn = !warnAfter || version.compareTo(warnAfter) >= 0;
-    return error ? createErrorDeprecation(name, errorAfter, since, options.message) :
-        warn ? createWarningDeprecation(name, errorAfter, since, options.message) :
-        noop;
+    return error ? createErrorDeprecation(name, errorAfter, since, options.message)
+        : warn ? createWarningDeprecation(name, errorAfter, since, options.message)
+        : noop;
 }
 
 function wrapFunction<F extends (...args: any[]) => any>(deprecation: () => void, func: F): F {

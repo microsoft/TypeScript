@@ -550,8 +550,8 @@ function isPropertyAccessNamespaceReference(node: Node): boolean {
 
     if (!isLastClause && root.parent.kind === SyntaxKind.ExpressionWithTypeArguments && root.parent.parent.kind === SyntaxKind.HeritageClause) {
         const decl = root.parent.parent.parent;
-        return (decl.kind === SyntaxKind.ClassDeclaration && (root.parent.parent as HeritageClause).token === SyntaxKind.ImplementsKeyword) ||
-            (decl.kind === SyntaxKind.InterfaceDeclaration && (root.parent.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword);
+        return (decl.kind === SyntaxKind.ClassDeclaration && (root.parent.parent as HeritageClause).token === SyntaxKind.ImplementsKeyword)
+            || (decl.kind === SyntaxKind.InterfaceDeclaration && (root.parent.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword);
     }
 
     return false;
@@ -732,8 +732,8 @@ export function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: StringLite
 
 /** @internal */
 export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
-    return isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
-        getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
+    return isExternalModuleImportEqualsDeclaration(node.parent.parent)
+        && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
 }
 
 /** @internal */
@@ -1029,8 +1029,8 @@ function isCompletedNode(n: Node | undefined, sourceFile: SourceFile): boolean {
             return isCompletedNode((n as IfStatement).thenStatement, sourceFile);
 
         case SyntaxKind.ExpressionStatement:
-            return isCompletedNode((n as ExpressionStatement).expression, sourceFile) ||
-                hasChildOfKind(n, SyntaxKind.SemicolonToken, sourceFile);
+            return isCompletedNode((n as ExpressionStatement).expression, sourceFile)
+                || hasChildOfKind(n, SyntaxKind.SemicolonToken, sourceFile);
 
         case SyntaxKind.ArrayLiteralExpression:
         case SyntaxKind.ArrayBindingPattern:
@@ -1333,16 +1333,16 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
     // NOTE: If the node is a modifier, we don't adjust its location if it is the `default` modifier as that is handled
     // specially by `getSymbolAtLocation`.
     if (
-        isModifier(node) && (forRename || node.kind !== SyntaxKind.DefaultKeyword) ? canHaveModifiers(parent) && contains(parent.modifiers, node) :
-            node.kind === SyntaxKind.ClassKeyword ? isClassDeclaration(parent) || isClassExpression(node) :
-            node.kind === SyntaxKind.FunctionKeyword ? isFunctionDeclaration(parent) || isFunctionExpression(node) :
-            node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent) :
-            node.kind === SyntaxKind.EnumKeyword ? isEnumDeclaration(parent) :
-            node.kind === SyntaxKind.TypeKeyword ? isTypeAliasDeclaration(parent) :
-            node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword ? isModuleDeclaration(parent) :
-            node.kind === SyntaxKind.ImportKeyword ? isImportEqualsDeclaration(parent) :
-            node.kind === SyntaxKind.GetKeyword ? isGetAccessorDeclaration(parent) :
-            node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(parent)
+        isModifier(node) && (forRename || node.kind !== SyntaxKind.DefaultKeyword) ? canHaveModifiers(parent) && contains(parent.modifiers, node)
+            : node.kind === SyntaxKind.ClassKeyword ? isClassDeclaration(parent) || isClassExpression(node)
+            : node.kind === SyntaxKind.FunctionKeyword ? isFunctionDeclaration(parent) || isFunctionExpression(node)
+            : node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent)
+            : node.kind === SyntaxKind.EnumKeyword ? isEnumDeclaration(parent)
+            : node.kind === SyntaxKind.TypeKeyword ? isTypeAliasDeclaration(parent)
+            : node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword ? isModuleDeclaration(parent)
+            : node.kind === SyntaxKind.ImportKeyword ? isImportEqualsDeclaration(parent)
+            : node.kind === SyntaxKind.GetKeyword ? isGetAccessorDeclaration(parent)
+            : node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(parent)
     ) {
         const location = getAdjustedLocationForDeclaration(parent, forRename);
         if (location) {
@@ -1351,8 +1351,8 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
     }
     // /**/<var|let|const> [|name|] ...
     if (
-        (node.kind === SyntaxKind.VarKeyword || node.kind === SyntaxKind.ConstKeyword || node.kind === SyntaxKind.LetKeyword) &&
-        isVariableDeclarationList(parent) && parent.declarations.length === 1
+        (node.kind === SyntaxKind.VarKeyword || node.kind === SyntaxKind.ConstKeyword || node.kind === SyntaxKind.LetKeyword)
+        && isVariableDeclarationList(parent) && parent.declarations.length === 1
     ) {
         const decl = parent.declarations[0];
         if (isIdentifier(decl.name)) {
@@ -1387,10 +1387,10 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
     // export * /**/as [|name|] ...
     if (node.kind === SyntaxKind.AsKeyword) {
         if (
-            isImportSpecifier(parent) && parent.propertyName ||
-            isExportSpecifier(parent) && parent.propertyName ||
-            isNamespaceImport(parent) ||
-            isNamespaceExport(parent)
+            isImportSpecifier(parent) && parent.propertyName
+            || isExportSpecifier(parent) && parent.propertyName
+            || isNamespaceImport(parent)
+            || isNamespaceExport(parent)
         ) {
             return parent.name;
         }
@@ -1467,15 +1467,15 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
     }
     // /**/keyof [|T|]
     if (
-        node.kind === SyntaxKind.KeyOfKeyword && isTypeOperatorNode(parent) && parent.operator === SyntaxKind.KeyOfKeyword &&
-        isTypeReferenceNode(parent.type)
+        node.kind === SyntaxKind.KeyOfKeyword && isTypeOperatorNode(parent) && parent.operator === SyntaxKind.KeyOfKeyword
+        && isTypeReferenceNode(parent.type)
     ) {
         return parent.type.typeName;
     }
     // /**/readonly [|name|][]
     if (
-        node.kind === SyntaxKind.ReadonlyKeyword && isTypeOperatorNode(parent) && parent.operator === SyntaxKind.ReadonlyKeyword &&
-        isArrayTypeNode(parent.type) && isTypeReferenceNode(parent.type.elementType)
+        node.kind === SyntaxKind.ReadonlyKeyword && isTypeOperatorNode(parent) && parent.operator === SyntaxKind.ReadonlyKeyword
+        && isArrayTypeNode(parent.type) && isTypeReferenceNode(parent.type.elementType)
     ) {
         return parent.type.elementType.typeName;
     }
@@ -1491,12 +1491,12 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
         // /**/yield obj.[|name|]
         // /**/delete obj.[|name|]
         if (
-            node.kind === SyntaxKind.NewKeyword && isNewExpression(parent) ||
-            node.kind === SyntaxKind.VoidKeyword && isVoidExpression(parent) ||
-            node.kind === SyntaxKind.TypeOfKeyword && isTypeOfExpression(parent) ||
-            node.kind === SyntaxKind.AwaitKeyword && isAwaitExpression(parent) ||
-            node.kind === SyntaxKind.YieldKeyword && isYieldExpression(parent) ||
-            node.kind === SyntaxKind.DeleteKeyword && isDeleteExpression(parent)
+            node.kind === SyntaxKind.NewKeyword && isNewExpression(parent)
+            || node.kind === SyntaxKind.VoidKeyword && isVoidExpression(parent)
+            || node.kind === SyntaxKind.TypeOfKeyword && isTypeOfExpression(parent)
+            || node.kind === SyntaxKind.AwaitKeyword && isAwaitExpression(parent)
+            || node.kind === SyntaxKind.YieldKeyword && isYieldExpression(parent)
+            || node.kind === SyntaxKind.DeleteKeyword && isDeleteExpression(parent)
         ) {
             if (parent.expression) {
                 return skipOuterExpressions(parent.expression);
@@ -1514,8 +1514,8 @@ function getAdjustedLocation(node: Node, forRename: boolean): Node {
         // for (... /**/in [|name|])
         // for (... /**/of [|name|])
         if (
-            node.kind === SyntaxKind.InKeyword && isForInStatement(parent) ||
-            node.kind === SyntaxKind.OfKeyword && isForOfStatement(parent)
+            node.kind === SyntaxKind.InKeyword && isForInStatement(parent)
+            || node.kind === SyntaxKind.OfKeyword && isForOfStatement(parent)
         ) {
             return skipOuterExpressions(parent.expression);
         }
@@ -1715,9 +1715,9 @@ export function findNextToken(previousToken: Node, parent: Node, sourceFile: Sou
         return firstDefined(n.getChildren(sourceFile), child => {
             const shouldDiveInChildNode =
                 // previous token is enclosed somewhere in the child
-                (child.pos <= previousToken.pos && child.end > previousToken.end) ||
+                (child.pos <= previousToken.pos && child.end > previousToken.end)
                 // previous token ends exactly at the beginning of child
-                (child.pos === previousToken.end);
+                || (child.pos === previousToken.end);
             return shouldDiveInChildNode && nodeHasTokens(child, sourceFile) ? find(child) : undefined;
         });
     }
@@ -1767,9 +1767,9 @@ export function findPrecedingToken(position: number, sourceFile: SourceFileLike,
             // 2) `position` is within the same span: we recurse on `child`.
             if (position < child.end) {
                 const start = child.getStart(sourceFile, /*includeJsDoc*/ !excludeJsdoc);
-                const lookInPreviousChild = (start >= position) || // cursor in the leading trivia
-                    !nodeHasTokens(child, sourceFile) ||
-                    isWhiteSpaceOnlyJsxText(child);
+                const lookInPreviousChild = (start >= position) // cursor in the leading trivia
+                    || !nodeHasTokens(child, sourceFile)
+                    || isWhiteSpaceOnlyJsxText(child);
 
                 if (lookInPreviousChild) {
                     // actual start of the node is past the position - previous token should be at the end of previous child
@@ -1997,17 +1997,17 @@ export function findPrecedingMatchingToken(token: Node, matchingTokenKind: Synta
 
 /** @internal */
 export function removeOptionality(type: Type, isOptionalExpression: boolean, isOptionalChain: boolean) {
-    return isOptionalExpression ? type.getNonNullableType() :
-        isOptionalChain ? type.getNonOptionalType() :
-        type;
+    return isOptionalExpression ? type.getNonNullableType()
+        : isOptionalChain ? type.getNonOptionalType()
+        : type;
 }
 
 /** @internal */
 export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean {
     const info = getPossibleTypeArgumentsInfo(token, sourceFile);
-    return info !== undefined && (isPartOfTypeNode(info.called) ||
-        getPossibleGenericSignatures(info.called, info.nTypeArguments, checker).length !== 0 ||
-        isPossiblyTypeArgumentPosition(info.called, sourceFile, checker));
+    return info !== undefined && (isPartOfTypeNode(info.called)
+        || getPossibleGenericSignatures(info.called, info.nTypeArguments, checker).length !== 0
+        || isPossiblyTypeArgumentPosition(info.called, sourceFile, checker));
 }
 
 /** @internal */
@@ -2221,8 +2221,8 @@ export function isStringAndEmptyAnonymousObjectIntersection(type: Type) {
     }
 
     const { types, checker } = type;
-    return types.length === 2 &&
-        (areIntersectedTypesAvoidingStringReduction(checker, types[0], types[1]) || areIntersectedTypesAvoidingStringReduction(checker, types[1], types[0]));
+    return types.length === 2
+        && (areIntersectedTypesAvoidingStringReduction(checker, types[0], types[1]) || areIntersectedTypesAvoidingStringReduction(checker, types[1], types[0]));
 }
 
 /** @internal */
@@ -2253,15 +2253,15 @@ export function cloneCompilerOptions(options: CompilerOptions): CompilerOptions 
 /** @internal */
 export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node) {
     if (
-        node.kind === SyntaxKind.ArrayLiteralExpression ||
-        node.kind === SyntaxKind.ObjectLiteralExpression
+        node.kind === SyntaxKind.ArrayLiteralExpression
+        || node.kind === SyntaxKind.ObjectLiteralExpression
     ) {
         // [a,b,c] from:
         // [a, b, c] = someExpression;
         if (
-            node.parent.kind === SyntaxKind.BinaryExpression &&
-            (node.parent as BinaryExpression).left === node &&
-            (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken
+            node.parent.kind === SyntaxKind.BinaryExpression
+            && (node.parent as BinaryExpression).left === node
+            && (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken
         ) {
             return true;
         }
@@ -2269,8 +2269,8 @@ export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node) {
         // [a, b, c] from:
         // for([a, b, c] of expression)
         if (
-            node.parent.kind === SyntaxKind.ForOfStatement &&
-            (node.parent as ForOfStatement).initializer === node
+            node.parent.kind === SyntaxKind.ForOfStatement
+            && (node.parent as ForOfStatement).initializer === node
         ) {
             return true;
         }
@@ -2532,8 +2532,8 @@ export function getQuotePreference(sourceFile: SourceFile, preferences: UserPref
     }
     else {
         // ignore synthetic import added when importHelpers: true
-        const firstModuleSpecifier = sourceFile.imports &&
-            find(sourceFile.imports, n => isStringLiteral(n) && !nodeIsSynthesized(n.parent)) as StringLiteral;
+        const firstModuleSpecifier = sourceFile.imports
+            && find(sourceFile.imports, n => isStringLiteral(n) && !nodeIsSynthesized(n.parent)) as StringLiteral;
         return firstModuleSpecifier ? quotePreferenceFromString(firstModuleSpecifier, sourceFile) : QuotePreference.Double;
     }
 }
@@ -2571,10 +2571,10 @@ export function symbolEscapedNameNoDefault(symbol: Symbol): __String | undefined
 /** @internal */
 export function isModuleSpecifierLike(node: Node): node is StringLiteralLike {
     return isStringLiteralLike(node) && (
-        isExternalModuleReference(node.parent) ||
-        isImportDeclaration(node.parent) ||
-        isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) && node.parent.arguments[0] === node ||
-        isImportCall(node.parent) && node.parent.arguments[0] === node
+        isExternalModuleReference(node.parent)
+        || isImportDeclaration(node.parent)
+        || isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) && node.parent.arguments[0] === node
+        || isImportCall(node.parent) && node.parent.arguments[0] === node
     );
 }
 
@@ -2583,10 +2583,10 @@ export type ObjectBindingElementWithoutPropertyName = BindingElement & { name: I
 
 /** @internal */
 export function isObjectBindingElementWithoutPropertyName(bindingElement: Node): bindingElement is ObjectBindingElementWithoutPropertyName {
-    return isBindingElement(bindingElement) &&
-        isObjectBindingPattern(bindingElement.parent) &&
-        isIdentifier(bindingElement.name) &&
-        !bindingElement.propertyName;
+    return isBindingElement(bindingElement)
+        && isObjectBindingPattern(bindingElement.parent)
+        && isIdentifier(bindingElement.name)
+        && !bindingElement.propertyName;
 }
 
 /** @internal */
@@ -2609,8 +2609,8 @@ export function getParentNodeInSpan(node: Node | undefined, file: SourceFile, sp
 }
 
 function spanContainsNode(span: TextSpan, node: Node, file: SourceFile): boolean {
-    return textSpanContainsPosition(span, node.getStart(file)) &&
-        node.getEnd() <= textSpanEnd(span);
+    return textSpanContainsPosition(span, node.getStart(file))
+        && node.getEnd() <= textSpanEnd(span);
 }
 
 /** @internal */
@@ -2633,8 +2633,8 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
             const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
             if (insertionIndex === 0) {
                 // If the first import is top-of-file, insert after the leading comment which is likely the header.
-                const options = existingImportStatements[0] === sourceFile.statements[0] ?
-                    { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude } : {};
+                const options = existingImportStatements[0] === sourceFile.statements[0]
+                    ? { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude } : {};
                 changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false, options);
             }
             else {
@@ -2666,8 +2666,8 @@ export function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined)
 }
 /** @internal */
 export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan, useCaseSensitiveFileNames: boolean): boolean {
-    return (useCaseSensitiveFileNames ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.fileName, b.fileName) &&
-        textSpansEqual(a.textSpan, b.textSpan);
+    return (useCaseSensitiveFileNames ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.fileName, b.fileName)
+        && textSpansEqual(a.textSpan, b.textSpan);
 }
 
 /** @internal */
@@ -2747,9 +2747,9 @@ export function getMappedContextSpan(documentSpan: DocumentSpan, sourceMapper: S
         sourceMapper,
         fileExists,
     );
-    return contextSpanStart && contextSpanEnd ?
-        { start: contextSpanStart.pos, length: contextSpanEnd.pos - contextSpanStart.pos } :
-        undefined;
+    return contextSpanStart && contextSpanEnd
+        ? { start: contextSpanStart.pos, length: contextSpanEnd.pos - contextSpanStart.pos }
+        : undefined;
 }
 
 // #endregion
@@ -3030,9 +3030,9 @@ const lineFeed = "\n";
  * @internal
  */
 export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings: FormatCodeSettings | undefined) {
-    return formatSettings?.newLineCharacter ||
-        host.getNewLine?.() ||
-        lineFeed;
+    return formatSettings?.newLineCharacter
+        || host.getNewLine?.()
+        || lineFeed;
 }
 
 /** @internal */
@@ -3176,9 +3176,9 @@ function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (n
 
     if (visited === node) {
         // This only happens for leaf nodes - internal nodes always see their children change.
-        const clone = isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
-            isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
-            factory.cloneNode(node);
+        const clone = isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T
+            : isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T
+            : factory.cloneNode(node);
         return setTextRange(clone, node);
     }
 
@@ -3805,8 +3805,8 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
             return true;
         }
 
-        const result = moduleSpecifierIsCoveredByPackageJson(declaringNodeModuleName) ||
-            moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
+        const result = moduleSpecifierIsCoveredByPackageJson(declaringNodeModuleName)
+            || moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
         ambientModuleCache.set(moduleSymbol, result);
         return result;
     }
@@ -4043,8 +4043,8 @@ function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undef
 function getSymbolParentOrFail(symbol: Symbol) {
     return Debug.checkDefined(
         symbol.parent,
-        `Symbol parent was undefined. Flags: ${Debug.formatSymbolFlags(symbol.flags)}. ` +
-            `Declarations: ${
+        `Symbol parent was undefined. Flags: ${Debug.formatSymbolFlags(symbol.flags)}. `
+            + `Declarations: ${
                 symbol.declarations?.map(d => {
                     const kind = Debug.formatSyntaxKind(d.kind);
                     const inJS = isInJSFile(d);

@@ -106,8 +106,8 @@ function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | u
 
     const token = getTouchingPropertyName(context.file, context.startPosition);
     const declaration = findAncestor(token, n =>
-        isBlock(n) || n.parent && isArrowFunction(n.parent) && (n.kind === SyntaxKind.EqualsGreaterThanToken || n.parent.body === n) ? "quit" :
-            isConvertibleDeclaration(n)) as ConvertibleDeclaration | undefined;
+        isBlock(n) || n.parent && isArrowFunction(n.parent) && (n.kind === SyntaxKind.EqualsGreaterThanToken || n.parent.body === n) ? "quit"
+            : isConvertibleDeclaration(n)) as ConvertibleDeclaration | undefined;
     if (!declaration || !declaration.body || declaration.type) {
         return { error: getLocaleSpecificMessage(Diagnostics.Return_type_must_be_inferred_from_a_function) };
     }

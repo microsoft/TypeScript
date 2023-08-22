@@ -31,9 +31,9 @@ export function commandLineCallbacks(
             if (isAnyProgram(program)) {
                 baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall);
                 (programs || (programs = [])).push(
-                    ts.isBuilderProgram(program) ?
-                        [program.getProgram(), program] :
-                        [program],
+                    ts.isBuilderProgram(program)
+                        ? [program.getProgram(), program]
+                        : [program],
                 );
             }
             else {
@@ -177,18 +177,18 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
     if (buildInfo.program && ts.isProgramBundleEmitBuildInfo(buildInfo.program)) {
         const fileInfos: ReadableProgramBundleEmitBuildInfo["fileInfos"] = {};
         buildInfo.program?.fileInfos?.forEach((fileInfo, index) =>
-            fileInfos[toFileName(index + 1 as ts.ProgramBuildInfoFileId)] = ts.isString(fileInfo) ?
-                fileInfo :
-                toReadableFileInfo(fileInfo, ts.identity)
+            fileInfos[toFileName(index + 1 as ts.ProgramBuildInfoFileId)] = ts.isString(fileInfo)
+                ? fileInfo
+                : toReadableFileInfo(fileInfo, ts.identity)
         );
         const pendingEmit = buildInfo.program.pendingEmit;
         program = {
             ...buildInfo.program,
             fileInfos,
             root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
-            pendingEmit: pendingEmit === undefined ?
-                undefined :
-                [
+            pendingEmit: pendingEmit === undefined
+                ? undefined
+                : [
                     toReadableBuilderFileEmit(ts.toProgramEmitPending(pendingEmit, buildInfo.program.options)),
                     pendingEmit,
                 ],
@@ -211,9 +211,9 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(value => toReadableProgramBuilderInfoFilePendingEmit(value, fullEmitForOptions!)),
             changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
             emitSignatures: buildInfo.program.emitSignatures?.map(s =>
-                ts.isNumber(s) ?
-                    toFileName(s) :
-                    [toFileName(s[0]), s[1]]
+                ts.isNumber(s)
+                    ? toFileName(s)
+                    : [toFileName(s[0]), s[1]]
             ),
             latestChangedDtsFile: buildInfo.program.latestChangedDtsFile,
         };
@@ -284,9 +284,9 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
 
     function toReadableProgramBuildInfoDiagnosticsPerFile(diagnostics: ts.ProgramBuildInfoDiagnostic[] | undefined): readonly ReadableProgramBuildInfoDiagnostic[] | undefined {
         return diagnostics?.map(d =>
-            ts.isNumber(d) ?
-                toFileName(d) :
-                [toFileName(d[0]), d[1]]
+            ts.isNumber(d)
+                ? toFileName(d)
+                : [toFileName(d[0]), d[1]]
         );
     }
 }

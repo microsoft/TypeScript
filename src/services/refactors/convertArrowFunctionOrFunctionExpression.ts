@@ -107,8 +107,8 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
     const possibleActions: RefactorActionInfo[] = [];
     const errors: RefactorActionInfo[] = [];
     if (refactorKindBeginsWith(toNamedFunctionAction.kind, kind)) {
-        const error = selectedVariableDeclaration || (isArrowFunction(func) && isVariableDeclaration(func.parent)) ?
-            undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_named_function);
+        const error = selectedVariableDeclaration || (isArrowFunction(func) && isVariableDeclaration(func.parent))
+            ? undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_named_function);
         if (error) {
             errors.push({ ...toNamedFunctionAction, notApplicableReason: error });
         }
@@ -118,8 +118,8 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
     }
 
     if (refactorKindBeginsWith(toAnonymousFunctionAction.kind, kind)) {
-        const error = !selectedVariableDeclaration && isArrowFunction(func) ?
-            undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_anonymous_function);
+        const error = !selectedVariableDeclaration && isArrowFunction(func)
+            ? undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_anonymous_function);
         if (error) {
             errors.push({ ...toAnonymousFunctionAction, notApplicableReason: error });
         }
@@ -141,8 +141,8 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
     return [{
         name: refactorName,
         description: refactorDescription,
-        actions: possibleActions.length === 0 && context.preferences.provideRefactorNotApplicableReason ?
-            errors : possibleActions,
+        actions: possibleActions.length === 0 && context.preferences.provideRefactorNotApplicableReason
+            ? errors : possibleActions,
     }];
 }
 
@@ -204,11 +204,11 @@ function getFunctionInfo(file: SourceFile, startPosition: number, program: Progr
 
     const maybeFunc = getContainingFunction(token);
     if (
-        maybeFunc &&
-        (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) &&
-        !rangeContainsRange(maybeFunc.body, token) &&
-        !containingThis(maybeFunc.body) &&
-        !typeChecker.containsArgumentsReference(maybeFunc)
+        maybeFunc
+        && (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc))
+        && !rangeContainsRange(maybeFunc.body, token)
+        && !containingThis(maybeFunc.body)
+        && !typeChecker.containsArgumentsReference(maybeFunc)
     ) {
         if (isFunctionExpression(maybeFunc) && isFunctionReferencedInFile(file, typeChecker, maybeFunc)) return undefined;
         return { selectedVariableDeclaration: false, func: maybeFunc };

@@ -681,9 +681,9 @@ export class FileSystem {
 
         if (isDirectory(node)) throw createIOError("EISDIR");
         if (!isFile(node)) throw createIOError("EBADF");
-        node.buffer = Buffer.isBuffer(data) ?
-            { encoding: undefined, data: data.slice() } :
-            { encoding: (encoding ?? "utf8") as BufferEncoding, data };
+        node.buffer = Buffer.isBuffer(data)
+            ? { encoding: undefined, data: data.slice() }
+            : { encoding: (encoding ?? "utf8") as BufferEncoding, data };
         // Updated the size if it's easy to get, otherwise set to undefined. _getSize will compute the correct size
         node.size = !node.buffer.encoding ? node.buffer.data.byteLength : undefined;
         node.mtimeMs = time;
@@ -697,9 +697,9 @@ export class FileSystem {
     public diff(base?: FileSystem | undefined, options: DiffOptions = {}) {
         if (!base && !options.baseIsNotShadowRoot) base = this.shadowRoot;
         const differences: FileSet = {};
-        const hasDifferences = base ?
-            FileSystem.rootDiff(differences, this, base, options) :
-            FileSystem.trackCreatedInodes(differences, this, this._getRootLinks());
+        const hasDifferences = base
+            ? FileSystem.rootDiff(differences, this, base, options)
+            : FileSystem.trackCreatedInodes(differences, this, this._getRootLinks());
         return hasDifferences ? differences : undefined;
     }
 
@@ -709,9 +709,9 @@ export class FileSystem {
      */
     public static diff(changed: FileSystem, base: FileSystem, options: DiffOptions = {}) {
         const differences: FileSet = {};
-        return FileSystem.rootDiff(differences, changed, base, options) ?
-            differences :
-            undefined;
+        return FileSystem.rootDiff(differences, changed, base, options)
+            ? differences
+            : undefined;
     }
 
     private static diffWorker(container: FileSet, changed: FileSystem, changedLinks: ReadonlyMap<string, Inode> | undefined, base: FileSystem, baseLinks: ReadonlyMap<string, Inode> | undefined, options: DiffOptions) {
@@ -772,9 +772,9 @@ export class FileSystem {
 
         // no difference if both nodes are unpopulated and point to the same mounted file system
         if (
-            !changedNode.links && !baseNode.links &&
-            changedNode.resolver && changedNode.source !== undefined &&
-            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source
+            !changedNode.links && !baseNode.links
+            && changedNode.resolver && changedNode.source !== undefined
+            && baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source
         ) return false;
 
         // no difference if both nodes have identical children
@@ -799,9 +799,9 @@ export class FileSystem {
 
         // no difference if both nodes are unpopulated and point to the same mounted file system
         if (
-            !changedNode.buffer && !baseNode.buffer &&
-            changedNode.resolver && changedNode.source !== undefined &&
-            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source
+            !changedNode.buffer && !baseNode.buffer
+            && changedNode.resolver && changedNode.source !== undefined
+            && baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source
         ) return false;
 
         const encoding = changedNode.buffer?.encoding ?? baseNode.buffer?.encoding ?? FileSystem.defaultEncoding;
@@ -1575,15 +1575,15 @@ function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileS
 /* eslint-disable no-null/no-null */
 function normalizeFileSetEntry(value: FileSet[string]) {
     if (
-        value === undefined ||
-        value === null ||
-        value instanceof Directory ||
-        value instanceof File ||
-        value instanceof Link ||
-        value instanceof Symlink ||
-        value instanceof Mount ||
-        value instanceof Rmdir ||
-        value instanceof Unlink
+        value === undefined
+        || value === null
+        || value instanceof Directory
+        || value instanceof File
+        || value instanceof Link
+        || value instanceof Symlink
+        || value instanceof Mount
+        || value instanceof Rmdir
+        || value instanceof Unlink
     ) {
         return value;
     }

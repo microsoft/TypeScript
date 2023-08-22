@@ -206,9 +206,9 @@ export function addNewNodeForMemberSymbol(
     const declarationName = createDeclarationName(symbol, declaration);
     const effectiveModifierFlags = declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None;
     let modifierFlags = effectiveModifierFlags & ModifierFlags.Static;
-    modifierFlags |= effectiveModifierFlags & ModifierFlags.Public ? ModifierFlags.Public :
-        effectiveModifierFlags & ModifierFlags.Protected ? ModifierFlags.Protected :
-        ModifierFlags.None;
+    modifierFlags |= effectiveModifierFlags & ModifierFlags.Public ? ModifierFlags.Public
+        : effectiveModifierFlags & ModifierFlags.Protected ? ModifierFlags.Protected
+        : ModifierFlags.None;
     if (declaration && isAutoAccessorPropertyDeclaration(declaration)) {
         modifierFlags |= ModifierFlags.Accessor;
     }
@@ -348,8 +348,8 @@ export function addNewNodeForMemberSymbol(
     }
 
     function createBody(block: Block | undefined, quotePreference: QuotePreference, ambient?: boolean) {
-        return ambient ? undefined :
-            getSynthesizedDeepClone(block, /*includeTrivia*/ false) || createStubbedMethodBody(quotePreference);
+        return ambient ? undefined
+            : getSynthesizedDeepClone(block, /*includeTrivia*/ false) || createStubbedMethodBody(quotePreference);
     }
 
     function createTypeNode(typeNode: TypeNode | undefined) {

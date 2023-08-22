@@ -440,13 +440,13 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             node.name,
             /*questionToken*/ undefined,
             /*typeParameters*/ undefined,
-            parameters = functionFlags & FunctionFlags.Async ?
-                transformAsyncFunctionParameterList(node) :
-                visitParameterList(node.parameters, visitor, context),
+            parameters = functionFlags & FunctionFlags.Async
+                ? transformAsyncFunctionParameterList(node)
+                : visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            functionFlags & FunctionFlags.Async ?
-                transformAsyncFunctionBody(node, parameters) :
-                transformMethodBody(node),
+            functionFlags & FunctionFlags.Async
+                ? transformAsyncFunctionBody(node, parameters)
+                : transformMethodBody(node),
         );
         lexicalArgumentsBinding = savedLexicalArgumentsBinding;
         return updated;
@@ -500,13 +500,13 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            parameters = functionFlags & FunctionFlags.Async ?
-                transformAsyncFunctionParameterList(node) :
-                visitParameterList(node.parameters, visitor, context),
+            parameters = functionFlags & FunctionFlags.Async
+                ? transformAsyncFunctionParameterList(node)
+                : visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            functionFlags & FunctionFlags.Async ?
-                transformAsyncFunctionBody(node, parameters) :
-                visitFunctionBody(node.body, visitor, context),
+            functionFlags & FunctionFlags.Async
+                ? transformAsyncFunctionBody(node, parameters)
+                : visitFunctionBody(node.body, visitor, context),
         );
         lexicalArgumentsBinding = savedLexicalArgumentsBinding;
         return updated;
@@ -531,13 +531,13 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            parameters = functionFlags & FunctionFlags.Async ?
-                transformAsyncFunctionParameterList(node) :
-                visitParameterList(node.parameters, visitor, context),
+            parameters = functionFlags & FunctionFlags.Async
+                ? transformAsyncFunctionParameterList(node)
+                : visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            functionFlags & FunctionFlags.Async ?
-                transformAsyncFunctionBody(node, parameters) :
-                visitFunctionBody(node.body, visitor, context),
+            functionFlags & FunctionFlags.Async
+                ? transformAsyncFunctionBody(node, parameters)
+                : visitFunctionBody(node.body, visitor, context),
         );
         lexicalArgumentsBinding = savedLexicalArgumentsBinding;
         return updated;
@@ -558,14 +558,14 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             node,
             visitNodes(node.modifiers, visitor, isModifier),
             /*typeParameters*/ undefined,
-            parameters = functionFlags & FunctionFlags.Async ?
-                transformAsyncFunctionParameterList(node) :
-                visitParameterList(node.parameters, visitor, context),
+            parameters = functionFlags & FunctionFlags.Async
+                ? transformAsyncFunctionParameterList(node)
+                : visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
             node.equalsGreaterThanToken,
-            functionFlags & FunctionFlags.Async ?
-                transformAsyncFunctionBody(node, parameters) :
-                visitFunctionBody(node.body, visitor, context),
+            functionFlags & FunctionFlags.Async
+                ? transformAsyncFunctionBody(node, parameters)
+                : visitFunctionBody(node.body, visitor, context),
         );
     }
 
@@ -658,9 +658,9 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
         // This step isn't needed if we eventually transform this to ES5.
         const originalMethod = getOriginalNode(node, isFunctionLikeDeclaration);
-        const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 &&
-            resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) &&
-            (getFunctionFlags(originalMethod) & FunctionFlags.AsyncGenerator) !== FunctionFlags.AsyncGenerator;
+        const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015
+            && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync)
+            && (getFunctionFlags(originalMethod) & FunctionFlags.AsyncGenerator) !== FunctionFlags.AsyncGenerator;
 
         if (emitSuperHelpers) {
             enableSubstitutionForAsyncMethodsWithSuper();

@@ -115,9 +115,9 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         const options = program.getCompilerOptions();
         const outPath = options.outFile;
 
-        const declarationPath = outPath ?
-            removeFileExtension(outPath) + Extension.Dts :
-            getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
+        const declarationPath = outPath
+            ? removeFileExtension(outPath) + Extension.Dts
+            : getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
         if (declarationPath === undefined) return undefined;
 
         const newLoc = getDocumentPositionMapper(declarationPath, info.fileName).getGeneratedPosition(info);
@@ -153,9 +153,9 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
 
     // This can be called from source mapper in either source program or program that includes generated file
     function getSourceFileLike(fileName: string) {
-        return !host.getSourceFileLike ?
-            getSourceFile(fileName) || getOrCreateSourceFileLike(fileName) :
-            host.getSourceFileLike(fileName);
+        return !host.getSourceFileLike
+            ? getSourceFile(fileName) || getOrCreateSourceFileLike(fileName)
+            : host.getSourceFileLike(fileName);
     }
 
     function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {

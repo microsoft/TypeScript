@@ -192,8 +192,8 @@ describe("unittests:: config:: showConfig", () => {
             }
         }
 
-        const configObject = optionValue &&
-            (isCompilerOptions ? { compilerOptions: optionValue } : { watchOptions: optionValue });
+        const configObject = optionValue
+            && (isCompilerOptions ? { compilerOptions: optionValue } : { watchOptions: optionValue });
         showTSConfigCorrectly(`Shows tsconfig for single option/${option.name}`, args, configObject);
     }
 });

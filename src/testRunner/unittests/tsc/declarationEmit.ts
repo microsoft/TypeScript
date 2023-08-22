@@ -21,9 +21,9 @@ describe("unittests:: tsc:: declarationEmit::", () => {
     }
 
     function changeCaseFile(file: FileOrFolderOrSymLink, testPath: (path: string) => boolean, replacePath: (path: string) => string): FileOrFolderOrSymLink {
-        return !isSymLink(file) || !testPath(file.symLink) ?
-            testPath(file.path) ? { ...file, path: replacePath(file.path) } : file :
-            { path: testPath(file.path) ? replacePath(file.path) : file.path, symLink: replacePath(file.symLink) };
+        return !isSymLink(file) || !testPath(file.symLink)
+            ? testPath(file.path) ? { ...file, path: replacePath(file.path) } : file
+            : { path: testPath(file.path) ? replacePath(file.path) : file.path, symLink: replacePath(file.symLink) };
     }
 
     function verifyDeclarationEmit({ subScenario, files, rootProject, changeCaseFileTestPath }: VerifyDeclarationEmitInput) {

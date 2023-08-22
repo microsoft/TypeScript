@@ -14,9 +14,9 @@ export interface FsOptions {
 export type FsOptionsOrLibContentsToAppend = FsOptions | string;
 
 function valueOfFsOptions(options: FsOptionsOrLibContentsToAppend | undefined, key: keyof FsOptions) {
-    return typeof options === "string" ?
-        key === "libContentToAppend" ? options : undefined :
-        options?.[key];
+    return typeof options === "string"
+        ? key === "libContentToAppend" ? options : undefined
+        : options?.[key];
 }
 
 /**

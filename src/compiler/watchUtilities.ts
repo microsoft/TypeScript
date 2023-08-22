@@ -222,8 +222,8 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     function fileExists(fileName: string): boolean {
         const path = toPath(fileName);
         const result = getCachedFileSystemEntriesForBaseDir(path);
-        return result && hasEntry(result.sortedAndCanonicalizedFiles, getCanonicalFileName(getBaseNameOfFileName(fileName))) ||
-            host.fileExists(fileName);
+        return result && hasEntry(result.sortedAndCanonicalizedFiles, getCanonicalFileName(getBaseNameOfFileName(fileName)))
+            || host.fileExists(fileName);
     }
 
     function directoryExists(dirPath: string): boolean {
@@ -270,9 +270,9 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
                 return rootResult || getFileSystemEntriesFromHost(dir, path);
             }
             const result = tryReadDirectory(dir, path);
-            return result !== undefined ?
-                result || getFileSystemEntriesFromHost(dir, path) :
-                emptyFileSystemEntries;
+            return result !== undefined
+                ? result || getFileSystemEntriesFromHost(dir, path)
+                : emptyFileSystemEntries;
         }
 
         function getFileSystemEntriesFromHost(dir: string, path: Path): FileSystemEntries {
@@ -582,8 +582,8 @@ export function isIgnoredFileFromWildCardWatching({
     // If the the added or created file or directory is not supported file name, ignore the file
     if (
         hasExtension(fileOrDirectoryPath) && !(
-            isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions) ||
-            isSupportedScriptKind()
+            isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions)
+            || isSupportedScriptKind()
         )
     ) {
         writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
@@ -615,8 +615,8 @@ export function isIgnoredFileFromWildCardWatching({
     const realProgram = isArray(program) ? undefined : isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
     const builderProgram = !realProgram && !isArray(program) ? program as BuilderProgram : undefined;
     if (
-        hasSourceFile((filePathWithoutExtension + Extension.Ts) as Path) ||
-        hasSourceFile((filePathWithoutExtension + Extension.Tsx) as Path)
+        hasSourceFile((filePathWithoutExtension + Extension.Ts) as Path)
+        || hasSourceFile((filePathWithoutExtension + Extension.Tsx) as Path)
     ) {
         writeLog(`Project: ${configFileName} Detected output file: ${fileOrDirectory}`);
         return true;
@@ -624,11 +624,11 @@ export function isIgnoredFileFromWildCardWatching({
     return false;
 
     function hasSourceFile(file: Path): boolean {
-        return realProgram ?
-            !!realProgram.getSourceFileByPath(file) :
-            builderProgram ?
-            builderProgram.getState().fileInfos.has(file) :
-            !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
+        return realProgram
+            ? !!realProgram.getSourceFileByPath(file)
+            : builderProgram
+            ? builderProgram.getState().fileInfos.has(file)
+            : !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
     }
 
     function isSupportedScriptKind() {
@@ -694,21 +694,21 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         watchFile: (file, callback, pollingInterval, options) => host.watchFile(file, callback, pollingInterval, options),
         watchDirectory: (directory, callback, flags, options) => host.watchDirectory(directory, callback, (flags & WatchDirectoryFlags.Recursive) !== 0, options),
     };
-    const triggerInvokingFactory: WatchFactory<X, Y> | undefined = watchLogLevel !== WatchLogLevel.None ?
-        {
+    const triggerInvokingFactory: WatchFactory<X, Y> | undefined = watchLogLevel !== WatchLogLevel.None
+        ? {
             watchFile: createTriggerLoggingAddWatch("watchFile"),
             watchDirectory: createTriggerLoggingAddWatch("watchDirectory"),
-        } :
-        undefined;
-    const factory = watchLogLevel === WatchLogLevel.Verbose ?
-        {
+        }
+        : undefined;
+    const factory = watchLogLevel === WatchLogLevel.Verbose
+        ? {
             watchFile: createFileWatcherWithLogging,
             watchDirectory: createDirectoryWatcherWithLogging,
-        } :
-        triggerInvokingFactory || plainInvokeFactory;
-    const excludeWatcherFactory = watchLogLevel === WatchLogLevel.Verbose ?
-        createExcludeWatcherWithLogging :
-        returnNoopFileWatcher;
+        }
+        : triggerInvokingFactory || plainInvokeFactory;
+    const excludeWatcherFactory = watchLogLevel === WatchLogLevel.Verbose
+        ? createExcludeWatcherWithLogging
+        : returnNoopFileWatcher;
 
     return {
         watchFile: createExcludeHandlingAddWatch("watchFile"),
@@ -723,15 +723,15 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
             options: WatchOptions | undefined,
             detailInfo1: X,
             detailInfo2?: Y,
-        ) => !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
-            factory[key].call(/*thisArgs*/ undefined, file, cb, flags, options, detailInfo1, detailInfo2) :
-            excludeWatcherFactory(file, flags, options, detailInfo1, detailInfo2);
+        ) => !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "")
+            ? factory[key].call(/*thisArgs*/ undefined, file, cb, flags, options, detailInfo1, detailInfo2)
+            : excludeWatcherFactory(file, flags, options, detailInfo1, detailInfo2);
     }
 
     function useCaseSensitiveFileNames() {
-        return typeof host.useCaseSensitiveFileNames === "boolean" ?
-            host.useCaseSensitiveFileNames :
-            host.useCaseSensitiveFileNames();
+        return typeof host.useCaseSensitiveFileNames === "boolean"
+            ? host.useCaseSensitiveFileNames
+            : host.useCaseSensitiveFileNames();
     }
 
     function createExcludeWatcherWithLogging(
@@ -826,9 +826,9 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
 export function getFallbackOptions(options: WatchOptions | undefined): WatchOptions {
     const fallbackPolling = options?.fallbackPolling;
     return {
-        watchFile: fallbackPolling !== undefined ?
-            fallbackPolling as unknown as WatchFileKind :
-            WatchFileKind.PriorityPollingInterval,
+        watchFile: fallbackPolling !== undefined
+            ? fallbackPolling as unknown as WatchFileKind
+            : WatchFileKind.PriorityPollingInterval,
     };
 }
 

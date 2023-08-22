@@ -283,20 +283,20 @@ function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: 
 }
 
 function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AcceptedDeclaration, container: ContainerDeclaration) {
-    isParameterPropertyDeclaration(declaration, declaration.parent) ? changeTracker.insertMemberAtStart(file, container as ClassLikeDeclaration, accessor) :
-        isPropertyAssignment(declaration) ? changeTracker.insertNodeAfterComma(file, declaration, accessor) :
-        changeTracker.insertNodeAfter(file, declaration, accessor);
+    isParameterPropertyDeclaration(declaration, declaration.parent) ? changeTracker.insertMemberAtStart(file, container as ClassLikeDeclaration, accessor)
+        : isPropertyAssignment(declaration) ? changeTracker.insertNodeAfterComma(file, declaration, accessor)
+        : changeTracker.insertNodeAfter(file, declaration, accessor);
 }
 
 function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, file: SourceFile, constructor: ConstructorDeclaration, fieldName: string, originalName: string) {
     if (!constructor.body) return;
     constructor.body.forEachChild(function recur(node) {
         if (
-            isElementAccessExpression(node) &&
-            node.expression.kind === SyntaxKind.ThisKeyword &&
-            isStringLiteral(node.argumentExpression) &&
-            node.argumentExpression.text === originalName &&
-            isWriteAccess(node)
+            isElementAccessExpression(node)
+            && node.expression.kind === SyntaxKind.ThisKeyword
+            && isStringLiteral(node.argumentExpression)
+            && node.argumentExpression.text === originalName
+            && isWriteAccess(node)
         ) {
             changeTracker.replaceNode(file, node.argumentExpression, factory.createStringLiteral(fieldName));
         }

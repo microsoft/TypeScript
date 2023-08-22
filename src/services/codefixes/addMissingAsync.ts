@@ -116,8 +116,8 @@ function getFixableErrorSpanDeclaration(sourceFile: SourceFile, span: TextSpan |
 
 function getIsMatchingAsyncError(span: TextSpan, errorCode: number) {
     return ({ start, length, relatedInformation, code }: Diagnostic) =>
-        isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
-        code === errorCode &&
-        !!relatedInformation &&
-        some(relatedInformation, related => related.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code);
+        isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span)
+        && code === errorCode
+        && !!relatedInformation
+        && some(relatedInformation, related => related.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code);
 }

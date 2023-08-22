@@ -660,16 +660,16 @@ module MyModule {
             if (ts.isClassLike(node)) {
                 const newMembers = [ts.factory.createPropertyDeclaration([ts.factory.createModifier(ts.SyntaxKind.StaticKeyword)], "newField", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, ts.factory.createStringLiteral("x"))];
                 ts.setSyntheticLeadingComments(newMembers[0], [{ kind: ts.SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
-                return ts.isClassDeclaration(node) ?
-                    ts.factory.updateClassDeclaration(
+                return ts.isClassDeclaration(node)
+                    ? ts.factory.updateClassDeclaration(
                         node,
                         node.modifiers,
                         node.name,
                         node.typeParameters,
                         node.heritageClauses,
                         newMembers,
-                    ) :
-                    ts.factory.updateClassExpression(
+                    )
+                    : ts.factory.updateClassExpression(
                         node,
                         node.modifiers,
                         node.name,

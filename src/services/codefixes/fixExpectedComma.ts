@@ -51,10 +51,10 @@ interface Info {
 function getInfo(sourceFile: SourceFile, pos: number, _: number): Info | undefined {
     const node = getTokenAtPosition(sourceFile, pos);
 
-    return (node.kind === SyntaxKind.SemicolonToken &&
-            node.parent &&
-            (isObjectLiteralExpression(node.parent) ||
-                isArrayLiteralExpression(node.parent))) ? { node } : undefined;
+    return (node.kind === SyntaxKind.SemicolonToken
+            && node.parent
+            && (isObjectLiteralExpression(node.parent)
+                || isArrayLiteralExpression(node.parent))) ? { node } : undefined;
 }
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node }: Info): void {

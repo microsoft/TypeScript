@@ -760,8 +760,8 @@ export namespace Compiler {
             // When calling this function from rwc-runner, the baselinePath will have no extension.
             // As rwc test- file is stored in json which ".json" will get stripped off.
             // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
-            const outputFileName = ts.endsWith(baselinePath, ts.Extension.Ts) || ts.endsWith(baselinePath, ts.Extension.Tsx) ?
-                baselinePath.replace(/\.tsx?/, "") : baselinePath;
+            const outputFileName = ts.endsWith(baselinePath, ts.Extension.Ts) || ts.endsWith(baselinePath, ts.Extension.Tsx)
+                ? baselinePath.replace(/\.tsx?/, "") : baselinePath;
 
             if (!multifile) {
                 const fullBaseLine = generateBaseLine(isSymbolBaseLine, isSymbolBaseLine ? skipSymbolBaselines : skipTypeBaselines);
@@ -1555,8 +1555,8 @@ export function isDefaultLibraryFile(filePath: string): boolean {
 }
 
 export function isBuiltFile(filePath: string): boolean {
-    return filePath.indexOf(libFolder) === 0 ||
-        filePath.indexOf(vpath.addTrailingSeparator(vfs.builtFolder)) === 0;
+    return filePath.indexOf(libFolder) === 0
+        || filePath.indexOf(vpath.addTrailingSeparator(vfs.builtFolder)) === 0;
 }
 
 export function getDefaultLibraryFile(filePath: string, io: IO): Compiler.TestFile {

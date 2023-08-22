@@ -94,9 +94,9 @@ export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "
 
 function getTestSessionPartialOptionsAndHost(optsOrHost: TestSessionConstructorOptions): TestSessionPartialOptionsAndHost {
     // eslint-disable-next-line local/no-in-operator
-    return "host" in optsOrHost ?
-        optsOrHost :
-        { host: optsOrHost };
+    return "host" in optsOrHost
+        ? optsOrHost
+        : { host: optsOrHost };
 }
 export class TestSession extends ts.server.Session {
     private seq = 0;
@@ -109,12 +109,12 @@ export class TestSession extends ts.server.Session {
         const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
         opts.logger = opts.logger || createLoggerWithInMemoryLogs(opts.host);
         const typingsInstaller = !opts.disableAutomaticTypingAcquisition ? new TestTypingsInstallerAdapter(opts) : undefined;
-        const cancellationToken = opts.useCancellationToken ?
-            new TestServerCancellationToken(
+        const cancellationToken = opts.useCancellationToken
+            ? new TestServerCancellationToken(
                 opts.logger,
                 ts.isNumber(opts.useCancellationToken) ? opts.useCancellationToken : undefined,
-            ) :
-            ts.server.nullCancellationToken;
+            )
+            : ts.server.nullCancellationToken;
         super({
             cancellationToken,
             useSingleInferredProject: false,
@@ -313,16 +313,16 @@ export function openFilesForSession(
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
-            arguments: ts.isString(file) ?
-                { file } :
-                "file" in file ? // eslint-disable-line local/no-in-operator
-                {
+            arguments: ts.isString(file)
+                ? { file }
+                : "file" in file // eslint-disable-line local/no-in-operator
+                ? {
                     file: typeof file.file === "string" ? file.file : file.file.path,
                     projectRootPath: file.projectRootPath,
                     fileContent: file.content,
                     scriptKindName: file.scriptKindName,
-                } :
-                { file: file.path },
+                }
+                : { file: file.path },
         });
     }
 }
@@ -356,9 +356,9 @@ export function setCompilerOptionsForInferredProjectsRequestForSession(
 ) {
     session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
         command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
-        arguments: "options" in options ? // eslint-disable-line local/no-in-operator
-            options as ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs :
-            { options },
+        arguments: "options" in options // eslint-disable-line local/no-in-operator
+            ? options as ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs
+            : { options },
     });
 }
 

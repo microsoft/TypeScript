@@ -256,8 +256,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function hasProto(obj: ObjectLiteralExpression) {
         return obj.properties.some(p =>
-            isPropertyAssignment(p) &&
-            (isIdentifier(p.name) && idText(p.name) === "__proto__" || isStringLiteral(p.name) && p.name.text === "__proto__")
+            isPropertyAssignment(p)
+            && (isIdentifier(p.name) && idText(p.name) === "__proto__" || isStringLiteral(p.name) && p.name.text === "__proto__")
         );
     }
 
@@ -316,8 +316,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         const childrenProp = children && children.length ? convertJsxChildrenToChildrenPropAssignment(children) : undefined;
         const keyAttr = find(node.attributes.properties, p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key") as JsxAttribute | undefined;
         const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
-        const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs, childrenProp) :
-            factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : emptyArray); // When there are no attributes, React wants {}
+        const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs, childrenProp)
+            : factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : emptyArray); // When there are no attributes, React wants {}
         return visitJsxOpeningLikeElementOrFragmentJSX(
             tagName,
             objectProperties,
@@ -380,8 +380,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     function visitJsxOpeningLikeElementCreateElement(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
         const tagName = getTagName(node);
         const attrs = node.attributes.properties;
-        const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs) :
-            factory.createNull(); // When there are no attributes, React wants "null"
+        const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs)
+            : factory.createNull(); // When there are no attributes, React wants "null"
 
         const callee = currentFileState.importSpecifier === undefined
             ? createJsxFactoryExpression(
@@ -453,8 +453,8 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function transformJsxAttributesToObjectProps(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
         const target = getEmitScriptTarget(compilerOptions);
-        return target && target >= ScriptTarget.ES2018 ? factory.createObjectLiteralExpression(transformJsxAttributesToProps(attrs, children)) :
-            transformJsxAttributesToExpression(attrs, children);
+        return target && target >= ScriptTarget.ES2018 ? factory.createObjectLiteralExpression(transformJsxAttributesToProps(attrs, children))
+            : transformJsxAttributesToExpression(attrs, children);
     }
 
     function transformJsxAttributesToProps(attrs: readonly (JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {

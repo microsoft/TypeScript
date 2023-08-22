@@ -516,9 +516,9 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
 
         let statements: Statement[] | undefined;
         if (
-            lexicalEnvironmentVariableDeclarations ||
-            lexicalEnvironmentFunctionDeclarations ||
-            lexicalEnvironmentStatements
+            lexicalEnvironmentVariableDeclarations
+            || lexicalEnvironmentFunctionDeclarations
+            || lexicalEnvironmentStatements
         ) {
             if (lexicalEnvironmentFunctionDeclarations) {
                 statements = [...lexicalEnvironmentFunctionDeclarations];
@@ -566,9 +566,9 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     }
 
     function setLexicalEnvironmentFlags(flags: LexicalEnvironmentFlags, value: boolean): void {
-        lexicalEnvironmentFlags = value ?
-            lexicalEnvironmentFlags | flags :
-            lexicalEnvironmentFlags & ~flags;
+        lexicalEnvironmentFlags = value
+            ? lexicalEnvironmentFlags | flags
+            : lexicalEnvironmentFlags & ~flags;
     }
 
     function getLexicalEnvironmentFlags(): LexicalEnvironmentFlags {
@@ -592,8 +592,8 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     function endBlockScope() {
         Debug.assert(state > TransformationState.Uninitialized, "Cannot end a block scope during initialization.");
         Debug.assert(state < TransformationState.Completed, "Cannot end a block scope after transformation has completed.");
-        const statements: Statement[] | undefined = some(blockScopedVariableDeclarations) ?
-            [
+        const statements: Statement[] | undefined = some(blockScopedVariableDeclarations)
+            ? [
                 factory.createVariableStatement(
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(

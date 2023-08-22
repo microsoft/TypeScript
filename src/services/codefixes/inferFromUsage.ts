@@ -503,8 +503,8 @@ function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, pr
 
 function inferTypeForParametersFromUsage(func: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken) {
     const references = getFunctionReferences(func, sourceFile, program, cancellationToken);
-    return references && inferTypeFromReferences(program, references, cancellationToken).parameters(func) ||
-        func.parameters.map<ParameterInference>(p => ({
+    return references && inferTypeFromReferences(program, references, cancellationToken).parameters(func)
+        || func.parameters.map<ParameterInference>(p => ({
             declaration: p,
             type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType(),
         }));
@@ -519,9 +519,9 @@ function getFunctionReferences(containingFunction: SignatureDeclaration, sourceF
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.FunctionExpression:
             const parent = containingFunction.parent;
-            searchToken = (isVariableDeclaration(parent) || isPropertyDeclaration(parent)) && isIdentifier(parent.name) ?
-                parent.name :
-                containingFunction.name;
+            searchToken = (isVariableDeclaration(parent) || isPropertyDeclaration(parent)) && isIdentifier(parent.name)
+                ? parent.name
+                : containingFunction.name;
             break;
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.MethodDeclaration:
@@ -882,8 +882,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             case SyntaxKind.BarBarToken:
             case SyntaxKind.QuestionQuestionToken:
                 if (
-                    node === parent.left &&
-                    (node.parent.parent.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))
+                    node === parent.left
+                    && (node.parent.parent.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))
                 ) {
                     // var x = x || {};
                     // TODO: use getFalsyflagsOfType
@@ -953,9 +953,9 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     }
 
     function inferTypeFromPropertyAssignment(assignment: PropertyAssignment | ShorthandPropertyAssignment, usage: Usage) {
-        const nodeWithRealType = isVariableDeclaration(assignment.parent.parent) ?
-            assignment.parent.parent :
-            assignment.parent;
+        const nodeWithRealType = isVariableDeclaration(assignment.parent.parent)
+            ? assignment.parent.parent
+            : assignment.parent;
         addCandidateThisType(usage, checker.getTypeAtLocation(nodeWithRealType));
     }
 

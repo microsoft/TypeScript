@@ -225,13 +225,13 @@ export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver
     return result.diagnostics;
 }
 
-const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals |
-    NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
-    NodeBuilderFlags.UseTypeOfFunction |
-    NodeBuilderFlags.UseStructuralFallback |
-    NodeBuilderFlags.AllowEmptyTuple |
-    NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
-    NodeBuilderFlags.NoTruncation;
+const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
+    | NodeBuilderFlags.WriteClassExpressionAsTypeLiteral
+    | NodeBuilderFlags.UseTypeOfFunction
+    | NodeBuilderFlags.UseStructuralFallback
+    | NodeBuilderFlags.AllowEmptyTuple
+    | NodeBuilderFlags.GenerateNamesForShadowedTypeParams
+    | NodeBuilderFlags.NoTruncation;
 
 /**
  * Transforms a ts file into a .d.ts file
@@ -370,10 +370,10 @@ export function transformDeclarations(context: TransformationContext) {
     }
 
     function errorDeclarationNameWithFallback() {
-        return errorNameNode ? declarationNameToString(errorNameNode) :
-            errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ? declarationNameToString(getNameOfDeclaration(errorFallbackNode)) :
-            errorFallbackNode && isExportAssignment(errorFallbackNode) ? errorFallbackNode.isExportEquals ? "export=" : "default" :
-            "(Missing)"; // same fallback declarationNameToString uses when node is zero-width (ie, nameless)
+        return errorNameNode ? declarationNameToString(errorNameNode)
+            : errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ? declarationNameToString(getNameOfDeclaration(errorFallbackNode))
+            : errorFallbackNode && isExportAssignment(errorFallbackNode) ? errorFallbackNode.isExportEquals ? "export=" : "default"
+            : "(Missing)"; // same fallback declarationNameToString uses when node is zero-width (ie, nameless)
     }
 
     function reportInaccessibleUniqueSymbolError() {

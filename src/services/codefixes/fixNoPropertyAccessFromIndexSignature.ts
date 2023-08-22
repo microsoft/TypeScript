@@ -41,9 +41,9 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, no
     changes.replaceNode(
         sourceFile,
         node,
-        isPropertyAccessChain(node) ?
-            factory.createElementAccessChain(node.expression, node.questionDotToken, argumentsExpression) :
-            factory.createElementAccessExpression(node.expression, argumentsExpression),
+        isPropertyAccessChain(node)
+            ? factory.createElementAccessChain(node.expression, node.questionDotToken, argumentsExpression)
+            : factory.createElementAccessExpression(node.expression, argumentsExpression),
     );
 }
 

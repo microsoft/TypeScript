@@ -338,8 +338,8 @@ function tryDeleteParameter(
 ): void {
     if (mayDeleteParameter(checker, sourceFile, parameter, sourceFiles, program, cancellationToken, isFixAll)) {
         if (
-            parameter.modifiers && parameter.modifiers.length > 0 &&
-            (!isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))
+            parameter.modifiers && parameter.modifiers.length > 0
+            && (!isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))
         ) {
             for (const modifier of parameter.modifiers) {
                 if (isModifier(modifier)) {
@@ -422,12 +422,12 @@ function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDecl
     const parameters = func.parameters;
     const index = parameters.indexOf(parameter);
     Debug.assert(index !== -1, "The parameter should already be in the list");
-    return isFixAll ?
-        parameters.slice(index + 1).every(p => isIdentifier(p.name) && !p.symbol.isReferenced) :
-        index === parameters.length - 1;
+    return isFixAll
+        ? parameters.slice(index + 1).every(p => isIdentifier(p.name) && !p.symbol.isReferenced)
+        : index === parameters.length - 1;
 }
 
 function mayDeleteExpression(node: Node) {
-    return ((isBinaryExpression(node.parent) && node.parent.left === node) ||
-        ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && isExpressionStatement(node.parent.parent);
+    return ((isBinaryExpression(node.parent) && node.parent.left === node)
+        || ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && isExpressionStatement(node.parent.parent);
 }

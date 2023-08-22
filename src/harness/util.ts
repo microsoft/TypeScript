@@ -108,9 +108,9 @@ export function theory<T extends any[]>(name: string, cb: (...args: T) => void, 
 }
 
 function formatTheoryDatum(value: any) {
-    return typeof value === "function" ? value.name || "<anonymous function>" :
-        value === undefined ? "undefined" :
-        JSON.stringify(value);
+    return typeof value === "function" ? value.name || "<anonymous function>"
+        : value === undefined ? "undefined"
+        : JSON.stringify(value);
 }
 
 export interface Deferred<T> {

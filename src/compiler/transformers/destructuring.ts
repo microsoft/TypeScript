@@ -137,8 +137,8 @@ export function flattenDestructuringAssignment(
         Debug.assert(value);
 
         if (
-            isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText) ||
-            bindingOrAssignmentElementContainsNonLiteralComputedName(node)
+            isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText)
+            || bindingOrAssignmentElementContainsNonLiteralComputedName(node)
         ) {
             // If the right-hand value of the assignment is also an assignment target then
             // we need to cache the right-hand value.
@@ -268,8 +268,8 @@ export function flattenDestructuringBinding(
     if (isVariableDeclaration(node)) {
         let initializer = getInitializerOfBindingOrAssignmentElement(node);
         if (
-            initializer && (isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText) ||
-                bindingOrAssignmentElementContainsNonLiteralComputedName(node))
+            initializer && (isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText)
+                || bindingOrAssignmentElementContainsNonLiteralComputedName(node))
         ) {
             // If the right-hand value of the assignment is also an assignment target then
             // we need to cache the right-hand value.

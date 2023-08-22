@@ -89,10 +89,10 @@ function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBas
     // Only fix spelling for No_overload_matches_this_call emitted on the React class component
     if (
         (
-            errorCode === Diagnostics.No_overload_matches_this_call.code ||
-            errorCode === Diagnostics.Type_0_is_not_assignable_to_type_1.code
-        ) &&
-        !isJsxAttribute(parent)
+            errorCode === Diagnostics.No_overload_matches_this_call.code
+            || errorCode === Diagnostics.Type_0_is_not_assignable_to_type_1.code
+        )
+        && !isJsxAttribute(parent)
     ) return undefined;
     const checker = context.program.getTypeChecker();
 

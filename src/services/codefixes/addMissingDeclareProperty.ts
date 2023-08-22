@@ -41,8 +41,8 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
     }
     const declaration = token.parent;
     if (
-        declaration.kind === SyntaxKind.PropertyDeclaration &&
-        (!fixedNodes || tryAddToSet(fixedNodes, declaration))
+        declaration.kind === SyntaxKind.PropertyDeclaration
+        && (!fixedNodes || tryAddToSet(fixedNodes, declaration))
     ) {
         changeTracker.insertModifierBefore(sourceFile, SyntaxKind.DeclareKeyword, declaration);
     }

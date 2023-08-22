@@ -80,9 +80,9 @@ export function testTscCompileLike(input: TestTscCompileLike) {
     additionalBaseline?.(sys);
     fs.makeReadonly();
     sys.baseLine = () => {
-        const baseFsPatch = diffWithInitial ?
-            inputFs.diff(initialFs, { includeChangedFileWithSameContent: true }) :
-            inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
+        const baseFsPatch = diffWithInitial
+            ? inputFs.diff(initialFs, { includeChangedFileWithSameContent: true })
+            : inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true });
         const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
         return {
             file: tscBaselineName(scenario, subScenario, commandLineArgs),
@@ -532,8 +532,8 @@ export function verifyTsc({
                 });
                 return {
                     file,
-                    text: `currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}\r\n` +
-                        texts.join("\r\n"),
+                    text: `currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}\r\n`
+                        + texts.join("\r\n"),
                 };
             },
         }));

@@ -270,8 +270,8 @@ function getJSDocPropertyTagsInfo(nodes: readonly JSDocTag[] | undefined, checke
 }
 
 function tryGetJSDocPropertyTags(node: JSDocTag) {
-    return isJSDocPropertyLikeTag(node) && node.isNameFirst && node.typeExpression &&
-            isJSDocTypeLiteral(node.typeExpression.type) ? node.typeExpression.type.jsDocPropertyTags : undefined;
+    return isJSDocPropertyLikeTag(node) && node.isNameFirst && node.typeExpression
+            && isJSDocTypeLiteral(node.typeExpression.type) ? node.typeExpression.type.jsDocPropertyTags : undefined;
 }
 
 function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
@@ -290,8 +290,8 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
     switch (kind) {
         case SyntaxKind.JSDocThrowsTag:
             const typeExpression = (tag as JSDocThrowsTag).typeExpression;
-            return typeExpression ? withNode(typeExpression) :
-                comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
+            return typeExpression ? withNode(typeExpression)
+                : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         case SyntaxKind.JSDocImplementsTag:
             return withNode((tag as JSDocImplementsTag).class);
         case SyntaxKind.JSDocAugmentsTag:
@@ -505,8 +505,8 @@ export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: Sou
 
     const indentationStr = getIndentationStringAtPosition(sourceFile, position);
     const isJavaScriptFile = hasJSFileExtension(sourceFile.fileName);
-    const tags = (parameters ? parameterDocComments(parameters || [], isJavaScriptFile, indentationStr, newLine) : "") +
-        (hasReturn ? returnsDocComment(indentationStr, newLine) : "");
+    const tags = (parameters ? parameterDocComments(parameters || [], isJavaScriptFile, indentationStr, newLine) : "")
+        + (hasReturn ? returnsDocComment(indentationStr, newLine) : "");
 
     // A doc comment consists of the following
     // * The opening comment line
@@ -625,8 +625,8 @@ function getCommentOwnerInfoWorker(commentOwner: Node, options: DocCommentTempla
 }
 
 function hasReturn(node: Node, options: DocCommentTemplateOptions | undefined) {
-    return !!options?.generateReturnInDocTemplate &&
-        (isFunctionTypeNode(node) || isArrowFunction(node) && isExpression(node.body)
+    return !!options?.generateReturnInDocTemplate
+        && (isFunctionTypeNode(node) || isArrowFunction(node) && isExpression(node.body)
             || isFunctionLikeDeclaration(node) && node.body && isBlock(node.body) && !!forEachReturnStatement(node.body, n => n));
 }
 

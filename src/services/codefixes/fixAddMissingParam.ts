@@ -137,9 +137,9 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Signatu
 
     const nonOverloadDeclaration = lastOrUndefined(convertibleSignatureDeclarations);
     if (
-        nonOverloadDeclaration === undefined ||
-        nonOverloadDeclaration.body === undefined ||
-        isSourceFileFromLibrary(program, nonOverloadDeclaration.getSourceFile())
+        nonOverloadDeclaration === undefined
+        || nonOverloadDeclaration.body === undefined
+        || isSourceFileFromLibrary(program, nonOverloadDeclaration.getSourceFile())
     ) {
         return undefined;
     }
@@ -164,8 +164,8 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Signatu
         const type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)));
         const parameter = pos < parametersLength ? nonOverloadDeclaration.parameters[pos] : undefined;
         if (
-            parameter &&
-            checker.isTypeAssignableTo(type, checker.getTypeAtLocation(parameter))
+            parameter
+            && checker.isTypeAssignableTo(type, checker.getTypeAtLocation(parameter))
         ) {
             pos++;
             continue;
@@ -203,9 +203,9 @@ function tryGetName(node: FunctionLikeDeclaration) {
     }
 
     if (
-        isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ||
-        isPropertyDeclaration(node.parent) ||
-        isParameter(node.parent)
+        isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)
+        || isPropertyDeclaration(node.parent)
+        || isParameter(node.parent)
     ) {
         return node.parent.name;
     }

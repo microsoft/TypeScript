@@ -34,9 +34,9 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
                 path: `/user/username/projects/myproject/pkg${index}/tsconfig.json`,
                 content: jsonToReadableText({
                     compilerOptions: { composite: true },
-                    references: index === 0 ?
-                        undefined :
-                        [{ path: `../pkg0` }],
+                    references: index === 0
+                        ? undefined
+                        : [{ path: `../pkg0` }],
                 }),
             },
         ];

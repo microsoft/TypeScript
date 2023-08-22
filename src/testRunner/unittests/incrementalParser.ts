@@ -122,13 +122,13 @@ function insertCode(source: string, index: number, toInsert: string) {
 
 describe("unittests:: Incremental Parser", () => {
     it("Inserting into method", () => {
-        const source = "class C {\r\n" +
-            "    public foo1() { }\r\n" +
-            "    public foo2() {\r\n" +
-            "        return 1;\r\n" +
-            "    }\r\n" +
-            "    public foo3() { }\r\n" +
-            "}";
+        const source = "class C {\r\n"
+            + "    public foo1() { }\r\n"
+            + "    public foo2() {\r\n"
+            + "        return 1;\r\n"
+            + "    }\r\n"
+            + "    public foo3() { }\r\n"
+            + "}";
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const semicolonIndex = source.indexOf(";");
@@ -138,13 +138,13 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Deleting from method", () => {
-        const source = "class C {\r\n" +
-            "    public foo1() { }\r\n" +
-            "    public foo2() {\r\n" +
-            "        return 1 + 1;\r\n" +
-            "    }\r\n" +
-            "    public foo3() { }\r\n" +
-            "}";
+        const source = "class C {\r\n"
+            + "    public foo1() { }\r\n"
+            + "    public foo2() {\r\n"
+            + "        return 1 + 1;\r\n"
+            + "    }\r\n"
+            + "    public foo3() { }\r\n"
+            + "}";
 
         const index = source.indexOf("+ 1");
         const oldText = ts.ScriptSnapshot.fromString(source);
@@ -213,11 +213,11 @@ describe("unittests:: Incremental Parser", () => {
 
     it("Parameter 1", () => {
         // Should be able to reuse all the parameters.
-        const source = "class C {\r\n" +
-            "    public foo2(a, b, c, d) {\r\n" +
-            "        return 1;\r\n" +
-            "    }\r\n" +
-            "}";
+        const source = "class C {\r\n"
+            + "    public foo2(a, b, c, d) {\r\n"
+            + "        return 1;\r\n"
+            + "    }\r\n"
+            + "}";
 
         const semicolonIndex = source.indexOf(";");
         const oldText = ts.ScriptSnapshot.fromString(source);
@@ -807,22 +807,22 @@ module m3 { }\
     });
 
     it("Type after incomplete enum 1", () => {
-        const source = "function foo() {\r\n" +
-            "            function getOccurrencesAtPosition() {\r\n" +
-            "            switch (node) {\r\n" +
-            "                enum \r\n" +
-            "            }\r\n" +
-            "                \r\n" +
-            "                return undefined;\r\n" +
-            "                \r\n" +
-            "                function keywordToReferenceEntry() {\r\n" +
-            "                }\r\n" +
-            "            }\r\n" +
-            "                \r\n" +
-            "            return {\r\n" +
-            "                getEmitOutput: (fileName): Bar => null,\r\n" +
-            "            };\r\n" +
-            "        }";
+        const source = "function foo() {\r\n"
+            + "            function getOccurrencesAtPosition() {\r\n"
+            + "            switch (node) {\r\n"
+            + "                enum \r\n"
+            + "            }\r\n"
+            + "                \r\n"
+            + "                return undefined;\r\n"
+            + "                \r\n"
+            + "                function keywordToReferenceEntry() {\r\n"
+            + "                }\r\n"
+            + "            }\r\n"
+            + "                \r\n"
+            + "            return {\r\n"
+            + "                getEmitOutput: (fileName): Bar => null,\r\n"
+            + "            };\r\n"
+            + "        }";
 
         const index = source.indexOf("enum ") + "enum ".length;
         insertCode(source, index, "Fo");

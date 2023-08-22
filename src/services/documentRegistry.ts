@@ -266,9 +266,9 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         const compilationSettings = getCompilationSettings(compilationSettingsOrHost);
         const host: MinimalResolutionCacheHost | undefined = compilationSettingsOrHost === compilationSettings ? undefined : compilationSettingsOrHost as MinimalResolutionCacheHost;
         const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : getEmitScriptTarget(compilationSettings);
-        const sourceFileOptions: CreateSourceFileOptions = typeof languageVersionOrOptions === "object" ?
-            languageVersionOrOptions :
-            {
+        const sourceFileOptions: CreateSourceFileOptions = typeof languageVersionOrOptions === "object"
+            ? languageVersionOrOptions
+            : {
                 languageVersion: scriptTarget,
                 impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
@@ -290,8 +290,8 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             // It is fairly suspicious to have one path in two buckets - you'd expect dependencies to have similar configurations.
             // If this occurs unexpectedly, the fix is likely to synchronize the project settings.
             // Skip .d.ts files to reduce noise (should also cover most of node_modules).
-            const otherBucketKey = !isDeclarationFileName(path) &&
-                forEachEntry(buckets, (bucket, bucketKey) => bucketKey !== keyWithMode && bucket.has(path) && bucketKey);
+            const otherBucketKey = !isDeclarationFileName(path)
+                && forEachEntry(buckets, (bucket, bucketKey) => bucketKey !== keyWithMode && bucket.has(path) && bucketKey);
             if (otherBucketKey) {
                 tracing.instant(tracing.Phase.Session, "documentRegistryBucketOverlap", { path, key1: otherBucketKey, key2: keyWithMode });
             }

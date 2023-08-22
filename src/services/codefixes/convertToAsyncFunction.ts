@@ -141,8 +141,8 @@ function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: 
 
     // if the parent of a FunctionLikeDeclaration is a variable declaration, the convertToAsync diagnostic will be reported on the variable name
     if (
-        isIdentifier(tokenAtPosition) && isVariableDeclaration(tokenAtPosition.parent) &&
-        tokenAtPosition.parent.initializer && isFunctionLikeDeclaration(tokenAtPosition.parent.initializer)
+        isIdentifier(tokenAtPosition) && isVariableDeclaration(tokenAtPosition.parent)
+        && tokenAtPosition.parent.initializer && isFunctionLikeDeclaration(tokenAtPosition.parent.initializer)
     ) {
         functionToConvert = tokenAtPosition.parent.initializer;
     }
@@ -216,8 +216,8 @@ function getAllPromiseExpressionsToReturn(func: FunctionLikeDeclaration, checker
             forEach(node.arguments, visit);
         }
         else if (
-            isPromiseReturningCallExpression(node, checker, "catch") ||
-            isPromiseReturningCallExpression(node, checker, "finally")
+            isPromiseReturningCallExpression(node, checker, "catch")
+            || isPromiseReturningCallExpression(node, checker, "finally")
         ) {
             setOfExpressionsToReturn.add(getNodeId(node));
             // if .catch() or .finally() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
@@ -260,8 +260,8 @@ function getExplicitPromisedTypeOfPromiseReturningCallExpression(node: PromiseRe
     // which type argument is safe to use as an annotation.
     const promiseType = checker.getTypeAtLocation(node.expression.expression);
     if (
-        isReferenceToType(promiseType, checker.getPromiseType()) ||
-        isReferenceToType(promiseType, checker.getPromiseLikeType())
+        isReferenceToType(promiseType, checker.getPromiseType())
+        || isReferenceToType(promiseType, checker.getPromiseLikeType())
     ) {
         if (node.expression.name.escapedText === "then") {
             if (callback === elementAt(node.arguments, 0)) {
@@ -735,9 +735,9 @@ function transformCallbackArgument(func: Expression, hasContinuation: boolean, c
                     );
             }
             else {
-                const inlinedStatements = isFixablePromiseHandler(funcBody, transformer.checker) ?
-                    transformReturnStatementWithFixablePromiseHandler(transformer, factory.createReturnStatement(funcBody), hasContinuation, continuationArgName) :
-                    emptyArray;
+                const inlinedStatements = isFixablePromiseHandler(funcBody, transformer.checker)
+                    ? transformReturnStatementWithFixablePromiseHandler(transformer, factory.createReturnStatement(funcBody), hasContinuation, continuationArgName)
+                    : emptyArray;
 
                 if (inlinedStatements.length > 0) {
                     return inlinedStatements;

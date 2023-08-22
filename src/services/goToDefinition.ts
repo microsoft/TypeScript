@@ -265,8 +265,8 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     //      }
     //      bar<Test>(({pr/*goto*/op1})=>{});
     if (
-        isPropertyName(node) && isBindingElement(parent) && isObjectBindingPattern(parent.parent) &&
-        (node === (parent.propertyName || parent.name))
+        isPropertyName(node) && isBindingElement(parent) && isObjectBindingPattern(parent.parent)
+        && (node === (parent.propertyName || parent.name))
     ) {
         const name = getNameFromPropertyName(node);
         const type = typeChecker.getTypeAtLocation(parent.parent);
@@ -429,9 +429,9 @@ function getFirstTypeArgumentDefinitions(typeChecker: TypeChecker, type: Type, n
     }
 
     if (
-        (getObjectFlags(type) & ObjectFlags.Mapped) &&
-        (type as MappedType).target &&
-        shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker, (type as MappedType).target!)
+        (getObjectFlags(type) & ObjectFlags.Mapped)
+        && (type as MappedType).target
+        && shouldUnwrapFirstTypeArgumentTypeDefinitionFromAlias(typeChecker, (type as MappedType).target!)
     ) {
         const declaration = type.aliasSymbol?.declarations?.[0];
 
@@ -462,9 +462,9 @@ export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile
     const fromReturnType = returnType && definitionFromType(returnType, typeChecker, node, failedAliasResolution);
 
     // If a function returns 'void' or some other type with no definition, just return the function definition.
-    const [resolvedType, typeDefinitions] = fromReturnType && fromReturnType.length !== 0 ?
-        [returnType, fromReturnType] :
-        [typeAtLocation, definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution)];
+    const [resolvedType, typeDefinitions] = fromReturnType && fromReturnType.length !== 0
+        ? [returnType, fromReturnType]
+        : [typeAtLocation, definitionFromType(typeAtLocation, typeChecker, node, failedAliasResolution)];
 
     return typeDefinitions.length ? [...getFirstTypeArgumentDefinitions(typeChecker, resolvedType, node, failedAliasResolution), ...typeDefinitions]
         : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node, failedAliasResolution)
@@ -479,9 +479,9 @@ function tryGetReturnTypeOfFunction(symbol: Symbol, type: Type, checker: TypeChe
     // If the type is just a function's inferred type,
     // go-to-type should go to the return type instead, since go-to-definition takes you to the function anyway.
     if (
-        type.symbol === symbol ||
+        type.symbol === symbol
         // At `const f = () => {}`, the symbol is `f` and the type symbol is at `() => {}`
-        symbol.valueDeclaration && type.symbol && isVariableDeclaration(symbol.valueDeclaration) && symbol.valueDeclaration.initializer === type.symbol.valueDeclaration as Node
+        || symbol.valueDeclaration && type.symbol && isVariableDeclaration(symbol.valueDeclaration) && symbol.valueDeclaration.initializer === type.symbol.valueDeclaration as Node
     ) {
         const sigs = type.getCallSignatures();
         if (sigs.length === 1) return checker.getReturnTypeOfSignature(first(sigs));
@@ -498,9 +498,9 @@ export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFi
     }
 
     // Check if position is on triple slash reference.
-    const comment = findReferenceInPosition(sourceFile.referencedFiles, position) ||
-        findReferenceInPosition(sourceFile.typeReferenceDirectives, position) ||
-        findReferenceInPosition(sourceFile.libReferenceDirectives, position);
+    const comment = findReferenceInPosition(sourceFile.referencedFiles, position)
+        || findReferenceInPosition(sourceFile.typeReferenceDirectives, position)
+        || findReferenceInPosition(sourceFile.libReferenceDirectives, position);
 
     if (comment) {
         return { definitions, textSpan: createTextSpanFromRange(comment) };

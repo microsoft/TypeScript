@@ -519,11 +519,11 @@ export function transformTypeScript(context: TransformationContext) {
      */
     function namespaceElementVisitorWorker(node: Node): VisitResult<Node | undefined> {
         if (
-            node.kind === SyntaxKind.ExportDeclaration ||
-            node.kind === SyntaxKind.ImportDeclaration ||
-            node.kind === SyntaxKind.ImportClause ||
-            (node.kind === SyntaxKind.ImportEqualsDeclaration &&
-                (node as ImportEqualsDeclaration).moduleReference.kind === SyntaxKind.ExternalModuleReference)
+            node.kind === SyntaxKind.ExportDeclaration
+            || node.kind === SyntaxKind.ImportDeclaration
+            || node.kind === SyntaxKind.ImportClause
+            || (node.kind === SyntaxKind.ImportEqualsDeclaration
+                && (node as ImportEqualsDeclaration).moduleReference.kind === SyntaxKind.ExternalModuleReference)
         ) {
             // do not emit ES6 imports and exports since they are illegal inside a namespace
             return undefined;
@@ -838,9 +838,9 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function visitSourceFile(node: SourceFile) {
-        const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") &&
-            !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015) &&
-            !isJsonSourceFile(node);
+        const alwaysStrict = getStrictOptionValue(compilerOptions, "alwaysStrict")
+            && !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015)
+            && !isJsonSourceFile(node);
 
         return factory.updateSourceFile(
             node,
@@ -881,13 +881,13 @@ export function transformTypeScript(context: TransformationContext) {
 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
         const facts = getClassFacts(node);
-        const promoteToIIFE = languageVersion <= ScriptTarget.ES5 &&
-            !!(facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression);
+        const promoteToIIFE = languageVersion <= ScriptTarget.ES5
+            && !!(facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression);
 
         if (
-            !isClassLikeDeclarationWithTypeScriptSyntax(node) &&
-            !classOrConstructorParameterIsDecorated(legacyDecorators, node) &&
-            !isExportOfNamespace(node)
+            !isClassLikeDeclarationWithTypeScriptSyntax(node)
+            && !classOrConstructorParameterIsDecorated(legacyDecorators, node)
+            && !isExportOfNamespace(node)
         ) {
             return factory.updateClassDeclaration(
                 node,
@@ -903,27 +903,27 @@ export function transformTypeScript(context: TransformationContext) {
             context.startLexicalEnvironment();
         }
 
-        const moveModifiers = promoteToIIFE ||
-            facts & ClassFacts.IsExportOfNamespace;
+        const moveModifiers = promoteToIIFE
+            || facts & ClassFacts.IsExportOfNamespace;
 
         // elide modifiers on the declaration if we are emitting an IIFE or the class is
         // a namespace export
-        let modifiers = moveModifiers ?
-            visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike) :
-            visitNodes(node.modifiers, visitor, isModifierLike);
+        let modifiers = moveModifiers
+            ? visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike)
+            : visitNodes(node.modifiers, visitor, isModifierLike);
 
         // inject metadata only if the class is decorated
         if (facts & ClassFacts.HasClassOrConstructorParameterDecorators) {
             modifiers = injectClassTypeMetadata(modifiers, node);
         }
 
-        const needsName = moveModifiers && !node.name ||
-            facts & ClassFacts.HasMemberDecorators ||
-            facts & ClassFacts.HasStaticInitializedProperties;
+        const needsName = moveModifiers && !node.name
+            || facts & ClassFacts.HasMemberDecorators
+            || facts & ClassFacts.HasStaticInitializedProperties;
 
-        const name = needsName ?
-            node.name ?? factory.getGeneratedNameForNode(node) :
-            node.name;
+        const name = needsName
+            ? node.name ?? factory.getGeneratedNameForNode(node)
+            : node.name;
 
         //  ${modifiers} class ${name} ${heritageClauses} {
         //      ${members}
@@ -1052,8 +1052,8 @@ export function transformTypeScript(context: TransformationContext) {
 
         let newMembers: ClassElement[] | undefined;
         const constructor = getFirstConstructorWithBody(node);
-        const parametersWithPropertyAssignments = constructor &&
-            filter(constructor.parameters, (p): p is ParameterPropertyDeclaration => isParameterPropertyDeclaration(p, constructor));
+        const parametersWithPropertyAssignments = constructor
+            && filter(constructor.parameters, (p): p is ParameterPropertyDeclaration => isParameterPropertyDeclaration(p, constructor));
 
         if (parametersWithPropertyAssignments) {
             for (const parameter of parametersWithPropertyAssignments) {
@@ -1113,9 +1113,9 @@ export function transformTypeScript(context: TransformationContext) {
     function getTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
         // Decorator metadata is not yet supported for ES decorators.
         if (!legacyDecorators) return undefined;
-        return USE_NEW_TYPE_METADATA_FORMAT ?
-            getNewTypeMetadata(node, container) :
-            getOldTypeMetadata(node, container);
+        return USE_NEW_TYPE_METADATA_FORMAT
+            ? getNewTypeMetadata(node, container)
+            : getOldTypeMetadata(node, container);
     }
 
     function getOldTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
@@ -1304,10 +1304,10 @@ export function transformTypeScript(context: TransformationContext) {
             return undefined;
         }
 
-        let modifiers = isClassLike(parent) ? !isAmbient ?
-            visitNodes(node.modifiers, visitor, isModifierLike) :
-            visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike) :
-            visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+        let modifiers = isClassLike(parent) ? !isAmbient
+            ? visitNodes(node.modifiers, visitor, isModifierLike)
+            : visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike)
+            : visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
 
         modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
@@ -1380,8 +1380,8 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function transformConstructorBody(body: Block, constructor: ConstructorDeclaration) {
-        const parametersWithPropertyAssignments = constructor &&
-            filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as readonly ParameterPropertyDeclaration[] | undefined;
+        const parametersWithPropertyAssignments = constructor
+            && filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor)) as readonly ParameterPropertyDeclaration[] | undefined;
         if (!some(parametersWithPropertyAssignments)) {
             return visitFunctionBody(body, visitor, context);
         }
@@ -1474,9 +1474,9 @@ export function transformTypeScript(context: TransformationContext) {
             return undefined;
         }
 
-        let modifiers = isClassLike(parent) ?
-            visitNodes(node.modifiers, visitor, isModifierLike) :
-            visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+        let modifiers = isClassLike(parent)
+            ? visitNodes(node.modifiers, visitor, isModifierLike)
+            : visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
 
         modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
@@ -1512,9 +1512,9 @@ export function transformTypeScript(context: TransformationContext) {
             return undefined;
         }
 
-        let modifiers = isClassLike(parent) ?
-            visitNodes(node.modifiers, visitor, isModifierLike) :
-            visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+        let modifiers = isClassLike(parent)
+            ? visitNodes(node.modifiers, visitor, isModifierLike)
+            : visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
 
         modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
@@ -1537,9 +1537,9 @@ export function transformTypeScript(context: TransformationContext) {
             return undefined;
         }
 
-        let modifiers = isClassLike(parent) ?
-            visitNodes(node.modifiers, visitor, isModifierLike) :
-            visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+        let modifiers = isClassLike(parent)
+            ? visitNodes(node.modifiers, visitor, isModifierLike)
+            : visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
 
         modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
@@ -1923,9 +1923,9 @@ export function transformTypeScript(context: TransformationContext) {
             ),
             valueExpression,
         );
-        const outerAssignment = isSyntacticallyString(valueExpression) ?
-            innerAssignment :
-            factory.createAssignment(
+        const outerAssignment = isSyntacticallyString(valueExpression)
+            ? innerAssignment
+            : factory.createAssignment(
                 factory.createElementAccessExpression(
                     currentNamespaceContainerName,
                     innerAssignment,
@@ -1951,9 +1951,9 @@ export function transformTypeScript(context: TransformationContext) {
     function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
         const value = resolver.getConstantValue(member);
         if (value !== undefined) {
-            return typeof value === "string" ? factory.createStringLiteral(value) :
-                value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) :
-                factory.createNumericLiteral(value);
+            return typeof value === "string" ? factory.createStringLiteral(value)
+                : value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value))
+                : factory.createNumericLiteral(value);
         }
         else {
             enableSubstitutionForNonQualifiedEnumMembers();
@@ -2683,8 +2683,8 @@ export function transformTypeScript(context: TransformationContext) {
             // an identifier that is exported from a merged namespace.
             const container = resolver.getReferencedExportContainer(node, /*prefixLocals*/ false);
             if (container && container.kind !== SyntaxKind.SourceFile) {
-                const substitute = (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
-                    (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
+                const substitute = (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration)
+                    || (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
                 if (substitute) {
                     return setTextRange(
                         factory.createPropertyAccessExpression(factory.getGeneratedNameForNode(container), node),
@@ -2714,9 +2714,9 @@ export function transformTypeScript(context: TransformationContext) {
         if (constantValue !== undefined) {
             // track the constant value on the node for the printer in mayNeedDotDotForPropertyAccess
             setConstantValue(node, constantValue);
-            const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
-                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constantValue)) :
-                factory.createNumericLiteral(constantValue);
+            const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue)
+                : constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constantValue))
+                : factory.createNumericLiteral(constantValue);
 
             if (!compilerOptions.removeComments) {
                 const originalNode = getOriginalNode(node, isAccessExpression);

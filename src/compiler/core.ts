@@ -766,10 +766,10 @@ function deduplicateEquality<T>(array: readonly T[], equalityComparer: EqualityC
  * @internal
  */
 export function deduplicate<T>(array: readonly T[], equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
-    return array.length === 0 ? [] :
-        array.length === 1 ? array.slice() :
-        comparer ? deduplicateRelational(array, equalityComparer, comparer) :
-        deduplicateEquality(array, equalityComparer);
+    return array.length === 0 ? []
+        : array.length === 1 ? array.slice()
+        : comparer ? deduplicateRelational(array, equalityComparer, comparer)
+        : deduplicateEquality(array, equalityComparer);
 }
 
 /**
@@ -1928,9 +1928,9 @@ const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_. ]+/g;
  * @internal
  */
 export function toFileNameLowerCase(x: string) {
-    return fileNameLowerCaseRegExp.test(x) ?
-        x.replace(fileNameLowerCaseRegExp, toLowerCase) :
-        x;
+    return fileNameLowerCaseRegExp.test(x)
+        ? x.replace(fileNameLowerCaseRegExp, toLowerCase)
+        : x;
 }
 
 /**
@@ -2103,11 +2103,11 @@ export function equateStringsCaseSensitive(a: string, b: string) {
 function compareComparableValues(a: string | undefined, b: string | undefined): Comparison;
 function compareComparableValues(a: number | undefined, b: number | undefined): Comparison;
 function compareComparableValues(a: string | number | undefined, b: string | number | undefined) {
-    return a === b ? Comparison.EqualTo :
-        a === undefined ? Comparison.LessThan :
-        b === undefined ? Comparison.GreaterThan :
-        a < b ? Comparison.LessThan :
-        Comparison.GreaterThan;
+    return a === b ? Comparison.EqualTo
+        : a === undefined ? Comparison.LessThan
+        : b === undefined ? Comparison.GreaterThan
+        : a < b ? Comparison.LessThan
+        : Comparison.GreaterThan;
 }
 
 /**
@@ -2260,10 +2260,10 @@ export function compareStringsCaseSensitiveUI(a: string, b: string) {
 
 /** @internal */
 export function compareProperties<T extends object, K extends keyof T>(a: T | undefined, b: T | undefined, key: K, comparer: Comparer<T[K]>): Comparison {
-    return a === b ? Comparison.EqualTo :
-        a === undefined ? Comparison.LessThan :
-        b === undefined ? Comparison.GreaterThan :
-        comparer(a[key], b[key]);
+    return a === b ? Comparison.EqualTo
+        : a === undefined ? Comparison.LessThan
+        : b === undefined ? Comparison.GreaterThan
+        : comparer(a[key], b[key]);
 }
 
 /**
@@ -2568,9 +2568,9 @@ export function tryRemovePrefix(str: string, prefix: string, getCanonicalFileNam
 
 /** @internal */
 export function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
-    return candidate.length >= prefix.length + suffix.length &&
-        startsWith(candidate, prefix) &&
-        endsWith(candidate, suffix);
+    return candidate.length >= prefix.length + suffix.length
+        && startsWith(candidate, prefix)
+        && endsWith(candidate, suffix);
 }
 
 /** @internal */

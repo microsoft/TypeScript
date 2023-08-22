@@ -542,9 +542,9 @@ export class SessionClient implements LanguageService {
                 locations.push({
                     textSpan: this.decodeSpan({ start, end }, fileName),
                     fileName,
-                    ...(contextStart !== undefined ?
-                        { contextSpan: this.decodeSpan({ start: contextStart, end: contextEnd! }, fileName) } :
-                        undefined),
+                    ...(contextStart !== undefined
+                        ? { contextSpan: this.decodeSpan({ start: contextStart, end: contextEnd! }, fileName) }
+                        : undefined),
                     ...prefixSuffixText,
                 });
             }
@@ -580,11 +580,11 @@ export class SessionClient implements LanguageService {
 
     findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, preferences: UserPreferences | boolean | undefined): RenameLocation[] {
         if (
-            !this.lastRenameEntry ||
-            this.lastRenameEntry.inputs.fileName !== fileName ||
-            this.lastRenameEntry.inputs.position !== position ||
-            this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
-            this.lastRenameEntry.inputs.findInComments !== findInComments
+            !this.lastRenameEntry
+            || this.lastRenameEntry.inputs.fileName !== fileName
+            || this.lastRenameEntry.inputs.position !== position
+            || this.lastRenameEntry.inputs.findInStrings !== findInStrings
+            || this.lastRenameEntry.inputs.findInComments !== findInComments
         ) {
             const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences : preferences?.providePrefixAndSuffixTextForRename;
             const quotePreference = typeof preferences === "boolean" ? undefined : preferences?.quotePreference;

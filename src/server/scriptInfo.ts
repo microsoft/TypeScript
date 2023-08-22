@@ -174,9 +174,9 @@ export class TextStorage {
      * returns true if text changed
      */
     public reloadWithFileText(tempFileName?: string) {
-        const { text: newText, fileSize } = tempFileName || !this.info.isDynamicOrHasMixedContent() ?
-            this.getFileTextAndSize(tempFileName) :
-            { text: "", fileSize: undefined };
+        const { text: newText, fileSize } = tempFileName || !this.info.isDynamicOrHasMixedContent()
+            ? this.getFileTextAndSize(tempFileName)
+            : { text: "", fileSize: undefined };
         const reloaded = this.reload(newText);
         this.fileSize = fileSize; // NB: after reload since reload clears it
         this.ownFileText = !tempFileName || tempFileName === this.info.fileName;
@@ -188,9 +188,9 @@ export class TextStorage {
      * returns true when scheduling reload
      */
     public scheduleReloadIfNeeded() {
-        return !this.pendingReloadFromDisk && !this.ownFileText ?
-            this.pendingReloadFromDisk = true :
-            false;
+        return !this.pendingReloadFromDisk && !this.ownFileText
+            ? this.pendingReloadFromDisk = true
+            : false;
     }
 
     public delayReloadFromFileIntoText() {
@@ -215,20 +215,20 @@ export class TextStorage {
     }
 
     public getSnapshot(): IScriptSnapshot {
-        return this.tryUseScriptVersionCache()?.getSnapshot() ||
-            (this.textSnapshot ??= ScriptSnapshot.fromString(Debug.checkDefined(this.text)));
+        return this.tryUseScriptVersionCache()?.getSnapshot()
+            || (this.textSnapshot ??= ScriptSnapshot.fromString(Debug.checkDefined(this.text)));
     }
 
     public getAbsolutePositionAndLineText(oneBasedLine: number): AbsolutePositionAndLineText {
         const svc = this.tryUseScriptVersionCache();
         if (svc) return svc.getAbsolutePositionAndLineText(oneBasedLine);
         const lineMap = this.getLineMap();
-        return oneBasedLine <= lineMap.length ?
-            {
+        return oneBasedLine <= lineMap.length
+            ? {
                 absolutePosition: lineMap[oneBasedLine - 1],
                 lineText: this.text!.substring(lineMap[oneBasedLine - 1], lineMap[oneBasedLine]),
-            } :
-            {
+            }
+            : {
                 absolutePosition: this.text!.length,
                 lineText: undefined,
             };
@@ -251,9 +251,9 @@ export class TextStorage {
      */
     lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
         const svc = this.tryUseScriptVersionCache();
-        return svc ?
-            svc.lineOffsetToPosition(line, offset) :
-            computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text, allowEdits);
+        return svc
+            ? svc.lineOffsetToPosition(line, offset)
+            : computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text, allowEdits);
     }
 
     positionToLineOffset(position: number): protocol.Location {
@@ -337,10 +337,10 @@ export class TextStorage {
 }
 
 export function isDynamicFileName(fileName: NormalizedPath) {
-    return fileName[0] === "^" ||
-        ((fileName.includes("walkThroughSnippet:/") || fileName.includes("untitled:/")) &&
-            getBaseFileName(fileName)[0] === "^") ||
-        (fileName.includes(":^") && !fileName.includes(directorySeparator));
+    return fileName[0] === "^"
+        || ((fileName.includes("walkThroughSnippet:/") || fileName.includes("untitled:/"))
+            && getBaseFileName(fileName)[0] === "^")
+        || (fileName.includes(":^") && !fileName.includes(directorySeparator));
 }
 
 /** @internal */
@@ -429,8 +429,8 @@ export class ScriptInfo {
     public open(newText: string | undefined) {
         this.textStorage.isOpen = true;
         if (
-            newText !== undefined &&
-            this.textStorage.reload(newText)
+            newText !== undefined
+            && this.textStorage.reload(newText)
         ) {
             // reload new contents only if the existing contents changed
             this.markContainingProjectsAsDirty();
@@ -587,8 +587,8 @@ export class ScriptInfo {
                             // If we havent found default configuredProject and
                             // its not the last one, find it and use that one if there
                             if (
-                                defaultConfiguredProject === undefined &&
-                                index !== this.containingProjects.length - 1
+                                defaultConfiguredProject === undefined
+                                && index !== this.containingProjects.length - 1
                             ) {
                                 defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) || false;
                             }
@@ -605,11 +605,11 @@ export class ScriptInfo {
                     }
                 }
                 return ensurePrimaryProjectKind(
-                    defaultConfiguredProject ||
-                        firstNonSourceOfProjectReferenceRedirect ||
-                        firstConfiguredProject ||
-                        firstExternalProject ||
-                        firstInferredProject,
+                    defaultConfiguredProject
+                        || firstNonSourceOfProjectReferenceRedirect
+                        || firstConfiguredProject
+                        || firstExternalProject
+                        || firstInferredProject,
                 );
         }
     }

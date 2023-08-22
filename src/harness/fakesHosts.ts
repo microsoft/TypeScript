@@ -397,9 +397,9 @@ export class CompilerHost implements ts.CompilerHost {
                 try {
                     const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName) : undefined!; // TODO: GH#18217
                     if (
-                        shadowRootStats.dev !== stats.dev ||
-                        shadowRootStats.ino !== stats.ino ||
-                        shadowRootStats.mtimeMs !== stats.mtimeMs
+                        shadowRootStats.dev !== stats.dev
+                        || shadowRootStats.ino !== stats.ino
+                        || shadowRootStats.mtimeMs !== stats.mtimeMs
                     ) {
                         break;
                     }
@@ -498,9 +498,9 @@ function expectedErrorDiagnosticToText({ relatedInformation, ...diagnosticRelate
 }
 
 function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
-    return ts.isArray(errorOrStatus) ?
-        `${DiagnosticKind.Status}!: ${expectedDiagnosticMessageToText(errorOrStatus)}` :
-        expectedErrorDiagnosticToText(errorOrStatus);
+    return ts.isArray(errorOrStatus)
+        ? `${DiagnosticKind.Status}!: ${expectedDiagnosticMessageToText(errorOrStatus)}`
+        : expectedErrorDiagnosticToText(errorOrStatus);
 }
 
 function diagnosticMessageChainToText({ messageText, next }: ts.DiagnosticMessageChain, indent = 0) {
@@ -513,12 +513,12 @@ function diagnosticMessageChainToText({ messageText, next }: ts.DiagnosticMessag
 }
 
 function diagnosticRelatedInformationToText({ file, start, length, messageText }: ts.DiagnosticRelatedInformation) {
-    const text = typeof messageText === "string" ?
-        messageText :
-        diagnosticMessageChainToText(messageText);
-    return file ?
-        `${file.fileName}(${start}:${length}):: ${text}` :
-        text;
+    const text = typeof messageText === "string"
+        ? messageText
+        : diagnosticMessageChainToText(messageText);
+    return file
+        ? `${file.fileName}(${start}:${length}):: ${text}`
+        : text;
 }
 
 function diagnosticToText({ kind, diagnostic: { relatedInformation, ...diagnosticRelatedInformation } }: SolutionBuilderDiagnostic) {

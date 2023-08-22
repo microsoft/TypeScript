@@ -91,8 +91,8 @@ function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOption
         let pathStart = args[initialIndex];
         let extraPartCounter = 0;
         if (
-            pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
-            pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote
+            pathStart.charCodeAt(0) === CharacterCodes.doubleQuote
+            && pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote
         ) {
             for (let i = initialIndex + 1; i < args.length; i++) {
                 pathStart += " ";
@@ -710,12 +710,12 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
     function getGlobalTypingsCacheLocation() {
         switch (process.platform) {
             case "win32": {
-                const basePath = process.env.LOCALAPPDATA ||
-                    process.env.APPDATA ||
-                    (os.homedir && os.homedir()) ||
-                    process.env.USERPROFILE ||
-                    (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
-                    os.tmpdir();
+                const basePath = process.env.LOCALAPPDATA
+                    || process.env.APPDATA
+                    || (os.homedir && os.homedir())
+                    || process.env.USERPROFILE
+                    || (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH))
+                    || os.tmpdir();
                 return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
             }
             case "openbsd":
@@ -737,10 +737,10 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
             return process.env.XDG_CACHE_HOME;
         }
         const usersDir = platformIsDarwin ? "Users" : "home";
-        const homePath = (os.homedir && os.homedir()) ||
-            process.env.HOME ||
-            ((process.env.LOGNAME || process.env.USER) && `/${usersDir}/${process.env.LOGNAME || process.env.USER}`) ||
-            os.tmpdir();
+        const homePath = (os.homedir && os.homedir())
+            || process.env.HOME
+            || ((process.env.LOGNAME || process.env.USER) && `/${usersDir}/${process.env.LOGNAME || process.env.USER}`)
+            || os.tmpdir();
         const cacheFolder = platformIsDarwin
             ? "Library/Caches"
             : ".cache";

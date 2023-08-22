@@ -260,9 +260,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 
     function createESDecorateClassElementAccessGetMethod(elementName: ESDecorateName) {
-        const accessor = elementName.computed ?
-            factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
-            factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
+        const accessor = elementName.computed
+            ? factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name)
+            : factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
 
         return factory.createPropertyAssignment(
             "get",
@@ -282,9 +282,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 
     function createESDecorateClassElementAccessSetMethod(elementName: ESDecorateName) {
-        const accessor = elementName.computed ?
-            factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name) :
-            factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
+        const accessor = elementName.computed
+            ? factory.createElementAccessExpression(factory.createIdentifier("obj"), elementName.name)
+            : factory.createPropertyAccessExpression(factory.createIdentifier("obj"), elementName.name);
 
         return factory.createPropertyAssignment(
             "set",
@@ -318,9 +318,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 
     function createESDecorateClassElementAccessHasMethod(elementName: ESDecorateName) {
-        const propertyName = elementName.computed ? elementName.name :
-            isIdentifier(elementName.name) ? factory.createStringLiteralFromNode(elementName.name) :
-            elementName.name;
+        const propertyName = elementName.computed ? elementName.name
+            : isIdentifier(elementName.name) ? factory.createStringLiteralFromNode(elementName.name)
+            : elementName.name;
 
         return factory.createPropertyAssignment(
             "has",
@@ -364,8 +364,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
     }
 
     function createESDecorateContextObject(contextIn: ESDecorateContext) {
-        return contextIn.kind === "class" ? createESDecorateClassContextObject(contextIn) :
-            createESDecorateClassElementContextObject(contextIn);
+        return contextIn.kind === "class" ? createESDecorateClassContextObject(contextIn)
+            : createESDecorateClassElementContextObject(contextIn);
     }
 
     function createESDecorateHelper(ctor: Expression, descriptorIn: Expression, decorators: Expression, contextIn: ESDecorateContext, initializers: Expression, extraInitializers: Expression) {

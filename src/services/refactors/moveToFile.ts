@@ -449,8 +449,8 @@ export function updateImportsInOtherFiles(
 function getNamespaceLikeImport(node: SupportedImport): Identifier | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
-            return node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport ?
-                node.importClause.namedBindings.name : undefined;
+            return node.importClause && node.importClause.namedBindings && node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport
+                ? node.importClause.namedBindings.name : undefined;
         case SyntaxKind.ImportEqualsDeclaration:
             return node.name;
         case SyntaxKind.VariableDeclaration:
@@ -610,9 +610,9 @@ function makeVariableStatement(name: BindingName, type: TypeNode | undefined, in
 export function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needExport: Set<Symbol>, useEs6Exports: boolean): readonly Statement[] {
     return flatMap(toMove, statement => {
         if (
-            isTopLevelDeclarationStatement(statement) &&
-            !isExported(sourceFile, statement, useEs6Exports) &&
-            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)))
+            isTopLevelDeclarationStatement(statement)
+            && !isExported(sourceFile, statement, useEs6Exports)
+            && forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)))
         ) {
             const exports = addExport(getSynthesizedDeepClone(statement), useEs6Exports);
             if (exports) return exports;
@@ -625,8 +625,8 @@ function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, 
     if (useEs6Exports) {
         return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) || !!(name && sourceFile.symbol && sourceFile.symbol.exports?.has(name.escapedText));
     }
-    return !!sourceFile.symbol && !!sourceFile.symbol.exports &&
-        getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
+    return !!sourceFile.symbol && !!sourceFile.symbol.exports
+        && getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
 }
 
 /** @internal */
@@ -652,8 +652,8 @@ function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: Im
     if (!importDecl.importClause) return;
     const { name, namedBindings } = importDecl.importClause;
     const defaultUnused = !name || isUnused(name);
-    const namedBindingsUnused = !namedBindings ||
-        (namedBindings.kind === SyntaxKind.NamespaceImport ? isUnused(namedBindings.name) : namedBindings.elements.length !== 0 && namedBindings.elements.every(e => isUnused(e.name)));
+    const namedBindingsUnused = !namedBindings
+        || (namedBindings.kind === SyntaxKind.NamespaceImport ? isUnused(namedBindings.name) : namedBindings.elements.length !== 0 && namedBindings.elements.every(e => isUnused(e.name)));
     if (defaultUnused && namedBindingsUnused) {
         changes.delete(sourceFile, importDecl);
     }
@@ -1159,8 +1159,8 @@ function isInImport(decl: Declaration) {
 }
 
 function isVariableDeclarationInImport(decl: VariableDeclaration) {
-    return isSourceFile(decl.parent.parent.parent) &&
-        !!decl.initializer && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true);
+    return isSourceFile(decl.parent.parent.parent)
+        && !!decl.initializer && isRequireCall(decl.initializer, /*requireStringLiteralLikeArgument*/ true);
 }
 
 /** @internal */
@@ -1210,8 +1210,8 @@ function moveStatementsToTargetFile(changes: textChanges.ChangeTracker, program:
                 forEachTopLevelDeclaration(node, declaration => {
                     const targetDeclarations = canHaveSymbol(declaration) ? targetExports.get(declaration.symbol.escapedName)?.declarations : undefined;
                     const exportDeclaration = firstDefined(targetDeclarations, d =>
-                        isExportDeclaration(d) ? d :
-                            isExportSpecifier(d) ? tryCast(d.parent.parent, isExportDeclaration) : undefined);
+                        isExportDeclaration(d) ? d
+                            : isExportSpecifier(d) ? tryCast(d.parent.parent, isExportDeclaration) : undefined);
                     if (exportDeclaration && exportDeclaration.moduleSpecifier) {
                         targetToSourceExports.set(exportDeclaration, (targetToSourceExports.get(exportDeclaration) || new Set()).add(declaration));
                     }
@@ -1267,8 +1267,8 @@ function getExistingLocals(sourceFile: SourceFile, statements: readonly Statemen
     for (const moduleSpecifier of sourceFile.imports) {
         const declaration = importFromModuleSpecifier(moduleSpecifier);
         if (
-            isImportDeclaration(declaration) && declaration.importClause &&
-            declaration.importClause.namedBindings && isNamedImports(declaration.importClause.namedBindings)
+            isImportDeclaration(declaration) && declaration.importClause
+            && declaration.importClause.namedBindings && isNamedImports(declaration.importClause.namedBindings)
         ) {
             for (const e of declaration.importClause.namedBindings.elements) {
                 const symbol = checker.getSymbolAtLocation(e.propertyName || e.name);

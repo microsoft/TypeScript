@@ -315,8 +315,8 @@ export function discoverTypings(
                     // packages. So that needs this dance here.
                     const pathComponents = getPathComponents(normalizePath(manifestPath));
                     const isScoped = pathComponents[pathComponents.length - 3][0] === "@";
-                    return isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 4]) === modulesDirName || // `node_modules/@foo/bar`
-                        !isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 3]) === modulesDirName; // `node_modules/foo`
+                    return isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 4]) === modulesDirName // `node_modules/@foo/bar`
+                        || !isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 3]) === modulesDirName; // `node_modules/foo`
                 });
 
         if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
@@ -448,9 +448,9 @@ function validatePackageNameWorker(packageName: string, supportScopedPackage: bo
 
 /** @internal */
 export function renderPackageNameValidationFailure(result: PackageNameValidationResult, typing: string): string {
-    return typeof result === "object" ?
-        renderPackageNameValidationFailureWorker(typing, result.result, result.name, result.isScopeName) :
-        renderPackageNameValidationFailureWorker(typing, result, typing, /*isScopeName*/ false);
+    return typeof result === "object"
+        ? renderPackageNameValidationFailureWorker(typing, result.result, result.name, result.isScopeName)
+        : renderPackageNameValidationFailureWorker(typing, result, typing, /*isScopeName*/ false);
 }
 
 function renderPackageNameValidationFailureWorker(typing: string, result: NameValidationResult, name: string, isScopeName: boolean): string {

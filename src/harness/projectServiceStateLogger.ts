@@ -195,9 +195,9 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 open: info.isScriptOpen(),
                 version: info.textStorage.getVersion(),
                 pendingReloadFromDisk: info.textStorage.pendingReloadFromDisk,
-                sourceMapFilePath: info.sourceMapFilePath && !isString(info.sourceMapFilePath) ?
-                    { original: info.sourceMapFilePath, sourceInfos: new Set(info.sourceMapFilePath.sourceInfos) } :
-                    info.sourceMapFilePath,
+                sourceMapFilePath: info.sourceMapFilePath && !isString(info.sourceMapFilePath)
+                    ? { original: info.sourceMapFilePath, sourceInfos: new Set(info.sourceMapFilePath.sourceInfos) }
+                    : info.sourceMapFilePath,
                 declarationInfoPath: info.declarationInfoPath,
                 sourceInfos: info.sourceInfos && new Set(info.sourceInfos),
                 documentPositionMapper: info.documentPositionMapper,
@@ -324,8 +324,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
             dataDiff,
             propertyLogs,
             (value, key) =>
-                dataDiff !== Diff.New && dataValue?.get(key) !== value ?
-                    !dataValue?.has(key) ? Diff.New : Diff.Change : Diff.None,
+                dataDiff !== Diff.New && dataValue?.get(key) !== value
+                    ? !dataValue?.has(key) ? Diff.New : Diff.Change : Diff.None,
             (value, key) => `${key}: ${toStringPropertyValue(value)}`,
         );
     }
@@ -433,16 +433,16 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         infoDiff: Diff,
         infoPropertyLogs: StatePropertyLog[],
     ) {
-        return !info.sourceMapFilePath || isString(info.sourceMapFilePath) ?
-            printProperty(
+        return !info.sourceMapFilePath || isString(info.sourceMapFilePath)
+            ? printProperty(
                 PrintPropertyWhen.DefinedOrChangedOrNew,
                 data,
                 "sourceMapFilePath",
                 info.sourceMapFilePath,
                 infoDiff,
                 infoPropertyLogs,
-            ) :
-            printSetPropertyValueWorker(
+            )
+            : printSetPropertyValueWorker(
                 PrintPropertyWhen.DefinedOrChangedOrNew,
                 data?.sourceMapFilePath && !isString(data?.sourceMapFilePath) ? data.sourceMapFilePath.sourceInfos : undefined,
                 "sourceMapFilePath sourceInfos",
@@ -461,8 +461,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     }
 
     function getSourceMapper(project: Project) {
-        return project.projectKind !== ProjectKind.AutoImportProvider ?
-            project.getLanguageService(/*ensureSynchronized*/ false)?.getSourceMapper() :
-            undefined;
+        return project.projectKind !== ProjectKind.AutoImportProvider
+            ? project.getLanguageService(/*ensureSynchronized*/ false)?.getSourceMapper()
+            : undefined;
     }
 }

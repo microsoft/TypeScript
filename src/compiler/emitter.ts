@@ -486,11 +486,11 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     else {
         if (!configFile) return undefined;
         const configFileExtensionLess = removeFileExtension(configFile);
-        buildInfoExtensionLess = options.outDir ?
-            options.rootDir ?
-                resolvePath(options.outDir, getRelativePathFromDirectory(options.rootDir, configFileExtensionLess, /*ignoreCase*/ true)) :
-                combinePaths(options.outDir, getBaseFileName(configFileExtensionLess)) :
-            configFileExtensionLess;
+        buildInfoExtensionLess = options.outDir
+            ? options.rootDir
+                ? resolvePath(options.outDir, getRelativePathFromDirectory(options.rootDir, configFileExtensionLess, /*ignoreCase*/ true))
+                : combinePaths(options.outDir, getBaseFileName(configFileExtensionLess))
+            : configFileExtensionLess;
     }
     return buildInfoExtensionLess + Extension.TsBuildInfo;
 }
@@ -516,8 +516,8 @@ export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHos
         const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile.fileName, options));
         const isJsonFile = isJsonSourceFile(sourceFile);
         // If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
-        const isJsonEmittedToSameLocation = isJsonFile &&
-            comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+        const isJsonEmittedToSameLocation = isJsonFile
+            && comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         const jsFilePath = options.emitDeclarationOnly || isJsonEmittedToSameLocation ? undefined : ownOutputFilePath;
         const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || (getEmitDeclarations(options) && !isJsonFile)) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
@@ -532,11 +532,11 @@ function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
 
 /** @internal */
 export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
-    return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
-        options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
-        fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
-        fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs :
-        Extension.Js;
+    return fileExtensionIs(fileName, Extension.Json) ? Extension.Json
+        : options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx
+        : fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs
+        : fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs
+        : Extension.Js;
 }
 
 function getOutputPathWithoutChangingExt(
@@ -545,12 +545,12 @@ function getOutputPathWithoutChangingExt(
     outputDir: string | undefined,
     getCommonSourceDirectory: () => string,
 ): string {
-    return outputDir ?
-        resolvePath(
+    return outputDir
+        ? resolvePath(
             outputDir,
             getRelativePathFromDirectory(getCommonSourceDirectory(), inputFileName, ignoreCase),
-        ) :
-        inputFileName;
+        )
+        : inputFileName;
 }
 
 /** @internal */
@@ -570,9 +570,9 @@ function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLin
     if (configFile.options.emitDeclarationOnly) return undefined;
     const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
     const outputFileName = getOutputJSFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
-    return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
-        outputFileName :
-        undefined;
+    return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo
+        ? outputFileName
+        : undefined;
 }
 
 /** @internal */
@@ -1425,9 +1425,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function shouldEmitSourceMaps(node: Node) {
-        return !sourceMapsDisabled &&
-            !isSourceFile(node) &&
-            !isInJsonFile(node);
+        return !sourceMapsDisabled
+            && !isSourceFile(node)
+            && !isInJsonFile(node);
     }
 
     function getPipelinePhase(phase: PipelinePhase, emitHint: EmitHint, node: Node) {
@@ -2437,9 +2437,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeTokenText(node.operator, writeKeyword);
         writeSpace();
 
-        const parenthesizerRule = node.operator === SyntaxKind.ReadonlyKeyword ?
-            parenthesizer.parenthesizeOperandOfReadonlyTypeOperator :
-            parenthesizer.parenthesizeOperandOfTypeOperator;
+        const parenthesizerRule = node.operator === SyntaxKind.ReadonlyKeyword
+            ? parenthesizer.parenthesizeOperandOfReadonlyTypeOperator
+            : parenthesizer.parenthesizeOperandOfTypeOperator;
         emit(node.type, parenthesizerRule);
     }
 
@@ -2596,10 +2596,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         writeLinesAndIndent(linesBeforeDot, /*writeSpaceIfNotIndenting*/ false);
 
-        const shouldEmitDotDot = token.kind !== SyntaxKind.QuestionDotToken &&
-            mayNeedDotDotForPropertyAccess(node.expression) &&
-            !writer.hasTrailingComment() &&
-            !writer.hasTrailingWhitespace();
+        const shouldEmitDotDot = token.kind !== SyntaxKind.QuestionDotToken
+            && mayNeedDotDotForPropertyAccess(node.expression)
+            && !writer.hasTrailingComment()
+            && !writer.hasTrailingWhitespace();
 
         if (shouldEmitDotDot) {
             writePunctuation(".");
@@ -2859,9 +2859,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
 
         function maybeEmitExpression(next: Expression, parent: BinaryExpression, side: "left" | "right") {
-            const parenthesizerRule = side === "left" ?
-                parenthesizer.getParenthesizeLeftSideOfBinaryForOperator(parent.operatorToken.kind) :
-                parenthesizer.getParenthesizeRightSideOfBinaryForOperator(parent.operatorToken.kind);
+            const parenthesizerRule = side === "left"
+                ? parenthesizer.getParenthesizeLeftSideOfBinaryForOperator(parent.operatorToken.kind)
+                : parenthesizer.getParenthesizeRightSideOfBinaryForOperator(parent.operatorToken.kind);
 
             let pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Expression, next);
             if (pipelinePhase === pipelineEmitWithSubstitution) {
@@ -2872,9 +2872,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             }
 
             if (
-                pipelinePhase === pipelineEmitWithComments ||
-                pipelinePhase === pipelineEmitWithSourceMaps ||
-                pipelinePhase === pipelineEmitWithHint
+                pipelinePhase === pipelineEmitWithComments
+                || pipelinePhase === pipelineEmitWithSourceMaps
+                || pipelinePhase === pipelineEmitWithHint
             ) {
                 if (isBinaryExpression(next)) {
                     return next;
@@ -3283,10 +3283,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeKeyword("using");
         }
         else {
-            const head = isLet(node) ? "let" :
-                isVarConst(node) ? "const" :
-                isVarUsing(node) ? "using" :
-                "var";
+            const head = isLet(node) ? "let"
+                : isVarConst(node) ? "const"
+                : isVarUsing(node) ? "using"
+                : "var";
             writeKeyword(head);
         }
         writeSpace();
@@ -3617,9 +3617,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeSpace();
         emitExpression(
             node.expression,
-            node.isExportEquals ?
-                parenthesizer.getParenthesizeRightSideOfBinaryForOperator(SyntaxKind.EqualsToken) :
-                parenthesizer.parenthesizeExpressionOfExportDefault,
+            node.isExportEquals
+                ? parenthesizer.getParenthesizeRightSideOfBinaryForOperator(SyntaxKind.EqualsToken)
+                : parenthesizer.parenthesizeExpressionOfExportDefault,
         );
         writeTrailingSemicolon();
     }
@@ -3879,13 +3879,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitCaseOrDefaultClauseRest(parentNode: Node, statements: NodeArray<Statement>, colonPos: number) {
-        const emitAsSingleStatement = statements.length === 1 &&
-            (
+        const emitAsSingleStatement = statements.length === 1
+            && (
                 // treat synthesized nodes as located on the same line for emit purposes
-                !currentSourceFile ||
-                nodeIsSynthesized(parentNode) ||
-                nodeIsSynthesized(statements[0]) ||
-                rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
+                !currentSourceFile
+                || nodeIsSynthesized(parentNode)
+                || nodeIsSynthesized(statements[0])
+                || rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
             );
 
         let format = ListFormat.CaseOrDefaultClauseStatements;
@@ -4147,9 +4147,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         const statements = node.statements;
         // Emit detached comment if there are no prologue directives or if the first node is synthesized.
         // The synthesized node will have no leading comment so some comments may be missed.
-        const shouldEmitDetachedComment = statements.length === 0 ||
-            !isPrologueDirective(statements[0]) ||
-            nodeIsSynthesized(statements[0]);
+        const shouldEmitDetachedComment = statements.length === 0
+            || !isPrologueDirective(statements[0])
+            || nodeIsSynthesized(statements[0]);
         if (shouldEmitDetachedComment) {
             emitBodyWithDetachedComments(node, statements, emitSourceFileWorker);
             return;
@@ -4426,9 +4426,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitEmbeddedStatement(parent: Node, node: Statement) {
         if (
-            isBlock(node) ||
-            getEmitFlags(parent) & EmitFlags.SingleLine ||
-            preserveSourceNewlines && !getLeadingLineTerminatorCount(parent, node, ListFormat.None)
+            isBlock(node)
+            || getEmitFlags(parent) & EmitFlags.SingleLine
+            || preserveSourceNewlines && !getLeadingLineTerminatorCount(parent, node, ListFormat.None)
         ) {
             writeSpace();
             emit(node);
@@ -4898,10 +4898,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 return 0;
             }
             if (
-                currentSourceFile && parentNode &&
-                !positionIsSynthesized(parentNode.pos) &&
-                !nodeIsSynthesized(firstChild) &&
-                (!firstChild.parent || getOriginalNode(firstChild.parent) === getOriginalNode(parentNode))
+                currentSourceFile && parentNode
+                && !positionIsSynthesized(parentNode.pos)
+                && !nodeIsSynthesized(firstChild)
+                && (!firstChild.parent || getOriginalNode(firstChild.parent) === getOriginalNode(parentNode))
             ) {
                 if (preserveSourceNewlines) {
                     return getEffectiveLines(
@@ -5130,9 +5130,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             const textSourceNode = (node as StringLiteral).textSourceNode!;
             if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode) || isJsxNamespacedName(textSourceNode)) {
                 const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
-                return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
-                    neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
-                    `"${escapeNonAsciiString(text)}"`;
+                return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"`
+                    : neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"`
+                    : `"${escapeNonAsciiString(text)}"`;
             }
             else {
                 return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
@@ -5529,8 +5529,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      */
     function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
         const expr = getExternalModuleName(node)!; // TODO: GH#18217
-        const baseName = isStringLiteral(expr) ?
-            makeIdentifierFromModuleName(expr.text) : "module";
+        const baseName = isStringLiteral(expr)
+            ? makeIdentifierFromModuleName(expr.text) : "module";
         return makeUniqueName(baseName, isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
     }
 
@@ -6215,7 +6215,7 @@ function emitListItemWithParenthesizerRule(node: Node, emit: EmitFunction, paren
 }
 
 function getEmitListItem<T extends Node>(emit: EmitFunction, parenthesizerRule: ParenthesizerRuleOrSelector<T> | undefined): EmitListItemFunction<T> {
-    return emit.length === 1 ? emitListItemNoParenthesizer as EmitListItemFunction<T> :
-        typeof parenthesizerRule === "object" ? emitListItemWithParenthesizerRuleSelector as EmitListItemFunction<T> :
-        emitListItemWithParenthesizerRule as EmitListItemFunction<T>;
+    return emit.length === 1 ? emitListItemNoParenthesizer as EmitListItemFunction<T>
+        : typeof parenthesizerRule === "object" ? emitListItemWithParenthesizerRuleSelector as EmitListItemFunction<T>
+        : emitListItemWithParenthesizerRule as EmitListItemFunction<T>;
 }

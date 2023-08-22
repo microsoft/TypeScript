@@ -334,10 +334,10 @@ import * as classifier2020 from "./classifier2020";
 export const servicesVersion = "0.8";
 
 function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
-    const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
-        kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
-        kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
-        new TokenObject(kind, pos, end);
+    const node = isNodeKind(kind) ? new NodeObject(kind, pos, end)
+        : kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end)
+        : kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end)
+        : new TokenObject(kind, pos, end);
     node.parent = parent;
     node.flags = parent.flags & NodeFlags.ContextFlags;
     return node;
@@ -439,9 +439,9 @@ class NodeObject implements Node {
         }
 
         const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode)!;
-        return child.kind < SyntaxKind.FirstNode ?
-            child :
-            child.getFirstToken(sourceFile);
+        return child.kind < SyntaxKind.FirstNode
+            ? child
+            : child.getFirstToken(sourceFile);
     }
 
     public getLastToken(sourceFile?: SourceFileLike): Node | undefined {
@@ -1781,9 +1781,9 @@ export function createLanguageService(
             const existing = parsedCommandLines?.get(path);
             if (existing !== undefined) return existing || undefined;
 
-            const result = host.getParsedCommandLine ?
-                host.getParsedCommandLine(fileName) :
-                getParsedCommandLineOfConfigFileUsingSourceFile(fileName);
+            const result = host.getParsedCommandLine
+                ? host.getParsedCommandLine(fileName)
+                : getParsedCommandLineOfConfigFileUsingSourceFile(fileName);
             (parsedCommandLines ||= new Map()).set(path, result || false);
             return result;
         }
@@ -2280,8 +2280,8 @@ export function createLanguageService(
                 // If parent of the module declaration which is parent of this node is module declaration and its body is the module declaration that this node is name of
                 // Then this name is name from dotted module
                 if (
-                    nodeForStartPos.parent.parent.kind === SyntaxKind.ModuleDeclaration &&
-                    (nodeForStartPos.parent.parent as ModuleDeclaration).body === nodeForStartPos.parent
+                    nodeForStartPos.parent.parent.kind === SyntaxKind.ModuleDeclaration
+                    && (nodeForStartPos.parent.parent as ModuleDeclaration).body === nodeForStartPos.parent
                 ) {
                     // Use parent module declarations name for start pos
                     nodeForStartPos = (nodeForStartPos.parent.parent as ModuleDeclaration).name;
@@ -2824,8 +2824,8 @@ export function createLanguageService(
     }
 
     function isUnclosedTag({ openingElement, closingElement, parent }: JsxElement): boolean {
-        return !tagNamesAreEquivalent(openingElement.tagName, closingElement.tagName) ||
-            isJsxElement(parent) && tagNamesAreEquivalent(openingElement.tagName, parent.openingElement.tagName) && isUnclosedTag(parent);
+        return !tagNamesAreEquivalent(openingElement.tagName, closingElement.tagName)
+            || isJsxElement(parent) && tagNamesAreEquivalent(openingElement.tagName, parent.openingElement.tagName) && isUnclosedTag(parent);
     }
 
     function isUnclosedFragment({ closingFragment, parent }: JsxFragment): boolean {
@@ -2975,9 +2975,9 @@ export function createLanguageService(
         }
 
         function isLetterOrDigit(char: number): boolean {
-            return (char >= CharacterCodes.a && char <= CharacterCodes.z) ||
-                (char >= CharacterCodes.A && char <= CharacterCodes.Z) ||
-                (char >= CharacterCodes._0 && char <= CharacterCodes._9);
+            return (char >= CharacterCodes.a && char <= CharacterCodes.z)
+                || (char >= CharacterCodes.A && char <= CharacterCodes.Z)
+                || (char >= CharacterCodes._0 && char <= CharacterCodes._9);
         }
 
         function isNodeModulesFile(path: string): boolean {
@@ -3038,9 +3038,9 @@ export function createLanguageService(
         const files = mapDefined(allFiles, file => {
             const fileNameExtension = extensionFromPath(file.fileName);
             const isValidSourceFile = !program?.isSourceFileFromExternalLibrary(sourceFile) && !(
-                sourceFile === getValidSourceFile(file.fileName) ||
-                extension === Extension.Ts && fileNameExtension === Extension.Dts ||
-                extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && fileNameExtension === Extension.Dts
+                sourceFile === getValidSourceFile(file.fileName)
+                || extension === Extension.Ts && fileNameExtension === Extension.Dts
+                || extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && fileNameExtension === Extension.Dts
             );
             return isValidSourceFile && (extension === fileNameExtension || (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx) ? file.fileName : undefined;
         });
@@ -3235,10 +3235,10 @@ function initializeNameTable(sourceFile: SourceFile): void {
  * "a['propname']" then we want to store "propname" in the name table.
  */
 function literalIsName(node: StringLiteralLike | NumericLiteral): boolean {
-    return isDeclarationName(node) ||
-        node.parent.kind === SyntaxKind.ExternalModuleReference ||
-        isArgumentOfElementAccessExpression(node) ||
-        isLiteralComputedPropertyDeclarationName(node);
+    return isDeclarationName(node)
+        || node.parent.kind === SyntaxKind.ExternalModuleReference
+        || isArgumentOfElementAccessExpression(node)
+        || isLiteralComputedPropertyDeclarationName(node);
 }
 
 /**
@@ -3261,9 +3261,9 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
         // falls through
 
         case SyntaxKind.Identifier:
-            return isObjectLiteralElement(node.parent) &&
-                    (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
-                    node.parent.name === node ? node.parent : undefined;
+            return isObjectLiteralElement(node.parent)
+                    && (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes)
+                    && node.parent.name === node ? node.parent : undefined;
     }
     return undefined;
 }
@@ -3314,10 +3314,10 @@ export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementW
 }
 
 function isArgumentOfElementAccessExpression(node: Node) {
-    return node &&
-        node.parent &&
-        node.parent.kind === SyntaxKind.ElementAccessExpression &&
-        (node.parent as ElementAccessExpression).argumentExpression === node;
+    return node
+        && node.parent
+        && node.parent.kind === SyntaxKind.ElementAccessExpression
+        && (node.parent as ElementAccessExpression).argumentExpression === node;
 }
 
 /**

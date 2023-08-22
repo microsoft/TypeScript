@@ -93,7 +93,7 @@ export function getServerHostForLibResolution(libRedirection?: true) {
 }
 
 export function getCommandLineArgsForLibResolution(withoutConfig: true | undefined) {
-    return withoutConfig ?
-        ["project1/core.d.ts", "project1/utils.d.ts", "project1/file.ts", "project1/index.ts", "project1/file2.ts", "--lib", "es5,dom", "--traceResolution", "--explainFiles"] :
-        ["-p", "project1", "--explainFiles"];
+    return withoutConfig
+        ? ["project1/core.d.ts", "project1/utils.d.ts", "project1/file.ts", "project1/index.ts", "project1/file2.ts", "--lib", "es5,dom", "--traceResolution", "--explainFiles"]
+        : ["-p", "project1", "--explainFiles"];
 }

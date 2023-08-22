@@ -67,8 +67,8 @@ export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
     }
 
     function directoryHasPackageJson(directory: Path) {
-        return packageJsons.has(combinePaths(directory, "package.json") as Path) ? Ternary.True :
-            directoriesWithoutPackageJson.has(directory) ? Ternary.False :
-            Ternary.Maybe;
+        return packageJsons.has(combinePaths(directory, "package.json") as Path) ? Ternary.True
+            : directoriesWithoutPackageJson.has(directory) ? Ternary.False
+            : Ternary.Maybe;
     }
 }

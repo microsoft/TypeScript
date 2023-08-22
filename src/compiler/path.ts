@@ -144,8 +144,8 @@ export function hasTrailingDirectorySeparator(path: string) {
 //// Path Parsing
 
 function isVolumeCharacter(charCode: number) {
-    return (charCode >= CharacterCodes.a && charCode <= CharacterCodes.z) ||
-        (charCode >= CharacterCodes.A && charCode <= CharacterCodes.Z);
+    return (charCode >= CharacterCodes.a && charCode <= CharacterCodes.z)
+        || (charCode >= CharacterCodes.A && charCode <= CharacterCodes.Z);
 }
 
 function getFileUrlVolumeSeparatorEnd(url: string, start: number) {
@@ -195,8 +195,8 @@ function getEncodedRootLength(path: string): number {
             const scheme = path.slice(0, schemeEnd);
             const authority = path.slice(authorityStart, authorityEnd);
             if (
-                scheme === "file" && (authority === "" || authority === "localhost") &&
-                isVolumeCharacter(path.charCodeAt(authorityEnd + 1))
+                scheme === "file" && (authority === "" || authority === "localhost")
+                && isVolumeCharacter(path.charCodeAt(authorityEnd + 1))
             ) {
                 const volumeSeparatorEnd = getFileUrlVolumeSeparatorEnd(path, authorityEnd + 2);
                 if (volumeSeparatorEnd !== -1) {
@@ -770,8 +770,8 @@ export function changeAnyExtension(path: string, ext: string, extensions?: strin
 export function changeFullExtension(path: string, newExtension: string) {
     const declarationExtension = getDeclarationFileExtension(path);
     if (declarationExtension) {
-        return path.slice(0, path.length - declarationExtension.length) +
-            (startsWith(newExtension, ".") ? newExtension : ("." + newExtension));
+        return path.slice(0, path.length - declarationExtension.length)
+            + (startsWith(newExtension, ".") ? newExtension : ("." + newExtension));
     }
     return changeAnyExtension(path, newExtension);
 }

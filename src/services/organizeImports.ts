@@ -364,8 +364,8 @@ function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFil
 
     function isDeclarationUsed(identifier: Identifier) {
         // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
-        return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) && jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
-            FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
+        return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) && jsxModeNeedsExplicitImport(compilerOptions.jsx)
+            || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
     }
 }
 
@@ -505,10 +505,10 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
                 : factory.createNamedImports(sortedImportSpecifiers);
 
             if (
-                sourceFile &&
-                newNamedImports &&
-                firstNamedImport?.importClause.namedBindings &&
-                !rangeIsOnSingleLine(firstNamedImport.importClause.namedBindings, sourceFile)
+                sourceFile
+                && newNamedImports
+                && firstNamedImport?.importClause.namedBindings
+                && !rangeIsOnSingleLine(firstNamedImport.importClause.namedBindings, sourceFile)
             ) {
                 setEmitFlags(newNamedImports, EmitFlags.MultiLine);
             }
@@ -587,9 +587,9 @@ function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], specif
                 exportDecl.modifiers,
                 exportDecl.isTypeOnly,
                 exportDecl.exportClause && (
-                    isNamedExports(exportDecl.exportClause) ?
-                        factory.updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
-                        factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
+                    isNamedExports(exportDecl.exportClause)
+                        ? factory.updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers)
+                        : factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                 ),
                 exportDecl.moduleSpecifier,
                 exportDecl.attributes,
@@ -659,9 +659,9 @@ function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: 
 function compareModuleSpecifiersWorker(m1: Expression | undefined, m2: Expression | undefined, comparer: Comparer<string>) {
     const name1 = m1 === undefined ? undefined : getExternalModuleName(m1);
     const name2 = m2 === undefined ? undefined : getExternalModuleName(m2);
-    return compareBooleans(name1 === undefined, name2 === undefined) ||
-        compareBooleans(isExternalModuleNameRelative(name1!), isExternalModuleNameRelative(name2!)) ||
-        comparer(name1!, name2!);
+    return compareBooleans(name1 === undefined, name2 === undefined)
+        || compareBooleans(isExternalModuleNameRelative(name1!), isExternalModuleNameRelative(name2!))
+        || comparer(name1!, name2!);
 }
 
 function getModuleNamesFromDecls(decls: readonly AnyImportOrRequireStatement[]): string[] {
@@ -842,9 +842,9 @@ function getOrganizeImportsUnicodeStringComparer(ignoreCase: boolean, preference
     const caseFirst = preferences.organizeImportsCaseFirst ?? false;
     const numeric = preferences.organizeImportsNumericCollation ?? false;
     const accents = preferences.organizeImportsAccentCollation ?? true;
-    const sensitivity = ignoreCase ?
-        accents ? "accent" : "base" :
-        accents ? "variant" : "case";
+    const sensitivity = ignoreCase
+        ? accents ? "accent" : "base"
+        : accents ? "variant" : "case";
 
     const collator = new Intl.Collator(resolvedLocale, {
         usage: "sort",
@@ -869,9 +869,9 @@ function getOrganizeImportsLocale(preferences: UserPreferences): string {
 
 function getOrganizeImportsStringComparer(preferences: UserPreferences, ignoreCase: boolean): Comparer<string> {
     const collation = preferences.organizeImportsCollation ?? "ordinal";
-    return collation === "unicode" ?
-        getOrganizeImportsUnicodeStringComparer(ignoreCase, preferences) :
-        getOrganizeImportsOrdinalStringComparer(ignoreCase);
+    return collation === "unicode"
+        ? getOrganizeImportsUnicodeStringComparer(ignoreCase, preferences)
+        : getOrganizeImportsOrdinalStringComparer(ignoreCase);
 }
 
 /** @internal */

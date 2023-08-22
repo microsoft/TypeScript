@@ -141,11 +141,11 @@ export function createDiagnosticReporter(system: System, pretty?: boolean): Diag
  */
 function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions): boolean {
     if (
-        system.clearScreen &&
-        !options.preserveWatchOutput &&
-        !options.extendedDiagnostics &&
-        !options.diagnostics &&
-        contains(screenStartingMessageCodes, diagnostic.code)
+        system.clearScreen
+        && !options.preserveWatchOutput
+        && !options.extendedDiagnostics
+        && !options.diagnostics
+        && contains(screenStartingMessageCodes, diagnostic.code)
     ) {
         system.clearScreen();
         return true;
@@ -172,14 +172,14 @@ function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: st
  * @internal
  */
 export function getLocaleTimeString(system: System) {
-    return !system.now ?
-        new Date().toLocaleTimeString() :
+    return !system.now
+        ? new Date().toLocaleTimeString()
         // On some systems / builds of Node, there's a non-breaking space between the time and AM/PM.
         // This branch is solely for testing, so just switch it to a normal space for baseline stability.
         // See:
         //     - https://github.com/nodejs/node/issues/45171
         //     - https://github.com/nodejs/node/issues/45753
-        system.now().toLocaleTimeString("en-US", { timeZone: "UTC" }).replace("\u202f", " ");
+        : system.now().toLocaleTimeString("en-US", { timeZone: "UTC" }).replace("\u202f", " ");
 }
 
 /**
@@ -188,14 +188,14 @@ export function getLocaleTimeString(system: System) {
  * @internal
  */
 export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
-    return pretty ?
-        (diagnostic, newLine, options) => {
+    return pretty
+        ? (diagnostic, newLine, options) => {
             clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
             let output = `[${formatColorAndReset(getLocaleTimeString(system), ForegroundColorEscapeSequences.Grey)}] `;
             output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine}`;
             system.write(output);
-        } :
-        (diagnostic, newLine, options) => {
+        }
+        : (diagnostic, newLine, options) => {
             let output = "";
 
             if (!clearScreenIfNotWatchingForFileChanges(system, diagnostic, options)) {
@@ -255,9 +255,9 @@ export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (
 
 /** @internal */
 export function getWatchErrorSummaryDiagnosticMessage(errorCount: number) {
-    return errorCount === 1 ?
-        Diagnostics.Found_1_error_Watching_for_file_changes :
-        Diagnostics.Found_0_errors_Watching_for_file_changes;
+    return errorCount === 1
+        ? Diagnostics.Found_1_error_Watching_for_file_changes
+        : Diagnostics.Found_0_errors_Watching_for_file_changes;
 }
 
 function prettyPathForFileError(error: ReportFileInError, cwd: string) {
@@ -288,9 +288,9 @@ export function getErrorSummaryText(
         messageAndArgs = filesInError[0] !== undefined ? [Diagnostics.Found_1_error_in_0, firstFileReference!] : [Diagnostics.Found_1_error];
     }
     else {
-        messageAndArgs = distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount] :
-            distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference!] :
-            [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
+        messageAndArgs = distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount]
+            : distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference!]
+            : [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
     }
 
     const d = createCompilerDiagnostic(...messageAndArgs);
@@ -316,8 +316,8 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
     fileToErrorCount.forEach(row => {
         const [file, errorCount] = row;
         const errorCountDigitsLength = Math.log(errorCount) * Math.LOG10E + 1 | 0;
-        const leftPadding = errorCountDigitsLength < leftPaddingGoal ?
-            " ".repeat(leftPaddingGoal - errorCountDigitsLength)
+        const leftPadding = errorCountDigitsLength < leftPaddingGoal
+            ? " ".repeat(leftPaddingGoal - errorCountDigitsLength)
             : "";
 
         const fileRef = prettyPathForFileError(file!, host.getCurrentDirectory());
@@ -391,9 +391,9 @@ export function explainIfFileIsRedirectAndImpliedFormat(
                 if (file.packageJsonScope) {
                     (result ??= []).push(chainDiagnosticMessages(
                         /*details*/ undefined,
-                        file.packageJsonScope.contents.packageJsonContent.type ?
-                            Diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module :
-                            Diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type,
+                        file.packageJsonScope.contents.packageJsonContent.type
+                            ? Diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module
+                            : Diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type,
                         toFileName(last(file.packageJsonLocations!), fileNameConvertor),
                     ));
                 }
@@ -448,19 +448,19 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
         switch (reason.kind) {
             case FileIncludeKind.Import:
                 if (isReferenceFileLocation(referenceLocation)) {
-                    message = referenceLocation.packageId ?
-                        Diagnostics.Imported_via_0_from_file_1_with_packageId_2 :
-                        Diagnostics.Imported_via_0_from_file_1;
+                    message = referenceLocation.packageId
+                        ? Diagnostics.Imported_via_0_from_file_1_with_packageId_2
+                        : Diagnostics.Imported_via_0_from_file_1;
                 }
                 else if (referenceLocation.text === externalHelpersModuleNameText) {
-                    message = referenceLocation.packageId ?
-                        Diagnostics.Imported_via_0_from_file_1_with_packageId_2_to_import_importHelpers_as_specified_in_compilerOptions :
-                        Diagnostics.Imported_via_0_from_file_1_to_import_importHelpers_as_specified_in_compilerOptions;
+                    message = referenceLocation.packageId
+                        ? Diagnostics.Imported_via_0_from_file_1_with_packageId_2_to_import_importHelpers_as_specified_in_compilerOptions
+                        : Diagnostics.Imported_via_0_from_file_1_to_import_importHelpers_as_specified_in_compilerOptions;
                 }
                 else {
-                    message = referenceLocation.packageId ?
-                        Diagnostics.Imported_via_0_from_file_1_with_packageId_2_to_import_jsx_and_jsxs_factory_functions :
-                        Diagnostics.Imported_via_0_from_file_1_to_import_jsx_and_jsxs_factory_functions;
+                    message = referenceLocation.packageId
+                        ? Diagnostics.Imported_via_0_from_file_1_with_packageId_2_to_import_jsx_and_jsxs_factory_functions
+                        : Diagnostics.Imported_via_0_from_file_1_to_import_jsx_and_jsxs_factory_functions;
                 }
                 break;
             case FileIncludeKind.ReferenceFile:
@@ -468,9 +468,9 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
                 message = Diagnostics.Referenced_via_0_from_file_1;
                 break;
             case FileIncludeKind.TypeReferenceDirective:
-                message = referenceLocation.packageId ?
-                    Diagnostics.Type_library_referenced_via_0_from_file_1_with_packageId_2 :
-                    Diagnostics.Type_library_referenced_via_0_from_file_1;
+                message = referenceLocation.packageId
+                    ? Diagnostics.Type_library_referenced_via_0_from_file_1_with_packageId_2
+                    : Diagnostics.Type_library_referenced_via_0_from_file_1;
                 break;
             case FileIncludeKind.LibReferenceDirective:
                 Debug.assert(!referenceLocation.packageId);
@@ -494,19 +494,19 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
             const matchedByFiles = getMatchedFileSpec(program, fileName);
             if (matchedByFiles) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
             const matchedByInclude = getMatchedIncludeSpec(program, fileName);
-            return isString(matchedByInclude) ?
-                chainDiagnosticMessages(
+            return isString(matchedByInclude)
+                ? chainDiagnosticMessages(
                     /*details*/ undefined,
                     Diagnostics.Matched_by_include_pattern_0_in_1,
                     matchedByInclude,
                     toFileName(options.configFile, fileNameConvertor),
-                ) :
+                )
                 // Could be additional files specified as roots or matched by default include
-                chainDiagnosticMessages(
+                : chainDiagnosticMessages(
                     /*details*/ undefined,
-                    matchedByInclude ?
-                        Diagnostics.Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk :
-                        Diagnostics.Root_file_specified_for_compilation,
+                    matchedByInclude
+                        ? Diagnostics.Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk
+                        : Diagnostics.Root_file_specified_for_compilation,
                 );
         case FileIncludeKind.SourceFromProjectReference:
         case FileIncludeKind.OutputFromProjectReference:
@@ -514,24 +514,24 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
             const referencedResolvedRef = Debug.checkDefined(program.getResolvedProjectReferences()?.[reason.index]);
             return chainDiagnosticMessages(
                 /*details*/ undefined,
-                options.outFile ?
-                    isOutput ?
-                        Diagnostics.Output_from_referenced_project_0_included_because_1_specified :
-                        Diagnostics.Source_from_referenced_project_0_included_because_1_specified :
-                    isOutput ?
-                    Diagnostics.Output_from_referenced_project_0_included_because_module_is_specified_as_none :
-                    Diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none,
+                options.outFile
+                    ? isOutput
+                        ? Diagnostics.Output_from_referenced_project_0_included_because_1_specified
+                        : Diagnostics.Source_from_referenced_project_0_included_because_1_specified
+                    : isOutput
+                    ? Diagnostics.Output_from_referenced_project_0_included_because_module_is_specified_as_none
+                    : Diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none,
                 toFileName(referencedResolvedRef.sourceFile.fileName, fileNameConvertor),
                 options.outFile ? "--outFile" : "--out",
             );
         case FileIncludeKind.AutomaticTypeDirectiveFile: {
-            const messageAndArgs: DiagnosticAndArguments = options.types ?
-                reason.packageId ?
-                    [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
-                    [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference] :
-                reason.packageId ?
-                [Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
-                [Diagnostics.Entry_point_for_implicit_type_library_0, reason.typeReference];
+            const messageAndArgs: DiagnosticAndArguments = options.types
+                ? reason.packageId
+                    ? [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)]
+                    : [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference]
+                : reason.packageId
+                ? [Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)]
+                : [Diagnostics.Entry_point_for_implicit_type_library_0, reason.typeReference];
 
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
         }

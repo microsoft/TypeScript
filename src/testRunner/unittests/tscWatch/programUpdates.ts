@@ -1019,9 +1019,9 @@ declare const eval: any`,
         function verifyTypesLoad(includeTypeRoots: boolean) {
             verifyTscWatch({
                 scenario,
-                subScenario: includeTypeRoots ?
-                    "types should not load from config file path if config exists but does not specifies typeRoots" :
-                    "types should load from config file path if config exists",
+                subScenario: includeTypeRoots
+                    ? "types should not load from config file path if config exists but does not specifies typeRoots"
+                    : "types should load from config file path if config exists",
                 commandLineArgs: ["-w", "-p", configFilePath],
                 sys: () => {
                     const f1 = {

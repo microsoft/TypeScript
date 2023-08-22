@@ -292,9 +292,9 @@ export class ScriptVersionCache {
     edit(pos: number, deleteLen: number, insertedText?: string) {
         this.changes.push(new TextChange(pos, deleteLen, insertedText));
         if (
-            this.changes.length > ScriptVersionCache.changeNumberThreshold ||
-            deleteLen > ScriptVersionCache.changeLengthThreshold ||
-            insertedText && insertedText.length > ScriptVersionCache.changeLengthThreshold
+            this.changes.length > ScriptVersionCache.changeNumberThreshold
+            || deleteLen > ScriptVersionCache.changeLengthThreshold
+            || insertedText && insertedText.length > ScriptVersionCache.changeLengthThreshold
         ) {
             this.getSnapshot();
         }

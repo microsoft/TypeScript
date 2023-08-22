@@ -58,9 +58,9 @@ function getReturnType(expr: FunctionDeclaration | MethodDeclaration | FunctionE
         return expr.type;
     }
     if (
-        isVariableDeclaration(expr.parent) &&
-        expr.parent.type &&
-        isFunctionTypeNode(expr.parent.type)
+        isVariableDeclaration(expr.parent)
+        && expr.parent.type
+        && isFunctionTypeNode(expr.parent.type)
     ) {
         return expr.parent.type.type;
     }
