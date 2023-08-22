@@ -229,6 +229,17 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                 }
                 ++i;
             }
+
+            if (variableStatement.declarationList.declarations.length > 1) {
+                newNodes.push(ts.factory.updateVariableStatement(
+                    variableStatement,
+                    variableStatement.modifiers,
+                    ts.factory.updateVariableDeclarationList(
+                        variableStatement.declarationList,
+                        variableStatement.declarationList.declarations.filter((node) => node !== bindingPattern.parent),
+                        )
+                ));
+            }
             return newNodes;
         }
 

@@ -373,6 +373,17 @@ function transformDestructuringPatterns(bindingPattern: BindingPattern,
         }
         ++i;
     }
+
+    if (enclosingVarStmt.declarationList.declarations.length > 1) {
+        newNodes.push(factory.updateVariableStatement(
+            enclosingVarStmt,
+            enclosingVarStmt.modifiers,
+            factory.updateVariableDeclarationList(
+                enclosingVarStmt.declarationList,
+                enclosingVarStmt.declarationList.declarations.filter((node) => node !== bindingPattern.parent),
+                )
+        ));
+    }
     changes.replaceNodeWithNodes(sourceFile, enclosingVarStmt, newNodes);
 }
 
