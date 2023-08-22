@@ -2,7 +2,9 @@ import * as vfs from "../../_namespaces/vfs";
 import {
     verifyTsc,
 } from "../helpers/tsc";
-import { loadProjectFromDisk } from "../helpers/vfs";
+import {
+    loadProjectFromDisk,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
     let projFs: vfs.FileSystem;
@@ -14,16 +16,22 @@ describe("unittests:: tsbuild:: when project reference is referenced transitivel
     });
 
     function modifyFsBTsToNonRelativeImport(fs: vfs.FileSystem, moduleResolution: "node" | "classic") {
-        fs.writeFileSync("/src/b.ts", `import {A} from 'a';
-export const b = new A();`);
-        fs.writeFileSync("/src/tsconfig.b.json", JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                moduleResolution
-            },
-            files: ["b.ts"],
-            references: [{ path: "tsconfig.a.json" }]
-        }));
+        fs.writeFileSync(
+            "/src/b.ts",
+            `import {A} from 'a';
+export const b = new A();`,
+        );
+        fs.writeFileSync(
+            "/src/tsconfig.b.json",
+            JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    moduleResolution,
+                },
+                files: ["b.ts"],
+                references: [{ path: "tsconfig.a.json" }],
+            }),
+        );
     }
 
     verifyTsc({

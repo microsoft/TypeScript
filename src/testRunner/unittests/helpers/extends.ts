@@ -1,4 +1,6 @@
-import { dedent } from "../../_namespaces/Utils";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
 import {
     createServerHost,
     createWatchedSystem,
@@ -12,7 +14,7 @@ export function getSymlinkedExtendsSys(forTsserver?: true): TestServerHost {
             extends: "@something/tsconfig-base/tsconfig.json",
             compilerOptions: {
                 removeComments: true,
-            }
+            },
         }),
         "/users/user/projects/myconfigs/node_modules/@something/tsconfig-base/tsconfig.json": JSON.stringify({
             compilerOptions: { composite: true },

@@ -69,7 +69,6 @@ import {
     textSpanIntersectsWith,
     TupleTypeReference,
     Type,
-    TypeFormatFlags,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
@@ -248,11 +247,13 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        let signatureParamPos = 0;
         const sourceFile = shouldUseInteractiveInlayHints(preferences) ? expr.getSourceFile() : undefined;
+
+        let signatureParamPos = 0;
         for (const originalArg of args) {
             const arg = skipParentheses(originalArg);
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
+                signatureParamPos++;
                 continue;
             }
 
@@ -414,7 +415,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function printTypeInSingleLine(type: Type) {
-        const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const printer = createPrinterWithRemoveComments();
 
         return usingSingleLineStringWriter(writer => {
@@ -440,7 +441,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return {
             text,
             span: createTextSpanFromNode(node, sourceFile),
-            file: sourceFile.fileName
+            file: sourceFile.fileName,
         };
     }
 }

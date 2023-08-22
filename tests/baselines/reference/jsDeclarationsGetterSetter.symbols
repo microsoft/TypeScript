@@ -103,3 +103,41 @@ Object.defineProperty(F.prototype, "x", {
 
 });
 
+export class G {}
+>G : Symbol(G, Decl(index.js, 46, 3))
+
+Object.defineProperty(G.prototype, "x", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>G.prototype : Symbol(G.prototype)
+>G : Symbol(G, Decl(index.js, 46, 3))
+>prototype : Symbol(G.prototype)
+>"x" : Symbol(G.x, Decl(index.js, 48, 17))
+
+    /**
+     * @param {number[]} args
+     */
+    set(...args) {}
+>set : Symbol(set, Decl(index.js, 49, 41))
+>args : Symbol(args, Decl(index.js, 53, 8))
+
+});
+
+export class H {}
+>H : Symbol(H, Decl(index.js, 54, 3))
+
+Object.defineProperty(H.prototype, "x", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>H.prototype : Symbol(H.prototype)
+>H : Symbol(H, Decl(index.js, 54, 3))
+>prototype : Symbol(H.prototype)
+>"x" : Symbol(H.x, Decl(index.js, 56, 17))
+
+    set() {}
+>set : Symbol(set, Decl(index.js, 57, 41))
+
+});
+
