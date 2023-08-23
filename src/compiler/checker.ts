@@ -8,6 +8,7 @@ import {
     addSyntheticLeadingComment,
     AliasDeclarationNode,
     AllAccessorDeclarations,
+    AllScriptTargetFeatures,
     AmbientModuleDeclaration,
     and,
     AnonymousType,
@@ -344,7 +345,6 @@ import {
     getResolveJsonModule,
     getRestParameterElementType,
     getRootDeclaration,
-    getScriptTargetFeatures,
     getSelectedEffectiveModifierFlags,
     getSemanticJsxChildren,
     getSetAccessorValueParameter,
@@ -32377,8 +32377,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getSuggestedLibForNonExistentName(name: __String | Identifier) {
         const missingName = diagnosticName(name);
-        const allFeatures = getScriptTargetFeatures();
-        const typeFeatures = allFeatures.get(missingName);
+        const typeFeatures = AllScriptTargetFeatures.get(missingName);
         return typeFeatures && firstIterator(typeFeatures.keys());
     }
 
@@ -32388,8 +32387,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
         const containingTypeName = symbolName(container);
-        const allFeatures = getScriptTargetFeatures();
-        const typeFeatures = allFeatures.get(containingTypeName);
+        const typeFeatures = AllScriptTargetFeatures.get(containingTypeName);
         if (typeFeatures) {
             for (const [libTarget, featuresOfType] of typeFeatures) {
                 if (contains(featuresOfType, missingProperty)) {
