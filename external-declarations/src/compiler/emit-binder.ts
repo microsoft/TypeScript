@@ -5,11 +5,12 @@ import { forEach } from "./lang-utils";
 import { getEmitModuleKind, getEmitModuleResolutionKind, getNodeId, hasSyntacticModifier, isBindingPattern, isEnumConst, nodeHasName } from "./utils";
 
 
-interface NodeLinks {
+export interface NodeLinks {
     isVisible?: boolean;
     symbol?: BasicSymbol;
     localSymbol?: BasicSymbol;
     locals?: SymbolTable;
+    enumValue?: string | number | undefined;
 }
 
 type SymbolTable = Map<__String, BasicSymbol>;

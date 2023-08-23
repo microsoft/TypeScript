@@ -1,4 +1,4 @@
-import { AsExpression, BinaryExpression, ClassDeclaration, CompilerOptions, ComputedPropertyName, Declaration, Diagnostic, DiagnosticMessage, DiagnosticWithLocation, ElementAccessExpression, EntityNameExpression, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, FileReference, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedDeclaration, Node, NonNullExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SatisfiesExpression, SignatureDeclaration, SourceFile, StringLiteralLike, Symbol, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, TypeAssertion, TypeNode, VariableDeclaration, VariableStatement, Path } from "typescript";
+import { AsExpression, BinaryExpression, ClassDeclaration, CompilerOptions, ComputedPropertyName, Declaration, DiagnosticWithLocation, ElementAccessExpression, EntityNameExpression, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, FileReference, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedDeclaration, Node, NonNullExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SatisfiesExpression, SignatureDeclaration, SourceFile, StringLiteralLike, Symbol, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, TypeAssertion, VariableDeclaration, VariableStatement, Path, EnumMember, PropertyAccessExpression } from "typescript";
 
 import { AnyImportSyntax } from "./utils";
 
@@ -27,7 +27,6 @@ export interface IsolatedEmitHost extends ModuleSpecifierResolutionHost, Resolve
 }
 
 export interface IsolatedEmitResolver {
-    isSyntheticTypeEquivalent(actualTypeNode: Node, typeNode: TypeNode, message: DiagnosticMessage): Diagnostic[] | true;
     isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
     isLateBound(node: Declaration): node is LateBoundDeclaration;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
@@ -40,6 +39,7 @@ export interface IsolatedEmitResolver {
     isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
     getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
+    getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined
 }
 /** @internal */
 export interface AmbientModuleDeclaration extends ModuleDeclaration {

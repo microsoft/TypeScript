@@ -1,7 +1,7 @@
-import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName, EntityNameOrEntityNameExpression, EnumMember, findAncestor, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isBindingElement, isElementAccessExpression, isEnumMember, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSourceFile, isVariableDeclaration, isVariableStatement, ModifierFlags, NamespaceImport, Node, NodeFlags, ParameterDeclaration, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
+import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, factory, findAncestor, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isBindingElement, isElementAccessExpression, isEnumMember, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSourceFile, isStringLiteralLike, isVariableDeclaration, isVariableStatement, LiteralExpression, ModifierFlags, NamespaceImport, Node, NodeFlags, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
 
 import { Debug } from "./debug";
-import { BasicSymbol, bindSourceFile } from "./emit-binder";
+import { BasicSymbol, bindSourceFile, NodeLinks } from "./emit-binder";
 import { appendIfUnique, emptyArray, every, filter, hasProperty } from "./lang-utils";
 import { IsolatedEmitResolver, LateBoundDeclaration, LateVisibilityPaintedStatement, SymbolAccessibility, SymbolVisibilityResult } from "./types";
 import { AnyImportSyntax, getFirstIdentifier, hasDynamicName, hasEffectiveModifier, hasSyntacticModifier, isAmbientDeclaration,isBindingPattern, isExternalModuleAugmentation, isInJSFile, isLateVisibilityPaintedStatement, isPartOfTypeNode, isThisIdentifier, nodeIsPresent, skipParentheses } from "./utils";
@@ -13,10 +13,14 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
 
 
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration | EnumMember): boolean {
-        if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
+        if (isDeclarationReadonly(node) || (isVariableDeclaration(node) && isVarConst(node)) || isEnumMember(node)) {
             // TODO: Make sure this is a valid approximation for literal types
             return (isEnumMember(node) || !node.type) && hasProperty(node, "initializer") && !!node.initializer &&
-            (isLiteralExpression(node.initializer) || isPrefixUnaryExpression(node.initializer) && isLiteralExpression(node.initializer.operand));
+                (isLiteralExpression(node.initializer) 
+                    || node.initializer.kind === SyntaxKind.TrueKeyword || node.initializer.kind === SyntaxKind.FalseKeyword
+                    || (isPrefixUnaryExpression(node.initializer) 
+                        && (node.initializer.operator === SyntaxKind.PlusToken || node.initializer.operator === SyntaxKind.MinusToken)
+                        && isLiteralExpression(node.initializer.operand)));
             // Original TS version
             // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
         }
@@ -37,13 +41,73 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     }
 
     return {
-        isSyntheticTypeEquivalent(actualTypeNode, typeNode, message) {
-            return true;
-        },
         isDeclarationVisible,
         isLiteralConstDeclaration,
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined {
+            function getLiteralValue(value: LiteralExpression) {
+                if(isStringLiteralLike(value)) {
+                    return value.text
+                }
+                if(isNumericLiteral(value)) {
+                    return +value.text
+                }
+                return undefined;
+            }
+            function getEnumMemberInitializerValue(node: EnumMember) {
+                if(isLiteralConstDeclaration(node)) {
+                    const initializer = node.initializer;
+                    if(!initializer) return undefined;
+                    if(isLiteralExpression(initializer)) {
+                        return getLiteralValue(initializer);
+                    }
+                    
+                    if(isPrefixUnaryExpression(initializer) && isNumericLiteral(initializer.operand)) {
+                        if(initializer.operator === SyntaxKind.MinusToken) {
+                            const value = getLiteralValue(initializer.operand);
+                            return value && -value;
+                        }
+                        if(initializer.operator === SyntaxKind.PlusToken) {
+                            return getLiteralValue(initializer.operand)
+                        }
+                    }
+                }
+            }
+            function updateEnumValues(node: EnumDeclaration) {
+                let prevEnumValueLinks: NodeLinks | undefined;  
+                let isDeclaration = isAmbientDeclaration(node);
+                for(const enumValue of node.members) {
+                    const links = getNodeLinks(enumValue);
+                    const value = getEnumMemberInitializerValue(enumValue);
+                    if(isDeclaration || value !== undefined || enumValue.initializer) {
+                        links.enumValue = value;
+                    }
+                    else if(prevEnumValueLinks === undefined) {
+                        links.enumValue = 0;
+                    }
+                    else if(typeof prevEnumValueLinks.enumValue === "number") {
+                        links.enumValue = prevEnumValueLinks.enumValue + 1;
+                    }
+                    prevEnumValueLinks = links;
+                }
+            }
+
+
+            if(isEnumMember(node)) {
+                const links = getNodeLinks(node);
+                if(!hasProperty(links, 'enumValue')) {
+                    updateEnumValues(node.parent)
+                }
+                return links.enumValue;
+                
+            }
+
+        },
         createLiteralConstValue(node) {
             if(hasProperty(node, "initializer") && node.initializer) {
+                const initializer = node.initializer;
+                if(isStringLiteralLike(initializer)) {
+                    return factory.createStringLiteral(initializer.text);
+                }
                 return node.initializer;
             }
             Debug.fail();

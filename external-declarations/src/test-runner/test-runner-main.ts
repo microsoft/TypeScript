@@ -14,7 +14,8 @@ import { IO } from "./tsc-infrastructure/io";
 import { CompilerSettings, TestCaseContent } from "./tsc-infrastructure/test-file-parser";
 import { getFileBasedTestConfigurationDescription, getFileBasedTestConfigurations } from "./tsc-infrastructure/vary-by";
 import { changeExtension } from "./tsc-infrastructure/vpath";
-import { FileContent,loadTestCase, runIsolated, runTypeScript } from "./utils";
+import { TestCompilationResult, loadTestCase, runIsolated, runTypeScript } from "./utils";
+import { Diagnostics } from "./tsc-infrastructure/diagnosticInformationMap.generated";
 
 
 const excludeFilter =/\/fourslash\//;
@@ -56,6 +57,15 @@ const historical = (parsedArgs.histFolder && `/${parsedArgs.histFolder}/`) ?? `/
 function pad(num: number, size: number) {
     return ("000000000" + num).substr(-size);
 }
+const isolatedDeclarationErrors = new Set([
+    Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code
+]);
+
+const unreliableEmitErrors = new Set([
+    Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any.code,
+    Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_have_a_simple_literal_type_or_a_unique_symbol_type.code,
+    Diagnostics.A_parameter_property_may_not_be_declared_using_a_binding_pattern.code,
+])
 
 async function main() {
 
@@ -86,11 +96,10 @@ async function main() {
         }
         console.log(`    Ran: ${pad(count, 5)}/${allTests.length}`);
 
-        function runAndWrite(file: string, varySettings: CompilerSettings, fn: (data: TestCaseContent, opts: ts.CompilerOptions) => FileContent[]) {
+        function runAndWrite(file: string, varySettings: CompilerSettings, fn: (data: TestCaseContent, opts: ts.CompilerOptions) => TestCompilationResult) {
             const settings: ts.CompilerOptions = {};
             setCompilerOptionsFromHarnessSetting(data.settings, settings);
             setCompilerOptionsFromHarnessSetting(varySettings, settings);
-
 
             // Not supported
             delete settings.outFile;
@@ -99,7 +108,8 @@ async function main() {
             delete settings.declarationDir;
 
             const results = safeRun(d => fn(d, settings));
-            const resultText = results
+            file = normalizePath(file)
+            const resultText = results.files
                 .flatMap(r => [
                     "// " + r.fileName,
                     r.content
@@ -110,25 +120,47 @@ async function main() {
 // ` + data.code.split("\n").join(`
 // `);
 
+            if (results.diagnostics instanceof Error) {
+                file = path.join(
+                    path.dirname(file),
+                    "critical-errors",
+                    path.basename(file)
+                );
+            } else if(results.diagnostics.some(d =>isolatedDeclarationErrors.has(d.code))) {
+                file = path.join(
+                    path.dirname(file),
+                    "with-isolated-declaration-errors",
+                    path.basename(file)
+                );
+            } else if(results.diagnostics.some(d =>unreliableEmitErrors.has(d.code))) {
+                file = path.join(
+                    path.dirname(file),
+                    "with-unreliable-errors",
+                    path.basename(file)
+                );
+            }
             if (allTests.length > 5) {
-                writeResults(normalizePath(file).replace("/$now/", historical), resultText);
+                writeResults(file.replace("/$now/", historical), resultText);
             }
             writeResults(file, resultText);
         }
 
-        function safeRun(fn: (data: TestCaseContent) => FileContent[]): FileContent[] {
+        function safeRun(fn: (data: TestCaseContent) => TestCompilationResult): TestCompilationResult {
             try {
                 return fn(data);
             }
             catch (e) {
-                return [{
-                    fileName: path.basename(testFile),
-                    content: `
+                return {
+                    diagnostics: e,
+                    files: [{
+                        fileName: path.basename(testFile),
+                        content: `
 ==== ERROR ====
 message: ${e.message},
 ${e.stack},
-                    `,
-                }];
+`,
+                    }]
+                };
             }
         }
 

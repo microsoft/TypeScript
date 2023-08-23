@@ -11,9 +11,13 @@ import * as TestCaseParser from "./tsc-infrastructure/test-file-parser";
 import { changeExtension } from "./tsc-infrastructure/vpath";
 import * as vpath from "./tsc-infrastructure/vpath";
 
+export interface TestCompilationResult {
+    files: readonly FileContent[];
+    diagnostics: readonly ts.Diagnostic[] | Error
+}
 export interface FileContent {
-    content: string,
-    fileName: string
+    readonly content: string,
+    readonly fileName: string,
 }
 
 export async function loadTestCase(fileName: string) {
@@ -26,7 +30,8 @@ export async function loadTestCase(fileName: string) {
         BOM: rawText.substring(0, Utils.getByteOrderMarkLength(rawText))
     });
 }
-export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings: ts.CompilerOptions): FileContent[] {
+const forceIsolatedDeclarations = process.argv.some(v => v === "--force-isolated-declarations");
+export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings: ts.CompilerOptions): TestCompilationResult {
     function createHarnessTestFile(lastUnit: TestCaseParser.TestUnitData): TestFile {
         return { unitName: lastUnit.name, content: lastUnit.content, fileOptions: lastUnit.fileOptions };
     }
@@ -35,7 +40,7 @@ export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings
         return createHarnessTestFile(unit);
     });
 
-    if (settings.isolatedDeclarations === undefined) {
+    if (forceIsolatedDeclarations && settings.isolatedDeclarations === undefined) {
         settings.isolatedDeclarations = true;
     }
     const result = compileFiles(toBeCompiled, [], {
@@ -44,7 +49,7 @@ export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings
         removeComments: "false",
     }, settings);
 
-    return caseData.testUnitData
+    const files =  caseData.testUnitData
         .filter(isRelevantTestFile)
         .flatMap(file => {
             const declarationFile = changeExtension(file.name, getDeclarationExtension(file.name));
@@ -63,13 +68,17 @@ export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings
             // }
             ];
         });
+    return {
+        files,
+        diagnostics: result.diagnostics,
+    }
 }
 export function isRelevantTestFile(f: TestCaseParser.TestUnitData) {
     return isTypeScriptFile(f.name) && !isDeclarationFile(f.name) && f.content !== undefined;
 }
 
 
-export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: string[], settings: ts.CompilerOptions): FileContent[] {
+export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: string[], settings: ts.CompilerOptions): TestCompilationResult {
     const toSrc = (n: string) => vpath.combine("/src", n);
     const projectFiles = [...caseData.testUnitData.map(o => toSrc(o.name)), ...libFiles];
     settings = {
@@ -83,7 +92,8 @@ export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: 
         packageResolution = JSON.parse(packageJson.content)?.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
     }
 
-    const results = caseData.testUnitData
+    const diagnostics: ts.Diagnostic[] = []
+    const files = caseData.testUnitData
         .filter(isRelevantTestFile)
         .map(file => {
             const sourceFile = ts.createSourceFile(
@@ -93,12 +103,13 @@ export function runIsolated(caseData: TestCaseParser.TestCaseContent, libFiles: 
                 /*setParentNodes*/ true,
                 file.name.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
             const declaration = transformFile(sourceFile, projectFiles, libs, settings, packageResolution);
+            diagnostics.push(...declaration.diagnostics);
             return {
                 content: declaration.code,
                 fileName: changeExtension(file.name, getDeclarationExtension(file.name)),
             };
         });
-    return results;
+    return { files, diagnostics };
 }
 
 
