@@ -13,6 +13,7 @@ Debug.setLoggingHost({
 
 if (Debug.isDebugging) {
     Debug.enableDebugInfo();
+    (globalThis as any).Debug = Debug;
 }
 
 if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {

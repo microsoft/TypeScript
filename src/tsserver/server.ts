@@ -35,6 +35,7 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
 
     if (Debug.isDebugging) {
         Debug.enableDebugInfo();
+        (globalThis as any).Debug = Debug;
     }
 
     if (sys.tryEnableSourceMapsForHost && /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))) {
