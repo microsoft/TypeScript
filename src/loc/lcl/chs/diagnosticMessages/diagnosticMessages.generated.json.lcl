@@ -685,7 +685,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest element cannot have a property name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[其余元素不能具有属性名。]]></Val>
+            <Val><![CDATA[rest 元素不能具有属性名。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
