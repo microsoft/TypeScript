@@ -25535,12 +25535,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function inferFromSignatures(source: Type, target: Type, kind: SignatureKind) {
             const sourceSignatures = getSignaturesOfType(source, kind);
-            const targetSignatures = getSignaturesOfType(target, kind);
             const sourceLen = sourceSignatures.length;
-            const targetLen = targetSignatures.length;
-            const len = sourceLen < targetLen ? sourceLen : targetLen;
-            for (let i = 0; i < len; i++) {
-                inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]));
+            if (sourceLen > 0) {
+                // We match source and target signatures from the bottom up, and if the source has fewer signatures
+                // than the target, we infer from the first source signature to the excess target signatures.
+                const targetSignatures = getSignaturesOfType(target, kind);
+                const targetLen = targetSignatures.length;
+                for (let i = 0; i < targetLen; i++) {
+                    const sourceIndex = Math.max(sourceLen - targetLen + i, 0);
+                    inferFromSignature(getBaseSignature(sourceSignatures[sourceIndex]), getErasedSignature(targetSignatures[i]));
+                }
             }
         }
 
