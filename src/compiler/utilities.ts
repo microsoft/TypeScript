@@ -1282,7 +1282,7 @@ export function getInternalEmitFlags(node: Node): InternalEmitFlags {
 export type ScriptTargetFeatures = ReadonlyMap<string, ReadonlyMap<string, string[]>>;
 
 /** @internal */
-export const getScriptTargetFeatures = /* @__PURE__ */ memoize(() => new Map(Object.entries({
+export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ */ memoize(() => new Map(Object.entries({
     Array: new Map(Object.entries({
         es2015: [
             "find",
@@ -1675,7 +1675,7 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize(() => new Map(Obj
             "cause",
         ],
     })),
-})) as ScriptTargetFeatures);
+})));
 
 /** @internal */
 export const enum GetLiteralTextFlags {
