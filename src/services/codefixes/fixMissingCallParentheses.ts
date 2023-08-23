@@ -31,14 +31,15 @@ registerCodeFix({
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, callName));
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_call_parentheses, fixId, Diagnostics.Add_all_missing_call_parentheses)];
     },
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const callName = getCallName(diag.file, diag.start);
-        if (callName) doChange(changes, diag.file, callName);
-    })
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const callName = getCallName(diag.file, diag.start);
+            if (callName) doChange(changes, diag.file, callName);
+        }),
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, name: Identifier | PrivateIdentifier): void {
-    changes.replaceNodeWithText(sourceFile, name, `${ name.text }()`);
+    changes.replaceNodeWithText(sourceFile, name, `${name.text}()`);
 }
 
 function getCallName(sourceFile: SourceFile, start: number): Identifier | PrivateIdentifier | undefined {

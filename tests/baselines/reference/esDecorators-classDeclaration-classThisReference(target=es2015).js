@@ -21,8 +21,8 @@ let C = (() => {
     let _classExtraInitializers = [];
     let _classThis;
     var C = _classThis = class {
-        static get a() { return __classPrivateFieldGet(this, _classThis, "f", _C_a_accessor_storage); }
-        static set a(value) { __classPrivateFieldSet(this, _classThis, value, "f", _C_a_accessor_storage); }
+        static get a() { return __classPrivateFieldGet(_classThis, _classThis, "f", _C_a_accessor_storage); }
+        static set a(value) { __classPrivateFieldSet(_classThis, _classThis, value, "f", _C_a_accessor_storage); }
         static m() { this; }
         static get g() { return this; }
     };

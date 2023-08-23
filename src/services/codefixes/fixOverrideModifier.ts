@@ -79,7 +79,7 @@ const errorCodeFixIdMap: Record<number, ErrorCodeFixInfo> = {
     [Diagnostics.This_member_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0.code]: {
         descriptions: Diagnostics.Add_override_modifier,
         fixId: fixAddOverrideId,
-        fixAllDescriptions: Diagnostics.Add_all_missing_override_modifiers
+        fixAllDescriptions: Diagnostics.Add_all_missing_override_modifiers,
     },
     // case #2:
     [Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class.code]: {
@@ -90,7 +90,7 @@ const errorCodeFixIdMap: Record<number, ErrorCodeFixInfo> = {
     [Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_containing_class_0_does_not_extend_another_class.code]: {
         descriptions: Diagnostics.Remove_override_modifier,
         fixId: fixRemoveOverrideId,
-        fixAllDescriptions: Diagnostics.Remove_override_modifier
+        fixAllDescriptions: Diagnostics.Remove_override_modifier,
     },
     // case #3:
     [Diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0.code]: {
@@ -119,7 +119,7 @@ const errorCodeFixIdMap: Record<number, ErrorCodeFixInfo> = {
         descriptions: Diagnostics.Remove_override_modifier,
         fixId: fixRemoveOverrideId,
         fixAllDescriptions: Diagnostics.Remove_all_unnecessary_override_modifiers,
-    }
+    },
 };
 
 registerCodeFix({
@@ -134,7 +134,7 @@ registerCodeFix({
         const changes = textChanges.ChangeTracker.with(context, changes => dispatchChanges(changes, context, errorCode, span.start));
 
         return [
-            createCodeFixActionMaybeFixAll(fixName, changes, descriptions, fixId, fixAllDescriptions)
+            createCodeFixActionMaybeFixAll(fixName, changes, descriptions, fixId, fixAllDescriptions),
         ];
     },
     fixIds: [fixName, fixAddOverrideId, fixRemoveOverrideId],
@@ -147,14 +147,15 @@ registerCodeFix({
             }
 
             dispatchChanges(changes, context, code, start);
-        })
+        }),
 });
 
 function dispatchChanges(
     changeTracker: textChanges.ChangeTracker,
     context: CodeFixContext | CodeFixAllContext,
     errorCode: number,
-    pos: number) {
+    pos: number,
+) {
     switch (errorCode) {
         case Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0.code:
         case Diagnostics.This_member_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0.code:
@@ -228,4 +229,3 @@ function findContainerClassElementLike(sourceFile: SourceFile, pos: number) {
     Debug.assert(classElement && isClassElementLikeHasJSDoc(classElement));
     return classElement;
 }
-

@@ -242,7 +242,7 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
                 else {
                     elas[j] = ela[j];
                 }
-                etotalChars += (las[j] - elas[j]);
+                etotalChars += las[j] - elas[j];
             }
         }
     });

@@ -136,8 +136,10 @@ function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOption
     function getEntireValue(initialIndex: number) {
         let pathStart = args[initialIndex];
         let extraPartCounter = 0;
-        if (pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
-            pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote) {
+        if (
+            pathStart.charCodeAt(0) === CharacterCodes.doubleQuote &&
+            pathStart.charCodeAt(pathStart.length - 1) !== CharacterCodes.doubleQuote
+        ) {
             for (let i = initialIndex + 1; i < args.length; i++) {
                 pathStart += " ";
                 pathStart += args[i];
@@ -169,7 +171,7 @@ function parseServerMode(): LanguageServiceMode | string | undefined {
 export function initializeNodeSystem(): StartInput {
     const sys = Debug.checkDefined(ts.sys) as ServerHost;
     const childProcess: {
-        execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
+        execFileSync(file: string, args: string[], options: { stdio: "ignore"; env: MapLike<string>; }): string | Buffer;
     } = require("child_process");
 
     interface Stats {
@@ -212,7 +214,7 @@ export function initializeNodeSystem(): StartInput {
         constructor(
             private readonly logFilename: string,
             private readonly traceToConsole: boolean,
-            private readonly level: LogLevel
+            private readonly level: LogLevel,
         ) {
             if (this.logFilename) {
                 try {
@@ -313,7 +315,7 @@ export function initializeNodeSystem(): StartInput {
                 case Debug.LogLevel.Verbose:
                     return logger.msg(s, Msg.Info);
             }
-        }
+        },
     });
 
     const pending = createQueue<Buffer>();
@@ -408,7 +410,7 @@ export function initializeNodeSystem(): StartInput {
         cancellationToken,
         serverMode,
         unknownServerMode,
-        startSession: startNodeSession
+        startSession: startNodeSession,
     };
 
     // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
@@ -420,8 +422,8 @@ export function initializeNodeSystem(): StartInput {
         const unsubstitutedLogFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
-                ? envLogOptions.file || (libDirectory + "/.log" + process.pid.toString())
-                : undefined;
+            ? envLogOptions.file || (libDirectory + "/.log" + process.pid.toString())
+            : undefined;
 
         const substitutedLogFileName = unsubstitutedLogFileName
             ? unsubstitutedLogFileName.replace("PID", process.pid.toString())
@@ -497,7 +499,7 @@ function parseEventPort(eventPortStr: string | undefined) {
 }
 function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
     const childProcess: {
-        fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
+        fork(modulePath: string, args: string[], options?: { execArgv: string[]; env?: MapLike<string>; }): NodeChildProcess;
     } = require("child_process");
 
     const os: {
@@ -506,7 +508,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
     } = require("os");
 
     const net: {
-        connect(options: { port: number }, onConnect?: () => void): NodeSocket
+        connect(options: { port: number; }, onConnect?: () => void): NodeSocket;
     } = require("net");
 
     const readline: {
@@ -541,7 +543,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
+        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void; reject(reason: unknown): void; } | undefined;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -552,7 +554,8 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
             private readonly validateDefaultNpmLocation: boolean,
-            private event: server.Event) {
+            private event: server.Event,
+        ) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -698,7 +701,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                 }
                 case EventInitializationFailed: {
                     const body: protocol.TypesInstallerInitializationFailedEventBody = {
-                        message: response.message
+                        message: response.message,
                     };
                     const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
                     this.event(body, eventName);
@@ -720,8 +723,8 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                             payload: {
                                 installedPackages: response.packagesToInstall.join(","),
                                 installSuccess: response.installSuccess,
-                                typingsInstallerVersion: response.typingsInstallerVersion
-                            }
+                                typingsInstallerVersion: response.typingsInstallerVersion,
+                            },
                         };
                         const eventName: protocol.TelemetryEventName = "telemetry";
                         this.event(body, eventName);
@@ -787,7 +790,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
     class IOSession extends Session {
         private eventPort: number | undefined;
         private eventSocket: NodeSocket | undefined;
-        private socketEventQueue: { body: any, eventName: string }[] | undefined;
+        private socketEventQueue: { body: any; eventName: string; }[] | undefined;
         /** No longer needed if syntax target is es6 or above. Any access to "this" before initialized will be a runtime error. */
         private constructed: boolean | undefined;
 
@@ -876,7 +879,6 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
     }
 
     class IpcIOSession extends IOSession {
-
         protected override writeMessage(msg: protocol.Message): void {
             const verboseLogging = logger.hasLevel(LogLevel.verbose);
             if (verboseLogging) {

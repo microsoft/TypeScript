@@ -1,9 +1,15 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
 
-import { commandLineCallbacks } from "../helpers/baseline";
-import { libContent } from "../helpers/contents";
+import {
+    commandLineCallbacks,
+} from "../helpers/baseline";
+import {
+    libContent,
+} from "../helpers/contents";
 import {
     applyEdit,
     createBaseline,
@@ -23,39 +29,40 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
     it("verify that module resolution with json extension works when returned without extension", () => {
         const configFileJson: any = {
             compilerOptions: { module: "commonjs", resolveJsonModule: true },
-            files: ["index.ts"]
+            files: ["index.ts"],
         };
         const mainFile: File = {
             path: `/user/username/projects/myproject/index.ts`,
-            content: "import settings from './settings.json';"
+            content: "import settings from './settings.json';",
         };
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify(configFileJson)
+            content: JSON.stringify(configFileJson),
         };
         const settingsJson: File = {
             path: `/user/username/projects/myproject/settings.json`,
-            content: JSON.stringify({ content: "Print this" })
+            content: JSON.stringify({ content: "Print this" }),
         };
         const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(
             [libFile, mainFile, config, settingsJson],
-            { currentDirectory: "/user/username/projects/myproject" }),
-        );
+            { currentDirectory: "/user/username/projects/myproject" },
+        ));
         const host = createWatchCompilerHostOfConfigFileForBaseline({
             configFileName: config.path,
             system: sys,
             cb,
         });
         const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, config.path);
-        host.resolveModuleNames = (moduleNames, containingFile) => moduleNames.map(m => {
-            const result = ts.resolveModuleName(m, containingFile, parsedCommandResult.options, host);
-            const resolvedModule = result.resolvedModule!;
-            return {
-                resolvedFileName: resolvedModule.resolvedFileName,
-                isExternalLibraryImport: resolvedModule.isExternalLibraryImport,
-                originalFileName: resolvedModule.originalPath,
-            };
-        });
+        host.resolveModuleNames = (moduleNames, containingFile) =>
+            moduleNames.map(m => {
+                const result = ts.resolveModuleName(m, containingFile, parsedCommandResult.options, host);
+                const resolvedModule = result.resolvedModule!;
+                return {
+                    resolvedFileName: resolvedModule.resolvedFileName,
+                    isExternalLibraryImport: resolvedModule.isExternalLibraryImport,
+                    originalFileName: resolvedModule.originalPath,
+                };
+            });
         const watch = ts.createWatchProgram(host);
         runWatchBaseline({
             scenario: "watchApi",
@@ -65,7 +72,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             baseline,
             oldSnap,
             getPrograms,
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     });
 
@@ -75,7 +82,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                 const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem({
                     [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
                         compilerOptions: { traceResolution: true, extendedDiagnostics: true },
-                        files: ["main.ts"]
+                        files: ["main.ts"],
                     }),
                     [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./other";`,
                     [`/user/username/projects/myproject/other.d.ts`]: "export function foo(): void;",
@@ -86,8 +93,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                     system: sys,
                     cb,
                 });
-                host.resolveModuleNames = (moduleNames, containingFile, _reusedNames, _redirectedReference, options) =>
-                    moduleNames.map(m => ts.resolveModuleName(m, containingFile, options, host).resolvedModule);
+                host.resolveModuleNames = (moduleNames, containingFile, _reusedNames, _redirectedReference, options) => moduleNames.map(m => ts.resolveModuleName(m, containingFile, options, host).resolvedModule);
                 // Invalidate resolutions only when ts file is created
                 if (implementHasInvalidatedResolution) host.hasInvalidatedResolutions = () => sys.fileExists(`/user/username/projects/myproject/other.ts`);
                 const watch = ts.createWatchProgram(host);
@@ -119,7 +125,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                         },
                     ],
-                    watchOrSolution: watch
+                    watchOrSolution: watch,
                 });
             });
         }
@@ -134,17 +140,17 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to wat
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: { module: "commonjs" },
-                files: ["index.ts"]
-            })
+                files: ["index.ts"],
+            }),
         };
         const mainFile: File = {
             path: `/user/username/projects/myproject/index.ts`,
-            content: "let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}"
+            content: "let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}",
         };
         const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(
             [libFile, mainFile, config],
-            { currentDirectory: "/user/username/projects/myproject" }),
-        );
+            { currentDirectory: "/user/username/projects/myproject" },
+        ));
         const host = createWatchCompilerHostOfConfigFileForBaseline({
             configFileName: config.path,
             system: sys,
@@ -166,7 +172,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to wat
             baseline,
             oldSnap,
             getPrograms,
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     });
 });
@@ -175,11 +181,11 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement s
     it("verifies that getProgram gets updated program if new file is added to the program", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const mainFile: File = {
             path: `/user/username/projects/myproject/main.ts`,
-            content: "const x = 10;"
+            content: "const x = 10;",
         };
         const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([config, mainFile, libFile]));
         const host = createWatchCompilerHostOfConfigFileForBaseline({
@@ -204,9 +210,9 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement s
                 timeouts: sys => {
                     sys.logTimeoutQueueLength();
                     watch.getProgram();
-                }
+                },
             }],
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     });
 });
@@ -215,18 +221,18 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost can add extraFileExt
     it("verifies that extraFileExtensions are supported to get the program with other extensions", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const mainFile: File = {
             path: `/user/username/projects/myproject/main.ts`,
-            content: "const x = 10;"
+            content: "const x = 10;",
         };
         const otherFile: File = {
             path: `/user/username/projects/myproject/other.vue`,
-            content: ""
+            content: "",
         };
         const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(
-            createWatchedSystem([config, mainFile, otherFile, libFile])
+            createWatchedSystem([config, mainFile, otherFile, libFile]),
         );
         const host = createWatchCompilerHostOfConfigFileForBaseline({
             configFileName: config.path,
@@ -249,7 +255,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost can add extraFileExt
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/other2.vue`, otherFile.content),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }],
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     });
 });
@@ -258,15 +264,15 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
     function createSystem(configText: string, mainText: string) {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: configText
+            content: configText,
         };
         const mainFile: File = {
             path: `/user/username/projects/myproject/main.ts`,
-            content: mainText
+            content: mainText,
         };
         const otherFile: File = {
             path: `/user/username/projects/myproject/other.ts`,
-            content: "export const y = 10;"
+            content: "export const y = 10;",
         };
         return {
             ...createBaseline(createWatchedSystem([config, mainFile, otherFile, libFile])),
@@ -324,7 +330,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
         sys: TscWatchSystem,
         emitSys: TscWatchSystem,
         change: (sys: TscWatchSystem) => void,
-        caption: string
+        caption: string,
     ) {
         // Change file
         applyEdit(sys, baseline, change, caption);
@@ -338,7 +344,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
         sys: TscWatchSystem,
         emitSys: TscWatchSystem,
         createProgram: ts.CreateProgram<T>,
-        optionsToExtend?: ts.CompilerOptions) {
+        optionsToExtend?: ts.CompilerOptions,
+    ) {
         createWatch(baseline, config, sys, createProgram, optionsToExtend);
         createWatch(emitBaseline, config, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram, optionsToExtend);
         verifyOutputs(baseline, sys, emitSys);
@@ -367,7 +374,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
                 edit: sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }],
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     });
 
@@ -479,7 +486,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
                 ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
                 sys.newLine,
                 program.getCompilerOptions(),
-                diagnostics.length
+                diagnostics.length,
             );
             cb(program);
         };
@@ -502,34 +509,34 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             content: JSON.stringify({
                 compilerOptions: {
                     module: "none",
-                    composite: true
+                    composite: true,
                 },
-                exclude: ["temp"]
-            })
+                exclude: ["temp"],
+            }),
         };
         const class1: File = {
             path: `/user/username/projects/myproject/projects/project1/class1.ts`,
-            content: `class class1 {}`
+            content: `class class1 {}`,
         };
         const class1Dts: File = {
             path: `/user/username/projects/myproject/projects/project1/class1.d.ts`,
-            content: `declare class class1 {}`
+            content: `declare class class1 {}`,
         };
         const config2: File = {
             path: `/user/username/projects/myproject/projects/project2/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
                     module: "none",
-                    composite: true
+                    composite: true,
                 },
                 references: [
-                    { path: "../project1" }
-                ]
-            })
+                    { path: "../project1" },
+                ],
+            }),
         };
         const class2: File = {
             path: `/user/username/projects/myproject/projects/project2/class2.ts`,
-            content: `class class2 {}`
+            content: `class class2 {}`,
         };
         const system = createWatchedSystem([config1, class1, class1Dts, config2, class2, libFile]);
         const baseline = createBaseline(system);
@@ -537,7 +544,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             cb: baseline.cb,
             system,
             configFileName: config2.path,
-            optionsToExtend: { extendedDiagnostics: true }
+            optionsToExtend: { extendedDiagnostics: true },
         });
         compilerHost.useSourceOfProjectReferenceRedirect = useSourceOfProjectReferenceRedirect;
         const calledGetParsedCommandLine = new Set<string>();
@@ -584,7 +591,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                     timeouts: sys => sys.logTimeoutQueueLength(),
                 },
             ],
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     });
 
@@ -625,7 +632,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     });
 });
@@ -647,7 +654,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                 cb: baseline.cb,
                 system,
                 configFileName: `/user/username/projects/myproject/tsconfig.json`,
-                optionsToExtend: { extendedDiagnostics: true }
+                optionsToExtend: { extendedDiagnostics: true },
             });
             const originalEmitProgram = compilerHost.afterProgramCreate;
             compilerHost.afterProgramCreate = myAfterProgramCreate;
@@ -704,7 +711,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                         timeouts: sys => sys.logTimeoutQueueLength(),
                     },
                 ],
-                watchOrSolution: watch
+                watchOrSolution: watch,
             });
 
             function myAfterProgramCreate(program: ts.EmitAndSemanticDiagnosticsBuilderProgram) {
@@ -729,7 +736,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
             "/user/username/projects/project/tsconfig.json": JSON.stringify({
                 compilerOptions: { types: [] },
                 files: ["app.ts"],
-                references: [{ path: "./lib" }]
+                references: [{ path: "./lib" }],
             }),
             "/user/username/projects/project/app.ts": dedent`
                 import { one } from './lib';
@@ -758,7 +765,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
                 getCurrentDirectory: () => system.getCurrentDirectory(),
                 readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
                 onUnRecoverableConfigFileDiagnostic: ts.noop,
-            }
+            },
         )!;
         const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             cb: baseline.cb,
@@ -782,14 +789,18 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
             edits: [
                 {
                     caption: "Modify lib tsconfig",
-                    edit: sys => sys.writeFile(`/user/username/projects/project/lib/tsconfig.json`, JSON.stringify({
-                        compilerOptions: { composite: true },
-                        files: ["index.ts"],
-                    })),
+                    edit: sys =>
+                        sys.writeFile(
+                            `/user/username/projects/project/lib/tsconfig.json`,
+                            JSON.stringify({
+                                compilerOptions: { composite: true },
+                                files: ["index.ts"],
+                            }),
+                        ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     });
 
@@ -803,22 +814,30 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
             edits: [
                 {
                     caption: "Modify lib tsconfig",
-                    edit: sys => sys.writeFile(`/user/username/projects/project/lib/tsconfig.json`, JSON.stringify({
-                        extends: "./tsconfig.base.json",
-                        compilerOptions: { typeRoots: [] },
-                        files: ["index.ts"],
-                    })),
+                    edit: sys =>
+                        sys.writeFile(
+                            `/user/username/projects/project/lib/tsconfig.json`,
+                            JSON.stringify({
+                                extends: "./tsconfig.base.json",
+                                compilerOptions: { typeRoots: [] },
+                                files: ["index.ts"],
+                            }),
+                        ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Modify lib extends",
-                    edit: sys => sys.writeFile(`/user/username/projects/project/lib/tsconfig.base.json`, JSON.stringify({
-                        compilerOptions: { composite: true },
-                    })),
+                    edit: sys =>
+                        sys.writeFile(
+                            `/user/username/projects/project/lib/tsconfig.base.json`,
+                            JSON.stringify({
+                                compilerOptions: { composite: true },
+                            }),
+                        ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ],
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     });
 });

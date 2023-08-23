@@ -1,0 +1,135 @@
+//// [tests/cases/compiler/literalWideningWithCompoundLikeAssignments.ts] ////
+
+=== literalWideningWithCompoundLikeAssignments.ts ===
+// repro from #13865
+
+const empty: "" = "";
+>empty : Symbol(empty, Decl(literalWideningWithCompoundLikeAssignments.ts, 2, 5))
+
+let foo = empty;
+>foo : Symbol(foo, Decl(literalWideningWithCompoundLikeAssignments.ts, 3, 3))
+>empty : Symbol(empty, Decl(literalWideningWithCompoundLikeAssignments.ts, 2, 5))
+
+foo = foo + "bar"
+>foo : Symbol(foo, Decl(literalWideningWithCompoundLikeAssignments.ts, 3, 3))
+>foo : Symbol(foo, Decl(literalWideningWithCompoundLikeAssignments.ts, 3, 3))
+
+foo // string
+>foo : Symbol(foo, Decl(literalWideningWithCompoundLikeAssignments.ts, 3, 3))
+
+declare const numLiteral: 0;
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+let t1 = numLiteral;
+>t1 : Symbol(t1, Decl(literalWideningWithCompoundLikeAssignments.ts, 9, 3))
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+t1 = t1 + 42
+>t1 : Symbol(t1, Decl(literalWideningWithCompoundLikeAssignments.ts, 9, 3))
+>t1 : Symbol(t1, Decl(literalWideningWithCompoundLikeAssignments.ts, 9, 3))
+
+t1 // number
+>t1 : Symbol(t1, Decl(literalWideningWithCompoundLikeAssignments.ts, 9, 3))
+
+let t2 = numLiteral;
+>t2 : Symbol(t2, Decl(literalWideningWithCompoundLikeAssignments.ts, 13, 3))
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+t2 = t2 - 42
+>t2 : Symbol(t2, Decl(literalWideningWithCompoundLikeAssignments.ts, 13, 3))
+>t2 : Symbol(t2, Decl(literalWideningWithCompoundLikeAssignments.ts, 13, 3))
+
+t2 // number
+>t2 : Symbol(t2, Decl(literalWideningWithCompoundLikeAssignments.ts, 13, 3))
+
+let t3 = numLiteral;
+>t3 : Symbol(t3, Decl(literalWideningWithCompoundLikeAssignments.ts, 17, 3))
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+t3 = t3 * 42
+>t3 : Symbol(t3, Decl(literalWideningWithCompoundLikeAssignments.ts, 17, 3))
+>t3 : Symbol(t3, Decl(literalWideningWithCompoundLikeAssignments.ts, 17, 3))
+
+t3 // number
+>t3 : Symbol(t3, Decl(literalWideningWithCompoundLikeAssignments.ts, 17, 3))
+
+let t4 = numLiteral;
+>t4 : Symbol(t4, Decl(literalWideningWithCompoundLikeAssignments.ts, 21, 3))
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+t4 = t4 ** 42
+>t4 : Symbol(t4, Decl(literalWideningWithCompoundLikeAssignments.ts, 21, 3))
+>t4 : Symbol(t4, Decl(literalWideningWithCompoundLikeAssignments.ts, 21, 3))
+
+t4 // number
+>t4 : Symbol(t4, Decl(literalWideningWithCompoundLikeAssignments.ts, 21, 3))
+
+let t5 = numLiteral;
+>t5 : Symbol(t5, Decl(literalWideningWithCompoundLikeAssignments.ts, 25, 3))
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+t5 = t5 / 42
+>t5 : Symbol(t5, Decl(literalWideningWithCompoundLikeAssignments.ts, 25, 3))
+>t5 : Symbol(t5, Decl(literalWideningWithCompoundLikeAssignments.ts, 25, 3))
+
+t5 // number
+>t5 : Symbol(t5, Decl(literalWideningWithCompoundLikeAssignments.ts, 25, 3))
+
+let t6 = numLiteral;
+>t6 : Symbol(t6, Decl(literalWideningWithCompoundLikeAssignments.ts, 29, 3))
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+t6 = t6 % 42
+>t6 : Symbol(t6, Decl(literalWideningWithCompoundLikeAssignments.ts, 29, 3))
+>t6 : Symbol(t6, Decl(literalWideningWithCompoundLikeAssignments.ts, 29, 3))
+
+t6 // number
+>t6 : Symbol(t6, Decl(literalWideningWithCompoundLikeAssignments.ts, 29, 3))
+
+let t7 = numLiteral;
+>t7 : Symbol(t7, Decl(literalWideningWithCompoundLikeAssignments.ts, 33, 3))
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+t7 = t7 >> 0
+>t7 : Symbol(t7, Decl(literalWideningWithCompoundLikeAssignments.ts, 33, 3))
+>t7 : Symbol(t7, Decl(literalWideningWithCompoundLikeAssignments.ts, 33, 3))
+
+t7 // number
+>t7 : Symbol(t7, Decl(literalWideningWithCompoundLikeAssignments.ts, 33, 3))
+
+let t8 = numLiteral;
+>t8 : Symbol(t8, Decl(literalWideningWithCompoundLikeAssignments.ts, 37, 3))
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+t8 = t8 >>> 0
+>t8 : Symbol(t8, Decl(literalWideningWithCompoundLikeAssignments.ts, 37, 3))
+>t8 : Symbol(t8, Decl(literalWideningWithCompoundLikeAssignments.ts, 37, 3))
+
+t8 // number
+>t8 : Symbol(t8, Decl(literalWideningWithCompoundLikeAssignments.ts, 37, 3))
+
+let t9 = numLiteral;
+>t9 : Symbol(t9, Decl(literalWideningWithCompoundLikeAssignments.ts, 41, 3))
+>numLiteral : Symbol(numLiteral, Decl(literalWideningWithCompoundLikeAssignments.ts, 7, 13))
+
+t9 = t9 << 0
+>t9 : Symbol(t9, Decl(literalWideningWithCompoundLikeAssignments.ts, 41, 3))
+>t9 : Symbol(t9, Decl(literalWideningWithCompoundLikeAssignments.ts, 41, 3))
+
+t9 // number
+>t9 : Symbol(t9, Decl(literalWideningWithCompoundLikeAssignments.ts, 41, 3))
+
+declare const literalUnion: "a" | 0;
+>literalUnion : Symbol(literalUnion, Decl(literalWideningWithCompoundLikeAssignments.ts, 45, 13))
+
+let t10 = literalUnion;
+>t10 : Symbol(t10, Decl(literalWideningWithCompoundLikeAssignments.ts, 46, 3))
+>literalUnion : Symbol(literalUnion, Decl(literalWideningWithCompoundLikeAssignments.ts, 45, 13))
+
+t10 = t10 + 'b'
+>t10 : Symbol(t10, Decl(literalWideningWithCompoundLikeAssignments.ts, 46, 3))
+>t10 : Symbol(t10, Decl(literalWideningWithCompoundLikeAssignments.ts, 46, 3))
+
+t10 // string
+>t10 : Symbol(t10, Decl(literalWideningWithCompoundLikeAssignments.ts, 46, 3))
+

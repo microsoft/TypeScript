@@ -103,7 +103,9 @@ import {
     TypeNode,
     VariableDeclaration,
 } from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 import * as Debug from "../../compiler/debug";
 
@@ -114,12 +116,12 @@ const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_paramet
 const toDestructuredAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.rewrite.parameters.toDestructured"
+    kind: "refactor.rewrite.parameters.toDestructured",
 };
 registerRefactor(refactorName, {
     kinds: [toDestructuredAction.kind],
     getEditsForAction: getRefactorEditsToConvertParametersToDestructuredObject,
-    getAvailableActions: getRefactorActionsToConvertParametersToDestructuredObject
+    getAvailableActions: getRefactorActionsToConvertParametersToDestructuredObject,
 });
 
 function getRefactorActionsToConvertParametersToDestructuredObject(context: RefactorContext): readonly ApplicableRefactorInfo[] {
@@ -132,7 +134,7 @@ function getRefactorActionsToConvertParametersToDestructuredObject(context: Refa
     return [{
         name: refactorName,
         description: refactorDescription,
-        actions: [toDestructuredAction]
+        actions: [toDestructuredAction],
     }];
 }
 
@@ -157,7 +159,8 @@ function doChange(
     host: LanguageServiceHost,
     changes: textChanges.ChangeTracker,
     functionDeclaration: ValidFunctionDeclaration,
-    groupedReferences: GroupedReferences): void {
+    groupedReferences: GroupedReferences,
+): void {
     const signature = groupedReferences.signature;
     const newFunctionDeclarationParams = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
 
@@ -176,7 +179,8 @@ function doChange(
                 first(call.arguments),
                 last(call.arguments),
                 newArgument,
-                { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include });
+                { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include },
+            );
         }
     }
 
@@ -191,8 +195,9 @@ function doChange(
                 // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
                 indentation: 0,
                 leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-                trailingTriviaOption: textChanges.TrailingTriviaOption.Include
-            });
+                trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+            },
+        );
     }
 }
 
@@ -338,10 +343,12 @@ function getSymbolForContextualType(node: Node, checker: TypeChecker): Symbol | 
 function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undefined {
     const node = entry.node;
 
-    if (isImportSpecifier(node.parent)
+    if (
+        isImportSpecifier(node.parent)
         || isImportClause(node.parent)
         || isImportEqualsDeclaration(node.parent)
-        || isNamespaceImport(node.parent)) {
+        || isNamespaceImport(node.parent)
+    ) {
         return node;
     }
 
@@ -435,10 +442,12 @@ function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: numbe
     // don't offer refactor on top-level JSDoc
     if (isTopLevelJSDoc(node)) return undefined;
 
-    if (functionDeclaration
+    if (
+        functionDeclaration
         && isValidFunctionDeclaration(functionDeclaration, checker)
         && rangeContainsRange(functionDeclaration, node)
-        && !(functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node))) return functionDeclaration;
+        && !(functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node))
+    ) return functionDeclaration;
 
     return undefined;
 }
@@ -458,7 +467,8 @@ function isValidMethodSignature(node: Node): node is ValidMethodSignature {
 
 function isValidFunctionDeclaration(
     functionDeclaration: FunctionLikeDeclaration,
-    checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
+    checker: TypeChecker,
+): functionDeclaration is ValidFunctionDeclaration {
     if (!isValidParameterNodeArray(functionDeclaration.parameters, checker)) return false;
     switch (functionDeclaration.kind) {
         case SyntaxKind.FunctionDeclaration:
@@ -499,14 +509,16 @@ function hasNameOrDefault(functionOrClassDeclaration: FunctionDeclaration | Clas
 
 function isValidParameterNodeArray(
     parameters: NodeArray<ParameterDeclaration>,
-    checker: TypeChecker): parameters is ValidParameterNodeArray {
+    checker: TypeChecker,
+): parameters is ValidParameterNodeArray {
     return getRefactorableParametersLength(parameters) >= minimumParameterLength
         && every(parameters, /*callback*/ paramDecl => isValidParameterDeclaration(paramDecl, checker));
 }
 
 function isValidParameterDeclaration(
     parameterDeclaration: ParameterDeclaration,
-    checker: TypeChecker): parameterDeclaration is ValidParameterDeclaration {
+    checker: TypeChecker,
+): parameterDeclaration is ValidParameterDeclaration {
     if (isRestParameter(parameterDeclaration)) {
         const type = checker.getTypeAtLocation(parameterDeclaration);
         if (!checker.isArrayType(type) && !checker.isTupleType(type)) return false;
@@ -586,7 +598,8 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
         objectParameterName,
         /*questionToken*/ undefined,
         objectParameterType,
-        objectInitializer);
+        objectInitializer,
+    );
 
     if (hasThisParameter(functionDeclaration.parameters)) {
         const thisParameter = functionDeclaration.parameters[0];
@@ -595,7 +608,8 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
             /*dotDotDotToken*/ undefined,
             thisParameter.name,
             /*questionToken*/ undefined,
-            thisParameter.type);
+            thisParameter.type,
+        );
 
         suppressLeadingAndTrailingTrivia(newThisParameter.name);
         copyComments(thisParameter.name, newThisParameter.name);
@@ -613,7 +627,8 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
             /*dotDotDotToken*/ undefined,
             /*propertyName*/ undefined,
             getParameterName(parameterDeclaration),
-            isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression() : parameterDeclaration.initializer);
+            isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression() : parameterDeclaration.initializer,
+        );
 
         suppressLeadingAndTrailingTrivia(element);
         if (parameterDeclaration.initializer && element.initializer) {
@@ -638,7 +653,8 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
             /*modifiers*/ undefined,
             getParameterName(parameterDeclaration),
             isOptionalParameter(parameterDeclaration) ? factory.createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
-            parameterType);
+            parameterType,
+        );
 
         suppressLeadingAndTrailingTrivia(propertySignature);
         copyComments(parameterDeclaration.name, propertySignature.name);
@@ -676,7 +692,8 @@ function getClassNames(constructorDeclaration: ValidConstructor): (Identifier | 
             // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
             const defaultModifier = Debug.checkDefined(
                 findModifier(classDeclaration, SyntaxKind.DefaultKeyword),
-                "Nameless class declaration should be a default export");
+                "Nameless class declaration should be a default export",
+            );
             return [defaultModifier];
         case SyntaxKind.ClassExpression:
             const classExpression = constructorDeclaration.parent;
@@ -695,14 +712,16 @@ function getFunctionNames(functionDeclaration: ValidFunctionDeclaration): Node[]
             // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
             const defaultModifier = Debug.checkDefined(
                 findModifier(functionDeclaration, SyntaxKind.DefaultKeyword),
-                "Nameless function declaration should be a default export");
+                "Nameless function declaration should be a default export",
+            );
             return [defaultModifier];
         case SyntaxKind.MethodDeclaration:
             return [functionDeclaration.name];
         case SyntaxKind.Constructor:
             const ctrKeyword = Debug.checkDefined(
                 findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile()),
-                "Constructor declaration should have constructor keyword");
+                "Constructor declaration should have constructor keyword",
+            );
             if (functionDeclaration.parent.kind === SyntaxKind.ClassExpression) {
                 const variableDeclaration = functionDeclaration.parent.parent;
                 return [variableDeclaration.name, ctrKeyword];
@@ -726,7 +745,7 @@ interface ValidVariableDeclaration extends VariableDeclaration {
 }
 
 interface ValidConstructor extends ConstructorDeclaration {
-    parent: ClassDeclaration | (ClassExpression & { parent: ValidVariableDeclaration });
+    parent: ClassDeclaration | (ClassExpression & { parent: ValidVariableDeclaration; });
     parameters: NodeArray<ValidParameterDeclaration>;
     body: FunctionBody;
 }

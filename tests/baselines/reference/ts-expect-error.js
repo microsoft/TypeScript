@@ -42,6 +42,14 @@ var validPlain: string = 'nope';
 (({ a: true } as const).a === false); // error
 (({ a: true } as const).a === false); // error
 
+// @ts-expect-error: additional commenting with no whitespace
+var invalidCommentedFancySingle: number = 'nope';
+
+/*
+ @ts-expect-error: additional commenting with no whitespace */
+var invalidCommentedFancyMulti: number = 'nope';
+
+
 //// [ts-expect-error.js]
 // @ts-expect-error additional commenting
 var invalidCommentedFancySingle = 'nope';
@@ -71,3 +79,8 @@ var validPlain = 'nope';
 ({ a: true }.a === false); // Should error
 ({ a: true }.a === false); // error
 ({ a: true }.a === false); // error
+// @ts-expect-error: additional commenting with no whitespace
+var invalidCommentedFancySingle = 'nope';
+/*
+ @ts-expect-error: additional commenting with no whitespace */
+var invalidCommentedFancyMulti = 'nope';

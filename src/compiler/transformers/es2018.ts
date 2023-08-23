@@ -115,7 +115,7 @@ import * as Debug from "../debug";
 
 const enum ESNextSubstitutionFlags {
     /** Enables substitutions for async methods with `super` calls. */
-    AsyncMethodsWithSuper = 1 << 0
+    AsyncMethodsWithSuper = 1 << 0,
 }
 
 // Facts we track as we traverse the tree
@@ -157,7 +157,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         getEmitHelperFactory: emitHelpers,
         resumeLexicalEnvironment,
         endLexicalEnvironment,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     const resolver = context.getEmitResolver();
@@ -216,7 +216,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     function recordTaggedTemplateString(temp: Identifier) {
         taggedTemplateStringDeclarations = append(
             taggedTemplateStringDeclarations,
-            factory.createVariableDeclaration(temp));
+            factory.createVariableDeclaration(temp),
+        );
     }
 
     function transformSourceFile(node: SourceFile) {
@@ -298,7 +299,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     visitDefault,
                     node,
                     HierarchyFacts.IterationStatementExcludes,
-                    HierarchyFacts.IterationStatementIncludes);
+                    HierarchyFacts.IterationStatementIncludes,
+                );
             case SyntaxKind.ForOfStatement:
                 return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
             case SyntaxKind.ForStatement:
@@ -306,7 +308,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     visitForStatement,
                     node as ForStatement,
                     HierarchyFacts.IterationStatementExcludes,
-                    HierarchyFacts.IterationStatementIncludes);
+                    HierarchyFacts.IterationStatementIncludes,
+                );
             case SyntaxKind.VoidExpression:
                 return visitVoidExpression(node as VoidExpression);
             case SyntaxKind.Constructor:
@@ -314,43 +317,50 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     visitConstructorDeclaration,
                     node as ConstructorDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
-                    HierarchyFacts.ClassOrFunctionIncludes);
+                    HierarchyFacts.ClassOrFunctionIncludes,
+                );
             case SyntaxKind.MethodDeclaration:
                 return doWithHierarchyFacts(
                     visitMethodDeclaration,
                     node as MethodDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
-                    HierarchyFacts.ClassOrFunctionIncludes);
+                    HierarchyFacts.ClassOrFunctionIncludes,
+                );
             case SyntaxKind.GetAccessor:
                 return doWithHierarchyFacts(
                     visitGetAccessorDeclaration,
                     node as GetAccessorDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
-                    HierarchyFacts.ClassOrFunctionIncludes);
+                    HierarchyFacts.ClassOrFunctionIncludes,
+                );
             case SyntaxKind.SetAccessor:
                 return doWithHierarchyFacts(
                     visitSetAccessorDeclaration,
                     node as SetAccessorDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
-                    HierarchyFacts.ClassOrFunctionIncludes);
+                    HierarchyFacts.ClassOrFunctionIncludes,
+                );
             case SyntaxKind.FunctionDeclaration:
                 return doWithHierarchyFacts(
                     visitFunctionDeclaration,
                     node as FunctionDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
-                    HierarchyFacts.ClassOrFunctionIncludes);
+                    HierarchyFacts.ClassOrFunctionIncludes,
+                );
             case SyntaxKind.FunctionExpression:
                 return doWithHierarchyFacts(
                     visitFunctionExpression,
                     node as FunctionExpression,
                     HierarchyFacts.ClassOrFunctionExcludes,
-                    HierarchyFacts.ClassOrFunctionIncludes);
+                    HierarchyFacts.ClassOrFunctionIncludes,
+                );
             case SyntaxKind.ArrowFunction:
                 return doWithHierarchyFacts(
                     visitArrowFunction,
                     node as ArrowFunction,
                     HierarchyFacts.ArrowFunctionExcludes,
-                    HierarchyFacts.ArrowFunctionIncludes);
+                    HierarchyFacts.ArrowFunctionIncludes,
+                );
             case SyntaxKind.Parameter:
                 return visitParameter(node as ParameterDeclaration);
             case SyntaxKind.ExpressionStatement:
@@ -375,7 +385,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     visitDefault,
                     node,
                     HierarchyFacts.ClassOrFunctionExcludes,
-                    HierarchyFacts.ClassOrFunctionIncludes);
+                    HierarchyFacts.ClassOrFunctionIncludes,
+                );
             default:
                 return visitEachChild(node, visitor, context);
         }
@@ -386,9 +397,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             return setOriginalNode(
                 setTextRange(
                     factory.createYieldExpression(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(visitNode(node.expression, visitor, isExpression))),
-                    /*location*/ node
+                    /*location*/ node,
                 ),
-                node
+                node,
             );
         }
         return visitEachChild(node, visitor, context);
@@ -411,17 +422,17 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                                         emitHelpers().createAsyncDelegatorHelper(
                                             setTextRange(
                                                 emitHelpers().createAsyncValuesHelper(expression),
-                                                expression
-                                            )
+                                                expression,
+                                            ),
                                         ),
-                                        expression
-                                    )
-                                )
-                            )
+                                        expression,
+                                    ),
+                                ),
+                            ),
                         ),
-                        node
+                        node,
                     ),
-                    node
+                    node,
                 );
             }
 
@@ -432,12 +443,12 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                         createDownlevelAwait(
                             node.expression
                                 ? visitNode(node.expression, visitor, isExpression)
-                                : factory.createVoidZero()
-                        )
+                                : factory.createVoidZero(),
+                        ),
                     ),
-                    node
+                    node,
                 ),
-                node
+                node,
             );
         }
 
@@ -446,9 +457,12 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
 
     function visitReturnStatement(node: ReturnStatement) {
         if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
-            return factory.updateReturnStatement(node, createDownlevelAwait(
-                node.expression ? visitNode(node.expression, visitor, isExpression) : factory.createVoidZero()
-            ));
+            return factory.updateReturnStatement(
+                node,
+                createDownlevelAwait(
+                    node.expression ? visitNode(node.expression, visitor, isExpression) : factory.createVoidZero(),
+                ),
+            );
         }
 
         return visitEachChild(node, visitor, context);
@@ -478,9 +492,12 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 objects.push(visitNode(target, visitor, isExpression));
             }
             else {
-                chunkObject = append(chunkObject, e.kind === SyntaxKind.PropertyAssignment
-                    ? factory.createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
-                    : visitNode(e, visitor, isObjectLiteralElementLike));
+                chunkObject = append(
+                    chunkObject,
+                    e.kind === SyntaxKind.PropertyAssignment
+                        ? factory.createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
+                        : visitNode(e, visitor, isObjectLiteralElementLike),
+                );
             }
         }
         if (chunkObject) {
@@ -548,13 +565,16 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             HierarchyFacts.SourceFileExcludes,
             isEffectiveStrictModeSourceFile(node, compilerOptions) ?
                 HierarchyFacts.StrictModeSourceFileIncludes :
-                HierarchyFacts.SourceFileIncludes);
+                HierarchyFacts.SourceFileIncludes,
+        );
         exportedVariableStatement = false;
         const visited = visitEachChild(node, visitor, context);
-        const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
-            factory.createVariableStatement(/*modifiers*/ undefined,
-                factory.createVariableDeclarationList(taggedTemplateStringDeclarations))
-        ]);
+        const statement = concatenate(
+            visited.statements,
+            taggedTemplateStringDeclarations && [
+                factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList(taggedTemplateStringDeclarations)),
+            ],
+        );
         const result = factory.updateSourceFile(visited, setTextRange(factory.createNodeArray(statement), node.statements));
         exitSubtree(ancestorFacts);
         return result;
@@ -567,7 +587,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             visitor,
             currentSourceFile,
             recordTaggedTemplateString,
-            ProcessLevel.LiftRestriction
+            ProcessLevel.LiftRestriction,
         );
     }
 
@@ -585,7 +605,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 visitor,
                 context,
                 FlattenLevel.ObjectRest,
-                !expressionResultIsUnused
+                !expressionResultIsUnused,
             );
         }
         if (node.operatorToken.kind === SyntaxKind.CommaToken) {
@@ -593,7 +613,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 node,
                 visitNode(node.left, visitorWithUnusedExpressionResult, isExpression),
                 node.operatorToken,
-                visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression)
+                visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression),
             );
         }
         return visitEachChild(node, visitor, context);
@@ -621,9 +641,11 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     }
 
     function visitCatchClause(node: CatchClause) {
-        if (node.variableDeclaration &&
+        if (
+            node.variableDeclaration &&
             isBindingPattern(node.variableDeclaration.name) &&
-            node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+            node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread
+        ) {
             const name = factory.getGeneratedNameForNode(node.variableDeclaration.name);
             const updatedDecl = factory.updateVariableDeclaration(node.variableDeclaration, node.variableDeclaration.name, /*exclamationToken*/ undefined, /*type*/ undefined, name);
             const visitedBindings = flattenDestructuringBinding(updatedDecl, visitor, context, FlattenLevel.ObjectRest);
@@ -637,7 +659,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             return factory.updateCatchClause(
                 node,
                 factory.updateVariableDeclaration(node.variableDeclaration, name, /*exclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined),
-                block);
+                block,
+            );
         }
         return visitEachChild(node, visitor, context);
     }
@@ -678,7 +701,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 context,
                 FlattenLevel.ObjectRest,
                 /*rval*/ undefined,
-                exportedVariableStatement
+                exportedVariableStatement,
             );
         }
         return visitEachChild(node, visitor, context);
@@ -690,7 +713,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             visitNode(node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
             visitNode(node.condition, visitor, isExpression),
             visitNode(node.incrementor, visitorWithUnusedExpressionResult, isExpression),
-            visitIterationBody(node.statement, visitor, context)
+            visitIterationBody(node.statement, visitor, context),
         );
     }
 
@@ -705,8 +728,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
      */
     function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
         const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
-        if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread ||
-            isAssignmentPattern(node.initializer) && containsObjectRestOrSpread(node.initializer)) {
+        if (
+            node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread ||
+            isAssignmentPattern(node.initializer) && containsObjectRestOrSpread(node.initializer)
+        ) {
             node = transformForOfStatementWithObjectRest(node);
         }
         const result = node.awaitModifier ?
@@ -739,20 +764,20 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 setTextRange(
                     factory.createVariableDeclarationList(
                         [
-                            setTextRange(factory.createVariableDeclaration(temp), node.initializer)
+                            setTextRange(factory.createVariableDeclaration(temp), node.initializer),
                         ],
-                        NodeFlags.Let
+                        NodeFlags.Let,
                     ),
-                    node.initializer
+                    node.initializer,
                 ),
                 node.expression,
                 setTextRange(
                     factory.createBlock(
                         setTextRange(factory.createNodeArray(statements), statementsLocation),
-                        /*multiLine*/ true
+                        /*multiLine*/ true,
                     ),
-                    bodyLocation
-                )
+                    bodyLocation,
+                ),
             );
         }
         return node;
@@ -787,9 +812,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         return setTextRange(
             factory.createBlock(
                 setTextRange(factory.createNodeArray(statements), statementsLocation),
-                /*multiLine*/ true
+                /*multiLine*/ true,
             ),
-            bodyLocation
+            bodyLocation,
         );
     }
 
@@ -830,23 +855,23 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                             factory.createVariableDeclarationList([
                                 factory.createVariableDeclaration(nonUserCode, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createTrue()),
                                 setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
-                                factory.createVariableDeclaration(result)
+                                factory.createVariableDeclaration(result),
                             ]),
-                            node.expression
+                            node.expression,
                         ),
-                        EmitFlags.NoHoisting
+                        EmitFlags.NoHoisting,
                     ),
                     /*condition*/ factory.inlineExpressions([
                         factory.createAssignment(result, createDownlevelAwait(callNext)),
                         factory.createAssignment(done, getDone),
-                        factory.createLogicalNot(done)
+                        factory.createLogicalNot(done),
                     ]),
                     /*incrementor*/ factory.createAssignment(nonUserCode, factory.createTrue()),
-                    /*statement*/ convertForOfStatementHead(node, getValue, nonUserCode)
+                    /*statement*/ convertForOfStatementHead(node, getValue, nonUserCode),
                 ),
-                /*location*/ node
+                /*location*/ node,
             ),
-            EmitFlags.NoTokenTrailingSourceMaps
+            EmitFlags.NoTokenTrailingSourceMaps,
         );
         setOriginalNode(forStatement, node);
 
@@ -854,8 +879,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             factory.createBlock([
                 factory.restoreEnclosingLabel(
                     forStatement,
-                    outermostLabeledStatement
-                )
+                    outermostLabeledStatement,
+                ),
             ]),
             factory.createCatchClause(
                 factory.createVariableDeclaration(catchVariable),
@@ -865,13 +890,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                             factory.createAssignment(
                                 errorRecord,
                                 factory.createObjectLiteralExpression([
-                                    factory.createPropertyAssignment("error", catchVariable)
-                                ])
-                            )
-                        )
+                                    factory.createPropertyAssignment("error", catchVariable),
+                                ]),
+                            ),
+                        ),
                     ]),
-                    EmitFlags.SingleLine
-                )
+                    EmitFlags.SingleLine,
+                ),
             ),
             factory.createBlock([
                 factory.createTryStatement(
@@ -885,13 +910,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                                     ),
                                     factory.createAssignment(
                                         returnMethod,
-                                        factory.createPropertyAccessExpression(iterator, "return")
-                                    )
+                                        factory.createPropertyAccessExpression(iterator, "return"),
+                                    ),
                                 ),
-                                factory.createExpressionStatement(createDownlevelAwait(callReturn))
+                                factory.createExpressionStatement(createDownlevelAwait(callReturn)),
                             ),
-                            EmitFlags.SingleLine
-                        )
+                            EmitFlags.SingleLine,
+                        ),
                     ]),
                     /*catchClause*/ undefined,
                     /*finallyBlock*/ setEmitFlags(
@@ -900,16 +925,16 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                                 factory.createIfStatement(
                                     errorRecord,
                                     factory.createThrowStatement(
-                                        factory.createPropertyAccessExpression(errorRecord, "error")
-                                    )
+                                        factory.createPropertyAccessExpression(errorRecord, "error"),
+                                    ),
                                 ),
-                                EmitFlags.SingleLine
-                            )
+                                EmitFlags.SingleLine,
+                            ),
                         ]),
-                        EmitFlags.SingleLine
-                    )
-                )
-            ])
+                        EmitFlags.SingleLine,
+                    ),
+                ),
+            ]),
         );
     }
 
@@ -927,7 +952,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 isBindingPattern(node.name) ? factory.getGeneratedNameForNode(node) : node.name,
                 /*questionToken*/ undefined,
                 /*type*/ undefined,
-                /*initializer*/ undefined
+                /*initializer*/ undefined,
             );
         }
         if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
@@ -940,7 +965,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 factory.getGeneratedNameForNode(node),
                 /*questionToken*/ undefined,
                 /*type*/ undefined,
-                visitNode(node.initializer, visitor, isExpression)
+                visitNode(node.initializer, visitor, isExpression),
             );
         }
         return visitEachChild(node, visitor, context);
@@ -968,7 +993,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             node,
             node.modifiers,
             visitParameterList(node.parameters, parameterVisitor, context),
-            transformFunctionBody(node)
+            transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -986,7 +1011,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             visitNode(node.name, visitor, isPropertyName),
             visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            transformFunctionBody(node)
+            transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -1003,7 +1028,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             node.modifiers,
             visitNode(node.name, visitor, isPropertyName),
             visitParameterList(node.parameters, parameterVisitor, context),
-            transformFunctionBody(node)
+            transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -1030,7 +1055,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             /*type*/ undefined,
             enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
                 ? transformAsyncGeneratorFunctionBody(node)
-                : transformFunctionBody(node)
+                : transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -1056,7 +1081,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             /*type*/ undefined,
             enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
                 ? transformAsyncGeneratorFunctionBody(node)
-                : transformFunctionBody(node)
+                : transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -1101,7 +1126,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             /*type*/ undefined,
             enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
                 ? transformAsyncGeneratorFunctionBody(node)
-                : transformFunctionBody(node)
+                : transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -1130,11 +1155,11 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     /*type*/ undefined,
                     factory.updateBlock(
                         node.body!,
-                        visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
-                    )
+                        visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset),
+                    ),
                 ),
-                !!(hierarchyFacts & HierarchyFacts.HasLexicalThis)
-            )
+                !!(hierarchyFacts & HierarchyFacts.HasLexicalThis),
+            ),
         );
 
         // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
@@ -1206,7 +1231,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                             visitor,
                             context,
                             FlattenLevel.All,
-                            factory.getGeneratedNameForNode(parameter));
+                            factory.getGeneratedNameForNode(parameter),
+                        );
                         if (some(declarations)) {
                             const declarationList = factory.createVariableDeclarationList(declarations);
                             const statement = factory.createVariableStatement(/*modifiers*/ undefined, declarationList);
@@ -1363,8 +1389,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             return setTextRange(
                 factory.createPropertyAccessExpression(
                     factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
-                    node.name),
-                node
+                    node.name,
+                ),
+                node,
             );
         }
         return node;
@@ -1374,7 +1401,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         if (node.expression.kind === SyntaxKind.SuperKeyword) {
             return createSuperElementAccessInAsyncMethod(
                 node.argumentExpression,
-                node
+                node,
             );
         }
         return node;
@@ -1391,8 +1418,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 /*typeArguments*/ undefined,
                 [
                     factory.createThis(),
-                    ...node.arguments
-                ]
+                    ...node.arguments,
+                ],
             );
         }
         return node;
@@ -1414,11 +1441,11 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     factory.createCallExpression(
                         factory.createIdentifier("_superIndex"),
                         /*typeArguments*/ undefined,
-                        [argumentExpression]
+                        [argumentExpression],
                     ),
-                    "value"
+                    "value",
                 ),
-                location
+                location,
             );
         }
         else {
@@ -1426,9 +1453,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 factory.createCallExpression(
                     factory.createIdentifier("_superIndex"),
                     /*typeArguments*/ undefined,
-                    [argumentExpression]
+                    [argumentExpression],
                 ),
-                location
+                location,
             );
         }
     }

@@ -1,8 +1,18 @@
-import { dedent } from "../../_namespaces/Utils";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
 
-import { FsContents, libContent } from "./contents";
-import { loadProjectFromFiles } from "./vfs";
-import { createServerHost, createWatchedSystem } from "./virtualFileSystemWithWatch";
+import {
+    FsContents,
+    libContent,
+} from "./contents";
+import {
+    loadProjectFromFiles,
+} from "./vfs";
+import {
+    createServerHost,
+    createWatchedSystem,
+} from "./virtualFileSystemWithWatch";
 
 function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
     return {
@@ -46,7 +56,7 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
             "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts": "interface DOMInterface { }",
             "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts": "interface WebworkerInterface { }",
             "/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts": "interface ScriptHostInterface { }",
-        } : undefined
+        } : undefined,
     };
 }
 
@@ -56,7 +66,7 @@ export function getFsForLibResolution(libRedirection: true | undefined) {
         {
             cwd: "/home/src/projects",
             executingFilePath: "/home/src/lib/tsc.js",
-        }
+        },
     );
 }
 
@@ -66,7 +76,7 @@ export function getSysForLibResolution(libRedirection?: true) {
         {
             currentDirectory: "/home/src/projects",
             executingFilePath: "/home/src/lib/tsc.js",
-        }
+        },
     );
 }
 
@@ -76,7 +86,7 @@ export function getServerHosForLibResolution(libRedirection?: true) {
         {
             currentDirectory: "/home/src/projects",
             executingFilePath: "/home/src/lib/tsc.js",
-        }
+        },
     );
 }
 

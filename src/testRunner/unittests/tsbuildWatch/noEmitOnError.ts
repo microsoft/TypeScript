@@ -1,4 +1,6 @@
-import { libContent } from "../helpers/contents";
+import {
+    libContent,
+} from "../helpers/contents";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
@@ -29,27 +31,37 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
         scenario: "noEmitOnError",
         subScenario: "does not emit any files on error",
         commandLineArgs: ["-b", "-w", "-verbose"],
-        sys: () => createWatchedSystem(
-            [
-                ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                    .map(f => getTsBuildProjectFile("noEmitOnError", f)),
-                { path: libFile.path, content: libContent }
-            ],
-            { currentDirectory: `/user/username/projects/noEmitOnError` }
-        ),
+        sys: () =>
+            createWatchedSystem(
+                [
+                    ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
+                        .map(f => getTsBuildProjectFile("noEmitOnError", f)),
+                    { path: libFile.path, content: libContent },
+                ],
+                { currentDirectory: `/user/username/projects/noEmitOnError` },
+            ),
         edits: [
             noChange,
-            change("Fix Syntax error", `import { A } from "../shared/types/db";
+            change(
+                "Fix Syntax error",
+                `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`),
-            change("Semantic Error", `import { A } from "../shared/types/db";
-const a: string = 10;`),
+};`,
+            ),
+            change(
+                "Semantic Error",
+                `import { A } from "../shared/types/db";
+const a: string = 10;`,
+            ),
             noChange,
-            change("Fix Semantic Error", `import { A } from "../shared/types/db";
-const a: string = "hello";`),
+            change(
+                "Fix Semantic Error",
+                `import { A } from "../shared/types/db";
+const a: string = "hello";`,
+            ),
             noChange,
         ],
-        baselineIncremental: true
+        baselineIncremental: true,
     });
 });

@@ -34,6 +34,7 @@ import "./unittests/evaluation/asyncArrow";
 import "./unittests/evaluation/asyncGenerator";
 import "./unittests/evaluation/autoAccessors";
 import "./unittests/evaluation/awaiter";
+import "./unittests/evaluation/constEnum";
 import "./unittests/evaluation/destructuring";
 import "./unittests/evaluation/externalModules";
 import "./unittests/evaluation/esDecorators";

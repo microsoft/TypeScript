@@ -1,5 +1,9 @@
-import { libContent } from "../helpers/contents";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import {
+    libContent,
+} from "../helpers/contents";
+import {
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     libFile,
@@ -10,15 +14,16 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
         scenario: "noEmit",
         subScenario: "does not go in loop when watching when no files are emitted",
         commandLineArgs: ["-b", "-w", "-verbose"],
-        sys: () => createWatchedSystem(
-            [
-                { path: libFile.path, content: libContent },
-                { path: `/user/username/projects/myproject/a.js`, content: "" },
-                { path: `/user/username/projects/myproject/b.ts`, content: "" },
-                { path: `/user/username/projects/myproject/tsconfig.json`, content: JSON.stringify({ compilerOptions: { allowJs: true, noEmit: true } }) },
-            ],
-            { currentDirectory: "/user/username/projects/myproject" }
-        ),
+        sys: () =>
+            createWatchedSystem(
+                [
+                    { path: libFile.path, content: libContent },
+                    { path: `/user/username/projects/myproject/a.js`, content: "" },
+                    { path: `/user/username/projects/myproject/b.ts`, content: "" },
+                    { path: `/user/username/projects/myproject/tsconfig.json`, content: JSON.stringify({ compilerOptions: { allowJs: true, noEmit: true } }) },
+                ],
+                { currentDirectory: "/user/username/projects/myproject" },
+            ),
         edits: [
             {
                 caption: "No change",
@@ -33,6 +38,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
-        baselineIncremental: true
+        baselineIncremental: true,
     });
 });

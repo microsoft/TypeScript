@@ -58,7 +58,7 @@ export declare const thing: {
     };
     findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
     fill: (value: number, start?: number, end?: number) => number[];
-    copyWithin: (target: number, start?: number, end?: number) => number[];
+    copyWithin: (target: number, start: number, end?: number) => number[];
     entries: () => IterableIterator<[number, number]>;
     keys: () => IterableIterator<number>;
     values: () => IterableIterator<number>;
@@ -164,7 +164,7 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): error TS2526: A 'this'
         };
         findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
         fill: (value: number, start?: number, end?: number) => number[];
-        copyWithin: (target: number, start?: number, end?: number) => number[];
+        copyWithin: (target: number, start: number, end?: number) => number[];
         entries: () => IterableIterator<[number, number]>;
         keys: () => IterableIterator<number>;
         values: () => IterableIterator<number>;

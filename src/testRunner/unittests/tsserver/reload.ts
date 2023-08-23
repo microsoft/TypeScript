@@ -17,11 +17,11 @@ describe("unittests:: tsserver:: reload", () => {
     it("should work with temp file", () => {
         const f1 = {
             path: "/a/b/app.ts",
-            content: "let x = 1"
+            content: "let x = 1",
         };
         const tmp = {
             path: "/a/b/app.tmp",
-            content: "const y = 42"
+            content: "const y = 42",
         };
         const host = createServerHost([f1, tmp]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -32,7 +32,7 @@ describe("unittests:: tsserver:: reload", () => {
         // reload from tmp file
         session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
             command: ts.server.protocol.CommandTypes.Reload,
-            arguments: { file: f1.path, tmpfile: tmp.path }
+            arguments: { file: f1.path, tmpfile: tmp.path },
         });
 
         // verify content
@@ -43,7 +43,7 @@ describe("unittests:: tsserver:: reload", () => {
         // reload from original file file
         session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
             command: ts.server.protocol.CommandTypes.Reload,
-            arguments: { file: f1.path, tmpfile: undefined! }
+            arguments: { file: f1.path, tmpfile: undefined! },
         });
 
         // verify content
@@ -55,11 +55,11 @@ describe("unittests:: tsserver:: reload", () => {
     it("should work when script info doesnt have any project open", () => {
         const f1 = {
             path: "/a/b/app.ts",
-            content: "let x = 1"
+            content: "let x = 1",
         };
         const tmp = {
             path: "/a/b/app.tmp",
-            content: "const y = 42"
+            content: "const y = 42",
         };
         const host = createServerHost([f1, tmp, libFile]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -81,7 +81,7 @@ describe("unittests:: tsserver:: reload", () => {
         // reload from temp file
         session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
             command: ts.server.protocol.CommandTypes.Reload,
-            arguments: { file: f1.path, tmpfile: tmp.path }
+            arguments: { file: f1.path, tmpfile: tmp.path },
         });
         checkScriptInfoAndProjects("contents of temp file");
         checkInferredProjectIsOrphan();
@@ -89,7 +89,7 @@ describe("unittests:: tsserver:: reload", () => {
         // reload from own file
         session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
             command: ts.server.protocol.CommandTypes.Reload,
-            arguments: { file: f1.path, tmpfile: undefined! }
+            arguments: { file: f1.path, tmpfile: undefined! },
         });
         checkScriptInfoAndProjects("contents of closed file");
         checkInferredProjectIsOrphan();
@@ -108,7 +108,7 @@ describe("unittests:: tsserver:: reload", () => {
         // reload from temp file
         session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
             command: ts.server.protocol.CommandTypes.Reload,
-            arguments: { file: f1.path, tmpfile: tmp.path }
+            arguments: { file: f1.path, tmpfile: tmp.path },
         });
         checkScriptInfoAndProjects("contents of temp file");
         assert.notStrictEqual(info.getSnapshot(), snap);
@@ -117,7 +117,7 @@ describe("unittests:: tsserver:: reload", () => {
         // reload from own file
         session.executeCommandSeq<ts.server.protocol.ReloadRequest>({
             command: ts.server.protocol.CommandTypes.Reload,
-            arguments: { file: f1.path, tmpfile: undefined! }
+            arguments: { file: f1.path, tmpfile: undefined! },
         });
         checkScriptInfoAndProjects("contents of closed file");
         assert.notStrictEqual(info.getSnapshot(), snap);

@@ -1,0 +1,77 @@
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration16_es5.ts] ////
+
+=== /types.d.ts ===
+declare class Thenable { then(): void; }
+>Thenable : Symbol(Thenable, Decl(types.d.ts, 0, 0))
+>then : Symbol(Thenable.then, Decl(types.d.ts, 0, 24))
+
+=== /a.js ===
+/**
+ * @callback T1
+ * @param {string} str
+ * @returns {string}
+ */
+
+/**
+ * @callback T2
+ * @param {string} str
+ * @returns {Promise<string>}
+ */
+
+/**
+ * @callback T3
+ * @param {string} str
+ * @returns {Thenable}
+ */
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+const f1 = async str => {
+>f1 : Symbol(f1, Decl(a.js, 22, 5))
+>str : Symbol(str, Decl(a.js, 22, 16))
+
+    return str;
+>str : Symbol(str, Decl(a.js, 22, 16))
+}
+
+/** @type {T1} */
+const f2 = async str => {
+>f2 : Symbol(f2, Decl(a.js, 27, 5))
+>str : Symbol(str, Decl(a.js, 27, 16))
+
+    return str;
+>str : Symbol(str, Decl(a.js, 27, 16))
+}
+
+/**
+ * @param {string} str
+ * @returns {Promise<string>}
+ */
+const f3 = async str => {
+>f3 : Symbol(f3, Decl(a.js, 35, 5))
+>str : Symbol(str, Decl(a.js, 35, 16))
+
+    return str;
+>str : Symbol(str, Decl(a.js, 35, 16))
+}
+
+/** @type {T2} */
+const f4 = async str => {
+>f4 : Symbol(f4, Decl(a.js, 40, 5))
+>str : Symbol(str, Decl(a.js, 40, 16))
+
+    return str;
+>str : Symbol(str, Decl(a.js, 40, 16))
+}
+
+/** @type {T3} */
+const f5 = async str => {
+>f5 : Symbol(f5, Decl(a.js, 45, 5))
+>str : Symbol(str, Decl(a.js, 45, 16))
+
+    return str;
+>str : Symbol(str, Decl(a.js, 45, 16))
+}
+

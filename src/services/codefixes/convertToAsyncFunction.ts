@@ -92,7 +92,7 @@ registerCodeFix({
     errorCodes,
     getCodeActions(context: CodeFixContext) {
         codeActionSucceeded = true;
-        const changes = textChanges.ChangeTracker.with(context, (t) => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
+        const changes = textChanges.ChangeTracker.with(context, t => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
         return codeActionSucceeded ? [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)] : [];
     },
     fixIds: [fixId],
@@ -141,8 +141,10 @@ function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: 
     let functionToConvert: FunctionLikeDeclaration | undefined;
 
     // if the parent of a FunctionLikeDeclaration is a variable declaration, the convertToAsync diagnostic will be reported on the variable name
-    if (isIdentifier(tokenAtPosition) && isVariableDeclaration(tokenAtPosition.parent) &&
-        tokenAtPosition.parent.initializer && isFunctionLikeDeclaration(tokenAtPosition.parent.initializer)) {
+    if (
+        isIdentifier(tokenAtPosition) && isVariableDeclaration(tokenAtPosition.parent) &&
+        tokenAtPosition.parent.initializer && isFunctionLikeDeclaration(tokenAtPosition.parent.initializer)
+    ) {
         functionToConvert = tokenAtPosition.parent.initializer;
     }
     else {
@@ -214,8 +216,10 @@ function getAllPromiseExpressionsToReturn(func: FunctionLikeDeclaration, checker
             setOfExpressionsToReturn.add(getNodeId(node));
             forEach(node.arguments, visit);
         }
-        else if (isPromiseReturningCallExpression(node, checker, "catch") ||
-            isPromiseReturningCallExpression(node, checker, "finally")) {
+        else if (
+            isPromiseReturningCallExpression(node, checker, "catch") ||
+            isPromiseReturningCallExpression(node, checker, "finally")
+        ) {
             setOfExpressionsToReturn.add(getNodeId(node));
             // if .catch() or .finally() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
             forEachChild(node, visit);
@@ -256,8 +260,10 @@ function getExplicitPromisedTypeOfPromiseReturningCallExpression(node: PromiseRe
     // type argument supplied for the callback. For other promise types we would need a more complex heuristic to determine
     // which type argument is safe to use as an annotation.
     const promiseType = checker.getTypeAtLocation(node.expression.expression);
-    if (isReferenceToType(promiseType, checker.getPromiseType()) ||
-        isReferenceToType(promiseType, checker.getPromiseLikeType())) {
+    if (
+        isReferenceToType(promiseType, checker.getPromiseType()) ||
+        isReferenceToType(promiseType, checker.getPromiseLikeType())
+    ) {
         if (node.expression.name.escapedText === "then") {
             if (callback === elementAt(node.arguments, 0)) {
                 // for the `onfulfilled` callback, use the first type argument
@@ -307,8 +313,8 @@ function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker:
             if (lastCallSignature && !isParameter(node.parent) && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
                 const firstParameter = firstOrUndefined(lastCallSignature.parameters);
                 const ident = firstParameter?.valueDeclaration
-                    && isParameter(firstParameter.valueDeclaration)
-                    && tryCast(firstParameter.valueDeclaration.name, isIdentifier)
+                        && isParameter(firstParameter.valueDeclaration)
+                        && tryCast(firstParameter.valueDeclaration.name, isIdentifier)
                     || factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
                 const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
                 synthNamesMap.set(symbolIdString, synthName);
@@ -344,7 +350,8 @@ function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker:
                     original.dotDotDotToken,
                     original.propertyName || original.name,
                     renameInfo,
-                    original.initializer);
+                    original.initializer,
+                );
             }
         }
         else if (isIdentifier(original)) {
@@ -472,9 +479,10 @@ function finishCatchOrFinallyTransform(node: PromiseReturningCallExpression<"the
                     getSynthesizedDeepClone(declareSynthBindingPattern(continuationArgName)),
                     /*exclamationToken*/ undefined,
                     /*type*/ undefined,
-                    varDeclIdentifier
-                )],
-                NodeFlags.Const)));
+                    varDeclIdentifier,
+                ),
+            ], NodeFlags.Const),
+        ));
     }
 
     return statements;
@@ -598,8 +606,11 @@ function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBind
                     getSynthesizedDeepClone(declareSynthBindingName(variableName)),
                     /*exclamationToken*/ undefined,
                     typeAnnotation,
-                    rightHandSide)],
-                NodeFlags.Const))];
+                    rightHandSide,
+                ),
+            ], NodeFlags.Const),
+        ),
+    ];
 }
 
 function maybeAnnotateAndReturn(expressionToReturn: Expression | undefined, typeAnnotation: TypeNode | undefined): Statement[] {
@@ -607,7 +618,7 @@ function maybeAnnotateAndReturn(expressionToReturn: Expression | undefined, type
         const name = factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
         return [
             ...createVariableOrAssignmentOrExpressionStatement(createSynthIdentifier(name), expressionToReturn, typeAnnotation),
-            factory.createReturnStatement(name)
+            factory.createReturnStatement(name),
         ];
     }
     return [factory.createReturnStatement(expressionToReturn)];
@@ -689,7 +700,7 @@ function transformCallbackArgument(func: Expression, hasContinuation: boolean, c
                         // However, branching returns in the outermost continuation are acceptable as no other continuation follows it:
                         //
                         // source                               | result
-                        //--------------------------------------|---------------------------------------
+                        // --------------------------------------|---------------------------------------
                         // function f() {                       | async function f() {
                         //     return foo().then(res => {       |     const res = await foo();
                         //       if (res.ok) {                  |     if (res.ok) {
@@ -721,7 +732,8 @@ function transformCallbackArgument(func: Expression, hasContinuation: boolean, c
                         refactoredStmts,
                         continuationArgName,
                         transformer,
-                        seenReturnStatement);
+                        seenReturnStatement,
+                    );
             }
             else {
                 const inlinedStatements = isFixablePromiseHandler(funcBody, transformer.checker) ?
@@ -781,8 +793,7 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
                     ret.push(factory.createExpressionStatement(factory.createAssignment(referenceSynthIdentifier(prevArgName), possiblyAwaitedExpression)));
                 }
                 else {
-                    ret.push(factory.createVariableStatement(/*modifiers*/ undefined,
-                        (factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, possiblyAwaitedExpression)], NodeFlags.Const))));
+                    ret.push(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, possiblyAwaitedExpression)], NodeFlags.Const)));
                 }
             }
         }
@@ -793,8 +804,7 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
 
     // if block has no return statement, need to define prevArgName as undefined to prevent undeclared variables
     if (!seenReturnStatement && prevArgName !== undefined) {
-        ret.push(factory.createVariableStatement(/*modifiers*/ undefined,
-            (factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createIdentifier("undefined"))], NodeFlags.Const))));
+        ret.push(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(declareSynthBindingName(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, factory.createIdentifier("undefined"))], NodeFlags.Const)));
     }
 
     return ret;

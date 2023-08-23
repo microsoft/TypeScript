@@ -36,7 +36,7 @@ export function createTimer(measureName: string, startMarkName: string, endMarkN
     let enterCount = 0;
     return {
         enter,
-        exit
+        exit,
     };
 
     function enter() {

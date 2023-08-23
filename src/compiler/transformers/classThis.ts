@@ -20,7 +20,7 @@ import {
     some,
     Statement,
     SyntaxKind,
-    ThisExpression
+    ThisExpression,
 } from "../_namespaces/ts";
 
 /**
@@ -52,14 +52,16 @@ export function createClassThisAssignmentBlock(factory: NodeFactory, classThis: 
 /** @internal */
 export type ClassThisAssignmentBlock = ClassStaticBlockDeclaration & {
     readonly body: Block & {
-        readonly statements: NodeArray<Statement> & readonly [
-            ExpressionStatement & {
-                readonly expression: AssignmentExpression<EqualsToken> & {
-                    readonly left: Identifier;
-                    readonly right: ThisExpression;
-                };
-            }
-        ];
+        readonly statements:
+            & NodeArray<Statement>
+            & readonly [
+                ExpressionStatement & {
+                    readonly expression: AssignmentExpression<EqualsToken> & {
+                        readonly left: Identifier;
+                        readonly right: ThisExpression;
+                    };
+                },
+            ];
     };
 };
 
@@ -99,11 +101,8 @@ export function classHasClassThisAssignment(node: ClassLikeDeclaration) {
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
  * @internal
  */
-export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T,
-    classThis: Identifier, thisExpression?: ThisExpression): Extract<ClassLikeDeclaration, Pick<T, "kind">>;
-export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T,
-    classThis: Identifier, thisExpression?: ThisExpression) {
-
+export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T, classThis: Identifier, thisExpression?: ThisExpression): Extract<ClassLikeDeclaration, Pick<T, "kind">>;
+export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaration>(factory: NodeFactory, node: T, classThis: Identifier, thisExpression?: ThisExpression) {
     // given:
     //
     //  class C {
@@ -134,14 +133,16 @@ export function injectClassThisAssignmentIfMissing<T extends ClassLikeDeclaratio
             node.name,
             node.typeParameters,
             node.heritageClauses,
-            members) :
+            members,
+        ) :
         factory.updateClassExpression(
             node,
             node.modifiers,
             node.name,
             node.typeParameters,
             node.heritageClauses,
-            members);
+            members,
+        );
 
     getOrCreateEmitNode(updatedNode).classThis = classThis;
     return updatedNode;

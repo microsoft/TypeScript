@@ -51,7 +51,7 @@ export interface ParseConfigInput {
     createHost: (baseline: string[]) => fakes.ParseConfigHost;
     jsonText: string;
     configFileName: string;
-    basePath?: string,
+    basePath?: string;
     existingOptions?: ts.CompilerOptions;
     existingWatchOptions?: ts.WatchOptions;
     baselineParsed(baseline: string[], parsed: ts.ParsedCommandLine): void;

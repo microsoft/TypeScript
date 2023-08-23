@@ -6,7 +6,7 @@
         { "path": "../compiler" },
         { "path": "../jsTyping" },
         { "path": "../services" },
-        { "path": "../deprecatedCompat" }
+        { "path": "../server" }
     ],
     "include": ["**/*"]
 }

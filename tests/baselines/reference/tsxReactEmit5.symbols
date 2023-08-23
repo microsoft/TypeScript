@@ -30,7 +30,7 @@ var foo: any;
 
 var spread1 = <div x='' {...foo} y='' />;
 >spread1 : Symbol(spread1, Decl(react-consumer.tsx, 4, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >x : Symbol(x, Decl(react-consumer.tsx, 4, 18))
 >foo : Symbol(foo, Decl(react-consumer.tsx, 3, 3))
 >y : Symbol(y, Decl(react-consumer.tsx, 4, 32))

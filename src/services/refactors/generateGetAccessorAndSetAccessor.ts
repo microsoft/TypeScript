@@ -62,5 +62,5 @@ registerRefactor(actionName, {
         }
 
         return emptyArray;
-    }
+    },
 });

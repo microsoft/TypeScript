@@ -4,12 +4,9 @@ thisTypeInFunctionsNegative.ts(49,1): error TS2684: The 'this' context of type '
 thisTypeInFunctionsNegative.ts(51,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'I'.
 thisTypeInFunctionsNegative.ts(56,21): error TS2339: Property 'notFound' does not exist on type '{ y: number; }'.
 thisTypeInFunctionsNegative.ts(59,21): error TS2339: Property 'notSpecified' does not exist on type 'void'.
-thisTypeInFunctionsNegative.ts(61,79): error TS2322: Type '{ y: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
-  Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
-thisTypeInFunctionsNegative.ts(62,97): error TS2322: Type '{ y: string; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
-  Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
-thisTypeInFunctionsNegative.ts(63,110): error TS2322: Type '{ wrongName: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
-  Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
+thisTypeInFunctionsNegative.ts(61,79): error TS2353: Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
+thisTypeInFunctionsNegative.ts(62,97): error TS2353: Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
+thisTypeInFunctionsNegative.ts(63,110): error TS2353: Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
 thisTypeInFunctionsNegative.ts(65,4): error TS2554: Expected 1 arguments, but got 0.
 thisTypeInFunctionsNegative.ts(66,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 thisTypeInFunctionsNegative.ts(67,10): error TS2554: Expected 1 arguments, but got 2.
@@ -168,16 +165,13 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
     }
     let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, explicitStructural };
                                                                                   ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ y: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
     let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number} = { y: 'foo', explicitStructural };
                                                                                                     ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ y: string; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
     let wrongPropertyName: {wrongName: number, f: (this: { y: number }, x: number) => number} = { wrongName: 12, explicitStructural };
                                                                                                                  ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ wrongName: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
     
     ok.f(); // not enough arguments
        ~~~

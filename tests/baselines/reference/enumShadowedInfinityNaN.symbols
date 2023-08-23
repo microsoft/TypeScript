@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/enums/enumShadowedInfinityNaN.ts] ////
+
+=== enumShadowedInfinityNaN.ts ===
+// https://github.com/microsoft/TypeScript/issues/54981
+
+{
+  let Infinity = {};
+>Infinity : Symbol(Infinity, Decl(enumShadowedInfinityNaN.ts, 3, 5))
+
+  enum En {
+>En : Symbol(En, Decl(enumShadowedInfinityNaN.ts, 3, 20))
+
+    X = Infinity
+>X : Symbol(En.X, Decl(enumShadowedInfinityNaN.ts, 4, 11))
+>Infinity : Symbol(Infinity, Decl(enumShadowedInfinityNaN.ts, 3, 5))
+  }
+}
+
+{
+  let NaN = {};
+>NaN : Symbol(NaN, Decl(enumShadowedInfinityNaN.ts, 10, 5))
+
+  enum En {
+>En : Symbol(En, Decl(enumShadowedInfinityNaN.ts, 10, 15))
+
+    X = NaN
+>X : Symbol(En.X, Decl(enumShadowedInfinityNaN.ts, 11, 11))
+>NaN : Symbol(NaN, Decl(enumShadowedInfinityNaN.ts, 10, 5))
+  }
+}
+

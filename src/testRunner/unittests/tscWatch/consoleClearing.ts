@@ -17,7 +17,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
     const scenario = "consoleClearing";
     const file: File = {
         path: "/f.ts",
-        content: ""
+        content: "",
     };
 
     const makeChangeToFile: TscWatchCompileChange[] = [{
@@ -43,11 +43,11 @@ describe("unittests:: tsc-watch:: console clearing", () => {
 
     describe("when preserveWatchOutput is true in config file", () => {
         const compilerOptions: ts.CompilerOptions = {
-            preserveWatchOutput: true
+            preserveWatchOutput: true,
         };
         const configFile: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({ compilerOptions })
+            content: JSON.stringify({ compilerOptions }),
         };
         const files = [file, configFile, libFile];
         it("using createWatchOfConfigFile ", () => {
@@ -65,7 +65,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
                 ...baseline,
                 getPrograms: () => [[watch.getCurrentProgram().getProgram(), watch.getCurrentProgram()]],
                 edits: makeChangeToFile,
-                watchOrSolution: watch
+                watchOrSolution: watch,
             });
         });
         verifyTscWatch({

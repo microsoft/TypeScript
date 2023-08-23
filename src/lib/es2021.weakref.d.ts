@@ -17,7 +17,7 @@ interface WeakRefConstructor {
      * In es2023 the value can be either a symbol or an object, in previous versions only object is permissible.
      * @param target The target value for the WeakRef instance.
      */
-    new<T extends WeakKey>(target: T): WeakRef<T>;
+    new <T extends WeakKey>(target: T): WeakRef<T>;
 }
 
 declare var WeakRef: WeakRefConstructor;
@@ -52,7 +52,7 @@ interface FinalizationRegistryConstructor {
      * Creates a finalization registry with an associated cleanup callback
      * @param cleanupCallback The callback to call after a value in the registry has been reclaimed.
      */
-    new<T>(cleanupCallback: (heldValue: T) => void): FinalizationRegistry<T>;
+    new <T>(cleanupCallback: (heldValue: T) => void): FinalizationRegistry<T>;
 }
 
 declare var FinalizationRegistry: FinalizationRegistryConstructor;

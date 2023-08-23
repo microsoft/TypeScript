@@ -1,4 +1,6 @@
-import { LanguageServiceMode } from "./_namespaces/ts";
+import {
+    LanguageServiceMode,
+} from "./_namespaces/ts";
 import {
     Logger,
     LogLevel,

@@ -41,7 +41,7 @@ export interface PerformanceObserverEntryList {
 /** @internal */
 export interface PerformanceObserver {
     disconnect(): void;
-    observe(options: { entryTypes: readonly ("mark" | "measure")[] }): void;
+    observe(options: { entryTypes: readonly ("mark" | "measure")[]; }): void;
 }
 
 /** @internal */
@@ -66,16 +66,18 @@ function hasRequiredAPI(performance: Performance | undefined, PerformanceObserve
 }
 
 function tryGetWebPerformanceHooks(): PerformanceHooks | undefined {
-    if (typeof performance === "object" &&
+    if (
+        typeof performance === "object" &&
         typeof PerformanceObserver === "function" &&
-        hasRequiredAPI(performance, PerformanceObserver)) {
+        hasRequiredAPI(performance, PerformanceObserver)
+    ) {
         return {
             // For now we always write native performance events when running in the browser. We may
             // make this conditional in the future if we find that native web performance hooks
             // in the browser also slow down compilation.
             shouldWriteNativeEvents: true,
             performance,
-            PerformanceObserver
+            PerformanceObserver,
         };
     }
 }
@@ -89,7 +91,7 @@ function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
                     // By default, only write native events when generating a cpu profile or using the v8 profiler.
                     shouldWriteNativeEvents: false,
                     performance,
-                    PerformanceObserver
+                    PerformanceObserver,
                 };
             }
         }
@@ -114,7 +116,6 @@ export function tryGetNativePerformanceHooks() {
  *
  * @internal
  */
-export const timestamp =
-    nativePerformance ? () => nativePerformance.now() :
+export const timestamp = nativePerformance ? () => nativePerformance.now() :
     Date.now ? Date.now :
     () => +(new Date());

@@ -9,7 +9,10 @@ import {
     openFilesForSession,
     toExternalFiles,
 } from "../helpers/tsserver";
-import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: project telemetry", () => {
     it("does nothing for inferred project", () => {
@@ -17,7 +20,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const host = createServerHost([file]);
         const session = createSession(host, {
             canUseEvents: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([file], session);
         baselineTsserverLogs("telemetry", "does nothing for inferred project", session);
@@ -31,7 +34,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const host = createServerHost([file, file2, tsconfig]);
         const session = createSession(host, {
             canUseEvents: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([file], session);
         closeFilesForSession([file], session);
@@ -49,7 +52,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const host = createServerHost([...files, notIncludedFile, tsconfig]);
         const session = createSession(host, {
             canUseEvents: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([files[0]], session);
         baselineTsserverLogs("telemetry", "counts files by extension", session);
@@ -60,7 +63,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const host = createServerHost([file1]);
         const session = createSession(host, {
             canUseEvents: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         const compilerOptions: ts.server.protocol.CompilerOptions = { strict: true };
 
@@ -73,7 +76,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
 
         session.executeCommandSeq<ts.server.protocol.CloseExternalProjectRequest>({
             command: ts.server.protocol.CommandTypes.CloseExternalProject,
-            arguments: { projectFileName }
+            arguments: { projectFileName },
         });
 
         open();
@@ -128,7 +131,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const host = createServerHost([file, tsconfig]);
         const session = createSession(host, {
             canUseEvents: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([file], session);
         baselineTsserverLogs("telemetry", "does not expose paths", session);
@@ -147,7 +150,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const host = createServerHost([file, tsconfig]);
         const session = createSession(host, {
             canUseEvents: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([file], session);
         baselineTsserverLogs("telemetry", "sends telemetry for extends, files, include, exclude, and compileOnSave", session);
@@ -159,7 +162,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         allowSyntheticDefaultImports: true,
         maxNodeModuleJsDepth: 2,
         skipLibCheck: true,
-        noEmit: true
+        noEmit: true,
     };
 
     it("sends telemetry for typeAcquisition settings", () => {
@@ -175,7 +178,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const host = createServerHost([file, jsconfig]);
         const session = createSession(host, {
             canUseEvents: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([file], session);
         baselineTsserverLogs("telemetry", "sends telemetry for typeAcquisition settings", session);
@@ -185,12 +188,12 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const jsFile = makeFile("/a.js", "1");
         const tsFile = makeFile("/b.ts", "12");
         const tsconfig = makeFile("/jsconfig.json", {
-            compilerOptions: autoJsCompilerOptions
+            compilerOptions: autoJsCompilerOptions,
         });
         const host = createServerHost([tsconfig, tsFile, jsFile]);
         const session = createSession(host, {
             canUseEvents: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([jsFile], session);
         baselineTsserverLogs("telemetry", "sends telemetry for file sizes", session);
@@ -202,7 +205,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const host = createServerHost([tsconfig, file]);
         const session = createSession(host, {
             canUseEvents: true,
-            logger: createLoggerWithInMemoryLogs(host)
+            logger: createLoggerWithInMemoryLogs(host),
         });
         const fileSize = ts.server.maxProgramSizeForNonTsFiles + 1;
         host.getFileSize = () => fileSize;
@@ -217,7 +220,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
             const host = createServerHost([ajs, bjs]);
             const session = createSession(host, {
                 canUseEvents: true,
-                logger: createLoggerWithInMemoryLogs(host)
+                logger: createLoggerWithInMemoryLogs(host),
             });
             openFilesForSession([ajs, bjs], session);
 
@@ -231,7 +234,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
             const host = createServerHost([ats]);
             const session = createSession(host, {
                 canUseEvents: true,
-                logger: createLoggerWithInMemoryLogs(host)
+                logger: createLoggerWithInMemoryLogs(host),
             });
             openFilesForSession([ats], session);
             baselineTsserverLogs("telemetry", "not for ts file", session);
@@ -244,7 +247,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
             const host = createServerHost([jsconfig, file]);
             const session = createSession(host, {
                 canUseEvents: true,
-                logger: createLoggerWithInMemoryLogs(host)
+                logger: createLoggerWithInMemoryLogs(host),
             });
             openFilesForSession([file], session);
             baselineTsserverLogs("telemetry", "even for project with ts-check in config", session);

@@ -21,7 +21,7 @@ registerCodeFix({
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
                 factory.createNamedExports([]),
-                /*moduleSpecifier*/ undefined
+                /*moduleSpecifier*/ undefined,
             );
             changes.insertNodeAtEndOfScope(sourceFile, sourceFile, exportDeclaration);
         });

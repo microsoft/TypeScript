@@ -1,0 +1,31 @@
+indexedAccessConstraints.ts(2,9): error TS2322: Type 'T[keyof T]' is not assignable to type 'number'.
+  Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'number'.
+    Type 'T[string]' is not assignable to type 'number'.
+
+
+==== indexedAccessConstraints.ts (1 errors) ====
+    function foo<T extends object>(a: T[keyof T]) {
+        let b: number = a;  // Error
+            ~
+!!! error TS2322: Type 'T[keyof T]' is not assignable to type 'number'.
+!!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'number'.
+!!! error TS2322:     Type 'T[string]' is not assignable to type 'number'.
+    }
+    
+    // Repro from #54522
+    
+    export function methodFnLength<T extends {}, K extends keyof T>(obj: T, methodKey: K): number {
+        const fn = obj[methodKey];
+        if (typeof fn !== 'function') {
+            return 0;
+        }
+        return fn.length;
+    }
+    
+    // Repro from #54837
+    
+    function getField<T extends object>(x: T | null, k: keyof T) {
+        const result = x ? x[k] : null;
+        return result;  // T[keyof T] | null
+    }
+    

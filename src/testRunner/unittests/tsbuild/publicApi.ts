@@ -11,7 +11,9 @@ import {
     TscCompileSystem,
     verifyTscBaseline,
 } from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
+import {
+    loadProjectFromFiles,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;
@@ -20,9 +22,9 @@ describe("unittests:: tsbuild:: Public API with custom transformers when passed 
             "/src/tsconfig.json": JSON.stringify({
                 references: [
                     { path: "./shared/tsconfig.json" },
-                    { path: "./webpack/tsconfig.json" }
+                    { path: "./webpack/tsconfig.json" },
                 ],
-                files: []
+                files: [],
             }),
             "/src/shared/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true },
@@ -36,7 +38,7 @@ export function f2() { } // trailing`,
                 compilerOptions: {
                     composite: true,
                 },
-                references: [{ path: "../shared/tsconfig.json" }]
+                references: [{ path: "../shared/tsconfig.json" }],
             }),
             "/src/webpack/index.ts": `export function f2() { }
 export class c2 { }
@@ -63,10 +65,10 @@ export function f22() { } // trailing`,
         const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
         const buildHost = ts.createSolutionBuilderHost(
             sys,
-                /*createProgram*/ undefined,
+            /*createProgram*/ undefined,
             ts.createDiagnosticReporter(sys, /*pretty*/ true),
             ts.createBuilderStatusReporter(sys, /*pretty*/ true),
-            (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
+            (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)),
         );
         buildHost.afterProgramEmitAndDiagnostics = cb;
         buildHost.afterEmitBundle = cb;
@@ -89,7 +91,7 @@ ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 Output::
 ${sys.output.join("")}
 
-${patch ? vfs.formatPatch(patch) : ""}`
+${patch ? vfs.formatPatch(patch) : ""}`,
             };
         };
 

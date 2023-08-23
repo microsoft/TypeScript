@@ -29,7 +29,7 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
         return {
             isCancellationRequested: () => false,
             setRequest: (_requestId: number): void => void 0,
-            resetRequest: (_requestId: number): void => void 0
+            resetRequest: (_requestId: number): void => void 0,
         };
     }
     // cancellationPipeName is a string without '*' inside that can optionally end with '*'
@@ -55,14 +55,14 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
                     throw new Error(`Mismatched request id, expected ${currentRequestId}, actual ${requestId}`);
                 }
                 perRequestPipeName = undefined;
-            }
+            },
         };
     }
     else {
         return {
             isCancellationRequested: () => pipeExists(cancellationPipeName!), // TODO: GH#18217
             setRequest: (_requestId: number): void => void 0,
-            resetRequest: (_requestId: number): void => void 0
+            resetRequest: (_requestId: number): void => void 0,
         };
     }
 }

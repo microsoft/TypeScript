@@ -8,15 +8,15 @@ const parsed = minimist(process.argv.slice(2), {
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         /* eslint-disable quote-props */
-        "b": "browser",
-        "i": ["inspect", "inspect-brk", "break", "debug", "debug-brk"],
-        "t": ["tests", "test"],
-        "ru": ["runners", "runner"],
-        "r": "reporter",
-        "c": ["colors", "color"],
-        "skippercent": "skipPercent",
-        "w": "workers",
-        "f": "fix"
+        b: "browser",
+        i: ["inspect", "inspect-brk", "break", "debug", "debug-brk"],
+        t: ["tests", "test"],
+        ru: ["runners", "runner"],
+        r: "reporter",
+        c: ["colors", "color"],
+        skippercent: "skipPercent",
+        w: "workers",
+        f: "fix",
         /* eslint-enable quote-props */
     },
     default: {
@@ -43,7 +43,7 @@ const parsed = minimist(process.argv.slice(2), {
         typecheck: true,
         lint: true,
         coverage: false,
-    }
+    },
 });
 
 /** @type {CommandLineOptions} */
@@ -58,8 +58,6 @@ if (!options.bundle && !options.typecheck) {
 }
 
 export default options;
-
-
 
 /**
  * @typedef CommandLineOptions

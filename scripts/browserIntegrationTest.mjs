@@ -1,6 +1,10 @@
 import chalk from "chalk";
-import { readFileSync } from "fs";
-import { join } from "path";
+import {
+    readFileSync,
+} from "fs";
+import {
+    join,
+} from "path";
 
 let playwright;
 try {

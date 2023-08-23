@@ -1,0 +1,22 @@
+initializationOrdering1.ts(11,16): error TS2729: Property 'facade' is used before its initialization.
+
+
+==== initializationOrdering1.ts (1 errors) ====
+    class Helper {
+        create(): boolean {
+            return true
+        }
+    }
+    
+    export class Broken {
+        constructor(readonly facade: Helper) {
+            console.log(this.bug)
+        }
+        bug = this.facade.create()
+                   ~~~~~~
+!!! error TS2729: Property 'facade' is used before its initialization.
+!!! related TS2728 initializationOrdering1.ts:8:17: 'facade' is declared here.
+    
+    }
+    
+    new Broken(new Helper)

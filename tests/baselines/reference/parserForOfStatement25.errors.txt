@@ -1,0 +1,11 @@
+parserForOfStatement25.ts(4,11): error TS2339: Property 'x' does not exist on type '{}'.
+
+
+==== parserForOfStatement25.ts (1 errors) ====
+    // repro from https://github.com/microsoft/TypeScript/issues/54769
+    
+    for (let [x = 'a' in {}] of [[]]) console.log(x)
+    for (let {x = 'a' in {}} of [{}]) console.log(x)
+              ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+    

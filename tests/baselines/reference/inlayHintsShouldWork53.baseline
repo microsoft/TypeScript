@@ -1,8 +1,0 @@
-fn(/* nobody knows exactly what this param is */ 42);
-                                                 ^
-{
-  "text": "x:",
-  "position": 76,
-  "kind": "Parameter",
-  "whitespaceAfter": true
-}

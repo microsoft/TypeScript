@@ -487,3 +487,28 @@ export abstract class BB {
     }
 }
 
+// repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
+function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
+>conversionTest : Symbol(conversionTest, Decl(templateLiteralTypesPatterns.ts, 200, 1))
+>groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 203, 24))
+
+conversionTest("testDowncast");
+>conversionTest : Symbol(conversionTest, Decl(templateLiteralTypesPatterns.ts, 200, 1))
+
+function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
+>conversionTest2 : Symbol(conversionTest2, Decl(templateLiteralTypesPatterns.ts, 204, 31))
+>groupName : Symbol(groupName, Decl(templateLiteralTypesPatterns.ts, 205, 25))
+
+conversionTest2("testDowncast");
+>conversionTest2 : Symbol(conversionTest2, Decl(templateLiteralTypesPatterns.ts, 204, 31))
+
+function foo(str: `${`a${string}` & `${string}a`}Test`) {}
+>foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 206, 32))
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 208, 13))
+
+foo("abaTest"); // ok
+>foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 206, 32))
+
+foo("abcTest"); // error
+>foo : Symbol(foo, Decl(templateLiteralTypesPatterns.ts, 206, 32))
+

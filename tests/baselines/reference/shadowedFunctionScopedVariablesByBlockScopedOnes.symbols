@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/shadowedFunctionScopedVariablesByBlockScopedOnes.ts] ////
+
+=== shadowedFunctionScopedVariablesByBlockScopedOnes.ts ===
+// https://github.com/microsoft/TypeScript/issues/2185
+
+function test1() {
+>test1 : Symbol(test1, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 0, 0))
+
+    for (let v; ; ) { var v; }
+>v : Symbol(v, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 3, 12))
+>v : Symbol(v, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 3, 25))
+}
+function test2() {
+>test2 : Symbol(test2, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 4, 1))
+
+    for (let v in []) { var v; }
+>v : Symbol(v, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 6, 12))
+>v : Symbol(v, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 6, 27))
+}
+function test3() {
+>test3 : Symbol(test3, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 7, 1))
+
+    for (let v of []) { var v; }
+>v : Symbol(v, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 9, 12))
+>v : Symbol(v, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 9, 27))
+}
+function test4() {
+>test4 : Symbol(test4, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 10, 1))
+    {
+        let x;
+>x : Symbol(x, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 13, 11))
+        {
+            var x;
+>x : Symbol(x, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 15, 15))
+        }
+    }
+}
+function test5() {
+>test5 : Symbol(test5, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 18, 1))
+    {
+        {
+            var x;
+>x : Symbol(x, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 22, 15))
+        }
+        let x;
+>x : Symbol(x, Decl(shadowedFunctionScopedVariablesByBlockScopedOnes.ts, 24, 11))
+    }
+}
+
+
+

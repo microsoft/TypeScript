@@ -252,10 +252,14 @@ export function start() {
      */
     function validateHostMessage(message: ParallelHostMessage) {
         switch (message.type) {
-            case "test": return validateTest(message.payload);
-            case "batch": return validateBatch(message.payload);
-            case "close": return true;
-            default: return false;
+            case "test":
+                return validateTest(message.payload);
+            case "batch":
+                return validateBatch(message.payload);
+            case "close":
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -280,9 +284,12 @@ export function start() {
         }
 
         switch (message.type) {
-            case "test": return processTest(message.payload, /*last*/ true);
-            case "batch": return processBatch(message.payload);
-            case "close": return process.exit(0);
+            case "test":
+                return processTest(message.payload, /*last*/ true);
+            case "batch":
+                return processBatch(message.payload);
+            case "close":
+                return process.exit(0);
         }
     }
 

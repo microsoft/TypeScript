@@ -1,4 +1,3 @@
-
 const MAX_UNICODE_CODEPOINT = 0x10FFFF;
 /** @type {(c: string) => boolean} */
 const isStart = c => /[\p{ID_Start}\u{2118}\u{212E}\u{309B}\u{309C}]/u.test(c); // Other_ID_Start explicitly included for back compat - see http://www.unicode.org/reports/tr31/#Introduction

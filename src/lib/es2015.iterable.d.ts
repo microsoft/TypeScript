@@ -137,11 +137,11 @@ interface ReadonlyMap<K, V> {
 }
 
 interface MapConstructor {
-    new(): Map<any, any>;
+    new (): Map<any, any>;
     new <K, V>(iterable?: Iterable<readonly [K, V]> | null): Map<K, V>;
 }
 
-interface WeakMap<K extends WeakKey, V> { }
+interface WeakMap<K extends WeakKey, V> {}
 
 interface WeakMapConstructor {
     new <K extends WeakKey, V>(iterable: Iterable<readonly [K, V]>): WeakMap<K, V>;
@@ -189,13 +189,13 @@ interface SetConstructor {
     new <T>(iterable?: Iterable<T> | null): Set<T>;
 }
 
-interface WeakSet<T extends WeakKey> { }
+interface WeakSet<T extends WeakKey> {}
 
 interface WeakSetConstructor {
     new <T extends WeakKey = WeakKey>(iterable: Iterable<T>): WeakSet<T>;
 }
 
-interface Promise<T> { }
+interface Promise<T> {}
 
 interface PromiseConstructor {
     /**
@@ -296,7 +296,6 @@ interface Uint8ClampedArray {
 
 interface Uint8ClampedArrayConstructor {
     new (elements: Iterable<number>): Uint8ClampedArray;
-
 
     /**
      * Creates an array from an array-like or iterable object.

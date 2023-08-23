@@ -1,15 +1,23 @@
-import { protocol } from "../../_namespaces/ts.server";
+import {
+    protocol,
+} from "../../_namespaces/ts.server";
 
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession } from "../helpers/tsserver";
-import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: services:: findAllReferences", () => {
     it("does not try to open a file in a project that was updated and no longer has the file", () => {
         const files: File[] = [
             {
                 path: "/packages/babel-loader/tsconfig.json",
-                content:
-`
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -23,19 +31,17 @@ describe("unittests:: services:: findAllReferences", () => {
     "include": ["src"],
     "references": [{"path": "../core"}]
 }
-`
+`,
             },
             {
                 path: "/packages/babel-loader/src/index.ts",
-                content:
-`
+                content: `
 import type { Foo } from "../../core/src/index.js";
-`
+`,
             },
             {
                 path: "/packages/core/tsconfig.json",
-                content:
-`
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -48,30 +54,28 @@ import type { Foo } from "../../core/src/index.js";
     },
     "include": ["./src"]
 }
-`
+`,
             },
             {
                 path: "/packages/core/src/index.ts",
-                content:
-`
+                content: `
 import { Bar } from "./loading-indicator.js";
 export type Foo = {};
 const bar: Bar = {
     prop: 0
 }
-`
+`,
             },
             {
                 path: "/packages/core/src/loading-indicator.ts",
-                content:
-`
+                content: `
 export interface Bar {
     prop: number;
 }
 const bar: Bar = {
     prop: 1
 }
-`
+`,
             },
         ];
         const host = createServerHost(files);
@@ -84,9 +88,9 @@ const bar: Bar = {
                     {
                         file: files[1].path, // babel-loader/src/index.ts
                         fileContent: files[1].content,
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         });
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,
@@ -95,9 +99,9 @@ const bar: Bar = {
                     {
                         file: files[3].path, // core/src/index.ts
                         fileContent: files[3].content,
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         });
         // Now change `babel-loader` project to no longer import `core` project
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
@@ -110,18 +114,18 @@ const bar: Bar = {
                             {
                                 start: {
                                     line: 1,
-                                    offset: 26
+                                    offset: 26,
                                 },
                                 end: {
                                     line: 1,
-                                    offset: 26
+                                    offset: 26,
                                 },
                                 newText: "// comment",
-                            }
-                        ]
-                    }
-                ]
-            }
+                            },
+                        ],
+                    },
+                ],
+            },
         });
         const loadingIndicatorScriptInfo = session.getProjectService().getScriptInfo(files[3].path)!;
         // At this point, we haven't updated `babel-loader` project yet,
@@ -133,9 +137,9 @@ const bar: Bar = {
             command: protocol.CommandTypes.References,
             arguments: {
                 file: files[3].path, // core/src/index.ts
-                line: 5,             // `prop`
+                line: 5, // `prop`
                 offset: 5,
-            }
+            },
         });
         baselineTsserverLogs("findAllReferences", "does not try to open a file in a project that was updated and no longer has the file", session);
     });

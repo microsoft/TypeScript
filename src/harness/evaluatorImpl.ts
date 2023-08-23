@@ -33,23 +33,26 @@ for (const symbolName of symbolNames) {
     }
 }
 
-export function evaluateTypeScript(source: string | { files: vfs.FileSet, rootFiles: string[], main: string }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
+export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
     if (typeof source === "string") source = { files: { [sourceFile]: source }, rootFiles: [sourceFile], main: sourceFile };
     const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { files: source.files });
     const compilerOptions: ts.CompilerOptions = {
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
         lib: ["lib.esnext.d.ts", "lib.dom.d.ts"],
-        ...options
+        ...options,
     };
     const host = new fakes.CompilerHost(fs, compilerOptions);
     const result = compiler.compileFiles(host, source.rootFiles, compilerOptions);
     if (ts.some(result.diagnostics)) {
-        assert.ok(/*value*/ false, "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
-            getCanonicalFileName: file => file,
-            getCurrentDirectory: () => "",
-            getNewLine: () => "\n"
-        }));
+        assert.ok(
+            /*value*/ false,
+            "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
+                getCanonicalFileName: file => file,
+                getCurrentDirectory: () => "",
+                getNewLine: () => "\n",
+            }),
+        );
     }
 
     const output = result.getOutput(source.main, "js")!;
@@ -256,7 +259,7 @@ class SystemLoader extends Loader<SystemModule> {
             dependers: [],
             setters: [],
             hasExports: false,
-            state: SystemModuleState.Uninstantiated
+            state: SystemModuleState.Uninstantiated,
         };
     }
 
@@ -294,7 +297,7 @@ class SystemLoader extends Loader<SystemModule> {
             }
         }
         const localSystem: SystemGlobal = {
-            register: (dependencies, declare) => this.instantiateModule(module, dependencies, declare)
+            register: (dependencies, declare) => this.instantiateModule(module, dependencies, declare),
         };
         const evaluateText = `(function (System, ${globalNames.join(", ")}) { ${text}\n})`;
         try {
@@ -330,10 +333,12 @@ class SystemLoader extends Loader<SystemModule> {
         }
 
         const context: SystemModuleContext = {
-            import: (_id) => { throw new Error("Dynamic import not implemented."); },
+            import: _id => {
+                throw new Error("Dynamic import not implemented.");
+            },
             meta: {
-                url: ts.isUrl(module.file) ? module.file : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`
-            }
+                url: ts.isUrl(module.file) ? module.file : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`,
+            },
         };
 
         module.requestedDependencies = dependencies;

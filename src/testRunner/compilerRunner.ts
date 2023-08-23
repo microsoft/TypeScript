@@ -263,7 +263,7 @@ class CompilerTest {
             this.harnessSettings,
             /*options*/ tsConfigOptions,
             /*currentDirectory*/ this.harnessSettings.currentDirectory,
-            testCaseContent.symlinks
+            testCaseContent.symlinks,
         );
 
         this.options = this.result.options;
@@ -283,13 +283,13 @@ class CompilerTest {
             this.configuredName,
             this.tsConfigFiles.concat(this.toBeCompiled, this.otherFiles),
             this.result.diagnostics,
-            !!this.options.pretty);
+            !!this.options.pretty,
+        );
     }
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
-            Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"),
-                JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4));
+            Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"), JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4));
         }
     }
 
@@ -314,7 +314,8 @@ class CompilerTest {
                 this.tsConfigFiles,
                 this.toBeCompiled,
                 this.otherFiles,
-                this.harnessSettings);
+                this.harnessSettings,
+            );
         }
     }
 
@@ -323,7 +324,8 @@ class CompilerTest {
             this.configuredName,
             this.options,
             this.result,
-            this.harnessSettings);
+            this.harnessSettings,
+        );
     }
 
     public verifyTypesAndSymbols() {
@@ -331,8 +333,7 @@ class CompilerTest {
             return;
         }
 
-        const noTypesAndSymbols =
-            this.harnessSettings.noTypesAndSymbols &&
+        const noTypesAndSymbols = this.harnessSettings.noTypesAndSymbols &&
             this.harnessSettings.noTypesAndSymbols.toLowerCase() === "true";
         if (noTypesAndSymbols) {
             return;
@@ -347,7 +348,7 @@ class CompilerTest {
             /*multifile*/ undefined,
             /*skipTypeBaselines*/ undefined,
             /*skipSymbolBaselines*/ undefined,
-            !!ts.length(this.result.diagnostics)
+            !!ts.length(this.result.diagnostics),
         );
     }
 
@@ -355,7 +356,7 @@ class CompilerTest {
         return {
             unitName: unit.name,
             content: unit.content,
-            fileOptions: unit.fileOptions
+            fileOptions: unit.fileOptions,
         };
     }
 }

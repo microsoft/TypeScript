@@ -109,9 +109,8 @@ import * as Debug from "../compiler/debug";
 
 /** @internal */
 export type NamedExpression =
-    | ClassExpression & { name: Identifier }
-    | FunctionExpression & { name: Identifier }
-    ;
+    | ClassExpression & { name: Identifier; }
+    | FunctionExpression & { name: Identifier; };
 
 /** Indictates whether a node is named function or class expression. */
 function isNamedExpression(node: Node): node is NamedExpression {
@@ -120,10 +119,9 @@ function isNamedExpression(node: Node): node is NamedExpression {
 
 /** @internal */
 export type ConstNamedExpression =
-    | ClassExpression & { name: undefined, parent: VariableDeclaration & { name: Identifier } }
-    | FunctionExpression & { name: undefined, parent: VariableDeclaration & { name: Identifier } }
-    | ArrowFunction & { name: undefined, parent: VariableDeclaration & { name: Identifier } }
-    ;
+    | ClassExpression & { name: undefined; parent: VariableDeclaration & { name: Identifier; }; }
+    | FunctionExpression & { name: undefined; parent: VariableDeclaration & { name: Identifier; }; }
+    | ArrowFunction & { name: undefined; parent: VariableDeclaration & { name: Identifier; }; };
 
 /** Indicates whether a node is a function, arrow, or class expression assigned to a constant variable. */
 function isConstNamedExpression(node: Node): node is ConstNamedExpression {
@@ -137,7 +135,7 @@ function isConstNamedExpression(node: Node): node is ConstNamedExpression {
 /** @internal */
 export type CallHierarchyDeclaration =
     | SourceFile
-    | ModuleDeclaration & { name: Identifier }
+    | ModuleDeclaration & { name: Identifier; }
     | FunctionDeclaration
     | ClassDeclaration
     | ClassStaticBlockDeclaration
@@ -145,8 +143,7 @@ export type CallHierarchyDeclaration =
     | GetAccessorDeclaration
     | SetAccessorDeclaration
     | NamedExpression
-    | ConstNamedExpression
-    ;
+    | ConstNamedExpression;
 
 /**
  * Indicates whether a node could possibly be a call hierarchy declaration.
@@ -205,7 +202,7 @@ function getSymbolOfCallHierarchyDeclaration(typeChecker: TypeChecker, node: Exc
 }
 
 /** Gets the text and range for the name of a call hierarchy declaration. */
-function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclaration): { text: string, pos: number, end: number } {
+function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclaration): { text: string; pos: number; end: number; } {
     if (isSourceFile(node)) {
         return { text: node.fileName, pos: 0, end: 0 };
     }
@@ -230,11 +227,10 @@ function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclarati
     const declName = isConstNamedExpression(node) ? node.parent.name :
         Debug.checkDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
 
-    let text =
-        isIdentifier(declName) ? idText(declName) :
+    let text = isIdentifier(declName) ? idText(declName) :
         isStringOrNumericLiteralLike(declName) ? declName.text :
         isComputedPropertyName(declName) ?
-            isStringOrNumericLiteralLike(declName.expression) ? declName.expression.text :
+        isStringOrNumericLiteralLike(declName.expression) ? declName.expression.text :
             undefined :
         undefined;
     if (text === undefined) {
@@ -433,12 +429,14 @@ interface CallSite {
 function convertEntryToCallSite(entry: FindAllReferences.Entry): CallSite | undefined {
     if (entry.kind === FindAllReferences.EntryKind.Node) {
         const { node } = entry;
-        if (isCallOrNewExpressionTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+        if (
+            isCallOrNewExpressionTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
             || isTaggedTemplateTag(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
             || isDecoratorTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
             || isJsxOpeningLikeElementTagName(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
             || isRightSideOfPropertyAccess(node)
-            || isArgumentExpressionOfElementAccess(node)) {
+            || isArgumentExpressionOfElementAccess(node)
+        ) {
             const sourceFile = node.getSourceFile();
             const ancestor = findAncestor(node, isValidCallHierarchyDeclaration) || sourceFile;
             return { declaration: ancestor, range: createTextRangeFromNode(node, sourceFile) };
@@ -475,8 +473,7 @@ export function getIncomingCalls(program: Program, declaration: CallHierarchyDec
 
 function createCallSiteCollector(program: Program, callSites: CallSite[]): (node: Node | undefined) => void {
     function recordCallSite(node: CallExpression | NewExpression | TaggedTemplateExpression | PropertyAccessExpression | ElementAccessExpression | Decorator | JsxOpeningLikeElement | ClassStaticBlockDeclaration) {
-        const target =
-            isTaggedTemplateExpression(node) ? node.tag :
+        const target = isTaggedTemplateExpression(node) ? node.tag :
             isJsxOpeningLikeElement(node) ? node.tagName :
             isAccessExpression(node) ? node :
             isClassStaticBlockDeclaration(node) ? node :

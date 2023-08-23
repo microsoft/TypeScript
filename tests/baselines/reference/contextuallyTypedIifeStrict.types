@@ -89,7 +89,7 @@
 >k : undefined
 >1 : 1
 
-((l, o?) => l + o)(12); // o should be any
+((l, o?) => l + o)(12);
 >((l, o?) => l + o)(12) : any
 >((l, o?) => l + o) : (l: number, o?: undefined) => any
 >(l, o?) => l + o : (l: number, o?: undefined) => any

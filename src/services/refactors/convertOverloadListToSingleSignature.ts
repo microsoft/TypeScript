@@ -39,7 +39,9 @@ import {
     textChanges,
     TupleTypeNode,
 } from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 import * as Debug from "../../compiler/debug";
 
@@ -54,7 +56,7 @@ const functionOverloadAction = {
 registerRefactor(refactorName, {
     kinds: [functionOverloadAction.kind],
     getEditsForAction: getRefactorEditsToConvertOverloadsToOneSignature,
-    getAvailableActions: getRefactorActionsToConvertOverloadsToOneSignature
+    getAvailableActions: getRefactorActionsToConvertOverloadsToOneSignature,
 });
 
 function getRefactorActionsToConvertOverloadsToOneSignature(context: RefactorContext): readonly ApplicableRefactorInfo[] {
@@ -65,7 +67,7 @@ function getRefactorActionsToConvertOverloadsToOneSignature(context: RefactorCon
     return [{
         name: refactorName,
         description: refactorDescription,
-        actions: [functionOverloadAction]
+        actions: [functionOverloadAction],
     }];
 }
 
@@ -101,7 +103,7 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
                 lastDeclaration.typeParameters,
                 getNewParametersForCombinedSignature(signatureDecls),
                 lastDeclaration.type,
-                lastDeclaration.body
+                lastDeclaration.body,
             );
             break;
         }
@@ -119,7 +121,7 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
                 lastDeclaration,
                 lastDeclaration.modifiers,
                 getNewParametersForCombinedSignature(signatureDecls),
-                lastDeclaration.body
+                lastDeclaration.body,
             );
             break;
         }
@@ -141,11 +143,12 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
                 lastDeclaration.typeParameters,
                 getNewParametersForCombinedSignature(signatureDecls),
                 lastDeclaration.type,
-                lastDeclaration.body
+                lastDeclaration.body,
             );
             break;
         }
-        default: return Debug.failBadSyntaxKind(lastDeclaration, "Unhandled signature kind in overload list conversion refactoring");
+        default:
+            return Debug.failBadSyntaxKind(lastDeclaration, "Unhandled signature kind in overload list conversion refactoring");
     }
 
     if (updated === lastDeclaration) {
@@ -170,8 +173,8 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
                 factory.createToken(SyntaxKind.DotDotDotToken),
                 "args",
                 /*questionToken*/ undefined,
-                factory.createUnionTypeNode(map(signatureDeclarations, convertSignatureParametersToTuple))
-            )
+                factory.createUnionTypeNode(map(signatureDeclarations, convertSignatureParametersToTuple)),
+            ),
         ]);
     }
 
@@ -182,12 +185,15 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
 
     function convertParameterToNamedTupleMember(p: ParameterDeclaration): NamedTupleMember {
         Debug.assert(isIdentifier(p.name)); // This is checked during refactoring applicability checking
-        const result = setTextRange(factory.createNamedTupleMember(
-            p.dotDotDotToken,
-            p.name,
-            p.questionToken,
-            p.type || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
-        ), p);
+        const result = setTextRange(
+            factory.createNamedTupleMember(
+                p.dotDotDotToken,
+                p.name,
+                p.questionToken,
+                p.type || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+            ),
+            p,
+        );
         const parameterDocComment = p.symbol && p.symbol.getDocumentationComment(checker);
         if (parameterDocComment) {
             const newComment = displayPartsToString(parameterDocComment);
@@ -206,7 +212,6 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
         }
         return result;
     }
-
 }
 
 function isConvertableSignatureDeclaration(d: Node): d is MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration {

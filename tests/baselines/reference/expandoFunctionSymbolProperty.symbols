@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/expandoFunctionSymbolProperty.ts] ////
+
+=== expandoFunctionSymbolProperty.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54220
+
+const symb = Symbol();
+>symb : Symbol(symb, Decl(expandoFunctionSymbolProperty.ts, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+interface TestSymb {
+>TestSymb : Symbol(TestSymb, Decl(expandoFunctionSymbolProperty.ts, 2, 22))
+
+  (): void;
+  readonly [symb]: boolean;
+>[symb] : Symbol(TestSymb[symb], Decl(expandoFunctionSymbolProperty.ts, 5, 11))
+>symb : Symbol(symb, Decl(expandoFunctionSymbolProperty.ts, 2, 5))
+}
+
+export function test(): TestSymb {
+>test : Symbol(test, Decl(expandoFunctionSymbolProperty.ts, 7, 1))
+>TestSymb : Symbol(TestSymb, Decl(expandoFunctionSymbolProperty.ts, 2, 22))
+
+  function inner() {}
+>inner : Symbol(inner, Decl(expandoFunctionSymbolProperty.ts, 9, 34))
+
+  inner[symb] = true;
+>inner : Symbol(inner, Decl(expandoFunctionSymbolProperty.ts, 9, 34))
+>symb : Symbol(symb, Decl(expandoFunctionSymbolProperty.ts, 2, 5))
+
+  return inner;
+>inner : Symbol(inner, Decl(expandoFunctionSymbolProperty.ts, 9, 34))
+}
+

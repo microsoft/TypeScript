@@ -1,6 +1,8 @@
 import * as evaluator from "../../_namespaces/evaluator";
 import * as ts from "../../_namespaces/ts";
-import { ScriptTarget } from "../../_namespaces/ts";
+import {
+    ScriptTarget,
+} from "../../_namespaces/ts";
 
 describe("unittests:: evaluation:: esDecorators", () => {
     const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2021 };
@@ -739,7 +741,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({ method() {} }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -754,7 +756,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isFalse(context.access.has(D));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("read public element of argument", () => {
                     const { context, C } = exec`
@@ -809,9 +811,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({
-                        get x() { return 2; }
+                        get x() {
+                            return 2;
+                        },
                     }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -826,7 +830,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isFalse(context.access.has(D));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("read public element of argument", () => {
                     const { context, C } = exec`
@@ -879,7 +883,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({ x: 2 }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -953,7 +957,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({ x: 2 }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -1036,7 +1040,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({ x: 2 }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -1136,7 +1140,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         @((t, c) => { context = c; }) class C {
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
             });
             describe("for: method", () => {
@@ -1186,7 +1190,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static method() {}
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1267,7 +1271,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static get x() { return 1; }
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1348,7 +1352,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static set x(v: number) {}
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1429,7 +1433,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static x: number;
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1510,7 +1514,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static accessor x: number;
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -2249,7 +2253,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 "post-super constructor evaluation",
 
                 // and now evaluation has completed:
-                "done"
+                "done",
             ]);
         });
 

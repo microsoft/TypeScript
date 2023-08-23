@@ -1,6 +1,10 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 
-import { runSequence } from "./run-sequence.mjs";
+import {
+    runSequence,
+} from "./run-sequence.mjs";
 
 // The first is used by bot-based kickoffs, the second by automatic triggers
 const triggeredPR = process.env.SOURCE_ISSUE || process.env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER;
@@ -13,7 +17,7 @@ const triggeredPR = process.env.SOURCE_ISSUE || process.env.SYSTEM_PULLREQUEST_P
  */
 async function main() {
     const gh = new Octokit({
-        auth: process.argv[2]
+        auth: process.argv[2],
     });
     const prnums = (await gh.issues.listForRepo({
         labels: "typescript@experimental",
@@ -50,7 +54,7 @@ async function main() {
                         owner: "Microsoft",
                         repo: "TypeScript",
                         issue_number: num,
-                        body: `This PR is configured as an experiment, and currently has rebase conflicts with main - please rebase onto main and fix the conflicts.`
+                        body: `This PR is configured as an experiment, and currently has rebase conflicts with main - please rebase onto main and fix the conflicts.`,
                     });
                 }
                 throw new Error(`Rebase conflict detected in PR ${num} with main`); // A PR is currently in conflict, give up
@@ -61,7 +65,6 @@ async function main() {
                 ["git", ["rebase", "main"]],
                 ["git", ["push", "-f", "-u", "fork", `${num}`]], // Keep a rebased copy of this branch in our fork
             ]);
-
         }
         else {
             throw new Error(`Invalid PR number: ${numRaw}`);
@@ -83,7 +86,7 @@ async function main() {
         ]);
         // Simulate the merge and abort if there are conflicts
         const mergeTree = runSequence([
-            ["git", ["merge-tree", mergeBase.trim(), branch, "experimental"]]
+            ["git", ["merge-tree", mergeBase.trim(), branch, "experimental"]],
         ]);
         if (mergeTree.indexOf(`===${"="}===`) >= 0) { // 7 equals is the center of the merge conflict marker
             throw new Error(`Merge conflict detected involving PR ${branch} with other experiment`);

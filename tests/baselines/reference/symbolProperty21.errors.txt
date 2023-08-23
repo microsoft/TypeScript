@@ -1,5 +1,4 @@
-symbolProperty21.ts(10,5): error TS2345: Argument of type '{ [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: true; }' is not assignable to parameter of type 'I<boolean, string>'.
-  Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<boolean, string>'.
+symbolProperty21.ts(10,5): error TS2353: Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<boolean, string>'.
 
 
 ==== symbolProperty21.ts (1 errors) ====
@@ -14,7 +13,6 @@ symbolProperty21.ts(10,5): error TS2345: Argument of type '{ [Symbol.isConcatSpr
         [Symbol.isConcatSpreadable]: "",
         [Symbol.toPrimitive]: 0,
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: true; }' is not assignable to parameter of type 'I<boolean, string>'.
-!!! error TS2345:   Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<boolean, string>'.
+!!! error TS2353: Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<boolean, string>'.
         [Symbol.unscopables]: true
     });

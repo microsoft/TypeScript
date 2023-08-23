@@ -11,16 +11,18 @@ describe("unittests:: config:: showConfig", () => {
                 const configPath = ts.combinePaths(cwd, "tsconfig.json");
                 const configContents = configJson ? JSON.stringify(configJson) : undefined;
                 const configParseHost: ts.ParseConfigFileHost = {
-                    fileExists: path =>
-                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? true : false,
-                    getCurrentDirectory() { return cwd; },
+                    fileExists: path => ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? true : false,
+                    getCurrentDirectory() {
+                        return cwd;
+                    },
                     useCaseSensitiveFileNames: true,
                     onUnRecoverableConfigFileDiagnostic: d => {
                         throw new Error(ts.flattenDiagnosticMessageText(d.messageText, "\n"));
                     },
-                    readDirectory() { return []; },
-                    readFile: path =>
-                        ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents : undefined,
+                    readDirectory() {
+                        return [];
+                    },
+                    readFile: path => ts.comparePaths(ts.getNormalizedAbsolutePath(path, cwd), configPath) === ts.Comparison.EqualTo ? configContents : undefined,
                 };
                 let commandLine = ts.parseCommandLine(commandLinesArgs);
                 if (commandLine.options.project) {
@@ -64,14 +66,14 @@ describe("unittests:: config:: showConfig", () => {
         },
         compileOnSave: true,
         exclude: [
-            "dist"
+            "dist",
         ],
         files: [],
         include: [
-            "src/*"
+            "src/*",
         ],
         references: [
-            { path: "./test" }
+            { path: "./test" },
         ],
     });
 
@@ -92,25 +94,25 @@ describe("unittests:: config:: showConfig", () => {
                 "@common/*": ["src/common/*"],
                 "*": [
                     "node_modules/*",
-                    "src/types/*"
-                ]
+                    "src/types/*",
+                ],
             },
             experimentalDecorators: true,
             emitDecoratorMetadata: true,
-            resolveJsonModule: true
+            resolveJsonModule: true,
         },
         include: [
-            "./src/**/*"
-        ]
+            "./src/**/*",
+        ],
     });
 
     showTSConfigCorrectly("Show TSConfig with watch options", ["-p", "tsconfig.json"], {
         watchOptions: {
-            watchFile: "DynamicPriorityPolling"
+            watchFile: "DynamicPriorityPolling",
         },
         include: [
-            "./src/**/*"
-        ]
+            "./src/**/*",
+        ],
     });
 
     // Bulk validation of all option declarations

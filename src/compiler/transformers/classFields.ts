@@ -153,6 +153,7 @@ import {
     Modifier,
     ModifierFlags,
     ModifierLike,
+    modifiersToFlags,
     moveRangePastModifiers,
     moveRangePos,
     newPrivateEnvironment,
@@ -222,7 +223,7 @@ import {
     visitNodes,
     Visitor,
     visitParameterList,
-    VisitResult
+    VisitResult,
 } from "../_namespaces/ts";
 
 import * as Debug from "../debug";
@@ -358,7 +359,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         endLexicalEnvironment,
         startLexicalEnvironment,
         resumeLexicalEnvironment,
-        addBlockScopedVariable
+        addBlockScopedVariable,
     } = context;
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
@@ -378,8 +379,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
     // We need to transform `accessor` fields when target < ESNext.
     // We may need to transform `accessor` fields when `useDefineForClassFields: false`
-    const shouldTransformAutoAccessors =
-        languageVersion < ScriptTarget.ESNext ? Ternary.True :
+    const shouldTransformAutoAccessors = languageVersion < ScriptTarget.ESNext ? Ternary.True :
         !useDefineForClassFields ? Ternary.Maybe :
         Ternary.False;
 
@@ -391,8 +391,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     // the es2015 transformation handles those.
     const shouldTransformSuperInStaticInitializers = shouldTransformThisInStaticInitializers && languageVersion >= ScriptTarget.ES2015;
 
-    const shouldTransformAnything =
-        shouldTransformInitializers ||
+    const shouldTransformAnything = shouldTransformInitializers ||
         shouldTransformPrivateElementsOrClassStaticBlocks ||
         shouldTransformAutoAccessors === Ternary.True;
 
@@ -458,8 +457,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitor(node: Node): VisitResult<Node> {
-        if (!(node.transformFlags & TransformFlags.ContainsClassFields) &&
-            !(node.transformFlags & TransformFlags.ContainsLexicalThisOrSuper)) {
+        if (
+            !(node.transformFlags & TransformFlags.ContainsClassFields) &&
+            !(node.transformFlags & TransformFlags.ContainsLexicalThisOrSuper)
+        ) {
             return node;
         }
 
@@ -514,7 +515,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return setCurrentClassElementAnd(
                     /*classElement*/ undefined,
                     fallbackVisitor,
-                    node
+                    node,
                 );
             case SyntaxKind.Constructor:
             case SyntaxKind.MethodDeclaration:
@@ -524,7 +525,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return setCurrentClassElementAnd(
                     node as ConstructorDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration,
                     fallbackVisitor,
-                    node
+                    node,
                 );
             }
             default:
@@ -591,24 +592,28 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return setCurrentClassElementAnd(
                     node as ConstructorDeclaration,
                     visitConstructorDeclaration,
-                    node as ConstructorDeclaration);
+                    node as ConstructorDeclaration,
+                );
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodDeclaration:
                 return setCurrentClassElementAnd(
                     node as MethodDeclaration | AccessorDeclaration,
                     visitMethodOrAccessorDeclaration,
-                    node as MethodDeclaration | AccessorDeclaration);
+                    node as MethodDeclaration | AccessorDeclaration,
+                );
             case SyntaxKind.PropertyDeclaration:
                 return setCurrentClassElementAnd(
                     node as PropertyDeclaration,
                     visitPropertyDeclaration,
-                    node as PropertyDeclaration);
+                    node as PropertyDeclaration,
+                );
             case SyntaxKind.ClassStaticBlockDeclaration:
                 return setCurrentClassElementAnd(
                     node as ClassStaticBlockDeclaration,
                     visitClassStaticBlockDeclaration,
-                    node as ClassStaticBlockDeclaration);
+                    node as ClassStaticBlockDeclaration,
+                );
             case SyntaxKind.ComputedPropertyName:
                 return visitComputedPropertyName(node as ComputedPropertyName);
             case SyntaxKind.SemicolonClassElement:
@@ -671,7 +676,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const receiver = visitNode(node.right, visitor, isExpression);
             return setOriginalNode(
                 emitHelpers().createClassPrivateFieldInHelper(info.brandCheckIdentifier, receiver),
-                node
+                node,
             );
         }
 
@@ -853,9 +858,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         /*typeParameters*/ undefined,
                         visitParameterList(node.parameters, visitor, context),
                         /*type*/ undefined,
-                        visitFunctionBody(node.body!, visitor, context)
-                    )
-                )
+                        visitFunctionBody(node.body!, visitor, context),
+                    ),
+                ),
             );
         }
 
@@ -897,6 +902,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
     }
 
+    function getClassThis() {
+        const lex = getClassLexicalEnvironment();
+        const classThis = lex.classThis ?? lex.classConstructor ?? currentClassContainer?.name;
+        return Debug.checkDefined(classThis);
+    }
+
     function transformAutoAccessor(node: AutoAccessorPropertyDeclaration): VisitResult<Node> {
         // transforms:
         //      accessor x = 1;
@@ -936,12 +947,15 @@ export function transformClassFields(context: TransformationContext): (x: Source
         setEmitFlags(backingField, EmitFlags.NoComments);
         setSourceMapRange(backingField, sourceMapRange);
 
-        const getter = createAccessorPropertyGetRedirector(factory, node, modifiers, getterName);
+        const receiver = isStatic(node) ? getClassThis() : factory.createThis();
+        const getter = createAccessorPropertyGetRedirector(factory, node, modifiers, getterName, receiver);
         setOriginalNode(getter, node);
         setCommentRange(getter, commentRange);
         setSourceMapRange(getter, sourceMapRange);
 
-        const setter = createAccessorPropertySetRedirector(factory, node, modifiers, setterName);
+        // create a fresh copy of the modifiers so that we don't duplicate comments
+        const setterModifiers = factory.createModifiersFromModifierFlags(modifiersToFlags(modifiers));
+        const setter = createAccessorPropertySetRedirector(factory, node, setterModifiers, setterName, receiver);
         setOriginalNode(setter, node);
         setEmitFlags(setter, EmitFlags.NoComments);
         setSourceMapRange(setter, sourceMapRange);
@@ -984,7 +998,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 node.name,
                 /*questionOrExclamationToken*/ undefined,
                 /*type*/ undefined,
-                /*initializer*/ undefined
+                /*initializer*/ undefined,
             );
         }
 
@@ -998,7 +1012,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             visitNode(node.name, propertyNameVisitor, isPropertyName),
             /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
-            visitNode(node.initializer, visitor, isExpression)
+            visitNode(node.initializer, visitor, isExpression),
         );
     }
 
@@ -1010,7 +1024,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
             const expr = getPropertyNameExpressionIfNeeded(
                 node.name,
-                /*shouldHoist*/ !!node.initializer || useDefineForClassFields);
+                /*shouldHoist*/ !!node.initializer || useDefineForClassFields,
+            );
             if (expr) {
                 getPendingExpressions().push(...flattenCommaList(expr));
             }
@@ -1019,7 +1034,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 const initializerStatement = transformPropertyOrClassStaticBlock(node, factory.createThis());
                 if (initializerStatement) {
                     const staticBlock = factory.createClassStaticBlockDeclaration(
-                        factory.createBlock([initializerStatement])
+                        factory.createBlock([initializerStatement]),
                     );
 
                     setOriginalNode(staticBlock, node);
@@ -1043,7 +1058,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             visitNode(node.name, propertyNameVisitor, isPropertyName),
             /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
-            visitNode(node.initializer, visitor, isExpression)
+            visitNode(node.initializer, visitor, isExpression),
         );
     }
 
@@ -1057,14 +1072,16 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function shouldTransformAutoAccessorsInCurrentClass() {
         return shouldTransformAutoAccessors === Ternary.True ||
             shouldTransformAutoAccessors === Ternary.Maybe &&
-            !!lexicalEnvironment?.data && !!(lexicalEnvironment.data.facts & ClassFacts.WillHoistInitializersToConstructor);
+                !!lexicalEnvironment?.data && !!(lexicalEnvironment.data.facts & ClassFacts.WillHoistInitializersToConstructor);
     }
 
     function visitPropertyDeclaration(node: PropertyDeclaration) {
         // If this is an auto-accessor, we defer to `transformAutoAccessor`. That function
         // will in turn call `transformFieldInitializer` as needed.
-        if (isAutoAccessorPropertyDeclaration(node) && (shouldTransformAutoAccessorsInCurrentClass() ||
-            hasStaticModifier(node) && getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements)) {
+        if (
+            isAutoAccessorPropertyDeclaration(node) && (shouldTransformAutoAccessorsInCurrentClass() ||
+                hasStaticModifier(node) && getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements)
+        ) {
             return transformAutoAccessor(node);
         }
 
@@ -1107,21 +1124,21 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     receiver,
                     info.brandCheckIdentifier,
                     info.kind,
-                    info.getterName
+                    info.getterName,
                 );
             case PrivateIdentifierKind.Method:
                 return emitHelpers().createClassPrivateFieldGetHelper(
                     receiver,
                     info.brandCheckIdentifier,
                     info.kind,
-                    info.methodName
+                    info.methodName,
                 );
             case PrivateIdentifierKind.Field:
                 return emitHelpers().createClassPrivateFieldGetHelper(
                     receiver,
                     info.brandCheckIdentifier,
                     info.kind,
-                    info.isStatic ? info.variableName : undefined
+                    info.isStatic ? info.variableName : undefined,
                 );
             case "untransformed":
                 return Debug.fail("Access helpers should not be created for untransformed private elements");
@@ -1138,18 +1155,20 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return setTextRange(
                     setOriginalNode(
                         createPrivateIdentifierAccess(privateIdentifierInfo, node.expression),
-                        node
+                        node,
                     ),
-                    node
+                    node,
                 );
             }
         }
-        if (shouldTransformSuperInStaticInitializers &&
+        if (
+            shouldTransformSuperInStaticInitializers &&
             currentClassElement &&
             isSuperProperty(node) &&
             isIdentifier(node.name) &&
             isStaticPropertyDeclarationOrClassStaticBlock(currentClassElement) &&
-            lexicalEnvironment?.data) {
+            lexicalEnvironment?.data
+        ) {
             const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
             if (facts & ClassFacts.ClassWasDecorated) {
                 return visitInvalidSuperProperty(node);
@@ -1159,7 +1178,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 const superProperty = factory.createReflectGetCall(
                     superClassReference,
                     factory.createStringLiteralFromNode(node.name),
-                    classConstructor
+                    classConstructor,
                 );
                 setOriginalNode(superProperty, node.expression);
                 setTextRange(superProperty, node.expression);
@@ -1170,11 +1189,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitElementAccessExpression(node: ElementAccessExpression) {
-        if (shouldTransformSuperInStaticInitializers &&
+        if (
+            shouldTransformSuperInStaticInitializers &&
             currentClassElement &&
             isSuperProperty(node) &&
             isStaticPropertyDeclarationOrClassStaticBlock(currentClassElement) &&
-            lexicalEnvironment?.data) {
+            lexicalEnvironment?.data
+        ) {
             const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
             if (facts & ClassFacts.ClassWasDecorated) {
                 return visitInvalidSuperProperty(node);
@@ -1185,7 +1206,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 const superProperty = factory.createReflectGetCall(
                     superClassReference,
                     visitNode(node.argumentExpression, visitor, isExpression),
-                    classConstructor
+                    classConstructor,
                 );
                 setOriginalNode(superProperty, node.expression);
                 setTextRange(superProperty, node.expression);
@@ -1196,8 +1217,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitPreOrPostfixUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression, discarded: boolean) {
-        if (node.operator === SyntaxKind.PlusPlusToken ||
-            node.operator === SyntaxKind.MinusMinusToken) {
+        if (
+            node.operator === SyntaxKind.PlusPlusToken ||
+            node.operator === SyntaxKind.MinusMinusToken
+        ) {
             const operand = skipParentheses(node.operand);
 
             if (isPrivateIdentifierPropertyAccessExpression(operand)) {
@@ -1214,7 +1237,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         info,
                         initializeExpression || readExpression,
                         expression,
-                        SyntaxKind.EqualsToken
+                        SyntaxKind.EqualsToken,
                     );
                     setOriginalNode(expression, node);
                     setTextRange(expression, node);
@@ -1225,11 +1248,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     return expression;
                 }
             }
-            else if (shouldTransformSuperInStaticInitializers &&
+            else if (
+                shouldTransformSuperInStaticInitializers &&
                 currentClassElement &&
                 isSuperProperty(operand) &&
                 isStaticPropertyDeclarationOrClassStaticBlock(currentClassElement) &&
-                lexicalEnvironment?.data) {
+                lexicalEnvironment?.data
+            ) {
                 // converts `++super.a` into `(Reflect.set(_baseTemp, "a", (_a = Reflect.get(_baseTemp, "a", _classTemp), _b = ++_a), _classTemp), _b)`
                 // converts `++super[f()]` into `(Reflect.set(_baseTemp, _a = f(), (_b = Reflect.get(_baseTemp, _a, _classTemp), _c = ++_b), _classTemp), _c)`
                 // converts `--super.a` into `(Reflect.set(_baseTemp, "a", (_a = Reflect.get(_baseTemp, "a", _classTemp), _b = --_a), _classTemp), _b)`
@@ -1289,18 +1314,18 @@ export function transformClassFields(context: TransformationContext): (x: Source
             visitNode(node.initializer, discardedValueVisitor, isForInitializer),
             visitNode(node.condition, visitor, isExpression),
             visitNode(node.incrementor, discardedValueVisitor, isExpression),
-            visitIterationBody(node.statement, visitor, context)
+            visitIterationBody(node.statement, visitor, context),
         );
     }
 
     function visitExpressionStatement(node: ExpressionStatement) {
         return factory.updateExpressionStatement(
             node,
-            visitNode(node.expression, discardedValueVisitor, isExpression)
+            visitNode(node.expression, discardedValueVisitor, isExpression),
         );
     }
 
-    function createCopiableReceiverExpr(receiver: Expression): { readExpression: Expression; initializeExpression: Expression | undefined } {
+    function createCopiableReceiverExpr(receiver: Expression): { readExpression: Expression; initializeExpression: Expression | undefined; } {
         const clone = nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver);
         if (receiver.kind === SyntaxKind.ThisKeyword && noSubstitution.has(receiver)) {
             noSubstitution.add(clone);
@@ -1314,8 +1339,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitCallExpression(node: CallExpression) {
-        if (isPrivateIdentifierPropertyAccessExpression(node.expression) &&
-            accessPrivateIdentifier(node.expression.name)) {
+        if (
+            isPrivateIdentifierPropertyAccessExpression(node.expression) &&
+            accessPrivateIdentifier(node.expression.name)
+        ) {
             // obj.#x()
 
             // Transform call expressions of private names to properly bind the `this` parameter.
@@ -1326,22 +1353,24 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     factory.createPropertyAccessChain(visitNode(target, visitor, isExpression), node.questionDotToken, "call"),
                     /*questionDotToken*/ undefined,
                     /*typeArguments*/ undefined,
-                    [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)]
+                    [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)],
                 );
             }
             return factory.updateCallExpression(
                 node,
                 factory.createPropertyAccessExpression(visitNode(target, visitor, isExpression), "call"),
                 /*typeArguments*/ undefined,
-                [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)]
+                [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)],
             );
         }
 
-        if (shouldTransformSuperInStaticInitializers &&
+        if (
+            shouldTransformSuperInStaticInitializers &&
             currentClassElement &&
             isSuperProperty(node.expression) &&
             isStaticPropertyDeclarationOrClassStaticBlock(currentClassElement) &&
-            lexicalEnvironment?.data?.classConstructor) {
+            lexicalEnvironment?.data?.classConstructor
+        ) {
             // super.x()
             // super[x]()
 
@@ -1349,7 +1378,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const invocation = factory.createFunctionCallCall(
                 visitNode(node.expression, visitor, isExpression),
                 lexicalEnvironment.data.classConstructor,
-                visitNodes(node.arguments, visitor, isExpression)
+                visitNodes(node.arguments, visitor, isExpression),
             );
             setOriginalNode(invocation, node);
             setTextRange(invocation, node);
@@ -1360,8 +1389,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
-        if (isPrivateIdentifierPropertyAccessExpression(node.tag) &&
-            accessPrivateIdentifier(node.tag.name)) {
+        if (
+            isPrivateIdentifierPropertyAccessExpression(node.tag) &&
+            accessPrivateIdentifier(node.tag.name)
+        ) {
             // Bind the `this` correctly for tagged template literals when the tag is a private identifier property access.
             const { thisArg, target } = factory.createCallBinding(node.tag, hoistVariableDeclaration, languageVersion);
             return factory.updateTaggedTemplateExpression(
@@ -1369,23 +1400,24 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 factory.createCallExpression(
                     factory.createPropertyAccessExpression(visitNode(target, visitor, isExpression), "bind"),
                     /*typeArguments*/ undefined,
-                    [visitNode(thisArg, visitor, isExpression)]
+                    [visitNode(thisArg, visitor, isExpression)],
                 ),
                 /*typeArguments*/ undefined,
-                visitNode(node.template, visitor, isTemplateLiteral)
+                visitNode(node.template, visitor, isTemplateLiteral),
             );
         }
-        if (shouldTransformSuperInStaticInitializers &&
+        if (
+            shouldTransformSuperInStaticInitializers &&
             currentClassElement &&
             isSuperProperty(node.tag) &&
             isStaticPropertyDeclarationOrClassStaticBlock(currentClassElement) &&
-            lexicalEnvironment?.data?.classConstructor) {
-
+            lexicalEnvironment?.data?.classConstructor
+        ) {
             // converts `` super.f`x` `` into `` Reflect.get(_baseTemp, "f", _classTemp).bind(_classTemp)`x` ``
             const invocation = factory.createFunctionBindCall(
                 visitNode(node.tag, visitor, isExpression),
                 lexicalEnvironment.data.classConstructor,
-                []
+                [],
             );
             setOriginalNode(invocation, node);
             setTextRange(invocation, node);
@@ -1393,7 +1425,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 node,
                 invocation,
                 /*typeArguments*/ undefined,
-                visitNode(node.template, visitor, isTemplateLiteral)
+                visitNode(node.template, visitor, isTemplateLiteral),
             );
         }
         return visitEachChild(node, visitor, context);
@@ -1409,8 +1441,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 const result = visitNode(node.body.statements[0].expression, visitor, isExpression);
                 // If the generated `_classThis` assignment is a noop (i.e., `_classThis = _classThis`), we can
                 // eliminate the expression
-                if (isAssignmentExpression(result, /*excludeCompoundAssignment*/ true) &&
-                    result.left === result.right) {
+                if (
+                    isAssignmentExpression(result, /*excludeCompoundAssignment*/ true) &&
+                    result.left === result.right
+                ) {
                     return undefined;
                 }
                 return result;
@@ -1424,7 +1458,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             let statements = setCurrentClassElementAnd(
                 node,
                 statements => visitNodes(statements, visitor, isStatement),
-                node.body.statements
+                node.body.statements,
             );
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
 
@@ -1444,9 +1478,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return false;
             }
 
-            const hasTransformableStatics =
-                (shouldTransformPrivateElementsOrClassStaticBlocks ||
-                    !!(getInternalEmitFlags(node) && InternalEmitFlags.TransformPrivateStaticElements)) &&
+            const hasTransformableStatics = (shouldTransformPrivateElementsOrClassStaticBlocks ||
+                !!(getInternalEmitFlags(node) && InternalEmitFlags.TransformPrivateStaticElements)) &&
                 some(staticPropertiesOrClassStaticBlocks, node =>
                     isClassStaticBlockDeclaration(node) ||
                     isPrivateIdentifierClassElementDeclaration(node) ||
@@ -1467,7 +1500,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 node,
                 visitNode(node.left, assignmentTargetVisitor, isExpression),
                 node.operatorToken,
-                visitNode(node.right, visitor, isExpression)
+                visitNode(node.right, visitor, isExpression),
             );
             const expr = some(pendingExpressions) ?
                 factory.inlineExpressions(compact([...pendingExpressions, node])) :
@@ -1515,17 +1548,19 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     return setTextRange(
                         setOriginalNode(
                             createPrivateIdentifierAssignment(info, left.expression, node.right, node.operatorToken.kind),
-                            node
+                            node,
                         ),
-                        node
+                        node,
                     );
                 }
             }
-            else if (shouldTransformSuperInStaticInitializers &&
+            else if (
+                shouldTransformSuperInStaticInitializers &&
                 currentClassElement &&
                 isSuperProperty(node.left) &&
                 isStaticPropertyDeclarationOrClassStaticBlock(currentClassElement) &&
-                lexicalEnvironment?.data) {
+                lexicalEnvironment?.data
+            ) {
                 // super.x = ...
                 // super[x] = ...
                 // super.x += ...
@@ -1536,11 +1571,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         node,
                         visitInvalidSuperProperty(node.left),
                         node.operatorToken,
-                        visitNode(node.right, visitor, isExpression));
+                        visitNode(node.right, visitor, isExpression),
+                    );
                 }
                 if (classConstructor && superClassReference) {
-                    let setterName =
-                        isElementAccessExpression(node.left) ? visitNode(node.left.argumentExpression, visitor, isExpression) :
+                    let setterName = isElementAccessExpression(node.left) ? visitNode(node.left.argumentExpression, visitor, isExpression) :
                         isIdentifier(node.left.name) ? factory.createStringLiteralFromNode(node.left.name) :
                         undefined;
                     if (setterName) {
@@ -1559,14 +1594,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
                             const superPropertyGet = factory.createReflectGetCall(
                                 superClassReference,
                                 getterName,
-                                classConstructor
+                                classConstructor,
                             );
                             setOriginalNode(superPropertyGet, node.left);
                             setTextRange(superPropertyGet, node.left);
                             expression = factory.createBinaryExpression(
                                 superPropertyGet,
                                 getNonAssignmentOperatorForCompoundAssignment(node.operatorToken.kind),
-                                expression
+                                expression,
                             );
                             setTextRange(expression, node);
                         }
@@ -1581,7 +1616,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                             superClassReference,
                             setterName,
                             expression,
-                            classConstructor
+                            classConstructor,
                         );
                         setOriginalNode(expression, node);
                         setTextRange(expression, node);
@@ -1616,13 +1651,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //     ...
         //     2. Return ? NamedEvaluation of |Expression| with argument _name_.
 
-        const visitorFunc: Visitor<Node, Node> =
-            discarded ? discardedValueVisitor :
+        const visitorFunc: Visitor<Node, Node> = discarded ? discardedValueVisitor :
             visitor;
         const expression = visitNode(node.expression, visitorFunc, isExpression);
         return factory.updateParenthesizedExpression(node, expression);
     }
-
 
     function createPrivateIdentifierAssignment(info: PrivateIdentifierInfo, receiver: Expression, right: Expression, operator: AssignmentOperator): Expression {
         receiver = visitNode(receiver, visitor, isExpression);
@@ -1635,20 +1668,20 @@ export function transformClassFields(context: TransformationContext): (x: Source
             right = factory.createBinaryExpression(
                 createPrivateIdentifierAccessHelper(info, readExpression),
                 getNonAssignmentOperatorForCompoundAssignment(operator),
-                right
+                right,
             );
         }
 
         setCommentRange(receiver, moveRangePos(receiver, -1));
 
-        switch(info.kind) {
+        switch (info.kind) {
             case PrivateIdentifierKind.Accessor:
                 return emitHelpers().createClassPrivateFieldSetHelper(
                     receiver,
                     info.brandCheckIdentifier,
                     right,
                     info.kind,
-                    info.setterName
+                    info.setterName,
                 );
             case PrivateIdentifierKind.Method:
                 return emitHelpers().createClassPrivateFieldSetHelper(
@@ -1656,7 +1689,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     info.brandCheckIdentifier,
                     right,
                     info.kind,
-                    /*f*/ undefined
+                    /*f*/ undefined,
                 );
             case PrivateIdentifierKind.Field:
                 return emitHelpers().createClassPrivateFieldSetHelper(
@@ -1664,7 +1697,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     info.brandCheckIdentifier,
                     right,
                     info.kind,
-                    info.isStatic ? info.variableName : undefined
+                    info.isStatic ? info.variableName : undefined,
                 );
             case "untransformed":
                 return Debug.fail("Access helpers should not be created for untransformed private elements");
@@ -1693,9 +1726,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
         let containsInstanceAutoAccessors = false;
         for (const member of node.members) {
             if (isStatic(member)) {
-                if (member.name &&
-                    (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) &&
-                    shouldTransformPrivateElementsOrClassStaticBlocks) {
+                if (
+                    member.name && (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) &&
+                    shouldTransformPrivateElementsOrClassStaticBlocks
+                ) {
+                    facts |= ClassFacts.NeedsClassConstructorReference;
+                }
+                else if (isAutoAccessorPropertyDeclaration(member) && shouldTransformAutoAccessors === Ternary.True && !node.name && !node.emitNode?.classThis) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
                 if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
@@ -1719,6 +1756,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 }
                 else if (isPrivateIdentifierClassElementDeclaration(member)) {
                     containsInstancePrivateElements = true;
+                    if (resolver.getNodeCheckFlags(member) & NodeCheckFlags.ContainsConstructorReference) {
+                        facts |= ClassFacts.NeedsClassConstructorReference;
+                    }
                 }
                 else if (isPropertyDeclaration(member)) {
                     containsPublicInstanceFields = true;
@@ -1727,8 +1767,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             }
         }
 
-        const willHoistInitializersToConstructor =
-            shouldTransformInitializersUsingDefine && containsPublicInstanceFields ||
+        const willHoistInitializersToConstructor = shouldTransformInitializersUsingDefine && containsPublicInstanceFields ||
             shouldTransformInitializersUsingSet && containsInitializedPublicInstanceFields ||
             shouldTransformPrivateElementsOrClassStaticBlocks && containsInstancePrivateElements ||
             shouldTransformPrivateElementsOrClassStaticBlocks && containsInstanceAutoAccessors && shouldTransformAutoAccessors === Ternary.True;
@@ -1749,9 +1788,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 node,
                 factory.createAssignment(
                     temp,
-                    visitNode(node.expression, visitor, isExpression)
+                    visitNode(node.expression, visitor, isExpression),
                 ),
-                /*typeArguments*/ undefined
+                /*typeArguments*/ undefined,
             );
         }
         return visitEachChild(node, visitor, context);
@@ -1775,8 +1814,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 if (isStringLiteral(node.emitNode.assignedName)) {
                     // If the class name was assigned from a string literal based on an Identifier, use the Identifier
                     // as the prefix.
-                    if (node.emitNode.assignedName.textSourceNode &&
-                        isIdentifier(node.emitNode.assignedName.textSourceNode)) {
+                    if (
+                        node.emitNode.assignedName.textSourceNode &&
+                        isIdentifier(node.emitNode.assignedName.textSourceNode)
+                    ) {
                         getPrivateIdentifierEnvironment().data.className = node.emitNode.assignedName.textSourceNode;
                     }
                     // If the class name was assigned from a string literal that is a valid identifier, create an
@@ -1794,7 +1835,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             if (some(privateInstanceMethodsAndAccessors)) {
                 getPrivateIdentifierEnvironment().data.weakSetName = createHoistedVariableForClass(
                     "instances",
-                    privateInstanceMethodsAndAccessors[0].name
+                    privateInstanceMethodsAndAccessors[0].name,
                 );
             }
         }
@@ -1814,7 +1855,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
         currentClassContainer = savedCurrentClassContainer;
         pendingExpressions = savedPendingExpressions;
         return result;
-
     }
 
     function visitClassDeclaration(node: ClassDeclaration) {
@@ -1844,12 +1884,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
                 pendingClassReferenceAssignment = factory.createAssignment(temp, factory.getInternalName(node));
             }
-
-            if (node.emitNode?.classThis) {
-                getClassLexicalEnvironment().classThis = node.emitNode.classThis;
-            }
         }
 
+        if (node.emitNode?.classThis) {
+            getClassLexicalEnvironment().classThis = node.emitNode.classThis;
+        }
+
+        const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsConstructorReference;
         const isExport = hasSyntacticModifier(node, ModifierFlags.Export);
         const isDefault = hasSyntacticModifier(node, ModifierFlags.Default);
         let modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
@@ -1884,8 +1925,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
             statements.push(factory.createExportAssignment(
                 /*modifiers*/ undefined,
                 /*isExportEquals*/ false,
-                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true),
             ));
+        }
+
+        const alias = getClassLexicalEnvironment().classConstructor;
+        if (isClassWithConstructorReference && alias) {
+            enableSubstitutionForClassAliases();
+            classAliases[getOriginalNodeId(node)] = alias;
         }
 
         const classDecl = factory.updateClassDeclaration(
@@ -1894,7 +1941,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             node.name,
             /*typeParameters*/ undefined,
             heritageClauses,
-            members
+            members,
         );
         statements.unshift(classDecl);
 
@@ -1919,7 +1966,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // these statements after the class expression variable statement.
         const isDecoratedClassDeclaration = !!(facts & ClassFacts.ClassWasDecorated);
         const staticPropertiesOrClassStaticBlocks = getStaticPropertiesAndClassStaticBlock(node);
-        const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
+        const classCheckFlags = resolver.getNodeCheckFlags(node);
+        const isClassWithConstructorReference = classCheckFlags & NodeCheckFlags.ContainsConstructorReference;
 
         let temp: Identifier | undefined;
         function createClassTempVar() {
@@ -1936,7 +1984,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return getClassLexicalEnvironment().classConstructor = node.emitNode.classThis;
             }
 
-            const classCheckFlags = resolver.getNodeCheckFlags(node);
             const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
             const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
             getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
@@ -1960,7 +2007,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             node.name,
             /*typeParameters*/ undefined,
             heritageClauses,
-            members
+            members,
         );
 
         const expressions: Expression[] = [];
@@ -1970,8 +2017,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
         // Static initializers are transformed to `static {}` blocks when `useDefineForClassFields: false`
         // and not also transforming static blocks.
-        const hasTransformableStatics =
-            (shouldTransformPrivateElementsOrClassStaticBlocks || getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) &&
+        const hasTransformableStatics = (shouldTransformPrivateElementsOrClassStaticBlocks || getInternalEmitFlags(node) & InternalEmitFlags.TransformPrivateStaticElements) &&
             some(staticPropertiesOrClassStaticBlocks, node =>
                 isClassStaticBlockDeclaration(node) ||
                 isPrivateIdentifierClassElementDeclaration(node) ||
@@ -2041,9 +2087,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function visitThisExpression(node: ThisExpression) {
-        if (shouldTransformThisInStaticInitializers && currentClassElement &&
+        if (
+            shouldTransformThisInStaticInitializers && currentClassElement &&
             isClassStaticBlockDeclaration(currentClassElement) &&
-            lexicalEnvironment?.data) {
+            lexicalEnvironment?.data
+        ) {
             const { classThis, classConstructor } = lexicalEnvironment.data;
             return classThis ?? classConstructor ?? node;
         }
@@ -2078,8 +2126,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 for (const member of node.members) {
                     if (isAutoAccessorPropertyDeclaration(member)) {
                         const storageName = factory.getGeneratedPrivateNameForNode(member.name, /*prefix*/ undefined, "_accessor_storage");
-                        if (shouldTransformPrivateElementsOrClassStaticBlocks ||
-                            shouldTransformPrivateStaticElementsInClass && hasStaticModifier(member)) {
+                        if (
+                            shouldTransformPrivateElementsOrClassStaticBlocks ||
+                            shouldTransformPrivateStaticElementsInClass && hasStaticModifier(member)
+                        ) {
                             addPrivateIdentifierToEnvironment(member, storageName, addPrivateIdentifierPropertyDeclarationToEnvironment);
                         }
                         else {
@@ -2119,7 +2169,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     /*parameters*/ [],
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ undefined,
-                    factory.createBlock([statement]));
+                    factory.createBlock([statement]),
+                );
                 prologue = factory.createAssignment(temp, arrow);
                 statement = factory.createExpressionStatement(factory.createCallExpression(temp, /*typeArguments*/ undefined, []));
             }
@@ -2159,9 +2210,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 factory.createNewExpression(
                     factory.createIdentifier("WeakSet"),
                     /*typeArguments*/ undefined,
-                    []
-                )
-            )
+                    [],
+                ),
+            ),
         );
     }
 
@@ -2190,12 +2241,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     factory.createConstructorDeclaration(
                         /*modifiers*/ undefined,
                         parameters ?? [],
-                        body
+                        body,
                     ),
-                    constructor || container
+                    constructor || container,
                 ),
-                constructor
-            )
+                constructor,
+            ),
         );
     }
 
@@ -2214,7 +2265,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 superPath,
                 superPathDepth + 1,
                 initializerStatements,
-                constructor);
+                constructor,
+            );
 
             const tryBlockStatementsArray = factory.createNodeArray(tryBlockStatements);
             setTextRange(tryBlockStatementsArray, superStatement.tryBlock.statements);
@@ -2223,7 +2275,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 superStatement,
                 factory.updateBlock(superStatement.tryBlock, tryBlockStatements),
                 visitNode(superStatement.catchClause, visitor, isCatchClause),
-                visitNode(superStatement.finallyBlock, visitor, isBlock)));
+                visitNode(superStatement.finallyBlock, visitor, isBlock),
+            ));
         }
         else {
             addRange(statementsOut, visitNodes(statementsIn, visitor, isStatement, superStatementIndex, 1));
@@ -2316,7 +2369,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     superStatementIndices,
                     /*superPathDepth*/ 0,
                     initializerStatements,
-                    constructor
+                    constructor,
                 );
             }
             else {
@@ -2346,9 +2399,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         factory.createCallExpression(
                             factory.createSuper(),
                             /*typeArguments*/ undefined,
-                            [factory.createSpreadElement(factory.createIdentifier("arguments"))]
-                        )
-                    )
+                            [factory.createSpreadElement(factory.createIdentifier("arguments"))],
+                        ),
+                    ),
                 );
             }
             addRange(statements, initializerStatements);
@@ -2368,11 +2421,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
             factory.createBlock(
                 setTextRange(
                     factory.createNodeArray(statements),
-                    /*location*/ constructor ? constructor.body!.statements : node.members
+                    /*location*/ constructor ? constructor.body!.statements : node.members,
                 ),
-                multiLine
+                multiLine,
             ),
-            /*location*/ constructor ? constructor.body : undefined
+            /*location*/ constructor ? constructor.body : undefined,
         );
     }
 
@@ -2489,12 +2542,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
             property = transformNamedEvaluation(context, property);
         }
 
-        const propertyName =
-            hasAccessorModifier(property) ?
-                factory.getGeneratedPrivateNameForNode(property.name) :
+        const propertyName = hasAccessorModifier(property) ?
+            factory.getGeneratedPrivateNameForNode(property.name) :
             isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression) ?
-                factory.updateComputedPropertyName(property.name, factory.getGeneratedNameForNode(property.name)) :
-                property.name;
+            factory.updateComputedPropertyName(property.name, factory.getGeneratedNameForNode(property.name)) :
+            property.name;
 
         if (hasStaticModifier(property)) {
             currentClassElement = property;
@@ -2509,14 +2561,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
                             factory,
                             receiver,
                             visitNode(property.initializer, visitor, isExpression),
-                            privateIdentifierInfo.brandCheckIdentifier
+                            privateIdentifierInfo.brandCheckIdentifier,
                         );
                     }
                     else {
                         return createPrivateStaticFieldInitializer(
                             factory,
                             privateIdentifierInfo.variableName,
-                            visitNode(property.initializer, visitor, isExpression)
+                            visitNode(property.initializer, visitor, isExpression),
                         );
                     }
                 }
@@ -2545,11 +2597,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const localName = factory.cloneNode(propertyName);
             if (initializer) {
                 // unwrap `(__runInitializers(this, _instanceExtraInitializers), void 0)`
-                if (isParenthesizedExpression(initializer) &&
+                if (
+                    isParenthesizedExpression(initializer) &&
                     isCommaExpression(initializer.expression) &&
                     isCallToHelper(initializer.expression.left, "___runInitializers" as __String) &&
                     isVoidExpression(initializer.expression.right) &&
-                    isNumericLiteral(initializer.expression.right.expression)) {
+                    isNumericLiteral(initializer.expression.right.expression)
+                ) {
                     initializer = initializer.expression.left;
                 }
                 initializer = factory.inlineExpressions([initializer, localName]);
@@ -2626,8 +2680,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
         Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
         statements.push(
             factory.createExpressionStatement(
-                createPrivateInstanceMethodInitializer(factory, receiver, weakSetName)
-            )
+                createPrivateInstanceMethodInitializer(factory, receiver, weakSetName),
+            ),
         );
     }
 
@@ -2636,11 +2690,13 @@ export function transformClassFields(context: TransformationContext): (x: Source
             factory.updatePropertyAccessExpression(
                 node,
                 factory.createVoidZero(),
-                node.name) :
+                node.name,
+            ) :
             factory.updateElementAccessExpression(
                 node,
                 factory.createVoidZero(),
-                visitNode(node.argumentExpression, visitor, isExpression));
+                visitNode(node.argumentExpression, visitor, isExpression),
+            );
     }
 
     /**
@@ -2707,7 +2763,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         privateEnv: PrivateEnv,
         isStatic: boolean,
         isValid: boolean,
-        previousInfo: PrivateIdentifierInfo | undefined
+        previousInfo: PrivateIdentifierInfo | undefined,
     ) {
         if (isAutoAccessorPropertyDeclaration(node)) {
             addPrivateIdentifierAutoAccessorPropertyDeclarationToEnvironment(node, name, lex, privateEnv, isStatic, isValid, previousInfo);
@@ -2733,11 +2789,10 @@ export function transformClassFields(context: TransformationContext): (x: Source
         privateEnv: PrivateEnv,
         isStatic: boolean,
         isValid: boolean,
-        _previousInfo: PrivateIdentifierInfo | undefined
+        _previousInfo: PrivateIdentifierInfo | undefined,
     ) {
         if (isStatic) {
-            const brandCheckIdentifier =
-                Debug.checkDefined(lex.classThis ?? lex.classConstructor, "classConstructor should be set in private identifier environment");
+            const brandCheckIdentifier = Debug.checkDefined(lex.classThis ?? lex.classConstructor, "classConstructor should be set in private identifier environment");
 
             const variableName = createHoistedVariableForPrivateName(name);
             setPrivateIdentifier(privateEnv, name, {
@@ -2763,8 +2818,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 factory.createNewExpression(
                     factory.createIdentifier("WeakMap"),
                     /*typeArguments*/ undefined,
-                    []
-                )
+                    [],
+                ),
             ));
         }
     }
@@ -2776,7 +2831,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         privateEnv: PrivateEnv,
         isStatic: boolean,
         isValid: boolean,
-        _previousInfo: PrivateIdentifierInfo | undefined
+        _previousInfo: PrivateIdentifierInfo | undefined,
     ) {
         const methodName = createHoistedVariableForPrivateName(name);
         const brandCheckIdentifier = isStatic ?
@@ -2799,7 +2854,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         privateEnv: PrivateEnv,
         isStatic: boolean,
         isValid: boolean,
-        previousInfo: PrivateIdentifierInfo | undefined
+        previousInfo: PrivateIdentifierInfo | undefined,
     ) {
         const getterName = createHoistedVariableForPrivateName(name, "_get");
         const brandCheckIdentifier = isStatic ?
@@ -2828,15 +2883,17 @@ export function transformClassFields(context: TransformationContext): (x: Source
         privateEnv: PrivateEnv,
         isStatic: boolean,
         isValid: boolean,
-        previousInfo: PrivateIdentifierInfo | undefined
+        previousInfo: PrivateIdentifierInfo | undefined,
     ) {
         const setterName = createHoistedVariableForPrivateName(name, "_set");
         const brandCheckIdentifier = isStatic ?
             Debug.checkDefined(lex.classThis ?? lex.classConstructor, "classConstructor should be set in private identifier environment") :
             Debug.checkDefined(privateEnv.data.weakSetName, "weakSetName should be set in private identifier environment");
 
-        if (previousInfo?.kind === PrivateIdentifierKind.Accessor &&
-            previousInfo.isStatic === isStatic && !previousInfo.setterName) {
+        if (
+            previousInfo?.kind === PrivateIdentifierKind.Accessor &&
+            previousInfo.isStatic === isStatic && !previousInfo.setterName
+        ) {
             previousInfo.setterName = setterName;
         }
         else {
@@ -2858,7 +2915,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         privateEnv: PrivateEnv,
         isStatic: boolean,
         isValid: boolean,
-        _previousInfo: PrivateIdentifierInfo | undefined
+        _previousInfo: PrivateIdentifierInfo | undefined,
     ) {
         const getterName = createHoistedVariableForPrivateName(name, "_get");
         const setterName = createHoistedVariableForPrivateName(name, "_set");
@@ -2886,8 +2943,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
             privateEnv: PrivateEnv,
             isStatic: boolean,
             isValid: boolean,
-            previousInfo: PrivateIdentifierInfo | undefined
-        ) => void
+            previousInfo: PrivateIdentifierInfo | undefined,
+        ) => void,
     ) {
         const lex = getClassLexicalEnvironment();
         const privateEnv = getPrivateIdentifierEnvironment();
@@ -2900,8 +2957,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function createHoistedVariableForClass(name: string | PrivateIdentifier | undefined, node: PrivateIdentifier | ClassStaticBlockDeclaration, suffix?: string): Identifier {
         const { className } = getPrivateIdentifierEnvironment().data;
         const prefix: GeneratedNamePart | string = className ? { prefix: "_", node: className, suffix: "_" } : "_";
-        const identifier =
-            typeof name === "object" ? factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
+        const identifier = typeof name === "object" ? factory.getGeneratedNameForNode(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes, prefix, suffix) :
             typeof name === "string" ? factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic, prefix, suffix) :
             factory.createTempVariable(/*recordTempVariable*/ undefined, /*reservedInNestedScopes*/ true, prefix, suffix);
 
@@ -2949,8 +3005,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 info,
                 receiver,
                 parameter,
-                SyntaxKind.EqualsToken
-            )
+                SyntaxKind.EqualsToken,
+            ),
         );
     }
 
@@ -2962,18 +3018,19 @@ export function transformClassFields(context: TransformationContext): (x: Source
         if (isPrivateIdentifierPropertyAccessExpression(node)) {
             return wrapPrivateIdentifierForDestructuringTarget(node);
         }
-        else if (shouldTransformSuperInStaticInitializers &&
+        else if (
+            shouldTransformSuperInStaticInitializers &&
             currentClassElement &&
             isSuperProperty(node) &&
             isStaticPropertyDeclarationOrClassStaticBlock(currentClassElement) &&
-            lexicalEnvironment?.data) {
+            lexicalEnvironment?.data
+        ) {
             const { classConstructor, superClassReference, facts } = lexicalEnvironment.data;
             if (facts & ClassFacts.ClassWasDecorated) {
                 return visitInvalidSuperProperty(node);
             }
             else if (classConstructor && superClassReference) {
-                const name =
-                    isElementAccessExpression(node) ? visitNode(node.argumentExpression, visitor, isExpression) :
+                const name = isElementAccessExpression(node) ? visitNode(node.argumentExpression, visitor, isExpression) :
                     isIdentifier(node.name) ? factory.createStringLiteralFromNode(node.name) :
                     undefined;
                 if (name) {
@@ -2985,7 +3042,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                             name,
                             temp,
                             classConstructor,
-                        )
+                        ),
                     );
                 }
             }
@@ -3103,7 +3160,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             // [ { set value(x) { this.#myProp = x; } }.value ] = [ "hello" ];
             return factory.updateArrayLiteralExpression(
                 node,
-                visitNodes(node.elements, visitArrayAssignmentElement, isExpression)
+                visitNodes(node.elements, visitArrayAssignmentElement, isExpression),
             );
         }
         else {
@@ -3117,7 +3174,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             // ({ stringProperty: { set value(x) { this.#myProp = x; } }.value }) = { stringProperty: "hello" };
             return factory.updateObjectLiteralExpression(
                 node,
-                visitNodes(node.properties, visitObjectAssignmentElement, isObjectLiteralElementLike)
+                visitNodes(node.properties, visitObjectAssignmentElement, isObjectLiteralElementLike),
             );
         }
     }
@@ -3210,9 +3267,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function substituteThisExpression(node: ThisExpression) {
-        if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference &&
+        if (
+            enabledSubstitutions & ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference &&
             lexicalEnvironment?.data &&
-            !noSubstitution.has(node)) {
+            !noSubstitution.has(node)
+        ) {
             const { facts, classConstructor, classThis } = lexicalEnvironment.data;
             const substituteThis = shouldSubstituteThisWithClassThis ? classThis ?? classConstructor : classConstructor;
             if (substituteThis) {
@@ -3221,7 +3280,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                         factory.cloneNode(substituteThis),
                         node,
                     ),
-                    node
+                    node,
                 );
             }
             if (facts & ClassFacts.ClassWasDecorated && legacyDecorators) {
@@ -3237,7 +3296,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
     function trySubstituteClassAlias(node: Identifier): Expression | undefined {
         if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassAliases) {
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReferenceInClass) {
+            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReference) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
@@ -3264,8 +3323,8 @@ function createPrivateStaticFieldInitializer(factory: NodeFactory, variableName:
     return factory.createAssignment(
         variableName,
         factory.createObjectLiteralExpression([
-            factory.createPropertyAssignment("value", initializer || factory.createVoidZero())
-        ])
+            factory.createPropertyAssignment("value", initializer || factory.createVoidZero()),
+        ]),
     );
 }
 
@@ -3273,7 +3332,7 @@ function createPrivateInstanceFieldInitializer(factory: NodeFactory, receiver: L
     return factory.createCallExpression(
         factory.createPropertyAccessExpression(weakMapName, "set"),
         /*typeArguments*/ undefined,
-        [receiver, initializer || factory.createVoidZero()]
+        [receiver, initializer || factory.createVoidZero()],
     );
 }
 
@@ -3281,7 +3340,7 @@ function createPrivateInstanceMethodInitializer(factory: NodeFactory, receiver: 
     return factory.createCallExpression(
         factory.createPropertyAccessExpression(weakSetName, "add"),
         /*typeArguments*/ undefined,
-        [receiver]
+        [receiver],
     );
 }
 
@@ -3289,7 +3348,7 @@ function isReservedPrivateName(node: PrivateIdentifier) {
     return !isGeneratedPrivateIdentifier(node) && node.escapedText === "#constructor";
 }
 
-type PrivateIdentifierInExpression = BinaryExpression & { readonly left: PrivateIdentifier, readonly token: InKeyword };
+type PrivateIdentifierInExpression = BinaryExpression & { readonly left: PrivateIdentifier; readonly token: InKeyword; };
 
 function isPrivateIdentifierInExpression(node: BinaryExpression): node is PrivateIdentifierInExpression {
     return isPrivateIdentifier(node.left)

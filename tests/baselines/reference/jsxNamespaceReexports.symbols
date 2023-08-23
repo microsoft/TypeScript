@@ -29,5 +29,5 @@ import * as MyLib from "./library";
 
 const content = <my-element/>;
 >content : Symbol(content, Decl(index.tsx, 2, 5))
->my-element : Symbol(MyLib.JSX.IntrinsicElements, Decl(library.ts, 2, 15))
+>my-element : Symbol(MyLib.JSX.IntrinsicElements.__index, Decl(library.ts, 3, 38))
 

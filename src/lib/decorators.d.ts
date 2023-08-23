@@ -6,21 +6,18 @@ type ClassMemberDecoratorContext =
     | ClassGetterDecoratorContext
     | ClassSetterDecoratorContext
     | ClassFieldDecoratorContext
-    | ClassAccessorDecoratorContext
-    ;
+    | ClassAccessorDecoratorContext;
 
 /**
  * The decorator context types provided to any decorator.
  */
 type DecoratorContext =
     | ClassDecoratorContext
-    | ClassMemberDecoratorContext
-    ;
+    | ClassMemberDecoratorContext;
 
 type DecoratorMetadataObject = Record<PropertyKey, unknown> & object;
 
-type DecoratorMetadata =
-    typeof globalThis extends { Symbol: { readonly metadata: symbol } } ? DecoratorMetadataObject : DecoratorMetadataObject | undefined;
+type DecoratorMetadata = typeof globalThis extends { Symbol: { readonly metadata: symbol; }; } ? DecoratorMetadataObject : DecoratorMetadataObject | undefined;
 
 /**
  * Context provided to a class decorator.

@@ -1,0 +1,21 @@
+/a.ts(1,24): error TS2307: Cannot find module './z' or its corresponding type declarations.
+/b.ts(3,3): error TS2353: Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
+
+
+==== /a.ts (1 errors) ====
+    import type { A } from './z'; // unresolved
+                           ~~~~~
+!!! error TS2307: Cannot find module './z' or its corresponding type declarations.
+    type A = 0;
+    export { A };
+    export class B {};
+    
+==== /b.ts (1 errors) ====
+    import * as types from './a';
+    let t: typeof types = {
+      A: undefined as any, // error
+      ~
+!!! error TS2353: Object literal may only specify known properties, and 'A' does not exist in type 'typeof import("/a")'.
+      B: undefined as any,
+    }
+    

@@ -91,7 +91,7 @@ describe("unittests:: tsserver:: refactors", () => {
                 endOffset: aTs.content.length,
                 refactor: "Move to a new file",
                 action: "Move to a new file",
-            }
+            },
         });
         baselineTsserverLogs("refactors", "handles canonicalization of tsconfig path", session);
     });
@@ -99,8 +99,10 @@ describe("unittests:: tsserver:: refactors", () => {
     it("handles moving statement to an existing file", () => {
         const aTs: File = { path: "/Foo/a.ts", content: "const x = 0;" };
         const bTs: File = {
-            path: "/Foo/b.ts", content: `import {} from "./bar";
-    const a = 1;`};
+            path: "/Foo/b.ts",
+            content: `import {} from "./bar";
+    const a = 1;`,
+        };
         const tsconfig: File = { path: "/Foo/tsconfig.json", content: `{ "files": ["./a.ts", "./b.ts"] }` };
         const host = createServerHost([aTs, bTs, tsconfig]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -117,7 +119,7 @@ describe("unittests:: tsserver:: refactors", () => {
                 refactor: "Move to file",
                 action: "Move to file",
                 interactiveRefactorArguments: { targetFile: "/Foo/b.ts" },
-            }
+            },
         });
         baselineTsserverLogs("refactors", "handles moving statement to an existing file", session);
     });
@@ -125,15 +127,15 @@ describe("unittests:: tsserver:: refactors", () => {
     it("handles moving statements to a non-TS file", () => {
         const aTs: File = {
             path: "/Foo/a.ts",
-            content: "const x = 0;"
+            content: "const x = 0;",
         };
         const bTxt: File = {
             path: "/Foo/b.txt",
-            content: ""
+            content: "",
         };
         const tsconfig: File = {
             path: "/Foo/tsconfig.json",
-            content: `{ "files": ["./a.ts"] }`
+            content: `{ "files": ["./a.ts"] }`,
         };
         const host = createServerHost([aTs, bTxt, tsconfig]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -150,7 +152,7 @@ describe("unittests:: tsserver:: refactors", () => {
                 refactor: "Move to file",
                 action: "Move to file",
                 interactiveRefactorArguments: { targetFile: "/Foo/b.txt" },
-            }
+            },
         });
         baselineTsserverLogs("refactors", "handles moving statements to a non-TS file", session);
     });
@@ -158,11 +160,11 @@ describe("unittests:: tsserver:: refactors", () => {
     it("handles moving statements to a TS file that is not included in the TS project", () => {
         const fooATs: File = {
             path: "/Foo/a.ts",
-            content: ""
+            content: "",
         };
         const fooTsconfig: File = {
             path: "/Foo/tsconfig.json",
-            content: `{ "files": ["./a.ts"] }`
+            content: `{ "files": ["./a.ts"] }`,
         };
 
         const barATs: File = {
@@ -171,11 +173,11 @@ describe("unittests:: tsserver:: refactors", () => {
                 "const a = 1;",
                 "const b = 2;",
                 "console.log(a, b);",
-            ].join("\n")
+            ].join("\n"),
         };
         const barTsconfig: File = {
             path: "/Bar/tsconfig.json",
-            content: `{ "files": ["./a.ts"] }`
+            content: `{ "files": ["./a.ts"] }`,
         };
         const host = createServerHost([fooATs, fooTsconfig, barATs, barTsconfig]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -192,7 +194,7 @@ describe("unittests:: tsserver:: refactors", () => {
                 refactor: "Move to file",
                 action: "Move to file",
                 interactiveRefactorArguments: { targetFile: "/Foo/a.ts" },
-            }
+            },
         });
         baselineTsserverLogs("refactors", "handles moving statements to a TS file that is not included in the TS project", session);
     });

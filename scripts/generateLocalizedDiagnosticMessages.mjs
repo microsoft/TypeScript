@@ -1,4 +1,6 @@
-import { XMLParser } from "fast-xml-parser";
+import {
+    XMLParser,
+} from "fast-xml-parser";
 import fs from "fs";
 import path from "path";
 
@@ -50,8 +52,7 @@ async function main() {
         const inputFilePath = path.join(inputPath, name, "diagnosticMessages", "diagnosticMessages.generated.json.lcl");
         const contents = await fs.promises.readFile(inputFilePath);
         /** @type {ParsedLCL} */
-        // eslint-disable-next-line local/object-literal-surrounding-space
-        const result = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "$_"}).parse(contents);
+        const result = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "$_" }).parse(contents);
         if (!result || !result.LCX || !result.LCX.$_TgtCul) {
             console.error("Unexpected XML file structure. Expected to find result.LCX.$_TgtCul.");
             process.exit(1);
@@ -135,8 +136,8 @@ async function main() {
             path.join(outputPath, "enu", "diagnosticMessages.generated.json.lcg"),
             getLCGFileXML(
                 Object.entries(JSON.parse(contents))
-                    .sort((a, b) => a[0] > b[0] ? 1 : -1)  // lcg sorted by property keys
-                    .reduce((s, [key, value]) => s + getItemXML(key, value), "")
+                    .sort((a, b) => a[0] > b[0] ? 1 : -1) // lcg sorted by property keys
+                    .reduce((s, [key, value]) => s + getItemXML(key, value), ""),
             ),
         );
         return;

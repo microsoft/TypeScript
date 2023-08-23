@@ -22,7 +22,7 @@ export function readProject(host: fakes.ParseConfigHost, project: string | undef
     }
     else {
         [project] = host.vfs.scanSync(".", "ancestors-or-self", {
-            accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0
+            accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0,
         });
     }
 
@@ -109,7 +109,7 @@ export class CompilationResult {
                     inputs,
                     js: js.get(outFile),
                     dts: dts.get(vpath.changeExtension(outFile, ".d.ts")),
-                    map: maps.get(outFile + ".map")
+                    map: maps.get(outFile + ".map"),
                 };
 
                 if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
@@ -131,7 +131,7 @@ export class CompilationResult {
                                 inputs: [input],
                                 js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
                                 dts: dts.get(this.getOutputPath(sourceFile.fileName, ts.getDeclarationEmitExtensionForPath(sourceFile.fileName))),
-                                map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map"))
+                                map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map")),
                             };
 
                             this._inputsAndOutputs.set(sourceFile.fileName, outputs);
@@ -273,22 +273,23 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;
     const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;
-    const errors = preErrors && (preErrors.length !== postErrors.length) ? [...shorterErrors!,
+    const errors = preErrors && (preErrors.length !== postErrors.length) ? [
+        ...shorterErrors!,
         ts.addRelatedInfo(
             ts.createCompilerDiagnostic({
                 category: ts.DiagnosticCategory.Error,
                 code: -1,
                 key: "-1",
-                message: `Pre-emit (${preErrors.length}) and post-emit (${postErrors.length}) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!`
+                message: `Pre-emit (${preErrors.length}) and post-emit (${postErrors.length}) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!`,
             }),
             ts.createCompilerDiagnostic({
                 category: ts.DiagnosticCategory.Error,
                 code: -1,
                 key: "-1",
-                message: `The excess diagnostics are:`
+                message: `The excess diagnostics are:`,
             }),
-            ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo))
-        )
+            ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo)),
+        ),
     ] : postErrors;
     return new CompilationResult(host, compilerOptions, program, emitResult, errors);
 }

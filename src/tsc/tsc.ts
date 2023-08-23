@@ -8,7 +8,7 @@ import * as Debug from "../compiler/debug";
 Debug.setLoggingHost({
     log(_level, s) {
         ts.sys.write(`${s || ""}${ts.sys.newLine}`);
-    }
+    },
 });
 
 if (Debug.isDebugging) {

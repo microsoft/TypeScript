@@ -1,0 +1,20 @@
+parserForInStatement8.ts(3,10): error TS2461: Type 'string' is not an array type.
+parserForInStatement8.ts(3,10): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
+parserForInStatement8.ts(4,10): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
+parserForInStatement8.ts(4,11): error TS2339: Property 'x' does not exist on type 'String'.
+
+
+==== parserForInStatement8.ts (4 errors) ====
+    // repro from https://github.com/microsoft/TypeScript/issues/54769
+    
+    for (let [x = 'a' in {}] in { '': 0 }) console.log(x)
+             ~~~~~~~~~~~~~~~
+!!! error TS2461: Type 'string' is not an array type.
+             ~~~~~~~~~~~~~~~
+!!! error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
+    for (let {x = 'a' in {}} in { '': 0 }) console.log(x)
+             ~~~~~~~~~~~~~~~
+!!! error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
+              ~
+!!! error TS2339: Property 'x' does not exist on type 'String'.
+    

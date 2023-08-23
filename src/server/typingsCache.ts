@@ -41,7 +41,7 @@ export const nullTypingsInstaller: ITypingsInstaller = {
     enqueueInstallTypingsRequest: noop,
     attach: noop,
     onProjectClosed: noop,
-    globalTypingsCacheLocation: undefined! // TODO: GH#18217
+    globalTypingsCacheLocation: undefined!, // TODO: GH#18217
 };
 
 interface TypingsCacheEntry {
@@ -123,11 +123,13 @@ export class TypingsCache {
         }
 
         const entry = this.perProjectCache.get(project.getProjectName());
-        if (forceRefresh ||
+        if (
+            forceRefresh ||
             !entry ||
             typeAcquisitionChanged(typeAcquisition, entry.typeAcquisition) ||
             compilerOptionsChanged(project.getCompilationSettings(), entry.compilerOptions) ||
-            unresolvedImportsChanged(unresolvedImports, entry.unresolvedImports)) {
+            unresolvedImportsChanged(unresolvedImports, entry.unresolvedImports)
+        ) {
             // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
             // instead it acts as a placeholder to prevent issuing multiple requests
             this.perProjectCache.set(project.getProjectName(), {
@@ -135,7 +137,7 @@ export class TypingsCache {
                 typeAcquisition,
                 typings: entry ? entry.typings : emptyArray,
                 unresolvedImports,
-                poisoned: true
+                poisoned: true,
             });
             // something has been changed, issue a request to update typings
             this.installer.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
@@ -149,7 +151,7 @@ export class TypingsCache {
             typeAcquisition,
             typings,
             unresolvedImports,
-            poisoned: false
+            poisoned: false,
         });
         return !typeAcquisition || !typeAcquisition.enable ? emptyArray : typings;
     }

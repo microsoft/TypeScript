@@ -2,19 +2,22 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
+import {
+    loadProjectFromFiles,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: noEmit", () => {
     function verifyNoEmitWorker(subScenario: string, aTsContent: string, commandLineArgs: readonly string[]) {
         verifyTsc({
             scenario: "noEmit",
             subScenario,
-            fs: () => loadProjectFromFiles({
-                "/src/a.ts": aTsContent,
-                "/src/tsconfig.json": JSON.stringify({
-                    compilerOptions: { noEmit: true }
-                })
-            }),
+            fs: () =>
+                loadProjectFromFiles({
+                    "/src/a.ts": aTsContent,
+                    "/src/tsconfig.json": JSON.stringify({
+                        compilerOptions: { noEmit: true },
+                    }),
+                }),
             commandLineArgs,
             edits: [
                 noChangeRun,

@@ -28,7 +28,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     import {B} from './b';
                     declare var console: any;
                     let b = new B();
-                    console.log(b.c.d);`
+                    console.log(b.c.d);`,
             };
             const bFile: File = {
                 path: `/user/username/projects/myproject/b.ts`,
@@ -36,36 +36,36 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     import {C} from './c';
                     export class B {
                         c = new C();
-                    }`
+                    }`,
             };
             const cFile: File = {
                 path: `/user/username/projects/myproject/c.ts`,
                 content: Utils.dedent`
                     export class C {
                         d = 1;
-                    }`
+                    }`,
             };
             const dFile: File = {
                 path: `/user/username/projects/myproject/d.ts`,
-                content: "export class D { }"
+                content: "export class D { }",
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } })
+                content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } }),
             };
             const { sys, baseline, oldSnap: originalSnap } = createBaseline(createWatchedSystem(
                 [aFile, bFile, cFile, dFile, config, libFile],
-                { currentDirectory: "/user/username/projects/myproject" }
+                { currentDirectory: "/user/username/projects/myproject" },
             ));
             sys.exit = exitCode => sys.exitCode = exitCode;
             const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
             const parsedConfig = ts.parseConfigFileWithSystem(
                 "tsconfig.json",
                 {},
-             /*extendedConfigCache*/ undefined,
-              /*watchOptionsToExtend*/ undefined,
+                /*extendedConfigCache*/ undefined,
+                /*watchOptionsToExtend*/ undefined,
                 sys,
-                reportDiagnostic
+                reportDiagnostic,
             )!;
             const host = ts.createIncrementalCompilerHost(parsedConfig.options, sys);
             let programs: CommandLineProgram[] = ts.emptyArray;
@@ -92,7 +92,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                 sys,
                 baseline,
                 sys => sys.appendFile(cFile.path, "export function foo() {}"),
-                "Add change that affects d.ts"
+                "Add change that affects d.ts",
             );
             createIncrementalProgram();
 
@@ -146,8 +146,8 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                         parsedConfig.options,
                         host,
                         builderProgram,
-                    /*configFileParsingDiagnostics*/ undefined,
-                    /*projectReferences*/ undefined,
+                        /*configFileParsingDiagnostics*/ undefined,
+                        /*projectReferences*/ undefined,
                     );
                 updatePrograms();
             }
@@ -174,9 +174,9 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     parsedConfig.fileNames,
                     parsedConfig.options,
                     host,
-                /*oldProgram*/ undefined,
-                /*configFileParsingDiagnostics*/ undefined,
-                /*projectReferences*/ undefined,
+                    /*oldProgram*/ undefined,
+                    /*configFileParsingDiagnostics*/ undefined,
+                    /*projectReferences*/ undefined,
                 );
                 updatePrograms();
                 emitAndBaseline();

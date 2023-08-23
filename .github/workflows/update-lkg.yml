@@ -20,17 +20,17 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
 
-    - name: Configure Git and Update LKG
-      run: |
-        git config user.email "typescriptbot@microsoft.com"
-        git config user.name "TypeScript Bot"
-        npm ci
-        npx hereby LKG
-        npm test
-        git diff
-        git add --force ./lib
-        git commit -m "Update LKG"
-        git push
+      - name: Configure Git and Update LKG
+        run: |
+          git config user.email "typescriptbot@microsoft.com"
+          git config user.name "TypeScript Bot"
+          npm ci
+          npx hereby LKG
+          npm test
+          git diff
+          git add --force ./lib
+          git commit -m "Update LKG"
+          git push

@@ -1,5 +1,4 @@
-switchStatements.ts(35,20): error TS2678: Type '{ id: number; name: string; }' is not comparable to type 'C'.
-  Object literal may only specify known properties, and 'name' does not exist in type 'C'.
+switchStatements.ts(35,20): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'C'.
 
 
 ==== switchStatements.ts (1 errors) ====
@@ -39,8 +38,7 @@ switchStatements.ts(35,20): error TS2678: Type '{ id: number; name: string; }' i
         case new D():
         case { id: 12, name: '' }:
                        ~~~~
-!!! error TS2678: Type '{ id: number; name: string; }' is not comparable to type 'C'.
-!!! error TS2678:   Object literal may only specify known properties, and 'name' does not exist in type 'C'.
+!!! error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'C'.
         case new C():
     }
     

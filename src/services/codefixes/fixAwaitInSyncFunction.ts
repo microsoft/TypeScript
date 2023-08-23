@@ -31,7 +31,7 @@ const errorCodes = [
     Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
     Diagnostics.await_using_statements_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
     Diagnostics.for_await_loops_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
-    Diagnostics.Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function.code
+    Diagnostics.Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function.code,
 ];
 registerCodeFix({
     errorCodes,
@@ -57,14 +57,16 @@ function getReturnType(expr: FunctionDeclaration | MethodDeclaration | FunctionE
     if (expr.type) {
         return expr.type;
     }
-    if (isVariableDeclaration(expr.parent) &&
+    if (
+        isVariableDeclaration(expr.parent) &&
         expr.parent.type &&
-        isFunctionTypeNode(expr.parent.type)) {
+        isFunctionTypeNode(expr.parent.type)
+    ) {
         return expr.parent.type.type;
     }
 }
 
-function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node, returnType: TypeNode | undefined } | undefined {
+function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node; returnType: TypeNode | undefined; } | undefined {
     const token = getTokenAtPosition(sourceFile, start);
     const containingFunction = getContainingFunction(token);
     if (!containingFunction) {
@@ -90,15 +92,15 @@ function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node, 
 
     return insertBefore && {
         insertBefore,
-        returnType: getReturnType(containingFunction)
+        returnType: getReturnType(containingFunction),
     };
 }
 
 function doChange(
     changes: textChanges.ChangeTracker,
     sourceFile: SourceFile,
-    { insertBefore, returnType }: { insertBefore: Node, returnType: TypeNode | undefined }): void {
-
+    { insertBefore, returnType }: { insertBefore: Node; returnType: TypeNode | undefined; },
+): void {
     if (returnType) {
         const entityName = getEntityNameFromTypeNode(returnType);
         if (!entityName || entityName.kind !== SyntaxKind.Identifier || entityName.text !== "Promise") {

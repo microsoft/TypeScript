@@ -1,0 +1,9 @@
+for-of53.ts(2,9): error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
+
+
+==== for-of53.ts (1 errors) ====
+    for (let v of []) {
+        var v;
+            ~
+!!! error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
+    }

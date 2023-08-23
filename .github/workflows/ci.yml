@@ -26,219 +26,254 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - "20"
-          - "18"
-          - "16"
-          - "14"
+          - '20'
+          - '18'
+          - '16'
+          - '14'
         bundle:
-          - "true"
+          - 'true'
         include:
-          - node-version: "*"
-            bundle: "false"
+          - node-version: '*'
+            bundle: 'false'
 
     name: Test Node ${{ matrix.node-version }} with --bundle=${{ matrix.bundle }}
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use node version ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@v3
+      - name: Use node version ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          check-latest: true
+      - run: npm ci
 
-    - name: Tests
-      # run tests, but lint separately
-      run:  npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+      - name: Tests
+        # run tests, but lint separately
+        run: npm run test -- --no-lint --bundle=${{ matrix.bundle }}
 
   lint:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
 
-    - name: Linter
-      run:  npm run lint
+      - name: Linter
+        run: npm run lint
+
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
+
+      # TODO: The cache fails when copied between GHA runners. See:
+      # https://github.com/dprint/dprint/issues/734
+      # https://github.com/dprint/dprint/issues/735
+      # - uses: actions/cache@v3
+      #   with:
+      #     path: ~/.cache/dprint
+      #     key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-dprint-
+
+      - name: Check formatting
+        run: npx dprint check
 
   browser-integration:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
 
-    - name: Adding playwright
-      run: npm install --no-save --no-package-lock playwright
+      - name: Adding playwright
+        run: npm install --no-save --no-package-lock playwright
 
-    - name: Validate the browser can import TypeScript
-      run: npx hereby test-browser-integration
+      - name: Validate the browser can import TypeScript
+        run: npx hereby test-browser-integration
 
   typecheck:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
 
-    - name: Build src
-      run: npx hereby build-src
+      - name: Build src
+        run: npx hereby build-src
 
   smoke:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run: |
-        npm --version
-        # corepack enable npm
-        npm install -g $(jq -r '.packageManager' < package.json)
-        npm --version
-    
-    - run:  npm ci
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: |
+          npm --version
+          # corepack enable npm
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
 
-    - run: npx hereby lkg
-    - run: |
-        npm pack
-        mv typescript*.tgz typescript.tgz
-        echo "package=$PWD/typescript.tgz" >> "$GITHUB_OUTPUT"
-      id: pack
+      - run: npm ci
 
-    - name: Smoke test
-      run: |
-        cd "$(mktemp -d)"
-        npm init --yes
-        npm install ${{ steps.pack.outputs.package }}
+      - run: npx hereby lkg
+      - run: |
+          npm pack
+          mv typescript*.tgz typescript.tgz
+          echo "package=$PWD/typescript.tgz" >> "$GITHUB_OUTPUT"
+        id: pack
 
-        echo "Testing tsc..."
-        npx tsc --version
+      - name: Smoke test
+        run: |
+          cd "$(mktemp -d)"
+          npm init --yes
+          npm install ${{ steps.pack.outputs.package }}
 
-        echo "Testing tsserver..."
-        echo '{"seq": 1, "command": "status"}' | npx tsserver
+          echo "Testing tsc..."
+          npx tsc --version
 
-        node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript
-        node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript/lib/tsserverlibrary
+          echo "Testing tsserver..."
+          echo '{"seq": 1, "command": "status"}' | npx tsserver
+
+          node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript
+          node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript/lib/tsserverlibrary
 
   package-size:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        path: pr
+      - uses: actions/checkout@v3
+        with:
+          path: pr
 
-    - uses: actions/checkout@v3
-      with:
-        path: base
-        ref: ${{ github.base_ref }}
+      - uses: actions/checkout@v3
+        with:
+          path: base
+          ref: ${{ github.base_ref }}
 
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run: |
-        npm --version
-        # corepack enable npm
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: |
+          npm --version
+          # corepack enable npm
 
-    - run: |
-        npm install -g $(jq -r '.packageManager' < package.json)
-        npm --version
-      working-directory: ./pr
+      - run: |
+          npm install -g $(jq -r '.packageManager' < package.json)
+          npm --version
+        working-directory: ./pr
 
-    - run: npm ci
-      working-directory: ./pr
+      - run: npm ci
+        working-directory: ./pr
 
-    - run: npm ci
-      working-directory: ./base
+      - run: npm ci
+        working-directory: ./base
 
-    - run: npx hereby lkg
-      working-directory: ./pr
-      
-    - run: npx hereby lkg
-      working-directory: ./base
+      - run: npx hereby lkg
+        working-directory: ./pr
 
-    - run: |
-        echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
-        node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
+      - run: npx hereby lkg
+        working-directory: ./base
+
+      - run: |
+          echo "See $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID for more info."
+          node ./pr/scripts/checkPackageSize.mjs ./base ./pr >> $GITHUB_STEP_SUMMARY
 
   misc:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
 
-    - name: Build scripts
-      run: npx hereby scripts
+      - name: Build scripts
+        run: npx hereby scripts
 
-    - name: ESLint tests
-      run: npx hereby run-eslint-rules-tests
+      - name: ESLint tests
+        run: npx hereby run-eslint-rules-tests
 
   self-check:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
 
-    - name: Build tsc
-      run: npx hereby tsc
+      - name: Build tsc
+        run: npx hereby tsc
 
-    - name: Clean
-      run: npx hereby clean-src
+      - name: Clean
+        run: npx hereby clean-src
 
-    - name: Self build
-      run: npx hereby build-src --built
+      - name: Self build
+        run: npx hereby build-src --built
 
-  unused-baselines:
+  baselines:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: "*"
-        check-latest: true
-    - run:  npm ci
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
 
-    - name: Remove all baselines
-      run: rm -rf tests/baselines/reference
+      - name: Remove all baselines
+        run: rm -rf tests/baselines/reference
 
-    - name: Run tests
-      run: npm test &> /dev/null || exit 0
+      - name: Run tests
+        run: npm test &> /dev/null || exit 0
 
-    - name: Accept baselines
-      run: npx hereby baseline-accept
+      - name: Accept baselines
+        run: |
+          npx hereby baseline-accept
+          git add tests/baselines/reference
 
-    - name: Check for unused baselines
-      run: |
-        if ! git diff --exit-code --quiet; then
-          echo "Unused baselines:"
-          git diff --exit-code --name-only
-        fi
+      - name: Check baselines
+        run: |
+          function print_diff() {
+            if ! git diff --staged --exit-code --quiet --diff-filter=$1; then
+              echo "$2:"
+              git diff --staged --name-only --diff-filter=$1
+            fi
+          }
+
+          if ! git diff --staged --exit-code --quiet; then
+            print_diff ACR "Missing baselines"
+            print_diff MTUXB "Modified baselines"
+            print_diff D "Unused baselines"
+            exit 1
+          fi

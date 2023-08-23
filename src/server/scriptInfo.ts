@@ -210,10 +210,10 @@ export class TextStorage {
         return !!this.fileSize
             ? this.fileSize
             : !!this.text // Check text before svc because its length is cheaper
-                ? this.text.length // Could be wrong if this.pendingReloadFromDisk
-                : !!this.svc
-                    ? this.svc.getSnapshot().getLength() // Could be wrong if this.pendingReloadFromDisk
-                    : this.getSnapshot().getLength(); // Should be strictly correct
+            ? this.text.length // Could be wrong if this.pendingReloadFromDisk
+            : !!this.svc
+            ? this.svc.getSnapshot().getLength() // Could be wrong if this.pendingReloadFromDisk
+            : this.getSnapshot().getLength(); // Should be strictly correct
     }
 
     public getSnapshot(): IScriptSnapshot {
@@ -265,7 +265,7 @@ export class TextStorage {
         return { line: line + 1, offset: character + 1 };
     }
 
-    private getFileTextAndSize(tempFileName?: string): { text: string, fileSize?: number } {
+    private getFileTextAndSize(tempFileName?: string): { text: string; fileSize?: number; } {
         let text: string;
         const fileName = tempFileName || this.info.fileName;
         const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
@@ -330,7 +330,7 @@ export class TextStorage {
         if (svc) {
             return {
                 getLineCount: () => svc.getLineCount(),
-                getLineText: line => svc.getAbsolutePositionAndLineText(line + 1).lineText!
+                getLineText: line => svc.getAbsolutePositionAndLineText(line + 1).lineText!,
             };
         }
         const lineMap = this.getLineMap();
@@ -406,7 +406,8 @@ export class ScriptInfo {
         readonly scriptKind: ScriptKind,
         public readonly hasMixedContent: boolean,
         readonly path: Path,
-        initialVersion?: number) {
+        initialVersion?: number,
+    ) {
         this.isDynamic = isDynamicFileName(fileName);
 
         this.textStorage = new TextStorage(host, this, initialVersion);
@@ -429,8 +430,10 @@ export class ScriptInfo {
 
     public open(newText: string | undefined) {
         this.textStorage.isOpen = true;
-        if (newText !== undefined &&
-            this.textStorage.reload(newText)) {
+        if (
+            newText !== undefined &&
+            this.textStorage.reload(newText)
+        ) {
             // reload new contents only if the existing contents changed
             this.markContainingProjectsAsDirty();
         }
@@ -480,8 +483,12 @@ export class ScriptInfo {
         return this.realpath && this.realpath !== this.path;
     }
 
-    getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
-    getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
+    getFormatCodeSettings(): FormatCodeSettings | undefined {
+        return this.formatSettings;
+    }
+    getPreferences(): protocol.UserPreferences | undefined {
+        return this.preferences;
+    }
 
     attachToProject(project: Project): boolean {
         const isNew = !this.isAttached(project);
@@ -498,10 +505,14 @@ export class ScriptInfo {
     isAttached(project: Project) {
         // unrolled for common cases
         switch (this.containingProjects.length) {
-            case 0: return false;
-            case 1: return this.containingProjects[0] === project;
-            case 2: return this.containingProjects[0] === project || this.containingProjects[1] === project;
-            default: return contains(this.containingProjects, project);
+            case 0:
+                return false;
+            case 1:
+                return this.containingProjects[0] === project;
+            case 2:
+                return this.containingProjects[0] === project || this.containingProjects[1] === project;
+            default:
+                return contains(this.containingProjects, project);
         }
     }
 
@@ -576,8 +587,10 @@ export class ScriptInfo {
                         if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
                             // If we havent found default configuredProject and
                             // its not the last one, find it and use that one if there
-                            if (defaultConfiguredProject === undefined &&
-                                index !== this.containingProjects.length - 1) {
+                            if (
+                                defaultConfiguredProject === undefined &&
+                                index !== this.containingProjects.length - 1
+                            ) {
                                 defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) || false;
                             }
                             if (defaultConfiguredProject === project) return project;
@@ -592,11 +605,13 @@ export class ScriptInfo {
                         firstInferredProject = project;
                     }
                 }
-                return ensurePrimaryProjectKind(defaultConfiguredProject ||
-                    firstNonSourceOfProjectReferenceRedirect ||
-                    firstConfiguredProject ||
-                    firstExternalProject ||
-                    firstInferredProject);
+                return ensurePrimaryProjectKind(
+                    defaultConfiguredProject ||
+                        firstNonSourceOfProjectReferenceRedirect ||
+                        firstConfiguredProject ||
+                        firstExternalProject ||
+                        firstInferredProject,
+                );
         }
     }
 
@@ -669,7 +684,8 @@ export class ScriptInfo {
     isContainedByBackgroundProject() {
         return some(
             this.containingProjects,
-            p => p.projectKind === ProjectKind.AutoImportProvider || p.projectKind === ProjectKind.Auxiliary);
+            p => p.projectKind === ProjectKind.AutoImportProvider || p.projectKind === ProjectKind.Auxiliary,
+        );
     }
 
     /**

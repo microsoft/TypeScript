@@ -396,7 +396,6 @@ function annotateSetAccessor(
     program: Program,
     host: LanguageServiceHost,
     cancellationToken: CancellationToken,
-
 ): void {
     const param = firstOrUndefined(setAccessorDeclaration.parameters);
     if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
@@ -437,7 +436,7 @@ function tryReplaceImportTypeNodeWithAutoImport(
     sourceFile: SourceFile,
     changes: textChanges.ChangeTracker,
     importAdder: ImportAdder,
-    scriptTarget: ScriptTarget
+    scriptTarget: ScriptTarget,
 ): boolean {
     const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
     if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
@@ -488,16 +487,14 @@ function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile:
         }
     }
     else {
-        const paramTags = map(inferences, ({ name, typeNode, isOptional }) =>
-            factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ false, /*comment*/ undefined));
+        const paramTags = map(inferences, ({ name, typeNode, isOptional }) => factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ false, /*comment*/ undefined));
         changes.addJSDocTags(sourceFile, signature, paramTags);
     }
 }
 
 function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): readonly Identifier[] {
     // Position shouldn't matter since token is not a SourceFile.
-    return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry =>
-        entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
+    return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry => entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
 }
 
 function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, program: Program, cancellationToken: CancellationToken): Type {
@@ -510,7 +507,7 @@ function inferTypeForParametersFromUsage(func: SignatureDeclaration, sourceFile:
     return references && inferTypeFromReferences(program, references, cancellationToken).parameters(func) ||
         func.parameters.map<ParameterInference>(p => ({
             declaration: p,
-            type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType()
+            type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType(),
         }));
 }
 
@@ -549,7 +546,7 @@ interface ParameterInference {
 
 function inferTypeFromReferences(program: Program, references: readonly Identifier[], cancellationToken: CancellationToken) {
     const checker = program.getTypeChecker();
-    const builtinConstructors: { [s: string]: (t: Type) => Type } = {
+    const builtinConstructors: { [s: string]: (t: Type) => Type; } = {
         string: () => checker.getStringType(),
         number: () => checker.getNumberType(),
         Array: t => checker.createArrayType(t),
@@ -677,7 +674,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             return {
                 type: isRest ? checker.createArrayType(type) : type,
                 isOptional: isOptional && !isRest,
-                declaration: parameter
+                declaration: parameter,
             };
         });
     }
@@ -783,8 +780,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
                 usage.isNumberOrString = true;
                 break;
 
-            // case SyntaxKind.ExclamationToken:
-            // no inferences here;
+                // case SyntaxKind.ExclamationToken:
+                // no inferences here;
         }
     }
 
@@ -885,8 +882,10 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             // LogicalOperator Or NullishCoalescing
             case SyntaxKind.BarBarToken:
             case SyntaxKind.QuestionQuestionToken:
-                if (node === parent.left &&
-                    (node.parent.parent.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))) {
+                if (
+                    node === parent.left &&
+                    (node.parent.parent.kind === SyntaxKind.VariableDeclaration || isAssignmentExpression(node.parent.parent, /*excludeCompoundAssignment*/ true))
+                ) {
                     // var x = x || {};
                     // TODO: use getFalsyflagsOfType
                     addCandidateType(usage, checker.getTypeAtLocation(parent.right));
@@ -908,7 +907,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     function inferTypeFromCallExpression(parent: CallExpression | NewExpression, usage: Usage): void {
         const call: CallUsage = {
             argumentTypes: [],
-            return_: createEmptyUsage()
+            return_: createEmptyUsage(),
         };
 
         if (parent.arguments) {
@@ -997,16 +996,17 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const priorities: Priority[] = [
             {
                 high: t => t === checker.getStringType() || t === checker.getNumberType(),
-                low: t => t === stringNumber
+                low: t => t === stringNumber,
             },
             {
                 high: t => !(t.flags & (TypeFlags.Any | TypeFlags.Void)),
-                low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void))
+                low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void)),
             },
             {
                 high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),
-                low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous)
-            }];
+                low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous),
+            },
+        ];
         let good = removeLowPriorityInferences(inferences, priorities);
         const anons = good.filter(i => getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
         if (anons.length) {
@@ -1058,7 +1058,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             members,
             calls,
             constructs,
-            indexInfos);
+            indexInfos,
+        );
     }
 
     function inferTypes(usage: Usage): Type[] {

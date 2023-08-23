@@ -3,20 +3,24 @@
     "build": {
         "dockerfile": "Dockerfile",
         "args": {
-            "VARIANT": "14"
+            "VARIANT": "18"
         }
     },
-    "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
-        "terminal.integrated.profiles.linux": {
-            "bash": {
-                "path": "/bin/bash",
-                "icon": "terminal-bash",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash",
+                        "icon": "terminal-bash"
+                    }
+                }
             },
-        },
+            "extensions": [
+                "dbaeumer.vscode-eslint"
+            ]
+        }
     },
-    "extensions": [
-        "dbaeumer.vscode-eslint"
-    ],
     "remoteUser": "node"
 }

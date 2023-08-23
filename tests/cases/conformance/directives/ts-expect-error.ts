@@ -38,3 +38,10 @@ var validPlain: string = 'nope';
 
 (({ a: true } as const).a === false); // error
 (({ a: true } as const).a === false); // error
+
+// @ts-expect-error: additional commenting with no whitespace
+var invalidCommentedFancySingle: number = 'nope';
+
+/*
+ @ts-expect-error: additional commenting with no whitespace */
+var invalidCommentedFancyMulti: number = 'nope';

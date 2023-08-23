@@ -5,6 +5,7 @@ import MyFunction from "./MyComponent";
 >MyFunction : Symbol(MyFunction, Decl(main.ts, 0, 6))
 
 MyFunction({msg: "Hello World"});
+>MyFunction : Symbol(MyFunction, Decl(main.ts, 0, 6))
 >msg : Symbol(msg, Decl(main.ts, 2, 12))
 
 

@@ -43,7 +43,7 @@ export function transformES2019(context: TransformationContext): (x: SourceFile 
             return factory.updateCatchClause(
                 node,
                 factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined)),
-                visitNode(node.block, visitor, isBlock)
+                visitNode(node.block, visitor, isBlock),
             );
         }
         return visitEachChild(node, visitor, context);

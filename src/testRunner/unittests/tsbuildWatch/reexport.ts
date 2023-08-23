@@ -1,5 +1,9 @@
-import { libContent } from "../helpers/contents";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import {
+    libContent,
+} from "../helpers/contents";
+import {
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     getTsBuildProjectFile,
@@ -11,18 +15,22 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
         scenario: "reexport",
         subScenario: "Reports errors correctly",
         commandLineArgs: ["-b", "-w", "-verbose", "src"],
-        sys: () => createWatchedSystem(
-            [
-                ...[
-                    "src/tsconfig.json",
-                    "src/main/tsconfig.json", "src/main/index.ts",
-                    "src/pure/tsconfig.json", "src/pure/index.ts", "src/pure/session.ts"
-                ]
-                    .map(f => getTsBuildProjectFile("reexport", f)),
-                { path: libFile.path, content: libContent }
-            ],
-            { currentDirectory: `/user/username/projects/reexport` }
-        ),
+        sys: () =>
+            createWatchedSystem(
+                [
+                    ...[
+                        "src/tsconfig.json",
+                        "src/main/tsconfig.json",
+                        "src/main/index.ts",
+                        "src/pure/tsconfig.json",
+                        "src/pure/index.ts",
+                        "src/pure/session.ts",
+                    ]
+                        .map(f => getTsBuildProjectFile("reexport", f)),
+                    { path: libFile.path, content: libContent },
+                ],
+                { currentDirectory: `/user/username/projects/reexport` },
+            ),
         edits: [
             {
                 caption: "Introduce error",
@@ -39,7 +47,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
                     sys.runQueuedTimeoutCallbacks(); // build src/pure
                     sys.runQueuedTimeoutCallbacks(); // build src/main and src
                 },
-            }
-        ]
+            },
+        ],
     });
 });

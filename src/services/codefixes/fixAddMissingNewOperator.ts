@@ -26,8 +26,7 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_new_operator_to_call, fixId, Diagnostics.Add_missing_new_operator_to_all_calls)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-        addMissingNewOperator(changes, context.sourceFile, diag)),
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => addMissingNewOperator(changes, context.sourceFile, diag)),
 });
 
 function addMissingNewOperator(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan): void {

@@ -4,6 +4,11 @@
     // To use the locally built compiler, after 'npm run build':
     // "typescript.tsdk": "built/local"
 
+    "[typescript][javascript][yaml]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+
     // To ignore commits listed in .git-blame-ignore-revs in GitLens:
     "gitlens.advanced.blame.customArguments": [
         "--ignore-revs-file",

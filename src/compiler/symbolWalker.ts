@@ -37,8 +37,8 @@ export function createGetSymbolWalker(
     getResolvedSymbol: (node: Identifier) => Symbol,
     getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
     getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier,
-    getTypeArguments: (type: TypeReference) => readonly Type[]) {
-
+    getTypeArguments: (type: TypeReference) => readonly Type[],
+) {
     return getSymbolWalker;
 
     function getSymbolWalker(accept: (symbol: Symbol) => boolean = () => true): SymbolWalker {
@@ -214,4 +214,3 @@ export function createGetSymbolWalker(
         }
     }
 }
-

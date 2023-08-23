@@ -91,23 +91,21 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
 
             // Make sure each of the children is in order.
             let currentPos = 0;
-            ts.forEachChild(node,
-                child => {
-                    assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
-                    currentPos = child.end;
-                },
-                array => {
-                    assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
-                    assert.isFalse(array.end > node.end, "array.end > node.end");
-                    assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
+            ts.forEachChild(node, child => {
+                assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
+                currentPos = child.end;
+            }, array => {
+                assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
+                assert.isFalse(array.end > node.end, "array.end > node.end");
+                assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
 
-                    for (const item of array) {
-                        assert.isFalse(item.pos < currentPos, "array[i].pos < currentPos");
-                        currentPos = item.end;
-                    }
+                for (const item of array) {
+                    assert.isFalse(item.pos < currentPos, "array[i].pos < currentPos");
+                    currentPos = item.end;
+                }
 
-                    currentPos = array.end;
-                });
+                currentPos = array.end;
+            });
 
             const childNodesAndArrays: any[] = [];
             ts.forEachChild(node, child => {
@@ -117,7 +115,8 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
             });
 
             for (const childName in node) {
-                if (childName === "parent" ||
+                if (
+                    childName === "parent" ||
                     childName === "nextContainer" ||
                     childName === "modifiers" ||
                     childName === "externalModuleIndicator" ||
@@ -133,13 +132,13 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
                     childName === "illegalQuestionToken" ||
                     childName === "illegalExclamationToken" ||
                     childName === "illegalTypeParameters" ||
-                    childName === "illegalType") {
+                    childName === "illegalType"
+                ) {
                     continue;
                 }
                 const child = (node as any)[childName];
                 if (isNodeOrArray(child)) {
-                    assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
-                        "Missing child when forEach'ing over node: " + ts.Debug.formatSyntaxKind(node.kind) + "-" + childName);
+                    assert.isFalse(childNodesAndArrays.indexOf(child) < 0, "Missing child when forEach'ing over node: " + ts.Debug.formatSyntaxKind(node.kind) + "-" + childName);
                 }
             }
         }
@@ -160,7 +159,7 @@ function convertDiagnostic(diagnostic: ts.Diagnostic) {
         length: diagnostic.length,
         messageText: ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()),
         category: ts.diagnosticCategoryName(diagnostic, /*lowerCase*/ false),
-        code: diagnostic.code
+        code: diagnostic.code,
     };
 }
 
@@ -270,7 +269,9 @@ export function assertDiagnosticsEquals(array1: readonly ts.Diagnostic[], array2
         assert.equal(d1.length, d2.length, "d1.length !== d2.length");
         assert.equal(
             ts.flattenDiagnosticMessageText(d1.messageText, Harness.IO.newLine()),
-            ts.flattenDiagnosticMessageText(d2.messageText, Harness.IO.newLine()), "d1.messageText !== d2.messageText");
+            ts.flattenDiagnosticMessageText(d2.messageText, Harness.IO.newLine()),
+            "d1.messageText !== d2.messageText",
+        );
         assert.equal(d1.category, d2.category, "d1.category !== d2.category");
         assert.equal(d1.code, d2.code, "d1.code !== d2.code");
     }
@@ -292,19 +293,17 @@ export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
     assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
     assert.equal(node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, "node1.flags !== node2.flags");
 
-    ts.forEachChild(node1,
-        child1 => {
-            const childName = findChildName(node1, child1);
-            const child2: ts.Node = (node2 as any)[childName];
+    ts.forEachChild(node1, child1 => {
+        const childName = findChildName(node1, child1);
+        const child2: ts.Node = (node2 as any)[childName];
 
-            assertStructuralEquals(child1, child2);
-        },
-        array1 => {
-            const childName = findChildName(node1, array1);
-            const array2: ts.NodeArray<ts.Node> = (node2 as any)[childName];
+        assertStructuralEquals(child1, child2);
+    }, array1 => {
+        const childName = findChildName(node1, array1);
+        const array2: ts.NodeArray<ts.Node> = (node2 as any)[childName];
 
-            assertArrayStructuralEquals(array1, array2);
-        });
+        assertArrayStructuralEquals(array1, array2);
+    });
 }
 
 function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.NodeArray<ts.Node>) {
@@ -344,9 +343,11 @@ export function filterStack(error: Error, stackTraceLimit = Infinity) {
         let harnessFrameCount = 0;
         for (let line of lines) {
             if (isStackFrame(line)) {
-                if (frameCount >= stackTraceLimit
+                if (
+                    frameCount >= stackTraceLimit
                     || isMocha(line)
-                    || isNode(line)) {
+                    || isNode(line)
+                ) {
                     continue;
                 }
 

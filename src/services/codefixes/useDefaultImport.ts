@@ -32,10 +32,11 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_default_import, fixId, Diagnostics.Convert_all_to_default_imports)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, diag.start);
-        if (info) doChange(changes, diag.file, info, context.preferences);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, diag.start);
+            if (info) doChange(changes, diag.file, info, context.preferences);
+        }),
 });
 
 interface Info {

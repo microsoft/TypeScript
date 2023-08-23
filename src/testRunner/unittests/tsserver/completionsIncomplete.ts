@@ -19,10 +19,12 @@ function createExportingModuleFile(path: string, exportPrefix: string, exportCou
 }
 
 function createExportingModuleFiles(pathPrefix: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
-    return ts.arrayOf(fileCount, fileIndex => createExportingModuleFile(
-        `${pathPrefix}_${fileIndex}.ts`,
-        getExportPrefix(fileIndex),
-        exportCount));
+    return ts.arrayOf(fileCount, fileIndex =>
+        createExportingModuleFile(
+            `${pathPrefix}_${fileIndex}.ts`,
+            getExportPrefix(fileIndex),
+            exportCount,
+        ));
 }
 
 function createNodeModulesPackage(packageName: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
@@ -44,12 +46,12 @@ function createNodeModulesPackage(packageName: string, fileCount: number, export
 
 const indexFile: File = {
     path: "/index.ts",
-    content: ""
+    content: "",
 };
 
 const tsconfigFile: File = {
     path: "/tsconfig.json",
-    content: `{ "compilerOptions": { "module": "commonjs" } }`
+    content: `{ "compilerOptions": { "module": "commonjs" } }`,
 };
 
 const packageJsonFile: File = {
@@ -134,7 +136,8 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                 assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a")), 50);
                 assertCompletionDetailsOk(
                     indexFile.path,
-                    completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!);
+                    completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!,
+                );
             });
         baselineTsserverLogs("completionsIncomplete", "works with PackageJsonAutoImportProvider", session);
     });
@@ -177,8 +180,8 @@ function setup(files: File[]) {
                 includeCompletionsWithInsertText: true,
                 includeCompletionsForImportStatements: true,
                 includePackageJsonAutoImports: "auto",
-            }
-        }
+            },
+        },
     });
 
     return { host, session, projectService, typeToTriggerCompletions, assertCompletionDetailsOk };
@@ -214,7 +217,7 @@ function setup(files: File[]) {
                     triggerKind: isIncompleteContinuation
                         ? ts.server.protocol.CompletionTriggerKind.TriggerForIncompleteCompletions
                         : undefined,
-                }
+                },
             }).response as ts.server.protocol.CompletionInfo;
 
             cb?.(ts.Debug.checkDefined(response));
@@ -269,8 +272,8 @@ function setup(files: File[]) {
                     name: entry.name,
                     source: entry.source,
                     data: entry.data,
-                }]
-            }
+                }],
+            },
         }).response as ts.server.protocol.CompletionEntryDetails[];
 
         assert(details[0]);

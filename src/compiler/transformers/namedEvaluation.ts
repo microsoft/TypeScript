@@ -47,7 +47,7 @@ import {
     SyntaxKind,
     TransformationContext,
     VariableDeclaration,
-    WrappedExpression
+    WrappedExpression,
 } from "../_namespaces/ts";
 
 /**
@@ -56,8 +56,10 @@ import {
  */
 export function getAssignedNameOfIdentifier(factory: NodeFactory, name: Identifier, expression: WrappedExpression<AnonymousFunctionDefinition>): StringLiteral {
     const original = getOriginalNode(skipOuterExpressions(expression));
-    if ((isClassDeclaration(original) || isFunctionDeclaration(original)) &&
-        !original.name && hasSyntacticModifier(original, ModifierFlags.Default)) {
+    if (
+        (isClassDeclaration(original) || isFunctionDeclaration(original)) &&
+        !original.name && hasSyntacticModifier(original, ModifierFlags.Default)
+    ) {
         return factory.createStringLiteral("default");
     }
     return factory.createStringLiteralFromNode(name);
@@ -119,16 +121,17 @@ export function createClassNamedEvaluationHelperBlock(context: TransformationCon
 /** @internal */
 export type ClassNamedEvaluationHelperBlock = ClassStaticBlockDeclaration & {
     readonly body: Block & {
-        readonly statements: NodeArray<Statement> & readonly [
-            ExpressionStatement & {
-                readonly expression: CallExpression & {
-                    readonly expression: Identifier;
-                };
-            }
-        ];
+        readonly statements:
+            & NodeArray<Statement>
+            & readonly [
+                ExpressionStatement & {
+                    readonly expression: CallExpression & {
+                        readonly expression: Identifier;
+                    };
+                },
+            ];
     };
 };
-
 
 /**
  * Gets whether a node is a `static {}` block containing only a single call to the `__setFunctionName` helper where that
@@ -173,13 +176,13 @@ export function injectClassNamedEvaluationHelperBlockIfMissing<T extends ClassLi
     context: TransformationContext,
     node: T,
     assignedName: Expression,
-    thisExpression?: Expression
+    thisExpression?: Expression,
 ): Extract<ClassLikeDeclaration, Pick<T, "kind">>;
 export function injectClassNamedEvaluationHelperBlockIfMissing(
     context: TransformationContext,
     node: ClassLikeDeclaration,
     assignedName: Expression,
-    thisExpression?: Expression
+    thisExpression?: Expression,
 ) {
     // given:
     //
@@ -217,14 +220,16 @@ export function injectClassNamedEvaluationHelperBlockIfMissing(
             node.name,
             node.typeParameters,
             node.heritageClauses,
-            members) :
+            members,
+        ) :
         factory.updateClassExpression(
             node,
             node.modifiers,
             node.name,
             node.typeParameters,
             node.heritageClauses,
-            members);
+            members,
+        );
 
     getOrCreateEmitNode(node).assignedName = assignedName;
     return node;
@@ -264,7 +269,8 @@ function transformNamedEvaluationOfPropertyAssignment(context: TransformationCon
     return factory.updatePropertyAssignment(
         node,
         name,
-        initializer);
+        initializer,
+    );
 }
 
 function transformNamedEvaluationOfShorthandAssignmentProperty(context: TransformationContext, node: NamedEvaluation & ShorthandPropertyAssignment, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
@@ -283,7 +289,8 @@ function transformNamedEvaluationOfShorthandAssignmentProperty(context: Transfor
     return factory.updateShorthandPropertyAssignment(
         node,
         node.name,
-        objectAssignmentInitializer);
+        objectAssignmentInitializer,
+    );
 }
 
 function transformNamedEvaluationOfVariableDeclaration(context: TransformationContext, node: NamedEvaluation & VariableDeclaration, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
@@ -310,7 +317,8 @@ function transformNamedEvaluationOfVariableDeclaration(context: TransformationCo
         node.name,
         node.exclamationToken,
         node.type,
-        initializer);
+        initializer,
+    );
 }
 
 function transformNamedEvaluationOfParameterDeclaration(context: TransformationContext, node: NamedEvaluation & ParameterDeclaration, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
@@ -341,7 +349,8 @@ function transformNamedEvaluationOfParameterDeclaration(context: TransformationC
         node.name,
         node.questionToken,
         node.type,
-        initializer);
+        initializer,
+    );
 }
 
 function transformNamedEvaluationOfBindingElement(context: TransformationContext, node: NamedEvaluation & BindingElement, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
@@ -370,7 +379,8 @@ function transformNamedEvaluationOfBindingElement(context: TransformationContext
         node.dotDotDotToken,
         node.propertyName,
         node.name,
-        initializer);
+        initializer,
+    );
 }
 
 function transformNamedEvaluationOfPropertyDeclaration(context: TransformationContext, node: NamedEvaluation & PropertyDeclaration, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
@@ -390,7 +400,8 @@ function transformNamedEvaluationOfPropertyDeclaration(context: TransformationCo
         name,
         node.questionToken ?? node.exclamationToken,
         node.type,
-        initializer);
+        initializer,
+    );
 }
 
 function transformNamedEvaluationOfAssignmentExpression(context: TransformationContext, node: NamedEvaluation & BinaryExpression, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
@@ -428,7 +439,8 @@ function transformNamedEvaluationOfAssignmentExpression(context: TransformationC
         node,
         node.left,
         node.operatorToken,
-        right);
+        right,
+    );
 }
 
 function transformNamedEvaluationOfExportAssignment(context: TransformationContext, node: NamedEvaluation & ExportAssignment, ignoreEmptyStringLiteral?: boolean, assignedNameText?: string) {
@@ -448,7 +460,8 @@ function transformNamedEvaluationOfExportAssignment(context: TransformationConte
     return factory.updateExportAssignment(
         node,
         node.modifiers,
-        expression);
+        expression,
+    );
 }
 
 /**

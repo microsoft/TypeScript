@@ -25,14 +25,14 @@ export const testLibFolder = "/.lib";
 export const srcFolder = "/.src";
 
 // file type
-const S_IFMT            = 0o170000; // file type
-const S_IFSOCK          = 0o140000; // socket
-const S_IFLNK           = 0o120000; // symbolic link
-const S_IFREG           = 0o100000; // regular file
-const S_IFBLK           = 0o060000; // block device
-const S_IFDIR           = 0o040000; // directory
-const S_IFCHR           = 0o020000; // character device
-const S_IFIFO           = 0o010000; // FIFO
+const S_IFMT = 0o170000; // file type
+const S_IFSOCK = 0o140000; // socket
+const S_IFLNK = 0o120000; // symbolic link
+const S_IFREG = 0o100000; // regular file
+const S_IFBLK = 0o060000; // block device
+const S_IFDIR = 0o040000; // directory
+const S_IFCHR = 0o020000; // character device
+const S_IFIFO = 0o010000; // FIFO
 
 let devCount = 0; // A monotonically increasing count of device ids
 let inoCount = 0; // A monotonically increasing count of inodes
@@ -455,7 +455,6 @@ export class FileSystem {
         return this._stat(this._walk(this._resolve(path), /*noFollow*/ true));
     }
 
-
     private _stat(entry: WalkResult) {
         const node = entry.node;
         if (!node) throw createIOError(`ENOENT`, entry.realpath);
@@ -768,9 +767,11 @@ export class FileSystem {
         if (isEmptyNonShadowedDirectory(changedNode) && isEmptyNonShadowedDirectory(baseNode)) return false;
 
         // no difference if both nodes are unpopulated and point to the same mounted file system
-        if (!changedNode.links && !baseNode.links &&
+        if (
+            !changedNode.links && !baseNode.links &&
             changedNode.resolver && changedNode.source !== undefined &&
-            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source) return false;
+            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source
+        ) return false;
 
         // no difference if both nodes have identical children
         const children: FileSet = {};
@@ -793,9 +794,11 @@ export class FileSystem {
         if (isEmptyNonShadowedFile(changedNode) && isEmptyNonShadowedFile(baseNode)) return false;
 
         // no difference if both nodes are unpopulated and point to the same mounted file system
-        if (!changedNode.buffer && !baseNode.buffer &&
+        if (
+            !changedNode.buffer && !baseNode.buffer &&
             changedNode.resolver && changedNode.source !== undefined &&
-            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source) return false;
+            baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source
+        ) return false;
 
         const changedBuffer = changed._getBuffer(changedNode);
         const baseBuffer = base._getBuffer(baseNode);
@@ -871,7 +874,7 @@ export class FileSystem {
             mtimeMs: time,
             ctimeMs: time,
             birthtimeMs: time,
-            nlink: 0
+            nlink: 0,
         };
     }
 
@@ -964,7 +967,7 @@ export class FileSystem {
                 ctimeMs: root.ctimeMs,
                 birthtimeMs: root.birthtimeMs,
                 nlink: root.nlink,
-                shadowRoot: root
+                shadowRoot: root,
             };
 
             if (isSymlink(root)) (shadow as SymlinkInode).symlink = root.symlink;
@@ -1218,7 +1221,7 @@ export function createResolver(host: FileSystemResolverHost): FileSystemResolver
         },
         readFileSync(path: string): Buffer {
             return ts.sys.bufferFrom!(host.readFile(path)!, "utf8") as Buffer; // TODO: GH#18217
-        }
+        },
     };
 }
 
@@ -1309,13 +1312,27 @@ export class Stats {
         this.birthtime = new Date(this.birthtimeMs);
     }
 
-    public isFile() { return (this.mode & S_IFMT) === S_IFREG; }
-    public isDirectory() { return (this.mode & S_IFMT) === S_IFDIR; }
-    public isSymbolicLink() { return (this.mode & S_IFMT) === S_IFLNK; }
-    public isBlockDevice() { return (this.mode & S_IFMT) === S_IFBLK; }
-    public isCharacterDevice() { return (this.mode & S_IFMT) === S_IFCHR; }
-    public isFIFO() { return (this.mode & S_IFMT) === S_IFIFO; }
-    public isSocket() { return (this.mode & S_IFMT) === S_IFSOCK; }
+    public isFile() {
+        return (this.mode & S_IFMT) === S_IFREG;
+    }
+    public isDirectory() {
+        return (this.mode & S_IFMT) === S_IFDIR;
+    }
+    public isSymbolicLink() {
+        return (this.mode & S_IFMT) === S_IFLNK;
+    }
+    public isBlockDevice() {
+        return (this.mode & S_IFMT) === S_IFBLK;
+    }
+    public isCharacterDevice() {
+        return (this.mode & S_IFMT) === S_IFCHR;
+    }
+    public isFIFO() {
+        return (this.mode & S_IFMT) === S_IFIFO;
+    }
+    public isSocket() {
+        return (this.mode & S_IFMT) === S_IFSOCK;
+    }
 }
 
 export const IOErrorMessages = Object.freeze({
@@ -1330,7 +1347,7 @@ export const IOErrorMessages = Object.freeze({
     EINVAL: "invalid value",
     ENOTEMPTY: "directory not empty",
     EPERM: "operation not permitted",
-    EROFS: "file system is read-only"
+    EROFS: "file system is read-only",
 });
 
 export function createIOError(code: keyof typeof IOErrorMessages, details = "") {
@@ -1354,7 +1371,7 @@ export type FileLike = File | Buffer | string;
 export class Directory {
     public readonly files: FileSet;
     public readonly meta: Record<string, any> | undefined;
-    constructor(files: FileSet, { meta }: { meta?: Record<string, any> } = {}) {
+    constructor(files: FileSet, { meta }: { meta?: Record<string, any>; } = {}) {
         this.files = files;
         this.meta = meta;
     }
@@ -1365,7 +1382,7 @@ export class File {
     public readonly data: Buffer | string;
     public readonly encoding: string | undefined;
     public readonly meta: Record<string, any> | undefined;
-    constructor(data: Buffer | string, { meta, encoding }: { encoding?: string, meta?: Record<string, any> } = {}) {
+    constructor(data: Buffer | string, { meta, encoding }: { encoding?: string; meta?: Record<string, any>; } = {}) {
         this.data = data;
         this.encoding = encoding;
         this.meta = meta;
@@ -1373,13 +1390,13 @@ export class File {
 }
 
 export class SameFileContentFile extends File {
-    constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string, meta?: Record<string, any> }) {
+    constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string; meta?: Record<string, any>; }) {
         super(data, metaAndEncoding);
     }
 }
 
 export class SameFileWithModifiedTime extends File {
-    constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string, meta?: Record<string, any> }) {
+    constructor(data: Buffer | string, metaAndEncoding?: { encoding?: string; meta?: Record<string, any>; }) {
         super(data, metaAndEncoding);
     }
 }
@@ -1406,7 +1423,7 @@ export class Unlink {
 export class Symlink {
     public readonly symlink: string;
     public readonly meta: Record<string, any> | undefined;
-    constructor(symlink: string, { meta }: { meta?: Record<string, any> } = {}) {
+    constructor(symlink: string, { meta }: { meta?: Record<string, any>; } = {}) {
         this.symlink = symlink;
         this.meta = meta;
     }
@@ -1417,7 +1434,7 @@ export class Mount {
     public readonly source: string;
     public readonly resolver: FileSystemResolver;
     public readonly meta: Record<string, any> | undefined;
-    constructor(source: string, resolver: FileSystemResolver, { meta }: { meta?: Record<string, any> } = {}) {
+    constructor(source: string, resolver: FileSystemResolver, { meta }: { meta?: Record<string, any>; } = {}) {
         this.source = source;
         this.resolver = resolver;
         this.meta = meta;
@@ -1519,10 +1536,10 @@ function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileS
                 [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
                 [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
                 [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
-                [srcFolder]: {}
+                [srcFolder]: {},
             },
             cwd: srcFolder,
-            meta: { defaultLibLocation: builtFolder }
+            meta: { defaultLibLocation: builtFolder },
         });
         builtLocalCI.makeReadonly();
     }
@@ -1536,7 +1553,8 @@ function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileS
 
 /* eslint-disable no-null/no-null */
 function normalizeFileSetEntry(value: FileSet[string]) {
-    if (value === undefined ||
+    if (
+        value === undefined ||
         value === null ||
         value instanceof Directory ||
         value instanceof File ||
@@ -1544,7 +1562,8 @@ function normalizeFileSetEntry(value: FileSet[string]) {
         value instanceof Symlink ||
         value instanceof Mount ||
         value instanceof Rmdir ||
-        value instanceof Unlink) {
+        value instanceof Unlink
+    ) {
         return value;
     }
     return typeof value === "string" || Buffer.isBuffer(value) ? new File(value) : new Directory(value);

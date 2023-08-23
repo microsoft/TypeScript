@@ -33,29 +33,37 @@ function verifyDocumentRegistryStats(
                 );
             }
             else {
-                entry.forEach((real, kind) => ts.Debug.assert(
-                    real.languageServiceRefCount === expected?.get(kind),
-                    `Document registry has unexpected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(kind)} ${real.languageServiceRefCount}`,
-                    reportStats,
-                ));
-                expected?.forEach((value, kind) => ts.Debug.assert(
-                    entry.has(kind),
-                    `Document registry expected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(kind)} ${value}`,
-                    reportStats,
-                ));
+                entry.forEach((real, kind) =>
+                    ts.Debug.assert(
+                        real.languageServiceRefCount === expected?.get(kind),
+                        `Document registry has unexpected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(kind)} ${real.languageServiceRefCount}`,
+                        reportStats,
+                    )
+                );
+                expected?.forEach((value, kind) =>
+                    ts.Debug.assert(
+                        entry.has(kind),
+                        `Document registry expected language service ref count for ${key} ${path} ${ts.Debug.formatScriptKind(kind)} ${value}`,
+                        reportStats,
+                    )
+                );
             }
         });
-        statsByPath?.forEach((_value, path) => ts.Debug.assert(
-            bucketEntries.has(path),
-            `Document registry does not contain entry for ${key}, ${path}`,
-            reportStats,
-        ));
+        statsByPath?.forEach((_value, path) =>
+            ts.Debug.assert(
+                bucketEntries.has(path),
+                `Document registry does not contain entry for ${key}, ${path}`,
+                reportStats,
+            )
+        );
     });
-    stats.forEach((_value, key) => ts.Debug.assert(
-        documentRegistry.getBuckets().has(key),
-        `Document registry does not contain entry for key: ${key}`,
-        reportStats,
-    ));
+    stats.forEach((_value, key) =>
+        ts.Debug.assert(
+            documentRegistry.getBuckets().has(key),
+            `Document registry does not contain entry for key: ${key}`,
+            reportStats,
+        )
+    );
 
     function reportStats() {
         const str: string[] = ["", "Actual::", ...reportDocumentRegistryStats(documentRegistry)];

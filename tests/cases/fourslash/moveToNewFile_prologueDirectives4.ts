@@ -5,4 +5,15 @@
 ////    [|"use strict";|]
 ////}
 
-verify.noMoveToNewFile();
+verify.moveToNewFile({
+    newFileContents: {
+        "/a.ts":
+``,
+
+        "/foo.ts":
+`function foo() {
+    "use strict";
+}
+`,
+    },
+});

@@ -1,4 +1,6 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 import minimist from "minimist";
 
 const options = minimist(process.argv.slice(2), {
@@ -7,15 +9,15 @@ const options = minimist(process.argv.slice(2), {
     alias: {
         pr: "pull",
         h: "help",
-        ["?"]: "help"
+        ["?"]: "help",
     },
     default: {
         token: process.env.GH_TOKEN,
         pull: process.env.GH_PULL_NUMBER,
         reviewer: process.env.REQUESTED_REVIEWER,
         owner: "microsoft",
-        repo: "TypeScript"
-    }
+        repo: "TypeScript",
+    },
 });
 
 if (options.help) {

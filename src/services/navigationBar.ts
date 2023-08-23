@@ -235,7 +235,7 @@ function emptyNavigationBarNode(node: Node, name?: DeclarationName): NavigationB
         additionalNodes: undefined,
         parent,
         children: undefined,
-        indent: parent.indent + 1
+        indent: parent.indent + 1,
     };
 }
 
@@ -478,7 +478,7 @@ function addChildrenRecursively(node: Node | undefined): void {
                     return;
                 case AssignmentDeclarationKind.Prototype:
                 case AssignmentDeclarationKind.PrototypeProperty: {
-                    const binaryExpression = (node as BinaryExpression);
+                    const binaryExpression = node as BinaryExpression;
                     const assignmentTarget = binaryExpression.left as PropertyAccessExpression;
 
                     const prototypeAccess = special === AssignmentDeclarationKind.PrototypeProperty ?
@@ -500,19 +500,17 @@ function addChildrenRecursively(node: Node | undefined): void {
                         if (isObjectLiteralExpression(binaryExpression.right)) {
                             if (binaryExpression.right.properties.length > 0) {
                                 startNode(binaryExpression, className);
-                                    forEachChild(binaryExpression.right, addChildrenRecursively);
+                                forEachChild(binaryExpression.right, addChildrenRecursively);
                                 endNode();
                             }
                         }
                     }
                     else if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
-                        addNodeWithRecursiveChild(node,
-                            binaryExpression.right,
-                            className);
+                        addNodeWithRecursiveChild(node, binaryExpression.right, className);
                     }
                     else {
                         startNode(binaryExpression, className);
-                            addNodeWithRecursiveChild(node, binaryExpression.right, assignmentTarget.name);
+                        addNodeWithRecursiveChild(node, binaryExpression.right, assignmentTarget.name);
                         endNode();
                     }
                     endNestedNodes(depth);
@@ -527,26 +525,28 @@ function addChildrenRecursively(node: Node | undefined): void {
 
                     const memberName = defineCall.arguments[1];
                     const [depth, classNameIdentifier] = startNestedNodes(node, className);
-                        startNode(node, classNameIdentifier);
-                            startNode(node, setTextRange(factory.createIdentifier(memberName.text), memberName));
-                                addChildrenRecursively((node as CallExpression).arguments[2]);
-                            endNode();
-                        endNode();
+                    startNode(node, classNameIdentifier);
+                    startNode(node, setTextRange(factory.createIdentifier(memberName.text), memberName));
+                    addChildrenRecursively((node as CallExpression).arguments[2]);
+                    endNode();
+                    endNode();
                     endNestedNodes(depth);
                     return;
                 }
                 case AssignmentDeclarationKind.Property: {
-                    const binaryExpression = (node as BinaryExpression);
+                    const binaryExpression = node as BinaryExpression;
                     const assignmentTarget = binaryExpression.left as PropertyAccessExpression | BindableElementAccessExpression;
                     const targetFunction = assignmentTarget.expression;
-                    if (isIdentifier(targetFunction) && getElementOrPropertyAccessName(assignmentTarget) !== "prototype" &&
-                        trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)) {
+                    if (
+                        isIdentifier(targetFunction) && getElementOrPropertyAccessName(assignmentTarget) !== "prototype" &&
+                        trackedEs5Classes && trackedEs5Classes.has(targetFunction.text)
+                    ) {
                         if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
                             addNodeWithRecursiveChild(node, binaryExpression.right, targetFunction);
                         }
                         else if (isBindableStaticAccessExpression(assignmentTarget)) {
                             startNode(binaryExpression, targetFunction);
-                                addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, getNameOrArgument(assignmentTarget));
+                            addNodeWithRecursiveChild(binaryExpression.left, binaryExpression.right, getNameOrArgument(assignmentTarget));
                             endNode();
                         }
                         return;
@@ -639,20 +639,21 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
         AssignmentDeclarationKind.None;
 
     // We treat this as an es5 class and merge the nodes in in one of several cases
-    if ((isEs5ClassMember[bAssignmentDeclarationKind] && isEs5ClassMember[aAssignmentDeclarationKind]) // merge two class elements
+    if (
+        (isEs5ClassMember[bAssignmentDeclarationKind] && isEs5ClassMember[aAssignmentDeclarationKind]) // merge two class elements
         || (isPossibleConstructor(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // ctor function & member
         || (isPossibleConstructor(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & ctor function
         || (isClassDeclaration(a.node) && isSynthesized(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // class (generated) & member
         || (isClassDeclaration(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & class (generated)
         || (isClassDeclaration(a.node) && isSynthesized(a.node) && isPossibleConstructor(b.node)) // class (generated) & ctor
         || (isClassDeclaration(b.node) && isPossibleConstructor(a.node) && isSynthesized(a.node)) // ctor & class (generated)
-        ) {
-
+    ) {
         let lastANode = a.additionalNodes && lastOrUndefined(a.additionalNodes) || a.node;
 
-        if ((!isClassDeclaration(a.node) && !isClassDeclaration(b.node)) // If neither outline node is a class
+        if (
+            (!isClassDeclaration(a.node) && !isClassDeclaration(b.node)) // If neither outline node is a class
             || isPossibleConstructor(a.node) || isPossibleConstructor(b.node) // If either function is a constructor function
-            ) {
+        ) {
             const ctorFunction = isPossibleConstructor(a.node) ? a.node :
                 isPossibleConstructor(b.node) ? b.node :
                 undefined;
@@ -660,7 +661,8 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
             if (ctorFunction !== undefined) {
                 const ctorNode = setTextRange(
                     factory.createConstructorDeclaration(/*modifiers*/ undefined, [], /*body*/ undefined),
-                    ctorFunction);
+                    ctorFunction,
+                );
                 const ctor = emptyNavigationBarNode(ctorNode);
                 ctor.indent = a.indent + 1;
                 ctor.children = a.node === ctorFunction ? a.children : b.children;
@@ -676,13 +678,16 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
                 }
             }
 
-            lastANode = a.node = setTextRange(factory.createClassDeclaration(
-                /*modifiers*/ undefined,
-                a.name as Identifier || factory.createIdentifier("__class__"),
-                /*typeParameters*/ undefined,
-                /*heritageClauses*/ undefined,
-                []
-            ), a.node);
+            lastANode = a.node = setTextRange(
+                factory.createClassDeclaration(
+                    /*modifiers*/ undefined,
+                    a.name as Identifier || factory.createIdentifier("__class__"),
+                    /*typeParameters*/ undefined,
+                    /*heritageClauses*/ undefined,
+                    [],
+                ),
+                a.node,
+            );
         }
         else {
             a.children = concatenate(a.children, b.children);
@@ -703,13 +708,16 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
         }
         else {
             if (!a.additionalNodes) a.additionalNodes = [];
-            a.additionalNodes.push(setTextRange(factory.createClassDeclaration(
-                /*modifiers*/ undefined,
-                a.name as Identifier || factory.createIdentifier("__class__"),
-                /*typeParameters*/ undefined,
-                /*heritageClauses*/ undefined,
-                []
-            ), b.node));
+            a.additionalNodes.push(setTextRange(
+                factory.createClassDeclaration(
+                    /*modifiers*/ undefined,
+                    a.name as Identifier || factory.createIdentifier("__class__"),
+                    /*typeParameters*/ undefined,
+                    /*heritageClauses*/ undefined,
+                    [],
+                ),
+                b.node,
+            ));
         }
         return true;
     }
@@ -937,7 +945,7 @@ function convertToTree(n: NavigationBarNode): NavigationTree {
         kindModifiers: getModifiers(n.node),
         spans: getSpans(n),
         nameSpan: n.name && getNodeSpan(n.name),
-        childItems: map(n.children, convertToTree)
+        childItems: map(n.children, convertToTree),
     };
 }
 
@@ -950,7 +958,7 @@ function convertToPrimaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem
         childItems: map(n.children, convertToSecondaryNavBarMenuItem) || emptyChildItemArray,
         indent: n.indent,
         bolded: false,
-        grayed: false
+        grayed: false,
     };
 
     function convertToSecondaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem {
@@ -962,7 +970,7 @@ function convertToPrimaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem
             childItems: emptyChildItemArray,
             indent: 0,
             bolded: false,
-            grayed: false
+            grayed: false,
         };
     }
 }

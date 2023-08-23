@@ -44,13 +44,17 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_mapped_object_type, name], fixId, [Diagnostics.Convert_0_to_mapped_object_type, name])];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, diag.start);
-        if (info) doChange(changes, diag.file, info);
-    })
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, diag.start);
+            if (info) doChange(changes, diag.file, info);
+        }),
 });
 
-interface Info { readonly indexSignature: IndexSignatureDeclaration; readonly container: FixableDeclaration; }
+interface Info {
+    readonly indexSignature: IndexSignatureDeclaration;
+    readonly container: FixableDeclaration;
+}
 function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     const indexSignature = tryCast(token.parent.parent, isIndexSignatureDeclaration);
@@ -77,7 +81,8 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { 
         /*nameType*/ undefined,
         indexSignature.questionToken,
         indexSignature.type,
-        /*members*/ undefined);
+        /*members*/ undefined,
+    );
     const intersectionType = factory.createIntersectionTypeNode([
         ...getAllSuperTypeNodes(container),
         mappedIntersectionType,

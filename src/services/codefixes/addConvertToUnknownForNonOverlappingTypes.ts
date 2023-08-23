@@ -29,12 +29,13 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_unknown_conversion_for_non_overlapping_types, fixId, Diagnostics.Add_unknown_to_all_conversions_of_non_overlapping_types)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const assertion = getAssertion(diag.file, diag.start);
-        if (assertion) {
-            makeChange(changes, diag.file, assertion);
-        }
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const assertion = getAssertion(diag.file, diag.start);
+            if (assertion) {
+                makeChange(changes, diag.file, assertion);
+            }
+        }),
 });
 
 function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, assertion: AsExpression | TypeAssertion) {

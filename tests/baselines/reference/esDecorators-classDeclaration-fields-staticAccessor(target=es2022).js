@@ -41,14 +41,14 @@ let C = (() => {
             __runInitializers(this, _staticExtraInitializers);
         }
         static #field1_accessor_storage = __runInitializers(this, _static_field1_initializers, 1);
-        static get field1() { return this.#field1_accessor_storage; }
-        static set field1(value) { this.#field1_accessor_storage = value; }
+        static get field1() { return C.#field1_accessor_storage; }
+        static set field1(value) { C.#field1_accessor_storage = value; }
         static #_a_accessor_storage = __runInitializers(this, _static_member_initializers, 2);
-        static get ["field2"]() { return this.#_a_accessor_storage; }
-        static set ["field2"](value) { this.#_a_accessor_storage = value; }
+        static get ["field2"]() { return C.#_a_accessor_storage; }
+        static set ["field2"](value) { C.#_a_accessor_storage = value; }
         static #_b_accessor_storage = __runInitializers(this, _static_member_initializers_1, 3);
-        static get [(_static_field1_decorators = [dec(1)], _static_member_decorators = [dec(2)], _static_member_decorators_1 = [dec(3)], _a = __propKey(field3))]() { return this.#_b_accessor_storage; }
-        static set [_a](value) { this.#_b_accessor_storage = value; }
+        static get [(_static_field1_decorators = [dec(1)], _static_member_decorators = [dec(2)], _static_member_decorators_1 = [dec(3)], _a = __propKey(field3))]() { return C.#_b_accessor_storage; }
+        static set [_a](value) { C.#_b_accessor_storage = value; }
     };
 })();
 let D = (() => {
@@ -69,8 +69,8 @@ let D = (() => {
         static {
             _D_field1_accessor_storage = { value: 1 };
         }
-        static get field1() { return __classPrivateFieldGet(this, _classThis, "f", _D_field1_accessor_storage); }
-        static set field1(value) { __classPrivateFieldSet(this, _classThis, value, "f", _D_field1_accessor_storage); }
+        static get field1() { return __classPrivateFieldGet(_classThis, _classThis, "f", _D_field1_accessor_storage); }
+        static set field1(value) { __classPrivateFieldSet(_classThis, _classThis, value, "f", _D_field1_accessor_storage); }
         static {
             _classThis.field1;
             _classThis.field1 = 1;

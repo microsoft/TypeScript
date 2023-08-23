@@ -1,7 +1,15 @@
 import assert from "assert";
-import { execFileSync } from "child_process";
-import { readFileSync, writeFileSync } from "fs";
-import { normalize, relative } from "path";
+import {
+    execFileSync,
+} from "child_process";
+import {
+    readFileSync,
+    writeFileSync,
+} from "fs";
+import {
+    normalize,
+    relative,
+} from "path";
 import url from "url";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
@@ -90,7 +98,7 @@ function updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, nightlyPatc
  * @returns {{ majorMinor: string, patch: string }}
  */
 function parsePackageJsonVersion(versionString) {
-    const versionRgx = /(\d+\.\d+)\.(\d+)($|\-)/;
+    const versionRgx = /(\d+\.\d+)\.(\d+)($|-)/;
     const match = versionString.match(versionRgx);
     assert(match !== null, "package.json 'version' should match " + versionRgx.toString());
     return { majorMinor: match[1], patch: match[2] };

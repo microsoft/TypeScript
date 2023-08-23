@@ -5,7 +5,7 @@ on:
     branches:
       - orta-twoslash-repros
   schedule:
-    - cron:  '0 8 * * *'
+    - cron: '0 8 * * *'
   repository_dispatch:
     types: run-twoslash-repros
   workflow_dispatch:
@@ -33,15 +33,15 @@ jobs:
     if: ${{ github.repository == 'microsoft/TypeScript' }}
     runs-on: ubuntu-latest
     steps:
-    - if: ${{ github.event.inputs.bisect }}
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - if: ${{ !github.event.inputs.bisect }}
-      uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-    - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
-      with:
-        github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-        issue: ${{ github.event.inputs.issue }}
-        bisect: ${{ github.event.inputs.bisect }}
+      - if: ${{ github.event.inputs.bisect }}
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - if: ${{ !github.event.inputs.bisect }}
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
+        with:
+          github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+          issue: ${{ github.event.inputs.issue }}
+          bisect: ${{ github.event.inputs.bisect }}

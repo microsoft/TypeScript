@@ -94,20 +94,20 @@ export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
     clearCache(): void;
 }
 
-type Canonicalized = string & { __canonicalized: void };
+type Canonicalized = string & { __canonicalized: void; };
 
 interface MutableFileSystemEntries {
     readonly files: string[];
     readonly directories: string[];
-    sortedAndCanonicalizedFiles?: SortedArray<Canonicalized>
-    sortedAndCanonicalizedDirectories?: SortedArray<Canonicalized>
+    sortedAndCanonicalizedFiles?: SortedArray<Canonicalized>;
+    sortedAndCanonicalizedDirectories?: SortedArray<Canonicalized>;
 }
 
 interface SortedAndCanonicalizedMutableFileSystemEntries {
     readonly files: string[];
     readonly directories: string[];
-    readonly sortedAndCanonicalizedFiles: SortedArray<Canonicalized>
-    readonly sortedAndCanonicalizedDirectories: SortedArray<Canonicalized>
+    readonly sortedAndCanonicalizedFiles: SortedArray<Canonicalized>;
+    readonly sortedAndCanonicalizedDirectories: SortedArray<Canonicalized>;
 }
 
 /** @internal */
@@ -130,7 +130,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         addOrDeleteFileOrDirectory,
         addOrDeleteFile,
         clearCache,
-        realpath: host.realpath && realpath
+        realpath: host.realpath && realpath,
     };
 
     function toPath(fileName: string) {
@@ -162,8 +162,8 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
         if (!host.realpath || ensureTrailingDirectorySeparator(toPath(host.realpath(rootDir))) === rootDirPath) {
             const resultFromHost: MutableFileSystemEntries = {
-                files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
-                directories: host.getDirectories!(rootDir) || []
+                files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]), getBaseNameOfFileName) || [],
+                directories: host.getDirectories!(rootDir) || [],
             };
 
             cachedReadDirectoryResult.set(ensureTrailingDirectorySeparator(rootDirPath), resultFromHost);
@@ -276,8 +276,8 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         function getFileSystemEntriesFromHost(dir: string, path: Path): FileSystemEntries {
             if (rootSymLinkResult && path === rootDirPath) return rootSymLinkResult;
             const result: FileSystemEntries = {
-                files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || emptyArray,
-                directories: host.getDirectories!(dir) || emptyArray
+                files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/ ["*.*"]), getBaseNameOfFileName) || emptyArray,
+                directories: host.getDirectories!(dir) || emptyArray,
             };
             if (path === rootDirPath) rootSymLinkResult = result;
             return result;
@@ -314,7 +314,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         const baseName = getBaseNameOfFileName(fileOrDirectory);
         const fsQueryResult: FileAndDirectoryExistence = {
             fileExists: host.fileExists(fileOrDirectoryPath),
-            directoryExists: host.directoryExists(fileOrDirectoryPath)
+            directoryExists: host.directoryExists(fileOrDirectoryPath),
         };
         if (fsQueryResult.directoryExists || hasEntry(parentResult.sortedAndCanonicalizedDirectories, getCanonicalFileName(baseName))) {
             // Folder added or removed, clear the cache instead of updating the folder and its structure
@@ -325,7 +325,6 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
             updateFilesOfFileSystemEntry(parentResult, baseName, fsQueryResult.fileExists);
         }
         return fsQueryResult;
-
     }
 
     function addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind) {
@@ -370,7 +369,7 @@ export enum ConfigFileProgramReloadLevel {
     /** Update the file name list from the disk */
     Partial,
     /** Reload completely by re-reading contents of config file from disk and updating program */
-    Full
+    Full,
 }
 
 /** @internal */
@@ -469,8 +468,8 @@ export function updatePackageJsonWatch(
         newMap,
         {
             createNewValue: createPackageJsonWatch,
-            onDeleteValue: closeFileWatcher
-        }
+            onDeleteValue: closeFileWatcher,
+        },
     );
 }
 
@@ -496,8 +495,8 @@ export function updateMissingFilePathsWatch(
             createNewValue: createMissingFileWatch,
             // Files that are no longer missing (e.g. because they are no longer required)
             // should no longer be watched.
-            onDeleteValue: closeFileWatcher
-        }
+            onDeleteValue: closeFileWatcher,
+        },
     );
 }
 
@@ -518,7 +517,7 @@ export interface WildcardDirectoryWatcher {
 export function updateWatchingWildcardDirectories(
     existingWatchedForWildcards: Map<string, WildcardDirectoryWatcher>,
     wildcardDirectories: Map<string, WatchDirectoryFlags>,
-    watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher
+    watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher,
 ) {
     mutateMap(
         existingWatchedForWildcards,
@@ -529,15 +528,15 @@ export function updateWatchingWildcardDirectories(
             // Close existing watch thats not needed any more
             onDeleteValue: closeFileWatcherOf,
             // Close existing watch that doesnt match in the flags
-            onExistingValue: updateWildcardDirectoryWatcher
-        }
+            onExistingValue: updateWildcardDirectoryWatcher,
+        },
     );
 
     function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher {
         // Create new watch and recursive info
         return {
             watcher: watchDirectory(directory, flags),
-            flags
+            flags,
         };
     }
 
@@ -568,10 +567,17 @@ export interface IsIgnoredFileFromWildCardWatchingInput {
 }
 /** @internal */
 export function isIgnoredFileFromWildCardWatching({
-    watchedDirPath, fileOrDirectory, fileOrDirectoryPath,
-    configFileName, options, program, extraFileExtensions,
-    currentDirectory, useCaseSensitiveFileNames,
-    writeLog, toPath,
+    watchedDirPath,
+    fileOrDirectory,
+    fileOrDirectoryPath,
+    configFileName,
+    options,
+    program,
+    extraFileExtensions,
+    currentDirectory,
+    useCaseSensitiveFileNames,
+    writeLog,
+    toPath,
 }: IsIgnoredFileFromWildCardWatchingInput): boolean {
     const newPath = removeIgnoredPath(fileOrDirectoryPath);
     if (!newPath) {
@@ -613,8 +619,10 @@ export function isIgnoredFileFromWildCardWatching({
     const filePathWithoutExtension = removeFileExtension(fileOrDirectoryPath);
     const realProgram = isArray(program) ? undefined : isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
     const builderProgram = !realProgram && !isArray(program) ? program as BuilderProgram : undefined;
-    if (hasSourceFile((filePathWithoutExtension + Extension.Ts) as Path) ||
-        hasSourceFile((filePathWithoutExtension + Extension.Tsx) as Path)) {
+    if (
+        hasSourceFile((filePathWithoutExtension + Extension.Ts) as Path) ||
+        hasSourceFile((filePathWithoutExtension + Extension.Tsx) as Path)
+    ) {
         writeLog(`Project: ${configFileName} Detected output file: ${fileOrDirectory}`);
         return true;
     }
@@ -624,8 +632,8 @@ export function isIgnoredFileFromWildCardWatching({
         return realProgram ?
             !!realProgram.getSourceFileByPath(file) :
             builderProgram ?
-                builderProgram.getState().fileInfos.has(file) :
-                !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
+            builderProgram.getState().fileInfos.has(file) :
+            !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
     }
 }
 
@@ -646,7 +654,7 @@ export function isEmittedFileOfProgram(program: Program | undefined, file: strin
 export enum WatchLogLevel {
     None,
     TriggerOnly,
-    Verbose
+    Verbose,
 }
 
 /** @internal */
@@ -675,13 +683,13 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     const triggerInvokingFactory: WatchFactory<X, Y> | undefined = watchLogLevel !== WatchLogLevel.None ?
         {
             watchFile: createTriggerLoggingAddWatch("watchFile"),
-            watchDirectory: createTriggerLoggingAddWatch("watchDirectory")
+            watchDirectory: createTriggerLoggingAddWatch("watchDirectory"),
         } :
         undefined;
     const factory = watchLogLevel === WatchLogLevel.Verbose ?
         {
             watchFile: createFileWatcherWithLogging,
-            watchDirectory: createDirectoryWatcherWithLogging
+            watchDirectory: createDirectoryWatcherWithLogging,
         } :
         triggerInvokingFactory || plainInvokeFactory;
     const excludeWatcherFactory = watchLogLevel === WatchLogLevel.Verbose ?
@@ -690,7 +698,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
 
     return {
         watchFile: createExcludeHandlingAddWatch("watchFile"),
-        watchDirectory: createExcludeHandlingAddWatch("watchDirectory")
+        watchDirectory: createExcludeHandlingAddWatch("watchDirectory"),
     };
 
     function createExcludeHandlingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
@@ -700,10 +708,10 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
             flags: PollingInterval | WatchDirectoryFlags,
             options: WatchOptions | undefined,
             detailInfo1: X,
-            detailInfo2?: Y
+            detailInfo2?: Y,
         ) => !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
-                factory[key].call(/*thisArgs*/ undefined, file, cb, flags, options, detailInfo1, detailInfo2) :
-                excludeWatcherFactory(file, flags, options, detailInfo1, detailInfo2);
+            factory[key].call(/*thisArgs*/ undefined, file, cb, flags, options, detailInfo1, detailInfo2) :
+            excludeWatcherFactory(file, flags, options, detailInfo1, detailInfo2);
     }
 
     function useCaseSensitiveFileNames() {
@@ -717,11 +725,11 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         flags: PollingInterval | WatchDirectoryFlags,
         options: WatchOptions | undefined,
         detailInfo1: X,
-        detailInfo2?: Y
+        detailInfo2?: Y,
     ) {
         log(`ExcludeWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
         return {
-            close: () => log(`ExcludeWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`)
+            close: () => log(`ExcludeWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`),
         };
     }
 
@@ -731,7 +739,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         flags: PollingInterval,
         options: WatchOptions | undefined,
         detailInfo1: X,
-        detailInfo2?: Y
+        detailInfo2?: Y,
     ): FileWatcher {
         log(`FileWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
         const watcher = triggerInvokingFactory!.watchFile(file, cb, flags, options, detailInfo1, detailInfo2);
@@ -739,7 +747,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
             close: () => {
                 log(`FileWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
                 watcher.close();
-            }
+            },
         };
     }
 
@@ -749,7 +757,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         flags: WatchDirectoryFlags,
         options: WatchOptions | undefined,
         detailInfo1: X,
-        detailInfo2?: Y
+        detailInfo2?: Y,
     ): FileWatcher {
         const watchInfo = `DirectoryWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
         log(watchInfo);
@@ -765,7 +773,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
                 watcher.close();
                 const elapsed = timestamp() - start;
                 log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
-            }
+            },
         };
     }
 
@@ -776,15 +784,23 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
             flags: PollingInterval | WatchDirectoryFlags,
             options: WatchOptions | undefined,
             detailInfo1: X,
-            detailInfo2?: Y
-        ) => plainInvokeFactory[key].call(/*thisArgs*/ undefined, file, (...args: any[]) => {
-            const triggerredInfo = `${key === "watchFile" ? "FileWatcher" : "DirectoryWatcher"}:: Triggered with ${args[0]} ${args[1] !== undefined ? args[1] : ""}:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
-            log(triggerredInfo);
-            const start = timestamp();
-            cb.call(/*thisArg*/ undefined, ...args);
-            const elapsed = timestamp() - start;
-            log(`Elapsed:: ${elapsed}ms ${triggerredInfo}`);
-        }, flags, options, detailInfo1, detailInfo2);
+            detailInfo2?: Y,
+        ) => plainInvokeFactory[key].call(
+            /*thisArgs*/ undefined,
+            file,
+            (...args: any[]) => {
+                const triggerredInfo = `${key === "watchFile" ? "FileWatcher" : "DirectoryWatcher"}:: Triggered with ${args[0]} ${args[1] !== undefined ? args[1] : ""}:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+                log(triggerredInfo);
+                const start = timestamp();
+                cb.call(/*thisArg*/ undefined, ...args);
+                const elapsed = timestamp() - start;
+                log(`Elapsed:: ${elapsed}ms ${triggerredInfo}`);
+            },
+            flags,
+            options,
+            detailInfo1,
+            detailInfo2,
+        );
     }
 
     function getWatchInfo<T>(file: string, flags: T, options: WatchOptions | undefined, detailInfo1: X, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
@@ -798,7 +814,7 @@ export function getFallbackOptions(options: WatchOptions | undefined): WatchOpti
     return {
         watchFile: fallbackPolling !== undefined ?
             fallbackPolling as unknown as WatchFileKind :
-            WatchFileKind.PriorityPollingInterval
+            WatchFileKind.PriorityPollingInterval,
     };
 }
 

@@ -103,13 +103,13 @@ type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclarat
 
 const enum ES2017SubstitutionFlags {
     /** Enables substitutions for async methods with `super` calls. */
-    AsyncMethodsWithSuper = 1 << 0
+    AsyncMethodsWithSuper = 1 << 0,
 }
 
 const enum ContextFlags {
     None = 0,
     NonTopLevel = 1 << 0,
-    HasLexicalThis = 1 << 1
+    HasLexicalThis = 1 << 1,
 }
 
 /** @internal */
@@ -119,7 +119,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         getEmitHelperFactory: emitHelpers,
         resumeLexicalEnvironment,
         endLexicalEnvironment,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     const resolver = context.getEmitResolver();
@@ -328,8 +328,8 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             isVariableDeclarationListWithCollidingName(node.initializer)
                 ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
                 : Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
-                Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
-            visitIterationBody(node.statement, asyncBodyVisitor, context)
+            Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
+            visitIterationBody(node.statement, asyncBodyVisitor, context),
         );
     }
 
@@ -341,7 +341,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
                 : Debug.checkDefined(visitNode(node.initializer, visitor, isForInitializer)),
             Debug.checkDefined(visitNode(node.expression, visitor, isExpression)),
-            visitIterationBody(node.statement, asyncBodyVisitor, context)
+            visitIterationBody(node.statement, asyncBodyVisitor, context),
         );
     }
 
@@ -354,7 +354,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 : visitNode(node.initializer, visitor, isForInitializer),
             visitNode(node.condition, visitor, isExpression),
             visitNode(node.incrementor, visitor, isExpression),
-            visitIterationBody(node.statement, asyncBodyVisitor, context)
+            visitIterationBody(node.statement, asyncBodyVisitor, context),
         );
     }
 
@@ -374,11 +374,11 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             setTextRange(
                 factory.createYieldExpression(
                     /*asteriskToken*/ undefined,
-                    visitNode(node.expression, visitor, isExpression)
+                    visitNode(node.expression, visitor, isExpression),
                 ),
-                node
+                node,
             ),
-            node
+            node,
         );
     }
 
@@ -387,7 +387,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             node,
             visitNodes(node.modifiers, visitor, isModifier),
             visitParameterList(node.parameters, visitor, context),
-            transformMethodBody(node)
+            transformMethodBody(node),
         );
     }
 
@@ -411,7 +411,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             /*type*/ undefined,
             getFunctionFlags(node) & FunctionFlags.Async
                 ? transformAsyncFunctionBody(node)
-                : transformMethodBody(node)
+                : transformMethodBody(node),
         );
     }
 
@@ -422,7 +422,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             node.name,
             visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            transformMethodBody(node)
+            transformMethodBody(node),
         );
     }
 
@@ -432,7 +432,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             visitNodes(node.modifiers, visitor, isModifierLike),
             node.name,
             visitParameterList(node.parameters, visitor, context),
-            transformMethodBody(node)
+            transformMethodBody(node),
         );
     }
 
@@ -455,7 +455,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             /*type*/ undefined,
             getFunctionFlags(node) & FunctionFlags.Async
                 ? transformAsyncFunctionBody(node)
-                : visitFunctionBody(node.body, visitor, context)
+                : visitFunctionBody(node.body, visitor, context),
         );
     }
 
@@ -478,7 +478,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             /*type*/ undefined,
             getFunctionFlags(node) & FunctionFlags.Async
                 ? transformAsyncFunctionBody(node)
-                : visitFunctionBody(node.body, visitor, context)
+                : visitFunctionBody(node.body, visitor, context),
         );
     }
 
@@ -559,9 +559,9 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         const converted = setSourceMapRange(
             factory.createAssignment(
                 factory.converters.convertToAssignmentElementTarget(node.name),
-                node.initializer!
+                node.initializer!,
             ),
-            node
+            node,
         );
         return Debug.checkDefined(visitNode(converted, visitor, isExpression));
     }
@@ -664,9 +664,9 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                         inHasLexicalThisContext(),
                         hasLexicalArguments,
                         promiseConstructor,
-                        transformAsyncFunctionBodyWorker(node.body as Block, statementOffset)
-                    )
-                )
+                        transformAsyncFunctionBodyWorker(node.body as Block, statementOffset),
+                    ),
+                ),
             );
 
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
@@ -704,7 +704,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 inHasLexicalThisContext(),
                 hasLexicalArguments,
                 promiseConstructor,
-                transformAsyncFunctionBodyWorker(node.body)
+                transformAsyncFunctionBodyWorker(node.body),
             );
 
             const declarations = endLexicalEnvironment();
@@ -738,8 +738,10 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         const typeName = type && getEntityNameFromTypeNode(type);
         if (typeName && isEntityName(typeName)) {
             const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
-            if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
-                || serializationKind === TypeReferenceSerializationKind.Unknown) {
+            if (
+                serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
+                || serializationKind === TypeReferenceSerializationKind.Unknown
+            ) {
                 return typeName;
             }
         }
@@ -831,8 +833,9 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             return setTextRange(
                 factory.createPropertyAccessExpression(
                     factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
-                    node.name),
-                node
+                    node.name,
+                ),
+                node,
             );
         }
         return node;
@@ -842,7 +845,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         if (node.expression.kind === SyntaxKind.SuperKeyword) {
             return createSuperElementAccessInAsyncMethod(
                 node.argumentExpression,
-                node
+                node,
             );
         }
         return node;
@@ -859,8 +862,8 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 /*typeArguments*/ undefined,
                 [
                     factory.createThis(),
-                    ...node.arguments
-                ]
+                    ...node.arguments,
+                ],
             );
         }
         return node;
@@ -882,11 +885,11 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                     factory.createCallExpression(
                         factory.createUniqueName("_superIndex", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         /*typeArguments*/ undefined,
-                        [argumentExpression]
+                        [argumentExpression],
                     ),
-                    "value"
+                    "value",
                 ),
-                location
+                location,
             );
         }
         else {
@@ -894,9 +897,9 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 factory.createCallExpression(
                     factory.createUniqueName("_superIndex", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                     /*typeArguments*/ undefined,
-                    [argumentExpression]
+                    [argumentExpression],
                 ),
-                location
+                location,
             );
         }
     }
@@ -920,20 +923,20 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
             factory.createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
-                /* parameters */[],
+                /* parameters */ [],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 setEmitFlags(
                     factory.createPropertyAccessExpression(
                         setEmitFlags(
                             factory.createSuper(),
-                            EmitFlags.NoSubstitution
+                            EmitFlags.NoSubstitution,
                         ),
-                        name
+                        name,
                     ),
-                    EmitFlags.NoSubstitution
-                )
-            )
+                    EmitFlags.NoSubstitution,
+                ),
+            ),
         ));
         if (hasBinding) {
             getterAndSetter.push(
@@ -942,15 +945,15 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                     factory.createArrowFunction(
                         /*modifiers*/ undefined,
                         /*typeParameters*/ undefined,
-                        /* parameters */[
+                        /* parameters */ [
                             factory.createParameterDeclaration(
                                 /*modifiers*/ undefined,
                                 /*dotDotDotToken*/ undefined,
                                 "v",
                                 /*questionToken*/ undefined,
                                 /*type*/ undefined,
-                                /*initializer*/ undefined
-                            )
+                                /*initializer*/ undefined,
+                            ),
                         ],
                         /*type*/ undefined,
                         /*equalsGreaterThanToken*/ undefined,
@@ -959,23 +962,23 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                                 factory.createPropertyAccessExpression(
                                     setEmitFlags(
                                         factory.createSuper(),
-                                        EmitFlags.NoSubstitution
+                                        EmitFlags.NoSubstitution,
                                     ),
-                                    name
+                                    name,
                                 ),
-                                EmitFlags.NoSubstitution
+                                EmitFlags.NoSubstitution,
                             ),
-                            factory.createIdentifier("v")
-                        )
-                    )
-                )
+                            factory.createIdentifier("v"),
+                        ),
+                    ),
+                ),
             );
         }
         accessors.push(
             factory.createPropertyAssignment(
                 name,
                 factory.createObjectLiteralExpression(getterAndSetter),
-            )
+            ),
         );
     });
     return factory.createVariableStatement(
@@ -989,15 +992,17 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                     factory.createCallExpression(
                         factory.createPropertyAccessExpression(
                             factory.createIdentifier("Object"),
-                            "create"
+                            "create",
                         ),
                         /*typeArguments*/ undefined,
                         [
                             factory.createNull(),
-                            factory.createObjectLiteralExpression(accessors, /*multiLine*/ true)
-                        ]
-                    )
-                )
+                            factory.createObjectLiteralExpression(accessors, /*multiLine*/ true),
+                        ],
+                    ),
+                ),
             ],
-            NodeFlags.Const));
+            NodeFlags.Const,
+        ),
+    );
 }

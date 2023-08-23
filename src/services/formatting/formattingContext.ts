@@ -5,7 +5,9 @@ import {
     SourceFileLike,
     SyntaxKind,
 } from "../_namespaces/ts";
-import { TextRangeWithKind } from "../_namespaces/ts.formatting";
+import {
+    TextRangeWithKind,
+} from "../_namespaces/ts.formatting";
 
 import * as Debug from "../../compiler/debug";
 
@@ -16,7 +18,7 @@ export const enum FormattingRequestKind {
     FormatOnEnter,
     FormatOnSemicolon,
     FormatOnOpeningCurlyBrace,
-    FormatOnClosingCurlyBrace
+    FormatOnClosingCurlyBrace,
 }
 
 /** @internal */
@@ -71,7 +73,7 @@ export class FormattingContext {
         if (this.tokensAreOnSameLine === undefined) {
             const startLine = this.sourceFile.getLineAndCharacterOfPosition(this.currentTokenSpan.pos).line;
             const endLine = this.sourceFile.getLineAndCharacterOfPosition(this.nextTokenSpan.pos).line;
-            this.tokensAreOnSameLine = (startLine === endLine);
+            this.tokensAreOnSameLine = startLine === endLine;
         }
 
         return this.tokensAreOnSameLine;

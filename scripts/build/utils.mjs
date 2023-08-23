@@ -1,7 +1,11 @@
-import { CancelError } from "@esfx/canceltoken";
+import {
+    CancelError,
+} from "@esfx/canceltoken";
 import assert from "assert";
 import chalk from "chalk";
-import { spawn } from "child_process";
+import {
+    spawn,
+} from "child_process";
 import fs from "fs";
 import JSONC from "jsonc-parser";
 import which from "which";
@@ -16,14 +20,15 @@ import which from "which";
  * @property {boolean} [ignoreExitCode]
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
+ * @property {boolean} [ignoreStdout]
  * @property {import("@esfx/canceltoken").CancelToken} [token]
  */
 export async function exec(cmd, args, options = {}) {
-    return /**@type {Promise<{exitCode?: number}>}*/(new Promise((resolve, reject) => {
-        const { ignoreExitCode, waitForExit = true } = options;
+    return /**@type {Promise<{exitCode?: number}>}*/ (new Promise((resolve, reject) => {
+        const { ignoreExitCode, waitForExit = true, ignoreStdout } = options;
 
         if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? "inherit" : "ignore" });
+        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore" });
         if (waitForExit) {
             const onCanceled = () => {
                 proc.kill();
@@ -83,18 +88,18 @@ export function readJson(jsonPath) {
 export function needsUpdate(source, dest) {
     if (typeof source === "string" && typeof dest === "string") {
         if (fs.existsSync(dest)) {
-            const {mtime: outTime} = fs.statSync(dest);
-            const {mtime: inTime} = fs.statSync(source);
+            const { mtime: outTime } = fs.statSync(dest);
+            const { mtime: inTime } = fs.statSync(source);
             if (+inTime <= +outTime) {
                 return false;
             }
         }
     }
     else if (typeof source === "string" && typeof dest !== "string") {
-        const {mtime: inTime} = fs.statSync(source);
+        const { mtime: inTime } = fs.statSync(source);
         for (const filepath of dest) {
             if (fs.existsSync(filepath)) {
-                const {mtime: outTime} = fs.statSync(filepath);
+                const { mtime: outTime } = fs.statSync(filepath);
                 if (+inTime > +outTime) {
                     return true;
                 }
@@ -107,10 +112,10 @@ export function needsUpdate(source, dest) {
     }
     else if (typeof source !== "string" && typeof dest === "string") {
         if (fs.existsSync(dest)) {
-            const {mtime: outTime} = fs.statSync(dest);
+            const { mtime: outTime } = fs.statSync(dest);
             for (const filepath of source) {
                 if (fs.existsSync(filepath)) {
-                    const {mtime: inTime} = fs.statSync(filepath);
+                    const { mtime: inTime } = fs.statSync(filepath);
                     if (+inTime > +outTime) {
                         return true;
                     }
@@ -128,8 +133,8 @@ export function needsUpdate(source, dest) {
                 continue;
             }
             if (fs.existsSync(dest[i])) {
-                const {mtime: outTime} = fs.statSync(dest[i]);
-                const {mtime: inTime} = fs.statSync(source[i]);
+                const { mtime: outTime } = fs.statSync(dest[i]);
+                const { mtime: inTime } = fs.statSync(source[i]);
                 if (+inTime > +outTime) {
                     return true;
                 }
@@ -175,7 +180,9 @@ export class Debouncer {
         this._action = action;
     }
 
-    get empty() { return !this._deferred; }
+    get empty() {
+        return !this._deferred;
+    }
 
     enqueue() {
         if (this._timer) {

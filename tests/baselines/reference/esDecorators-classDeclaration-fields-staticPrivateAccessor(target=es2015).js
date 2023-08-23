@@ -46,8 +46,8 @@ let D = (() => {
     let _classThis;
     var D = _classThis = class {
     };
-    _D_field1_get = function _D_field1_get() { return __classPrivateFieldGet(this, _classThis, "f", _D_field1_accessor_storage); };
-    _D_field1_set = function _D_field1_set(value) { __classPrivateFieldSet(this, _classThis, value, "f", _D_field1_accessor_storage); };
+    _D_field1_get = function _D_field1_get() { return __classPrivateFieldGet(_classThis, _classThis, "f", _D_field1_accessor_storage); };
+    _D_field1_set = function _D_field1_set(value) { __classPrivateFieldSet(_classThis, _classThis, value, "f", _D_field1_accessor_storage); };
     __setFunctionName(_classThis, "D");
     (() => {
         const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;

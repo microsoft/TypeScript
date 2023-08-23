@@ -29,3 +29,13 @@ var validPlain: string = 'nope';
 >validPlain : string
 >'nope' : "nope"
 
+// @ts-ignore: with additional commenting
+var invalidCommentedFancy: number = 'nope';
+>invalidCommentedFancy : number
+>'nope' : "nope"
+
+// @ts-ignore: with additional commenting
+var validCommentedFancy: string = 'nope';
+>validCommentedFancy : string
+>'nope' : "nope"
+

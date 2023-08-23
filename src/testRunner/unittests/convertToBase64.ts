@@ -13,7 +13,7 @@ describe("unittests:: convertToBase64", () => {
         });
 
         it("Converts escape sequences correctly", () => {
-            runTest("\t\n\r\\\"\'\u0062");
+            runTest("\t\n\r\\\"'\u0062");
         });
 
         it("Converts simple unicode characters correctly", () => {

@@ -1,5 +1,4 @@
 declare namespace Intl {
-
     // http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories
     type LDMLPluralRule = "zero" | "one" | "two" | "few" | "many" | "other";
     type PluralRuleType = "cardinal" | "ordinal";
@@ -34,7 +33,7 @@ declare namespace Intl {
         new (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
         (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
 
-        supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit" }): string[];
+        supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
     };
 
     // We can only have one definition for 'type' in TypeScript, and so you can learn where the keys come from here:

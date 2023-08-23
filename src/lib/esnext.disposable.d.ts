@@ -70,18 +70,18 @@ interface DisposableStack {
      *   constructor() {
      *     // stack will be disposed when exiting constructor for any reason
      *     using stack = new DisposableStack();
-     * 
+     *
      *     // get first resource
      *     this.#res1 = stack.use(getResource1());
-     * 
+     *
      *     // get second resource. If this fails, both `stack` and `#res1` will be disposed.
      *     this.#res2 = stack.use(getResource2());
-     * 
+     *
      *     // all operations succeeded, move resources out of `stack` so that they aren't disposed
      *     // when constructor exits
      *     this.#disposables = stack.move();
      *   }
-     * 
+     *
      *   [Symbol.dispose]() {
      *     this.#disposables.dispose();
      *   }
@@ -94,7 +94,7 @@ interface DisposableStack {
 }
 
 interface DisposableStackConstructor {
-    new(): DisposableStack;
+    new (): DisposableStack;
     readonly prototype: DisposableStack;
 }
 declare var DisposableStack: DisposableStackConstructor;
@@ -137,18 +137,18 @@ interface AsyncDisposableStack {
      *   constructor() {
      *     // stack will be disposed when exiting constructor for any reason
      *     using stack = new DisposableStack();
-     * 
+     *
      *     // get first resource
      *     this.#res1 = stack.use(getResource1());
-     * 
+     *
      *     // get second resource. If this fails, both `stack` and `#res1` will be disposed.
      *     this.#res2 = stack.use(getResource2());
-     * 
+     *
      *     // all operations succeeded, move resources out of `stack` so that they aren't disposed
      *     // when constructor exits
      *     this.#disposables = stack.move();
      *   }
-     * 
+     *
      *   [Symbol.dispose]() {
      *     this.#disposables.dispose();
      *   }
@@ -161,7 +161,7 @@ interface AsyncDisposableStack {
 }
 
 interface AsyncDisposableStackConstructor {
-    new(): AsyncDisposableStack;
+    new (): AsyncDisposableStack;
     readonly prototype: AsyncDisposableStack;
 }
 declare var AsyncDisposableStack: AsyncDisposableStackConstructor;

@@ -135,7 +135,7 @@ export namespace Status {
     }
 
     export interface OutOfDateRoots {
-        type: UpToDateStatusType.OutOfDateRoots,
+        type: UpToDateStatusType.OutOfDateRoots;
         buildInfoFile: string;
         inputFile: Path;
     }

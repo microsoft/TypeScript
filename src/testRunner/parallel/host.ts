@@ -79,7 +79,7 @@ export function start() {
     interface Worker {
         process: import("child_process").ChildProcess;
         accumulatedOutput: string;
-        currentTasks?: { file: string }[];
+        currentTasks?: { file: string; }[];
         timer?: any;
     }
 
@@ -118,7 +118,7 @@ export function start() {
                 incomplete,
                 close,
                 width,
-                noColors: options.noColors || false
+                noColors: options.noColors || false,
             };
 
             this._progressBars = [];
@@ -200,7 +200,7 @@ export function start() {
         return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
     }
 
-    function readSavedPerfData(target?: string): { [testHash: string]: number } | undefined {
+    function readSavedPerfData(target?: string): { [testHash: string]: number; } | undefined {
         const perfDataContents = IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
@@ -212,7 +212,7 @@ export function start() {
         return `tsrunner-${runner}://${test}`;
     }
 
-    function startDelayed(perfData: { [testHash: string]: number } | undefined, totalCost: number) {
+    function startDelayed(perfData: { [testHash: string]: number; } | undefined, totalCost: number) {
         console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
@@ -262,7 +262,7 @@ export function start() {
         let passingFiles = 0;
         let failingFiles = 0;
         let errorResults: ErrorInfo[] = [];
-        let passingResults: { name: string[] }[] = [];
+        let passingResults: { name: string[]; }[] = [];
         let totalPassing = 0;
         const startDate = new Date();
 
@@ -270,7 +270,7 @@ export function start() {
         const progressUpdateInterval = 1 / progressBars._options.width;
         let nextProgress = progressUpdateInterval;
 
-        const newPerfData: { [testHash: string]: number } = {};
+        const newPerfData: { [testHash: string]: number; } = {};
 
         const workers: Worker[] = [];
         let closedWorkers = 0;
@@ -283,7 +283,7 @@ export function start() {
                 process: fork(process.argv[1], [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] }),
                 accumulatedOutput: "",
                 currentTasks: undefined,
-                timer: undefined
+                timer: undefined,
             };
             const appendOutput = (d: Buffer) => {
                 worker.accumulatedOutput += d.toString();
@@ -385,10 +385,11 @@ export function start() {
         // It's only really worth doing an initial batching if there are a ton of files to go through (and they have estimates)
         if (totalFiles > 1000 && batchSize > 0) {
             console.log("Batching initial test lists...");
-            const batches: { runner: TestRunnerKind | "unittest", file: string, size: number }[][] = new Array(batchCount);
+            const batches: { runner: TestRunnerKind | "unittest"; file: string; size: number; }[][] = new Array(batchCount);
             const doneBatching = new Array(batchCount);
             let scheduledTotal = 0;
-            batcher: while (true) {
+            batcher:
+            while (true) {
                 for (let i = 0; i < batchCount; i++) {
                     if (tasks.length <= workerCount) { // Keep a small reserve even in the suboptimally packed case
                         console.log(`Suboptimal packing detected: no tests remain to be stolen. Reduce packing fraction from ${packfraction} to fix.`);
@@ -477,7 +478,7 @@ export function start() {
                 percentComplete,
                 progressColor,
                 title,
-                titleColor
+                titleColor,
             );
         }
 
@@ -485,20 +486,29 @@ export function start() {
             function patchStats(stats: Mocha.Stats) {
                 Object.defineProperties(stats, {
                     start: {
-                        configurable: true, enumerable: true,
-                        get() { return startDate; },
-                        set(_: Date) { /*do nothing*/ }
+                        configurable: true,
+                        enumerable: true,
+                        get() {
+                            return startDate;
+                        },
+                        set(_: Date) {/*do nothing*/},
                     },
                     end: {
-                        configurable: true, enumerable: true,
-                        get() { return endDate; },
-                        set(_: Date) { /*do nothing*/ }
+                        configurable: true,
+                        enumerable: true,
+                        get() {
+                            return endDate;
+                        },
+                        set(_: Date) {/*do nothing*/},
                     },
                     duration: {
-                        configurable: true, enumerable: true,
-                        get() { return duration; },
-                        set(_: number) { /*do nothing*/ }
-                    }
+                        configurable: true,
+                        enumerable: true,
+                        get() {
+                            return duration;
+                        },
+                        set(_: number) {/*do nothing*/},
+                    },
                 });
             }
 
@@ -563,8 +573,8 @@ export function start() {
                 xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
                     reporterOptions: {
                         suiteName: "Tests",
-                        output: "./TEST-results.xml"
-                    }
+                        output: "./TEST-results.xml",
+                    },
                 });
                 patchStats(xunitReporter.stats);
                 xunitReporter.write(`<?xml version="1.0" encoding="UTF-8"?>\n`);
@@ -574,7 +584,7 @@ export function start() {
                     reporterOptions: {
                         file: path.resolve(".failed-tests"),
                         keepFailed,
-                    }
+                    },
                 });
             }
 

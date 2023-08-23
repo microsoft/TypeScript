@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/indexedAccessWithVariableElement.ts] ////
+
+=== indexedAccessWithVariableElement.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54420
+
+declare const array1: [...number[], number]
+>array1 : Symbol(array1, Decl(indexedAccessWithVariableElement.ts, 2, 13))
+
+const el1: number = array1[0]
+>el1 : Symbol(el1, Decl(indexedAccessWithVariableElement.ts, 3, 5))
+>array1 : Symbol(array1, Decl(indexedAccessWithVariableElement.ts, 2, 13))
+
+declare const array2: [...number[], number]
+>array2 : Symbol(array2, Decl(indexedAccessWithVariableElement.ts, 5, 13))
+
+const el2: number = array2[1]
+>el2 : Symbol(el2, Decl(indexedAccessWithVariableElement.ts, 6, 5))
+>array2 : Symbol(array2, Decl(indexedAccessWithVariableElement.ts, 5, 13))
+
+declare const array3: [number, ...number[], number]
+>array3 : Symbol(array3, Decl(indexedAccessWithVariableElement.ts, 8, 13))
+
+const el3: number = array3[1]
+>el3 : Symbol(el3, Decl(indexedAccessWithVariableElement.ts, 9, 5))
+>array3 : Symbol(array3, Decl(indexedAccessWithVariableElement.ts, 8, 13))
+
+declare const array4: [number, ...number[], number]
+>array4 : Symbol(array4, Decl(indexedAccessWithVariableElement.ts, 11, 13))
+
+const el4: number = array4[2]
+>el4 : Symbol(el4, Decl(indexedAccessWithVariableElement.ts, 12, 5))
+>array4 : Symbol(array4, Decl(indexedAccessWithVariableElement.ts, 11, 13))
+

@@ -67,7 +67,7 @@ import {
 import * as Debug from "../../debug";
 
 /** @internal */
-export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => (SymbolAccessibilityDiagnostic | undefined);
+export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined;
 
 /** @internal */
 export interface SymbolAccessibilityDiagnostic {
@@ -145,7 +145,7 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         } : undefined;
     }
 
@@ -176,7 +176,7 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         } : undefined;
     }
 
@@ -246,8 +246,10 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         }
         // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
         // The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
-        else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression || node.kind === SyntaxKind.BinaryExpression || node.kind === SyntaxKind.PropertySignature ||
-            (node.kind === SyntaxKind.Parameter && hasSyntacticModifier(node.parent, ModifierFlags.Private))) {
+        else if (
+            node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression || node.kind === SyntaxKind.BinaryExpression || node.kind === SyntaxKind.PropertySignature ||
+            (node.kind === SyntaxKind.Parameter && hasSyntacticModifier(node.parent, ModifierFlags.Private))
+        ) {
             // TODO(jfreeman): Deal with computed properties in error reporting.
             if (isStatic(node)) {
                 return symbolAccessibilityResult.errorModuleName ?
@@ -277,7 +279,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         } : undefined;
     }
 
@@ -316,7 +318,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage,
             errorNode: (node as NamedDeclaration).name!,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         };
     }
 
@@ -382,7 +384,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
 
         return {
             diagnosticMessage,
-            errorNode: (node as NamedDeclaration).name || node
+            errorNode: (node as NamedDeclaration).name || node,
         };
     }
 
@@ -391,7 +393,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return diagnosticMessage !== undefined ? {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         } : undefined;
     }
 
@@ -524,7 +526,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         };
     }
 
@@ -535,8 +537,8 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
             // Class or Interface implemented/extended is inaccessible
             diagnosticMessage = isHeritageClause(node.parent) && node.parent.token === SyntaxKind.ImplementsKeyword ?
                 Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                    node.parent.parent.name ? Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                        Diagnostics.extends_clause_of_exported_class_has_or_is_using_private_name_0;
+                node.parent.parent.name ? Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1 :
+                Diagnostics.extends_clause_of_exported_class_has_or_is_using_private_name_0;
         }
         else {
             // interface is inaccessible
@@ -546,7 +548,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage,
             errorNode: node,
-            typeName: getNameOfDeclaration(node.parent.parent as Declaration)
+            typeName: getNameOfDeclaration(node.parent.parent as Declaration),
         };
     }
 
@@ -554,7 +556,7 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
         return {
             diagnosticMessage: Diagnostics.Import_declaration_0_is_using_private_name_1,
             errorNode: node,
-            typeName: (node as NamedDeclaration).name
+            typeName: (node as NamedDeclaration).name,
         };
     }
 
