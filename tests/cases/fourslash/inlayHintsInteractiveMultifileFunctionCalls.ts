@@ -21,4 +21,4 @@ goTo.file("./aaa.mts");
 verify.baselineInlayHints(undefined, {
     includeInlayParameterNameHints: "all",
     interactiveInlayHints: true
-})
+});
