@@ -43,6 +43,12 @@
             "rules": {
                 "no-restricted-globals": "off"
             }
+        },
+        {
+            "files": ["harness/**", "testRunner/**"],
+            "rules": {
+                "local/no-ts-debug": "off"
+            }
         }
     ]
 }

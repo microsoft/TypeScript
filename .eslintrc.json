@@ -122,6 +122,7 @@
         "local/debug-assert": "error",
         "local/no-keywords": "error",
         "local/jsdoc-format": "error",
+        "local/no-ts-debug": "error",
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
