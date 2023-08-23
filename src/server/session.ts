@@ -1877,14 +1877,15 @@ export class Session<TMessage = string> implements EventSender {
                 position: scriptInfo.positionToLineOffset(position),
                 displayParts: displayParts?.map(({ text, span, file }) => {
                     if (span) {
-                        const scriptInfo = this.projectService.getScriptInfo(file!)!;
+                        Debug.assertIsDefined(file, "Target file should be defined together with its span.");
+                        const scriptInfo = this.projectService.getScriptInfo(file)!;
 
                         return {
                             text,
                             span: {
                                 start: scriptInfo.positionToLineOffset(span.start),
                                 end: scriptInfo.positionToLineOffset(span.start + span.length),
-                                file: file!,
+                                file,
                             },
                         };
                     }
