@@ -62,7 +62,6 @@ import {
     Signature,
     skipParentheses,
     some,
-    SourceFile,
     Symbol,
     SymbolFlags,
     SyntaxKind,
@@ -158,11 +157,11 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
     }
 
-    function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean, sourceFile: SourceFile | undefined) {
+    function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean) {
         let hintText = `${isFirstVariadicArgument ? "..." : ""}${text}`;
         let displayParts: InlayHintDisplayPart[] | undefined;
         if (shouldUseInteractiveInlayHints(preferences)) {
-            displayParts = [getNodeDisplayPart(hintText, parameter, sourceFile!), { text: ":" }];
+            displayParts = [getNodeDisplayPart(hintText, parameter), { text: ":" }];
             hintText = "";
         }
         else {
@@ -286,7 +285,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     continue;
                 }
 
-                addParameterHints(name, parameter, originalArg.getStart(), isFirstVariadicArgument, sourceFile);
+                addParameterHints(name, parameter, originalArg.getStart(), isFirstVariadicArgument);
             }
         }
     }
@@ -436,7 +435,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return true;
     }
 
-    function getNodeDisplayPart(text: string, node: Node, sourceFile: SourceFile): InlayHintDisplayPart {
+    function getNodeDisplayPart(text: string, node: Node): InlayHintDisplayPart {
+        const sourceFile = node.getSourceFile();
         return {
             text,
             span: createTextSpanFromNode(node, sourceFile),
