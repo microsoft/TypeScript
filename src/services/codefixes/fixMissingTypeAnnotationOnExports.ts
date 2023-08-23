@@ -1,5 +1,6 @@
 import {
     ArrayBindingPattern,
+    ArrowFunction,
     BindingElement,
     BindingPattern,
     ClassDeclaration,
@@ -9,12 +10,16 @@ import {
     ExpressionWithTypeArguments,
     factory,
     FunctionDeclaration,
+    FunctionExpression,
     GeneratedIdentifierFlags,
     GetAccessorDeclaration,
     getTokenAtPosition,
     Identifier,
     isArrayBindingPattern,
+    isArrowFunction,
     isComputedPropertyName,
+    isFunctionDeclaration,
+    isFunctionExpression,
     isObjectBindingPattern,
     isOmittedExpression,
     isVariableDeclaration,
@@ -113,6 +118,9 @@ function fixupForIsolatedDeclarations(node: Node, nodeWithDiag: Node, sourceFile
     case SyntaxKind.VariableDeclaration:
         const variableDeclaration = node as VariableDeclaration;
         if (!variableDeclaration.type) {
+            if (variableDeclaration.initializer && (isFunctionExpression(variableDeclaration.initializer) || isArrowFunction(variableDeclaration.initializer))) {
+                return addTypeToFunctionLikeDeclaration(variableDeclaration.initializer, sourceFile, typeChecker, changes);
+            }
             const type = typeChecker.getTypeAtLocation(variableDeclaration);
             const typeNode = typeToTypeNode(type, variableDeclaration, typeChecker);
             return changes.replaceNodeWithNodes(sourceFile, node,
@@ -126,28 +134,13 @@ function fixupForIsolatedDeclarations(node: Node, nodeWithDiag: Node, sourceFile
         }
         break;
     case SyntaxKind.FunctionDeclaration:
-        const functionDecl = node as FunctionDeclaration;
-        if (!functionDecl.type) {
-            const type = tryGetReturnType(typeChecker, functionDecl);
-            if(type) {
-                const typeNode = typeToTypeNode(type, functionDecl, typeChecker);
-                return changes.replaceNodeWithNodes(sourceFile, node,
-                    [factory.updateFunctionDeclaration(
-                    functionDecl,
-                    functionDecl.modifiers,
-                    functionDecl.asteriskToken,
-                    functionDecl.name,
-                    functionDecl.typeParameters,
-                    updateTypesInNodeArray(functionDecl.parameters, typeChecker),
-                    typeNode,
-                    functionDecl.body)]
-                );
-            }
-        }
-        break;
+        return addTypeToFunctionLikeDeclaration(node as FunctionDeclaration, sourceFile, typeChecker, changes);
     case SyntaxKind.PropertyDeclaration:
         const propDecl = node as PropertyDeclaration;
         if(!propDecl.type) {
+            if (propDecl.initializer && (isFunctionExpression(propDecl.initializer) || isArrowFunction(propDecl.initializer))) {
+                return addTypeToFunctionLikeDeclaration(propDecl.initializer, sourceFile, typeChecker, changes);
+            }
             const type = typeChecker.getTypeAtLocation(node);
             const typeNode = typeToTypeNode(type, propDecl, typeChecker);
             return changes.replaceNodeWithNodes(sourceFile, node,
@@ -226,6 +219,56 @@ function fixupForIsolatedDeclarations(node: Node, nodeWithDiag: Node, sourceFile
         break;
     }
     throw new Error(`Cannot find a fix for the given node ${node.kind}`);
+}
+
+function addTypeToFunctionLikeDeclaration(func: FunctionDeclaration | FunctionExpression | ArrowFunction, sourceFile: SourceFile, typeChecker: TypeChecker, changes: textChanges.ChangeTracker) {
+    if (func.type) {
+        return;
+    }
+
+    const type = tryGetReturnType(typeChecker, func);
+    if (!type) {
+        return;
+    }
+    const typeNode = typeToTypeNode(type, func, typeChecker);
+    if (isFunctionDeclaration(func)) {
+        changes.replaceNodeWithNodes(sourceFile, func,
+            [factory.updateFunctionDeclaration(
+                func,
+                func.modifiers,
+                func.asteriskToken,
+                func.name,
+                func.typeParameters,
+                updateTypesInNodeArray(func.parameters, typeChecker),
+                typeNode,
+                func.body)]
+        );
+    }
+    else if (isFunctionExpression(func)) {
+        changes.replaceNodeWithNodes(sourceFile, func,
+            [factory.updateFunctionExpression(
+                func,
+                func.modifiers,
+                func.asteriskToken,
+                func.name,
+                func.typeParameters,
+                updateTypesInNodeArray(func.parameters, typeChecker),
+                typeNode,
+                func.body)]
+        );
+    }
+    else {
+        changes.replaceNodeWithNodes(sourceFile, func,
+            [factory.updateArrowFunction(
+                func,
+                func.modifiers,
+                func.typeParameters,
+                updateTypesInNodeArray(func.parameters, typeChecker),
+                typeNode,
+                factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                func.body)]
+        );
+    }
 }
 
 function handleClassDeclaration(classDecl: ClassDeclaration, heritageExpression: ExpressionWithTypeArguments, sourceFile: SourceFile, changes: textChanges.ChangeTracker, typeChecker: TypeChecker) {
