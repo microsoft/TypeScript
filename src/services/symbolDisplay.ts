@@ -1,4 +1,5 @@
 import {
+    AccessorDeclaration,
     addRange,
     arrayFrom,
     BinaryExpression,
@@ -16,7 +17,6 @@ import {
     first,
     firstDefined,
     forEach,
-    GetAccessorDeclaration,
     getCombinedLocalAndExportSymbolFlags,
     getDeclarationOfKind,
     getExternalModuleImportEqualsDeclarationExpression,
@@ -83,7 +83,6 @@ import {
     ScriptElementKind,
     ScriptElementKindModifier,
     SemanticMeaning,
-    SetAccessorDeclaration,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
@@ -276,7 +275,14 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
     if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
         // If symbol is accessor, they are allowed only if location is at declaration identifier of the accessor
         if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
-            const declaration = find(symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration | PropertyDeclaration)[]), declaration => declaration.name === location);
+            const declaration = find(
+                symbol.declarations as (AccessorDeclaration | PropertyDeclaration | PropertyAccessExpression)[],
+                (declaration): declaration is AccessorDeclaration | PropertyDeclaration =>
+                    declaration.name === location
+                    // an expando member could have been added to an object with a set accessor
+                    // we need to ignore such write location as it shouldn't be displayed as `(setter)` anyway
+                    && declaration.kind !== SyntaxKind.PropertyAccessExpression,
+            );
             if (declaration) {
                 switch (declaration.kind) {
                     case SyntaxKind.GetAccessor:
