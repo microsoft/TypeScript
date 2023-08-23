@@ -4118,7 +4118,7 @@ export class ProjectService {
                                 }).join("");
                             });
 
-                            if (excludeRules.indexOf(processedRule) === -1) {
+                            if (!excludeRules.includes(processedRule)) {
                                 excludeRules.push(processedRule);
                             }
                         }
@@ -4126,7 +4126,7 @@ export class ProjectService {
                     else {
                         // If not rules listed, add the default rule to exclude the matched file
                         const escaped = ProjectService.escapeFilenameForRegex(root);
-                        if (excludeRules.indexOf(escaped) < 0) {
+                        if (!excludeRules.includes(escaped)) {
                             excludeRules.push(escaped);
                         }
                     }

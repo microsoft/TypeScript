@@ -69,7 +69,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
                                 return false;
                             }
                             fileExistsIsCalled = true;
-                            assert.isTrue(fileName.indexOf("/f2.") !== -1);
+                            assert.isTrue(fileName.includes("/f2."));
                             return originalFileExists.call(host, fileName);
                         };
                         sys.writeFile(root.path, `import {x} from "f2"`);
@@ -88,7 +88,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
                                 return false;
                             }
                             fileExistsIsCalled = true;
-                            assert.isTrue(fileName.indexOf("/f1.") !== -1);
+                            assert.isTrue(fileName.includes("/f1."));
                             return originalFileExists.call(host, fileName);
                         };
                         sys.writeFile(root.path, `import {x} from "f1"`);
@@ -129,7 +129,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
                 return false;
             }
             if (!fileExistsCalledForBar) {
-                fileExistsCalledForBar = fileName.indexOf("/bar.") !== -1;
+                fileExistsCalledForBar = fileName.includes("/bar.");
             }
 
             return originalFileExists.call(host, fileName);
@@ -187,7 +187,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
                 return false;
             }
             if (!fileExistsCalledForBar) {
-                fileExistsCalledForBar = fileName.indexOf("/bar.") !== -1;
+                fileExistsCalledForBar = fileName.includes("/bar.");
             }
             return originalFileExists.call(host, fileName);
         };

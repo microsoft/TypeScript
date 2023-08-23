@@ -1808,7 +1808,7 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         && features & NodeResolutionFeatures.Exports
         && !isExternalModuleNameRelative(moduleName)
         && !extensionIsOk(Extensions.TypeScript | Extensions.Declaration, result.value.resolved.extension)
-        && conditions.indexOf("import") > -1
+        && conditions.includes("import")
     ) {
         traceIfEnabled(state, Diagnostics.Resolution_of_non_relative_name_failed_trying_with_modern_Node_resolution_features_disabled_to_see_if_npm_library_needs_configuration_update);
         const diagnosticState = {
@@ -1849,7 +1849,7 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
                 resolved = loadModuleFromSelfNameReference(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
             }
             if (!resolved) {
-                if (moduleName.indexOf(":") > -1) {
+                if (moduleName.includes(":")) {
                     if (traceEnabled) {
                         trace(host, Diagnostics.Skipping_module_0_that_looks_like_an_absolute_URI_target_file_types_Colon_1, moduleName, formatExtensions(extensions));
                     }
@@ -2006,7 +2006,7 @@ function loadModuleFromFile(extensions: Extensions, candidate: string, onlyRecor
 
 function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
     const filename = getBaseFileName(candidate);
-    if (filename.indexOf(".") === -1) {
+    if (!filename.includes(".")) {
         return undefined; // extensionless import, no lookups performed, since we don't support extensionless files
     }
     let extensionless = removeFileExtension(candidate);
@@ -2609,11 +2609,11 @@ export function comparePatternKeys(a: string, b: string) {
 function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, moduleName: string, lookupTable: object, scope: PackageJsonInfo, isImports: boolean): SearchResult<Resolved> | undefined {
     const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
 
-    if (!endsWith(moduleName, directorySeparator) && moduleName.indexOf("*") === -1 && hasProperty(lookupTable, moduleName)) {
+    if (!endsWith(moduleName, directorySeparator) && !moduleName.includes("*") && hasProperty(lookupTable, moduleName)) {
         const target = (lookupTable as { [idx: string]: unknown; })[moduleName];
         return loadModuleFromTargetImportOrExport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
     }
-    const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.indexOf("*") !== -1 || endsWith(k, "/")), comparePatternKeys);
+    const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.includes("*") || endsWith(k, "/")), comparePatternKeys);
     for (const potentialTarget of expandingKeys) {
         if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
             const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
@@ -2772,7 +2772,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
             if (
                 !state.isConfigLookup
                 && (state.compilerOptions.declarationDir || state.compilerOptions.outDir)
-                && finalPath.indexOf("/node_modules/") === -1
+                && !finalPath.includes("/node_modules/")
                 && (state.compilerOptions.configFile ? containsPath(scope.packageDirectory, toAbsolutePath(state.compilerOptions.configFile.fileName), !useCaseSensitiveFileNames(state)) : true)
             ) {
                 // So that all means we'll only try these guesses for files outside `node_modules` in a directory where the `package.json` and `tsconfig.json` are siblings.
@@ -2876,7 +2876,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
 
 /** @internal */
 export function isApplicableVersionedTypesKey(conditions: readonly string[], key: string) {
-    if (conditions.indexOf("types") === -1) return false; // only apply versioned types conditions if the types condition is applied
+    if (!conditions.includes("types")) return false; // only apply versioned types conditions if the types condition is applied
     if (!startsWith(key, "types@")) return false;
     const range = VersionRange.tryParse(key.substring("types@".length));
     if (!range) return false;

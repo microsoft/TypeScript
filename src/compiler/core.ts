@@ -2486,7 +2486,7 @@ export function tryRemoveSuffix(str: string, suffix: string): string | undefined
 
 /** @internal */
 export function stringContains(str: string, substring: string): boolean {
-    return str.indexOf(substring) !== -1;
+    return str.includes(substring);
 }
 
 /**
