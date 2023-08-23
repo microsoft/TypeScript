@@ -328,6 +328,44 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                     })
                 );
             }
+            function addTypeToFunctionLikeDeclaration(func: ts.FunctionDeclaration): ts.FunctionDeclaration;
+            function addTypeToFunctionLikeDeclaration(func: ts.FunctionExpression | ts.ArrowFunction): ts.FunctionExpression | ts.ArrowFunction;
+            function addTypeToFunctionLikeDeclaration(func: ts.FunctionDeclaration | ts.FunctionExpression | ts.ArrowFunction) {
+                const type = tryGetReturnType(typeChecker, func);
+                const typeNode = typeToTypeNode(type!, func);
+                if (ts.isFunctionDeclaration(func)) {
+                    return ts.factory.updateFunctionDeclaration(
+                            func,
+                            func.modifiers,
+                            func.asteriskToken,
+                            func.name,
+                            func.typeParameters,
+                            updateTypesInNodeArray(func.parameters),
+                            typeNode,
+                            func.body);
+                }
+                else if (ts.isFunctionExpression(func)) {
+                    return ts.factory.updateFunctionExpression(
+                            func,
+                            func.modifiers,
+                            func.asteriskToken,
+                            func.name,
+                            func.typeParameters,
+                            updateTypesInNodeArray(func.parameters),
+                            typeNode,
+                            func.body);
+                }
+                else {
+                    return ts.factory.updateArrowFunction(
+                            func,
+                            func.modifiers,
+                            func.typeParameters,
+                            updateTypesInNodeArray(func.parameters),
+                            typeNode,
+                            ts.factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+                            func.body);
+                }
+            }
 
             // Define a visitor function
             function visit(node: ts.Node): ts.Node | ts.Node[] {
@@ -358,6 +396,16 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                 case ts.SyntaxKind.VariableDeclaration:
                     const variableDeclaration = node as ts.VariableDeclaration;
                     if (!variableDeclaration.type) {
+                        if (variableDeclaration.initializer &&
+                            (ts.isFunctionExpression(variableDeclaration.initializer) || ts.isArrowFunction(variableDeclaration.initializer))) {
+                            return ts.factory.updateVariableDeclaration(
+                                variableDeclaration,
+                                variableDeclaration.name,
+                                /**exclamationToken=*/ undefined,
+                                /**type*/ undefined,
+                                addTypeToFunctionLikeDeclaration(variableDeclaration.initializer)
+                            );
+                        }
                         const type = typeChecker.getTypeAtLocation(variableDeclaration);
                         const typeNode = typeToTypeNode(type, variableDeclaration);
                         return ts.factory.updateVariableDeclaration(
@@ -405,6 +453,15 @@ export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program:
                 case ts.SyntaxKind.PropertyDeclaration:
                     const propDecl = node as ts.PropertyDeclaration;
                     if(!propDecl.type) {
+                        if (propDecl.initializer && (ts.isFunctionExpression(propDecl.initializer) || ts.isArrowFunction(propDecl.initializer))) {
+                            return ts.factory.updatePropertyDeclaration(
+                                propDecl,
+                                propDecl.modifiers,
+                                propDecl.name,
+                                propDecl.questionToken ?? propDecl.exclamationToken,
+                                /**type*/ undefined,
+                                addTypeToFunctionLikeDeclaration(propDecl.initializer));
+                        }
                         const type = typeChecker.getTypeAtLocation(node);
                         const typeNode = typeToTypeNode(type, propDecl);
                         return ts.factory.updatePropertyDeclaration(
