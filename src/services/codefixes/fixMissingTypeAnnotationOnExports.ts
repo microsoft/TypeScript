@@ -63,14 +63,14 @@ const canHaveExplicitTypeAnnotation = new Set<SyntaxKind>([
     SyntaxKind.ArrayBindingPattern,
 ]);
 
-const declarationEmitNodeBuilderFlags =
-    NodeBuilderFlags.MultilineObjectLiterals |
-    NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
-    NodeBuilderFlags.UseTypeOfFunction |
-    NodeBuilderFlags.UseStructuralFallback |
-    NodeBuilderFlags.AllowEmptyTuple |
-    NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
-    NodeBuilderFlags.NoTruncation;
+const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
+    | NodeBuilderFlags.WriteClassExpressionAsTypeLiteral
+    | NodeBuilderFlags.UseTypeOfFunction
+    | NodeBuilderFlags.UseStructuralFallback
+    | NodeBuilderFlags.AllowEmptyTuple
+    | NodeBuilderFlags.GenerateNamesForShadowedTypeParams
+    | NodeBuilderFlags.NoTruncation
+    | NodeBuilderFlags.AllowUniqueESSymbolType;
 
 registerCodeFix({
     errorCodes,

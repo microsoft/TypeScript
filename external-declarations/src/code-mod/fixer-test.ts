@@ -84,7 +84,7 @@ async function main() {
         const testFile = normalizePath(allTests[count].file);
         const caseData = await loadTestCase(testFile);
 
-        const settings: ts.CompilerOptions = {};
+        const settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES2019 };
         setCompilerOptionsFromHarnessSetting(caseData.settings, settings);
 
         function createHarnessTestFile(lastUnit: TestUnitData): TestFile {
