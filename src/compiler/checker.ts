@@ -23266,8 +23266,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isMutableArrayLikeType(type: Type): boolean {
-        // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
-        // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
+        // A type is mutable-array-like if it is a reference to the global Array type, or if it is not the
+        // undefined or null type and if it is assignable to Array<any>
         return isMutableArrayOrTuple(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyArrayType);
     }
 
@@ -23931,7 +23931,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
         }
         if (targetRestType) {
-            callback(getRestTypeAtPosition(source, paramCount, /*readonly*/ isConstTypeVariable(targetRestType) && !isMutableArrayLikeType(targetRestType)), targetRestType);
+            callback(getRestTypeAtPosition(source, paramCount, /*readonly*/ isConstTypeVariable(targetRestType) && !someType(targetRestType, isMutableArrayLikeType)), targetRestType);
         }
     }
 
@@ -30051,7 +30051,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createTupleType(elementTypes, elementFlags);
         }
         if (forceTuple || inConstContext || inTupleContext) {
-            return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext && !(contextualType && isMutableArrayLikeType(contextualType))));
+            return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext && !(contextualType && someType(contextualType, isMutableArrayLikeType))));
         }
         return createArrayLiteralType(createArrayType(elementTypes.length ?
             getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), UnionReduction.Subtype) :
@@ -32629,7 +32629,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 names.push((arg as SyntheticExpression).tupleNameSource!);
             }
         }
-        return createTupleType(types, flags, inConstContext && !isMutableArrayLikeType(restType), length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), length(names) === length(types) ? names : undefined);
     }
 
     function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
