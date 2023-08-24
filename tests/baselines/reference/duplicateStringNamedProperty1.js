@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateStringNamedProperty1.ts] ////
+
 //// [duplicateStringNamedProperty1.ts]
 export interface Album {
     "artist": string;

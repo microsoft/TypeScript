@@ -1,4 +1,6 @@
-=== tests/cases/compiler/booleanFilterAnyArray.ts ===
+//// [tests/cases/compiler/booleanFilterAnyArray.ts] ////
+
+=== booleanFilterAnyArray.ts ===
 interface Bullean { }
 interface BulleanConstructor {
     new(v1?: any): Bullean;

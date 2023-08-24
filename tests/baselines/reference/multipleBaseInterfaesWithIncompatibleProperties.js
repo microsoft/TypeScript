@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleBaseInterfaesWithIncompatibleProperties.ts] ////
+
 //// [multipleBaseInterfaesWithIncompatibleProperties.ts]
 interface A<T>
 {

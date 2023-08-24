@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement1.ts(2,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement1.ts(4,1): error TS1128: Declaration or statement expected.
+parserErrorRecovery_ModuleElement1.ts(2,1): error TS1128: Declaration or statement expected.
+parserErrorRecovery_ModuleElement1.ts(4,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement1.ts (2 errors) ====
+==== parserErrorRecovery_ModuleElement1.ts (2 errors) ====
     return foo;
     }
     ~

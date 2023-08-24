@@ -1,4 +1,6 @@
-=== tests/cases/compiler/topLevelLambda3.ts ===
+//// [tests/cases/compiler/topLevelLambda3.ts] ////
+
+=== topLevelLambda3.ts ===
 var f = () => {this.window;}
 >f : Symbol(f, Decl(topLevelLambda3.ts, 0, 3))
 >this.window : Symbol(window, Decl(lib.dom.d.ts, --, --))

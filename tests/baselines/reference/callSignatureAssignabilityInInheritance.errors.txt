@@ -1,13 +1,13 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts(57,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
+callSignatureAssignabilityInInheritance.ts(57,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
   The types returned by 'a(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts(63,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+callSignatureAssignabilityInInheritance.ts(63,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
   The types returned by 'a2(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts (2 errors) ====
+==== callSignatureAssignabilityInInheritance.ts (2 errors) ====
     module CallSignature {
         interface Base { // T
             // M's

@@ -1,0 +1,8 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 12) skipped ---
+// let opt = <Opt />;
+// let opt1 = <Opt propx={100} propString />;
+// let opt2 = <Opt propx={100} optional/>;
+// let opt3 = <Opt /*RENAME*/[|wrongRENAME|] />;
+// let opt4 = <Opt propx={100} propString="hi" />;

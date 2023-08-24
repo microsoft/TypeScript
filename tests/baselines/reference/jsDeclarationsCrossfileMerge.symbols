@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCrossfileMerge.ts] ////
+
+=== index.js ===
 const m = require("./exporter");
 >m : Symbol(m, Decl(index.js, 0, 5))
 >require : Symbol(require)
@@ -19,7 +21,7 @@ module.exports.memberName = "thing";
 >exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >memberName : Symbol(memberName, Decl(index.js, 2, 27))
 
-=== tests/cases/conformance/jsdoc/declarations/exporter.js ===
+=== exporter.js ===
 function validate() {}
 >validate : Symbol(validate, Decl(exporter.js, 0, 0))
 

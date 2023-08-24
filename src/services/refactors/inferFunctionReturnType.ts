@@ -35,17 +35,17 @@ import {
 } from "../_namespaces/ts.refactor";
 
 const refactorName = "Infer function return type";
-const refactorDescription = Diagnostics.Infer_function_return_type.message;
+const refactorDescription = getLocaleSpecificMessage(Diagnostics.Infer_function_return_type);
 
 const inferReturnTypeAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.rewrite.function.returnType"
+    kind: "refactor.rewrite.function.returnType",
 };
 registerRefactor(refactorName, {
     kinds: [inferReturnTypeAction.kind],
     getEditsForAction: getRefactorEditsToInferReturnType,
-    getAvailableActions: getRefactorActionsToInferReturnType
+    getAvailableActions: getRefactorActionsToInferReturnType,
 });
 
 function getRefactorEditsToInferReturnType(context: RefactorContext): RefactorEditInfo | undefined {
@@ -64,14 +64,14 @@ function getRefactorActionsToInferReturnType(context: RefactorContext): readonly
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: [inferReturnTypeAction]
+            actions: [inferReturnTypeAction],
         }];
     }
     if (context.preferences.provideRefactorNotApplicableReason) {
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: [{ ...inferReturnTypeAction, notApplicableReason: info.error }]
+            actions: [{ ...inferReturnTypeAction, notApplicableReason: info.error }],
         }];
     }
     return emptyArray;

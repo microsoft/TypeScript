@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mergedModuleDeclarationCodeGen4.ts ===
+//// [tests/cases/compiler/mergedModuleDeclarationCodeGen4.ts] ////
+
+=== mergedModuleDeclarationCodeGen4.ts ===
 module superContain {
 >superContain : Symbol(superContain, Decl(mergedModuleDeclarationCodeGen4.ts, 0, 0))
 

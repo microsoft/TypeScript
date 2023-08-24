@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ExportDefaultFunctionDeclaration3.ts] ////
+
 //// [es5ExportDefaultFunctionDeclaration3.ts]
 var before: typeof func = func();
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType1.ts] ////
+
 //// [symbolType1.ts]
 Symbol() instanceof Symbol;
 Symbol instanceof Symbol();

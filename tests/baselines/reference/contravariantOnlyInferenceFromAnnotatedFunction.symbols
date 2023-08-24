@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/contravariantOnlyInferenceFromAnnotatedFunction.ts] ////
+
+=== contravariantOnlyInferenceFromAnnotatedFunction.ts ===
+// repro from #52580
+
+type Funcs<A, B extends Record<string, unknown>> = {
+>Funcs : Symbol(Funcs, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 0, 0))
+>A : Symbol(A, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 2, 11))
+>B : Symbol(B, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 2, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  [K in keyof B]: {
+>K : Symbol(K, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 3, 3))
+>B : Symbol(B, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 2, 13))
+
+    fn: (a: A, b: B) => void;
+>fn : Symbol(fn, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 3, 19))
+>a : Symbol(a, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 4, 9))
+>A : Symbol(A, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 2, 11))
+>b : Symbol(b, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 4, 14))
+>B : Symbol(B, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 2, 13))
+
+    thing: B[K];
+>thing : Symbol(thing, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 4, 29))
+>B : Symbol(B, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 2, 13))
+>K : Symbol(K, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 3, 3))
+
+  };
+}
+
+declare function foo<A, B extends Record<string, unknown>>(fns: Funcs<A, B>): [A, B]
+>foo : Symbol(foo, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 7, 1))
+>A : Symbol(A, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 9, 21))
+>B : Symbol(B, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 9, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>fns : Symbol(fns, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 9, 59))
+>Funcs : Symbol(Funcs, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 0, 0))
+>A : Symbol(A, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 9, 21))
+>B : Symbol(B, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 9, 23))
+>A : Symbol(A, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 9, 21))
+>B : Symbol(B, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 9, 23))
+
+const result = foo({
+>result : Symbol(result, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 11, 5))
+>foo : Symbol(foo, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 7, 1))
+
+  bar: {
+>bar : Symbol(bar, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 11, 20))
+
+    fn: (a: string) => {},
+>fn : Symbol(fn, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 12, 8))
+>a : Symbol(a, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 13, 9))
+
+    thing: 'asd',
+>thing : Symbol(thing, Decl(contravariantOnlyInferenceFromAnnotatedFunction.ts, 13, 26))
+
+  },
+});
+

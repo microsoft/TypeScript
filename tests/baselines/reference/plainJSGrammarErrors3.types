@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/plainJSGrammarErrors3.js ===
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors3.ts] ////
+
+=== plainJSGrammarErrors3.js ===
 
 === /a.js ===
 function foo() {

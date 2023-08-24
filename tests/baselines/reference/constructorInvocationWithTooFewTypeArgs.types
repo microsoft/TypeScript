@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts ===
+//// [tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts] ////
+
+=== constructorInvocationWithTooFewTypeArgs.ts ===
 class D<T, U> {
 >D : D<T, U>
 

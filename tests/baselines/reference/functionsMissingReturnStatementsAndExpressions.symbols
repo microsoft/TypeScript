@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts ===
+//// [tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts] ////
+
+=== functionsMissingReturnStatementsAndExpressions.ts ===
 function f1(): string {
 >f1 : Symbol(f1, Decl(functionsMissingReturnStatementsAndExpressions.ts, 0, 0))
 
@@ -46,14 +48,14 @@ function f7(): void {
     return null;
 }
 
-function f8(): void {
+function f8(): any {
 >f8 : Symbol(f8, Decl(functionsMissingReturnStatementsAndExpressions.ts, 30, 1))
 
     // Fine since are typed any.
     return;
 }
 
-function f9(): void {
+function f9(): any {
 >f9 : Symbol(f9, Decl(functionsMissingReturnStatementsAndExpressions.ts, 35, 1))
 
     // Fine since we are typed any and return undefined
@@ -152,37 +154,75 @@ function f21(): number | string {
     // Not okay; union does not contain void or any
 }
 
+function f22(): undefined {
+>f22 : Symbol(f22, Decl(functionsMissingReturnStatementsAndExpressions.ts, 100, 1))
+
+    // Okay; return type allows implicit return of undefined
+}
+
+function f23(): undefined | number {
+>f23 : Symbol(f23, Decl(functionsMissingReturnStatementsAndExpressions.ts, 104, 1))
+
+    // Error; because `undefined | number` becomes `number` without strictNullChecks.
+}
+
+const f30: () => undefined = () => {
+>f30 : Symbol(f30, Decl(functionsMissingReturnStatementsAndExpressions.ts, 110, 5))
+
+    // Ok, contextual type for implicit return is `undefined`
+}
+
+const f31: () => undefined = () => {
+>f31 : Symbol(f31, Decl(functionsMissingReturnStatementsAndExpressions.ts, 114, 5))
+
+    // Ok, contextual type for expression-less return is `undefined`
+    return;
+}
+
+const f32: () => undefined | number = () => {
+>f32 : Symbol(f32, Decl(functionsMissingReturnStatementsAndExpressions.ts, 119, 5))
+
+    // Error, contextual type for implicit return isn't just `undefined`
+}
+
+const f33: () => undefined | number = () => {
+>f33 : Symbol(f33, Decl(functionsMissingReturnStatementsAndExpressions.ts, 123, 5))
+
+    // Error, contextual type for expression-less return isn't just `undefined`
+    return;
+}
+
 class C {
->C : Symbol(C, Decl(functionsMissingReturnStatementsAndExpressions.ts, 100, 1))
+>C : Symbol(C, Decl(functionsMissingReturnStatementsAndExpressions.ts, 126, 1))
 
     public get m1() {
->m1 : Symbol(C.m1, Decl(functionsMissingReturnStatementsAndExpressions.ts, 102, 9))
+>m1 : Symbol(C.m1, Decl(functionsMissingReturnStatementsAndExpressions.ts, 128, 9))
 
         // Errors; get accessors must return a value.
     }
 
     public get m2() {
->m2 : Symbol(C.m2, Decl(functionsMissingReturnStatementsAndExpressions.ts, 105, 5))
+>m2 : Symbol(C.m2, Decl(functionsMissingReturnStatementsAndExpressions.ts, 131, 5))
 
         // Permissible; returns undefined.
         return;
     }
 
     public get m3() {
->m3 : Symbol(C.m3, Decl(functionsMissingReturnStatementsAndExpressions.ts, 110, 5))
+>m3 : Symbol(C.m3, Decl(functionsMissingReturnStatementsAndExpressions.ts, 136, 5))
 
         return "Okay, because this is a return expression.";
     }
 
     public get m4() {
->m4 : Symbol(C.m4, Decl(functionsMissingReturnStatementsAndExpressions.ts, 114, 5))
+>m4 : Symbol(C.m4, Decl(functionsMissingReturnStatementsAndExpressions.ts, 140, 5))
 
         // Fine since this consists of a single throw statement.
         throw null;
     }
 
     public get m5() {
->m5 : Symbol(C.m5, Decl(functionsMissingReturnStatementsAndExpressions.ts, 119, 5))
+>m5 : Symbol(C.m5, Decl(functionsMissingReturnStatementsAndExpressions.ts, 145, 5))
 
         // Not fine, since we can *only* consist of a single throw statement
         // if no return statements are present but we are a get accessor.
@@ -191,3 +231,4 @@ class C {
 >undefined : Symbol(undefined)
     }
 }
+

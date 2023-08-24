@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/functions.js ===
+//// [tests/cases/conformance/jsdoc/jsdocFunctionType.ts] ////
+
+=== functions.js ===
 /**
  * @param {function(this: string, number): number} c is just passing on through
  * @return {function(this: string, number): number}

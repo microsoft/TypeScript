@@ -1,0 +1,63 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// <|var [|{| defId: 0 |}x|]: number;|>
+
+// === /tests/cases/fourslash/b.ts ===
+// <|var [|{| defId: 1 |}x|]: number;|>
+
+// === /tests/cases/fourslash/c.ts ===
+// <|var [|{| defId: 2 |}x|]: number;|>
+
+// === /tests/cases/fourslash/d.ts ===
+// <|var [|{| defId: 3 |}x|]: number;|>
+
+// === /tests/cases/fourslash/e.ts ===
+// /// <reference path="a.ts" />
+// /// <reference path="b.ts" />
+// /// <reference path="c.ts" />
+// /// <reference path="d.ts" />
+// /*GOTO DEF*/[|x|]++;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "var",
+    "name": "x",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "var",
+    "name": "x",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "var",
+    "name": "x",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 3,
+    "kind": "var",
+    "name": "x",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

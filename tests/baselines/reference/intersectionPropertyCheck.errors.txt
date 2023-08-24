@@ -1,20 +1,18 @@
-tests/cases/compiler/intersectionPropertyCheck.ts(1,68): error TS2322: Type '{ x: string; y: number; }' is not assignable to type '{ x: string; }'.
-  Object literal may only specify known properties, and 'y' does not exist in type '{ x: string; }'.
-tests/cases/compiler/intersectionPropertyCheck.ts(4,5): error TS2322: Type '{ a: { y: string; }; }' is not assignable to type '{ a?: { x?: number | undefined; } | undefined; } & { c?: string | undefined; }'.
+intersectionPropertyCheck.ts(1,68): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: string; }'.
+intersectionPropertyCheck.ts(4,5): error TS2322: Type '{ a: { y: string; }; }' is not assignable to type '{ a?: { x?: number | undefined; } | undefined; } & { c?: string | undefined; }'.
   Types of property 'a' are incompatible.
     Type '{ y: string; }' has no properties in common with type '{ x?: number | undefined; }'.
-tests/cases/compiler/intersectionPropertyCheck.ts(7,3): error TS2322: Type 'T & { a: boolean; }' is not assignable to type '{ a?: string | undefined; }'.
+intersectionPropertyCheck.ts(7,3): error TS2322: Type 'T & { a: boolean; }' is not assignable to type '{ a?: string | undefined; }'.
   Types of property 'a' are incompatible.
     Type 'boolean' is not assignable to type 'string'.
-tests/cases/compiler/intersectionPropertyCheck.ts(17,22): error TS2322: Type 'boolean' is not assignable to type 'string[]'.
+intersectionPropertyCheck.ts(17,22): error TS2322: Type 'boolean' is not assignable to type 'string[]'.
 
 
-==== tests/cases/compiler/intersectionPropertyCheck.ts (4 errors) ====
+==== intersectionPropertyCheck.ts (4 errors) ====
     let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
                                                                        ~
-!!! error TS2322: Type '{ x: string; y: number; }' is not assignable to type '{ x: string; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x: string; }'.
-!!! related TS6500 tests/cases/compiler/intersectionPropertyCheck.ts:1:12: The expected type comes from property 'a' which is declared here on type '{ a: { x: string; }; } & { c: number; }'
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: string; }'.
+!!! related TS6500 intersectionPropertyCheck.ts:1:12: The expected type comes from property 'a' which is declared here on type '{ a: { x: string; }; } & { c: number; }'
     
     declare let wrong: { a: { y: string } };
     let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
@@ -41,6 +39,6 @@ tests/cases/compiler/intersectionPropertyCheck.ts(17,22): error TS2322: Type 'bo
       return { ...value, hi: true }
                          ~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'string[]'.
-!!! related TS6500 tests/cases/compiler/intersectionPropertyCheck.ts:13:12: The expected type comes from property 'hi' which is declared here on type 'Test'
+!!! related TS6500 intersectionPropertyCheck.ts:13:12: The expected type comes from property 'hi' which is declared here on type 'Test'
     }
     

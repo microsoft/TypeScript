@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName3.ts] ////
+
+=== a.ts ===
+export const n = 1;
+>n : Symbol(n, Decl(a.ts, 0, 12))
+
+export const s = "s";
+>s : Symbol(s, Decl(a.ts, 1, 12))
+
+export enum E1 { A = "ENUM_KEY" }
+>E1 : Symbol(E1, Decl(a.ts, 1, 21))
+>A : Symbol(E1.A, Decl(a.ts, 2, 16))
+
+export enum E2 { B }
+>E2 : Symbol(E2, Decl(a.ts, 2, 33))
+>B : Symbol(E2.B, Decl(a.ts, 3, 16))
+
+=== b.ts ===
+import * as keys from "./a";
+>keys : Symbol(keys, Decl(b.ts, 0, 6))
+
+const t1 = {
+>t1 : Symbol(t1, Decl(b.ts, 2, 5))
+
+    [keys.n]: 1,
+>[keys.n] : Symbol([keys.n], Decl(b.ts, 2, 12), Decl(b.ts, 3, 16))
+>keys.n : Symbol(keys.n, Decl(a.ts, 0, 12))
+>keys : Symbol(keys, Decl(b.ts, 0, 6))
+>n : Symbol(keys.n, Decl(a.ts, 0, 12))
+
+    [keys.n]: 1, // duplicate
+>[keys.n] : Symbol([keys.n], Decl(b.ts, 2, 12), Decl(b.ts, 3, 16))
+>keys.n : Symbol(keys.n, Decl(a.ts, 0, 12))
+>keys : Symbol(keys, Decl(b.ts, 0, 6))
+>n : Symbol(keys.n, Decl(a.ts, 0, 12))
+}
+
+const t2 = {
+>t2 : Symbol(t2, Decl(b.ts, 7, 5))
+
+    [keys.s]: 1,
+>[keys.s] : Symbol([keys.s], Decl(b.ts, 7, 12), Decl(b.ts, 8, 16))
+>keys.s : Symbol(keys.s, Decl(a.ts, 1, 12))
+>keys : Symbol(keys, Decl(b.ts, 0, 6))
+>s : Symbol(keys.s, Decl(a.ts, 1, 12))
+
+    [keys.s]: 1, // duplicate
+>[keys.s] : Symbol([keys.s], Decl(b.ts, 7, 12), Decl(b.ts, 8, 16))
+>keys.s : Symbol(keys.s, Decl(a.ts, 1, 12))
+>keys : Symbol(keys, Decl(b.ts, 0, 6))
+>s : Symbol(keys.s, Decl(a.ts, 1, 12))
+}
+
+const t3 = {
+>t3 : Symbol(t3, Decl(b.ts, 12, 5))
+
+    [keys.E1.A]: 1,
+>[keys.E1.A] : Symbol([keys.E1.A], Decl(b.ts, 12, 12), Decl(b.ts, 13, 19))
+>keys.E1.A : Symbol(keys.E1.A, Decl(a.ts, 2, 16))
+>keys.E1 : Symbol(keys.E1, Decl(a.ts, 1, 21))
+>keys : Symbol(keys, Decl(b.ts, 0, 6))
+>E1 : Symbol(keys.E1, Decl(a.ts, 1, 21))
+>A : Symbol(keys.E1.A, Decl(a.ts, 2, 16))
+
+    [keys.E1.A]: 1, // duplicate
+>[keys.E1.A] : Symbol([keys.E1.A], Decl(b.ts, 12, 12), Decl(b.ts, 13, 19))
+>keys.E1.A : Symbol(keys.E1.A, Decl(a.ts, 2, 16))
+>keys.E1 : Symbol(keys.E1, Decl(a.ts, 1, 21))
+>keys : Symbol(keys, Decl(b.ts, 0, 6))
+>E1 : Symbol(keys.E1, Decl(a.ts, 1, 21))
+>A : Symbol(keys.E1.A, Decl(a.ts, 2, 16))
+}
+
+const t4 = {
+>t4 : Symbol(t4, Decl(b.ts, 17, 5))
+
+    [keys.E2.B]: 1,
+>[keys.E2.B] : Symbol([keys.E2.B], Decl(b.ts, 17, 12), Decl(b.ts, 18, 19))
+>keys.E2.B : Symbol(keys.E2.B, Decl(a.ts, 3, 16))
+>keys.E2 : Symbol(keys.E2, Decl(a.ts, 2, 33))
+>keys : Symbol(keys, Decl(b.ts, 0, 6))
+>E2 : Symbol(keys.E2, Decl(a.ts, 2, 33))
+>B : Symbol(keys.E2.B, Decl(a.ts, 3, 16))
+
+    [keys.E2.B]: 1, // duplicate
+>[keys.E2.B] : Symbol([keys.E2.B], Decl(b.ts, 17, 12), Decl(b.ts, 18, 19))
+>keys.E2.B : Symbol(keys.E2.B, Decl(a.ts, 3, 16))
+>keys.E2 : Symbol(keys.E2, Decl(a.ts, 2, 33))
+>keys : Symbol(keys, Decl(b.ts, 0, 6))
+>E2 : Symbol(keys.E2, Decl(a.ts, 2, 33))
+>B : Symbol(keys.E2.B, Decl(a.ts, 3, 16))
+}
+

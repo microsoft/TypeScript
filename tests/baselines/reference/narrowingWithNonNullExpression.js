@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingWithNonNullExpression.ts] ////
+
 //// [narrowingWithNonNullExpression.ts]
 const m = ''.match('');
 m! && m[0];

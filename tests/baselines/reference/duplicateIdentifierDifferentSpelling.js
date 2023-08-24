@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierDifferentSpelling.ts] ////
+
 //// [duplicateIdentifierDifferentSpelling.ts]
 class A {
   0b11 = '';

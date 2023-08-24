@@ -1,4 +1,6 @@
-=== tests/cases/compiler/toStringOnPrimitives.ts ===
+//// [tests/cases/compiler/toStringOnPrimitives.ts] ////
+
+=== toStringOnPrimitives.ts ===
 true.toString()
 >true.toString() : string
 >true.toString : () => string

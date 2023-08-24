@@ -1,9 +1,11 @@
 import {
+    verifyTsc,
+} from "../helpers/tsc";
+import {
     appendText,
     loadProjectFromDisk,
     replaceText,
-    verifyTsc,
-} from "../tsc/helpers";
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contains late bound member", () => {
     verifyTsc({
@@ -20,6 +22,6 @@ describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contai
                 caption: "incremental-declaration-doesnt-change",
                 edit: fs => appendText(fs, "/src/src/main.ts", "const x = 10;"),
             },
-        ]
+        ],
     });
 });

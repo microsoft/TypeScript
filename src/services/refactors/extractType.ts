@@ -85,14 +85,14 @@ const extractToInterfaceAction = {
 const extractToTypeDefAction = {
     name: "Extract to typedef",
     description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef),
-    kind: "refactor.extract.typedef"
+    kind: "refactor.extract.typedef",
 };
 
 registerRefactor(refactorName, {
     kinds: [
         extractToTypeAliasAction.kind,
         extractToInterfaceAction.kind,
-        extractToTypeDefAction.kind
+        extractToTypeDefAction.kind,
     ],
     getAvailableActions: function getRefactorActionsToExtractType(context): readonly ApplicableRefactorInfo[] {
         const info = getRangeToExtract(context, context.triggerReason === "invoked");
@@ -103,7 +103,7 @@ registerRefactor(refactorName, {
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_type),
                 actions: info.isJS ?
-                    [extractToTypeDefAction] : append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction)
+                    [extractToTypeDefAction] : append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction),
             }];
         }
 
@@ -115,7 +115,7 @@ registerRefactor(refactorName, {
                     { ...extractToTypeDefAction, notApplicableReason: info.error },
                     { ...extractToTypeAliasAction, notApplicableReason: info.error },
                     { ...extractToInterfaceAction, notApplicableReason: info.error },
-                ]
+                ],
             }];
         }
 
@@ -146,15 +146,23 @@ registerRefactor(refactorName, {
         const renameFilename = file.fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, name, /*preferLastLocation*/ false);
         return { edits, renameFilename, renameLocation };
-    }
+    },
 });
 
 interface TypeAliasInfo {
-    isJS: boolean; selection: TypeNode; enclosingNode: Node; typeParameters: readonly TypeParameterDeclaration[]; typeElements?: readonly TypeElement[];
+    isJS: boolean;
+    selection: TypeNode;
+    enclosingNode: Node;
+    typeParameters: readonly TypeParameterDeclaration[];
+    typeElements?: readonly TypeElement[];
 }
 
 interface InterfaceInfo {
-    isJS: boolean; selection: TypeNode; enclosingNode: Node; typeParameters: readonly TypeParameterDeclaration[]; typeElements: readonly TypeElement[];
+    isJS: boolean;
+    selection: TypeNode;
+    enclosingNode: Node;
+    typeParameters: readonly TypeParameterDeclaration[];
+    typeElements: readonly TypeElement[];
 }
 
 type ExtractInfo = TypeAliasInfo | InterfaceInfo;
@@ -166,8 +174,9 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const cursorRequest = range.pos === range.end && considerEmptySpans;
 
-    const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
-        (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
+    const selection = findAncestor(current, node =>
+        node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
+        (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end)));
     if (!selection || !isTypeNode(selection)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
 
     const checker = context.program.getTypeChecker();
@@ -217,7 +226,7 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode, enclos
         if (isTypeReferenceNode(node)) {
             if (isIdentifier(node.typeName)) {
                 const typeName = node.typeName;
-                const symbol = checker.resolveName(typeName.text, typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
+                const symbol = checker.resolveName(typeName.text, typeName, SymbolFlags.TypeParameter, /*excludeGlobals*/ true);
                 for (const decl of symbol?.declarations || emptyArray) {
                     if (isTypeParameterDeclaration(decl) && decl.getSourceFile() === file) {
                         // skip extraction if the type node is in the range of the type parameter declaration.
@@ -248,7 +257,7 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode, enclos
         }
         else if (isTypeQueryNode(node)) {
             if (isIdentifier(node.exprName)) {
-                const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /* excludeGlobals */ false);
+                const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /*excludeGlobals*/ false);
                 if (symbol?.valueDeclaration && rangeContainsSkipTrivia(enclosingNode, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selection, symbol.valueDeclaration, file)) {
                     return true;
                 }
@@ -272,28 +281,28 @@ function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile,
     const { enclosingNode, selection, typeParameters } = info;
 
     const newTypeNode = factory.createTypeAliasDeclaration(
-        /* modifiers */ undefined,
+        /*modifiers*/ undefined,
         name,
-        typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /* defaultType */ undefined)),
-        selection
+        typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
+        selection,
     );
-    changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
-    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+    changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
+    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
 }
 
 function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: InterfaceInfo) {
     const { enclosingNode, selection, typeParameters, typeElements } = info;
 
     const newTypeNode = factory.createInterfaceDeclaration(
-        /* modifiers */ undefined,
+        /*modifiers*/ undefined,
         name,
         typeParameters,
-        /* heritageClauses */ undefined,
-        typeElements
+        /*heritageClauses*/ undefined,
+        typeElements,
     );
     setTextRange(newTypeNode, typeElements[0]?.parent);
-    changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
-    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+    changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
+    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
 }
 
 function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorContext, file: SourceFile, name: string, info: ExtractInfo) {
@@ -304,7 +313,8 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
     const node = factory.createJSDocTypedefTag(
         factory.createIdentifier("typedef"),
         factory.createJSDocTypeExpression(selection),
-        factory.createIdentifier(name));
+        factory.createIdentifier(name),
+    );
 
     const templates: JSDocTemplateTag[] = [];
     forEach(typeParameters, typeParameter => {
@@ -313,23 +323,23 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
         const template = factory.createJSDocTemplateTag(
             factory.createIdentifier("template"),
             constraint && cast(constraint, isJSDocTypeExpression),
-            [parameter]
+            [parameter],
         );
         templates.push(template);
     });
 
-    const jsDoc = factory.createJSDocComment(/* comment */ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node])));
+    const jsDoc = factory.createJSDocComment(/*comment*/ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node])));
     if (isJSDoc(enclosingNode)) {
         const pos = enclosingNode.getStart(file);
         const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext?.options);
         changes.insertNodeAt(file, enclosingNode.getStart(file), jsDoc, {
-            suffix: newLineCharacter + newLineCharacter + file.text.slice(getPrecedingNonSpaceCharacterPosition(file.text, pos - 1), pos)
+            suffix: newLineCharacter + newLineCharacter + file.text.slice(getPrecedingNonSpaceCharacterPosition(file.text, pos - 1), pos),
         });
     }
     else {
-        changes.insertNodeBefore(file, enclosingNode, jsDoc, /* blankLineBetween */ true);
+        changes.insertNodeBefore(file, enclosingNode, jsDoc, /*blankLineBetween*/ true);
     }
-    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
+    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))));
 }
 
 function getEnclosingNode(node: Node, isJS: boolean) {

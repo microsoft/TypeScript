@@ -1,493 +1,397 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/index.tsx ===
-// import { /*FIND ALL REFS*/[|SubmissionComp|] } from "./RedditSubmission"
+// <|import { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}SubmissionComp|] } from "./RedditSubmission"|>
 // function displaySubreddit(subreddit: string) {
 //     let components = submissions
-//         .map((value, index) => <[|SubmissionComp|] key={ index } elementPosition= { index } {...value.data} />);
+//         .map((value, index) => <|<[|{| defId: 0 |}SubmissionComp|] key={ index } elementPosition= { index } {...value.data} />|>);
 // }
 
 // === /tests/cases/fourslash/RedditSubmission.ts ===
-// export const [|SubmissionComp|] = (submission: SubmissionProps) =>
-//     <div style={{ fontFamily: "sans-serif" }}></div>;
+// export const <|[|{| defId: 1, isWriteAccess: true |}SubmissionComp|] = (submission: SubmissionProps) =>
+//     <div style|>={{ fontFamily: "sans-serif" }}></div>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/index.tsx",
-      "kind": "alias",
-      "name": "(alias) const SubmissionComp: (submission: SubmissionProps) => div\nimport SubmissionComp",
-      "textSpan": {
-        "start": 9,
-        "length": 14
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionComp",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "submission",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionProps",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "div",
-          "kind": "text"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionComp",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 51
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/index.tsx",
-        "contextSpan": {
-          "start": 0,
-          "length": 51
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 164,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/index.tsx",
-        "contextSpan": {
-          "start": 163,
-          "length": 75
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/index.tsx ===
+  // <|import { /*FIND ALL REFS*/[|{| defId: 0 |}SubmissionComp|] } from "./RedditSubmission"|>
+  // function displaySubreddit(subreddit: string) {
+  //     let components = submissions
+  //         .map((value, index) => <SubmissionComp key={ index } elementPosition= { index } {...value.data} />);
+  // }
+
+  // === /tests/cases/fourslash/RedditSubmission.ts ===
+  // export const <|[|{| defId: 1 |}SubmissionComp|] = (submission: SubmissionProps) =>
+  //     <div style|>={{ fontFamily: "sans-serif" }}></div>;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const SubmissionComp: (submission: SubmissionProps) => div\nimport SubmissionComp",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionComp",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "submission",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionProps",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "div",
+      "kind": "text"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionComp",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/RedditSubmission.ts",
-      "kind": "const",
-      "name": "const SubmissionComp: (submission: SubmissionProps) => div",
-      "textSpan": {
-        "start": 13,
-        "length": 14
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionComp",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "submission",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionProps",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "div",
-          "kind": "text"
-        }
-      ],
-      "contextSpan": {
-        "start": 13,
-        "length": 64
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/RedditSubmission.ts",
-        "contextSpan": {
-          "start": 13,
-          "length": 64
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const SubmissionComp: (submission: SubmissionProps) => div",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionComp",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "submission",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionProps",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "div",
+      "kind": "text"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/RedditSubmission.ts ===
+// export const /*FIND ALL REFS*/<|[|{| defId: 0, isWriteAccess: true, isDefinition: true |}SubmissionComp|] = (submission: SubmissionProps) =>
+//     <div style|>={{ fontFamily: "sans-serif" }}></div>;
 
 // === /tests/cases/fourslash/index.tsx ===
-// import { [|SubmissionComp|] } from "./RedditSubmission"
+// <|import { [|{| defId: 1, isWriteAccess: true |}SubmissionComp|] } from "./RedditSubmission"|>
 // function displaySubreddit(subreddit: string) {
 //     let components = submissions
-//         .map((value, index) => <[|SubmissionComp|] key={ index } elementPosition= { index } {...value.data} />);
+//         .map((value, index) => <|<[|{| defId: 1 |}SubmissionComp|] key={ index } elementPosition= { index } {...value.data} />|>);
 // }
 
-// === /tests/cases/fourslash/RedditSubmission.ts ===
-// export const /*FIND ALL REFS*/[|SubmissionComp|] = (submission: SubmissionProps) =>
-//     <div style={{ fontFamily: "sans-serif" }}></div>;
+  // === Definitions ===
+  // === /tests/cases/fourslash/RedditSubmission.ts ===
+  // export const /*FIND ALL REFS*/<|[|{| defId: 0 |}SubmissionComp|] = (submission: SubmissionProps) =>
+  //     <div style|>={{ fontFamily: "sans-serif" }}></div>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/RedditSubmission.ts",
-      "kind": "const",
-      "name": "const SubmissionComp: (submission: SubmissionProps) => div",
-      "textSpan": {
-        "start": 13,
-        "length": 14
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionComp",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "submission",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionProps",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "div",
-          "kind": "text"
-        }
-      ],
-      "contextSpan": {
-        "start": 13,
-        "length": 64
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/RedditSubmission.ts",
-        "contextSpan": {
-          "start": 13,
-          "length": 64
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === /tests/cases/fourslash/index.tsx ===
+  // <|import { [|{| defId: 1 |}SubmissionComp|] } from "./RedditSubmission"|>
+  // function displaySubreddit(subreddit: string) {
+  //     let components = submissions
+  //         .map((value, index) => <SubmissionComp key={ index } elementPosition= { index } {...value.data} />);
+  // }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const SubmissionComp: (submission: SubmissionProps) => div",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionComp",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "submission",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionProps",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "div",
+      "kind": "text"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/index.tsx",
-      "kind": "alias",
-      "name": "(alias) const SubmissionComp: (submission: SubmissionProps) => div\nimport SubmissionComp",
-      "textSpan": {
-        "start": 9,
-        "length": 14
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionComp",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "submission",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionProps",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "div",
-          "kind": "text"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SubmissionComp",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 51
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/index.tsx",
-        "contextSpan": {
-          "start": 0,
-          "length": 51
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 164,
-          "length": 14
-        },
-        "fileName": "/tests/cases/fourslash/index.tsx",
-        "contextSpan": {
-          "start": 163,
-          "length": 75
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const SubmissionComp: (submission: SubmissionProps) => div\nimport SubmissionComp",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionComp",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "submission",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionProps",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "div",
+      "kind": "text"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SubmissionComp",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]

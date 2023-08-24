@@ -34,12 +34,12 @@ function f7(): void {
     return null;
 }
 
-function f8(): void {
+function f8(): any {
     // Fine since are typed any.
     return;
 }
 
-function f9(): void {
+function f9(): any {
     // Fine since we are typed any and return undefined
     return undefined;
 }
@@ -102,6 +102,32 @@ function f20(): any | number {
 
 function f21(): number | string {
     // Not okay; union does not contain void or any
+}
+
+function f22(): undefined {
+    // Okay; return type allows implicit return of undefined
+}
+
+function f23(): undefined | number {
+    // Error; because `undefined | number` becomes `number` without strictNullChecks.
+}
+
+const f30: () => undefined = () => {
+    // Ok, contextual type for implicit return is `undefined`
+}
+
+const f31: () => undefined = () => {
+    // Ok, contextual type for expression-less return is `undefined`
+    return;
+}
+
+const f32: () => undefined | number = () => {
+    // Error, contextual type for implicit return isn't just `undefined`
+}
+
+const f33: () => undefined | number = () => {
+    // Error, contextual type for expression-less return isn't just `undefined`
+    return;
 }
 
 class C {

@@ -13,7 +13,7 @@ var m1;
     var x3 = m4.x;
     var d3 = m4.d;
     var f3 = m4.foo();
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 // Do not emit unused import
 var m5 = require("m5");
 exports.d = m5.foo2();

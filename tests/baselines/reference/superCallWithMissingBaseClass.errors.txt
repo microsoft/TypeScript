@@ -1,7 +1,7 @@
-tests/cases/compiler/superCallWithMissingBaseClass.ts(1,19): error TS2304: Cannot find name 'Bar'.
+superCallWithMissingBaseClass.ts(1,19): error TS2304: Cannot find name 'Bar'.
 
 
-==== tests/cases/compiler/superCallWithMissingBaseClass.ts (1 errors) ====
+==== superCallWithMissingBaseClass.ts (1 errors) ====
     class Foo extends Bar {
                       ~~~
 !!! error TS2304: Cannot find name 'Bar'.

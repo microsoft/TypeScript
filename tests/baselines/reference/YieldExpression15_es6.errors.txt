@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/yieldExpressions/YieldExpression15_es6.ts(2,6): error TS1163: A 'yield' expression is only allowed in a generator body.
+YieldExpression15_es6.ts(2,6): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/YieldExpression15_es6.ts (1 errors) ====
+==== YieldExpression15_es6.ts (1 errors) ====
     var v = () => {
          yield foo
          ~~~~~

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts ===
+//// [tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts] ////
+
+=== indexSignatureWithAccessibilityModifier.ts ===
 interface I {
 >I : Symbol(I, Decl(indexSignatureWithAccessibilityModifier.ts, 0, 0))
 

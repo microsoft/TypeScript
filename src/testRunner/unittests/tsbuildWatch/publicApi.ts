@@ -3,12 +3,12 @@ import {
     createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     runWatchBaseline,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
     const solution: File = {
@@ -16,16 +16,16 @@ it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers",
         content: JSON.stringify({
             references: [
                 { path: "./shared/tsconfig.json" },
-                { path: "./webpack/tsconfig.json" }
+                { path: "./webpack/tsconfig.json" },
             ],
-            files: []
-        })
+            files: [],
+        }),
     };
     const sharedConfig: File = {
         path: `/user/username/projects/myproject/shared/tsconfig.json`,
         content: JSON.stringify({
             compilerOptions: { composite: true },
-        })
+        }),
     };
     const sharedIndex: File = {
         path: `/user/username/projects/myproject/shared/index.ts`,
@@ -33,14 +33,14 @@ it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers",
 export class c { }
 export enum e { }
 // leading
-export function f2() { } // trailing`
+export function f2() { } // trailing`,
     };
     const webpackConfig: File = {
         path: `/user/username/projects/myproject/webpack/tsconfig.json`,
         content: JSON.stringify({
-            compilerOptions: { composite: true, },
-            references: [{ path: "../shared/tsconfig.json" }]
-        })
+            compilerOptions: { composite: true },
+            references: [{ path: "../shared/tsconfig.json" }],
+        }),
     };
     const webpackIndex: File = {
         path: `/user/username/projects/myproject/webpack/index.ts`,
@@ -48,7 +48,7 @@ export function f2() { } // trailing`
 export class c2 { }
 export enum e2 { }
 // leading
-export function f22() { } // trailing`
+export function f22() { } // trailing`,
     };
     const commandLineArgs = ["--b", "--w"];
     const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: "/user/username/projects/myproject" }));
@@ -69,13 +69,12 @@ export function f22() { } // trailing`
                 caption: "change to shared",
                 edit: sys => sys.prependFile(sharedIndex.path, "export function fooBar() {}"),
                 timeouts: sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // Shared
-                    sys.checkTimeoutQueueLengthAndRun(1); // webpack and solution
-                    sys.checkTimeoutQueueLength(0);
-                }
-            }
+                    sys.runQueuedTimeoutCallbacks(); // Shared
+                    sys.runQueuedTimeoutCallbacks(); // webpack and solution
+                },
+            },
         ],
-        watchOrSolution: builder
+        watchOrSolution: builder,
     });
 
     function getCustomTransformers(project: string): ts.CustomTransformers {

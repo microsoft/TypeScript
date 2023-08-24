@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseInvalidNonNullableTypes.ts ===
+//// [tests/cases/compiler/parseInvalidNonNullableTypes.ts] ////
+
+=== parseInvalidNonNullableTypes.ts ===
 function f1(a: string): a is string! {
 >f1 : Symbol(f1, Decl(parseInvalidNonNullableTypes.ts, 0, 0))
 >a : Symbol(a, Decl(parseInvalidNonNullableTypes.ts, 0, 12))

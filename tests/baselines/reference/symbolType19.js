@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType19.ts] ////
+
 //// [symbolType19.ts]
 enum E { }
 var x: symbol | E;

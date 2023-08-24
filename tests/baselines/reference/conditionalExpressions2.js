@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalExpressions2.ts] ////
+
 //// [conditionalExpressions2.ts]
 var a = false ? 1 : null;
 var b = false ? undefined : 0;

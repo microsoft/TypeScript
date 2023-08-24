@@ -1,7 +1,7 @@
-tests/cases/compiler/noUnusedLocals_destructuringAssignment.ts(10,13): error TS6133: 'f' is declared but its value is never read.
+noUnusedLocals_destructuringAssignment.ts(10,13): error TS6133: 'f' is declared but its value is never read.
 
 
-==== tests/cases/compiler/noUnusedLocals_destructuringAssignment.ts (1 errors) ====
+==== noUnusedLocals_destructuringAssignment.ts (1 errors) ====
     class C {
         private x = 0;
     

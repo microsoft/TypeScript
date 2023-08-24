@@ -1,7 +1,7 @@
-tests/cases/compiler/amdModuleName2.ts(2,1): error TS2458: An AMD module cannot have multiple name assignments.
+amdModuleName2.ts(2,1): error TS2458: An AMD module cannot have multiple name assignments.
 
 
-==== tests/cases/compiler/amdModuleName2.ts (1 errors) ====
+==== amdModuleName2.ts (1 errors) ====
     ///<amd-module name='FirstModuleName'/>
     ///<amd-module name='SecondModuleName'/>
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

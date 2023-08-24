@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts] ////
+
 //// [conditionalTypesExcessProperties.ts]
 type Something<T> = { test: string } &  (T extends object ? {
     arg: T

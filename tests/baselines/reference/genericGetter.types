@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericGetter.ts ===
+//// [tests/cases/compiler/genericGetter.ts] ////
+
+=== genericGetter.ts ===
 class C<T> {
 >C : C<T>
 

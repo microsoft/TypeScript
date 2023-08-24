@@ -1,9 +1,10 @@
-tests/cases/compiler/addMoreOverloadsToBaseSignature.ts(5,11): error TS2430: Interface 'Bar' incorrectly extends interface 'Foo'.
+addMoreOverloadsToBaseSignature.ts(5,11): error TS2430: Interface 'Bar' incorrectly extends interface 'Foo'.
   Types of property 'f' are incompatible.
     Type '(key: string) => string' is not assignable to type '() => string'.
+      Target signature provides too few arguments. Expected 1 or more, but got 0.
 
 
-==== tests/cases/compiler/addMoreOverloadsToBaseSignature.ts (1 errors) ====
+==== addMoreOverloadsToBaseSignature.ts (1 errors) ====
     interface Foo {
         f(): string;
     }
@@ -13,6 +14,7 @@ tests/cases/compiler/addMoreOverloadsToBaseSignature.ts(5,11): error TS2430: Int
 !!! error TS2430: Interface 'Bar' incorrectly extends interface 'Foo'.
 !!! error TS2430:   Types of property 'f' are incompatible.
 !!! error TS2430:     Type '(key: string) => string' is not assignable to type '() => string'.
+!!! error TS2430:       Target signature provides too few arguments. Expected 1 or more, but got 0.
         f(key: string): string;
     }
     

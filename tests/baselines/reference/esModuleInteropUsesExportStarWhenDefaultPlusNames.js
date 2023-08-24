@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleInteropUsesExportStarWhenDefaultPlusNames.ts] ////
+
 //// [esModuleInteropUsesExportStarWhenDefaultPlusNames.ts]
 import Deps, { var2 } from './dep';
 void Deps;

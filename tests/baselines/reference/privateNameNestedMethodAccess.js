@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts] ////
+
 //// [privateNameNestedMethodAccess.ts]
 class C {
     #foo = 42;
@@ -30,21 +32,21 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _C_instances, _C_foo, _C_bar, _C_baz_get;
+var _C_instances, _a, _C_foo, _C_bar, _C_baz_get;
 class C {
     constructor() {
         _C_instances.add(this);
         _C_foo.set(this, 42);
     }
     m() {
-        var _D_instances, _D_bar, _a;
-        return _a = class D {
+        var _D_instances, _D_bar, _b;
+        return _b = class D {
                 constructor() {
                     _D_instances.add(this);
-                    __classPrivateFieldGet(new C(), _C_foo, "f");
-                    __classPrivateFieldGet(new C(), _D_instances, "m", _D_bar); // Error
-                    __classPrivateFieldGet(new C(), _C_instances, "a", _C_baz_get);
-                    __classPrivateFieldGet(new D(), _D_instances, "m", _D_bar);
+                    __classPrivateFieldGet(new _a(), _C_foo, "f");
+                    __classPrivateFieldGet(new _a(), _D_instances, "m", _D_bar); // Error
+                    __classPrivateFieldGet(new _a(), _C_instances, "a", _C_baz_get);
+                    __classPrivateFieldGet(new _b(), _D_instances, "m", _D_bar);
                 }
                 n(x) {
                     __classPrivateFieldGet(x, _C_foo, "f");
@@ -54,7 +56,7 @@ class C {
             },
             _D_instances = new WeakSet(),
             _D_bar = function _D_bar() { },
-            _a;
+            _b;
     }
 }
-_C_foo = new WeakMap(), _C_instances = new WeakSet(), _C_bar = function _C_bar() { __classPrivateFieldGet(new C(), _C_instances, "a", _C_baz_get); }, _C_baz_get = function _C_baz_get() { return 42; };
+_a = C, _C_foo = new WeakMap(), _C_instances = new WeakSet(), _C_bar = function _C_bar() { __classPrivateFieldGet(new _a(), _C_instances, "a", _C_baz_get); }, _C_baz_get = function _C_baz_get() { return 42; };

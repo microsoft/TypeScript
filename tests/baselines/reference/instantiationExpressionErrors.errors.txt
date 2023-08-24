@@ -1,22 +1,22 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(7,13): error TS1477: An instantiation expression cannot be followed by a property access.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(8,13): error TS1477: An instantiation expression cannot be followed by a property access.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(13,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(13,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(18,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(18,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(18,29): error TS1109: Expression expected.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(19,24): error TS2635: Type '{ (): number; g<U>(): U; }' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(23,23): error TS1005: '(' expected.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(26,24): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(39,2): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(43,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(44,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(44,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+instantiationExpressionErrors.ts(7,13): error TS1477: An instantiation expression cannot be followed by a property access.
+instantiationExpressionErrors.ts(8,13): error TS1477: An instantiation expression cannot be followed by a property access.
+instantiationExpressionErrors.ts(13,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
+instantiationExpressionErrors.ts(13,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+instantiationExpressionErrors.ts(18,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+instantiationExpressionErrors.ts(18,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+instantiationExpressionErrors.ts(18,29): error TS1109: Expression expected.
+instantiationExpressionErrors.ts(19,24): error TS2635: Type '{ (): number; g<U>(): U; }' has no signatures for which the type argument list is applicable.
+instantiationExpressionErrors.ts(23,23): error TS1005: '(' expected.
+instantiationExpressionErrors.ts(26,24): error TS2558: Expected 0 type arguments, but got 1.
+instantiationExpressionErrors.ts(39,2): error TS2554: Expected 0 arguments, but got 1.
+instantiationExpressionErrors.ts(43,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+instantiationExpressionErrors.ts(44,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+instantiationExpressionErrors.ts(44,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+instantiationExpressionErrors.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (16 errors) ====
+==== instantiationExpressionErrors.ts (16 errors) ====
     declare let f: { <T>(): T, g<U>(): U };
     
     // Type arguments in member expressions

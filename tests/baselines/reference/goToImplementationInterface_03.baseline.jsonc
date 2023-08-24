@@ -1,0 +1,26 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterface_03.ts ===
+// interface Fo/*GOTO IMPL*/o { hello: () => void }
+// 
+// var x = <Foo> [|{ hello: () => {} }|];
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]

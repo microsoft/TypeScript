@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: getApplicableRefactors", () => {
     it("works when taking position", () => {
@@ -18,7 +18,7 @@ describe("unittests:: tsserver:: getApplicableRefactors", () => {
         openFilesForSession([aTs], session);
         session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
             command: ts.server.protocol.CommandTypes.GetApplicableRefactors,
-            arguments: { file: aTs.path, line: 1, offset: 1 }
+            arguments: { file: aTs.path, line: 1, offset: 1 },
         });
         baselineTsserverLogs("getApplicableRefactors", "works when taking position", session);
     });

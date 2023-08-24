@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitThisBigThis.ts] ////
+
 //// [noImplicitThisBigThis.ts]
 // https://github.com/microsoft/TypeScript/issues/29902
 
