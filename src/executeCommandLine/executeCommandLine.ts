@@ -77,7 +77,6 @@ import {
     SourceFile,
     startsWith,
     startTracing,
-    stringContains,
     supportedJSExtensionsFlat,
     supportedTSExtensionsFlat,
     sys,
@@ -193,7 +192,7 @@ function createColors(sys: System) {
         return `\x1b[1m${str}\x1b[22m`;
     }
 
-    const isWindows = sys.getEnvironmentVariable("OS") && stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
+    const isWindows = sys.getEnvironmentVariable("OS") && sys.getEnvironmentVariable("OS").toLowerCase().includes("windows");
     const isWindowsTerminal = sys.getEnvironmentVariable("WT_SESSION");
     const isVSCode = sys.getEnvironmentVariable("TERM_PROGRAM") && sys.getEnvironmentVariable("TERM_PROGRAM") === "vscode";
 

@@ -100,7 +100,6 @@ import {
     sort,
     SourceFile,
     startsWith,
-    stringContains,
     supportedDeclarationExtensions,
     supportedJSExtensionsFlat,
     supportedTSImplementationExtensions,
@@ -1944,7 +1943,7 @@ function nodeLoadModuleByRelativeName(extensions: Extensions, candidate: string,
 export const nodeModulesPathPart = "/node_modules/";
 /** @internal */
 export function pathContainsNodeModules(path: string): boolean {
-    return stringContains(path, nodeModulesPathPart);
+    return path.includes(nodeModulesPathPart);
 }
 
 /**
@@ -3099,7 +3098,7 @@ export function getPackageNameFromTypesPackageName(mangledName: string): string 
 
 /** @internal */
 export function unmangleScopedPackageName(typesPackageName: string): string {
-    return stringContains(typesPackageName, mangledScopedPackageSeparator) ?
+    return typesPackageName.includes(mangledScopedPackageSeparator) ?
         "@" + typesPackageName.replace(mangledScopedPackageSeparator, directorySeparator) :
         typesPackageName;
 }

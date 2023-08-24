@@ -124,7 +124,6 @@ import {
     some,
     SourceFile,
     startsWith,
-    stringContains,
     SymbolDisplayPart,
     SyntaxKind,
     TextChange,
@@ -2960,7 +2959,7 @@ export class Session<TMessage = string> implements EventSender {
         }
 
         // No need to analyze lib.d.ts
-        const fileNamesInProject = fileNames!.filter(value => !stringContains(value, "lib.d.ts")); // TODO: GH#18217
+        const fileNamesInProject = fileNames!.filter(value => !value.includes("lib.d.ts")); // TODO: GH#18217
         if (fileNamesInProject.length === 0) {
             return;
         }

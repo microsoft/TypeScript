@@ -964,7 +964,6 @@ import {
     SpreadElement,
     startsWith,
     Statement,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     StringLiteralType,
@@ -30962,7 +30961,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isHyphenatedJsxName(name: string | __String) {
-        return stringContains(name as string, "-");
+        return (name as string).includes("-");
     }
 
     /**

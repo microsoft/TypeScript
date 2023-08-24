@@ -492,7 +492,6 @@ import {
     startsWith,
     startsWithUseStrict,
     Statement,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     StringLiteralType,
@@ -5986,7 +5985,7 @@ function isQuoteOrBacktick(charCode: number) {
 /** @internal */
 export function isIntrinsicJsxName(name: __String | string) {
     const ch = (name as string).charCodeAt(0);
-    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains(name as string, "-");
+    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || (name as string).includes("-");
 }
 
 const indentStrings: string[] = ["", "    "];
@@ -6007,7 +6006,7 @@ export function getIndentSize() {
 
 /** @internal */
 export function isNightly() {
-    return stringContains(version, "-dev") || stringContains(version, "-insiders");
+    return version.includes("-dev") || version.includes("-insiders");
 }
 
 /** @internal */
@@ -10052,7 +10051,7 @@ export function expressionResultIsUnused(node: Expression): boolean {
 
 /** @internal */
 export function containsIgnoredPath(path: string) {
-    return some(ignoredPaths, p => stringContains(path, p));
+    return some(ignoredPaths, p => path.includes(p));
 }
 
 /** @internal */

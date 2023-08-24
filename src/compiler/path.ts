@@ -15,7 +15,6 @@ import {
     Path,
     some,
     startsWith,
-    stringContains,
 } from "./_namespaces/ts";
 
 /**
@@ -113,7 +112,7 @@ export function pathIsBareSpecifier(path: string): boolean {
 
 /** @internal */
 export function hasExtension(fileName: string): boolean {
-    return stringContains(getBaseFileName(fileName), ".");
+    return getBaseFileName(fileName).includes(".");
 }
 
 /** @internal */

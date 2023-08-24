@@ -125,7 +125,6 @@ import {
     skipParentheses,
     SourceFile,
     startsWith,
-    stringContains,
     StringLiteralLike,
     StringLiteralType,
     stripQuotes,
@@ -1001,7 +1000,7 @@ function getCompletionsForPathMapping(
 ): readonly NameAndKind[] {
     if (!endsWith(path, "*")) {
         // For a path mapping "foo": ["/x/y/z.ts"], add "foo" itself as a completion.
-        return !stringContains(path, "*") ? justPathMappingName(path, ScriptElementKind.scriptElement) : emptyArray;
+        return !path.includes("*") ? justPathMappingName(path, ScriptElementKind.scriptElement) : emptyArray;
     }
 
     const pathPrefix = path.slice(0, path.length - 1);
@@ -1233,7 +1232,7 @@ const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\
 const nodeModulesDependencyKeys: readonly string[] = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
 
 function containsSlash(fragment: string) {
-    return stringContains(fragment, directorySeparator);
+    return fragment.includes(directorySeparator);
 }
 
 /**

@@ -104,7 +104,6 @@ import {
     returnTrue,
     ScriptTarget,
     startsWith,
-    stringContains,
     StringLiteral,
     SyntaxKind,
     sys,
@@ -1710,7 +1709,7 @@ export function parseListTypeOption(opt: CommandLineOptionOfListType, value = ""
     if (startsWith(value, "-")) {
         return undefined;
     }
-    if (opt.type === "listOrElement" && !stringContains(value, ",")) {
+    if (opt.type === "listOrElement" && !value.includes(",")) {
         return validateJsonOptionValue(opt, value, errors);
     }
     if (value === "") {
