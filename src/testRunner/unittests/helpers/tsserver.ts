@@ -1,8 +1,14 @@
-import { incrementalVerifier } from "../../../harness/incrementalUtils";
+import {
+    incrementalVerifier,
+} from "../../../harness/incrementalUtils";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { ActionWatchTypingLocations } from "../../_namespaces/ts.server";
-import { ensureErrorFreeBuild } from "./solutionBuilder";
+import {
+    ActionWatchTypingLocations,
+} from "../../_namespaces/ts.server";
+import {
+    ensureErrorFreeBuild,
+} from "./solutionBuilder";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -34,15 +40,14 @@ export const customTypesMap = {
                 "react": "react",
                 "lodash": "lodash"
             }
-        }`
+        }`,
 };
 
 function replaceAll(source: string, searchValue: string, replaceValue: string): string {
-    let result: string | undefined =
-        (source as string & { replaceAll: typeof source.replace }).replaceAll?.(searchValue, replaceValue);
+    let result: string | undefined = (source as string & { replaceAll: typeof source.replace; }).replaceAll?.(searchValue, replaceValue);
 
     if (result !== undefined) {
-       return result;
+        return result;
     }
 
     result = "";
@@ -245,7 +250,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         if (log?.isEnabled()) {
             patchHostTimeouts(
                 changeToHostTrackingWrittenFiles(installTypingHost),
-                logger
+                logger,
             );
             (installTypingHost as TestSessionAndServiceHost).baselineHost("TI:: Creating typing installer");
         }
@@ -267,15 +272,16 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
         installTypingHost.ensureFileOrFolder({
             path: getTypesRegistryFileLocation(globalTypingsCacheLocation),
             content: JSON.stringify(
-                createTypesRegistryFileContent(typesRegistry ?
-                    ts.isString(typesRegistry) ?
-                        [typesRegistry] :
-                        typesRegistry :
-                    ts.emptyArray
+                createTypesRegistryFileContent(
+                    typesRegistry ?
+                        ts.isString(typesRegistry) ?
+                            [typesRegistry] :
+                            typesRegistry :
+                        ts.emptyArray,
                 ),
                 undefined,
                 " ",
-            )
+            ),
         });
         if (this.log.isEnabled()) {
             this.log.writeLine(`TI:: Updated ${typesRegistryPackageName} npm package`);
@@ -333,7 +339,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
             success: !!out,
             requestId,
             packageNames,
-            callback: cb
+            callback: cb,
         };
         this.postExecActions.push(action);
     }
@@ -395,7 +401,7 @@ function createTypesRegistryFileContent(list: readonly string[]): TypesRegistryF
         "ts2.4": "1.3.0",
         "ts2.5": "1.3.0",
         "ts2.6": "1.3.0",
-        "ts2.7": "1.3.0"
+        "ts2.7": "1.3.0",
     };
     const entries: ts.MapLike<ts.MapLike<string>> = {};
     for (const l of list) {
@@ -497,7 +503,7 @@ export class TestSession extends ts.server.Session {
         ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");
         this.testhost = patchHostTimeouts(
             changeToHostTrackingWrittenFiles(this.host as TestServerHost),
-            this.logger
+            this.logger,
         );
     }
 
@@ -597,8 +603,7 @@ export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptio
 
 export class TestProjectService extends ts.server.ProjectService {
     public testhost: TestSessionAndServiceHost;
-    constructor(host: TestServerHost, public override logger: Logger, cancellationToken: ts.HostCancellationToken, useSingleInferredProject: boolean,
-        typingsInstaller: ts.server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
+    constructor(host: TestServerHost, public override logger: Logger, cancellationToken: ts.HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ts.server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
         super({
             host,
             logger,
@@ -609,12 +614,12 @@ export class TestProjectService extends ts.server.ProjectService {
             typingsInstaller,
             typesMapLocation: customTypesMap.path,
             incrementalVerifier,
-            ...opts
+            ...opts,
         });
         ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");
         this.testhost = patchHostTimeouts(
             changeToHostTrackingWrittenFiles(this.host as TestServerHost),
-            this.logger
+            this.logger,
         );
         if (logger.hasLevel(ts.server.LogLevel.verbose)) this.testhost.baselineHost("Creating project service");
     }
@@ -717,25 +722,28 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 }
 
-export function openFilesForSession(files: readonly (string | File | {
-    readonly file: File | string,
-    readonly projectRootPath?: string,
-    content?: string,
-    scriptKindName?: ts.server.protocol.ScriptKindName,
-})[], session: TestSession): void {
+export function openFilesForSession(
+    files: readonly (string | File | {
+        readonly file: File | string;
+        readonly projectRootPath?: string;
+        content?: string;
+        scriptKindName?: ts.server.protocol.ScriptKindName;
+    })[],
+    session: TestSession,
+): void {
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
             arguments: ts.isString(file) ?
                 { file } :
                 "file" in file ? // eslint-disable-line local/no-in-operator
-                    {
-                        file: typeof file.file === "string" ? file.file : file.file.path,
-                        projectRootPath: file.projectRootPath,
-                        fileContent: file.content,
-                        scriptKindName: file.scriptKindName,
-                    } :
-                    { file: file.path }
+                {
+                    file: typeof file.file === "string" ? file.file : file.file.path,
+                    projectRootPath: file.projectRootPath,
+                    fileContent: file.content,
+                    scriptKindName: file.scriptKindName,
+                } :
+                { file: file.path },
         });
     }
 }
@@ -744,7 +752,7 @@ export function closeFilesForSession(files: readonly (File | string)[], session:
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
             command: ts.server.protocol.CommandTypes.Close,
-            arguments: { file: ts.isString(file) ? file : file.path }
+            arguments: { file: ts.isString(file) ? file : file.path },
         });
     }
 }
@@ -752,26 +760,26 @@ export function closeFilesForSession(files: readonly (File | string)[], session:
 export function openExternalProjectForSession(project: ts.server.protocol.ExternalProject, session: TestSession) {
     session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
         command: ts.server.protocol.CommandTypes.OpenExternalProject,
-        arguments: project
+        arguments: project,
     });
 }
 
 export function openExternalProjectsForSession(projects: ts.server.protocol.ExternalProject[], session: TestSession) {
     session.executeCommandSeq<ts.server.protocol.OpenExternalProjectsRequest>({
         command: ts.server.protocol.CommandTypes.OpenExternalProjects,
-        arguments: { projects }
+        arguments: { projects },
     });
 }
 
 export function setCompilerOptionsForInferredProjectsRequestForSession(
     options: ts.server.protocol.InferredProjectCompilerOptions | ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs,
-    session: TestSession
+    session: TestSession,
 ) {
     session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
         command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
         arguments: "options" in options ? // eslint-disable-line local/no-in-operator
             options as ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs :
-            { options }
+            { options },
     });
 }
 
@@ -791,12 +799,15 @@ export function verifyGetErrRequest(request: VerifyGetErrRequest) {
     const { session, files } = request;
     session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
         command: ts.server.protocol.CommandTypes.Geterr,
-        arguments: { delay: 0, files: files.map(filePath) }
+        arguments: { delay: 0, files: files.map(filePath) },
     });
     checkAllErrors(request);
 }
 
-interface SkipErrors { semantic?: true; suggestion?: true }
+interface SkipErrors {
+    semantic?: true;
+    suggestion?: true;
+}
 export interface CheckAllErrors extends VerifyGetErrRequestBase {
     files: readonly any[];
     skip?: readonly (SkipErrors | undefined)[];
@@ -814,7 +825,7 @@ function filePath(file: string | File) {
     return ts.isString(file) ? file : file.path;
 }
 
-function verifyErrorsUsingGeterr({scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
+function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
     it("verifies the errors in open file", () => {
         const host = createServerHost([...allFiles(), libFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
@@ -834,7 +845,7 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
         for (const expected of getErrForProjectRequest()) {
             session.executeCommandSeq<ts.server.protocol.GeterrForProjectRequest>({
                 command: ts.server.protocol.CommandTypes.GeterrForProject,
-                arguments: { delay: 0, file: filePath(expected.project) }
+                arguments: { delay: 0, file: filePath(expected.project) },
             });
             checkAllErrors({ session, files: expected.files });
         }
@@ -851,15 +862,15 @@ function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFil
             const reqArgs = { file: filePath(file), projectFileName: project && filePath(project) };
             session.executeCommandSeq<ts.server.protocol.SyntacticDiagnosticsSyncRequest>({
                 command: ts.server.protocol.CommandTypes.SyntacticDiagnosticsSync,
-                arguments: reqArgs
+                arguments: reqArgs,
             });
             session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
                 command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-                arguments: reqArgs
+                arguments: reqArgs,
             });
             session.executeCommandSeq<ts.server.protocol.SuggestionDiagnosticsSyncRequest>({
                 command: ts.server.protocol.CommandTypes.SuggestionDiagnosticsSync,
-                arguments: reqArgs
+                arguments: reqArgs,
             });
         }
         baselineTsserverLogs(scenario, `${subScenario} gerErr with sync commands`, session);

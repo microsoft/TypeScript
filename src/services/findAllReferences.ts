@@ -268,18 +268,31 @@ export interface SymbolAndEntries {
 }
 
 /** @internal */
-export const enum DefinitionKind { Symbol, Label, Keyword, This, String, TripleSlashReference }
+export const enum DefinitionKind {
+    Symbol,
+    Label,
+    Keyword,
+    This,
+    String,
+    TripleSlashReference,
+}
 /** @internal */
 export type Definition =
-    | { readonly type: DefinitionKind.Symbol; readonly symbol: Symbol }
-    | { readonly type: DefinitionKind.Label; readonly node: Identifier }
-    | { readonly type: DefinitionKind.Keyword; readonly node: Node }
-    | { readonly type: DefinitionKind.This; readonly node: Node }
-    | { readonly type: DefinitionKind.String; readonly node: StringLiteralLike }
-    | { readonly type: DefinitionKind.TripleSlashReference; readonly reference: FileReference, readonly file: SourceFile };
+    | { readonly type: DefinitionKind.Symbol; readonly symbol: Symbol; }
+    | { readonly type: DefinitionKind.Label; readonly node: Identifier; }
+    | { readonly type: DefinitionKind.Keyword; readonly node: Node; }
+    | { readonly type: DefinitionKind.This; readonly node: Node; }
+    | { readonly type: DefinitionKind.String; readonly node: StringLiteralLike; }
+    | { readonly type: DefinitionKind.TripleSlashReference; readonly reference: FileReference; readonly file: SourceFile; };
 
 /** @internal */
-export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
+export const enum EntryKind {
+    Span,
+    Node,
+    StringLiteral,
+    SearchedLocalFoundProperty,
+    SearchedPropertyFoundLocal,
+}
 /** @internal */
 export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
 /** @internal */
@@ -308,7 +321,7 @@ export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): Nod
     return {
         kind,
         node: (node as NamedDeclaration).name || node,
-        context: getContextNodeForNodeEntry(node)
+        context: getContextNodeForNodeEntry(node),
     };
 }
 
@@ -332,8 +345,8 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
                 isAccessExpression(node.parent) &&
                     isBinaryExpression(node.parent.parent) &&
                     node.parent.parent.left === node.parent ?
-                    node.parent.parent :
-                    undefined;
+                node.parent.parent :
+                undefined;
             if (binaryExpression && getAssignmentDeclarationKind(binaryExpression) !== AssignmentDeclarationKind.None) {
                 return getContextNode(binaryExpression);
             }
@@ -343,9 +356,11 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
         if (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
             return node.parent.parent;
         }
-        else if (isJsxSelfClosingElement(node.parent) ||
+        else if (
+            isJsxSelfClosingElement(node.parent) ||
             isLabeledStatement(node.parent) ||
-            isBreakOrContinueStatement(node.parent)) {
+            isBreakOrContinueStatement(node.parent)
+        ) {
             return node.parent;
         }
         else if (isStringLiteralLike(node)) {
@@ -354,8 +369,7 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
                 const declOrStatement = findAncestor(validImport, node =>
                     isDeclaration(node) ||
                     isStatement(node) ||
-                    isJSDocTag(node)
-                )! as NamedDeclaration | Statement | JSDocTag;
+                    isJSDocTag(node))! as NamedDeclaration | Statement | JSDocTag;
                 return isDeclaration(declOrStatement) ?
                     getContextNode(declOrStatement) :
                     declOrStatement;
@@ -369,14 +383,16 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
             undefined;
     }
 
-    if (node.parent.name === node || // node is name of declaration, use parent
+    if (
+        node.parent.name === node || // node is name of declaration, use parent
         isConstructorDeclaration(node.parent) ||
         isExportAssignment(node.parent) ||
         // Property name of the import export specifier or binding pattern, use parent
         ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
             && node.parent.propertyName === node) ||
         // Is default export
-        (node.kind === SyntaxKind.DefaultKeyword && hasSyntacticModifier(node.parent, ModifierFlags.ExportDefault))) {
+        (node.kind === SyntaxKind.DefaultKeyword && hasSyntacticModifier(node.parent, ModifierFlags.ExportDefault))
+    ) {
         return getContextNode(node.parent);
     }
 
@@ -391,10 +407,10 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
             return !isVariableDeclarationList(node.parent) || node.parent.declarations.length !== 1 ?
                 node :
                 isVariableStatement(node.parent.parent) ?
-                    node.parent.parent :
-                    isForInOrOfStatement(node.parent.parent) ?
-                        getContextNode(node.parent.parent) :
-                        node.parent;
+                node.parent.parent :
+                isForInOrOfStatement(node.parent.parent) ?
+                getContextNode(node.parent.parent) :
+                node.parent;
 
         case SyntaxKind.BindingElement:
             return getContextNode(node.parent.parent as NamedDeclaration);
@@ -419,16 +435,14 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
         case SyntaxKind.ForInStatement:
             return {
                 start: (node as ForInOrOfStatement).initializer,
-                end: (node as ForInOrOfStatement).expression
+                end: (node as ForInOrOfStatement).expression,
             };
 
         case SyntaxKind.PropertyAssignment:
         case SyntaxKind.ShorthandPropertyAssignment:
             return isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent) ?
                 getContextNode(
-                    findAncestor(node.parent, node =>
-                        isBinaryExpression(node) || isForInOrOfStatement(node)
-                    ) as BinaryExpression | ForInOrOfStatement
+                    findAncestor(node.parent, node => isBinaryExpression(node) || isForInOrOfStatement(node)) as BinaryExpression | ForInOrOfStatement,
                 ) :
                 node;
 
@@ -438,7 +452,7 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
 }
 
 /** @internal */
-export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context?: ContextNode): { contextSpan: TextSpan } | undefined {
+export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context?: ContextNode): { contextSpan: TextSpan; } | undefined {
     if (!context) return undefined;
     const contextSpan = isContextWithStartAndEndNode(context) ?
         getTextSpan(context.start, sourceFile, context.end) :
@@ -494,7 +508,7 @@ export function findReferencedSymbols(program: Program, cancellationToken: Cance
         // Only include referenced symbols that have a valid definition.
         definition && {
             definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
-            references: references.map(r => toReferencedSymbolEntry(r, symbol))
+            references: references.map(r => toReferencedSymbolEntry(r, symbol)),
         });
 }
 
@@ -565,7 +579,12 @@ function getImplementationReferenceEntries(program: Program, cancellationToken: 
 
 /** @internal */
 export function findReferenceOrRenameEntries<T>(
-    program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], node: Node, position: number, options: Options | undefined,
+    program: Program,
+    cancellationToken: CancellationToken,
+    sourceFiles: readonly SourceFile[],
+    node: Node,
+    position: number,
+    options: Options | undefined,
     convertEntry: ToReferenceOrRenameEntry<T>,
 ): T[] | undefined {
     return map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), entry => convertEntry(entry, node, program.getTypeChecker()));
@@ -592,7 +611,7 @@ function flattenEntries(referenceSymbols: readonly SymbolAndEntries[] | undefine
 }
 
 function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: TypeChecker, originalNode: Node): ReferencedSymbolDefinitionInfo {
-    const info = ((): { sourceFile: SourceFile, textSpan: TextSpan, name: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], context?: Node | ContextWithStartAndEndNode } => {
+    const info = ((): { sourceFile: SourceFile; textSpan: TextSpan; name: string; kind: ScriptElementKind; displayParts: SymbolDisplayPart[]; context?: Node | ContextWithStartAndEndNode; } => {
         switch (def.type) {
             case DefinitionKind.Symbol: {
                 const { symbol } = def;
@@ -605,7 +624,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
                     name,
                     kind,
                     displayParts,
-                    context: getContextNode(declaration)
+                    context: getContextNode(declaration),
                 };
             }
             case DefinitionKind.Label: {
@@ -621,7 +640,12 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
                 const { node } = def;
                 const symbol = checker.getSymbolAtLocation(node);
                 const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
-                    checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
+                            checker,
+                            symbol,
+                            node.getSourceFile(),
+                            getContainerNode(node),
+                            node,
+                        ).displayParts || [textPart("this")];
                 return { ...getFileAndTextSpanFromNode(node), name: "this", kind: ScriptElementKind.variableElement, displayParts };
             }
             case DefinitionKind.String: {
@@ -630,7 +654,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
                     ...getFileAndTextSpanFromNode(node),
                     name: node.text,
                     kind: ScriptElementKind.variableElement,
-                    displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
+                    displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)],
                 };
             }
             case DefinitionKind.TripleSlashReference: {
@@ -639,7 +663,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
                     sourceFile: def.file,
                     name: def.reference.fileName,
                     kind: ScriptElementKind.string,
-                    displayParts: [displayPart(`"${def.reference.fileName}"`, SymbolDisplayPartKind.stringLiteral)]
+                    displayParts: [displayPart(`"${def.reference.fileName}"`, SymbolDisplayPartKind.stringLiteral)],
                 };
             }
             default:
@@ -656,7 +680,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
         name,
         textSpan,
         displayParts,
-        ...toContextSpan(textSpan, sourceFile, context)
+        ...toContextSpan(textSpan, sourceFile, context),
     };
 }
 
@@ -664,15 +688,14 @@ function getFileAndTextSpanFromNode(node: Node) {
     const sourceFile = node.getSourceFile();
     return {
         sourceFile,
-        textSpan: getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile)
+        textSpan: getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile),
     };
 }
 
-function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, node: Node): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
+function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, node: Node): { displayParts: SymbolDisplayPart[]; kind: ScriptElementKind; } {
     const meaning = Core.getIntersectingMeaningFromDeclarations(node, symbol);
     const enclosingDeclaration = symbol.declarations && firstOrUndefined(symbol.declarations) || node;
-    const { displayParts, symbolKind } =
-        SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, meaning);
+    const { displayParts, symbolKind } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, meaning);
     return { displayParts, kind: symbolKind };
 }
 
@@ -686,7 +709,7 @@ function toReferencedSymbolEntry(entry: Entry, symbol: Symbol | undefined): Refe
     if (!symbol) return referenceEntry;
     return {
         ...referenceEntry,
-        isDefinition: entry.kind !== EntryKind.Span && isDeclarationOfSymbol(entry.node, symbol)
+        isDefinition: entry.kind !== EntryKind.Span && isDeclarationOfSymbol(entry.node, symbol),
     };
 }
 
@@ -714,12 +737,15 @@ function entryToDocumentSpan(entry: Entry): DocumentSpan {
         return {
             textSpan,
             fileName: sourceFile.fileName,
-            ...toContextSpan(textSpan, sourceFile, entry.context)
+            ...toContextSpan(textSpan, sourceFile, entry.context),
         };
     }
 }
 
-interface PrefixAndSuffix { readonly prefixText?: string; readonly suffixText?: string; }
+interface PrefixAndSuffix {
+    readonly prefixText?: string;
+    readonly suffixText?: string;
+}
 function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker, quotePreference: QuotePreference): PrefixAndSuffix {
     if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
         const { node, kind } = entry;
@@ -740,9 +766,11 @@ function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeC
             // For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
             if (isShorthandAssignment) {
                 const grandParent = parent.parent;
-                if (isObjectLiteralExpression(grandParent) &&
+                if (
+                    isObjectLiteralExpression(grandParent) &&
                     isBinaryExpression(grandParent.parent) &&
-                    isModuleExportsAccessExpression(grandParent.parent.left)) {
+                    isModuleExportsAccessExpression(grandParent.parent.left)
+                ) {
                     return prefixColon;
                 }
                 return suffixColon;
@@ -779,7 +807,7 @@ function toImplementationLocation(entry: Entry, checker: TypeChecker): Implement
         const { node } = entry;
         return {
             ...documentSpan,
-            ...implementationKindDisplayParts(node, checker)
+            ...implementationKindDisplayParts(node, checker),
         };
     }
     else {
@@ -787,7 +815,7 @@ function toImplementationLocation(entry: Entry, checker: TypeChecker): Implement
     }
 }
 
-function implementationKindDisplayParts(node: Node, checker: TypeChecker): { kind: ScriptElementKind, displayParts: SymbolDisplayPart[] } {
+function implementationKindDisplayParts(node: Node, checker: TypeChecker): { kind: ScriptElementKind; displayParts: SymbolDisplayPart[]; } {
     const symbol = checker.getSymbolAtLocation(isDeclaration(node) && node.name ? node.name : node);
     if (symbol) {
         return getDefinitionKindAndDisplayParts(symbol, checker, node);
@@ -795,13 +823,13 @@ function implementationKindDisplayParts(node: Node, checker: TypeChecker): { kin
     else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
         return {
             kind: ScriptElementKind.interfaceElement,
-            displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("object literal"), punctuationPart(SyntaxKind.CloseParenToken)]
+            displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("object literal"), punctuationPart(SyntaxKind.CloseParenToken)],
         };
     }
     else if (node.kind === SyntaxKind.ClassExpression) {
         return {
             kind: ScriptElementKind.localClassElement,
-            displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("anonymous local class"), punctuationPart(SyntaxKind.CloseParenToken)]
+            displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("anonymous local class"), punctuationPart(SyntaxKind.CloseParenToken)],
         };
     }
     else {
@@ -810,15 +838,15 @@ function implementationKindDisplayParts(node: Node, checker: TypeChecker): { kin
 }
 
 /** @internal */
-export function toHighlightSpan(entry: Entry): { fileName: string, span: HighlightSpan } {
+export function toHighlightSpan(entry: Entry): { fileName: string; span: HighlightSpan; } {
     const documentSpan = entryToDocumentSpan(entry);
     if (entry.kind === EntryKind.Span) {
         return {
             fileName: documentSpan.fileName,
             span: {
                 textSpan: documentSpan.textSpan,
-                kind: HighlightSpanKind.reference
-            }
+                kind: HighlightSpanKind.reference,
+            },
         };
     }
 
@@ -827,7 +855,7 @@ export function toHighlightSpan(entry: Entry): { fileName: string, span: Highlig
         textSpan: documentSpan.textSpan,
         kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
         isInString: entry.kind === EntryKind.StringLiteral ? true : undefined,
-        ...documentSpan.contextSpan && { contextSpan: documentSpan.contextSpan }
+        ...documentSpan.contextSpan && { contextSpan: documentSpan.contextSpan },
     };
     return { fileName: documentSpan.fileName, span };
 }
@@ -868,9 +896,9 @@ export function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): b
     if (!target) return false;
     const source = getDeclarationFromName(node) ||
         (node.kind === SyntaxKind.DefaultKeyword ? node.parent
-        : isLiteralComputedPropertyDeclarationName(node) ? node.parent.parent
-        : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent.parent
-        : undefined);
+            : isLiteralComputedPropertyDeclarationName(node) ? node.parent.parent
+            : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent.parent
+            : undefined);
     const commonjsSource = source && isBinaryExpression(source) ? source.left as unknown as Declaration : undefined;
     return !!(source && target.declarations?.some(d => d === source || d === commonjsSource));
 }
@@ -960,7 +988,7 @@ export namespace Core {
             }
             return [{
                 definition: { type: DefinitionKind.TripleSlashReference, reference: resolvedRef.reference, file: node },
-                references: getReferencesForNonModule(resolvedRef.file, fileIncludeReasons, program) || emptyArray
+                references: getReferencesForNonModule(resolvedRef.file, fileIncludeReasons, program) || emptyArray,
             }];
         }
 
@@ -1043,7 +1071,7 @@ export namespace Core {
                     entries = append(entries, {
                         kind: EntryKind.Span,
                         fileName: referencingFile.fileName,
-                        textSpan: createTextSpanFromRange(location)
+                        textSpan: createTextSpanFromRange(location),
                     });
                 }
             }
@@ -1092,7 +1120,8 @@ export namespace Core {
                     continue;
                 }
                 const symbol = entry.definition.symbol;
-                const refIndex = findIndex(result, ref => !!ref.definition &&
+                const refIndex = findIndex(result, ref =>
+                    !!ref.definition &&
                     ref.definition.type === DefinitionKind.Symbol &&
                     ref.definition.symbol === symbol);
                 if (refIndex === -1) {
@@ -1115,7 +1144,7 @@ export namespace Core {
                         return entry1Span.start !== entry2Span.start ?
                             compareValues(entry1Span.start, entry2Span.start) :
                             compareValues(entry1Span.length, entry2Span.length);
-                    })
+                    }),
                 };
             }
         }
@@ -1147,9 +1176,9 @@ export namespace Core {
             else if (reference.kind === "implicit") {
                 // Return either: The first JSX node in the (if not a tslib import), the first statement of the file, or the whole file if neither of those exist
                 const range = reference.literal.text !== externalHelpersModuleNameText && forEachChildRecursively(
-                    reference.referencingFile,
-                    n => !(n.transformFlags & TransformFlags.ContainsJsx) ? "skip" : isJsxElement(n) || isJsxSelfClosingElement(n) || isJsxFragment(n) ? n : undefined
-                ) || reference.referencingFile.statements[0] || reference.referencingFile;
+                            reference.referencingFile,
+                            n => !(n.transformFlags & TransformFlags.ContainsJsx) ? "skip" : isJsxElement(n) || isJsxSelfClosingElement(n) || isJsxFragment(n) ? n : undefined,
+                        ) || reference.referencingFile.statements[0] || reference.referencingFile;
                 return nodeEntry(range);
             }
             else {
@@ -1222,7 +1251,8 @@ export namespace Core {
                 sourceFiles,
                 node.kind,
                 cancellationToken,
-                node.kind === SyntaxKind.ReadonlyKeyword ? isReadonlyTypeOperator : undefined);
+                node.kind === SyntaxKind.ReadonlyKeyword ? isReadonlyTypeOperator : undefined,
+            );
         }
 
         if (isImportMeta(node.parent) && node.parent.name === node) {
@@ -1406,7 +1436,8 @@ export namespace Core {
             readonly cancellationToken: CancellationToken,
             readonly searchMeaning: SemanticMeaning,
             readonly options: Options,
-            private readonly result: SymbolAndEntries[]) {
+            private readonly result: SymbolAndEntries[],
+        ) {
         }
 
         includesSourceFile(sourceFile: SourceFile): boolean {
@@ -1421,7 +1452,7 @@ export namespace Core {
         }
 
         /** @param allSearchSymbols set of additional symbols for use by `includes`. */
-        createSearch(location: Node | undefined, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
+        createSearch(location: Node | undefined, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string; allSearchSymbols?: Symbol[]; } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
             // Note: getLocalSymbolForExportDefault handles `export default class C {}`, but not `export default C` or `export { C as default }`.
             // The other two forms seem to be handled downstream (e.g. in `skipPastExportOrImportSpecifier`), so special-casing the first form
@@ -1454,7 +1485,7 @@ export namespace Core {
         addStringOrCommentReference(fileName: string, textSpan: TextSpan): void {
             this.result.push({
                 definition: undefined,
-                references: [{ kind: EntryKind.Span, fileName, textSpan }]
+                references: [{ kind: EntryKind.Span, fileName, textSpan }],
             });
         }
 
@@ -1668,9 +1699,11 @@ export namespace Core {
         for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name, searchContainer)) {
             if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) continue;
             const referenceSymbol = checker.getSymbolAtLocation(token)!;
-            if (referenceSymbol === symbol
+            if (
+                referenceSymbol === symbol
                 || checker.getShorthandAssignmentValueSymbol(token.parent) === symbol
-                || isExportSpecifier(token.parent) && getLocalSymbolForExportSpecifier(token, referenceSymbol, token.parent, checker) === symbol) {
+                || isExportSpecifier(token.parent) && getLocalSymbolForExportSpecifier(token, referenceSymbol, token.parent, checker) === symbol
+            ) {
                 const res = cb(token);
                 if (res) return res;
             }
@@ -1706,7 +1739,7 @@ export namespace Core {
         signature: SignatureDeclaration,
         sourceFiles: readonly SourceFile[],
         checker: TypeChecker,
-        cb: (name: Identifier, call?: CallExpression) => boolean
+        cb: (name: Identifier, call?: CallExpression) => boolean,
     ): boolean {
         if (!signature.name || !isIdentifier(signature.name)) return false;
 
@@ -1759,8 +1792,10 @@ export namespace Core {
             // before and after it have to be a non-identifier char).
             const endPosition = position + symbolNameLength;
 
-            if ((position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest)) &&
-                (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))) {
+            if (
+                (position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest)) &&
+                (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))
+            ) {
                 // Found a real match.  Keep searching.
                 positions.push(position);
             }
@@ -1914,9 +1949,11 @@ export namespace Core {
         }
 
         // Use the parent symbol if the location is commonjs require syntax on javascript files only.
-        if (isInJSFile(referenceLocation)
+        if (
+            isInJSFile(referenceLocation)
             && isBindingElement(referenceLocation.parent)
-            && isVariableDeclarationInitializedToBareOrAccessedRequire(referenceLocation.parent.parent.parent)) {
+            && isVariableDeclarationInitializedToBareOrAccessedRequire(referenceLocation.parent.parent.parent)
+        ) {
             referenceSymbol = referenceLocation.parent.symbol;
             // The parent will not have a symbol if it's an ObjectBindingPattern (when destructuring is used).  In
             // this case, just skip it, since the bound identifiers are not an alias of the import.
@@ -2028,12 +2065,12 @@ export namespace Core {
         const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(valueDeclaration)!;
         const name = valueDeclaration && getNameOfDeclaration(valueDeclaration);
         /*
-        * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
-        * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
-        * an identifier is declared, the language service should return the position of the variable declaration as well as
-        * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
-        * position of property accessing, the referenceEntry of such position will be handled in the first case.
-        */
+         * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
+         * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
+         * an identifier is declared, the language service should return the position of the variable declaration as well as
+         * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
+         * position of property accessing, the referenceEntry of such position will be handled in the first case.
+         */
         if (!(flags & SymbolFlags.Transient) && name && search.includes(shorthandValueSymbol)) {
             addReference(name, shorthandValueSymbol, state);
         }
@@ -2280,7 +2317,8 @@ export namespace Core {
             getAllSuperTypeNodes(declaration).some(typeReference => {
                 const type = checker.getTypeAtLocation(typeReference);
                 return !!type && !!type.symbol && explicitlyInheritsFrom(type.symbol, parent, cachedResults, checker);
-            }));
+            })
+        );
         cachedResults.set(key, inherits);
         return inherits;
     }
@@ -2396,7 +2434,7 @@ export namespace Core {
         const thisParameter = firstDefined(references, r => isParameter(r.node.parent) ? r.node : undefined);
         return [{
             definition: { type: DefinitionKind.This, node: thisParameter || thisOrSuperKeyword },
-            references
+            references,
         }];
     }
 
@@ -2422,7 +2460,7 @@ export namespace Core {
 
         return [{
             definition: { type: DefinitionKind.String, node },
-            references
+            references,
         }];
     }
 
@@ -2430,7 +2468,12 @@ export namespace Core {
     // This is not needed when searching for re-exports.
     function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRename: boolean, providePrefixAndSuffixText: boolean, implementations: boolean): Symbol[] {
         const result: Symbol[] = [];
-        forEachRelatedSymbol<void>(symbol, location, checker, isForRename, !(isForRename && providePrefixAndSuffixText),
+        forEachRelatedSymbol<void>(
+            symbol,
+            location,
+            checker,
+            isForRename,
+            !(isForRename && providePrefixAndSuffixText),
             (sym, root, base) => {
                 // static method/property and instance method/property might have the same name. Only include static or only include instance.
                 if (base) {
@@ -2439,9 +2482,9 @@ export namespace Core {
                     }
                 }
                 result.push(base || root || sym);
-            },
-            // when try to find implementation, implementations is true, and not allowed to find base class
-            /*allowBaseTypes*/() => !implementations);
+            }, // when try to find implementation, implementations is true, and not allowed to find base class
+            /*allowBaseTypes*/ () => !implementations,
+        );
         return result;
     }
 
@@ -2449,7 +2492,11 @@ export namespace Core {
      * @param allowBaseTypes return true means it would try to find in base class or interface.
      */
     function forEachRelatedSymbol<T>(
-        symbol: Symbol, location: Node, checker: TypeChecker, isForRenamePopulateSearchSymbolSet: boolean, onlyIncludeBindingElementAtReferenceLocation: boolean,
+        symbol: Symbol,
+        location: Node,
+        checker: TypeChecker,
+        isForRenamePopulateSearchSymbolSet: boolean,
+        onlyIncludeBindingElementAtReferenceLocation: boolean,
         /**
          * @param baseSymbol This symbol means one property/mehtod from base class or interface when it is not null or undefined,
          */
@@ -2481,7 +2528,8 @@ export namespace Core {
             const contextualType = checker.getContextualType(containingObjectLiteralElement.parent);
             const res = contextualType && firstDefined(
                 getPropertySymbolsFromContextualType(containingObjectLiteralElement, checker, contextualType, /*unionSymbolOk*/ true),
-                sym => fromRoot(sym, EntryKind.SearchedPropertyFoundLocal));
+                sym => fromRoot(sym, EntryKind.SearchedPropertyFoundLocal),
+            );
             if (res) return res;
 
             // If the location is name of property symbol from object literal destructuring pattern
@@ -2586,12 +2634,13 @@ export namespace Core {
             //      }
             if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, getSymbolId(symbol))) return;
 
-            return firstDefined(symbol.declarations, declaration => firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
-                const type = checker.getTypeAtLocation(typeReference);
-                const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
-                // Visit the typeReference as well to see if it directly or indirectly uses that property
-                return type && propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type.symbol));
-            }));
+            return firstDefined(symbol.declarations, declaration =>
+                firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
+                    const type = checker.getTypeAtLocation(typeReference);
+                    const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
+                    // Visit the typeReference as well to see if it directly or indirectly uses that property
+                    return type && propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type.symbol));
+                }));
         }
     }
 
@@ -2608,24 +2657,19 @@ export namespace Core {
 
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
         const { checker } = state;
-        return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
-            /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
-            (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => {
-                // check whether the symbol used to search itself is just the searched one.
-                if (baseSymbol) {
-                    // static method/property and instance method/property might have the same name. Only check static or only check instance.
-                    if (isStaticSymbol(referenceSymbol) !== isStaticSymbol(baseSymbol)) {
-                        baseSymbol = undefined;
-                    }
+        return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false, /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename, (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => {
+            // check whether the symbol used to search itself is just the searched one.
+            if (baseSymbol) {
+                // static method/property and instance method/property might have the same name. Only check static or only check instance.
+                if (isStaticSymbol(referenceSymbol) !== isStaticSymbol(baseSymbol)) {
+                    baseSymbol = undefined;
                 }
-                return search.includes(baseSymbol || rootSymbol || sym)
-                    // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
-                    ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }
-                    : undefined;
-            },
-            /*allowBaseTypes*/ rootSymbol =>
-                !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker)))
-        );
+            }
+            return search.includes(baseSymbol || rootSymbol || sym)
+                // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
+                ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }
+                : undefined;
+        }, /*allowBaseTypes*/ rootSymbol => !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))));
     }
 
     /**
@@ -2666,8 +2710,8 @@ export namespace Core {
     function isImplementation(node: Node): boolean {
         return !!(node.flags & NodeFlags.Ambient) ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node)) :
             (isVariableLike(node) ? hasInitializer(node) :
-            isFunctionLikeDeclaration(node) ? !!node.body :
-            isClassLike(node) || isModuleOrEnumDeclaration(node));
+                isFunctionLikeDeclaration(node) ? !!node.body :
+                isClassLike(node) || isModuleOrEnumDeclaration(node));
     }
 
     export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {
@@ -2706,8 +2750,7 @@ export namespace Core {
     function getParentSymbolsOfPropertyAccess(location: Node, symbol: Symbol, checker: TypeChecker): readonly Symbol[] | undefined {
         const propertyAccessExpression = isRightSideOfPropertyAccess(location) ? location.parent as PropertyAccessExpression : undefined;
         const lhsType = propertyAccessExpression && checker.getTypeAtLocation(propertyAccessExpression.expression);
-        const res = mapDefined(lhsType && (lhsType.isUnionOrIntersection() ? lhsType.types : lhsType.symbol === symbol.parent ? undefined : [lhsType]), t =>
-            t.symbol && t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? t.symbol : undefined);
+        const res = mapDefined(lhsType && (lhsType.isUnionOrIntersection() ? lhsType.types : lhsType.symbol === symbol.parent ? undefined : [lhsType]), t => t.symbol && t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? t.symbol : undefined);
         return res.length === 0 ? undefined : res;
     }
 

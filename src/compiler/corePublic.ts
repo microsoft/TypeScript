@@ -52,7 +52,7 @@ export type Comparer<T> = (a: T, b: T) => Comparison;
 
 /** @internal */
 export const enum Comparison {
-    LessThan    = -1,
-    EqualTo     = 0,
-    GreaterThan = 1
+    LessThan = -1,
+    EqualTo = 0,
+    GreaterThan = 1,
 }
