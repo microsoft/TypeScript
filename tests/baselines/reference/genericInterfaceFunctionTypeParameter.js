@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericInterfaceFunctionTypeParameter.ts] ////
+
 //// [genericInterfaceFunctionTypeParameter.ts]
 export interface IFoo<A> { }
 export function foo<A>(fn: (ifoo: IFoo<A>) => void) {

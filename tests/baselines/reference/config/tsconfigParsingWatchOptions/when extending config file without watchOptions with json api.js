@@ -1,20 +1,42 @@
-Input:: {
+Fs::
+//// [/a.ts]
+
+
+//// [/base.json]
+{}
+
+//// [/tsconfig.json]
+{
  "extends": "./base.json",
  "watchOptions": {
   "watchFile": "UseFsEvents"
- },
- "compileOnSave": false
+ }
 }
+
+
+configFileName:: tsconfig.json
 Result: WatchOptions::
 {
  "watchFile": 4
 }
-Result: Errors::
+Errors::
 
-Input:: {
- "extends": "./base.json",
- "compileOnSave": false
+
+Fs::
+//// [/a.ts]
+
+
+//// [/base.json]
+{}
+
+//// [/tsconfig.json]
+{
+ "extends": "./base.json"
 }
+
+
+configFileName:: tsconfig.json
 Result: WatchOptions::
 
-Result: Errors::
+Errors::
+

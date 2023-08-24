@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParameterInFunction1.ts ===
+//// [tests/cases/compiler/unusedTypeParameterInFunction1.ts] ////
+
+=== unusedTypeParameterInFunction1.ts ===
 function f1<T>() {
 >f1 : Symbol(f1, Decl(unusedTypeParameterInFunction1.ts, 0, 0))
 >T : Symbol(T, Decl(unusedTypeParameterInFunction1.ts, 0, 12))

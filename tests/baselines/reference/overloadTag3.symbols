@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsdoc/overloadTag3.ts] ////
+
+=== /a.js ===
+/**
+ * @template T
+ */
+export class Foo {
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+
+    /**
+     * @constructor
+     * @overload
+     */
+    constructor() { }
+
+    /**
+     * @param {T} value
+     */
+    bar(value) { }
+>bar : Symbol(Foo.bar, Decl(a.js, 8, 21))
+>value : Symbol(value, Decl(a.js, 13, 8))
+}
+
+/** @type {Foo<number>} */
+let foo;
+>foo : Symbol(foo, Decl(a.js, 17, 3))
+
+foo = new Foo();
+>foo : Symbol(foo, Decl(a.js, 17, 3))
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingConstrainedTypeParameter.ts ===
+//// [tests/cases/compiler/narrowingConstrainedTypeParameter.ts] ////
+
+=== narrowingConstrainedTypeParameter.ts ===
 // Repro from #10811
 
 interface Pet {

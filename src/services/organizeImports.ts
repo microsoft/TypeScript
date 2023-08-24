@@ -60,7 +60,6 @@ import {
     SortKind,
     SourceFile,
     stableSort,
-    suppressLeadingTrivia,
     SyntaxKind,
     textChanges,
     TransformFlags,
@@ -105,8 +104,7 @@ export function organizeImports(
     // Exports are always used
     if (mode !== OrganizeImportsMode.RemoveUnused) {
         // All of the old ExportDeclarations in the file, in syntactic order.
-        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl =>
-            organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer)));
+        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl => organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer)));
     }
 
     for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
@@ -137,7 +135,7 @@ export function organizeImports(
         // on the first import because it is probably the header comment for the file.
         // Consider: we could do a more careful check that this trivia is actually a header,
         // but the consequences of being wrong are very minor.
-        suppressLeadingTrivia(oldImportDecls[0]);
+        setEmitFlags(oldImportDecls[0], EmitFlags.NoLeadingComments);
 
         const oldImportGroups = shouldCombine
             ? group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier)!)
@@ -263,17 +261,18 @@ function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFil
         if (name || namedBindings) {
             usedImports.push(updateImportDeclarationAndClause(importDecl, name, namedBindings));
         }
-        // If a module is imported to be augmented, it’s used
+        // If a module is imported to be augmented, it's used
         else if (hasModuleDeclarationMatchingSpecifier(sourceFile, moduleSpecifier)) {
-            // If we’re in a declaration file, it’s safe to remove the import clause from it
+            // If we're in a declaration file, it's safe to remove the import clause from it
             if (sourceFile.isDeclarationFile) {
                 usedImports.push(factory.createImportDeclaration(
                     importDecl.modifiers,
                     /*importClause*/ undefined,
                     moduleSpecifier,
-                    /*assertClause*/ undefined));
+                    /*assertClause*/ undefined,
+                ));
             }
-            // If we’re not in a declaration file, we can’t remove the import clause even though
+            // If we're not in a declaration file, we can't remove the import clause even though
             // the imported symbols are unused, because removing them makes it look like the import
             // declaration has side effects, which will cause it to be preserved in the JS emit.
             else {
@@ -337,18 +336,19 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
             // Add the namespace import to the existing default ImportDeclaration.
             const defaultImport = defaultImports[0];
             coalescedImports.push(
-                updateImportDeclarationAndClause(defaultImport, defaultImport.importClause.name, namespaceImports[0].importClause.namedBindings));
+                updateImportDeclarationAndClause(defaultImport, defaultImport.importClause.name, namespaceImports[0].importClause.namedBindings),
+            );
 
             continue;
         }
 
-        const sortedNamespaceImports = stableSort(namespaceImports, (i1, i2) =>
-            comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
+        const sortedNamespaceImports = stableSort(namespaceImports, (i1, i2) => comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
 
         for (const namespaceImport of sortedNamespaceImports) {
             // Drop the name, if any
             coalescedImports.push(
-                updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause.namedBindings));
+                updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause.namedBindings),
+            );
         }
 
         const firstDefaultImport = firstOrUndefined(defaultImports);
@@ -366,7 +366,8 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
         else {
             for (const defaultImport of defaultImports) {
                 newImportSpecifiers.push(
-                    factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause.name));
+                    factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause.name),
+                );
             }
         }
 
@@ -374,7 +375,7 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
 
         const sortedImportSpecifiers = factory.createNodeArray(
             sortSpecifiers(newImportSpecifiers, comparer),
-            firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma
+            firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma,
         );
 
         const newNamedImports = sortedImportSpecifiers.length === 0
@@ -382,10 +383,11 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
                 ? undefined
                 : factory.createNamedImports(emptyArray)
             : firstNamedImport
-                ? factory.updateNamedImports(firstNamedImport.importClause.namedBindings, sortedImportSpecifiers)
-                : factory.createNamedImports(sortedImportSpecifiers);
+            ? factory.updateNamedImports(firstNamedImport.importClause.namedBindings, sortedImportSpecifiers)
+            : factory.createNamedImports(sortedImportSpecifiers);
 
-        if (sourceFile &&
+        if (
+            sourceFile &&
             newNamedImports &&
             firstNamedImport?.importClause.namedBindings &&
             !rangeIsOnSingleLine(firstNamedImport.importClause.namedBindings, sourceFile)
@@ -398,13 +400,16 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
         // choose not to as a stylistic preference.
         if (isTypeOnly && newDefaultImport && newNamedImports) {
             coalescedImports.push(
-                updateImportDeclarationAndClause(importDecl, newDefaultImport, /*namedBindings*/ undefined));
+                updateImportDeclarationAndClause(importDecl, newDefaultImport, /*namedBindings*/ undefined),
+            );
             coalescedImports.push(
-                updateImportDeclarationAndClause(firstNamedImport ?? importDecl, /*name*/ undefined, newNamedImports));
+                updateImportDeclarationAndClause(firstNamedImport ?? importDecl, /*name*/ undefined, newNamedImports),
+            );
         }
         else {
             coalescedImports.push(
-                updateImportDeclarationAndClause(importDecl, newDefaultImport, newNamedImports));
+                updateImportDeclarationAndClause(importDecl, newDefaultImport, newNamedImports),
+            );
         }
     }
 
@@ -525,7 +530,9 @@ function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], compar
                         factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                 ),
                 exportDecl.moduleSpecifier,
-                exportDecl.assertClause));
+                exportDecl.assertClause,
+            ),
+        );
     }
 
     return coalescedExports;
@@ -565,14 +572,15 @@ function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], compar
 function updateImportDeclarationAndClause(
     importDeclaration: ImportDeclaration,
     name: Identifier | undefined,
-    namedBindings: NamedImportBindings | undefined) {
-
+    namedBindings: NamedImportBindings | undefined,
+) {
     return factory.updateImportDeclaration(
         importDeclaration,
         importDeclaration.modifiers,
         factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
         importDeclaration.moduleSpecifier,
-        importDeclaration.assertClause);
+        importDeclaration.assertClause,
+    );
 }
 
 function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[], comparer: Comparer<string>) {
@@ -618,7 +626,8 @@ function getModuleSpecifierExpression(declaration: AnyImportOrRequireStatement):
 export function detectSorting(sourceFile: SourceFile, preferences: UserPreferences): SortKind {
     return detectSortingWorker(
         groupByNewlineContiguous(sourceFile, sourceFile.statements.filter(isImportDeclaration)),
-        preferences);
+        preferences,
+    );
 }
 
 function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: UserPreferences): SortKind {
@@ -633,7 +642,8 @@ function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: U
                 importGroup,
                 i => tryCast(i.moduleSpecifier, isStringLiteral)?.text ?? "",
                 collateCaseSensitive,
-                collateCaseInsensitive);
+                collateCaseInsensitive,
+            );
             if (moduleSpecifierSort) {
                 // Don't let a single unsorted group of module specifiers make the whole algorithm detect unsorted.
                 // If other things are sorted consistently, that's a stronger indicator than unsorted module specifiers.
@@ -648,7 +658,8 @@ function detectSortingWorker(importGroups: ImportDeclaration[][], preferences: U
         // Check import specifiers
         const declarationWithNamedImports = find(
             importGroup,
-            i => tryCast(i.importClause?.namedBindings, isNamedImports)?.elements.length! > 1);
+            i => tryCast(i.importClause?.namedBindings, isNamedImports)?.elements.length! > 1,
+        );
         if (declarationWithNamedImports) {
             const namedImportSort = detectImportSpecifierSorting((declarationWithNamedImports.importClause!.namedBindings as NamedImports).elements, preferences);
             if (namedImportSort) {
@@ -680,7 +691,7 @@ export function detectImportDeclarationSorting(imports: readonly AnyImportOrRequ
         imports,
         s => getExternalModuleName(getModuleSpecifierExpression(s)) || "",
         collateCaseSensitive,
-        collateCaseInsensitive
+        collateCaseInsensitive,
     );
 }
 
@@ -766,9 +777,7 @@ function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
         map(tryGetNamedBindingElements(namedImport), importSpecifier =>
             importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
                 ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
-                : importSpecifier
-        )
-    );
+                : importSpecifier));
 }
 
 function tryGetNamedBindingElements(namedImport: ImportDeclaration) {
@@ -786,10 +795,9 @@ function getOrganizeImportsUnicodeStringComparer(ignoreCase: boolean, preference
     const caseFirst = preferences.organizeImportsCaseFirst ?? false;
     const numeric = preferences.organizeImportsNumericCollation ?? false;
     const accents = preferences.organizeImportsAccentCollation ?? true;
-    const sensitivity =
-        ignoreCase ?
-            accents ? "accent" : "base" :
-            accents ? "variant" : "case";
+    const sensitivity = ignoreCase ?
+        accents ? "accent" : "base" :
+        accents ? "variant" : "case";
 
     const collator = new Intl.Collator(resolvedLocale, {
         usage: "sort",

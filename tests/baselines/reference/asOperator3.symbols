@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/asOperator/asOperator3.ts ===
+//// [tests/cases/conformance/expressions/asOperator/asOperator3.ts] ////
+
+=== asOperator3.ts ===
 declare function tag(...x: any[]): any;
 >tag : Symbol(tag, Decl(asOperator3.ts, 0, 0))
 >x : Symbol(x, Decl(asOperator3.ts, 0, 21))

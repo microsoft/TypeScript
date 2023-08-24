@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varBlock.ts] ////
+
 //// [varBlock.ts]
 module m2 {
 

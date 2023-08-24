@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemNamespaceAliasEmit.ts] ////
+
 //// [systemNamespaceAliasEmit.ts]
 namespace ns {
     const value = 1;
@@ -20,15 +22,11 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             (function (ns) {
                 var value = 1;
-            })(ns || (ns = {}));
-            exports_1("ns", ns);
-            exports_1("FooBar", ns);
+            })(ns || (exports_1("FooBar", exports_1("ns", ns = {}))));
             (function (AnEnum) {
                 AnEnum[AnEnum["ONE"] = 0] = "ONE";
                 AnEnum[AnEnum["TWO"] = 1] = "TWO";
-            })(AnEnum || (AnEnum = {}));
-            exports_1("AnEnum", AnEnum);
-            exports_1("BarEnum", AnEnum);
+            })(AnEnum || (exports_1("BarEnum", exports_1("AnEnum", AnEnum = {}))));
         }
     };
 });

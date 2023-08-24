@@ -1,7 +1,7 @@
-tests/cases/compiler/InterfaceDeclaration8.ts(1,11): error TS2427: Interface name cannot be 'string'.
+InterfaceDeclaration8.ts(1,11): error TS2427: Interface name cannot be 'string'.
 
 
-==== tests/cases/compiler/InterfaceDeclaration8.ts (1 errors) ====
+==== InterfaceDeclaration8.ts (1 errors) ====
     interface string {
               ~~~~~~
 !!! error TS2427: Interface name cannot be 'string'.

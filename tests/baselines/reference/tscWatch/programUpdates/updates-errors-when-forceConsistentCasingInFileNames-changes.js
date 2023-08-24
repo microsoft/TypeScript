@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a.ts]
 export class C {}
@@ -50,13 +51,13 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 
 FsWatches::
-/tsconfig.json: *new*
-  {}
 /a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
   {}
 /b.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -90,6 +91,9 @@ Input::
 {"compilerOptions":{"forceConsistentCasingInFileNames":true}}
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...

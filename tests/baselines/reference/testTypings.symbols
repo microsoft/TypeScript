@@ -1,4 +1,6 @@
-=== tests/cases/compiler/testTypings.ts ===
+//// [tests/cases/compiler/testTypings.ts] ////
+
+=== testTypings.ts ===
 interface IComparable<T> {
 >IComparable : Symbol(IComparable, Decl(testTypings.ts, 0, 0))
 >T : Symbol(T, Decl(testTypings.ts, 0, 22))

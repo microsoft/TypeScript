@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/continueStatements/forInContinueStatements.ts ===
+//// [tests/cases/conformance/statements/continueStatements/forInContinueStatements.ts] ////
+
+=== forInContinueStatements.ts ===
 for(var x in {}) {
 >x : Symbol(x, Decl(forInContinueStatements.ts, 0, 7), Decl(forInContinueStatements.ts, 5, 7), Decl(forInContinueStatements.ts, 11, 7), Decl(forInContinueStatements.ts, 16, 7), Decl(forInContinueStatements.ts, 18, 11) ... and 6 more)
 

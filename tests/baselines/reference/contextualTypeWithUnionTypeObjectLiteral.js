@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts] ////
+
 //// [contextualTypeWithUnionTypeObjectLiteral.ts]
 var str: string;
 var num: number;

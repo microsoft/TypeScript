@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor5.ts] ////
+
 //// [autoAccessor5.ts]
 class C1 {
     accessor ["w"]: any;
@@ -46,14 +48,14 @@ var C1 = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(C1, "y", {
-        get: function () { return __classPrivateFieldGet(this, _b, "f", _C1__d_accessor_storage); },
-        set: function (value) { __classPrivateFieldSet(this, _b, value, "f", _C1__d_accessor_storage); },
+        get: function () { return __classPrivateFieldGet(_b, _b, "f", _C1__d_accessor_storage); },
+        set: function (value) { __classPrivateFieldSet(_b, _b, value, "f", _C1__d_accessor_storage); },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(C1, "z", {
-        get: function () { return __classPrivateFieldGet(this, _b, "f", _C1__e_accessor_storage); },
-        set: function (value) { __classPrivateFieldSet(this, _b, value, "f", _C1__e_accessor_storage); },
+        get: function () { return __classPrivateFieldGet(_b, _b, "f", _C1__e_accessor_storage); },
+        set: function (value) { __classPrivateFieldSet(_b, _b, value, "f", _C1__e_accessor_storage); },
         enumerable: false,
         configurable: true
     });

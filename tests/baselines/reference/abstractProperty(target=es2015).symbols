@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/abstractProperty.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/abstractProperty.ts] ////
+
+=== abstractProperty.ts ===
 abstract class A {
 >A : Symbol(A, Decl(abstractProperty.ts, 0, 0))
 

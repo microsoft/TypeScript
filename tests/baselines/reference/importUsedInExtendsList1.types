@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importUsedInExtendsList1_1.ts ===
+//// [tests/cases/compiler/importUsedInExtendsList1.ts] ////
+
+=== importUsedInExtendsList1_1.ts ===
 ///<reference path='importUsedInExtendsList1_require.ts'/>
 import foo = require('./importUsedInExtendsList1_require');
 >foo : typeof foo
@@ -18,7 +20,7 @@ var r: string = s.foo;
 >s : Sub
 >foo : string
 
-=== tests/cases/compiler/importUsedInExtendsList1_require.ts ===
+=== importUsedInExtendsList1_require.ts ===
 export class Super { foo: string; }
 >Super : Super
 >foo : string

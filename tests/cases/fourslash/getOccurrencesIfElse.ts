@@ -22,4 +22,4 @@
 ////}
 ////[|else|] { }
 
-verify.rangesAreOccurrences(false);
+verify.baselineDocumentHighlights();

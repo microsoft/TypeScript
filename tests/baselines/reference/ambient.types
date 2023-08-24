@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/ambient.ts] ////
+
 === /a.ts ===
 export class A { a!: string }
 >A : A

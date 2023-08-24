@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterDirectlyConstrainedToItself.ts] ////
+
 //// [typeParameterDirectlyConstrainedToItself.ts]
 // all of the below should be errors
 

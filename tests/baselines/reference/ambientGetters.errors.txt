@@ -1,7 +1,7 @@
-tests/cases/compiler/ambientGetters.ts(6,18): error TS1183: An implementation cannot be declared in ambient contexts.
+ambientGetters.ts(6,18): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/ambientGetters.ts (1 errors) ====
+==== ambientGetters.ts (1 errors) ====
     declare class A {
         get length() : number;
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importOnAliasedIdentifiers.ts ===
+//// [tests/cases/compiler/importOnAliasedIdentifiers.ts] ////
+
+=== importOnAliasedIdentifiers.ts ===
 module A {
 >A : Symbol(A, Decl(importOnAliasedIdentifiers.ts, 0, 0))
 

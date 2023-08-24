@@ -1,4 +1,6 @@
-=== tests/cases/compiler/manyConstExports.ts ===
+//// [tests/cases/compiler/manyConstExports.ts] ////
+
+=== manyConstExports.ts ===
 export const exp0 = "test";
 >exp0 : Symbol(exp0, Decl(manyConstExports.ts, 0, 12))
 

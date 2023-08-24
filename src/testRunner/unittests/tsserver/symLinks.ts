@@ -1,56 +1,56 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-    SymLink,
-    TestServerHost,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     protocolLocationFromSubstring,
     verifyGetErrRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+    SymLink,
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: symLinks", () => {
     it("rename in common file renames all project", () => {
         const folderA = `/users/username/projects/a`;
         const aFile: File = {
             path: `${folderA}/a.ts`,
-            content: `import {C} from "./c/fc"; console.log(C)`
+            content: `import {C} from "./c/fc"; console.log(C)`,
         };
         const aTsconfig: File = {
             path: `${folderA}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { module: "commonjs" } })
+            content: JSON.stringify({ compilerOptions: { module: "commonjs" } }),
         };
         const aC: SymLink = {
             path: `${folderA}/c`,
-            symLink: "../c"
+            symLink: "../c",
         };
         const aFc = `${folderA}/c/fc.ts`;
 
         const folderB = `/users/username/projects/b`;
         const bFile: File = {
             path: `${folderB}/b.ts`,
-            content: `import {C} from "./c/fc"; console.log(C)`
+            content: `import {C} from "./c/fc"; console.log(C)`,
         };
         const bTsconfig: File = {
             path: `${folderB}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { module: "commonjs" } })
+            content: JSON.stringify({ compilerOptions: { module: "commonjs" } }),
         };
         const bC: SymLink = {
             path: `${folderB}/c`,
-            symLink: "../c"
+            symLink: "../c",
         };
         const bFc = `${folderB}/c/fc.ts`;
 
         const folderC = `/users/username/projects/c`;
         const cFile: File = {
             path: `${folderC}/fc.ts`,
-            content: `export const C = 8`
+            content: `export const C = 8`,
         };
 
         const files = [cFile, libFile, aFile, aTsconfig, aC, bFile, bTsconfig, bC];
@@ -63,10 +63,11 @@ describe("unittests:: tsserver:: symLinks", () => {
                 { file: aFc, projectRootPath: folderA },
                 { file: bFc, projectRootPath: folderB },
             ],
-            session);
+            session,
+        );
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") }
+            arguments: { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") },
         });
         baselineTsserverLogs("symLinks", "rename in common file renames all project", session);
     });
@@ -82,14 +83,14 @@ describe("unittests:: tsserver:: symLinks", () => {
         const recognizersDateTimeSrcFile: File = {
             path: `${recognizersDateTime}/src/datetime/baseDate.ts`,
             content: `import {C} from ${moduleNameInFile};
-new C();`
+new C();`,
         };
         const recognizerDateTimeTsconfigPath = `${recognizersDateTime}/tsconfig.json`;
         const recognizerDateTimeTsconfigWithoutPathMapping: File = {
             path: recognizerDateTimeTsconfigPath,
             content: JSON.stringify({
-                include: ["src"]
-            })
+                include: ["src"],
+            }),
         };
         const recognizerDateTimeTsconfigWithPathMapping: File = {
             path: recognizerDateTimeTsconfigPath,
@@ -98,29 +99,29 @@ new C();`
                     rootDir: "src",
                     baseUrl: "./",
                     paths: {
-                        "@microsoft/*": ["../*"]
-                    }
+                        "@microsoft/*": ["../*"],
+                    },
                 },
-                include: ["src"]
-            })
+                include: ["src"],
+            }),
         };
         const nodeModulesRecorgnizersText: SymLink = {
             path: `${recognizersDateTime}/node_modules/@microsoft/recognizers-text`,
-            symLink: recognizersText
+            symLink: recognizersText,
         };
         const recognizerTextSrcFile: File = {
             path: `${recognizersText}/src/recognizers-text.ts`,
-            content: `export class C { method () { return 10; } }`
+            content: `export class C { method () { return 10; } }`,
         };
         const recongnizerTextDistTypingFile: File = {
             path: `${recognizersTextDist}/types/recognizers-text.d.ts`,
-            content: `export class C { method(): number; }`
+            content: `export class C { method(): number; }`,
         };
         const recongnizerTextPackageJson: File = {
             path: `${recognizersText}/package.json`,
             content: JSON.stringify({
-                typings: "dist/types/recognizers-text.d.ts"
-            })
+                typings: "dist/types/recognizers-text.d.ts",
+            }),
         };
 
         function createSessionAndOpenFile(host: TestServerHost) {
@@ -129,8 +130,8 @@ new C();`
                 command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
                     file: recognizersDateTimeSrcFile.path,
-                    projectRootPath
-                }
+                    projectRootPath,
+                },
             });
             return session;
         }
@@ -141,21 +142,24 @@ new C();`
                 it("when project compiles from sources", () => {
                     const host = createServerHost(filesWithSources);
                     const session = createSessionAndOpenFile(host);
-                    verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
+                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
                     host.ensureFileOrFolder(nodeModulesRecorgnizersText);
                     host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
                     host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
                     host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
+                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
                     // Change config file's module resolution affecting option
                     const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
-                    host.writeFile(recognizerDateTimeTsconfigPath, JSON.stringify({
-                        ...config,
-                        compilerOptions: { ...config.compilerOptions, resolveJsonModule: true }
-                    }));
+                    host.writeFile(
+                        recognizerDateTimeTsconfigPath,
+                        JSON.stringify({
+                            ...config,
+                            compilerOptions: { ...config.compilerOptions, resolveJsonModule: true },
+                        }),
+                    );
                     host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
                     host.runQueuedTimeoutCallbacks(); // Actual update
 
@@ -165,13 +169,13 @@ new C();`
                 it("when project has node_modules setup but doesnt have modules in typings folder and then recompiles", () => {
                     const host = createServerHost([...filesWithSources, nodeModulesRecorgnizersText]);
                     const session = createSessionAndOpenFile(host);
-                    verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
+                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
                     host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
                     host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
                     host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
+                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
                     baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project has node_modules setup but doesnt have modules in typings folder and then recompiles`, session);
                 });
 
@@ -179,19 +183,19 @@ new C();`
                     const host = createServerHost([...filesWithSources, nodeModulesRecorgnizersText, recongnizerTextDistTypingFile]);
                     const session = createSessionAndOpenFile(host);
 
-                    verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
+                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
                     host.deleteFolder(recognizersTextDist, /*recursive*/ true);
                     host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
                     host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
+                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
 
                     host.ensureFileOrFolder(recongnizerTextDistTypingFile);
                     host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
                     host.runQueuedTimeoutCallbacks(); // Actual update
 
-                    verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
+                    verifyGetErrRequest({ session, files: [recognizersDateTimeSrcFile] });
                     baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project recompiles after deleting generated folders`, session);
                 });
             });

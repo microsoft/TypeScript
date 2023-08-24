@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadResolutionWithAny.ts ===
+//// [tests/cases/compiler/overloadResolutionWithAny.ts] ////
+
+=== overloadResolutionWithAny.ts ===
 var func: {
 >func : Symbol(func, Decl(overloadResolutionWithAny.ts, 0, 3))
 

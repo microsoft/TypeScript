@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseObjectLiteralsWithoutTypes.ts ===
+//// [tests/cases/compiler/parseObjectLiteralsWithoutTypes.ts] ////
+
+=== parseObjectLiteralsWithoutTypes.ts ===
 let x: { foo, bar }
 >x : { foo: any; bar: any; }
 >foo : any

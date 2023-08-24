@@ -1,26 +1,26 @@
-tests/cases/conformance/es2020/modules/1.ts(2,1): error TS2448: Block-scoped variable 'ns' used before its declaration.
-tests/cases/conformance/es2020/modules/1.ts(3,1): error TS2448: Block-scoped variable 'ns' used before its declaration.
+1.ts(2,1): error TS2448: Block-scoped variable 'ns' used before its declaration.
+1.ts(3,1): error TS2448: Block-scoped variable 'ns' used before its declaration.
 
 
-==== tests/cases/conformance/es2020/modules/0.ts (0 errors) ====
+==== 0.ts (0 errors) ====
     export const a = 1;
     export const b = 2;
     
-==== tests/cases/conformance/es2020/modules/1.ts (2 errors) ====
+==== 1.ts (2 errors) ====
     export * as ns from './0';
     ns.a;
     ~~
 !!! error TS2448: Block-scoped variable 'ns' used before its declaration.
-!!! related TS2728 tests/cases/conformance/es2020/modules/1.ts:4:5: 'ns' is declared here.
+!!! related TS2728 1.ts:4:5: 'ns' is declared here.
     ns.b;
     ~~
 !!! error TS2448: Block-scoped variable 'ns' used before its declaration.
-!!! related TS2728 tests/cases/conformance/es2020/modules/1.ts:4:5: 'ns' is declared here.
+!!! related TS2728 1.ts:4:5: 'ns' is declared here.
     let ns = {a: 1, b: 2}
     ns.a;
     ns.b;
     
-==== tests/cases/conformance/es2020/modules/2.ts (0 errors) ====
+==== 2.ts (0 errors) ====
     import * as foo from './1'
     
     foo.ns.a;

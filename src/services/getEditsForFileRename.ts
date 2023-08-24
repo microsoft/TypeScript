@@ -120,10 +120,12 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
                 if (foundExactMatch || propertyName !== "include" || !isArrayLiteralExpression(property.initializer)) return;
                 const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
                 if (includes.length === 0) return;
-                const matchers = getFileMatcherPatterns(configDir, /*excludes*/[], includes, useCaseSensitiveFileNames, currentDirectory);
+                const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
                 // If there isn't some include for this, add a new one.
-                if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
-                    !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
+                if (
+                    getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
+                    !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)
+                ) {
                     changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
                 }
                 return;
@@ -136,7 +138,7 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
                         updatePaths(property);
                     }
                     else if (propertyName === "paths") {
-                        forEachProperty(property.initializer, (pathsProperty) => {
+                        forEachProperty(property.initializer, pathsProperty => {
                             if (!isArrayLiteralExpression(pathsProperty.initializer)) return;
                             for (const e of pathsProperty.initializer.elements) {
                                 tryUpdateString(e);
@@ -194,30 +196,27 @@ function updateImports(
 
         const importingSourceFileMoved = newFromOld !== undefined || oldFromNew !== undefined;
 
-        updateImportsWorker(sourceFile, changeTracker,
-            referenceText => {
-                if (!pathIsRelative(referenceText)) return undefined;
-                const oldAbsolute = combinePathsSafe(oldImportFromDirectory, referenceText);
-                const newAbsolute = oldToNew(oldAbsolute);
-                return newAbsolute === undefined ? undefined : ensurePathIsNonModuleName(getRelativePathFromDirectory(newImportFromDirectory, newAbsolute, getCanonicalFileName));
-            },
-            importLiteral => {
-                const importedModuleSymbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
-                // No need to update if it's an ambient module^M
-                if (importedModuleSymbol?.declarations && importedModuleSymbol.declarations.some(d => isAmbientModule(d))) return undefined;
+        updateImportsWorker(sourceFile, changeTracker, referenceText => {
+            if (!pathIsRelative(referenceText)) return undefined;
+            const oldAbsolute = combinePathsSafe(oldImportFromDirectory, referenceText);
+            const newAbsolute = oldToNew(oldAbsolute);
+            return newAbsolute === undefined ? undefined : ensurePathIsNonModuleName(getRelativePathFromDirectory(newImportFromDirectory, newAbsolute, getCanonicalFileName));
+        }, importLiteral => {
+            const importedModuleSymbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
+            // No need to update if it's an ambient module^M
+            if (importedModuleSymbol?.declarations && importedModuleSymbol.declarations.some(d => isAmbientModule(d))) return undefined;
 
-                const toImport = oldFromNew !== undefined
-                    // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
-                    // TODO:GH#18217
-                    ? getSourceFileToImportFromResolved(importLiteral, resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost),
-                                                        oldToNew, allFiles)
-                    : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
+            const toImport = oldFromNew !== undefined
+                // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
+                // TODO:GH#18217
+                ? getSourceFileToImportFromResolved(importLiteral, resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, allFiles)
+                : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
 
-                // Need an update if the imported file moved, or the importing file moved and was using a relative path.
-                return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                    ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
-                    : undefined;
-            });
+            // Need an update if the imported file moved, or the importing file moved and was using a relative path.
+            return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
+                ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
+                : undefined;
+        });
     }
 }
 

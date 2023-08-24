@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds.ts] ////
+
 //// [interfaceExtendingClassWithProtecteds.ts]
 class Foo {
     protected x: string;

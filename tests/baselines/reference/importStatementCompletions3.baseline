@@ -34,7 +34,7 @@
               "kind": "text"
             }
           ],
-          "insertText": "import { foo$1 } from \"./\\\\$foo\";",
+          "insertText": "import { foo$1 } from \"./\\$foo\";",
           "replacementSpan": {
             "start": 0,
             "length": 8

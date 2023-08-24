@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts] ////
+
 //// [TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts]
 module A.B {
     export var x: number;

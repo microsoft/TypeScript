@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingFunctionReturningFunction.ts] ////
+
 //// [contextualTypingFunctionReturningFunction.ts]
 interface I {
 	a(s: string): void;

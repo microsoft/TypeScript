@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/umdDependencyCommentName2.ts] ////
+
 //// [umdDependencyCommentName2.ts]
 ///<amd-dependency path='bar' name='b'/>
 ///<amd-dependency path='foo'/>

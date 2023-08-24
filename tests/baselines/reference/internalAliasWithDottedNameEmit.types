@@ -1,4 +1,6 @@
-=== tests/cases/compiler/internalAliasWithDottedNameEmit.ts ===
+//// [tests/cases/compiler/internalAliasWithDottedNameEmit.ts] ////
+
+=== internalAliasWithDottedNameEmit.ts ===
 module a.b.c {
 >a : typeof a
 >b : typeof b

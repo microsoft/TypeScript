@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es3-declaration-amd.ts] ////
+
 //// [es3-declaration-amd.ts]
 class A
 {

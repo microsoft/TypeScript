@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowTypeByInstanceof.ts ===
+//// [tests/cases/compiler/narrowTypeByInstanceof.ts] ////
+
+=== narrowTypeByInstanceof.ts ===
     class Match {
 >Match : Match
 

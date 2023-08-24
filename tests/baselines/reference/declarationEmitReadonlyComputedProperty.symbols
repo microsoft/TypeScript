@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bug.ts ===
+//// [tests/cases/compiler/declarationEmitReadonlyComputedProperty.ts] ////
+
+=== bug.ts ===
 export const SYMBOL = Symbol()
 >SYMBOL : Symbol(SYMBOL, Decl(bug.ts, 0, 12))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -22,7 +24,7 @@ export function createInstance(): Interface {
   }
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { createInstance } from './bug'
 >createInstance : Symbol(createInstance, Decl(index.ts, 0, 8))
 

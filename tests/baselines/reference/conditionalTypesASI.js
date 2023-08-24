@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypesASI.ts] ////
+
 //// [conditionalTypesASI.ts]
 // Repro from #21637
 

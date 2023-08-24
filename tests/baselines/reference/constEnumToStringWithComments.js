@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constEnumToStringWithComments.ts] ////
+
 //// [constEnumToStringWithComments.ts]
 const enum Foo {
     X = 100,
@@ -29,9 +31,9 @@ var y0 = 0.5 /* Foo.Y */.toString();
 var y1 = 0.5 /* Foo["Y"] */.toString();
 var z0 = 2 /* Foo.Z */.toString();
 var z1 = 2 /* Foo["Z"] */.toString();
-var a0 = -1 /* Foo.A */.toString();
-var a1 = -1 /* Foo["A"] */.toString();
-var b0 = -1.5 /* Foo.B */.toString();
-var b1 = -1.5 /* Foo["B"] */.toString();
-var c0 = -1 /* Foo.C */.toString();
-var c1 = -1 /* Foo["C"] */.toString();
+var a0 = (-1 /* Foo.A */).toString();
+var a1 = (-1 /* Foo["A"] */).toString();
+var b0 = (-1.5 /* Foo.B */).toString();
+var b1 = (-1.5 /* Foo["B"] */).toString();
+var c0 = (-1 /* Foo.C */).toString();
+var c1 = (-1 /* Foo["C"] */).toString();

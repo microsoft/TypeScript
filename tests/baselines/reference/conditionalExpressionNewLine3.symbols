@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalExpressionNewLine3.ts ===
+//// [tests/cases/compiler/conditionalExpressionNewLine3.ts] ////
+
+=== conditionalExpressionNewLine3.ts ===
 var v = a ?
 >v : Symbol(v, Decl(conditionalExpressionNewLine3.ts, 0, 3))
 

@@ -68,6 +68,7 @@ import {
     FunctionLikeDeclaration,
     FunctionTypeNode,
     GeneratedIdentifier,
+    GeneratedIdentifierFlags,
     GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
     getAssignmentDeclarationKind,
@@ -310,7 +311,7 @@ export function getDefaultLibFileName(options: CompilerOptions): string {
         case ScriptTarget.ES2016:
             return "lib.es2016.full.d.ts";
         case ScriptTarget.ES2015:
-            return "lib.es6.d.ts";  // We don't use lib.es2015.full.d.ts due to breaking change.
+            return "lib.es6.d.ts"; // We don't use lib.es2015.full.d.ts due to breaking change.
         default:
             return "lib.d.ts";
     }
@@ -538,7 +539,7 @@ export function getTypeParameterOwner(d: Declaration): Declaration | undefined {
     }
 }
 
-export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
+export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration; name: Identifier; };
 
 export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
     return isParameter(node) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
@@ -604,7 +605,11 @@ export function getCombinedNodeFlagsAlwaysIncludeJSDoc(node: Declaration): Modif
 // list.  By calling this function, all those flags are combined so that the client can treat
 // the node as if it actually had those flags.
 export function getCombinedNodeFlags(node: Node): NodeFlags {
-    return getCombinedFlags(node, n => n.flags);
+    return getCombinedFlags(node, getNodeFlags);
+}
+
+function getNodeFlags(node: Node) {
+    return node.flags;
 }
 
 /** @internal */
@@ -616,10 +621,11 @@ export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "
  */
 export function validateLocaleAndSetLanguage(
     locale: string,
-    sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
-    errors?: Diagnostic[]) {
+    sys: { getExecutingFilePath(): string; resolvePath(path: string): string; fileExists(fileName: string): boolean; readFile(fileName: string): string | undefined; },
+    errors?: Diagnostic[],
+) {
     const lowerCaseLocale = locale.toLowerCase();
-    const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
+    const matchResult = /^([a-z]+)([_-]([a-z]+))?$/.exec(lowerCaseLocale);
 
     if (!matchResult) {
         if (errors) {
@@ -866,7 +872,7 @@ export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier 
 }
 
 /** @internal */
-export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName } {
+export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName; } {
     return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
 }
 
@@ -998,8 +1004,7 @@ export function getJSDocParameterTagsNoCache(param: ParameterDeclaration): reado
 
 function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
     const name = param.name.escapedText;
-    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag =>
-        isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
+    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag => isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
 }
 
 /**
@@ -1325,7 +1330,7 @@ export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
  *
  * @internal
  */
-export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot } {
+export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot; } {
     return isOptionalChainRoot(node.parent) && node.parent.expression === node;
 }
 
@@ -1531,6 +1536,14 @@ export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
 /** @internal */
 export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
     return isPrivateIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
+}
+
+/** @internal */
+export function isFileLevelReservedGeneratedIdentifier(node: GeneratedIdentifier) {
+    const flags = node.emitNode.autoGenerate.flags;
+    return !!(flags & GeneratedIdentifierFlags.FileLevel)
+        && !!(flags & GeneratedIdentifierFlags.Optimistic)
+        && !!(flags & GeneratedIdentifierFlags.ReservedInNestedScopes);
 }
 
 // Private Identifiers
@@ -1788,13 +1801,11 @@ export function isAssignmentPattern(node: Node): node is AssignmentPattern {
         || kind === SyntaxKind.ObjectLiteralExpression;
 }
 
-
 export function isArrayBindingElement(node: Node): node is ArrayBindingElement {
     const kind = node.kind;
     return kind === SyntaxKind.BindingElement
         || kind === SyntaxKind.OmittedExpression;
 }
-
 
 /**
  * Determines whether the BindingOrAssignmentElement is a BindingElement-like declaration
@@ -2333,9 +2344,7 @@ function isStatementKindButNotDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.VariableStatement
         || kind === SyntaxKind.WhileStatement
         || kind === SyntaxKind.WithStatement
-        || kind === SyntaxKind.NotEmittedStatement
-        || kind === SyntaxKind.EndOfDeclarationMarker
-        || kind === SyntaxKind.MergeDeclarationMarker;
+        || kind === SyntaxKind.NotEmittedStatement;
 }
 
 /** @internal */
@@ -2405,7 +2414,8 @@ export function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression
     const kind = node.kind;
     return kind === SyntaxKind.ThisKeyword
         || kind === SyntaxKind.Identifier
-        || kind === SyntaxKind.PropertyAccessExpression;
+        || kind === SyntaxKind.PropertyAccessExpression
+        || kind === SyntaxKind.JsxNamespacedName;
 }
 
 export function isJsxChild(node: Node): node is JsxChild {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts] ////
+
+=== derivedClassSuperStatementPosition.ts ===
 class DerivedBasic extends Object {
 >DerivedBasic : Symbol(DerivedBasic, Decl(derivedClassSuperStatementPosition.ts, 0, 0))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

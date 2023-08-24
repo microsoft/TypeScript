@@ -1,7 +1,7 @@
-tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral8.ts(1,1): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '-0o3'.
+scannerNumericLiteral8.ts(1,1): error TS1121: Octal literals are not allowed. Use the syntax '-0o3'.
 
 
-==== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral8.ts (1 errors) ====
+==== scannerNumericLiteral8.ts (1 errors) ====
     -03
     ~~~
-!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '-0o3'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '-0o3'.

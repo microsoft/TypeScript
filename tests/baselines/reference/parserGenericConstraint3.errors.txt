@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint3.ts(1,19): error TS2304: Cannot find name 'List'.
+parserGenericConstraint3.ts(1,19): error TS2304: Cannot find name 'List'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint3.ts (1 errors) ====
+==== parserGenericConstraint3.ts (1 errors) ====
     class C<T extends List<T>> {
                       ~~~~
 !!! error TS2304: Cannot find name 'List'.
