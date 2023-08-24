@@ -6214,7 +6214,9 @@ namespace Parser {
         let dotDotDotToken: DotDotDotToken | undefined;
         let expression: Expression | undefined;
         if (token() !== SyntaxKind.CloseBraceToken) {
-            dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            if (!inExpressionContext) {
+                dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            }
             // Only an AssignmentExpression is valid here per the JSX spec,
             // but we can unambiguously parse a comma sequence and provide
             // a better error message in grammar checking.
