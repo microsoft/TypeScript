@@ -170,12 +170,15 @@ fc1((a: string, b: number) => {}, "hello", 42);
 fc2((a: string, b: number) => {}, "hello", 42);
 
 declare function fd1<const T extends string[] | number[]>(args: T): T;
-declare function fd2<const T extends readonly string[] | readonly number[]>(args: T): T;
+declare function fd2<const T extends string[] | readonly number[]>(args: T): T;
+declare function fd3<const T extends readonly string[] | readonly number[]>(args: T): T;
 
 fd1(["hello", "world"]);
 fd1([1, 2, 3]);
 fd2(["hello", "world"]);
 fd2([1, 2, 3]);
+fd3(["hello", "world"]);
+fd3([1, 2, 3]);
 
 declare function fn1<const T extends { foo: unknown[] }[]>(...args: T): T;
 

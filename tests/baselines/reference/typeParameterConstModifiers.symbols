@@ -569,12 +569,19 @@ declare function fd1<const T extends string[] | number[]>(args: T): T;
 >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 169, 21))
 >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 169, 21))
 
-declare function fd2<const T extends readonly string[] | readonly number[]>(args: T): T;
+declare function fd2<const T extends string[] | readonly number[]>(args: T): T;
 >fd2 : Symbol(fd2, Decl(typeParameterConstModifiers.ts, 169, 70))
 >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 170, 21))
->args : Symbol(args, Decl(typeParameterConstModifiers.ts, 170, 76))
+>args : Symbol(args, Decl(typeParameterConstModifiers.ts, 170, 67))
 >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 170, 21))
 >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 170, 21))
+
+declare function fd3<const T extends readonly string[] | readonly number[]>(args: T): T;
+>fd3 : Symbol(fd3, Decl(typeParameterConstModifiers.ts, 170, 79))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 171, 21))
+>args : Symbol(args, Decl(typeParameterConstModifiers.ts, 171, 76))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 171, 21))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 171, 21))
 
 fd1(["hello", "world"]);
 >fd1 : Symbol(fd1, Decl(typeParameterConstModifiers.ts, 167, 47))
@@ -588,16 +595,22 @@ fd2(["hello", "world"]);
 fd2([1, 2, 3]);
 >fd2 : Symbol(fd2, Decl(typeParameterConstModifiers.ts, 169, 70))
 
+fd3(["hello", "world"]);
+>fd3 : Symbol(fd3, Decl(typeParameterConstModifiers.ts, 170, 79))
+
+fd3([1, 2, 3]);
+>fd3 : Symbol(fd3, Decl(typeParameterConstModifiers.ts, 170, 79))
+
 declare function fn1<const T extends { foo: unknown[] }[]>(...args: T): T;
->fn1 : Symbol(fn1, Decl(typeParameterConstModifiers.ts, 175, 15))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 177, 21))
->foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 177, 38))
->args : Symbol(args, Decl(typeParameterConstModifiers.ts, 177, 59))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 177, 21))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 177, 21))
+>fn1 : Symbol(fn1, Decl(typeParameterConstModifiers.ts, 178, 15))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 180, 21))
+>foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 180, 38))
+>args : Symbol(args, Decl(typeParameterConstModifiers.ts, 180, 59))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 180, 21))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 180, 21))
 
 fn1({ foo: ["hello", 123] }, { foo: [true]});
->fn1 : Symbol(fn1, Decl(typeParameterConstModifiers.ts, 175, 15))
->foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 179, 5))
->foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 179, 30))
+>fn1 : Symbol(fn1, Decl(typeParameterConstModifiers.ts, 178, 15))
+>foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 182, 5))
+>foo : Symbol(foo, Decl(typeParameterConstModifiers.ts, 182, 30))
 

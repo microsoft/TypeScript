@@ -637,8 +637,12 @@ declare function fd1<const T extends string[] | number[]>(args: T): T;
 >fd1 : <const T extends string[] | number[]>(args: T) => T
 >args : T
 
-declare function fd2<const T extends readonly string[] | readonly number[]>(args: T): T;
->fd2 : <const T extends readonly string[] | readonly number[]>(args: T) => T
+declare function fd2<const T extends string[] | readonly number[]>(args: T): T;
+>fd2 : <const T extends string[] | readonly number[]>(args: T) => T
+>args : T
+
+declare function fd3<const T extends readonly string[] | readonly number[]>(args: T): T;
+>fd3 : <const T extends readonly string[] | readonly number[]>(args: T) => T
 >args : T
 
 fd1(["hello", "world"]);
@@ -657,15 +661,30 @@ fd1([1, 2, 3]);
 >3 : 3
 
 fd2(["hello", "world"]);
->fd2(["hello", "world"]) : readonly ["hello", "world"]
->fd2 : <const T extends readonly string[] | readonly number[]>(args: T) => T
+>fd2(["hello", "world"]) : ["hello", "world"]
+>fd2 : <const T extends string[] | readonly number[]>(args: T) => T
 >["hello", "world"] : ["hello", "world"]
 >"hello" : "hello"
 >"world" : "world"
 
 fd2([1, 2, 3]);
->fd2([1, 2, 3]) : readonly [1, 2, 3]
->fd2 : <const T extends readonly string[] | readonly number[]>(args: T) => T
+>fd2([1, 2, 3]) : [1, 2, 3]
+>fd2 : <const T extends string[] | readonly number[]>(args: T) => T
+>[1, 2, 3] : [1, 2, 3]
+>1 : 1
+>2 : 2
+>3 : 3
+
+fd3(["hello", "world"]);
+>fd3(["hello", "world"]) : readonly ["hello", "world"]
+>fd3 : <const T extends readonly string[] | readonly number[]>(args: T) => T
+>["hello", "world"] : ["hello", "world"]
+>"hello" : "hello"
+>"world" : "world"
+
+fd3([1, 2, 3]);
+>fd3([1, 2, 3]) : readonly [1, 2, 3]
+>fd3 : <const T extends readonly string[] | readonly number[]>(args: T) => T
 >[1, 2, 3] : [1, 2, 3]
 >1 : 1
 >2 : 2
