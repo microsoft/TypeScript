@@ -9804,8 +9804,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 }
                             });
 
-                            Debug.assert(setter && isFunctionLikeDeclaration(setter));
-                            const paramSymbol: Symbol | undefined = getSignatureFromDeclaration(setter).parameters[0];
+                            Debug.assert(!!setter);
+                            const paramSymbol = isFunctionLikeDeclaration(setter) ? getSignatureFromDeclaration(setter).parameters[0] : undefined;
 
                             result.push(setTextRange(
                                 factory.createSetAccessorDeclaration(
