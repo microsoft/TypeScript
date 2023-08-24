@@ -126,7 +126,6 @@ import {
     isInterfaceDeclaration,
     isJsonSourceFile,
     isLateVisibilityPaintedStatement,
-    isLiteralExpression,
     isLiteralImportTypeNode,
     isMappedTypeNode,
     isMethodDeclaration,
@@ -778,9 +777,6 @@ export function transformDeclarations(context: TransformationContext) {
 
     function ensureNoInitializer(node: CanHaveLiteralInitializer) {
         if (shouldPrintWithInitializer(node)) {
-            if(isolatedDeclarations && node.initializer && isLiteralExpression(node.initializer)) {
-                return node.initializer;
-            }
             return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
         }
         return undefined;
@@ -1806,13 +1802,12 @@ export function transformDeclarations(context: TransformationContext) {
                 return cleanup(factory.updateEnumDeclaration(input, factory.createNodeArray(ensureModifiers(input)), input.name, factory.createNodeArray(mapDefined(input.members, m => {
                     if (shouldStripInternal(m)) return;
                     if (isolatedDeclarations) {
-                        if (!resolver.isLiteralConstDeclaration(m)) {
+                        if (m.initializer && !resolver.isLiteralConstDeclaration(m)) {
                             reportIsolatedDeclarationError(m);
                         }
-                        return m;
                     }
                     // Rewrite enum values to their constants, if available
-                    const constValue = isolatedDeclarations? undefined : resolver.getConstantValue(m);
+                    const constValue = resolver.getConstantValue(m);
                     return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
                 }))));
             }
