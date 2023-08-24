@@ -1,4 +1,6 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInCJS3.ts] ////
+
+=== 0.ts ===
 export class B {
 >B : B
 
@@ -7,7 +9,7 @@ export class B {
 >"I am B" : "I am B"
 }
 
-=== tests/cases/conformance/dynamicImport/2.ts ===
+=== 2.ts ===
 // We use Promise<any> for now as there is no way to specify shape of module object
 function foo(x: Promise<any>) {
 >foo : (x: Promise<any>) => void
@@ -40,6 +42,6 @@ function foo(x: Promise<any>) {
 foo(import("./0"));
 >foo(import("./0")) : void
 >foo : (x: Promise<any>) => void
->import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>import("./0") : Promise<typeof import("0")>
 >"./0" : "./0"
 

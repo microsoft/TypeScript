@@ -1,10 +1,10 @@
-import * as ts from "./_namespaces/ts";
-import * as vfs from "./_namespaces/vfs";
-import * as Utils from "./_namespaces/Utils";
-import * as vpath from "./_namespaces/vpath";
-import * as documents from "./_namespaces/documents";
 import * as collections from "./_namespaces/collections";
+import * as documents from "./_namespaces/documents";
 import * as Harness from "./_namespaces/Harness";
+import * as ts from "./_namespaces/ts";
+import * as Utils from "./_namespaces/Utils";
+import * as vfs from "./_namespaces/vfs";
+import * as vpath from "./_namespaces/vpath";
 
 /**
  * Fake implementations of various compiler dependencies.
@@ -221,6 +221,18 @@ export class ParseConfigHost implements ts.ParseConfigHost {
     public readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
         return this.sys.readDirectory(path, extensions, excludes, includes, depth);
     }
+
+    public realpath(path: string): string {
+        return this.sys.realpath(path);
+    }
+
+    public getDirectories(path: string): string[] {
+        return this.sys.getDirectories(path);
+    }
+
+    public getCurrentDirectory(): string {
+        return this.sys.getCurrentDirectory();
+    }
 }
 
 /**
@@ -243,7 +255,7 @@ export class CompilerHost implements ts.CompilerHost {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
-        this._newLine = ts.getNewLineCharacter(options, () => this.sys.newLine);
+        this._newLine = ts.getNewLineCharacter(options);
         this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
         this._setParentNodes = setParentNodes;
         this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
@@ -374,9 +386,11 @@ export class CompilerHost implements ts.CompilerHost {
             while (fs.shadowRoot) {
                 try {
                     const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName) : undefined!; // TODO: GH#18217
-                    if (shadowRootStats.dev !== stats.dev ||
+                    if (
+                        shadowRootStats.dev !== stats.dev ||
                         shadowRootStats.ino !== stats.ino ||
-                        shadowRootStats.mtimeMs !== stats.mtimeMs) {
+                        shadowRootStats.mtimeMs !== stats.mtimeMs
+                    ) {
                         break;
                     }
 
@@ -413,7 +427,7 @@ export interface ExpectedDiagnosticRelatedInformation extends ExpectedDiagnostic
 
 export enum DiagnosticKind {
     Error = "Error",
-    Status = "Status"
+    Status = "Status",
 }
 export interface ExpectedErrorDiagnostic extends ExpectedDiagnosticRelatedInformation {
     relatedInformation?: ExpectedDiagnosticRelatedInformation[];
@@ -479,7 +493,7 @@ function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
         expectedErrorDiagnosticToText(errorOrStatus);
 }
 
-function diagnosticMessageChainToText({ messageText, next}: ts.DiagnosticMessageChain, indent = 0) {
+function diagnosticMessageChainToText({ messageText, next }: ts.DiagnosticMessageChain, indent = 0) {
     let text = indentedText(indent, messageText);
     if (next) {
         indent++;
@@ -576,18 +590,26 @@ export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuil
     assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]) {
         const actual = this.diagnostics.slice().map(diagnosticToText);
         const expected = expectedDiagnostics.map(expectedDiagnosticToText);
-        assert.deepEqual(actual, expected, `Diagnostic arrays did not match:
+        assert.deepEqual(
+            actual,
+            expected,
+            `Diagnostic arrays did not match:
 Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
-Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
+Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`,
+        );
     }
 
     assertErrors(...expectedDiagnostics: ExpectedErrorDiagnostic[]) {
         const actual = this.diagnostics.filter(d => d.kind === DiagnosticKind.Error).map(diagnosticToText);
         const expected = expectedDiagnostics.map(expectedDiagnosticToText);
-        assert.deepEqual(actual, expected, `Diagnostics arrays did not match:
+        assert.deepEqual(
+            actual,
+            expected,
+            `Diagnostics arrays did not match:
 Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
 Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}
-Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`);
+Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`,
+        );
     }
 
     printDiagnostics(header = "== Diagnostics ==") {
@@ -602,4 +624,3 @@ Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*
         return this.sys.now();
     }
 }
-

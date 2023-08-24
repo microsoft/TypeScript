@@ -1,327 +1,249 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts ===
-// /*FIND ALL REFS*/var [|f|] = x => x + 1;
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}f|] = x => x + 1;|>
 // [|f|](12);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts",
-      "kind": "var",
-      "name": "var f: (x: any) => any",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts ===
+  // /*FIND ALL REFS*/<|var [|f|] = x => x + 1;|>
+  // f(12);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var f: (x: any) => any",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts ===
-// var /*FIND ALL REFS*/[|f|] = x => x + 1;
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}f|] = x => x + 1;|>
 // [|f|](12);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts",
-      "kind": "var",
-      "name": "var f: (x: any) => any",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts ===
+  // <|var /*FIND ALL REFS*/[|f|] = x => x + 1;|>
+  // f(12);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var f: (x: any) => any",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts ===
-// var [|f|] = x => x + 1;
+// <|var [|{| isWriteAccess: true |}f|] = x => x + 1;|>
 // /*FIND ALL REFS*/[|f|](12);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts",
-      "kind": "var",
-      "name": "var f: (x: any) => any",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfArrowFunction.ts ===
+  // <|var [|f|] = x => x + 1;|>
+  // /*FIND ALL REFS*/f(12);
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var f: (x: any) => any",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "x",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

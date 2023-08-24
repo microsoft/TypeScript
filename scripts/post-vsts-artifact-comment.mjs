@@ -1,4 +1,6 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 import assert from "assert";
 import ado from "azure-devops-node-api";
 import fetch from "node-fetch";
@@ -23,7 +25,7 @@ async function main() {
     tgzUrl.search = `artifactName=tgz&fileId=${file.blob.id}&fileName=${file.path}`;
     const link = "" + tgzUrl;
     const gh = new Octokit({
-        auth: process.argv[2]
+        auth: process.argv[2],
     });
 
     // Please keep the strings "an installable tgz" and "packed" in this message, as well as the devDependencies section,
@@ -42,7 +44,7 @@ async function main() {
 }
 \`\`\`
 and then running \`npm install\`.
-`
+`,
     });
 
     // Temporarily disable until we get access controls set up right
@@ -55,13 +57,13 @@ main().catch(async e => {
     process.exitCode = 1;
     if (process.env.SOURCE_ISSUE) {
         const gh = new Octokit({
-            auth: process.argv[2]
+            auth: process.argv[2],
         });
         await gh.issues.createComment({
             issue_number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
-            body: `Hey @${process.env.REQUESTING_USER}, something went wrong when looking for the build artifact. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)).`
+            body: `Hey @${process.env.REQUESTING_USER}, something went wrong when looking for the build artifact. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)).`,
         });
     }
 });

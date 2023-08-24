@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getAndSetNotIdenticalType2.ts ===
+//// [tests/cases/compiler/getAndSetNotIdenticalType2.ts] ////
+
+=== getAndSetNotIdenticalType2.ts ===
 class A<T> { foo: T; }
 >A : A<T>
 >foo : T

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts] ////
+
 //// [destructuringParameterProperties5.ts]
 type ObjType1 = { x: number; y: string; z: boolean }
 type TupleType1 = [ObjType1, number, string]

@@ -1,6 +1,15 @@
-import { normalize, relative } from "path";
 import assert from "assert";
-import { readFileSync, writeFileSync } from "fs";
+import {
+    execFileSync,
+} from "child_process";
+import {
+    readFileSync,
+    writeFileSync,
+} from "fs";
+import {
+    normalize,
+    relative,
+} from "path";
 import url from "url";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
@@ -11,6 +20,7 @@ const __filename = url.fileURLToPath(new URL(import.meta.url));
     name: string;
     version: string;
     keywords: string[];
+    gitHead?: string;
 }} PackageJson
  */
 
@@ -51,6 +61,7 @@ function main() {
     // Finally write the changes to disk.
     // Modify the package.json structure
     packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
+    packageJsonValue.gitHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
     writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
     writeFileSync(tsFilePath, modifiedTsFileContents);
 }
@@ -87,7 +98,7 @@ function updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, nightlyPatc
  * @returns {{ majorMinor: string, patch: string }}
  */
 function parsePackageJsonVersion(versionString) {
-    const versionRgx = /(\d+\.\d+)\.(\d+)($|\-)/;
+    const versionRgx = /(\d+\.\d+)\.(\d+)($|-)/;
     const match = versionString.match(versionRgx);
     assert(match !== null, "package.json 'version' should match " + versionRgx.toString());
     return { majorMinor: match[1], patch: match[2] };

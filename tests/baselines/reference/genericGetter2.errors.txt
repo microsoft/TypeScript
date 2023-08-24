@@ -1,7 +1,7 @@
-tests/cases/compiler/genericGetter2.ts(5,14): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+genericGetter2.ts(5,14): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/genericGetter2.ts (1 errors) ====
+==== genericGetter2.ts (1 errors) ====
     class A<T> { }
     
     class C<T> {

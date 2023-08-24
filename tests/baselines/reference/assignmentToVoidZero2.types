@@ -1,15 +1,17 @@
-=== tests/cases/conformance/salsa/assignmentToVoidZero2.js ===
+//// [tests/cases/conformance/salsa/assignmentToVoidZero2.ts] ////
+
+=== assignmentToVoidZero2.js ===
 exports.j = 1;
 >exports.j = 1 : 1
 >exports.j : 1
->exports : typeof import("tests/cases/conformance/salsa/assignmentToVoidZero2")
+>exports : typeof import("assignmentToVoidZero2")
 >j : 1
 >1 : 1
 
 exports.k = void 0;
 >exports.k = void 0 : undefined
 >exports.k : any
->exports : typeof import("tests/cases/conformance/salsa/assignmentToVoidZero2")
+>exports : typeof import("assignmentToVoidZero2")
 >k : any
 >void 0 : undefined
 >0 : 0
@@ -74,7 +76,7 @@ c.p + c.q
 >c : C
 >q : any
 
-=== tests/cases/conformance/salsa/importer.js ===
+=== importer.js ===
 import { j, k } from './assignmentToVoidZero2'
 >j : 1
 >k : any

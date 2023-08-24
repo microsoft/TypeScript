@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInObjectLiterals2.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInObjectLiterals2.ts] ////
+
+=== thisTypeInObjectLiterals2.ts ===
 // In methods of an object literal with no contextual type, 'this' has the type
 // of the object literal.
 
@@ -141,7 +143,6 @@ let p1: Point = {
 
 let p2: Point | null = {
 >p2 : Point | null
->null : null
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
@@ -240,7 +241,6 @@ let p3: Point | undefined = {
 
 let p4: Point | null | undefined = {
 >p4 : Point | null | undefined
->null : null
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
@@ -345,7 +345,6 @@ f1({
 declare function f2(p: Point | null | undefined): void;
 >f2 : (p: Point | null | undefined) => void
 >p : Point | null | undefined
->null : null
 
 f2({
 >f2({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void

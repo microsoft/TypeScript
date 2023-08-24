@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataNoLibIsolatedModulesTypes.ts] ////
+
 //// [decoratorMetadataNoLibIsolatedModulesTypes.ts]
 export class B {
     @Decorate

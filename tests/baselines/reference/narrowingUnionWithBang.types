@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingUnionWithBang.ts ===
+//// [tests/cases/compiler/narrowingUnionWithBang.ts] ////
+
+=== narrowingUnionWithBang.ts ===
 type WorkingType = {
 >WorkingType : { thing?: { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Error9'; message: string; } | { name: 'Correct'; id: string; } | undefined; }
 
@@ -50,7 +52,6 @@ const working: WorkingType = null as unknown as WorkingType;
 >working : WorkingType
 >null as unknown as WorkingType : WorkingType
 >null as unknown : unknown
->null : null
 
 if (working.thing!.name !== "Correct") {
 >working.thing!.name !== "Correct" : boolean
@@ -135,7 +136,6 @@ const borked: BorkedType = null as unknown as BorkedType;
 >borked : BorkedType
 >null as unknown as BorkedType : BorkedType
 >null as unknown : unknown
->null : null
 
 if (borked.thing!.name !== "Correct") {
 >borked.thing!.name !== "Correct" : boolean
@@ -220,7 +220,6 @@ const fixed: FixedType = null as unknown as FixedType;
 >fixed : FixedType
 >null as unknown as FixedType : FixedType
 >null as unknown : unknown
->null : null
 
 if (fixed.thing?.name !== "Correct") {
 >fixed.thing?.name !== "Correct" : boolean

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constEnumDeclarations.ts ===
+//// [tests/cases/compiler/constEnumDeclarations.ts] ////
+
+=== constEnumDeclarations.ts ===
 const enum E {
 >E : Symbol(E, Decl(constEnumDeclarations.ts, 0, 0))
 

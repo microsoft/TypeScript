@@ -1,19 +1,26 @@
-import del from "del";
+import {
+    CancelError,
+} from "@esfx/canceltoken";
+import chalk from "chalk";
 import fs from "fs";
 import os from "os";
 import path from "path";
-import chalk from "chalk";
+
+import {
+    findUpFile,
+    findUpRoot,
+} from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
-import { exec } from "./utils.mjs";
-import { findUpFile, findUpRoot } from "./findUpDir.mjs";
-import { CancelError } from "@esfx/canceltoken";
+import {
+    exec,
+    ExecError,
+    rimraf,
+} from "./utils.mjs";
 
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
-export const localRwcBaseline = "internal/baselines/rwc/local";
-export const refRwcBaseline = "internal/baselines/rwc/reference";
-export const localTest262Baseline = "internal/baselines/test262/local";
+export const coverageDir = "coverage";
 
 /**
  * @param {string} runJs
@@ -24,7 +31,7 @@ export const localTest262Baseline = "internal/baselines/test262/local";
  * @param {boolean} [options.watching]
  */
 export async function runConsoleTests(runJs, defaultReporter, runInParallel, options = {}) {
-    let testTimeout = cmdLineOptions.timeout;
+    const testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
@@ -35,20 +42,20 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     const keepFailed = cmdLineOptions.keepFailed;
     const shards = +cmdLineOptions.shards || undefined;
     const shardId = +cmdLineOptions.shardId || undefined;
+    const coverage = cmdLineOptions.coverage;
     if (!cmdLineOptions.dirty) {
         if (options.watching) {
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
         }
         await cleanTestDirs();
+        await rimraf(coverageDir);
 
         if (options.token?.signaled) {
             return;
         }
     }
 
-    if (fs.existsSync(testConfigFile)) {
-        fs.unlinkSync(testConfigFile);
-    }
+    await rimraf(testConfigFile);
 
     let workerCount, taskConfigsFolder;
     if (runInParallel) {
@@ -58,14 +65,11 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         do {
             taskConfigsFolder = prefix + i;
             i++;
-        } while (fs.existsSync(taskConfigsFolder));
+        }
+        while (fs.existsSync(taskConfigsFolder));
         fs.mkdirSync(taskConfigsFolder);
 
         workerCount = cmdLineOptions.workers;
-    }
-
-    if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 400000;
     }
 
     if (options.watching) {
@@ -109,7 +113,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             args.push("--no-colors");
         }
         if (inspect !== undefined) {
-            args.unshift((inspect === "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
+            args.unshift((inspect === "" || inspect === true) ? "--inspect-brk" : "--inspect-brk=" + inspect);
             args.push("-t", "0");
         }
         else {
@@ -128,25 +132,32 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     /** @type {Error | undefined} */
     let error;
 
+    const savedNodeEnv = process.env.NODE_ENV;
+    const savedNodeV8Coverage = process.env.NODE_V8_COVERAGE;
     try {
-        setNodeEnvToDevelopment();
+        process.env.NODE_ENV = "development";
+        if (coverage) {
+            process.env.NODE_V8_COVERAGE = path.resolve(coverageDir, "tmp");
+        }
 
-        const { exitCode } = await exec(process.execPath, args, { token: options.token });
-        if (exitCode !== 0) {
-            errorStatus = exitCode;
-            error = new Error(`Process exited with status code ${errorStatus}.`);
+        await exec(process.execPath, args, { token: options.token });
+        if (coverage) {
+            await exec("npm", ["--prefer-offline", "exec", "--", "c8", "report"], { token: options.token });
         }
     }
     catch (e) {
-        errorStatus = undefined;
+        errorStatus = e instanceof ExecError ? e.exitCode ?? undefined : undefined;
         error = /** @type {Error} */ (e);
     }
     finally {
-        restoreSavedNodeEnv();
+        if (coverage) {
+            process.env.NODE_V8_COVERAGE = savedNodeV8Coverage;
+        }
+        process.env.NODE_ENV = savedNodeEnv;
     }
 
-    await del("test.config");
-    await deleteTemporaryProjectOutput();
+    await rimraf("test.config");
+    await rimraf(path.join(localBaseline, "projectOutput"));
 
     if (error !== undefined) {
         if (error instanceof CancelError) {
@@ -164,8 +175,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 }
 
 export async function cleanTestDirs() {
-    await del([localBaseline, localRwcBaseline]);
-    await fs.promises.mkdir(localRwcBaseline, { recursive: true });
+    await rimraf(localBaseline);
     await fs.promises.mkdir(localBaseline, { recursive: true });
 }
 
@@ -175,9 +185,9 @@ export async function cleanTestDirs() {
  * @param {string} runners
  * @param {boolean} light
  * @param {string} [taskConfigsFolder]
- * @param {string | number} [workerCount]
+ * @param {number} [workerCount]
  * @param {string} [stackTraceLimit]
- * @param {string | number} [timeout]
+ * @param {number} [timeout]
  * @param {boolean} [keepFailed]
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]
@@ -194,30 +204,15 @@ export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, wo
         timeout,
         keepFailed,
         shards,
-        shardId
+        shardId,
     });
     console.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
-}
-
-/** @type {string | undefined} */
-let savedNodeEnv;
-function setNodeEnvToDevelopment() {
-    savedNodeEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = "development";
-}
-
-function restoreSavedNodeEnv() {
-    process.env.NODE_ENV = savedNodeEnv;
-}
-
-function deleteTemporaryProjectOutput() {
-    return del(path.join(localBaseline, "projectOutput/"));
 }
 
 /**
  * @param {string} text
  */
 function regExpEscape(text) {
-    return text.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
+    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

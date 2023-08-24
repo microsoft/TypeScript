@@ -127,7 +127,7 @@ var SpecializedWidget;
         return new Widget2();
     }
     SpecializedWidget.createWidget2 = createWidget2;
-})(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
+})(SpecializedWidget || (exports.SpecializedWidget = SpecializedWidget = {}));
 //// [privacyCannotNameVarTypeDeclFile_exporter.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -218,7 +218,7 @@ declare module "GlobalWidgets" {
         name: string;
     }
     function createWidget3(): Widget3;
-    module SpecializedGlobalWidget {
+    namespace SpecializedGlobalWidget {
         class Widget4 {
             name: string;
         }
@@ -230,7 +230,7 @@ export declare class Widget1 {
     name: string;
 }
 export declare function createWidget1(): Widget1;
-export declare module SpecializedWidget {
+export declare namespace SpecializedWidget {
     class Widget2 {
         name: string;
     }

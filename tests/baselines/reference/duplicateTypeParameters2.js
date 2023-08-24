@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateTypeParameters2.ts] ////
+
 //// [duplicateTypeParameters2.ts]
 class A { public foo() { } }
 class B { public bar() { } }

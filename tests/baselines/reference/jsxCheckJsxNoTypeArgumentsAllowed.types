@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/component.d.ts ===
+//// [tests/cases/conformance/jsx/jsxCheckJsxNoTypeArgumentsAllowed.tsx] ////
+
+=== component.d.ts ===
 import * as React from "react";
 >React : typeof React
 
@@ -20,7 +22,7 @@ export interface Prop {
 >b : string
 }
 
-=== tests/cases/conformance/jsx/file.jsx ===
+=== file.jsx ===
 import { MyComp, Prop } from "./component";
 >MyComp : typeof MyComp
 >Prop : any

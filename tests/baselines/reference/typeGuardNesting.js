@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardNesting.ts] ////
+
 //// [typeGuardNesting.ts]
 let strOrBool: string|boolean;
 if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'string') {

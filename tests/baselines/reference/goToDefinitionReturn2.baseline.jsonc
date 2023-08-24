@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionReturn2.ts ===
+// function foo() {
+//     return [|() => {
+//         /*GOTO DEF*/return 10;
+//     }|]
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "(Anonymous function)",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

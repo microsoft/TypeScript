@@ -1,35 +1,35 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
-    checkNumberOfInferredProjects,
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 const aTs: File = {
     path: "/a.ts",
-    content: `import { B } from "./b";`
+    content: `import { B } from "./b";`,
 };
 const bDts: File = {
     path: "/b.d.ts",
-    content: `export declare class B {}`
+    content: `export declare class B {}`,
 };
 const bJs: File = {
     path: "/b.js",
-    content: `export class B {}`
+    content: `export class B {}`,
 };
 describe("unittests:: tsserver:: auxiliaryProject", () => {
     it("AuxiliaryProject does not remove scrips from InferredProject", () => {
         const host = createServerHost([aTs, bDts, bJs]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         const projectService = session.getProjectService();
         openFilesForSession([aTs], session);
 
         // Open file is in inferred project
-        checkNumberOfInferredProjects(projectService, 1);
         const inferredProject = projectService.inferredProjects[0];
 
         // getNoDtsResolutionProject will create an AuxiliaryProject with a.ts and b.js
@@ -52,5 +52,6 @@ describe("unittests:: tsserver:: auxiliaryProject", () => {
         assert(!bJsScriptInfo.isOrphan());
         assert(bJsScriptInfo.isContainedByBackgroundProject());
         assert.equal(bJsScriptInfo.getDefaultProject().projectKind, ts.server.ProjectKind.Inferred);
+        baselineTsserverLogs("auxiliaryProject", "does not remove scrips from InferredProject", session);
     });
 });

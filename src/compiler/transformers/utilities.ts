@@ -1,4 +1,5 @@
 import {
+    __String,
     AccessorDeclaration,
     AllDecorators,
     append,
@@ -11,24 +12,24 @@ import {
     ClassExpression,
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
-    CompilerOptions,
     CompoundAssignmentOperator,
     CoreTransformationContext,
     createExternalHelpersImportDeclarationIfNeeded,
-    createMultiMap,
     Decorator,
-    EmitResolver,
     ExportAssignment,
     ExportDeclaration,
     ExportSpecifier,
     Expression,
     filter,
+    formatGeneratedName,
     FunctionDeclaration,
     FunctionLikeDeclaration,
+    GeneratedIdentifierFlags,
     getAllAccessorDeclarations,
     getDecorators,
     getFirstConstructorWithBody,
     getNamespaceDeclarationNode,
+    getNodeForGeneratedName,
     getNodeId,
     getOriginalNode,
     hasDecorators,
@@ -47,8 +48,11 @@ import {
     isDefaultImport,
     isExpressionStatement,
     isGeneratedIdentifier,
+    isGeneratedPrivateIdentifier,
     isIdentifier,
     isKeyword,
+    isLocalName,
+    isMemberName,
     isMethodOrAccessor,
     isNamedExports,
     isNamedImports,
@@ -58,6 +62,7 @@ import {
     isStatic,
     isStringLiteralLike,
     isSuperCall,
+    isTryStatement,
     LogicalOperatorOrHigher,
     map,
     MethodDeclaration,
@@ -67,6 +72,7 @@ import {
     Node,
     NodeArray,
     parameterIsThisKeyword,
+    PrivateIdentifier,
     PrivateIdentifierAccessorDeclaration,
     PrivateIdentifierAutoAccessorPropertyDeclaration,
     PrivateIdentifierMethodDeclaration,
@@ -78,6 +84,7 @@ import {
     SuperCall,
     SyntaxKind,
     TransformationContext,
+    unorderedRemoveItem,
     VariableDeclaration,
     VariableStatement,
 } from "../_namespaces/ts";
@@ -92,7 +99,7 @@ export function getOriginalNodeId(node: Node) {
 export interface ExternalModuleInfo {
     externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
     externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
-    exportSpecifiers: Map<string, ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
+    exportSpecifiers: IdentifierNameMap<ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
     exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported
     exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
@@ -154,9 +161,11 @@ export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): bool
 }
 
 /** @internal */
-export function collectExternalModuleInfo(context: TransformationContext, sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
+export function collectExternalModuleInfo(context: TransformationContext, sourceFile: SourceFile): ExternalModuleInfo {
+    const resolver = context.getEmitResolver();
+    const compilerOptions = context.getCompilerOptions();
     const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
-    const exportSpecifiers = createMultiMap<ExportSpecifier>();
+    const exportSpecifiers = new IdentifierNameMultiMap<ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
     let exportedNames: Identifier[] | undefined;
@@ -232,7 +241,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
             case SyntaxKind.VariableStatement:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     for (const decl of (node as VariableStatement).declarationList.declarations) {
-                        exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames);
+                        exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames, exportedBindings);
                     }
                 }
                 break;
@@ -293,7 +302,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
             if (!uniqueExports.get(idText(specifier.name))) {
                 const name = specifier.propertyName || specifier.name;
                 if (!node.moduleSpecifier) {
-                    exportSpecifiers.add(idText(name), specifier);
+                    exportSpecifiers.add(name, specifier);
                 }
 
                 const decl = resolver.getReferencedImportDeclaration(name)
@@ -310,11 +319,11 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 }
 
-function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined) {
+function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined, exportedBindings: Identifier[][]) {
     if (isBindingPattern(decl.name)) {
         for (const element of decl.name.elements) {
             if (!isOmittedExpression(element)) {
-                exportedNames = collectExportedVariableInfo(element, uniqueExports, exportedNames);
+                exportedNames = collectExportedVariableInfo(element, uniqueExports, exportedNames, exportedBindings);
             }
         }
     }
@@ -323,6 +332,9 @@ function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement,
         if (!uniqueExports.get(text)) {
             uniqueExports.set(text, true);
             exportedNames = append(exportedNames, decl.name);
+            if (isLocalName(decl.name)) {
+                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), decl.name);
+            }
         }
     }
     return exportedNames;
@@ -338,6 +350,83 @@ function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
         map[key] = values = [value];
     }
     return values;
+}
+
+/** @internal */
+export class IdentifierNameMap<V> {
+    private readonly _map = new Map<string, V>();
+
+    get size() {
+        return this._map.size;
+    }
+
+    has(key: Identifier) {
+        return this._map.has(IdentifierNameMap.toKey(key));
+    }
+
+    get(key: Identifier) {
+        return this._map.get(IdentifierNameMap.toKey(key));
+    }
+
+    set(key: Identifier, value: V) {
+        this._map.set(IdentifierNameMap.toKey(key), value);
+        return this;
+    }
+
+    delete(key: Identifier): boolean {
+        return this._map?.delete(IdentifierNameMap.toKey(key)) ?? false;
+    }
+
+    clear(): void {
+        this._map.clear();
+    }
+
+    values() {
+        return this._map.values();
+    }
+
+    private static toKey(name: Identifier | PrivateIdentifier): string {
+        if (isGeneratedPrivateIdentifier(name) || isGeneratedIdentifier(name)) {
+            const autoGenerate = name.emitNode.autoGenerate;
+            if ((autoGenerate.flags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
+                const node = getNodeForGeneratedName(name);
+                const baseName = isMemberName(node) && node !== name ? IdentifierNameMap.toKey(node) : `(generated@${getNodeId(node)})`;
+                return formatGeneratedName(/*privateName*/ false, autoGenerate.prefix, baseName, autoGenerate.suffix, IdentifierNameMap.toKey);
+            }
+            else {
+                const baseName = `(auto@${autoGenerate.id})`;
+                return formatGeneratedName(/*privateName*/ false, autoGenerate.prefix, baseName, autoGenerate.suffix, IdentifierNameMap.toKey);
+            }
+        }
+        if (isPrivateIdentifier(name)) {
+            return idText(name).slice(1);
+        }
+        return idText(name);
+    }
+}
+
+/** @internal */
+export class IdentifierNameMultiMap<V> extends IdentifierNameMap<V[]> {
+    add(key: Identifier, value: V): V[] {
+        let values = this.get(key);
+        if (values) {
+            values.push(value);
+        }
+        else {
+            this.set(key, values = [value]);
+        }
+        return values;
+    }
+
+    remove(key: Identifier, value: V) {
+        const values = this.get(key);
+        if (values) {
+            unorderedRemoveItem(values, value);
+            if (!values.length) {
+                this.delete(key);
+            }
+        }
+    }
 }
 
 /**
@@ -374,22 +463,36 @@ export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssi
 /** @internal */
 export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
     switch (kind) {
-        case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
-        case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
-        case SyntaxKind.AsteriskEqualsToken: return SyntaxKind.AsteriskToken;
-        case SyntaxKind.AsteriskAsteriskEqualsToken: return SyntaxKind.AsteriskAsteriskToken;
-        case SyntaxKind.SlashEqualsToken: return SyntaxKind.SlashToken;
-        case SyntaxKind.PercentEqualsToken: return SyntaxKind.PercentToken;
-        case SyntaxKind.LessThanLessThanEqualsToken: return SyntaxKind.LessThanLessThanToken;
-        case SyntaxKind.GreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanToken;
-        case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
-        case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
-        case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
-        case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
-        case SyntaxKind.BarBarEqualsToken: return SyntaxKind.BarBarToken;
-        case SyntaxKind.AmpersandAmpersandEqualsToken: return SyntaxKind.AmpersandAmpersandToken;
-        case SyntaxKind.QuestionQuestionEqualsToken: return SyntaxKind.QuestionQuestionToken;
-
+        case SyntaxKind.PlusEqualsToken:
+            return SyntaxKind.PlusToken;
+        case SyntaxKind.MinusEqualsToken:
+            return SyntaxKind.MinusToken;
+        case SyntaxKind.AsteriskEqualsToken:
+            return SyntaxKind.AsteriskToken;
+        case SyntaxKind.AsteriskAsteriskEqualsToken:
+            return SyntaxKind.AsteriskAsteriskToken;
+        case SyntaxKind.SlashEqualsToken:
+            return SyntaxKind.SlashToken;
+        case SyntaxKind.PercentEqualsToken:
+            return SyntaxKind.PercentToken;
+        case SyntaxKind.LessThanLessThanEqualsToken:
+            return SyntaxKind.LessThanLessThanToken;
+        case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+            return SyntaxKind.GreaterThanGreaterThanToken;
+        case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+            return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+        case SyntaxKind.AmpersandEqualsToken:
+            return SyntaxKind.AmpersandToken;
+        case SyntaxKind.BarEqualsToken:
+            return SyntaxKind.BarToken;
+        case SyntaxKind.CaretEqualsToken:
+            return SyntaxKind.CaretToken;
+        case SyntaxKind.BarBarEqualsToken:
+            return SyntaxKind.BarBarToken;
+        case SyntaxKind.AmpersandAmpersandEqualsToken:
+            return SyntaxKind.AmpersandAmpersandToken;
+        case SyntaxKind.QuestionQuestionEqualsToken:
+            return SyntaxKind.QuestionQuestionToken;
     }
 }
 
@@ -409,21 +512,34 @@ export function getSuperCallFromStatement(statement: Statement): SuperCall | und
         : undefined;
 }
 
-/**
- * @returns The index (after prologue statements) of a super call, or -1 if not found.
- *
- * @internal
- */
-export function findSuperStatementIndex(statements: NodeArray<Statement>, indexAfterLastPrologueStatement: number) {
-    for (let i = indexAfterLastPrologueStatement; i < statements.length; i += 1) {
+function findSuperStatementIndexPathWorker(statements: NodeArray<Statement>, start: number, indices: number[]) {
+    for (let i = start; i < statements.length; i += 1) {
         const statement = statements[i];
-
         if (getSuperCallFromStatement(statement)) {
-            return i;
+            indices.unshift(i);
+            return true;
+        }
+        else if (isTryStatement(statement) && findSuperStatementIndexPathWorker(statement.tryBlock.statements, 0, indices)) {
+            indices.unshift(i);
+            return true;
         }
     }
 
-    return -1;
+    return false;
+}
+
+/**
+ * Finds a path of indices to navigate to a `super()` call, descending only through `try` statements.
+ *
+ * @returns An array of indicies to walk down through `try` statements, with the last element being the index of
+ * the statement containing `super()`. Otherwise, an empty array if `super()` was not found.
+ *
+ * @internal
+ */
+export function findSuperStatementIndexPath(statements: NodeArray<Statement>, start: number) {
+    const indices: number[] = [];
+    findSuperStatementIndexPathWorker(statements, start, indices);
+    return indices;
 }
 
 /**
@@ -540,7 +656,7 @@ export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorato
 
     return {
         decorators,
-        parameters
+        parameters,
     };
 }
 
@@ -552,10 +668,13 @@ export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorato
  *
  * @internal
  */
-export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration): AllDecorators | undefined {
+export function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassLikeDeclaration, useLegacyDecorators: boolean): AllDecorators | undefined {
     switch (member.kind) {
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
+            if (!useLegacyDecorators) {
+                return getAllDecoratorsOfMethod(member as AccessorDeclaration);
+            }
             return getAllDecoratorsOfAccessors(member as AccessorDeclaration, parent);
 
         case SyntaxKind.MethodDeclaration:
@@ -581,8 +700,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
     }
 
     const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, accessor);
-    const firstAccessorWithDecorators =
-        hasDecorators(firstAccessor) ? firstAccessor :
+    const firstAccessorWithDecorators = hasDecorators(firstAccessor) ? firstAccessor :
         secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
         undefined;
 
@@ -600,7 +718,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
         decorators,
         parameters,
         getDecorators: getAccessor && getDecorators(getAccessor),
-        setDecorators: setAccessor && getDecorators(setAccessor)
+        setDecorators: setAccessor && getDecorators(setAccessor),
     };
 }
 
@@ -609,7 +727,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
  *
  * @param method The class method member.
  */
-function getAllDecoratorsOfMethod(method: MethodDeclaration): AllDecorators | undefined {
+function getAllDecoratorsOfMethod(method: MethodDeclaration | AccessorDeclaration): AllDecorators | undefined {
     if (!method.body) {
         return undefined;
     }
@@ -632,8 +750,84 @@ function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorator
     const decorators = getDecorators(property);
     if (!some(decorators)) {
         return undefined;
-
     }
 
     return { decorators };
+}
+
+/** @internal */
+export interface PrivateEnvironment<TData, TEntry> {
+    readonly data: TData;
+
+    /**
+     * A mapping of private names to information needed for transformation.
+     */
+    identifiers?: Map<__String, TEntry>;
+
+    /**
+     * A mapping of generated private names to information needed for transformation.
+     */
+    generatedIdentifiers?: Map<Node, TEntry>;
+}
+
+/** @internal */
+export interface LexicalEnvironment<in out TEnvData, TPrivateEnvData, TPrivateEntry> {
+    data: TEnvData;
+    privateEnv?: PrivateEnvironment<TPrivateEnvData, TPrivateEntry>;
+    readonly previous: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined;
+}
+
+/** @internal */
+export function walkUpLexicalEnvironments<TEnvData, TPrivateEnvData, TPrivateEntry, U>(
+    env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined,
+    cb: (env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry>) => U,
+): U | undefined {
+    while (env) {
+        const result = cb(env);
+        if (result !== undefined) return result;
+        env = env.previous;
+    }
+}
+
+/** @internal */
+export function newPrivateEnvironment<TData, TEntry>(data: TData): PrivateEnvironment<TData, TEntry> {
+    return { data };
+}
+
+/** @internal */
+export function getPrivateIdentifier<TData, TEntry>(
+    privateEnv: PrivateEnvironment<TData, TEntry> | undefined,
+    name: PrivateIdentifier,
+) {
+    return isGeneratedPrivateIdentifier(name) ?
+        privateEnv?.generatedIdentifiers?.get(getNodeForGeneratedName(name)) :
+        privateEnv?.identifiers?.get(name.escapedText);
+}
+
+/** @internal */
+export function setPrivateIdentifier<TData, TEntry>(
+    privateEnv: PrivateEnvironment<TData, TEntry>,
+    name: PrivateIdentifier,
+    entry: TEntry,
+) {
+    if (isGeneratedPrivateIdentifier(name)) {
+        privateEnv.generatedIdentifiers ??= new Map();
+        privateEnv.generatedIdentifiers.set(getNodeForGeneratedName(name), entry);
+    }
+    else {
+        privateEnv.identifiers ??= new Map();
+        privateEnv.identifiers.set(name.escapedText, entry);
+    }
+}
+
+/** @internal */
+export function accessPrivateIdentifier<
+    TEnvData,
+    TPrivateEnvData,
+    TPrivateEntry,
+>(
+    env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined,
+    name: PrivateIdentifier,
+) {
+    return walkUpLexicalEnvironments(env, env => getPrivateIdentifier(env.privateEnv, name));
 }

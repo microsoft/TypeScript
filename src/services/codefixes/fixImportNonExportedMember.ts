@@ -9,6 +9,7 @@ import {
     findAncestor,
     findLast,
     firstOrUndefined,
+    getIsolatedModules,
     getResolvedModule,
     getTokenAtPosition,
     Identifier,
@@ -90,7 +91,7 @@ registerCodeFix({
                 }
             });
         }));
-    }
+    },
 });
 
 interface ModuleExports {
@@ -166,24 +167,31 @@ function doChanges(changes: textChanges.ChangeTracker, program: Program, sourceF
 }
 
 function tryGetExportDeclaration(sourceFile: SourceFile, isTypeOnly: boolean) {
-    const predicate = (node: Node): node is ExportDeclaration =>
-        isExportDeclaration(node) && (isTypeOnly && node.isTypeOnly || !node.isTypeOnly);
+    const predicate = (node: Node): node is ExportDeclaration => isExportDeclaration(node) && (isTypeOnly && node.isTypeOnly || !node.isTypeOnly);
     return findLast(sourceFile.statements, predicate);
 }
 
 function updateExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, node: ExportDeclaration, names: ExportName[]) {
     const namedExports = node.exportClause && isNamedExports(node.exportClause) ? node.exportClause.elements : factory.createNodeArray([]);
-    const allowTypeModifier = !node.isTypeOnly && !!(program.getCompilerOptions().isolatedModules || find(namedExports, e => e.isTypeOnly));
-    changes.replaceNode(sourceFile, node,
-        factory.updateExportDeclaration(node, node.modifiers, node.isTypeOnly,
+    const allowTypeModifier = !node.isTypeOnly && !!(getIsolatedModules(program.getCompilerOptions()) || find(namedExports, e => e.isTypeOnly));
+    changes.replaceNode(
+        sourceFile,
+        node,
+        factory.updateExportDeclaration(
+            node,
+            node.modifiers,
+            node.isTypeOnly,
             factory.createNamedExports(
-                factory.createNodeArray([...namedExports, ...createExportSpecifiers(names, allowTypeModifier)], /*hasTrailingComma*/ namedExports.hasTrailingComma)), node.moduleSpecifier, node.assertClause));
+                factory.createNodeArray([...namedExports, ...createExportSpecifiers(names, allowTypeModifier)], /*hasTrailingComma*/ namedExports.hasTrailingComma),
+            ),
+            node.moduleSpecifier,
+            node.assertClause,
+        ),
+    );
 }
 
 function createExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, names: ExportName[]) {
-    changes.insertNodeAtEndOfScope(sourceFile, sourceFile,
-        factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false,
-            factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ !!program.getCompilerOptions().isolatedModules)), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));
+    changes.insertNodeAtEndOfScope(sourceFile, sourceFile, factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));
 }
 
 function createExportSpecifiers(names: ExportName[], allowTypeModifier: boolean) {

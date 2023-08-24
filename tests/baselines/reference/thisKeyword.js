@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisKeyword.ts] ////
+
 //// [thisKeyword.ts]
 module foo {
     this.bar = 4;

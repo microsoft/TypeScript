@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidOptionalChainFromNewExpression.ts] ////
+
 //// [invalidOptionalChainFromNewExpression.ts]
 class A {
     b() {}

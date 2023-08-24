@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateConstructSignature.ts ===
+//// [tests/cases/compiler/duplicateConstructSignature.ts] ////
+
+=== duplicateConstructSignature.ts ===
 interface I {
 >I : Symbol(I, Decl(duplicateConstructSignature.ts, 0, 0))
 

@@ -1,8 +1,8 @@
-tests/cases/compiler/inheritSameNamePropertiesWithDifferentVisibility.ts(9,11): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
+inheritSameNamePropertiesWithDifferentVisibility.ts(9,11): error TS2320: Interface 'A' cannot simultaneously extend types 'C' and 'C2'.
   Named property 'x' of types 'C' and 'C2' are not identical.
 
 
-==== tests/cases/compiler/inheritSameNamePropertiesWithDifferentVisibility.ts (1 errors) ====
+==== inheritSameNamePropertiesWithDifferentVisibility.ts (1 errors) ====
     class C {
         public x: number;
     }

@@ -2,7 +2,7 @@ error TS5069: Option 'declarationMap' cannot be specified without specifying opt
 
 
 !!! error TS5069: Option 'declarationMap' cannot be specified without specifying option 'declaration' or option 'composite'.
-==== tests/cases/compiler/declarationMapsWithoutDeclaration.ts (0 errors) ====
+==== declarationMapsWithoutDeclaration.ts (0 errors) ====
     module m2 {
         export interface connectModule {
             (res, req, next): void;

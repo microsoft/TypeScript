@@ -35,22 +35,22 @@ import {
 } from "../_namespaces/ts.refactor";
 
 const refactorName = "Add or remove braces in an arrow function";
-const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
+const refactorDescription = getLocaleSpecificMessage(Diagnostics.Add_or_remove_braces_in_an_arrow_function);
 
 const addBracesAction = {
     name: "Add braces to arrow function",
-    description: Diagnostics.Add_braces_to_arrow_function.message,
+    description: getLocaleSpecificMessage(Diagnostics.Add_braces_to_arrow_function),
     kind: "refactor.rewrite.arrow.braces.add",
 };
 const removeBracesAction = {
     name: "Remove braces from arrow function",
-    description: Diagnostics.Remove_braces_from_arrow_function.message,
-    kind: "refactor.rewrite.arrow.braces.remove"
+    description: getLocaleSpecificMessage(Diagnostics.Remove_braces_from_arrow_function),
+    kind: "refactor.rewrite.arrow.braces.remove",
 };
 registerRefactor(refactorName, {
     kinds: [removeBracesAction.kind],
     getEditsForAction: getRefactorEditsToRemoveFunctionBraces,
-    getAvailableActions: getRefactorActionsToRemoveFunctionBraces
+    getAvailableActions: getRefactorActionsToRemoveFunctionBraces,
 });
 
 interface FunctionBracesInfo {
@@ -70,8 +70,8 @@ function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): rea
             name: refactorName,
             description: refactorDescription,
             actions: [
-                info.addBraces ? addBracesAction : removeBracesAction
-            ]
+                info.addBraces ? addBracesAction : removeBracesAction,
+            ],
         }];
     }
 
@@ -82,7 +82,7 @@ function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): rea
             actions: [
                 { ...addBracesAction, notApplicableReason: info.error },
                 { ...removeBracesAction, notApplicableReason: info.error },
-            ]
+            ],
         }];
     }
 
@@ -100,15 +100,15 @@ function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, action
 
     if (actionName === addBracesAction.name) {
         const returnStatement = factory.createReturnStatement(expression);
-        body = factory.createBlock([returnStatement], /* multiLine */ true);
-        copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
+        body = factory.createBlock([returnStatement], /*multiLine*/ true);
+        copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ true);
     }
     else if (actionName === removeBracesAction.name && returnStatement) {
         const actualExpression = expression || factory.createVoidZero();
         body = needsParentheses(actualExpression) ? factory.createParenthesizedExpression(actualExpression) : actualExpression;
-        copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
-        copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
-        copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+        copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+        copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
+        copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /*hasTrailingNewLine*/ false);
     }
     else {
         Debug.fail("invalid action");
@@ -127,13 +127,13 @@ function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: 
 
     if (!func) {
         return {
-            error: getLocaleSpecificMessage(Diagnostics.Could_not_find_a_containing_arrow_function)
+            error: getLocaleSpecificMessage(Diagnostics.Could_not_find_a_containing_arrow_function),
         };
     }
 
     if (!isArrowFunction(func)) {
         return {
-            error: getLocaleSpecificMessage(Diagnostics.Containing_function_is_not_an_arrow_function)
+            error: getLocaleSpecificMessage(Diagnostics.Containing_function_is_not_an_arrow_function),
         };
     }
 

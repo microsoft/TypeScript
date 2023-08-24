@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedExcessPropertyChecking.ts] ////
+
 //// [nestedExcessPropertyChecking.ts]
 type A1 = { x: { a?: string } };
 type B1 = { x: { b?: string } };
@@ -42,6 +44,27 @@ const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
     }
 };
 
+// Simplified repro from #52252
+
+type T1 = {
+    primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
+};
+
+type T2 = {
+    primary: { __typename?: 'Feature' } & { colors: { light: number } },
+};
+
+type Query = T1 & T2;
+
+const response: Query = {
+    primary: {
+        colors: {
+            light: 1,
+            dark: 3,
+        },
+    },
+};
+
 
 //// [nestedExcessPropertyChecking.js]
 "use strict";
@@ -58,4 +81,12 @@ var foo2 = {
     variables: {
         overrides: false // Error
     }
+};
+var response = {
+    primary: {
+        colors: {
+            light: 1,
+            dark: 3,
+        },
+    },
 };

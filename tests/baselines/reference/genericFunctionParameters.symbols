@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericFunctionParameters.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericFunctionParameters.ts] ////
+
+=== genericFunctionParameters.ts ===
 declare function f1<T>(cb: <S>(x: S) => T): T;
 >f1 : Symbol(f1, Decl(genericFunctionParameters.ts, 0, 0))
 >T : Symbol(T, Decl(genericFunctionParameters.ts, 0, 20))

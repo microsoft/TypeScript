@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 import {B} from './b';
@@ -66,25 +67,27 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/a.ts:
+/user/username/projects/myproject: *new*
   {}
-/user/username/projects/myproject:
+/user/username/projects/myproject/a.ts: *new*
   {}
-/user/username/projects/myproject/b.d.ts:
+/user/username/projects/myproject/b.d.ts: *new*
   {}
-/user/username/projects/myproject/c.d.ts:
+/user/username/projects/myproject/c.d.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -98,7 +101,7 @@ console.log(b.c.d);
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-18774426152-export class C\n{\n    d: number;\n}","-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"options":{"assumeChangesOnlyAffectDirectDependencies":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-18774426152-export class C\n{\n    d: number;\n}","-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"options":{"assumeChangesOnlyAffectDirectDependencies":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -140,6 +143,19 @@ console.log(b.c.d);
         "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "./c.d.ts",
+          "./b.d.ts",
+          "./a.ts"
+        ]
+      ]
+    ],
     "options": {
       "assumeChangesOnlyAffectDirectDependencies": true
     },
@@ -167,7 +183,7 @@ console.log(b.c.d);
     ]
   },
   "version": "FakeTSVersion",
-  "size": 939
+  "size": 954
 }
 
 
@@ -181,6 +197,10 @@ export class C
 }
 
 
+Before running Timeout callback:: count: 2
+2: timerToInvalidateFailedLookupResolutions
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
@@ -206,32 +226,10 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.d.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/b.d.ts:
-  {}
-/user/username/projects/myproject/c.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-21444928214-export class C\n{\n    d2: number;\n}","-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"options":{"assumeChangesOnlyAffectDirectDependencies":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-21444928214-export class C\n{\n    d2: number;\n}","-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"options":{"assumeChangesOnlyAffectDirectDependencies":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -273,6 +271,19 @@ exitCode:: ExitStatus.undefined
         "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "./c.d.ts",
+          "./b.d.ts",
+          "./a.ts"
+        ]
+      ]
+    ],
     "options": {
       "assumeChangesOnlyAffectDirectDependencies": true
     },
@@ -300,7 +311,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 940
+  "size": 955
 }
 
 
@@ -314,6 +325,9 @@ export class C
 }
 
 
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
@@ -339,32 +353,10 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.d.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/b.d.ts:
-  {}
-/user/username/projects/myproject/c.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-18774426152-export class C\n{\n    d: number;\n}","-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"options":{"assumeChangesOnlyAffectDirectDependencies":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-18774426152-export class C\n{\n    d: number;\n}","-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"options":{"assumeChangesOnlyAffectDirectDependencies":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -406,6 +398,19 @@ exitCode:: ExitStatus.undefined
         "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "./c.d.ts",
+          "./b.d.ts",
+          "./a.ts"
+        ]
+      ]
+    ],
     "options": {
       "assumeChangesOnlyAffectDirectDependencies": true
     },
@@ -433,7 +438,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 939
+  "size": 954
 }
 
 
@@ -447,6 +452,9 @@ export class C
 }
 
 
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
@@ -472,32 +480,10 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/c.d.ts (used version)
 /user/username/projects/myproject/b.d.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/b.d.ts:
-  {}
-/user/username/projects/myproject/c.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-21444928214-export class C\n{\n    d2: number;\n}","-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"options":{"assumeChangesOnlyAffectDirectDependencies":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-21444928214-export class C\n{\n    d2: number;\n}","-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"options":{"assumeChangesOnlyAffectDirectDependencies":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -539,6 +525,19 @@ exitCode:: ExitStatus.undefined
         "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"
       }
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "./c.d.ts",
+          "./b.d.ts",
+          "./a.ts"
+        ]
+      ]
+    ],
     "options": {
       "assumeChangesOnlyAffectDirectDependencies": true
     },
@@ -566,6 +565,6 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 940
+  "size": 955
 }
 

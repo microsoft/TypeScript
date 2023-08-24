@@ -9,6 +9,7 @@ import {
     ExportedModulesFromDeclarationEmit,
     GetCanonicalFileName,
     getDirectoryPath,
+    getIsolatedModules,
     getSourceFileOfNode,
     HostForComputeHash,
     isDeclarationFileName,
@@ -35,8 +36,14 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
-    cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
+export function getFileEmitOutput(
+    program: Program,
+    sourceFile: SourceFile,
+    emitOnlyDtsFiles: boolean,
+    cancellationToken?: CancellationToken,
+    customTransformers?: CustomTransformers,
+    forceDtsEmit?: boolean,
+): EmitOutput {
     const outputFiles: OutputFile[] = [];
     const { emitSkipped, diagnostics } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
     return { outputFiles, emitSkipped, diagnostics };
@@ -272,8 +279,10 @@ export namespace BuilderState {
             // Add any file other than our own as reference
             for (const declaration of symbol.declarations) {
                 const declarationSourceFile = getSourceFileOfNode(declaration);
-                if (declarationSourceFile &&
-                    declarationSourceFile !== sourceFile) {
+                if (
+                    declarationSourceFile &&
+                    declarationSourceFile !== sourceFile
+                ) {
                     addReferencedFile(declarationSourceFile.resolvedPath);
                 }
             }
@@ -334,7 +343,7 @@ export namespace BuilderState {
                 signature,
                 // No need to calculate affectsGlobalScope with --out since its not used at all
                 affectsGlobalScope: !isOutFile ? isFileAffectingGlobalScope(sourceFile) || undefined : undefined,
-                impliedFormat: sourceFile.impliedNodeFormat
+                impliedFormat: sourceFile.impliedNodeFormat,
             });
         }
 
@@ -342,7 +351,7 @@ export namespace BuilderState {
             fileInfos,
             referencedMap,
             exportedModulesMap,
-            useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState
+            useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState,
         };
     }
 
@@ -411,18 +420,21 @@ export namespace BuilderState {
             sourceFile,
             (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
                 Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
-                onNewSignature(computeSignatureWithDiagnostics(
-                    programOfThisState,
-                    sourceFile,
-                    text,
-                    host,
-                    data,
-                ), sourceFiles!);
+                onNewSignature(
+                    computeSignatureWithDiagnostics(
+                        programOfThisState,
+                        sourceFile,
+                        text,
+                        host,
+                        data,
+                    ),
+                    sourceFiles!,
+                );
             },
             cancellationToken,
-            /*emitOnlyDtsFiles*/ true,
+            /*emitOnly*/ true,
             /*customTransformers*/ undefined,
-            /*forceDtsEmit*/ true
+            /*forceDtsEmit*/ true,
         );
     }
 
@@ -490,9 +502,10 @@ export namespace BuilderState {
     export function getExportedModules(exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
         let exportedModules: Set<Path> | undefined;
         exportedModulesFromDeclarationEmit?.forEach(
-            symbol => getReferencedFilesFromImportedModuleSymbol(symbol).forEach(
-                path => (exportedModules ??= new Set()).add(path)
-            )
+            symbol =>
+                getReferencedFilesFromImportedModuleSymbol(symbol).forEach(
+                    path => (exportedModules ??= new Set()).add(path),
+                ),
         );
         return exportedModules;
     }
@@ -635,7 +648,7 @@ export namespace BuilderState {
         }
 
         const compilerOptions = programOfThisState.getCompilerOptions();
-        if (compilerOptions && (compilerOptions.isolatedModules || outFile(compilerOptions))) {
+        if (compilerOptions && (getIsolatedModules(compilerOptions) || outFile(compilerOptions))) {
             return [sourceFileWithUpdatedShape];
         }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInterfaceImplementation.ts ===
+//// [tests/cases/compiler/genericInterfaceImplementation.ts] ////
+
+=== genericInterfaceImplementation.ts ===
 interface IOption<A> {
     get(): A;
 >get : () => A
@@ -14,7 +16,6 @@ class None<T> implements IOption<T>{
 >get : () => T
 
         throw null;
->null : null
     }
 
     flatten<U>() : IOption<U> {

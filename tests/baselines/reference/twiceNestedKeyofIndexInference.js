@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/twiceNestedKeyofIndexInference.ts] ////
+
 //// [twiceNestedKeyofIndexInference.ts]
 type Set1<T, K1 extends keyof T> = T extends any[] ? T : Pick<T, Exclude<keyof T, K1>> & {
     [SK1 in K1]-?: Required<Pick<T, SK1>>;

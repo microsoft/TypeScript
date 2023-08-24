@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveBaseCheck2.ts] ////
+
 //// [recursiveBaseCheck2.ts]
 declare module Box2D.Collision.Shapes {
     export class b2CircleShape extends b2Shape {

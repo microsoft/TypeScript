@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useDefineForClassFieldsFlagDefault.ts] ////
+
 //// [useDefineForClassFieldsFlagDefault.ts]
 class Foo {
     // For esNext should be emitted 'as is' because useDefineForClassFields defaults to true 

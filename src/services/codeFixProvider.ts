@@ -13,33 +13,32 @@ import {
     createMultiMap,
     Debug,
     Diagnostic,
-    DiagnosticAndArguments,
+    DiagnosticOrDiagnosticAndArguments,
     diagnosticToString,
     DiagnosticWithLocation,
     FileTextChanges,
     flatMap,
     isString,
     map,
-    Push,
     TextChange,
     textChanges,
 } from "./_namespaces/ts";
 
-const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
+const errorCodeToFixes = createMultiMap<string, CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();
 
 /** @internal */
-export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments) {
+export function createCodeFixActionWithoutFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments) {
     return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, /*fixId*/ undefined, /*fixAllDescription*/ undefined);
 }
 
 /** @internal */
-export function createCodeFixAction(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
+export function createCodeFixAction(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticOrDiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
     return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
 }
 
 /** @internal */
-export function createCodeFixActionMaybeFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments, fixId?: {}, fixAllDescription?: DiagnosticAndArguments, command?: CodeActionCommand) {
+export function createCodeFixActionMaybeFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticOrDiagnosticAndArguments, fixId?: {}, fixAllDescription?: DiagnosticOrDiagnosticAndArguments, command?: CodeActionCommand) {
     return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, fixAllDescription && diagnosticToString(fixAllDescription), command);
 }
 
@@ -50,6 +49,7 @@ function createCodeFixActionWorker(fixName: string, description: string, changes
 /** @internal */
 export function registerCodeFix(reg: CodeFixRegistration) {
     for (const error of reg.errorCodes) {
+        errorCodeToFixesArray = undefined;
         errorCodeToFixes.add(String(error), reg);
     }
     if (reg.fixIds) {
@@ -60,9 +60,10 @@ export function registerCodeFix(reg: CodeFixRegistration) {
     }
 }
 
+let errorCodeToFixesArray: readonly string[] | undefined;
 /** @internal */
 export function getSupportedErrorCodes(): readonly string[] {
-    return arrayFrom(errorCodeToFixes.keys());
+    return errorCodeToFixesArray ??= arrayFrom(errorCodeToFixes.keys());
 }
 
 function removeFixIdIfFixAllUnavailable(registration: CodeFixRegistration, diagnostics: Diagnostic[]) {
@@ -106,7 +107,7 @@ export function createFileTextChanges(fileName: string, textChanges: TextChange[
 export function codeFixAll(
     context: CodeFixAllContext,
     errorCodes: number[],
-    use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void,
+    use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: CodeActionCommand[]) => void,
 ): CombinedCodeActions {
     const commands: CodeActionCommand[] = [];
     const changes = textChanges.ChangeTracker.with(context, t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
@@ -126,6 +127,6 @@ function getDiagnostics({ program, sourceFile, cancellationToken }: CodeFixConte
     return [
         ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
         ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-        ...computeSuggestionDiagnostics(sourceFile, program, cancellationToken)
+        ...computeSuggestionDiagnostics(sourceFile, program, cancellationToken),
     ];
 }

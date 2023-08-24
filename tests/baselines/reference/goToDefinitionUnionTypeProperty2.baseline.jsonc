@@ -1,0 +1,42 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionUnionTypeProperty2.ts ===
+// interface HasAOrB {
+//     <|[|{| defId: 1 |}a|]: string;|>
+//     b: string;
+// }
+// 
+// interface One {
+//     common: { <|[|{| defId: 0 |}a|] : number;|> };
+// }
+// 
+// interface Two {
+//     common: HasAOrB;
+// }
+// 
+// var x : One | Two;
+// 
+// x.common./*GOTO DEF*/a;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "property",
+    "name": "a",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "property",
+    "name": "a",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

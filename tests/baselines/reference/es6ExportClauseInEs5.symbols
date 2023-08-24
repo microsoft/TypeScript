@@ -1,4 +1,6 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ExportClauseInEs5.ts] ////
+
+=== server.ts ===
 class c {
 >c : Symbol(c, Decl(server.ts, 0, 0))
 }

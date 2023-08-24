@@ -1,16 +1,102 @@
+=== /tests/cases/fourslash/completionsClassMembers2.ts ===
+// interface I {
+//     method(): void;
+// }
+// 
+// export class C implements I {
+//     property = "foo"
+//     
+//     ^
+// | ----------------------------------------------------------------------
+// | (method) I.method(): void
+// | abstract
+// | accessor
+// | async
+// | constructor
+// | declare
+// | get
+// | override
+// | private
+// | protected
+// | public
+// | readonly
+// | set
+// | static
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsClassMembers2.ts",
-      "position": 93,
+      "position": 92,
       "name": ""
     },
-    "completionList": {
+    "item": {
       "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": true,
       "entries": [
+        {
+          "name": "method",
+          "kind": "method",
+          "kindModifiers": "",
+          "sortText": "11",
+          "insertText": "method(): void {\n}",
+          "filterText": "method",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "I",
+              "kind": "interfaceName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
         {
           "name": "abstract",
           "kind": "keyword",
@@ -166,64 +252,6 @@
               "kind": "keyword"
             }
           ]
-        },
-        {
-          "name": "method",
-          "kind": "method",
-          "kindModifiers": "",
-          "sortText": "17",
-          "insertText": "method(): void {\r\n}",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "I",
-              "kind": "interfaceName"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "methodName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "void",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": []
         }
       ]
     }

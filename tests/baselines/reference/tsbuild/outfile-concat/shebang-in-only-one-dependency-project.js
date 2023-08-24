@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -85,6 +86,7 @@ class C {
 //// [/src/second/tsconfig.json]
 {
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true,
     "removeComments": true,
@@ -108,6 +110,7 @@ c.doSomething();
 //// [/src/third/tsconfig.json]
 {
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true,
     "removeComments": true,
@@ -195,7 +198,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -219,7 +222,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -237,7 +240,7 @@ sourceFile:../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1->
 2 >class 
 3 >              C
@@ -304,7 +307,7 @@ sourceFile:../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1 >#!someshebang second second_part1
   >namespace N {
   >    // Comment text
@@ -329,7 +332,7 @@ sourceFile:../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -341,7 +344,7 @@ sourceFile:../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -380,7 +383,7 @@ sourceFile:../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -392,7 +395,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -412,7 +415,7 @@ sourceFile:../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^->
+8 >                  ^^^^->
 1->
   >
 2 >}
@@ -441,20 +444,20 @@ sourceFile:../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1->
 1->Emitted(9, 1) Source(1, 1) + SourceIndex(1)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(10, 5) Source(1, 1) + SourceIndex(1)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -468,7 +471,7 @@ sourceFile:../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -506,7 +509,7 @@ sourceFile:../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -544,13 +547,13 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":35,"end":320,"kind":"text"}],"mapHash":"-4207645659-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";AAKA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACXD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}","hash":"4362029886-#!someshebang second second_part1\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":35,"end":135,"kind":"text"}],"mapHash":"-7527955494-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";AACA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACXD,cAAM,CAAC;IACH,WAAW;CAGd\"}","hash":"-16482341849-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-8705047463-#!someshebang second second_part1\nnamespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n","9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-11559081780-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":34,"end":304,"kind":"text"}],"mapHash":"-4207645659-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";AAKA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACXD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}","hash":"7338659886-#!someshebang second second_part1\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":34,"end":127,"kind":"text"}],"mapHash":"-7527955494-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";AACA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACXD,cAAM,CAAC;IACH,WAAW;CAGd\"}","hash":"10689383263-#!someshebang second second_part1\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-8705047463-#!someshebang second second_part1\nnamespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n","9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"14403894020-#!someshebang second second_part1\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-text: (35-320)
+text: (34-304)
 var N;
 (function (N) {
     function f() {
@@ -571,7 +574,7 @@ var C = (function () {
 ======================================================================
 File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-text: (35-135)
+text: (34-127)
 declare namespace N {
 }
 declare namespace N {
@@ -593,23 +596,23 @@ declare class C {
     "js": {
       "sections": [
         {
-          "pos": 35,
-          "end": 320,
+          "pos": 34,
+          "end": 304,
           "kind": "text"
         }
       ],
-      "hash": "4362029886-#!someshebang second second_part1\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map",
+      "hash": "7338659886-#!someshebang second second_part1\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\n//# sourceMappingURL=second-output.js.map",
       "mapHash": "-4207645659-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";AAKA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACXD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC\"}"
     },
     "dts": {
       "sections": [
         {
-          "pos": 35,
-          "end": 135,
+          "pos": 34,
+          "end": 127,
           "kind": "text"
         }
       ],
-      "hash": "-16482341849-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map",
+      "hash": "10689383263-#!someshebang second second_part1\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n//# sourceMappingURL=second-output.d.ts.map",
       "mapHash": "-7527955494-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";AACA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACXD,cAAM,CAAC;IACH,WAAW;CAGd\"}"
     }
   },
@@ -624,6 +627,16 @@ declare class C {
       "../second/second_part1.ts": "-8705047463-#!someshebang second second_part1\nnamespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n",
       "../second/second_part2.ts": "9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"
     },
+    "root": [
+      [
+        2,
+        "../second/second_part1.ts"
+      ],
+      [
+        3,
+        "../second/second_part2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -635,11 +648,11 @@ declare class C {
       "strict": false,
       "target": 1
     },
-    "outSignature": "-11559081780-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "outSignature": "14403894020-#!someshebang second second_part1\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
     "latestChangedDtsFile": "./second-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2933
+  "size": 2880
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -698,7 +711,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
@@ -758,7 +771,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
@@ -842,7 +855,7 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -907,7 +920,7 @@ sourceFile:../first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -943,13 +956,13 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}],"mapHash":"-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"-3712641672-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}],"mapHash":"28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17207381411-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":104,"kind":"text"}],"mapHash":"-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"4999315210-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":149,"kind":"text"}],"mapHash":"28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-17207381411-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-110)
+text: (0-104)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -961,7 +974,7 @@ function f() {
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-157)
+text: (0-149)
 interface TheFirst {
     none: any;
 }
@@ -986,22 +999,22 @@ declare function f(): string;
       "sections": [
         {
           "pos": 0,
-          "end": 110,
+          "end": 104,
           "kind": "text"
         }
       ],
-      "hash": "-3712641672-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "4999315210-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 157,
+          "end": 149,
           "kind": "text"
         }
       ],
-      "hash": "-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
@@ -1018,6 +1031,19 @@ declare function f(): string;
       "../first_part2.ts": "4973778178-console.log(f());\r\n",
       "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../first_part1.ts",
+          "../first_part2.ts",
+          "../first_part3.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -1028,11 +1054,11 @@ declare function f(): string;
       "strict": false,
       "target": 1
     },
-    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "outSignature": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2665
+  "size": 2635
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -1101,7 +1127,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(4, 2) Source(3, 2) + SourceIndex(0)
@@ -1161,7 +1187,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(8, 2) Source(9, 2) + SourceIndex(0)
@@ -1207,7 +1233,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -1231,7 +1257,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -1249,7 +1275,7 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1->
 2 >class 
 3 >              C
@@ -1268,7 +1294,7 @@ sourceFile:../../../second/second_part2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >() {
   >        console.log("something got done");
   >    }
@@ -1377,7 +1403,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -1442,7 +1468,7 @@ sourceFile:../../../first/first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -1468,7 +1494,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^->
+3 > ^^^^^->
 1 >
   >
 2 >}
@@ -1484,7 +1510,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1->#!someshebang second second_part1
   >namespace N {
   >    // Comment text
@@ -1509,7 +1535,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -1521,7 +1547,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -1560,7 +1586,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -1572,7 +1598,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -1592,7 +1618,7 @@ sourceFile:../../../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^->
+8 >                  ^^^^->
 1->
   >
 2 >}
@@ -1621,20 +1647,20 @@ sourceFile:../../../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1->
 1->Emitted(15, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(16, 5) Source(1, 1) + SourceIndex(4)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -1648,7 +1674,7 @@ sourceFile:../../../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -1686,7 +1712,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -1707,7 +1733,7 @@ sourceFile:../../../second/second_part2.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -1734,7 +1760,6 @@ sourceFile:../../third_part1.ts
 6 >            ^
 7 >             ^^
 8 >               ^
-9 >                ^->
 1->
 2 >var 
 3 >    c
@@ -1753,21 +1778,21 @@ sourceFile:../../third_part1.ts
 8 >Emitted(23, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
-1->
+1 >
 2 >^
 3 > ^
 4 >  ^^^^^^^^^^^
 5 >             ^^
 6 >               ^
 7 >                ^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
   >
 2 >c
 3 > .
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(24, 1) Source(2, 1) + SourceIndex(5)
+1 >Emitted(24, 1) Source(2, 1) + SourceIndex(5)
 2 >Emitted(24, 2) Source(2, 2) + SourceIndex(5)
 3 >Emitted(24, 3) Source(2, 3) + SourceIndex(5)
 4 >Emitted(24, 14) Source(2, 14) + SourceIndex(5)
@@ -1777,15 +1802,15 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":35,"end":145,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":35,"end":145,"kind":"text"}]},{"pos":145,"end":430,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":145,"end":430,"kind":"text"}]},{"pos":430,"end":466,"kind":"text"}],"mapHash":"17881551829-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACGD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACXD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}","hash":"-3129593933-#!someshebang second second_part1\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":35,"end":192,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":35,"end":192,"kind":"text"}]},{"pos":192,"end":292,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":192,"end":292,"kind":"text"}]},{"pos":292,"end":311,"kind":"text"}],"mapHash":"-8603414798-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACXD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"33189836939-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","-11559081780-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"34342993937-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":34,"end":138,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":34,"end":138,"kind":"text"}]},{"pos":138,"end":408,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":138,"end":408,"kind":"text"}]},{"pos":408,"end":442,"kind":"text"}],"mapHash":"17881551829-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACGD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACXD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}","hash":"6431547867-#!someshebang second second_part1\nvar s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":34,"end":183,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":34,"end":183,"kind":"text"}]},{"pos":183,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":183,"end":276,"kind":"text"}]},{"pos":276,"end":294,"kind":"text"}],"mapHash":"-8603414798-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACXD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-23331286674-#!someshebang second second_part1\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","14403894020-#!someshebang second second_part1\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n","10470273651-var c = new C();\r\nc.doSomething();\r\n"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15126051532-#!someshebang second second_part1\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (35-145):: ../../../first/bin/first-output.js texts:: 1
+prepend: (34-138):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (35-145)
+text: (34-138)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -1794,9 +1819,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (145-430):: ../../../2/second-output.js texts:: 1
+prepend: (138-408):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (145-430)
+text: (138-408)
 var N;
 (function (N) {
     function f() {
@@ -1814,7 +1839,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (430-466)
+text: (408-442)
 var c = new C();
 c.doSomething();
 
@@ -1822,9 +1847,9 @@ c.doSomething();
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (35-192):: ../../../first/bin/first-output.d.ts texts:: 1
+prepend: (34-183):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (35-192)
+text: (34-183)
 interface TheFirst {
     none: any;
 }
@@ -1835,9 +1860,9 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ----------------------------------------------------------------------
-prepend: (192-292):: ../../../2/second-output.d.ts texts:: 1
+prepend: (183-276):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (192-292)
+text: (183-276)
 declare namespace N {
 }
 declare namespace N {
@@ -1847,7 +1872,7 @@ declare class C {
 }
 
 ----------------------------------------------------------------------
-text: (292-311)
+text: (276-294)
 declare var c: C;
 
 ======================================================================
@@ -1862,75 +1887,75 @@ declare var c: C;
     "js": {
       "sections": [
         {
-          "pos": 35,
-          "end": 145,
+          "pos": 34,
+          "end": 138,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 35,
-              "end": 145,
+              "pos": 34,
+              "end": 138,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 145,
-          "end": 430,
+          "pos": 138,
+          "end": 408,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 145,
-              "end": 430,
+              "pos": 138,
+              "end": 408,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 430,
-          "end": 466,
+          "pos": 408,
+          "end": 442,
           "kind": "text"
         }
       ],
-      "hash": "-3129593933-#!someshebang second second_part1\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "6431547867-#!someshebang second second_part1\nvar s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "17881551829-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACGD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACXD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
-          "pos": 35,
-          "end": 192,
+          "pos": 34,
+          "end": 183,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
-              "pos": 35,
-              "end": 192,
+              "pos": 34,
+              "end": 183,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 192,
-          "end": 292,
+          "pos": 183,
+          "end": 276,
           "kind": "prepend",
           "data": "../../../2/second-output.d.ts",
           "texts": [
             {
-              "pos": 192,
-              "end": 292,
+              "pos": 183,
+              "end": 276,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 292,
-          "end": 311,
+          "pos": 276,
+          "end": 294,
           "kind": "text"
         }
       ],
-      "hash": "33189836939-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "hash": "-23331286674-#!someshebang second second_part1\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map",
       "mapHash": "-8603414798-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACXD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
@@ -1943,10 +1968,16 @@ declare var c: C;
     ],
     "fileInfos": {
       "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../../../first/bin/first-output.d.ts": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
-      "../../../2/second-output.d.ts": "-11559081780-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+      "../../../first/bin/first-output.d.ts": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
+      "../../../2/second-output.d.ts": "14403894020-#!someshebang second second_part1\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
       "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
     },
+    "root": [
+      [
+        4,
+        "../../third_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -1958,11 +1989,11 @@ declare var c: C;
       "strict": false,
       "target": 1
     },
-    "outSignature": "34342993937-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "outSignature": "-15126051532-#!someshebang second second_part1\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 4750
+  "size": 4613
 }
 
 
@@ -2064,7 +2095,6 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -2089,7 +2119,7 @@ sourceFile:../first_PART1.ts
 8 >Emitted(2, 16) Source(11, 16) + SourceIndex(0)
 ---
 >>>console.log(s);
-1->
+1 >
 2 >^^^^^^^
 3 >       ^
 4 >        ^^^
@@ -2097,8 +2127,8 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
-1->
+9 >               ^^->
+1 >
   >
 2 >console
 3 >       .
@@ -2107,7 +2137,7 @@ sourceFile:../first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1->Emitted(3, 1) Source(12, 1) + SourceIndex(0)
+1 >Emitted(3, 1) Source(12, 1) + SourceIndex(0)
 2 >Emitted(3, 8) Source(12, 8) + SourceIndex(0)
 3 >Emitted(3, 9) Source(12, 9) + SourceIndex(0)
 4 >Emitted(3, 12) Source(12, 12) + SourceIndex(0)
@@ -2157,7 +2187,7 @@ sourceFile:../first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -2193,13 +2223,13 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"text"}],"mapHash":"-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"18946534449-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}],"mapHash":"28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16950965473-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":120,"kind":"text"}],"mapHash":"-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"-20052626506-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":149,"kind":"text"}],"mapHash":"28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16950965473-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-127)
+text: (0-120)
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -2212,7 +2242,7 @@ function f() {
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-157)
+text: (0-149)
 interface TheFirst {
     none: any;
 }
@@ -2237,22 +2267,22 @@ declare function f(): string;
       "sections": [
         {
           "pos": 0,
-          "end": 127,
+          "end": 120,
           "kind": "text"
         }
       ],
-      "hash": "18946534449-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "-20052626506-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 157,
+          "end": 149,
           "kind": "text"
         }
       ],
-      "hash": "-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
@@ -2269,6 +2299,19 @@ declare function f(): string;
       "../first_part2.ts": "4973778178-console.log(f());\r\n",
       "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../first_part1.ts",
+          "../first_part2.ts",
+          "../first_part3.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -2279,11 +2322,11 @@ declare function f(): string;
       "strict": false,
       "target": 1
     },
-    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "outSignature": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2738
+  "size": 2708
 }
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -2362,7 +2405,6 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -2387,7 +2429,7 @@ sourceFile:../../../first/first_PART1.ts
 8 >Emitted(3, 16) Source(11, 16) + SourceIndex(0)
 ---
 >>>console.log(s);
-1->
+1 >
 2 >^^^^^^^
 3 >       ^
 4 >        ^^^
@@ -2395,8 +2437,8 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
-1->
+9 >               ^^->
+1 >
   >
 2 >console
 3 >       .
@@ -2405,7 +2447,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1->Emitted(4, 1) Source(12, 1) + SourceIndex(0)
+1 >Emitted(4, 1) Source(12, 1) + SourceIndex(0)
 2 >Emitted(4, 8) Source(12, 8) + SourceIndex(0)
 3 >Emitted(4, 9) Source(12, 9) + SourceIndex(0)
 4 >Emitted(4, 12) Source(12, 12) + SourceIndex(0)
@@ -2455,7 +2497,7 @@ sourceFile:../../../first/first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -2481,7 +2523,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^->
+3 > ^^^^^->
 1 >
   >
 2 >}
@@ -2497,7 +2539,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1->#!someshebang second second_part1
   >namespace N {
   >    // Comment text
@@ -2522,7 +2564,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -2534,7 +2576,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -2573,7 +2615,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -2585,7 +2627,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -2605,7 +2647,7 @@ sourceFile:../../../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^->
+8 >                  ^^^^->
 1->
   >
 2 >}
@@ -2634,20 +2676,20 @@ sourceFile:../../../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1->
 1->Emitted(16, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(17, 5) Source(1, 1) + SourceIndex(4)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -2661,7 +2703,7 @@ sourceFile:../../../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -2699,7 +2741,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -2720,7 +2762,7 @@ sourceFile:../../../second/second_part2.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -2747,7 +2789,6 @@ sourceFile:../../third_part1.ts
 6 >            ^
 7 >             ^^
 8 >               ^
-9 >                ^->
 1->
 2 >var 
 3 >    c
@@ -2766,21 +2807,21 @@ sourceFile:../../third_part1.ts
 8 >Emitted(24, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
-1->
+1 >
 2 >^
 3 > ^
 4 >  ^^^^^^^^^^^
 5 >             ^^
 6 >               ^
 7 >                ^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
   >
 2 >c
 3 > .
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(25, 1) Source(2, 1) + SourceIndex(5)
+1 >Emitted(25, 1) Source(2, 1) + SourceIndex(5)
 2 >Emitted(25, 2) Source(2, 2) + SourceIndex(5)
 3 >Emitted(25, 3) Source(2, 3) + SourceIndex(5)
 4 >Emitted(25, 14) Source(2, 14) + SourceIndex(5)
@@ -2790,15 +2831,15 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":35,"end":162,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":35,"end":162,"kind":"text"}]},{"pos":162,"end":447,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":162,"end":447,"kind":"text"}]},{"pos":447,"end":483,"kind":"text"}],"mapHash":"428292745-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACGD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACXD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}","hash":"-966991284-#!someshebang second second_part1\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":35,"end":192,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":35,"end":192,"kind":"text"}]},{"pos":192,"end":292,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":192,"end":292,"kind":"text"}]},{"pos":292,"end":311,"kind":"text"}],"mapHash":"-8603414798-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACXD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"33189836939-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","-11559081780-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"34342993937-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":34,"end":154,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":34,"end":154,"kind":"text"}]},{"pos":154,"end":424,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":154,"end":424,"kind":"text"}]},{"pos":424,"end":458,"kind":"text"}],"mapHash":"428292745-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACGD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACXD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}","hash":"-25217109881-#!someshebang second second_part1\nvar s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":34,"end":183,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":34,"end":183,"kind":"text"}]},{"pos":183,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":183,"end":276,"kind":"text"}]},{"pos":276,"end":294,"kind":"text"}],"mapHash":"-8603414798-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACXD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-23331286674-#!someshebang second second_part1\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","14403894020-#!someshebang second second_part1\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n","10470273651-var c = new C();\r\nc.doSomething();\r\n"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15126051532-#!someshebang second second_part1\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (35-162):: ../../../first/bin/first-output.js texts:: 1
+prepend: (34-154):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (35-162)
+text: (34-154)
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -2808,9 +2849,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (162-447):: ../../../2/second-output.js texts:: 1
+prepend: (154-424):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (162-447)
+text: (154-424)
 var N;
 (function (N) {
     function f() {
@@ -2828,7 +2869,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (447-483)
+text: (424-458)
 var c = new C();
 c.doSomething();
 
@@ -2836,9 +2877,9 @@ c.doSomething();
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (35-192):: ../../../first/bin/first-output.d.ts texts:: 1
+prepend: (34-183):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (35-192)
+text: (34-183)
 interface TheFirst {
     none: any;
 }
@@ -2849,9 +2890,9 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ----------------------------------------------------------------------
-prepend: (192-292):: ../../../2/second-output.d.ts texts:: 1
+prepend: (183-276):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (192-292)
+text: (183-276)
 declare namespace N {
 }
 declare namespace N {
@@ -2861,7 +2902,7 @@ declare class C {
 }
 
 ----------------------------------------------------------------------
-text: (292-311)
+text: (276-294)
 declare var c: C;
 
 ======================================================================
@@ -2876,75 +2917,75 @@ declare var c: C;
     "js": {
       "sections": [
         {
-          "pos": 35,
-          "end": 162,
+          "pos": 34,
+          "end": 154,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 35,
-              "end": 162,
+              "pos": 34,
+              "end": 154,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 162,
-          "end": 447,
+          "pos": 154,
+          "end": 424,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 162,
-              "end": 447,
+              "pos": 154,
+              "end": 424,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 447,
-          "end": 483,
+          "pos": 424,
+          "end": 458,
           "kind": "text"
         }
       ],
-      "hash": "-966991284-#!someshebang second second_part1\r\nvar s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar C = (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "-25217109881-#!someshebang second second_part1\nvar s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "428292745-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACGD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACXD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
-          "pos": 35,
-          "end": 192,
+          "pos": 34,
+          "end": 183,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
-              "pos": 35,
-              "end": 192,
+              "pos": 34,
+              "end": 183,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 192,
-          "end": 292,
+          "pos": 183,
+          "end": 276,
           "kind": "prepend",
           "data": "../../../2/second-output.d.ts",
           "texts": [
             {
-              "pos": 192,
-              "end": 292,
+              "pos": 183,
+              "end": 276,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 292,
-          "end": 311,
+          "pos": 276,
+          "end": 294,
           "kind": "text"
         }
       ],
-      "hash": "33189836939-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "hash": "-23331286674-#!someshebang second second_part1\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map",
       "mapHash": "-8603414798-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACDD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACXD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
@@ -2957,10 +2998,16 @@ declare var c: C;
     ],
     "fileInfos": {
       "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../../../first/bin/first-output.d.ts": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
-      "../../../2/second-output.d.ts": "-11559081780-#!someshebang second second_part1\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+      "../../../first/bin/first-output.d.ts": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
+      "../../../2/second-output.d.ts": "14403894020-#!someshebang second second_part1\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
       "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
     },
+    "root": [
+      [
+        4,
+        "../../third_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declaration": true,
@@ -2972,10 +3019,10 @@ declare var c: C;
       "strict": false,
       "target": 1
     },
-    "outSignature": "34342993937-#!someshebang second second_part1\r\ninterface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "outSignature": "-15126051532-#!someshebang second second_part1\ninterface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 4806
+  "size": 4670
 }
 

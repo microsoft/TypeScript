@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/localTypeParameterInferencePriority.ts] ////
+
 //// [localTypeParameterInferencePriority.ts]
 export type UnrollOnHover<O extends object> = O extends object ?
     { [K in keyof O]: O[K]; } :

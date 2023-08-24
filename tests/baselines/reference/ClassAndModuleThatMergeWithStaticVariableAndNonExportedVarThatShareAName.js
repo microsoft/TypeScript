@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts] ////
+
 //// [ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts]
 class Point {
     constructor(public x: number, public y: number) { }

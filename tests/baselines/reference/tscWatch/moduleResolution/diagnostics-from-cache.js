@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"moduleResolution":"nodenext","outDir":"./dist","declaration":true,"declarationDir":"./types"}}
@@ -37,11 +38,14 @@ Output::
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 ======== Resolving module '@this/package' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
 Matched 'exports' condition 'default'.
 Using 'exports' subpath '.' with target './dist/index.js'.
-File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
+Resolved under condition 'default'.
+Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/index.ts', result '/user/username/projects/myproject/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
@@ -50,7 +54,9 @@ File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
-[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
+[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+[[90m12:00:40 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -70,23 +76,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index2.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/index.ts:
+/user/username/projects/myproject/index.ts: *new*
   {}
-/user/username/projects/myproject/index2.ts:
+/user/username/projects/myproject/index2.ts: *new*
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/myproject/package.json: *new*
   {}
-/user/username/projects/myproject/package.json:
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject:
+/user/username/projects/myproject: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -126,6 +134,9 @@ import * as me from "./index.js";export function thing(): void {}
 
 
 
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
@@ -140,17 +151,19 @@ Reusing resolution of module '@this/package' from '/user/username/projects/mypro
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './index.js' from '/user/username/projects/myproject/index2.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-Resolving in ESM mode with conditions 'node', 'import', 'types'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/index.js', target file types: TypeScript, JavaScript, Declaration.
 File name '/user/username/projects/myproject/index.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
+File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
 ======== Module name './index.js' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
-[[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
+[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+[[90m12:00:50 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -166,26 +179,6 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index2.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/index.ts:
-  {}
-/user/username/projects/myproject/index2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/package.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
 
 exitCode:: ExitStatus.undefined
 

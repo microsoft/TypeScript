@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/discriminateWithMissingProperty.ts] ////
+
+=== discriminateWithMissingProperty.ts ===
+type Arg = {
+>Arg : Symbol(Arg, Decl(discriminateWithMissingProperty.ts, 0, 0))
+
+    mode: "numeric",
+>mode : Symbol(mode, Decl(discriminateWithMissingProperty.ts, 0, 12))
+
+    data: number,
+>data : Symbol(data, Decl(discriminateWithMissingProperty.ts, 1, 20))
+
+} | {
+    mode: "alphabetic",
+>mode : Symbol(mode, Decl(discriminateWithMissingProperty.ts, 3, 5))
+
+    data: string,
+>data : Symbol(data, Decl(discriminateWithMissingProperty.ts, 4, 23))
+
+} | {
+    data: string | Uint8Array;
+>data : Symbol(data, Decl(discriminateWithMissingProperty.ts, 6, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+declare function foo(arg: Arg): void;
+>foo : Symbol(foo, Decl(discriminateWithMissingProperty.ts, 8, 1))
+>arg : Symbol(arg, Decl(discriminateWithMissingProperty.ts, 10, 21))
+>Arg : Symbol(Arg, Decl(discriminateWithMissingProperty.ts, 0, 0))
+
+foo({ mode: "numeric", data: new Uint8Array([30]) }); // Should error
+>foo : Symbol(foo, Decl(discriminateWithMissingProperty.ts, 8, 1))
+>mode : Symbol(mode, Decl(discriminateWithMissingProperty.ts, 11, 5))
+>data : Symbol(data, Decl(discriminateWithMissingProperty.ts, 11, 22))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

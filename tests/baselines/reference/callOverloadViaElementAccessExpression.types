@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callOverloadViaElementAccessExpression.ts ===
+//// [tests/cases/compiler/callOverloadViaElementAccessExpression.ts] ////
+
+=== callOverloadViaElementAccessExpression.ts ===
 class C {
 >C : C
 
@@ -15,7 +17,6 @@ class C {
 >x : any
 
         return null;
->null : null
     }
 }
 

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -79,22 +80,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (used version)
 
-PolledWatches::
-
 FsWatches::
-/user/username/projects/sample1/library/tsconfig.json:
+/user/username/projects/sample1/app/app.ts: *new*
   {}
-/user/username/projects/sample1/library/library.ts:
+/user/username/projects/sample1/app/tsconfig.json: *new*
   {}
-/user/username/projects/sample1/app/tsconfig.json:
+/user/username/projects/sample1/library/library.ts: *new*
   {}
-/user/username/projects/sample1/app/app.ts:
+/user/username/projects/sample1/library/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/sample1/library:
+/user/username/projects/sample1/app: *new*
   {}
-/user/username/projects/sample1/app:
+/user/username/projects/sample1/library: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -120,7 +119,7 @@ export {};
 
 
 //// [/user/username/projects/sample1/Library/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./library.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"5256469508-\ninterface SomeObject\n{\n    message: string;\n}\n\nexport function createSomeObject(): SomeObject\n{\n    return {\n        message: \"new Object\"\n    };\n}","signature":"-18933614215-interface SomeObject {\n    message: string;\n}\nexport declare function createSomeObject(): SomeObject;\nexport {};\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./library.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./library.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"5256469508-\ninterface SomeObject\n{\n    message: string;\n}\n\nexport function createSomeObject(): SomeObject\n{\n    return {\n        message: \"new Object\"\n    };\n}","signature":"-18933614215-interface SomeObject {\n    message: string;\n}\nexport declare function createSomeObject(): SomeObject;\nexport {};\n"}],"root":[2],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./library.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/Library/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -148,6 +147,12 @@ export {};
         "signature": "-18933614215-interface SomeObject {\n    message: string;\n}\nexport declare function createSomeObject(): SomeObject;\nexport {};\n"
       }
     },
+    "root": [
+      [
+        2,
+        "./library.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -160,7 +165,7 @@ export {};
     "latestChangedDtsFile": "./library.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 993
+  "size": 1004
 }
 
 //// [/user/username/projects/sample1/App/app.js]
@@ -189,6 +194,13 @@ export function createSomeObject(): SomeObject
 }
 
 
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
@@ -236,24 +248,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/library/tsconfig.json:
-  {}
-/user/username/projects/sample1/library/library.ts:
-  {}
-/user/username/projects/sample1/app/tsconfig.json:
-  {}
-/user/username/projects/sample1/app/app.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/library:
-  {}
-/user/username/projects/sample1/app:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/Library/library.js]
@@ -277,7 +271,7 @@ export {};
 
 
 //// [/user/username/projects/sample1/Library/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./library.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-9741349880-\ninterface SomeObject\n{\n    message2: string;\n}\n\nexport function createSomeObject(): SomeObject\n{\n    return {\n        message2: \"new Object\"\n    };\n}","signature":"1956297931-interface SomeObject {\n    message2: string;\n}\nexport declare function createSomeObject(): SomeObject;\nexport {};\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./library.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./library.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-9741349880-\ninterface SomeObject\n{\n    message2: string;\n}\n\nexport function createSomeObject(): SomeObject\n{\n    return {\n        message2: \"new Object\"\n    };\n}","signature":"1956297931-interface SomeObject {\n    message2: string;\n}\nexport declare function createSomeObject(): SomeObject;\nexport {};\n"}],"root":[2],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./library.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/Library/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -305,6 +299,12 @@ export {};
         "signature": "1956297931-interface SomeObject {\n    message2: string;\n}\nexport declare function createSomeObject(): SomeObject;\nexport {};\n"
       }
     },
+    "root": [
+      [
+        2,
+        "./library.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -317,7 +317,7 @@ export {};
     "latestChangedDtsFile": "./library.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 995
+  "size": 1006
 }
 
 
@@ -339,6 +339,13 @@ export function createSomeObject(): SomeObject
 }
 
 
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:04 AM[0m] File change detected. Starting incremental compilation...
@@ -376,24 +383,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/user/username/projects/sample1/library/tsconfig.json:
-  {}
-/user/username/projects/sample1/library/library.ts:
-  {}
-/user/username/projects/sample1/app/tsconfig.json:
-  {}
-/user/username/projects/sample1/app/app.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/sample1/library:
-  {}
-/user/username/projects/sample1/app:
-  {}
-
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/Library/library.js]
@@ -417,7 +406,7 @@ export {};
 
 
 //// [/user/username/projects/sample1/Library/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./library.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"5256469508-\ninterface SomeObject\n{\n    message: string;\n}\n\nexport function createSomeObject(): SomeObject\n{\n    return {\n        message: \"new Object\"\n    };\n}","signature":"-18933614215-interface SomeObject {\n    message: string;\n}\nexport declare function createSomeObject(): SomeObject;\nexport {};\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./library.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./library.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"5256469508-\ninterface SomeObject\n{\n    message: string;\n}\n\nexport function createSomeObject(): SomeObject\n{\n    return {\n        message: \"new Object\"\n    };\n}","signature":"-18933614215-interface SomeObject {\n    message: string;\n}\nexport declare function createSomeObject(): SomeObject;\nexport {};\n"}],"root":[2],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./library.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/Library/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -445,6 +434,12 @@ export {};
         "signature": "-18933614215-interface SomeObject {\n    message: string;\n}\nexport declare function createSomeObject(): SomeObject;\nexport {};\n"
       }
     },
+    "root": [
+      [
+        2,
+        "./library.ts"
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -457,7 +452,7 @@ export {};
     "latestChangedDtsFile": "./library.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 993
+  "size": 1004
 }
 
 //// [/user/username/projects/sample1/App/app.js] file written with same contents

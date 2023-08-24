@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerModExport2.ts ===
+//// [tests/cases/compiler/innerModExport2.ts] ////
+
+=== innerModExport2.ts ===
 module Outer {
 >Outer : Symbol(Outer, Decl(innerModExport2.ts, 0, 0))
 

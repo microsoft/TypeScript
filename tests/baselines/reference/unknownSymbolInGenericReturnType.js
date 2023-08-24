@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unknownSymbolInGenericReturnType.ts] ////
+
 //// [unknownSymbolInGenericReturnType.ts]
 class Linq {
     public static select<T, S>(values: T[], func: (v: T) => A): any[] {

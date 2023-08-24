@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.ts] ////
+
 //// [privateNamesIncompatibleModifiersJs.js]
 class A {
     /**

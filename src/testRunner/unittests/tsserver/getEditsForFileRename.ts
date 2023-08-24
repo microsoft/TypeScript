@@ -1,15 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     textSpanFromSubstring,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: getEditsForFileRename", () => {
     it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {
@@ -82,11 +82,11 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         openFilesForSession([aUserTs, bUserTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
-            command: ts.server.CommandNames.GetEditsForFileRename,
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: aOldTs.path,
                 newFilePath: "/a/new.ts",
-            }
+            },
         });
         baselineTsserverLogs("getEditsForFileRename", "works with multiple projects", session);
     });
@@ -101,11 +101,11 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         openFilesForSession([aTs, cTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
-            command: ts.server.CommandNames.GetEditsForFileRename,
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
             arguments: {
                 oldFilePath: "/b.ts",
                 newFilePath: cTs.path,
-            }
+            },
         });
         baselineTsserverLogs("getEditsForFileRename", "works with file moved to inferred project", session);
     });
