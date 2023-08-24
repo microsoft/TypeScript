@@ -1,4 +1,4 @@
-topLevelAwaitErrors.12.ts(5,8): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+topLevelAwaitErrors.12.ts(5,8): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 
 
 ==== topLevelAwaitErrors.12.ts (1 errors) ====
@@ -8,5 +8,5 @@ topLevelAwaitErrors.12.ts(5,8): error TS1262: Identifier expected. 'await' is a 
     // await disallowed in import=namespace when in a module
     import await = foo.await;
            ~~~~~
-!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
     

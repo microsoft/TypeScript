@@ -1,6 +1,6 @@
 plainJSBinderErrors.js(1,1): error TS2528: A module cannot have multiple default exports.
 plainJSBinderErrors.js(2,1): error TS2528: A module cannot have multiple default exports.
-plainJSBinderErrors.js(3,7): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+plainJSBinderErrors.js(3,7): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 plainJSBinderErrors.js(4,7): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
 plainJSBinderErrors.js(6,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 plainJSBinderErrors.js(9,11): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
@@ -28,7 +28,7 @@ plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules 
 !!! related TS2752 plainJSBinderErrors.js:1:1: The first export default is here.
     const await = 1
           ~~~~~
-!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
     const yield = 2
           ~~~~~
 !!! error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
