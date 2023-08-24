@@ -2776,6 +2776,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return sourceFiles.indexOf(declarationFile) <= sourceFiles.indexOf(useFile);
         }
 
+        // deferred usage in a type context is always OK regardless of the usage position:
+        if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isInAmbientOrTypeNode(usage)) {
+            return true;
+        }
+
         if (declaration.pos <= usage.pos && !(isPropertyDeclaration(declaration) && isThisProperty(usage.parent) && !declaration.initializer && !declaration.exclamationToken)) {
             // declaration is before usage
             if (declaration.kind === SyntaxKind.BindingElement) {
@@ -2816,9 +2821,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //    (except when emitStandardClassFields: true and the reference is to a parameter property)
         // 4. inside a static property initializer, a reference to a static method in the same class
         // 5. inside a TS export= declaration (since we will move the export statement during emit to avoid TDZ)
-        // or if usage is in a type context:
-        // 1. inside a type query (typeof in type position)
-        // 2. inside a jsdoc comment
         if (usage.parent.kind === SyntaxKind.ExportSpecifier || (usage.parent.kind === SyntaxKind.ExportAssignment && (usage.parent as ExportAssignment).isExportEquals)) {
             // export specifiers do not use the variable, they only make it available for use
             return true;
@@ -2828,9 +2830,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-        if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isInAmbientOrTypeNode(usage)) {
-            return true;
-        }
         if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
             if (
                 emitStandardClassFields
@@ -9807,8 +9806,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 }
                             });
 
-                            Debug.assert(setter && isFunctionLikeDeclaration(setter));
-                            const paramSymbol: Symbol | undefined = getSignatureFromDeclaration(setter).parameters[0];
+                            Debug.assert(!!setter);
+                            const paramSymbol = isFunctionLikeDeclaration(setter) ? getSignatureFromDeclaration(setter).parameters[0] : undefined;
 
                             result.push(setTextRange(
                                 factory.createSetAccessorDeclaration(
@@ -10657,7 +10656,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             parentType = getNonNullableType(parentType);
         }
         // Filter `undefined` from the type we check against if the parent has an initializer and that initializer is not possibly `undefined`
-        else if (strictNullChecks && pattern.parent.initializer && !(getTypeFacts(getTypeOfInitializer(pattern.parent.initializer)) & TypeFacts.EQUndefined)) {
+        else if (strictNullChecks && pattern.parent.initializer && !(hasTypeFacts(getTypeOfInitializer(pattern.parent.initializer), TypeFacts.EQUndefined))) {
             parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
         }
 
@@ -10716,7 +10715,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration))) {
             // In strict null checking mode, if a default value of a non-undefined type is specified, remove
             // undefined from the final type.
-            return strictNullChecks && !(getTypeFacts(checkDeclarationInitializer(declaration, CheckMode.Normal)) & TypeFacts.IsUndefined) ? getNonUndefinedType(type) : type;
+            return strictNullChecks && !(hasTypeFacts(checkDeclarationInitializer(declaration, CheckMode.Normal), TypeFacts.IsUndefined)) ? getNonUndefinedType(type) : type;
         }
         return widenTypeInferredFromInitializer(declaration, getUnionType([getNonUndefinedType(type), checkDeclarationInitializer(declaration, CheckMode.Normal)], UnionReduction.Subtype));
     }
@@ -20382,7 +20381,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
                 const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
                 const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
-                    (getTypeFacts(sourceType) & TypeFacts.IsUndefinedOrNull) === (getTypeFacts(targetType) & TypeFacts.IsUndefinedOrNull);
+                    getTypeFacts(sourceType, TypeFacts.IsUndefinedOrNull) === getTypeFacts(targetType, TypeFacts.IsUndefinedOrNull);
                 let related = callbacks ?
                     compareSignaturesRelated(targetSig, sourceSig, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
                     !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
@@ -23944,7 +23943,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function removeDefinitelyFalsyTypes(type: Type): Type {
-        return filterType(type, t => !!(getTypeFacts(t) & TypeFacts.Truthy));
+        return filterType(type, t => hasTypeFacts(t, TypeFacts.Truthy));
     }
 
     function extractDefinitelyFalsyTypes(type: Type): Type {
@@ -25584,12 +25583,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function inferFromSignatures(source: Type, target: Type, kind: SignatureKind) {
             const sourceSignatures = getSignaturesOfType(source, kind);
-            const targetSignatures = getSignaturesOfType(target, kind);
             const sourceLen = sourceSignatures.length;
-            const targetLen = targetSignatures.length;
-            const len = sourceLen < targetLen ? sourceLen : targetLen;
-            for (let i = 0; i < len; i++) {
-                inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]));
+            if (sourceLen > 0) {
+                // We match source and target signatures from the bottom up, and if the source has fewer signatures
+                // than the target, we infer from the first source signature to the excess target signatures.
+                const targetSignatures = getSignaturesOfType(target, kind);
+                const targetLen = targetSignatures.length;
+                for (let i = 0; i < targetLen; i++) {
+                    const sourceIndex = Math.max(sourceLen - targetLen + i, 0);
+                    inferFromSignature(getBaseSignature(sourceSignatures[sourceIndex]), getErasedSignature(targetSignatures[i]));
+                }
             }
         }
 
@@ -26187,7 +26190,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             resolved.members.get("bind" as __String) && isTypeSubtypeOf(type, globalFunctionType));
     }
 
-    function getTypeFacts(type: Type): TypeFacts {
+    function getTypeFacts(type: Type, mask: TypeFacts): TypeFacts {
+        return getTypeFactsWorker(type, mask) & mask;
+    }
+
+    function hasTypeFacts(type: Type, mask: TypeFacts): boolean {
+        return getTypeFacts(type, mask) !== 0;
+    }
+
+    function getTypeFactsWorker(type: Type, callerOnlyNeeds: TypeFacts): TypeFacts {
         if (type.flags & (TypeFlags.Intersection | TypeFlags.Instantiable)) {
             type = getBaseConstraintOfType(type) || unknownType;
         }
@@ -26228,6 +26239,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
         }
         if (flags & TypeFlags.Object) {
+            const possibleFacts = strictNullChecks
+                ? TypeFacts.EmptyObjectStrictFacts | TypeFacts.FunctionStrictFacts | TypeFacts.ObjectStrictFacts
+                : TypeFacts.EmptyObjectFacts | TypeFacts.FunctionFacts | TypeFacts.ObjectFacts;
+
+            if ((callerOnlyNeeds & possibleFacts) === 0) {
+                // If the caller doesn't care about any of the facts that we could possibly produce,
+                // return zero so we can skip resolving members.
+                return 0;
+            }
+
             return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type as ObjectType) ?
                 strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
                 isFunctionObjectType(type as ObjectType) ?
@@ -26253,15 +26274,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return TypeFacts.None;
         }
         if (flags & TypeFlags.Union) {
-            return reduceLeft((type as UnionType).types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
+            return reduceLeft((type as UnionType).types, (facts, t) => facts | getTypeFactsWorker(t, callerOnlyNeeds), TypeFacts.None);
         }
         if (flags & TypeFlags.Intersection) {
-            return getIntersectionTypeFacts(type as IntersectionType);
+            return getIntersectionTypeFacts(type as IntersectionType, callerOnlyNeeds);
         }
         return TypeFacts.UnknownFacts;
     }
 
-    function getIntersectionTypeFacts(type: IntersectionType): TypeFacts {
+    function getIntersectionTypeFacts(type: IntersectionType, callerOnlyNeeds: TypeFacts): TypeFacts {
         // When an intersection contains a primitive type we ignore object type constituents as they are
         // presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
         const ignoreObjects = maybeTypeOfKind(type, TypeFlags.Primitive);
@@ -26271,7 +26292,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let andedFacts = TypeFacts.All;
         for (const t of type.types) {
             if (!(ignoreObjects && t.flags & TypeFlags.Object)) {
-                const f = getTypeFacts(t);
+                const f = getTypeFactsWorker(t, callerOnlyNeeds);
                 oredFacts |= f;
                 andedFacts &= f;
             }
@@ -26280,7 +26301,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeWithFacts(type: Type, include: TypeFacts) {
-        return filterType(type, t => (getTypeFacts(t) & include) !== 0);
+        return filterType(type, t => hasTypeFacts(t, include));
     }
 
     // This function is similar to getTypeWithFacts, except that in strictNullChecks mode it replaces type
@@ -26291,12 +26312,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (strictNullChecks) {
             switch (facts) {
                 case TypeFacts.NEUndefined:
-                    return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefined ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQNull && !maybeTypeOfKind(reduced, TypeFlags.Null) ? getUnionType([emptyObjectType, nullType]) : emptyObjectType]) : t);
+                    return mapType(reduced, t => hasTypeFacts(t, TypeFacts.EQUndefined) ? getIntersectionType([t, hasTypeFacts(t, TypeFacts.EQNull) && !maybeTypeOfKind(reduced, TypeFlags.Null) ? getUnionType([emptyObjectType, nullType]) : emptyObjectType]) : t);
                 case TypeFacts.NENull:
-                    return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQNull ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQUndefined && !maybeTypeOfKind(reduced, TypeFlags.Undefined) ? getUnionType([emptyObjectType, undefinedType]) : emptyObjectType]) : t);
+                    return mapType(reduced, t => hasTypeFacts(t, TypeFacts.EQNull) ? getIntersectionType([t, hasTypeFacts(t, TypeFacts.EQUndefined) && !maybeTypeOfKind(reduced, TypeFlags.Undefined) ? getUnionType([emptyObjectType, undefinedType]) : emptyObjectType]) : t);
                 case TypeFacts.NEUndefinedOrNull:
                 case TypeFacts.Truthy:
-                    return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefinedOrNull ? getGlobalNonNullableTypeInstantiation(t) : t);
+                    return mapType(reduced, t => hasTypeFacts(t, TypeFacts.EQUndefinedOrNull) ? getGlobalNonNullableTypeInstantiation(t) : t);
             }
         }
         return reduced;
@@ -27505,7 +27526,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
-            const type = declaredType.flags & TypeFlags.Union ? declaredType : computedType;
+            const type = !(computedType.flags & TypeFlags.Union) && declaredType.flags & TypeFlags.Union ? declaredType : computedType;
             if (type.flags & TypeFlags.Union) {
                 const access = getCandidateDiscriminantPropertyAccess(expr);
                 if (access) {
@@ -27864,14 +27885,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // the constituent based on its type facts. We use the strict subtype relation because it treats `object`
                 // as a subtype of `{}`, and we need the type facts check because function types are subtypes of `object`,
                 // but are classified as "function" according to `typeof`.
-                isTypeRelatedTo(t, impliedType, strictSubtypeRelation) ? getTypeFacts(t) & facts ? t : neverType :
+                isTypeRelatedTo(t, impliedType, strictSubtypeRelation) ? hasTypeFacts(t, facts) ? t : neverType :
                     // We next check if the consituent is a supertype of the implied type. If so, we substitute the implied
                     // type. This handles top types like `unknown` and `{}`, and supertypes like `{ toString(): string }`.
                     isTypeSubtypeOf(impliedType, t) ? impliedType :
                     // Neither the constituent nor the implied type is a subtype of the other, however their domains may still
                     // overlap. For example, an unconstrained type parameter and type `string`. If the type facts indicate
                     // possible overlap, we form an intersection. Otherwise, we eliminate the constituent.
-                    getTypeFacts(t) & facts ? getIntersectionType([t, impliedType]) :
+                    hasTypeFacts(t, facts) ? getIntersectionType([t, impliedType]) :
                     neverType);
         }
 
@@ -27886,7 +27907,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (hasDefaultClause) {
                 // In the default clause we filter constituents down to those that are not-equal to all handled cases.
                 const notEqualFacts = getNotEqualFactsFromTypeofSwitch(clauseStart, clauseEnd, witnesses);
-                return filterType(type, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts);
+                return filterType(type, t => getTypeFacts(t, notEqualFacts) === notEqualFacts);
             }
             // In the non-default cause we create a union of the type narrowed by each of the listed cases.
             const clauseWitnesses = witnesses.slice(clauseStart, clauseEnd);
@@ -28069,7 +28090,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     if (
                         strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
-                        !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)
+                        !(hasTypeFacts(predicate.type, TypeFacts.EQUndefined))
                     ) {
                         type = getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                     }
@@ -28230,7 +28251,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return true;
             }
 
-            const containsUndefined = !!(getTypeFacts(checkDeclarationInitializer(declaration, CheckMode.Normal)) & TypeFacts.IsUndefined);
+            const containsUndefined = !!(hasTypeFacts(checkDeclarationInitializer(declaration, CheckMode.Normal), TypeFacts.IsUndefined));
 
             if (!popTypeResolution()) {
                 reportCircularityError(declaration.symbol);
@@ -28248,7 +28269,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const removeUndefined = strictNullChecks &&
             declaration.kind === SyntaxKind.Parameter &&
             declaration.initializer &&
-            getTypeFacts(declaredType) & TypeFacts.IsUndefined &&
+            hasTypeFacts(declaredType, TypeFacts.IsUndefined) &&
             !parameterInitializerContainsUndefined(declaration);
 
         return removeUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
@@ -31827,7 +31848,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isNullableType(type: Type) {
-        return !!(getTypeFacts(type) & TypeFacts.IsUndefinedOrNull);
+        return hasTypeFacts(type, TypeFacts.IsUndefinedOrNull);
     }
 
     function getNonNullableTypeIfNeeded(type: Type) {
@@ -31891,7 +31912,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.Object_is_of_type_unknown);
             return errorType;
         }
-        const facts = getTypeFacts(type);
+        const facts = getTypeFacts(type, TypeFacts.IsUndefinedOrNull);
         if (facts & TypeFacts.IsUndefinedOrNull) {
             reportError(node, facts);
             const t = getNonNullableType(type);
@@ -36353,7 +36374,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return (TypeFacts.AllTypeofNE & notEqualFacts) === TypeFacts.AllTypeofNE;
             }
             // A missing not-equal flag indicates that the type wasn't handled by some case.
-            return !someType(operandConstraint, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts);
+            return !someType(operandConstraint, t => getTypeFacts(t, notEqualFacts) === notEqualFacts);
         }
         const type = checkExpressionCached(node.expression);
         if (!isLiteralType(type)) {
@@ -36759,7 +36780,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isReadonlySymbol(symbol)) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_cannot_be_a_read_only_property);
             }
-            checkDeleteExpressionMustBeOptional(expr, symbol);
+            else {
+                checkDeleteExpressionMustBeOptional(expr, symbol);
+            }
         }
         return booleanType;
     }
@@ -36769,7 +36792,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (
             strictNullChecks &&
             !(type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Never)) &&
-            !(exactOptionalPropertyTypes ? symbol.flags & SymbolFlags.Optional : getTypeFacts(type) & TypeFacts.IsUndefined)
+            !(exactOptionalPropertyTypes ? symbol.flags & SymbolFlags.Optional : hasTypeFacts(type, TypeFacts.IsUndefined))
         ) {
             error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_optional);
         }
@@ -36915,7 +36938,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getUnaryResultType(operandType);
             case SyntaxKind.ExclamationToken:
                 checkTruthinessOfType(operandType, node.operand);
-                const facts = getTypeFacts(operandType) & (TypeFacts.Truthy | TypeFacts.Falsy);
+                const facts = getTypeFacts(operandType, TypeFacts.Truthy | TypeFacts.Falsy);
                 return facts === TypeFacts.Truthy ? falseType :
                     facts === TypeFacts.Falsy ? trueType :
                     booleanType;
@@ -37206,7 +37229,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // undefined from the final type.
                 if (
                     strictNullChecks &&
-                    !(getTypeFacts(checkExpression(prop.objectAssignmentInitializer)) & TypeFacts.IsUndefined)
+                    !(hasTypeFacts(checkExpression(prop.objectAssignmentInitializer), TypeFacts.IsUndefined))
                 ) {
                     sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined);
                 }
@@ -37682,7 +37705,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return checkInExpression(left, right, leftType, rightType);
             case SyntaxKind.AmpersandAmpersandToken:
             case SyntaxKind.AmpersandAmpersandEqualsToken: {
-                const resultType = getTypeFacts(leftType) & TypeFacts.Truthy ?
+                const resultType = hasTypeFacts(leftType, TypeFacts.Truthy) ?
                     getUnionType([extractDefinitelyFalsyTypes(strictNullChecks ? leftType : getBaseTypeOfLiteralType(rightType)), rightType]) :
                     leftType;
                 if (operator === SyntaxKind.AmpersandAmpersandEqualsToken) {
@@ -37692,7 +37715,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             case SyntaxKind.BarBarToken:
             case SyntaxKind.BarBarEqualsToken: {
-                const resultType = getTypeFacts(leftType) & TypeFacts.Falsy ?
+                const resultType = hasTypeFacts(leftType, TypeFacts.Falsy) ?
                     getUnionType([getNonNullableType(removeDefinitelyFalsyTypes(leftType)), rightType], UnionReduction.Subtype) :
                     leftType;
                 if (operator === SyntaxKind.BarBarEqualsToken) {
@@ -37702,7 +37725,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             case SyntaxKind.QuestionQuestionToken:
             case SyntaxKind.QuestionQuestionEqualsToken: {
-                const resultType = getTypeFacts(leftType) & TypeFacts.EQUndefinedOrNull ?
+                const resultType = hasTypeFacts(leftType, TypeFacts.EQUndefinedOrNull) ?
                     getUnionType([getNonNullableType(leftType), rightType], UnionReduction.Subtype) :
                     leftType;
                 if (operator === SyntaxKind.QuestionQuestionEqualsToken) {
@@ -41961,7 +41984,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const type = location === condExpr ? condType : checkTruthinessExpression(location);
             const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
-            if (!(getTypeFacts(type) & TypeFacts.Truthy) || isPropertyExpressionCast) return;
+            if (!hasTypeFacts(type, TypeFacts.Truthy) || isPropertyExpressionCast) return;
 
             // While it technically should be invalid for any known-truthy value
             // to be tested, we de-scope to functions and Promises unreferenced in
