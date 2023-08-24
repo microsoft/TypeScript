@@ -2,14 +2,14 @@ import * as ts from "typescript";
 
 import { SymbolTracker } from "../compiler/types";
 
-const declarationEmitNodeBuilderFlags =
-    ts.NodeBuilderFlags.MultilineObjectLiterals |
-    ts.NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
-    ts.NodeBuilderFlags.UseTypeOfFunction |
-    ts.NodeBuilderFlags.UseStructuralFallback |
-    ts.NodeBuilderFlags.AllowEmptyTuple |
-    ts.NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
-    ts.NodeBuilderFlags.NoTruncation;
+const declarationEmitNodeBuilderFlags = ts.NodeBuilderFlags.MultilineObjectLiterals
+    | ts.NodeBuilderFlags.WriteClassExpressionAsTypeLiteral
+    | ts.NodeBuilderFlags.UseTypeOfFunction
+    | ts.NodeBuilderFlags.UseStructuralFallback
+    | ts.NodeBuilderFlags.AllowEmptyTuple
+    | ts.NodeBuilderFlags.GenerateNamesForShadowedTypeParams
+    | ts.NodeBuilderFlags.NoTruncation
+    | ts.NodeBuilderFlags.AllowUniqueESSymbolType;
 
 function tryGetReturnType(typeChecker: ts.TypeChecker, node: ts.SignatureDeclaration): ts.Type | undefined {
     const signature = typeChecker.getSignatureFromDeclaration(node);
