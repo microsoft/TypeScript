@@ -1,6 +1,6 @@
 import { Debug } from "../../debug";
 import { Diagnostics } from "../../diagnosticInformationMap.generated";
-import { isComputedPropertyName, isConstructSignatureDeclaration, isExportAssignment, isGetAccessorDeclaration, isIdentifier, isLiteralTypeNode, isMethodDeclaration, isMethodSignature, isNoSubstitutionTemplateLiteral, isNumericLiteral, isOmittedExpression, isParameter, isPropertyAccessExpression, isPropertyAssignment, isPropertyDeclaration, isSetAccessorDeclaration, isShorthandPropertyAssignment, isSpreadAssignment, isSpreadElement, isStringLiteral, isTypeParameterDeclaration, isTypeReferenceNode, isVariableDeclaration } from "../../factory/nodeTests";
+import { isCallSignatureDeclaration, isComputedPropertyName, isConstructSignatureDeclaration, isExportAssignment, isGetAccessorDeclaration, isIdentifier, isLiteralTypeNode, isMethodDeclaration, isMethodSignature, isNoSubstitutionTemplateLiteral, isNumericLiteral, isOmittedExpression, isParameter, isPrivateIdentifier, isPropertyAccessExpression, isPropertyAssignment, isPropertyDeclaration, isPropertySignature, isSetAccessorDeclaration, isShorthandPropertyAssignment, isSpreadAssignment, isSpreadElement, isStringLiteral, isTypeParameterDeclaration, isTypeReferenceNode, isUnionTypeNode, isVariableDeclaration } from "../../factory/nodeTests";
 import { setTextRange } from "../../factory/utilitiesPublic";
 import { forEachChildRecursively } from "../../parser";
 import { nullTransformationContext } from "../../transformer";
@@ -24,7 +24,7 @@ enum LocalTypeInfoFlags {
 
 interface LocalInferenceResolver {
     makeInvalidType(): Node;
-    fromInitializer(node: HasInferredType | ExportAssignment, sourceFile: SourceFile): TypeNode;
+    fromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined, sourceFile: SourceFile): TypeNode;
 }
 export function createLocalInferenceResolver({
     setEnclosingDeclarations,
@@ -41,6 +41,7 @@ export function createLocalInferenceResolver({
 }): LocalInferenceResolver | undefined {
     let currentSourceFile: SourceFile | undefined;
     const options = context.getCompilerOptions();
+    const resolver = context.getEmitResolver();
     if (!options.isolatedDeclarations) {
         return undefined;
     }
@@ -48,13 +49,16 @@ export function createLocalInferenceResolver({
     const strictNullChecks = !!options.strict || !!options.strictNullChecks;
 
     return {
-        fromInitializer(node: HasInferredType, sourceFile: SourceFile) {
+        fromInitializer(node: HasInferredType, type: TypeNode | undefined, sourceFile: SourceFile) {
             const oldSourceFile = currentSourceFile;
             currentSourceFile = sourceFile;
             try {
-                const localType = localInferenceFromInitializer(node);
+                const localType = localInferenceFromInitializer(node, type);
                 if (localType !== undefined) {
                     return localType;
+                }
+                if(type) {
+                    return visitNode(type, visitDeclarationSubtree, isTypeNode)!;
                 }
                 return makeInvalidType();
             }
@@ -263,6 +267,7 @@ export function createLocalInferenceResolver({
             case SyntaxKind.ObjectLiteralExpression: {
                 const objectLiteral = node as ObjectLiteralExpression;
                 const properties: TypeElement[] = [];
+                let inheritedObjectTypeFlags = LocalTypeInfoFlags.None;
 
                 for (let propIndex = 0, length = objectLiteral.properties.length; propIndex < length; propIndex++) {
                     const prop = objectLiteral.properties[propIndex];
@@ -274,12 +279,19 @@ export function createLocalInferenceResolver({
                         return invalid(prop);
                     }
 
-                    if (prop.name && isComputedPropertyName(prop.name) && isEntityNameExpression(prop.name.expression)) {
+                    if(isPrivateIdentifier(prop.name)) {
+                        // Not valid in object literals but the compiler will complain about this, we just ignore it here.
+                        continue;
+                    }
+                    if (isComputedPropertyName(prop.name)) {
+                        if(!isEntityNameExpression(prop.name.expression)) {
+                            reportIsolatedDeclarationError(node);
+                            continue;
+                        }
                         checkEntityNameVisibility(prop.name.expression, prop);
                     }
 
                     const name = deepClone(visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!);
-                    let inheritedObjectTypeFlags = LocalTypeInfoFlags.None;
                     let newProp;
                     if (isMethodDeclaration(prop)) {
                         const oldEnclosingDeclaration = setEnclosingDeclarations(prop);
@@ -361,7 +373,7 @@ export function createLocalInferenceResolver({
                 }
 
                 const typeNode: TypeNode = factory.createTypeLiteralNode(properties);
-                return regular(typeNode, objectLiteral);
+                return regular(typeNode, objectLiteral, inheritedObjectTypeFlags);
             }
         }
 
@@ -480,13 +492,44 @@ export function createLocalInferenceResolver({
         }
     }
 
-    function localInferenceFromInitializer(node: HasInferredType | ExportAssignment): TypeNode | undefined {
-        let localType;
-        if (isExportAssignment(node) && node.expression) {
-            localType = localInference(node.expression, NarrowBehavior.KeepLiterals);
+    function addUndefinedInUnion(type: TypeNode) {
+        if(isUnionTypeNode(type)) {
+            const hasUndefined = type.types.some(p => p.kind === SyntaxKind.UndefinedKeyword);
+            if(hasUndefined) return type;
+
+            return factory.createUnionTypeNode([
+                ...type.types,
+                factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)
+            ])
         }
-        else if (isParameter(node) && node.initializer) {
-            localType = localInference(node.initializer);
+        return factory.createUnionTypeNode([
+            type,
+            factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)
+        ])
+    }
+    function localInferenceFromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined): TypeNode | undefined {
+        let localType: LocalTypeInfo | undefined;
+        if (isParameter(node) && node.initializer) {
+            if(type) {
+                localType = {
+                    typeNode: visitNode(type, visitDeclarationSubtree, isTypeNode)!,
+                    sourceNode: node,
+                    flags: LocalTypeInfoFlags.None
+                }
+            }
+            else {
+                localType = localInference(node.initializer);
+            }
+
+            if(localType && strictNullChecks && !resolver.isOptionalParameter(node)) {
+                localType.typeNode = addUndefinedInUnion(localType.typeNode);
+            }
+        }
+        else if(type) {
+            return visitNode(type, visitDeclarationSubtree, isTypeNode);
+        }
+        else if (isExportAssignment(node) && node.expression) {
+            localType = localInference(node.expression, NarrowBehavior.KeepLiterals);
         }
         else if (isVariableDeclaration(node) && node.initializer) {
             localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.KeepLiterals : NarrowBehavior.None);
@@ -494,7 +537,10 @@ export function createLocalInferenceResolver({
         else if (isPropertyDeclaration(node) && node.initializer) {
             localType = localInference(node.initializer);
         }
-        else if(isMethodSignature(node) || isConstructSignatureDeclaration(node)) {
+        else if(isMethodSignature(node) 
+            || isConstructSignatureDeclaration(node)
+            || isCallSignatureDeclaration(node)
+            || isPropertySignature(node)) {
             return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
         else {

@@ -1,4 +1,4 @@
-import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, factory, findAncestor, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isBindingElement, isElementAccessExpression, isEnumMember, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSourceFile, isStringLiteralLike, isVariableDeclaration, isVariableStatement, LiteralExpression, ModifierFlags, NamespaceImport, Node, NodeFlags, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
+import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, factory, findAncestor, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isBigIntLiteral, isBindingElement, isElementAccessExpression, isEnumMember, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSourceFile, isStringLiteralLike, isVariableDeclaration, isVariableStatement, LiteralExpression, ModifierFlags, NamespaceImport, Node, NodeFlags, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
 
 import { Debug } from "./debug";
 import { BasicSymbol, bindSourceFile, NodeLinks } from "./emit-binder";
@@ -14,13 +14,24 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
 
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration | EnumMember): boolean {
         if (isDeclarationReadonly(node) || (isVariableDeclaration(node) && isVarConst(node)) || isEnumMember(node)) {
-            // TODO: Make sure this is a valid approximation for literal types
-            return (isEnumMember(node) || !node.type) && hasProperty(node, "initializer") && !!node.initializer &&
-                (isLiteralExpression(node.initializer) 
-                    || node.initializer.kind === SyntaxKind.TrueKeyword || node.initializer.kind === SyntaxKind.FalseKeyword
-                    || (isPrefixUnaryExpression(node.initializer) 
-                        && (node.initializer.operator === SyntaxKind.PlusToken || node.initializer.operator === SyntaxKind.MinusToken)
-                        && isLiteralExpression(node.initializer.operand)));
+            if(!(isEnumMember(node) || !node.type)) return false;
+            if(!(hasProperty(node, "initializer") && !!node.initializer)) return false;
+
+            const initializer = node.initializer;
+            if(isLiteralExpression(initializer)) return true;
+
+            if(initializer.kind === SyntaxKind.TrueKeyword || initializer.kind === SyntaxKind.FalseKeyword) return true;
+
+            if(isPrefixUnaryExpression(initializer)) {
+                const operand = initializer.operand;
+                if(initializer.operator === SyntaxKind.MinusToken) {
+                    return isNumericLiteral(operand) || isBigIntLiteral(operand);
+                }
+                if(initializer.operator === SyntaxKind.PlusToken) {
+                    return isNumericLiteral(operand);
+                }
+            }
+            return false;
             // Original TS version
             // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
         }
@@ -74,7 +85,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             }
             function updateEnumValues(node: EnumDeclaration) {
                 let prevEnumValueLinks: NodeLinks | undefined;  
-                let isDeclaration = isAmbientDeclaration(node);
+                let isDeclaration = isAmbientDeclaration(node) && !hasSyntacticModifier(node, ModifierFlags.Const);
                 for(const enumValue of node.members) {
                     const links = getNodeLinks(enumValue);
                     const value = getEnumMemberInitializerValue(enumValue);

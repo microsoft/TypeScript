@@ -759,7 +759,7 @@ export function transformDeclarations(context: TransformationContext) {
         const newParam = factory.updateParameterDeclaration(
             p,
             maskModifiers(factory, p, modifierMask),
-            p.dotDotDotToken,
+            p.dotDotDotToken,   
             filterBindingPatternInitializersAndRenamings(p.name),
             resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
             ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
@@ -791,11 +791,9 @@ export function transformDeclarations(context: TransformationContext) {
             // Literal const declarations will have an initializer ensured rather than a type
             return;
         }
-        if (isolatedDeclarations) {
-            if (type === undefined && localInferenceResolver) {
-                return localInferenceResolver.fromInitializer(node, currentSourceFile);
-            }
-            return visitNode(type, visitDeclarationSubtree, isTypeNode);
+        if (isolatedDeclarations && localInferenceResolver) {
+            return localInferenceResolver.fromInitializer(node, type, currentSourceFile);
+            
         }
         const shouldUseResolverType = node.kind === SyntaxKind.Parameter &&
             (resolver.isRequiredInitializedParameter(node) ||
@@ -1430,7 +1428,7 @@ export function transformDeclarations(context: TransformationContext) {
                     });
                     errorFallbackNode = input;
                     const type = isolatedDeclarations ?
-                        localInferenceResolver?.fromInitializer(input, currentSourceFile) :
+                        localInferenceResolver?.fromInitializer(input, undefined, currentSourceFile) :
                         resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker);
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                     errorFallbackNode = undefined;

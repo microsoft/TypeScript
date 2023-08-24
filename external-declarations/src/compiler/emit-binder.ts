@@ -289,15 +289,18 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                     const mappedType = node;
                     withScope(node, /*exports*/ undefined, () => {
                         bindTypeParameters([mappedType.typeParameter]);
-                        bindWorker(mappedType.nameType);
-                        bindWorker(mappedType.type);
                     });
+                    bindWorker(mappedType.nameType);
+                    bindWorker(mappedType.type);
                 }
                 else if(isConditionalTypeNode(node)) {
-                    withScope(node.checkType, /*exports*/ undefined, () => {
+                    withScope(node.extendsType, /*exports*/ undefined, () => {
                         bindWorker(node.extendsType);
                     });
-                    getNodeLinks(node.trueType).locals = getNodeLinks(node.checkType).locals;
+                    bindWorker(node.checkType);
+                    bindWorker(node.falseType);
+                    getNodeLinks(node.trueType).locals = getNodeLinks(node.extendsType).locals;
+                    bindWorker(node.trueType);
                 }
                 else if(isInferTypeNode(node)) {
                     const conditionalTypeOwner = findAncestor(node, isConditionalTypeNode);

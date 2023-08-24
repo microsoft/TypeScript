@@ -14,4 +14,6 @@ export const testRunnerCLIConfiguration = parserConfiguration({
     histFolder: ArgType.String(),
     libPath: ArgType.String(),
     rootPaths: ArgType.StringArray(),
+    configFile: ArgType.String(),
+    category: ArgType.String(),
 });
