@@ -36713,7 +36713,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isReadonlySymbol(symbol)) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_cannot_be_a_read_only_property);
             }
-            checkDeleteExpressionMustBeOptional(expr, symbol);
+            else {
+                checkDeleteExpressionMustBeOptional(expr, symbol);
+            }
         }
         return booleanType;
     }
