@@ -1350,7 +1350,7 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
                 "defineProperty",
                 "deleteProperty",
                 "get",
-                " getOwnPropertyDescriptor",
+                "getOwnPropertyDescriptor",
                 "getPrototypeOf",
                 "has",
                 "isExtensible",
