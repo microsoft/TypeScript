@@ -22,7 +22,7 @@ module.exports = createRule({
     defaultOptions: [],
 
     create(context) {
-        const keywords = [
+        const keywords = new Set([
             "Undefined",
             "undefined",
             "Boolean",
@@ -32,10 +32,10 @@ module.exports = createRule({
             "Number",
             "number",
             "any",
-        ];
+        ]);
 
         /** @type {(name: string) => boolean} */
-        const isKeyword = name => keywords.includes(name);
+        const isKeyword = name => keywords.has(name);
 
         /** @type {(node: TSESTree.Identifier) => void} */
         const report = node => {

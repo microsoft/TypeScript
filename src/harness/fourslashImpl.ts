@@ -429,18 +429,18 @@ export class TestState {
         this.openFile(0);
 
         function memoWrap(ls: ts.LanguageService, target: TestState): ts.LanguageService {
-            const cacheableMembers: (keyof typeof ls)[] = [
+            const cacheableMembers = new Set<keyof typeof ls>([
                 "getCompletionEntryDetails",
                 "getCompletionEntrySymbol",
                 "getQuickInfoAtPosition",
                 "getReferencesAtPosition",
                 "getDocumentHighlights",
-            ];
+            ]);
             const proxy = {} as ts.LanguageService;
             const keys = ts.getAllKeys(ls);
             for (const k of keys) {
                 const key = k as keyof typeof ls;
-                if (!cacheableMembers.includes(key)) {
+                if (!cacheableMembers.has(key)) {
                     proxy[key] = (...args: any[]) => (ls[key] as (...args: any[]) => any)(...args);
                     continue;
                 }

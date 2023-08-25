@@ -2241,6 +2241,7 @@ function loadEntrypointsFromExportMap(
                 });
             }
             else {
+                // eslint-disable-next-line unicorn/prefer-set-has
                 const partsAfterFirst = getPathComponents(target).slice(2);
                 if (partsAfterFirst.includes("..") || partsAfterFirst.includes(".") || partsAfterFirst.includes("node_modules")) {
                     return false;
@@ -2675,6 +2676,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                 return toSearchResult(/*value*/ undefined);
             }
             const parts = pathIsRelative(target) ? getPathComponents(target).slice(1) : getPathComponents(target);
+            // eslint-disable-next-line unicorn/prefer-set-has
             const partsAfterFirst = parts.slice(1);
             if (partsAfterFirst.includes("..") || partsAfterFirst.includes(".") || partsAfterFirst.includes("node_modules")) {
                 if (state.traceEnabled) {
