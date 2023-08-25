@@ -215,7 +215,7 @@ export function start() {
     function startDelayed(perfData: { [testHash: string]: number; } | undefined, totalCost: number) {
         console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
         console.log("Discovering runner-based tests...");
-        const discoverStart = +(new Date());
+        const discoverStart = Date.now();
         for (const runner of runners) {
             for (const test of runner.getTestFiles()) {
                 const file = typeof test === "string" ? test : test.file;
@@ -255,7 +255,7 @@ export function start() {
         const packfraction = 0.9;
         const chunkSize = 1000; // ~1KB or 1s for sending batches near the end of a test
         const batchSize = (totalCost / workerCount) * packfraction; // Keep spare tests for unittest thread in reserve
-        console.log(`Discovered ${tasks.length} test files in ${+(new Date()) - discoverStart}ms.`);
+        console.log(`Discovered ${tasks.length} test files in ${Date.now() - discoverStart}ms.`);
         console.log(`Starting to run tests using ${workerCount} threads...`);
 
         const totalFiles = tasks.length;
