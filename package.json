@@ -66,6 +66,7 @@
         "eslint-plugin-local": "^1.0.0",
         "eslint-plugin-no-null": "^1.0.2",
         "eslint-plugin-simple-import-sort": "^10.0.0",
+        "eslint-plugin-unicorn": "^48.0.1",
         "fast-xml-parser": "^4.0.11",
         "glob": "^8.1.0",
         "hereby": "^1.6.4",
