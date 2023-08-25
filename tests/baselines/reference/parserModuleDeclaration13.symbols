@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration13.ts] ////
+
+=== parserModuleDeclaration13.ts ===
+// https://github.com/microsoft/TypeScript/issues/11167
+
+declare module 
+     my.very.long.name.foo.bar.baz.able.baker {}
+>my : Symbol(my, Decl(parserModuleDeclaration13.ts, 0, 0))
+>very : Symbol(very, Decl(parserModuleDeclaration13.ts, 3, 8))
+>long : Symbol(long, Decl(parserModuleDeclaration13.ts, 3, 13))
+>name : Symbol(name, Decl(parserModuleDeclaration13.ts, 3, 18))
+>foo : Symbol(foo, Decl(parserModuleDeclaration13.ts, 3, 23))
+>bar : Symbol(bar, Decl(parserModuleDeclaration13.ts, 3, 27))
+>baz : Symbol(baz, Decl(parserModuleDeclaration13.ts, 3, 31))
+>able : Symbol(able, Decl(parserModuleDeclaration13.ts, 3, 35))
+>baker : Symbol(baker, Decl(parserModuleDeclaration13.ts, 3, 40))
+
