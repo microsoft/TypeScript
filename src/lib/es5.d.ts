@@ -135,7 +135,7 @@ interface Object {
 }
 
 interface ObjectConstructor {
-    new(value?: any): Object;
+    new (value?: any): Object;
     (): any;
     (value: any): any;
 
@@ -207,7 +207,7 @@ interface ObjectConstructor {
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
      * @param o Object on which to lock the attributes.
      */
-    freeze<T extends {[idx: string]: U | null | undefined | object}, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>;
+    freeze<T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>;
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
@@ -293,7 +293,7 @@ interface FunctionConstructor {
      * Creates a new function.
      * @param args A list of arguments the function accepts.
      */
-    new(...args: string[]): Function;
+    new (...args: string[]): Function;
     (...args: string[]): Function;
     readonly prototype: Function;
 }
@@ -514,7 +514,7 @@ interface String {
 }
 
 interface StringConstructor {
-    new(value?: any): String;
+    new (value?: any): String;
     (value?: any): string;
     readonly prototype: String;
     fromCharCode(...codes: number[]): string;
@@ -531,7 +531,7 @@ interface Boolean {
 }
 
 interface BooleanConstructor {
-    new(value?: any): Boolean;
+    new (value?: any): Boolean;
     <T>(value?: T): boolean;
     readonly prototype: Boolean;
 }
@@ -568,7 +568,7 @@ interface Number {
 }
 
 interface NumberConstructor {
-    new(value?: any): Number;
+    new (value?: any): Number;
     (value?: any): number;
     readonly prototype: Number;
 
@@ -896,8 +896,8 @@ interface Date {
 }
 
 interface DateConstructor {
-    new(): Date;
-    new(value: number | string): Date;
+    new (): Date;
+    new (value: number | string): Date;
     /**
      * Creates a new Date.
      * @param year The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
@@ -908,7 +908,7 @@ interface DateConstructor {
      * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
      * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
-    new(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
+    new (year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
     (): string;
     readonly prototype: Date;
     /**
@@ -996,49 +996,49 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    new(pattern: RegExp | string): RegExp;
-    new(pattern: string, flags?: string): RegExp;
+    new (pattern: RegExp | string): RegExp;
+    new (pattern: string, flags?: string): RegExp;
     (pattern: RegExp | string): RegExp;
     (pattern: string, flags?: string): RegExp;
-    readonly prototype: RegExp;
+    readonly "prototype": RegExp;
 
     // Non-standard extensions
     /** @deprecated A legacy feature for browser compatibility */
-    $1: string;
+    "$1": string;
     /** @deprecated A legacy feature for browser compatibility */
-    $2: string;
+    "$2": string;
     /** @deprecated A legacy feature for browser compatibility */
-    $3: string;
+    "$3": string;
     /** @deprecated A legacy feature for browser compatibility */
-    $4: string;
+    "$4": string;
     /** @deprecated A legacy feature for browser compatibility */
-    $5: string;
+    "$5": string;
     /** @deprecated A legacy feature for browser compatibility */
-    $6: string;
+    "$6": string;
     /** @deprecated A legacy feature for browser compatibility */
-    $7: string;
+    "$7": string;
     /** @deprecated A legacy feature for browser compatibility */
-    $8: string;
+    "$8": string;
     /** @deprecated A legacy feature for browser compatibility */
-    $9: string;
+    "$9": string;
     /** @deprecated A legacy feature for browser compatibility */
-    input: string;
+    "input": string;
     /** @deprecated A legacy feature for browser compatibility */
-    $_: string;
+    "$_": string;
     /** @deprecated A legacy feature for browser compatibility */
-    lastMatch: string;
+    "lastMatch": string;
     /** @deprecated A legacy feature for browser compatibility */
     "$&": string;
     /** @deprecated A legacy feature for browser compatibility */
-    lastParen: string;
+    "lastParen": string;
     /** @deprecated A legacy feature for browser compatibility */
     "$+": string;
     /** @deprecated A legacy feature for browser compatibility */
-    leftContext: string;
+    "leftContext": string;
     /** @deprecated A legacy feature for browser compatibility */
     "$`": string;
     /** @deprecated A legacy feature for browser compatibility */
-    rightContext: string;
+    "rightContext": string;
     /** @deprecated A legacy feature for browser compatibility */
     "$'": string;
 }
@@ -1052,7 +1052,7 @@ interface Error {
 }
 
 interface ErrorConstructor {
-    new(message?: string): Error;
+    new (message?: string): Error;
     (message?: string): Error;
     readonly prototype: Error;
 }
@@ -1063,7 +1063,7 @@ interface EvalError extends Error {
 }
 
 interface EvalErrorConstructor extends ErrorConstructor {
-    new(message?: string): EvalError;
+    new (message?: string): EvalError;
     (message?: string): EvalError;
     readonly prototype: EvalError;
 }
@@ -1074,7 +1074,7 @@ interface RangeError extends Error {
 }
 
 interface RangeErrorConstructor extends ErrorConstructor {
-    new(message?: string): RangeError;
+    new (message?: string): RangeError;
     (message?: string): RangeError;
     readonly prototype: RangeError;
 }
@@ -1085,7 +1085,7 @@ interface ReferenceError extends Error {
 }
 
 interface ReferenceErrorConstructor extends ErrorConstructor {
-    new(message?: string): ReferenceError;
+    new (message?: string): ReferenceError;
     (message?: string): ReferenceError;
     readonly prototype: ReferenceError;
 }
@@ -1096,7 +1096,7 @@ interface SyntaxError extends Error {
 }
 
 interface SyntaxErrorConstructor extends ErrorConstructor {
-    new(message?: string): SyntaxError;
+    new (message?: string): SyntaxError;
     (message?: string): SyntaxError;
     readonly prototype: SyntaxError;
 }
@@ -1107,7 +1107,7 @@ interface TypeError extends Error {
 }
 
 interface TypeErrorConstructor extends ErrorConstructor {
-    new(message?: string): TypeError;
+    new (message?: string): TypeError;
     (message?: string): TypeError;
     readonly prototype: TypeError;
 }
@@ -1118,7 +1118,7 @@ interface URIError extends Error {
 }
 
 interface URIErrorConstructor extends ErrorConstructor {
-    new(message?: string): URIError;
+    new (message?: string): URIError;
     (message?: string): URIError;
     readonly prototype: URIError;
 }
@@ -1153,7 +1153,6 @@ interface JSON {
  * An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format.
  */
 declare var JSON: JSON;
-
 
 /////////////////////////////
 /// ECMAScript Array API (specially handled by compiler)
@@ -1478,7 +1477,7 @@ interface Array<T> {
 }
 
 interface ArrayConstructor {
-    new(arrayLength?: number): any[];
+    new (arrayLength?: number): any[];
     new <T>(arrayLength: number): T[];
     new <T>(...items: T[]): T[];
     (arrayLength?: number): any[];
@@ -1534,13 +1533,12 @@ interface Promise<T> {
 /**
  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
  */
-type Awaited<T> =
-    T extends null | undefined ? T : // special case for `null | undefined` when not in `--strictNullChecks` mode
-        T extends object & { then(onfulfilled: infer F, ...args: infer _): any } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
-            F extends ((value: infer V, ...args: infer _) => any) ? // if the argument to `then` is callable, extracts the first argument
-                Awaited<V> : // recursively unwrap the value
-                never : // the argument to `then` was not callable
-        T; // non-object or non-thenable
+type Awaited<T> = T extends null | undefined ? T : // special case for `null | undefined` when not in `--strictNullChecks` mode
+    T extends object & { then(onfulfilled: infer F, ...args: infer _): any; } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
+        F extends ((value: infer V, ...args: infer _) => any) ? // if the argument to `then` is callable, extracts the first argument
+            Awaited<V> : // recursively unwrap the value
+        never : // the argument to `then` was not callable
+    T; // non-object or non-thenable
 
 interface ArrayLike<T> {
     readonly length: number;
@@ -1645,7 +1643,7 @@ type Uncapitalize<S extends string> = intrinsic;
 /**
  * Marker for contextual 'this' type
  */
-interface ThisType<T> { }
+interface ThisType<T> {}
 
 /**
  * Stores types to be used with WeakSet, WeakMap, WeakRef, and FinalizationRegistry
@@ -1684,7 +1682,7 @@ type ArrayBufferLike = ArrayBufferTypes[keyof ArrayBufferTypes];
 
 interface ArrayBufferConstructor {
     readonly prototype: ArrayBuffer;
-    new(byteLength: number): ArrayBuffer;
+    new (byteLength: number): ArrayBuffer;
     isView(arg: any): arg is ArrayBufferView;
 }
 declare var ArrayBuffer: ArrayBufferConstructor;
@@ -1836,7 +1834,7 @@ interface DataView {
 
 interface DataViewConstructor {
     readonly prototype: DataView;
-    new(buffer: ArrayBufferLike & { BYTES_PER_ELEMENT?: never }, byteOffset?: number, byteLength?: number): DataView;
+    new (buffer: ArrayBufferLike & { BYTES_PER_ELEMENT?: never; }, byteOffset?: number, byteLength?: number): DataView;
 }
 declare var DataView: DataViewConstructor;
 
@@ -2089,9 +2087,9 @@ interface Int8Array {
 }
 interface Int8ArrayConstructor {
     readonly prototype: Int8Array;
-    new(length: number): Int8Array;
-    new(array: ArrayLike<number> | ArrayBufferLike): Int8Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
+    new (length: number): Int8Array;
+    new (array: ArrayLike<number> | ArrayBufferLike): Int8Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -2117,8 +2115,6 @@ interface Int8ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array;
-
-
 }
 declare var Int8Array: Int8ArrayConstructor;
 
@@ -2372,9 +2368,9 @@ interface Uint8Array {
 
 interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array;
-    new(length: number): Uint8Array;
-    new(array: ArrayLike<number> | ArrayBufferLike): Uint8Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
+    new (length: number): Uint8Array;
+    new (array: ArrayLike<number> | ArrayBufferLike): Uint8Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -2400,7 +2396,6 @@ interface Uint8ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array;
-
 }
 declare var Uint8Array: Uint8ArrayConstructor;
 
@@ -2654,9 +2649,9 @@ interface Uint8ClampedArray {
 
 interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray;
-    new(length: number): Uint8ClampedArray;
-    new(array: ArrayLike<number> | ArrayBufferLike): Uint8ClampedArray;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
+    new (length: number): Uint8ClampedArray;
+    new (array: ArrayLike<number> | ArrayBufferLike): Uint8ClampedArray;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
 
     /**
      * The size in bytes of each element in the array.
@@ -2934,9 +2929,9 @@ interface Int16Array {
 
 interface Int16ArrayConstructor {
     readonly prototype: Int16Array;
-    new(length: number): Int16Array;
-    new(array: ArrayLike<number> | ArrayBufferLike): Int16Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
+    new (length: number): Int16Array;
+    new (array: ArrayLike<number> | ArrayBufferLike): Int16Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -2962,8 +2957,6 @@ interface Int16ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array;
-
-
 }
 declare var Int16Array: Int16ArrayConstructor;
 
@@ -3217,9 +3210,9 @@ interface Uint16Array {
 
 interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array;
-    new(length: number): Uint16Array;
-    new(array: ArrayLike<number> | ArrayBufferLike): Uint16Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
+    new (length: number): Uint16Array;
+    new (array: ArrayLike<number> | ArrayBufferLike): Uint16Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3245,8 +3238,6 @@ interface Uint16ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array;
-
-
 }
 declare var Uint16Array: Uint16ArrayConstructor;
 /**
@@ -3499,9 +3490,9 @@ interface Int32Array {
 
 interface Int32ArrayConstructor {
     readonly prototype: Int32Array;
-    new(length: number): Int32Array;
-    new(array: ArrayLike<number> | ArrayBufferLike): Int32Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
+    new (length: number): Int32Array;
+    new (array: ArrayLike<number> | ArrayBufferLike): Int32Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3527,7 +3518,6 @@ interface Int32ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array;
-
 }
 declare var Int32Array: Int32ArrayConstructor;
 
@@ -3780,9 +3770,9 @@ interface Uint32Array {
 
 interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array;
-    new(length: number): Uint32Array;
-    new(array: ArrayLike<number> | ArrayBufferLike): Uint32Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
+    new (length: number): Uint32Array;
+    new (array: ArrayLike<number> | ArrayBufferLike): Uint32Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3808,7 +3798,6 @@ interface Uint32ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array;
-
 }
 declare var Uint32Array: Uint32ArrayConstructor;
 
@@ -4062,9 +4051,9 @@ interface Float32Array {
 
 interface Float32ArrayConstructor {
     readonly prototype: Float32Array;
-    new(length: number): Float32Array;
-    new(array: ArrayLike<number> | ArrayBufferLike): Float32Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
+    new (length: number): Float32Array;
+    new (array: ArrayLike<number> | ArrayBufferLike): Float32Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -4090,8 +4079,6 @@ interface Float32ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array;
-
-
 }
 declare var Float32Array: Float32ArrayConstructor;
 
@@ -4345,9 +4332,9 @@ interface Float64Array {
 
 interface Float64ArrayConstructor {
     readonly prototype: Float64Array;
-    new(length: number): Float64Array;
-    new(array: ArrayLike<number> | ArrayBufferLike): Float64Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
+    new (length: number): Float64Array;
+    new (array: ArrayLike<number> | ArrayBufferLike): Float64Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -4373,7 +4360,6 @@ interface Float64ArrayConstructor {
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array;
-
 }
 declare var Float64Array: Float64ArrayConstructor;
 
@@ -4407,7 +4393,7 @@ declare namespace Intl {
         resolvedOptions(): ResolvedCollatorOptions;
     }
     var Collator: {
-        new(locales?: string | string[], options?: CollatorOptions): Collator;
+        new (locales?: string | string[], options?: CollatorOptions): Collator;
         (locales?: string | string[], options?: CollatorOptions): Collator;
         supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
     };
@@ -4443,7 +4429,7 @@ declare namespace Intl {
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
     var NumberFormat: {
-        new(locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
         readonly prototype: NumberFormat;
@@ -4487,7 +4473,7 @@ declare namespace Intl {
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
     var DateTimeFormat: {
-        new(locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
         readonly prototype: DateTimeFormat;

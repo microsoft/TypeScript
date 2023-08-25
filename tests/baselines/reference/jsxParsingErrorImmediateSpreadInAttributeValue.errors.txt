@@ -1,0 +1,21 @@
+a.tsx(11,7): error TS1109: Expression expected.
+a.tsx(11,11): error TS1003: Identifier expected.
+
+
+==== a.tsx (2 errors) ====
+    declare const React: any
+    declare namespace JSX {
+        interface IntrinsicElements {
+            [k: string]: any
+        }
+    }
+    
+    const X: any
+    const a: any
+    
+    <X a={...a} />
+          ~~~
+!!! error TS1109: Expression expected.
+              ~
+!!! error TS1003: Identifier expected.
+    

@@ -1,0 +1,68 @@
+uniqueSymbolsPropertyNames.ts(27,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(28,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(33,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(38,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(43,3): error TS1117: An object literal cannot have multiple properties with the same name.
+uniqueSymbolsPropertyNames.ts(45,3): error TS1117: An object literal cannot have multiple properties with the same name.
+
+
+==== uniqueSymbolsPropertyNames.ts (6 errors) ====
+    interface OpTypes {
+      readonly equal: unique symbol;
+    }
+    
+    namespace OpNamespace {
+      export declare const equal: unique symbol;
+    }
+    
+    const uniqueSymbol0 = Symbol.for("");
+    const uniqueSymbol1 = Symbol.for("");
+    
+    
+    function getUniqueSymbol0(): typeof uniqueSymbol0 {
+      return uniqueSymbol0;
+    }
+    
+    function getUniqueSymbol1(): typeof uniqueSymbol1 {
+        return uniqueSymbol1;
+      }
+    
+    const Op: OpTypes = {
+      equal: Symbol.for("equal"),
+    } as OpTypes;
+    
+    const t0 = {
+      equal: "first",
+      equal: "second",
+      ~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+      ["equal"]: "last",
+      ~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    
+    const t1 = {
+      [Op.equal]: "first",
+      [Op.equal]: "last",
+      ~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    
+    const t2 = {
+      [OpNamespace.equal]: "first",
+      [OpNamespace.equal]: "last",
+      ~~~~~~~~~~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    
+    const t3 = {
+      [getUniqueSymbol0()]: "first",
+      [getUniqueSymbol0()]: "last",
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+      [getUniqueSymbol1()]: "first",
+      [getUniqueSymbol1()]: "last",
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
+    };
+    

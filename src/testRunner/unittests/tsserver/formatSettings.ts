@@ -1,12 +1,19 @@
 import * as ts from "../../_namespaces/ts";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession, openFilesForSession } from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    openFilesForSession,
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: formatSettings", () => {
     it("can be set globally", () => {
         const f1 = {
             path: "/a/b/app.ts",
-            content: "let x;"
+            content: "let x;",
         };
         const host = createServerHost([f1]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -18,7 +25,7 @@ describe("unittests:: tsserver:: formatSettings", () => {
         const newGlobalSettings1 = { ...defaultSettings, placeOpenBraceOnNewLineForControlBlocks: !defaultSettings.placeOpenBraceOnNewLineForControlBlocks };
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { formatOptions: newGlobalSettings1 }
+            arguments: { formatOptions: newGlobalSettings1 },
         });
 
         // get format options for file - should be equal to new global settings
@@ -28,7 +35,7 @@ describe("unittests:: tsserver:: formatSettings", () => {
         const newPerFileSettings = { ...defaultSettings, insertSpaceAfterCommaDelimiter: !defaultSettings.insertSpaceAfterCommaDelimiter };
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { formatOptions: newPerFileSettings, file: f1.path }
+            arguments: { formatOptions: newPerFileSettings, file: f1.path },
         });
 
         // get format options for file - should be equal to new per-file settings
@@ -38,7 +45,7 @@ describe("unittests:: tsserver:: formatSettings", () => {
         const newGlobalSettings2 = { ...defaultSettings, insertSpaceAfterSemicolonInForStatements: !defaultSettings.insertSpaceAfterSemicolonInForStatements };
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { formatOptions: newGlobalSettings2 }
+            arguments: { formatOptions: newGlobalSettings2 },
         });
 
         // get format options for file - should be equal to new per-file settings

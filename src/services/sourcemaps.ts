@@ -77,7 +77,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
                 { getSourceFileLike, getCanonicalFileName, log: s => host.log(s) },
                 generatedFileName,
                 getLineInfo(file.text, getLineStarts(file)),
-                f => !host.fileExists || host.fileExists(f) ? host.readFile!(f) : undefined
+                f => !host.fileExists || host.fileExists(f) ? host.readFile!(f) : undefined,
             );
         }
         documentPositionMappers.set(path, mapper || identitySourceMapConsumer);
@@ -176,7 +176,8 @@ export function getDocumentPositionMapper(
     host: DocumentPositionMapperHost,
     generatedFileName: string,
     generatedFileLineInfo: LineInfo,
-    readMapFile: ReadMapFile) {
+    readMapFile: ReadMapFile,
+) {
     let mapFileName = tryGetSourceMappingURL(generatedFileLineInfo);
     if (mapFileName) {
         const match = base64UrlRegExp.exec(mapFileName);
@@ -227,6 +228,6 @@ function createSourceFileLike(text: string, lineMap?: SourceFileLike["lineMap"])
         lineMap,
         getLineAndCharacterOfPosition(pos: number) {
             return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
-        }
+        },
     };
 }
