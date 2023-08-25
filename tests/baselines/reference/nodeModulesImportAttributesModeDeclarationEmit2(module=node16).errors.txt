@@ -1,7 +1,7 @@
 /index.ts(1,15): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
 /index.ts(6,14): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
-/index.ts(6,50): error TS2856: Import attributes cannot be used with type-only imports or exports.
-/index.ts(7,49): error TS2856: Import attributes cannot be used with type-only imports or exports.
+/index.ts(6,50): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+/index.ts(7,49): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
 /index.ts(10,15): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
 
 
@@ -17,10 +17,10 @@
                  ~~~~~~~~~~~~~~~~
 !!! error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2856: Import attributes cannot be used with type-only imports or exports.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     import {type ImportInterface as Imp} from "pkg" with { "resolution-mode": "import" };
                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2856: Import attributes cannot be used with type-only imports or exports.
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     export interface Loc extends Req, Imp {}
     
     export type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
