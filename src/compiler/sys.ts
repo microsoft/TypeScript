@@ -1465,7 +1465,8 @@ export let sys: System = (() => {
         const nativePattern = /^native |^\([^)]+\)$|^(internal[\\/]|[a-zA-Z0-9_\s]+(\.js)?$)/;
         const _fs: typeof import("fs") = require("fs");
         const _path: typeof import("path") = require("path");
-        const _os = require("os");
+        const _os: typeof import("os") = require("os");
+        const _buffer: typeof import("buffer") = require("buffer");
         // crypto can be absent on reduced node installations
         let _crypto: typeof import("crypto") | undefined;
         try {
@@ -1477,10 +1478,7 @@ export let sys: System = (() => {
         let activeSession: import("inspector").Session | "stopping" | undefined;
         let profilePath = "./profile.cpuprofile";
 
-        const Buffer: {
-            new (input: string, encoding?: string): any;
-            from?(input: string, encoding?: string): any;
-        } = require("buffer").Buffer;
+        const Buffer = _buffer.Buffer;
 
         const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
 
@@ -1609,9 +1607,9 @@ export let sys: System = (() => {
                     handle.setBlocking(true);
                 }
             },
-            bufferFrom,
-            base64decode: input => bufferFrom(input, "base64").toString("utf8"),
-            base64encode: input => bufferFrom(input).toString("base64"),
+            bufferFrom: Buffer.from,
+            base64decode: input => Buffer.from(input, "base64").toString("utf8"),
+            base64encode: input => Buffer.from(input).toString("base64"),
             require: (baseDir, moduleName) => {
                 try {
                     const modulePath = resolveJSModule(moduleName, baseDir, nodeSystem);
@@ -1718,13 +1716,6 @@ export let sys: System = (() => {
                 cb();
                 return false;
             }
-        }
-
-        function bufferFrom(input: string, encoding?: string): Buffer {
-            // See https://github.com/Microsoft/TypeScript/issues/25652
-            return Buffer.from && Buffer.from !== Int8Array.from
-                ? Buffer.from(input, encoding)
-                : new Buffer(input, encoding);
         }
 
         function isFileSystemCaseSensitive(): boolean {
