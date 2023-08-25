@@ -368,8 +368,6 @@ import {
     tokenToString,
     tracing,
     TransformFlags,
-    trimString,
-    trimStringEnd,
     TryStatement,
     TupleTypeNode,
     TypeAliasDeclaration,
@@ -8895,7 +8893,7 @@ namespace Parser {
                         nextTokenJSDoc();
                     }
                 }
-                const trimmedComments = trimStringEnd(comments.join(""));
+                const trimmedComments = comments.join("").trimEnd();
                 if (parts.length && trimmedComments.length) {
                     parts.push(finishNode(factory.createJSDocText(trimmedComments), linkEnd ?? start, commentsPos));
                 }
@@ -8912,7 +8910,7 @@ namespace Parser {
 
             function removeTrailingWhitespace(comments: string[]) {
                 while (comments.length) {
-                    const trimmed = trimStringEnd(comments[comments.length - 1]);
+                    const trimmed = comments[comments.length - 1].trimEnd();
                     if (trimmed === "") {
                         comments.pop();
                     }
@@ -9174,7 +9172,7 @@ namespace Parser {
                 }
 
                 removeLeadingNewlines(comments);
-                const trimmedComments = trimStringEnd(comments.join(""));
+                const trimmedComments = comments.join("").trimEnd();
                 if (parts.length) {
                     if (trimmedComments.length) {
                         parts.push(finishNode(factory.createJSDocText(trimmedComments), linkEnd ?? commentsPos));
@@ -10618,7 +10616,7 @@ function addPragmaForMatch(pragmas: PragmaPseudoMapEntry[], range: CommentRange,
 function getNamedPragmaArguments(pragma: PragmaDefinition, text: string | undefined): { [index: string]: string; } | "fail" {
     if (!text) return {};
     if (!pragma.args) return {};
-    const args = trimString(text).split(/\s+/);
+    const args = text.trim().split(/\s+/);
     const argMap: { [index: string]: string; } = {};
     for (let i = 0; i < pragma.args.length; i++) {
         const argument = pragma.args[i];

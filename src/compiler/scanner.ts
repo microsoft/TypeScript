@@ -26,7 +26,6 @@ import {
     SourceFileLike,
     SyntaxKind,
     TokenFlags,
-    trimStringStart,
 } from "./_namespaces/ts";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
@@ -2392,7 +2391,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         commentDirectiveRegEx: RegExp,
         lineStart: number,
     ) {
-        const type = getDirectiveFromComment(trimStringStart(text), commentDirectiveRegEx);
+        const type = getDirectiveFromComment(text.trimStart(), commentDirectiveRegEx);
         if (type === undefined) {
             return commentDirectives;
         }

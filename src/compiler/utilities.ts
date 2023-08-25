@@ -521,8 +521,6 @@ import {
     tracing,
     TransformFlags,
     TransientSymbol,
-    trimString,
-    trimStringStart,
     TriviaSyntaxKind,
     tryCast,
     tryRemovePrefix,
@@ -1231,7 +1229,7 @@ export function getTextOfNodeFromSourceText(sourceText: string, node: Node, incl
 
     if (isJSDocTypeExpressionOrChild(node)) {
         // strip space + asterisk at line start
-        text = text.split(/\r\n|\n|\r/).map(line => trimStringStart(line.replace(/^\s*\*/, ""))).join("\n");
+        text = text.split(/\r\n|\n|\r/).map(line => line.replace(/^\s*\*/, "").trimStart()).join("\n");
     }
 
     return text;
@@ -6828,7 +6826,7 @@ export function writeCommentRange(text: string, lineMap: readonly number[], writ
 
 function writeTrimmedCurrentLine(text: string, commentEnd: number, writer: EmitTextWriter, newLine: string, pos: number, nextLineStart: number) {
     const end = Math.min(commentEnd, nextLineStart - 1);
-    const currentLineText = trimString(text.substring(pos, end));
+    const currentLineText = text.substring(pos, end).trim();
     if (currentLineText) {
         // trimmed forward and ending spaces text
         writer.writeComment(currentLineText);

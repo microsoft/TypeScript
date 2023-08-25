@@ -5,7 +5,6 @@ import {
     Comparison,
     Debug,
     EqualityComparer,
-    isWhiteSpaceLike,
     MapLike,
     Queue,
     SortedArray,
@@ -2827,42 +2826,6 @@ export function skipWhile<T, U extends T>(array: readonly T[] | undefined, predi
         }
         return array.slice(index) as Exclude<T, U>[];
     }
-}
-
-/**
- * Removes the leading and trailing white space and line terminator characters from a string.
- *
- * @internal
- */
-export const trimString = !!String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(trimStringStart(s));
-
-/**
- * Returns a copy with trailing whitespace removed.
- *
- * @internal
- */
-export const trimStringEnd = !!String.prototype.trimEnd ? ((s: string) => s.trimEnd()) : trimEndImpl;
-
-/**
- * Returns a copy with leading whitespace removed.
- *
- * @internal
- */
-export const trimStringStart = !!String.prototype.trimStart ? ((s: string) => s.trimStart()) : (s: string) => s.replace(/^\s+/g, "");
-
-/**
- * https://jsbench.me/gjkoxld4au/1
- * The simple regex for this, /\s+$/g is O(n^2) in v8.
- * The native .trimEnd method is by far best, but since that's technically ES2019,
- * we provide a (still much faster than the simple regex) fallback.
- */
-function trimEndImpl(s: string) {
-    let end = s.length - 1;
-    while (end >= 0) {
-        if (!isWhiteSpaceLike(s.charCodeAt(end))) break;
-        end--;
-    }
-    return s.slice(0, end + 1);
 }
 
 /** @internal */

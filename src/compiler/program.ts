@@ -318,7 +318,6 @@ import {
     toPath as ts_toPath,
     trace,
     tracing,
-    trimStringEnd,
     TsConfigSourceFile,
     TypeChecker,
     typeDirectiveIsEqualTo,
@@ -729,7 +728,7 @@ function formatCodeSpan(file: SourceFile, start: number, length: number, indent:
         const lineStart = getPositionOfLineAndCharacter(file, i, 0);
         const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
         let lineContent = file.text.slice(lineStart, lineEnd);
-        lineContent = trimStringEnd(lineContent); // trim from end
+        lineContent = lineContent.trimEnd(); // trim from end
         lineContent = lineContent.replace(/\t/g, " "); // convert tabs to single spaces
 
         // Output the gutter and the actual contents of the line.
