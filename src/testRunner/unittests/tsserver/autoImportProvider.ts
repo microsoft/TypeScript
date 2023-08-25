@@ -258,7 +258,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             packages.push(createPackage(i));
         }
 
-        const dependencies = packages.reduce((hash, p) => ({ ...hash, [JSON.parse(p[0].content).name]: "*" }), {});
+        const dependencies = Object.fromEntries(packages.map(p => [JSON.parse(p[0].content).name, "*"]));
         const packageJson: File = { path: "/package.json", content: JSON.stringify(dependencies) };
         const { projectService, session } = setup([...ts.flatten(packages), indexTs, tsconfig, packageJson]);
 
