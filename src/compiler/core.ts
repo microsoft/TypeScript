@@ -2240,11 +2240,7 @@ export function getStringComparer(ignoreCase?: boolean) {
  * Creates a string comparer for use with string collation in the UI.
  */
 const createUIStringComparer = (() => {
-    let defaultComparer: Comparer<string> | undefined;
-    let enUSComparer: Comparer<string> | undefined;
-
-    const stringComparerFactory = getStringComparerFactory();
-    return createStringComparer;
+    return createIntlCollatorStringComparer;
 
     function compareWithCallback(a: string | undefined, b: string | undefined, comparer: (a: string, b: string) => number) {
         if (a === b) return Comparison.EqualTo;
@@ -2259,70 +2255,6 @@ const createUIStringComparer = (() => {
         // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
         const comparer = new Intl.Collator(locale, { usage: "sort", sensitivity: "variant" }).compare;
         return (a, b) => compareWithCallback(a, b, comparer);
-    }
-
-    function createLocaleCompareStringComparer(locale: string | undefined): Comparer<string> {
-        // if the locale is not the default locale (`undefined`), use the fallback comparer.
-        if (locale !== undefined) return createFallbackStringComparer();
-
-        return (a, b) => compareWithCallback(a, b, compareStrings);
-
-        function compareStrings(a: string, b: string) {
-            return a.localeCompare(b);
-        }
-    }
-
-    function createFallbackStringComparer(): Comparer<string> {
-        // An ordinal comparison puts "A" after "b", but for the UI we want "A" before "b".
-        // We first sort case insensitively.  So "Aaa" will come before "baa".
-        // Then we sort case sensitively, so "aaa" will come before "Aaa".
-        //
-        // For case insensitive comparisons we always map both strings to their
-        // upper-case form as some unicode characters do not properly round-trip to
-        // lowercase (such as `Ã¡ÂºÅ¾` (German sharp capital s)).
-        return (a, b) => compareWithCallback(a, b, compareDictionaryOrder);
-
-        function compareDictionaryOrder(a: string, b: string) {
-            return compareStrings(a.toUpperCase(), b.toUpperCase()) || compareStrings(a, b);
-        }
-
-        function compareStrings(a: string, b: string) {
-            return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
-        }
-    }
-
-    function getStringComparerFactory() {
-        // If the host supports Intl, we use it for comparisons using the default locale.
-        if (typeof Intl === "object" && typeof Intl.Collator === "function") {
-            return createIntlCollatorStringComparer;
-        }
-
-        // If the host does not support Intl, we fall back to localeCompare.
-        // localeCompare in Node v0.10 is just an ordinal comparison, so don't use it.
-        if (
-            typeof String.prototype.localeCompare === "function" &&
-            typeof String.prototype.toLocaleUpperCase === "function" &&
-            "a".localeCompare("B") < 0
-        ) {
-            return createLocaleCompareStringComparer;
-        }
-
-        // Otherwise, fall back to ordinal comparison:
-        return createFallbackStringComparer;
-    }
-
-    function createStringComparer(locale: string | undefined) {
-        // Hold onto common string comparers. This avoids constantly reallocating comparers during
-        // tests.
-        if (locale === undefined) {
-            return defaultComparer || (defaultComparer = stringComparerFactory(locale));
-        }
-        else if (locale === "en-US") {
-            return enUSComparer || (enUSComparer = stringComparerFactory(locale));
-        }
-        else {
-            return stringComparerFactory(locale);
-        }
     }
 })();
 
