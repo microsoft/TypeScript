@@ -1524,9 +1524,8 @@ export function transformDeclarations(context: TransformationContext) {
                     ensureType(input, input.type),
                     /*body*/ undefined
                 ));
-                const isExpandoFunctionDeclaration = clean && resolver.isExpandoFunctionDeclaration(input);
-                if (isExpandoFunctionDeclaration && shouldEmitFunctionProperties(input)) {
-                    if(isExpandoFunctionDeclaration && isolatedDeclarations) {
+                if (clean && resolver.isExpandoFunction(input) && shouldEmitFunctionProperties(input)) {
+                    if(isolatedDeclarations) {
                         reportIsolatedDeclarationError(input);
                         return clean;
                     }

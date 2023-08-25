@@ -46319,16 +46319,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
     }
 
-    function isExpandoFunctionDeclaration(node: Declaration): boolean {
-        const declaration = getParseTreeNode(node, isFunctionDeclaration);
-        if (!declaration) {
+    function isExpandoFunction(node: Declaration): boolean {
+        const declaration = getParseTreeNode(node, (n): n is FunctionDeclaration | VariableDeclaration => isFunctionDeclaration(n) || isVariableDeclaration(n));
+        if (!declaration || (isVariableDeclaration(declaration) && !(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer)))) {
             return false;
         }
         const symbol = getSymbolOfDeclaration(declaration);
-        if (!symbol || !(symbol.flags & SymbolFlags.Function)) {
+        if (!symbol || !(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
             return false;
         }
-        return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && p.valueDeclaration && isPropertyAccessExpression(p.valueDeclaration));
+
+        // Temporary, remove when https://github.com/microsoft/TypeScript/pull/5518 is merged.
+        function isExpandoPropertyDeclaration(declaration: Declaration | undefined): declaration is PropertyAccessExpression | ElementAccessExpression | BinaryExpression {
+            return !!declaration && (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration) || isBinaryExpression(declaration));
+        }
+        return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && p.valueDeclaration && isExpandoPropertyDeclaration(p.valueDeclaration));
     }
 
     function getPropertiesOfContainerFunction(node: Declaration): Symbol[] {
@@ -46688,7 +46693,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isImplementationOfOverload,
             isRequiredInitializedParameter,
             isOptionalUninitializedParameterProperty,
-            isExpandoFunctionDeclaration,
+            isExpandoFunction,
             getPropertiesOfContainerFunction,
             createTypeOfDeclaration,
             createReturnTypeOfSignatureDeclaration,

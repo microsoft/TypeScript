@@ -531,7 +531,11 @@ export function createLocalInferenceResolver({
             localType = localInference(node.expression, NarrowBehavior.KeepLiterals);
         }
         else if (isVariableDeclaration(node) && node.initializer) {
-            localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.KeepLiterals : NarrowBehavior.None);
+            if(isVariableDeclaration(node) && resolver.isExpandoFunction(node)) {
+                localType = invalid(node);
+            } else {
+                localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.KeepLiterals : NarrowBehavior.None);
+            }
         }
         else if (isPropertyDeclaration(node) && node.initializer) {
             localType = localInference(node.initializer);

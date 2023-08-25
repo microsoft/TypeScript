@@ -1,4 +1,4 @@
-import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, factory, findAncestor, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isBigIntLiteral, isBindingElement, isElementAccessExpression, isEnumMember, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSourceFile, isStringLiteralLike, isVariableDeclaration, isVariableStatement, LiteralExpression, ModifierFlags, NamespaceImport, Node, NodeFlags, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
+import { __String, BindingPattern, CompilerOptions, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, Expression, factory, findAncestor, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isArrowFunction, isBigIntLiteral, isBindingElement, isElementAccessExpression, isEnumMember, isFunctionExpression, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSourceFile, isStringLiteralLike, isVariableDeclaration, isVariableStatement, LiteralExpression, ModifierFlags, NamespaceImport, Node, NodeFlags, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
 
 import { Debug } from "./debug";
 import { BasicSymbol, bindSourceFile, NodeLinks } from "./emit-binder";
@@ -52,7 +52,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     }
 
     // Do a best effort to find expando functions 
-    function isExpandoFunctionDeclaration(){
+    function isExpandoFunction(node: Declaration){
         return false;
     }
 
@@ -208,7 +208,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         getTypeReferenceDirectivesForEntityName(name) {
             return undefined;
         },
-        isExpandoFunctionDeclaration,
+        isExpandoFunction,
         getSymbolOfExternalModuleSpecifier() {
             return undefined;
         },
@@ -491,3 +491,7 @@ function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
             return undefined;
     }
 }
+function isFunctionExpressionOrArrowFunction(node: Expression) {
+    return isFunctionExpression(node) || isArrowFunction(node);
+}
+
