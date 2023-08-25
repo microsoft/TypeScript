@@ -304,7 +304,6 @@ import {
     stableSort,
     startsWith,
     Statement,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     StructureIsReused,
@@ -2016,7 +2015,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // but the resolved real path may be the .d.ts from project reference
         // Note:: Currently we try the real path only if the
         // file is from node_modules to avoid having to run real path on all file paths
-        if (!host.realpath || !options.preserveSymlinks || !stringContains(file.originalFileName, nodeModulesPathPart)) return undefined;
+        if (!host.realpath || !options.preserveSymlinks || !file.originalFileName.includes(nodeModulesPathPart)) return undefined;
         const realDeclarationPath = toPath(host.realpath(file.originalFileName));
         return realDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationPath);
     }
@@ -3565,7 +3564,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 host.realpath &&
                 options.preserveSymlinks &&
                 isDeclarationFileName(fileName) &&
-                stringContains(fileName, nodeModulesPathPart)
+                fileName.includes(nodeModulesPathPart)
             ) {
                 const realPath = toPath(host.realpath(fileName));
                 if (realPath !== path) source = getSourceOfProjectReferenceRedirect(realPath);
@@ -5090,7 +5089,7 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
         if (!host.getResolvedProjectReferences() || containsIgnoredPath(directory)) return;
 
         // Because we already watch node_modules, handle symlinks in there
-        if (!originalRealpath || !stringContains(directory, nodeModulesPathPart)) return;
+        if (!originalRealpath || !directory.includes(nodeModulesPathPart)) return;
         const symlinkCache = host.getSymlinkCache();
         const directoryPath = ensureTrailingDirectorySeparator(host.toPath(directory));
         if (symlinkCache.getSymlinkedDirectories()?.has(directoryPath)) return;
@@ -5124,7 +5123,7 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
         const symlinkedDirectories = symlinkCache.getSymlinkedDirectories();
         if (!symlinkedDirectories) return false;
         const fileOrDirectoryPath = host.toPath(fileOrDirectory);
-        if (!stringContains(fileOrDirectoryPath, nodeModulesPathPart)) return false;
+        if (!fileOrDirectoryPath.includes(nodeModulesPathPart)) return false;
         if (isFile && symlinkCache.getSymlinkedFiles()?.has(fileOrDirectoryPath)) return true;
 
         // If it contains node_modules check if its one of the symlinked path we know of

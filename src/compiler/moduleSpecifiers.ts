@@ -101,7 +101,6 @@ import {
     SourceFile,
     startsWith,
     startsWithDirectory,
-    stringContains,
     StringLiteral,
     Symbol,
     SymbolFlags,
@@ -866,7 +865,7 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
             return forEach(getOwnKeys(exports as MapLike<unknown>), k => {
                 const subPackageName = getNormalizedAbsolutePath(combinePaths(packageName, k), /*currentDirectory*/ undefined);
                 const mode = endsWith(k, "/") ? MatchingMode.Directory
-                    : stringContains(k, "*") ? MatchingMode.Pattern
+                    : k.includes("*") ? MatchingMode.Pattern
                     : MatchingMode.Exact;
                 return tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode);
             });
@@ -874,7 +873,7 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
         else {
             // conditional mapping
             for (const key of getOwnKeys(exports as MapLike<unknown>)) {
-                if (key === "default" || conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(conditions, key)) {
+                if (key === "default" || conditions.includes(key) || isApplicableVersionedTypesKey(conditions, key)) {
                     const subTarget = (exports as MapLike<unknown>)[key];
                     const result = tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, packageName, subTarget, conditions, mode);
                     if (result) {
@@ -1093,7 +1092,7 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
     else if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) {
         return noExtension + getJSExtensionForFile(fileName, options);
     }
-    else if (!fileExtensionIsOneOf(fileName, [Extension.Dts]) && fileExtensionIsOneOf(fileName, [Extension.Ts]) && stringContains(fileName, ".d.")) {
+    else if (!fileExtensionIsOneOf(fileName, [Extension.Dts]) && fileExtensionIsOneOf(fileName, [Extension.Ts]) && fileName.includes(".d.")) {
         // `foo.d.json.ts` and the like - remap back to `foo.json`
         return tryGetRealFileNameForNonJsDeclarationFileName(fileName)!;
     }
@@ -1129,7 +1128,7 @@ function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifie
 /** @internal */
 export function tryGetRealFileNameForNonJsDeclarationFileName(fileName: string) {
     const baseName = getBaseFileName(fileName);
-    if (!endsWith(fileName, Extension.Ts) || !stringContains(baseName, ".d.") || fileExtensionIsOneOf(baseName, [Extension.Dts])) return undefined;
+    if (!endsWith(fileName, Extension.Ts) || !baseName.includes(".d.") || fileExtensionIsOneOf(baseName, [Extension.Dts])) return undefined;
     const noExtension = removeExtension(fileName, Extension.Ts);
     const ext = noExtension.substring(noExtension.lastIndexOf("."));
     return noExtension.substring(0, noExtension.indexOf(".d.")) + ext;

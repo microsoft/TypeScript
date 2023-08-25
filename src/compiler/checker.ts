@@ -964,7 +964,6 @@ import {
     SpreadElement,
     startsWith,
     Statement,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     StringLiteralType,
@@ -7908,14 +7907,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!specifier) {
                     specifier = getSpecifierForModuleSymbol(chain[0], context);
                 }
-                if (!(context.flags & NodeBuilderFlags.AllowNodeModulesRelativePaths) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Classic && specifier.indexOf("/node_modules/") >= 0) {
+                if (!(context.flags & NodeBuilderFlags.AllowNodeModulesRelativePaths) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Classic && specifier.includes("/node_modules/")) {
                     const oldSpecifier = specifier;
                     if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
                         // We might be able to write a portable import type using a mode override; try specifier generation again, but with a different mode set
                         const swappedMode = contextFile?.impliedNodeFormat === ModuleKind.ESNext ? ModuleKind.CommonJS : ModuleKind.ESNext;
                         specifier = getSpecifierForModuleSymbol(chain[0], context, swappedMode);
 
-                        if (specifier.indexOf("/node_modules/") >= 0) {
+                        if (specifier.includes("/node_modules/")) {
                             // Still unreachable :(
                             specifier = oldSpecifier;
                         }
@@ -8661,7 +8660,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             if (group.length > 1) {
                                 // remove group members from statements and then merge group members and add back to statements
                                 statements = [
-                                    ...filter(statements, s => group.indexOf(s as ExportDeclaration) === -1),
+                                    ...filter(statements, s => !group.includes(s as ExportDeclaration)),
                                     factory.createExportDeclaration(
                                         /*modifiers*/ undefined,
                                         /*isTypeOnly*/ false,
@@ -24250,7 +24249,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const originalKeywordKind = identifierToKeywordKind(param.name);
                     if (
                         (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
-                        param.parent.parameters.indexOf(param) > -1 &&
+                        param.parent.parameters.includes(param) &&
                         (resolveName(param, param.name.escapedText, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, param.name.escapedText, /*isUse*/ true) ||
                             originalKeywordKind && isTypeNodeKind(originalKeywordKind))
                     ) {
@@ -30962,7 +30961,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isHyphenatedJsxName(name: string | __String) {
-        return stringContains(name as string, "-");
+        return (name as string).includes("-");
     }
 
     /**
@@ -49648,7 +49647,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Realism (size) checking
         // We should test against `getTextOfNode(node)` rather than `node.text`, because `node.text` for large numeric literals can contain "."
         // e.g. `node.text` for numeric literal `1100000000000000000000` is `1.1e21`.
-        const isFractional = getTextOfNode(node).indexOf(".") !== -1;
+        const isFractional = getTextOfNode(node).includes(".");
         const isScientific = node.numericLiteralFlags & TokenFlags.Scientific;
 
         // Scientific notation (e.g. 2e54 and 1e00000000010) can't be converted to bigint

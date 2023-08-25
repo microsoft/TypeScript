@@ -407,7 +407,6 @@ import {
     SpreadElement,
     stableSort,
     Statement,
-    stringContains,
     StringLiteral,
     supportedJSExtensionsFlat,
     SwitchStatement,
@@ -3065,9 +3064,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
             return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
-                && !stringContains(text, tokenToString(SyntaxKind.DotToken)!)
-                && !stringContains(text, String.fromCharCode(CharacterCodes.E))
-                && !stringContains(text, String.fromCharCode(CharacterCodes.e));
+                && !text.includes(tokenToString(SyntaxKind.DotToken)!)
+                && !text.includes(String.fromCharCode(CharacterCodes.E))
+                && !text.includes(String.fromCharCode(CharacterCodes.e));
         }
         else if (isAccessExpression(expression)) {
             // check if constant enum value is a non-negative integer

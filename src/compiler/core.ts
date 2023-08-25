@@ -2484,11 +2484,6 @@ export function tryRemoveSuffix(str: string, suffix: string): string | undefined
     return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : undefined;
 }
 
-/** @internal */
-export function stringContains(str: string, substring: string): boolean {
-    return str.indexOf(substring) !== -1;
-}
-
 /**
  * Takes a string like "jquery-min.4.2.3" and returns "jquery"
  *
