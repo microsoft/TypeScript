@@ -42,9 +42,13 @@ import {
     isHeritageClause,
     isIdentifier,
     isIdentifierOrThisTypeNode,
+    isImportAttribute,
+    isImportAttributeName,
+    isImportAttributes,
     isImportClause,
     isImportSpecifier,
     isImportTypeAssertionContainer,
+    isImportTypeAttributes,
     isJsxAttributeLike,
     isJsxAttributeName,
     isJsxAttributes,
@@ -895,9 +899,18 @@ const visitEachChildTable: VisitEachChildTable = {
             node,
             Debug.checkDefined(nodeVisitor(node.argument, visitor, isTypeNode)),
             nodeVisitor(node.assertions, visitor, isImportTypeAssertionContainer),
+            nodeVisitor(node.attributes, visitor, isImportTypeAttributes),
             nodeVisitor(node.qualifier, visitor, isEntityName),
             nodesVisitor(node.typeArguments, visitor, isTypeNode),
             node.isTypeOf,
+        );
+    },
+
+    [SyntaxKind.ImportTypeAttributes]: function visitEachChildOfImportTypeAttributes(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+        return context.factory.updateImportTypeAttributes(
+            node,
+            Debug.checkDefined(nodeVisitor(node.attributes, visitor, isImportAttributes)),
+            node.multiLine,
         );
     },
 
@@ -1525,6 +1538,7 @@ const visitEachChildTable: VisitEachChildTable = {
             nodeVisitor(node.importClause, visitor, isImportClause),
             Debug.checkDefined(nodeVisitor(node.moduleSpecifier, visitor, isExpression)),
             nodeVisitor(node.assertClause, visitor, isAssertClause),
+            nodeVisitor(node.attributes, visitor, isImportAttributes),
         );
     },
 
@@ -1540,6 +1554,22 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateAssertEntry(
             node,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isAssertionKey)),
+            Debug.checkDefined(nodeVisitor(node.value, visitor, isExpression)),
+        );
+    },
+
+    [SyntaxKind.ImportAttributes]: function visitEachChildOfImportAttributes(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+        return context.factory.updateImportAttributes(
+            node,
+            nodesVisitor(node.elements, visitor, isImportAttribute),
+            node.multiLine,
+        );
+    },
+
+    [SyntaxKind.ImportAttribute]: function visitEachChildOfImportAttribute(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+        return context.factory.updateImportAttribute(
+            node,
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isImportAttributeName)),
             Debug.checkDefined(nodeVisitor(node.value, visitor, isExpression)),
         );
     },
@@ -1599,6 +1629,7 @@ const visitEachChildTable: VisitEachChildTable = {
             nodeVisitor(node.exportClause, visitor, isNamedExportBindings),
             nodeVisitor(node.moduleSpecifier, visitor, isExpression),
             nodeVisitor(node.assertClause, visitor, isAssertClause),
+            nodeVisitor(node.attributes, visitor, isImportAttributes),
         );
     },
 

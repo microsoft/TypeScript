@@ -69,6 +69,7 @@ function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSp
             factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
             exportDeclaration.moduleSpecifier,
             /*assertClause*/ undefined,
+            /*attributes*/ undefined,
         );
         const typeExportDeclaration = factory.createExportDeclaration(
             /*modifiers*/ undefined,
@@ -76,6 +77,7 @@ function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSp
             factory.createNamedExports(typeExportSpecifiers),
             exportDeclaration.moduleSpecifier,
             /*assertClause*/ undefined,
+            /*attributes*/ undefined,
         );
 
         changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {

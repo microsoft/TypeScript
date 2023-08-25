@@ -1625,6 +1625,7 @@ function getNewImports(
                 ),
                 quotedModuleSpecifier,
                 /*assertClause*/ undefined,
+                /*attributes*/ undefined,
             );
         statements = combine(statements, declaration);
     }

@@ -2502,6 +2502,7 @@ export function makeImport(defaultImport: Identifier | undefined, namedImports: 
             : undefined,
         typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier,
         /*assertClause*/ undefined,
+        /*attributes*/ undefined,
     );
 }
 

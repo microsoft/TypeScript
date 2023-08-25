@@ -92,6 +92,7 @@ import {
     hasSyntacticModifier,
     HasType,
     Identifier,
+    ImportAttributeName,
     ImportClause,
     ImportEqualsDeclaration,
     ImportSpecifier,
@@ -146,6 +147,7 @@ import {
     isModuleBlock,
     isNonNullExpression,
     isNotEmittedStatement,
+    isNumericLiteral,
     isOmittedExpression,
     isParameter,
     isPartiallyEmittedExpression,
@@ -1524,6 +1526,10 @@ export function isAssertionKey(node: Node): node is AssertionKey {
 
 export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
     return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
+}
+
+export function isImportAttributeName(node: Node): node is ImportAttributeName {
+    return isStringLiteral(node) || isIdentifier(node) || isNumericLiteral(node);
 }
 
 // Identifiers

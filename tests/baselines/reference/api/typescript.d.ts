@@ -4404,72 +4404,75 @@ declare namespace ts {
         DefaultClause = 297,
         HeritageClause = 298,
         CatchClause = 299,
-        AssertClause = 300,
-        AssertEntry = 301,
-        ImportTypeAssertionContainer = 302,
-        PropertyAssignment = 303,
-        ShorthandPropertyAssignment = 304,
-        SpreadAssignment = 305,
-        EnumMember = 306,
-        /** @deprecated */ UnparsedPrologue = 307,
-        /** @deprecated */ UnparsedPrepend = 308,
-        /** @deprecated */ UnparsedText = 309,
-        /** @deprecated */ UnparsedInternalText = 310,
-        /** @deprecated */ UnparsedSyntheticReference = 311,
-        SourceFile = 312,
-        Bundle = 313,
-        /** @deprecated */ UnparsedSource = 314,
-        /** @deprecated */ InputFiles = 315,
-        JSDocTypeExpression = 316,
-        JSDocNameReference = 317,
-        JSDocMemberName = 318,
-        JSDocAllType = 319,
-        JSDocUnknownType = 320,
-        JSDocNullableType = 321,
-        JSDocNonNullableType = 322,
-        JSDocOptionalType = 323,
-        JSDocFunctionType = 324,
-        JSDocVariadicType = 325,
-        JSDocNamepathType = 326,
-        JSDoc = 327,
+        /** @deprecated */ AssertClause = 300,
+        /** @deprecated */ AssertEntry = 301,
+        /** @deprecated */ ImportTypeAssertionContainer = 302,
+        ImportAttributes = 303,
+        ImportAttribute = 304,
+        ImportTypeAttributes = 305,
+        PropertyAssignment = 306,
+        ShorthandPropertyAssignment = 307,
+        SpreadAssignment = 308,
+        EnumMember = 309,
+        /** @deprecated */ UnparsedPrologue = 310,
+        /** @deprecated */ UnparsedPrepend = 311,
+        /** @deprecated */ UnparsedText = 312,
+        /** @deprecated */ UnparsedInternalText = 313,
+        /** @deprecated */ UnparsedSyntheticReference = 314,
+        SourceFile = 315,
+        Bundle = 316,
+        /** @deprecated */ UnparsedSource = 317,
+        /** @deprecated */ InputFiles = 318,
+        JSDocTypeExpression = 319,
+        JSDocNameReference = 320,
+        JSDocMemberName = 321,
+        JSDocAllType = 322,
+        JSDocUnknownType = 323,
+        JSDocNullableType = 324,
+        JSDocNonNullableType = 325,
+        JSDocOptionalType = 326,
+        JSDocFunctionType = 327,
+        JSDocVariadicType = 328,
+        JSDocNamepathType = 329,
+        JSDoc = 330,
         /** @deprecated Use SyntaxKind.JSDoc */
-        JSDocComment = 327,
-        JSDocText = 328,
-        JSDocTypeLiteral = 329,
-        JSDocSignature = 330,
-        JSDocLink = 331,
-        JSDocLinkCode = 332,
-        JSDocLinkPlain = 333,
-        JSDocTag = 334,
-        JSDocAugmentsTag = 335,
-        JSDocImplementsTag = 336,
-        JSDocAuthorTag = 337,
-        JSDocDeprecatedTag = 338,
-        JSDocClassTag = 339,
-        JSDocPublicTag = 340,
-        JSDocPrivateTag = 341,
-        JSDocProtectedTag = 342,
-        JSDocReadonlyTag = 343,
-        JSDocOverrideTag = 344,
-        JSDocCallbackTag = 345,
-        JSDocOverloadTag = 346,
-        JSDocEnumTag = 347,
-        JSDocParameterTag = 348,
-        JSDocReturnTag = 349,
-        JSDocThisTag = 350,
-        JSDocTypeTag = 351,
-        JSDocTemplateTag = 352,
-        JSDocTypedefTag = 353,
-        JSDocSeeTag = 354,
-        JSDocPropertyTag = 355,
-        JSDocThrowsTag = 356,
-        JSDocSatisfiesTag = 357,
-        SyntaxList = 358,
-        NotEmittedStatement = 359,
-        PartiallyEmittedExpression = 360,
-        CommaListExpression = 361,
-        SyntheticReferenceExpression = 362,
-        Count = 363,
+        JSDocComment = 330,
+        JSDocText = 331,
+        JSDocTypeLiteral = 332,
+        JSDocSignature = 333,
+        JSDocLink = 334,
+        JSDocLinkCode = 335,
+        JSDocLinkPlain = 336,
+        JSDocTag = 337,
+        JSDocAugmentsTag = 338,
+        JSDocImplementsTag = 339,
+        JSDocAuthorTag = 340,
+        JSDocDeprecatedTag = 341,
+        JSDocClassTag = 342,
+        JSDocPublicTag = 343,
+        JSDocPrivateTag = 344,
+        JSDocProtectedTag = 345,
+        JSDocReadonlyTag = 346,
+        JSDocOverrideTag = 347,
+        JSDocCallbackTag = 348,
+        JSDocOverloadTag = 349,
+        JSDocEnumTag = 350,
+        JSDocParameterTag = 351,
+        JSDocReturnTag = 352,
+        JSDocThisTag = 353,
+        JSDocTypeTag = 354,
+        JSDocTemplateTag = 355,
+        JSDocTypedefTag = 356,
+        JSDocSeeTag = 357,
+        JSDocPropertyTag = 358,
+        JSDocThrowsTag = 359,
+        JSDocSatisfiesTag = 360,
+        SyntaxList = 361,
+        NotEmittedStatement = 362,
+        PartiallyEmittedExpression = 363,
+        CommaListExpression = 364,
+        SyntheticReferenceExpression = 365,
+        Count = 366,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -4497,10 +4500,10 @@ declare namespace ts {
         FirstStatement = 243,
         LastStatement = 259,
         FirstNode = 166,
-        FirstJSDocNode = 316,
-        LastJSDocNode = 357,
-        FirstJSDocTagNode = 334,
-        LastJSDocTagNode = 357,
+        FirstJSDocNode = 319,
+        LastJSDocNode = 360,
+        FirstJSDocTagNode = 337,
+        LastJSDocTagNode = 360,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -5137,17 +5140,25 @@ declare namespace ts {
     interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTypeSyntaxKind> extends KeywordToken<TKind>, TypeNode {
         readonly kind: TKind;
     }
+    /** @deprecated */
     interface ImportTypeAssertionContainer extends Node {
         readonly kind: SyntaxKind.ImportTypeAssertionContainer;
         readonly parent: ImportTypeNode;
         readonly assertClause: AssertClause;
         readonly multiLine?: boolean;
     }
+    interface ImportTypeAttributes extends Node {
+        readonly kind: SyntaxKind.ImportTypeAttributes;
+        readonly parent: ImportTypeNode;
+        readonly attributes: ImportAttributes;
+        readonly multiLine?: boolean;
+    }
     interface ImportTypeNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.ImportType;
         readonly isTypeOf: boolean;
         readonly argument: TypeNode;
-        readonly assertions?: ImportTypeAssertionContainer;
+        /** @deprecated */ readonly assertions?: ImportTypeAssertionContainer;
+        readonly attributes?: ImportTypeAttributes;
         readonly qualifier?: EntityName;
     }
     interface ThisTypeNode extends TypeNode {
@@ -5938,7 +5949,8 @@ declare namespace ts {
         readonly importClause?: ImportClause;
         /** If this is not a StringLiteral it will be a grammar error. */
         readonly moduleSpecifier: Expression;
-        readonly assertClause?: AssertClause;
+        /** @deprecated */ readonly assertClause?: AssertClause;
+        readonly attributes?: ImportAttributes;
     }
     type NamedImportBindings = NamespaceImport | NamedImports;
     type NamedExportBindings = NamespaceExport | NamedExports;
@@ -5949,17 +5961,33 @@ declare namespace ts {
         readonly name?: Identifier;
         readonly namedBindings?: NamedImportBindings;
     }
+    /** @deprecated */
     type AssertionKey = Identifier | StringLiteral;
+    /** @deprecated */
     interface AssertEntry extends Node {
         readonly kind: SyntaxKind.AssertEntry;
         readonly parent: AssertClause;
         readonly name: AssertionKey;
         readonly value: Expression;
     }
+    /** @deprecated */
     interface AssertClause extends Node {
         readonly kind: SyntaxKind.AssertClause;
         readonly parent: ImportDeclaration | ExportDeclaration;
         readonly elements: NodeArray<AssertEntry>;
+        readonly multiLine?: boolean;
+    }
+    type ImportAttributeName = Identifier | StringLiteral | NumericLiteral;
+    interface ImportAttribute extends Node {
+        readonly kind: SyntaxKind.ImportAttribute;
+        readonly parent: ImportAttributes;
+        readonly name: ImportAttributeName;
+        readonly value: Expression;
+    }
+    interface ImportAttributes extends Node {
+        readonly kind: SyntaxKind.ImportAttributes;
+        readonly parent: ImportDeclaration | ExportDeclaration;
+        readonly elements: NodeArray<ImportAttribute>;
         readonly multiLine?: boolean;
     }
     interface NamespaceImport extends NamedDeclaration {
@@ -5985,7 +6013,8 @@ declare namespace ts {
         readonly exportClause?: NamedExportBindings;
         /** If this is not a StringLiteral it will be a grammar error. */
         readonly moduleSpecifier?: Expression;
-        readonly assertClause?: AssertClause;
+        /** @deprecated */ readonly assertClause?: AssertClause;
+        readonly attributes?: ImportAttributes;
     }
     interface NamedImports extends Node {
         readonly kind: SyntaxKind.NamedImports;
@@ -7946,8 +7975,8 @@ declare namespace ts {
         updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
         createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
         updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-        createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
-        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
+        createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, attributes?: ImportTypeAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, attributes: ImportTypeAttributes | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
         updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
         createThisTypeNode(): ThisTypeNode;
@@ -8104,16 +8133,22 @@ declare namespace ts {
         updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
         createImportEqualsDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
         updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-        createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
-        updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+        createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause, attributes?: ImportAttributes): ImportDeclaration;
+        updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined, attributes: ImportAttributes | undefined): ImportDeclaration;
         createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
         updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
-        createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
-        updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
-        createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
-        updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
-        createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
-        updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+        /** @deprecated */ createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
+        /** @deprecated */ updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
+        /** @deprecated */ createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
+        /** @deprecated */ updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
+        /** @deprecated */ createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+        /** @deprecated */ updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+        createImportAttributes(elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
+        updateImportAttributes(node: ImportAttributes, elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
+        createImportAttribute(name: ImportAttributeName, value: Expression): ImportAttribute;
+        updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute;
+        createImportTypeAttributes(attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes;
+        updateImportTypeAttributes(node: ImportTypeAttributes, attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes;
         createNamespaceImport(name: Identifier): NamespaceImport;
         updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
         createNamespaceExport(name: Identifier): NamespaceExport;
@@ -8124,8 +8159,8 @@ declare namespace ts {
         updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
         createExportAssignment(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
         updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment;
-        createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
-        updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
+        createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause, attributes?: ImportAttributes): ExportDeclaration;
+        updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined, attributes: ImportAttributes | undefined): ExportDeclaration;
         createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
         updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
         createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
@@ -8574,7 +8609,8 @@ declare namespace ts {
         ObjectBindingPatternElements = 525136,
         ArrayBindingPatternElements = 524880,
         ObjectLiteralExpressionProperties = 526226,
-        ImportClauseEntries = 526226,
+        /** @deprecated */ ImportClauseEntries = 526226,
+        ImportAttributes = 526226,
         ArrayLiteralExpressionElements = 8914,
         CommaListElements = 528,
         CallExpressionArguments = 2576,
@@ -9004,6 +9040,7 @@ declare namespace ts {
     function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
     function isAssertionKey(node: Node): node is AssertionKey;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
+    function isImportAttributeName(node: Node): node is ImportAttributeName;
     function isModifier(node: Node): node is Modifier;
     function isEntityName(node: Node): node is EntityName;
     function isPropertyName(node: Node): node is PropertyName;
@@ -9086,6 +9123,8 @@ declare namespace ts {
      * ```
      */
     function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[];
+    /** @intre */
+    function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined): boolean;
     /** @deprecated */
     function createUnparsedSourceFile(text: string): UnparsedSource;
     /** @deprecated */
@@ -9305,8 +9344,13 @@ declare namespace ts {
     function isImportDeclaration(node: Node): node is ImportDeclaration;
     function isImportClause(node: Node): node is ImportClause;
     function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer;
+    function isImportTypeAttributes(node: Node): node is ImportTypeAttributes;
+    /** @deprecated */
     function isAssertClause(node: Node): node is AssertClause;
+    /** @deprecated */
     function isAssertEntry(node: Node): node is AssertEntry;
+    function isImportAttributes(node: Node): node is ImportAttributes;
+    function isImportAttribute(node: Node): node is ImportAttribute;
     function isNamespaceImport(node: Node): node is NamespaceImport;
     function isNamespaceExport(node: Node): node is NamespaceExport;
     function isNamedImports(node: Node): node is NamedImports;

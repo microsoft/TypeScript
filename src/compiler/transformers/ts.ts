@@ -2228,6 +2228,7 @@ export function transformTypeScript(context: TransformationContext) {
                 importClause,
                 node.moduleSpecifier,
                 node.assertClause,
+                node.attributes,
             )
             : undefined;
     }
@@ -2324,6 +2325,7 @@ export function transformTypeScript(context: TransformationContext) {
                 exportClause,
                 node.moduleSpecifier,
                 node.assertClause,
+                node.attributes,
             )
             : undefined;
     }
@@ -2394,6 +2396,7 @@ export function transformTypeScript(context: TransformationContext) {
                             /*importClause*/ undefined,
                             node.moduleReference.expression,
                             /*assertClause*/ undefined,
+                            /*attributes*/ undefined,
                         ),
                         node,
                     ),

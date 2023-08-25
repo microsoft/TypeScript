@@ -19,6 +19,10 @@
         "category": "Error",
         "code": 1007
     },
+    "The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.": {
+        "category": "Error",
+        "code": 1008
+    },
     "Trailing comma not allowed.": {
         "category": "Error",
         "code": 1009
@@ -1472,7 +1476,7 @@
         "category": "Message",
         "code": 1449
     },
-    "Dynamic imports can only accept a module specifier and an optional assertion as arguments": {
+    "Dynamic imports can only accept a module specifier and an optional set of attributes as arguments": {
         "category": "Message",
         "code": 1450
     },
@@ -1519,6 +1523,18 @@
     "File is CommonJS module because 'package.json' was not found": {
         "category": "Message",
         "code": 1461
+    },
+    "'resolution-mode' attribute are only supported when `moduleResolution` is `node16` or `nodenext`.": {
+        "category": "Error",
+        "code": 1462
+    },
+    "`resolution-mode` is the only valid key for type import attributes.": {
+        "category": "Error",
+        "code": 1463
+    },
+    "Type import attributes should have exactly one key - `resolution-mode` - with value `import` or `require`.": {
+        "category": "Error",
+        "code": 1464
     },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
@@ -1624,6 +1640,10 @@
     "'{0}' modifier cannot appear on an 'await using' declaration.": {
         "category": "Error",
         "code": 1495
+    },
+    "Identifier, string literal or number literal expected.": {
+        "category": "Error",
+        "code": 1496
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3663,6 +3683,18 @@
         "category": "Error",
         "code": 2854
     },
+    "Import attributes are not allowed on statements that transpile to CommonJS 'require' calls.": {
+        "category": "Error",
+        "code": 2855
+    },
+    "Import attributes cannot be used with type-only imports or exports.": {
+        "category": "Error",
+        "code": 2856
+    },
+    "Import attribute values must be string literal expressions.": {
+        "category": "Error",
+        "code": 2857
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4099,6 +4131,10 @@
     "'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 4125
+    },
+    "'resolution-mode' attributes are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+        "category": "Error",
+        "code": 4126
     },
 
     "The current host does not support the '{0}' option.": {

@@ -193,6 +193,7 @@ import {
     getPathComponents,
     getPathFromPathComponents,
     getRelativePathToDirectoryOrUrl,
+    getResolutionModeOverride,
     getRootLength,
     getSnippetElement,
     getStringComparer,
@@ -10434,4 +10435,14 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
         return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
     }
     return Debug.fail();
+}
+
+/** @intre */
+export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
+    if (node === undefined) {
+        return false;
+    }
+    const assertClause = isImportTypeNode(node) ? node.assertions?.assertClause : node.assertClause;
+    const attributes = isImportTypeNode(node) ? node.attributes?.attributes : node.attributes;
+    return !!getResolutionModeOverride(attributes || assertClause);
 }

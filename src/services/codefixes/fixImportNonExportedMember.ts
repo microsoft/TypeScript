@@ -186,12 +186,13 @@ function updateExport(changes: textChanges.ChangeTracker, program: Program, sour
             ),
             node.moduleSpecifier,
             node.assertClause,
+            node.attributes,
         ),
     );
 }
 
 function createExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, names: ExportName[]) {
-    changes.insertNodeAtEndOfScope(sourceFile, sourceFile, factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));
+    changes.insertNodeAtEndOfScope(sourceFile, sourceFile, factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined, /*attributes*/ undefined));
 }
 
 function createExportSpecifiers(names: ExportName[], allowTypeModifier: boolean) {

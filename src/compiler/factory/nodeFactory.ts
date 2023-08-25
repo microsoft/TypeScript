@@ -137,11 +137,15 @@ import {
     IfStatement,
     ImmediatelyInvokedArrowFunction,
     ImmediatelyInvokedFunctionExpression,
+    ImportAttribute,
+    ImportAttributeName,
+    ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportSpecifier,
     ImportTypeAssertionContainer,
+    ImportTypeAttributes,
     ImportTypeNode,
     IndexedAccessTypeNode,
     IndexSignatureDeclaration,
@@ -791,6 +795,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateAssertEntry,
         createImportTypeAssertionContainer,
         updateImportTypeAssertionContainer,
+        createImportTypeAttributes,
+        updateImportTypeAttributes,
+        createImportAttributes,
+        updateImportAttributes,
+        createImportAttribute,
+        updateImportAttribute,
         createNamespaceImport,
         updateNamespaceImport,
         createNamespaceExport,
@@ -2644,6 +2654,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createImportTypeNode(
         argument: TypeNode,
         assertions?: ImportTypeAssertionContainer,
+        attributes?: ImportTypeAttributes,
         qualifier?: EntityName,
         typeArguments?: readonly TypeNode[],
         isTypeOf = false,
@@ -2651,6 +2662,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
         node.argument = argument;
         node.assertions = assertions;
+        node.attributes = attributes;
         node.qualifier = qualifier;
         node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
         node.isTypeOf = isTypeOf;
@@ -2663,16 +2675,18 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node: ImportTypeNode,
         argument: TypeNode,
         assertions: ImportTypeAssertionContainer | undefined,
+        attributes: ImportTypeAttributes | undefined,
         qualifier: EntityName | undefined,
         typeArguments: readonly TypeNode[] | undefined,
         isTypeOf: boolean = node.isTypeOf,
     ): ImportTypeNode {
         return node.argument !== argument
+                || node.attributes !== attributes
                 || node.assertions !== assertions
                 || node.qualifier !== qualifier
                 || node.typeArguments !== typeArguments
                 || node.isTypeOf !== isTypeOf
-            ? update(createImportTypeNode(argument, assertions, qualifier, typeArguments, isTypeOf), node)
+            ? update(createImportTypeNode(argument, assertions, attributes, qualifier, typeArguments, isTypeOf), node)
             : node;
     }
 
@@ -4697,12 +4711,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         importClause: ImportClause | undefined,
         moduleSpecifier: Expression,
         assertClause: AssertClause | undefined,
+        attributes: ImportAttributes | undefined,
     ): ImportDeclaration {
         const node = createBaseNode<ImportDeclaration>(SyntaxKind.ImportDeclaration);
         node.modifiers = asNodeArray(modifiers);
         node.importClause = importClause;
         node.moduleSpecifier = moduleSpecifier;
         node.assertClause = assertClause;
+        node.attributes = attributes;
         node.transformFlags |= propagateChildFlags(node.importClause) |
             propagateChildFlags(node.moduleSpecifier);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
@@ -4718,12 +4734,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         importClause: ImportClause | undefined,
         moduleSpecifier: Expression,
         assertClause: AssertClause | undefined,
+        attributes: ImportAttributes | undefined,
     ) {
         return node.modifiers !== modifiers
                 || node.importClause !== importClause
                 || node.moduleSpecifier !== moduleSpecifier
                 || node.assertClause !== assertClause
-            ? update(createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause), node)
+                || node.attributes !== attributes
+            ? update(createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause, attributes), node)
             : node;
     }
 
@@ -4798,6 +4816,56 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node.assertClause !== clause
                 || node.multiLine !== multiLine
             ? update(createImportTypeAssertionContainer(clause, multiLine), node)
+            : node;
+    }
+
+    // @api
+    function createImportTypeAttributes(attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes {
+        const node = createBaseNode<ImportTypeAttributes>(SyntaxKind.ImportTypeAttributes);
+        node.attributes = attributes;
+        node.multiLine = multiLine;
+        return node;
+    }
+
+    // @api
+    function updateImportTypeAttributes(node: ImportTypeAttributes, attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes {
+        return node.attributes !== attributes
+                || node.multiLine !== multiLine
+            ? update(createImportTypeAttributes(attributes, multiLine), node)
+            : node;
+    }
+
+    // @api
+    function createImportAttributes(elements: readonly ImportAttribute[], multiLine?: boolean): ImportAttributes {
+        const node = createBaseNode<ImportAttributes>(SyntaxKind.ImportAttributes);
+        node.elements = createNodeArray(elements);
+        node.multiLine = multiLine;
+        node.transformFlags |= TransformFlags.ContainsESNext;
+        return node;
+    }
+
+    // @api
+    function updateImportAttributes(node: ImportAttributes, elements: readonly ImportAttribute[], multiLine?: boolean): ImportAttributes {
+        return node.elements !== elements
+                || node.multiLine !== multiLine
+            ? update(createImportAttributes(elements, multiLine), node)
+            : node;
+    }
+
+    // @api
+    function createImportAttribute(name: ImportAttributeName, value: Expression): ImportAttribute {
+        const node = createBaseNode<ImportAttribute>(SyntaxKind.ImportAttribute);
+        node.name = name;
+        node.value = value;
+        node.transformFlags |= TransformFlags.ContainsESNext;
+        return node;
+    }
+
+    // @api
+    function updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute {
+        return node.name !== name
+                || node.value !== value
+            ? update(createImportAttribute(name, value), node)
             : node;
     }
 
@@ -4909,6 +4977,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         exportClause: NamedExportBindings | undefined,
         moduleSpecifier?: Expression,
         assertClause?: AssertClause,
+        attributes?: ImportAttributes,
     ) {
         const node = createBaseDeclaration<ExportDeclaration>(SyntaxKind.ExportDeclaration);
         node.modifiers = asNodeArray(modifiers);
@@ -4916,6 +4985,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.exportClause = exportClause;
         node.moduleSpecifier = moduleSpecifier;
         node.assertClause = assertClause;
+        node.attributes = attributes;
         node.transformFlags |= propagateChildrenFlags(node.modifiers) |
             propagateChildFlags(node.exportClause) |
             propagateChildFlags(node.moduleSpecifier);
@@ -4933,13 +5003,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         exportClause: NamedExportBindings | undefined,
         moduleSpecifier: Expression | undefined,
         assertClause: AssertClause | undefined,
+        attributes: ImportAttributes | undefined,
     ) {
         return node.modifiers !== modifiers
                 || node.isTypeOnly !== isTypeOnly
                 || node.exportClause !== exportClause
                 || node.moduleSpecifier !== moduleSpecifier
                 || node.assertClause !== assertClause
-            ? finishUpdateExportDeclaration(createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause), node)
+                || node.attributes !== attributes
+            ? finishUpdateExportDeclaration(createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause, attributes), node)
             : node;
     }
 
@@ -7084,9 +7156,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isEnumDeclaration(node) ? updateEnumDeclaration(node, modifierArray, node.name, node.members) :
             isModuleDeclaration(node) ? updateModuleDeclaration(node, modifierArray, node.name, node.body) :
             isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, modifierArray, node.isTypeOnly, node.name, node.moduleReference) :
-            isImportDeclaration(node) ? updateImportDeclaration(node, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
+            isImportDeclaration(node) ? updateImportDeclaration(node, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause, node.attributes) :
             isExportAssignment(node) ? updateExportAssignment(node, modifierArray, node.expression) :
-            isExportDeclaration(node) ? updateExportDeclaration(node, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
+            isExportDeclaration(node) ? updateExportDeclaration(node, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause, node.attributes) :
             Debug.assertNever(node);
     }
 

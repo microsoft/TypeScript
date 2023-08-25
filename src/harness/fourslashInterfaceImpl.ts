@@ -1133,6 +1133,7 @@ export namespace Completion {
         interfaceEntry("ImportMeta"),
         interfaceEntry("ImportCallOptions"),
         interfaceEntry("ImportAssertions"),
+        interfaceEntry("ImportAttributes"),
         varEntry("Math"),
         varEntry("Date"),
         interfaceEntry("DateConstructor"),

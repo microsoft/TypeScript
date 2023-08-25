@@ -191,6 +191,8 @@ import {
     Identifier,
     idText,
     IfStatement,
+    ImportAttribute,
+    ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -2058,6 +2060,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitAssertClause(node as AssertClause);
                 case SyntaxKind.AssertEntry:
                     return emitAssertEntry(node as AssertEntry);
+                case SyntaxKind.ImportAttributes:
+                    return emitImportAttributes(node as ImportAttributes);
+                case SyntaxKind.ImportAttribute:
+                    return emitImportAttribute(node as ImportAttribute);
                 case SyntaxKind.MissingDeclaration:
                     return;
 
@@ -3991,8 +3997,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
         }
         emitExpression(node.moduleSpecifier);
-        if (node.assertClause) {
-            emitWithLeadingSpace(node.assertClause);
+        if (node.attributes || node.assertClause) {
+            emitWithLeadingSpace(node.attributes || node.assertClause);
         }
         writeTrailingSemicolon();
     }
@@ -4066,8 +4072,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
             emitExpression(node.moduleSpecifier);
         }
-        if (node.assertClause) {
-            emitWithLeadingSpace(node.assertClause);
+        if (node.attributes || node.assertClause) {
+            emitWithLeadingSpace(node.attributes || node.assertClause);
         }
         writeTrailingSemicolon();
     }
@@ -4080,6 +4086,27 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitAssertEntry(node: AssertEntry) {
+        emit(node.name);
+        writePunctuation(":");
+        writeSpace();
+
+        const value = node.value;
+        /** @see {emitPropertyAssignment} */
+        if ((getEmitFlags(value) & EmitFlags.NoLeadingComments) === 0) {
+            const commentRange = getCommentRange(value);
+            emitTrailingCommentsOfPosition(commentRange.pos);
+        }
+        emit(value);
+    }
+
+    function emitImportAttributes(node: ImportAttributes) {
+        emitTokenWithComment(SyntaxKind.WithKeyword, node.pos, writeKeyword, node);
+        writeSpace();
+        const elements = node.elements;
+        emitList(node, elements, ListFormat.ImportAttributes);
+    }
+
+    function emitImportAttribute(node: ImportAttribute) {
         emit(node.name);
         writePunctuation(":");
         writeSpace();

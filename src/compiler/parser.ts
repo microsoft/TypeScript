@@ -117,12 +117,15 @@ import {
     Identifier,
     idText,
     IfStatement,
+    ImportAttribute,
+    ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportOrExportSpecifier,
     ImportSpecifier,
     ImportTypeAssertionContainer,
+    ImportTypeAttributes,
     ImportTypeNode,
     IndexedAccessTypeNode,
     IndexSignatureDeclaration,
@@ -692,11 +695,15 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.ImportType]: function forEachChildInImportType<T>(node: ImportTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.argument) ||
             visitNode(cbNode, node.assertions) ||
+            visitNode(cbNode, node.attributes) ||
             visitNode(cbNode, node.qualifier) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
     },
     [SyntaxKind.ImportTypeAssertionContainer]: function forEachChildInImportTypeAssertionContainer<T>(node: ImportTypeAssertionContainer, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.assertClause);
+    },
+    [SyntaxKind.ImportTypeAttributes]: function forEachChildInImportTypeAttributes<T>(node: ImportTypeAttributes, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.attributes);
     },
     [SyntaxKind.ParenthesizedType]: forEachChildInParenthesizedTypeOrTypeOperator,
     [SyntaxKind.TypeOperator]: forEachChildInParenthesizedTypeOrTypeOperator,
@@ -930,7 +937,8 @@ const forEachChildTable: ForEachChildTable = {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.importClause) ||
             visitNode(cbNode, node.moduleSpecifier) ||
-            visitNode(cbNode, node.assertClause);
+            visitNode(cbNode, node.assertClause) ||
+            visitNode(cbNode, node.attributes);
     },
     [SyntaxKind.ImportClause]: function forEachChildInImportClause<T>(node: ImportClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name) ||
@@ -940,6 +948,13 @@ const forEachChildTable: ForEachChildTable = {
         return visitNodes(cbNode, cbNodes, node.elements);
     },
     [SyntaxKind.AssertEntry]: function forEachChildInAssertEntry<T>(node: AssertEntry, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.value);
+    },
+    [SyntaxKind.ImportAttributes]: function forEachChildInImportAttributes<T>(node: ImportAttributes, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.elements);
+    },
+    [SyntaxKind.ImportAttribute]: function forEachChildInImportAttribute<T>(node: ImportAttribute, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.value);
     },
@@ -959,7 +974,8 @@ const forEachChildTable: ForEachChildTable = {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.exportClause) ||
             visitNode(cbNode, node.moduleSpecifier) ||
-            visitNode(cbNode, node.assertClause);
+            visitNode(cbNode, node.assertClause) ||
+            visitNode(cbNode, node.attributes);
     },
     [SyntaxKind.ImportSpecifier]: forEachChildInImportOrExportSpecifier,
     [SyntaxKind.ExportSpecifier]: forEachChildInImportOrExportSpecifier,
@@ -2835,6 +2851,8 @@ namespace Parser {
                 return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
             case ParsingContext.AssertEntries:
                 return isAssertionKey();
+            case ParsingContext.ImportAttributes:
+                return isLiteralPropertyName();
             case ParsingContext.HeritageClauseElement:
                 // If we see `{ ... }` then only consume it as an expression if it is followed by `,` or `{`
                 // That way we won't consume the body of a class in its heritage clause.
@@ -2966,6 +2984,7 @@ namespace Parser {
             case ParsingContext.ObjectBindingElements:
             case ParsingContext.ImportOrExportSpecifiers:
             case ParsingContext.AssertEntries:
+            case ParsingContext.ImportAttributes:
                 return token() === SyntaxKind.CloseBraceToken;
             case ParsingContext.SwitchClauseStatements:
                 return token() === SyntaxKind.CloseBraceToken || token() === SyntaxKind.CaseKeyword || token() === SyntaxKind.DefaultKeyword;
@@ -3430,6 +3449,8 @@ namespace Parser {
                 return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.AssertEntries:
                 return parseErrorAtCurrentToken(Diagnostics.Identifier_or_string_literal_expected); // AssertionKey.
+            case ParsingContext.ImportAttributes:
+                return parseErrorAtCurrentToken(Diagnostics.Identifier_string_literal_or_number_literal_expected); // ImportAttributeName
             case ParsingContext.JSDocComment:
                 return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
             case ParsingContext.Count:
@@ -4498,24 +4519,20 @@ namespace Parser {
         return token() === SyntaxKind.ImportKeyword;
     }
 
-    function parseImportTypeAssertions(): ImportTypeAssertionContainer {
-        const pos = getNodePos();
-        const openBracePosition = scanner.getTokenStart();
-        parseExpected(SyntaxKind.OpenBraceToken);
-        const multiLine = scanner.hasPrecedingLineBreak();
+    function parseImportTypeAssertions(pos: number, openBracePosition: number, multiLine: boolean): ImportTypeAssertionContainer {
         parseExpected(SyntaxKind.AssertKeyword);
         parseExpected(SyntaxKind.ColonToken);
         const clause = parseAssertClause(/*skipAssertKeyword*/ true);
-        if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-            const lastError = lastOrUndefined(parseDiagnostics);
-            if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                addRelatedInfo(
-                    lastError,
-                    createDetachedDiagnostic(fileName, sourceText, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, "{", "}"),
-                );
-            }
-        }
+        parseExpectedCloseBrace(openBracePosition);
         return finishNode(factory.createImportTypeAssertionContainer(clause, multiLine), pos);
+    }
+
+    function parseImportTypeAttributes(pos: number, openBracePosition: number, multiLine: boolean): ImportTypeAttributes {
+        parseExpected(SyntaxKind.WithKeyword);
+        parseExpected(SyntaxKind.ColonToken);
+        const attributes = parseImportAttributes(/*skipWithKeyword*/ true);
+        parseExpectedCloseBrace(openBracePosition);
+        return finishNode(factory.createImportTypeAttributes(attributes, multiLine), pos);
     }
 
     function parseImportType(): ImportTypeNode {
@@ -4526,13 +4543,35 @@ namespace Parser {
         parseExpected(SyntaxKind.OpenParenToken);
         const type = parseType();
         let assertions: ImportTypeAssertionContainer | undefined;
+        let attributes: ImportTypeAttributes | undefined;
         if (parseOptional(SyntaxKind.CommaToken)) {
-            assertions = parseImportTypeAssertions();
+            const startPos = getNodePos();
+            const openBracePos = scanner.getTokenStart();
+            parseExpected(SyntaxKind.OpenBraceToken);
+            const multiLine = scanner.hasPrecedingLineBreak();
+            if (token() === SyntaxKind.AssertKeyword) {
+                assertions = parseImportTypeAssertions(startPos, openBracePos, multiLine);
+            }
+            else {
+                attributes = parseImportTypeAttributes(startPos, openBracePos, multiLine);
+            }
         }
         parseExpected(SyntaxKind.CloseParenToken);
         const qualifier = parseOptional(SyntaxKind.DotToken) ? parseEntityNameOfTypeReference() : undefined;
         const typeArguments = parseTypeArgumentsOfTypeReference();
-        return finishNode(factory.createImportTypeNode(type, assertions, qualifier, typeArguments, isTypeOf), pos);
+        return finishNode(factory.createImportTypeNode(type, assertions, attributes, qualifier, typeArguments, isTypeOf), pos);
+    }
+
+    function parseExpectedCloseBrace(pos: number) {
+        if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+            const lastError = lastOrUndefined(parseDiagnostics);
+            if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                addRelatedInfo(
+                    lastError,
+                    createDetachedDiagnostic(fileName, sourceText, pos, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, "{", "}"),
+                );
+            }
+        }
     }
 
     function nextTokenIsNumericOrBigIntLiteral() {
@@ -8342,14 +8381,16 @@ namespace Parser {
             parseExpected(SyntaxKind.FromKeyword);
         }
         const moduleSpecifier = parseModuleSpecifier();
-
         let assertClause: AssertClause | undefined;
         if (token() === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak()) {
             assertClause = parseAssertClause();
         }
-
+        let attributes: ImportAttributes | undefined;
+        if (assertClause === undefined && token() === SyntaxKind.WithKeyword) {
+            attributes = parseImportAttributes();
+        }
         parseSemicolon();
-        const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause);
+        const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause, attributes);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -8384,6 +8425,46 @@ namespace Parser {
         else {
             const elements = createNodeArray([], getNodePos(), /*end*/ undefined, /*hasTrailingComma*/ false);
             return finishNode(factory.createAssertClause(elements, /*multiLine*/ false), pos);
+        }
+    }
+
+    function parseImportAttributeName() {
+        if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
+            return parseLiteralLikeNode(token()) as StringLiteral | NumericLiteral;
+        }
+        return parseIdentifierName();
+    }
+
+    function parseImportAttribute() {
+        const pos = getNodePos();
+        const name = parseImportAttributeName();
+        parseExpected(SyntaxKind.ColonToken);
+        return finishNode(factory.createImportAttribute(name, parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true)), pos);
+    }
+
+    function parseImportAttributes(skipWithKeyword?: true) {
+        const pos = getNodePos();
+        if (!skipWithKeyword) {
+            parseExpected(SyntaxKind.WithKeyword);
+        }
+        const openBracePosition = scanner.getTokenStart();
+        if (parseExpected(SyntaxKind.OpenBraceToken)) {
+            const multiLine = scanner.hasPrecedingLineBreak();
+            const elements = parseDelimitedList(ParsingContext.ImportAttributes, parseImportAttribute, /*considerSemicolonAsDelimiter*/ true);
+            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, sourceText, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, "{", "}"),
+                    );
+                }
+            }
+            return finishNode(factory.createImportAttributes(elements, multiLine), pos);
+        }
+        else {
+            const elements = createNodeArray([], getNodePos(), /*end*/ undefined, /*hasTrailingComma*/ false);
+            return finishNode(factory.createImportAttributes(elements, /*multiLine*/ false), pos);
         }
     }
 
@@ -8587,6 +8668,7 @@ namespace Parser {
         let exportClause: NamedExportBindings | undefined;
         let moduleSpecifier: Expression | undefined;
         let assertClause: AssertClause | undefined;
+        let attributes: ImportAttributes | undefined;
         const isTypeOnly = parseOptional(SyntaxKind.TypeKeyword);
         const namespaceExportPos = getNodePos();
         if (parseOptional(SyntaxKind.AsteriskToken)) {
@@ -8609,9 +8691,12 @@ namespace Parser {
         if (moduleSpecifier && token() === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak()) {
             assertClause = parseAssertClause();
         }
+        if (assertClause === undefined && moduleSpecifier && token() === SyntaxKind.WithKeyword) {
+            attributes = parseImportAttributes();
+        }
         parseSemicolon();
         setAwaitContext(savedAwaitContext);
-        const node = factory.createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
+        const node = factory.createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause, attributes);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
@@ -8658,9 +8743,10 @@ namespace Parser {
         TupleElementTypes,         // Element types in tuple element type list
         HeritageClauses,           // Heritage clauses for a class or interface declaration.
         ImportOrExportSpecifiers,  // Named import clause's import specifier list,
-        AssertEntries,             // Import entries list.
+        /** @deprecated */ AssertEntries, // Import entries list
+        ImportAttributes,          // Import attributes
         JSDocComment,              // Parsing via JSDocParser
-        Count,                      // Number of parsing contexts
+        Count,                     // Number of parsing contexts
     }
 
     const enum Tristate {

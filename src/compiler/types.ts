@@ -376,9 +376,12 @@ export const enum SyntaxKind {
     DefaultClause,
     HeritageClause,
     CatchClause,
-    AssertClause,
-    AssertEntry,
-    ImportTypeAssertionContainer,
+    /** @deprecated */ AssertClause,
+    /** @deprecated */ AssertEntry,
+    /** @deprecated */ ImportTypeAssertionContainer,
+    ImportAttributes,
+    ImportAttribute,
+    ImportTypeAttributes,
 
     // Property assignments
     PropertyAssignment,
@@ -1057,6 +1060,7 @@ export type HasChildren =
     | InferTypeNode
     | ImportTypeNode
     | ImportTypeAssertionContainer
+    | ImportTypeAttributes
     | NamedTupleMember
     | ParenthesizedTypeNode
     | TypeOperatorNode
@@ -1129,6 +1133,8 @@ export type HasChildren =
     | ImportDeclaration
     | AssertClause
     | AssertEntry
+    | ImportAttributes
+    | ImportAttribute
     | ImportClause
     | NamespaceImport
     | NamespaceExport
@@ -2141,6 +2147,7 @@ export interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTy
     readonly kind: TKind;
 }
 
+/** @deprecated */
 export interface ImportTypeAssertionContainer extends Node {
     readonly kind: SyntaxKind.ImportTypeAssertionContainer;
     readonly parent: ImportTypeNode;
@@ -2148,11 +2155,19 @@ export interface ImportTypeAssertionContainer extends Node {
     readonly multiLine?: boolean;
 }
 
+export interface ImportTypeAttributes extends Node {
+    readonly kind: SyntaxKind.ImportTypeAttributes;
+    readonly parent: ImportTypeNode;
+    readonly attributes: ImportAttributes;
+    readonly multiLine?: boolean;
+}
+
 export interface ImportTypeNode extends NodeWithTypeArguments {
     readonly kind: SyntaxKind.ImportType;
     readonly isTypeOf: boolean;
     readonly argument: TypeNode;
-    readonly assertions?: ImportTypeAssertionContainer;
+    /** @deprecated */ readonly assertions?: ImportTypeAssertionContainer;
+    readonly attributes?: ImportTypeAttributes;
     readonly qualifier?: EntityName;
 }
 
@@ -3602,7 +3617,8 @@ export interface ImportDeclaration extends Statement {
     readonly importClause?: ImportClause;
     /** If this is not a StringLiteral it will be a grammar error. */
     readonly moduleSpecifier: Expression;
-    readonly assertClause?: AssertClause;
+    /** @deprecated */ readonly assertClause?: AssertClause;
+    readonly attributes?: ImportAttributes;
 }
 
 export type NamedImportBindings =
@@ -3627,8 +3643,10 @@ export interface ImportClause extends NamedDeclaration {
     readonly namedBindings?: NamedImportBindings;
 }
 
+/** @deprecated */
 export type AssertionKey = Identifier | StringLiteral;
 
+/** @deprecated */
 export interface AssertEntry extends Node {
     readonly kind: SyntaxKind.AssertEntry;
     readonly parent: AssertClause;
@@ -3636,10 +3654,27 @@ export interface AssertEntry extends Node {
     readonly value: Expression;
 }
 
+/** @deprecated */
 export interface AssertClause extends Node {
     readonly kind: SyntaxKind.AssertClause;
     readonly parent: ImportDeclaration | ExportDeclaration;
     readonly elements: NodeArray<AssertEntry>;
+    readonly multiLine?: boolean;
+}
+
+export type ImportAttributeName = Identifier | StringLiteral | NumericLiteral;
+
+export interface ImportAttribute extends Node {
+    readonly kind: SyntaxKind.ImportAttribute;
+    readonly parent: ImportAttributes;
+    readonly name: ImportAttributeName;
+    readonly value: Expression;
+}
+
+export interface ImportAttributes extends Node {
+    readonly kind: SyntaxKind.ImportAttributes;
+    readonly parent: ImportDeclaration | ExportDeclaration;
+    readonly elements: NodeArray<ImportAttribute>;
     readonly multiLine?: boolean;
 }
 
@@ -3672,7 +3707,8 @@ export interface ExportDeclaration extends DeclarationStatement, JSDocContainer 
     readonly exportClause?: NamedExportBindings;
     /** If this is not a StringLiteral it will be a grammar error. */
     readonly moduleSpecifier?: Expression;
-    readonly assertClause?: AssertClause;
+    /** @deprecated */ readonly assertClause?: AssertClause;
+    readonly attributes?: ImportAttributes;
 }
 
 export interface NamedImports extends Node {
@@ -8393,8 +8429,8 @@ export interface NodeFactory {
     updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
     createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
     updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-    createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
-    updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
+    createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, attributes?: ImportTypeAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+    updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, attributes: ImportTypeAttributes | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
     createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
     updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
     createThisTypeNode(): ThisTypeNode;
@@ -8574,16 +8610,22 @@ export interface NodeFactory {
     updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
     createImportEqualsDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
     updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-    createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
-    updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+    createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause, attributes?: ImportAttributes): ImportDeclaration;
+    updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined, attributes: ImportAttributes | undefined): ImportDeclaration;
     createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
     updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
-    createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
-    updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
-    createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
-    updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
-    createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
-    updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+    /** @deprecated */ createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
+    /** @deprecated */ updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
+    /** @deprecated */ createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
+    /** @deprecated */ updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
+    /** @deprecated */ createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+    /** @deprecated */ updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+    createImportAttributes(elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
+    updateImportAttributes(node: ImportAttributes, elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
+    createImportAttribute(name: ImportAttributeName, value: Expression): ImportAttribute;
+    updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute;
+    createImportTypeAttributes(attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes;
+    updateImportTypeAttributes(node: ImportTypeAttributes, attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes;
     createNamespaceImport(name: Identifier): NamespaceImport;
     updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
     createNamespaceExport(name: Identifier): NamespaceExport;
@@ -8594,8 +8636,8 @@ export interface NodeFactory {
     updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
     createExportAssignment(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
     updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment;
-    createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
-    updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
+    createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause, attributes?: ImportAttributes): ExportDeclaration;
+    updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined, attributes: ImportAttributes | undefined): ExportDeclaration;
     createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
     updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
     createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
@@ -9724,7 +9766,8 @@ export const enum ListFormat {
     ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
     ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
     ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
-    ImportClauseEntries = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
+    /** @deprecated */ ImportClauseEntries = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
+    ImportAttributes = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
     ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
     CommaListElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
     CallExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,

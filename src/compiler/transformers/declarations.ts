@@ -70,7 +70,7 @@ import {
     getOutputPathsFor,
     getParseTreeNode,
     getRelativePathToDirectoryOrUrl,
-    getResolutionModeOverrideForClause,
+    getResolutionModeOverride,
     getResolvedExternalModuleName,
     getSetAccessorValueParameter,
     getSourceFileOfNode,
@@ -86,6 +86,7 @@ import {
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
+    ImportAttributes,
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportTypeNode,
@@ -118,6 +119,7 @@ import {
     isIdentifier,
     isIdentifierANonContextualKeyword,
     isIdentifierText,
+    isImportAttributes,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
@@ -984,7 +986,8 @@ export function transformDeclarations(context: TransformationContext) {
                 decl.modifiers,
                 decl.importClause,
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.attributes),
             );
         }
         // The `importClause` visibility corresponds to the default's visibility.
@@ -1001,7 +1004,8 @@ export function transformDeclarations(context: TransformationContext) {
                     /*namedBindings*/ undefined,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.attributes),
             );
         }
         if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -1017,7 +1021,8 @@ export function transformDeclarations(context: TransformationContext) {
                     namedBindings,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.attributes),
             ) : undefined;
         }
         // Named imports (optionally with visible default)
@@ -1033,7 +1038,8 @@ export function transformDeclarations(context: TransformationContext) {
                     bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.attributes),
             );
         }
         // Augmentation of export depends on import
@@ -1043,19 +1049,25 @@ export function transformDeclarations(context: TransformationContext) {
                 decl.modifiers,
                 /*importClause*/ undefined,
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                getResolutionModeOverrideForClauseInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.assertClause),
+                getResolutionModeOverrideInNightly(decl.attributes),
             );
         }
         // Nothing visible
     }
 
-    function getResolutionModeOverrideForClauseInNightly(assertClause: AssertClause | undefined) {
-        const mode = getResolutionModeOverrideForClause(assertClause);
-        if (mode !== undefined) {
+    function getResolutionModeOverrideInNightly<T extends AssertClause | ImportAttributes>(node: T | undefined) {
+        const mode = getResolutionModeOverride(node);
+        if (node && mode !== undefined) {
             if (!isNightly()) {
-                context.addDiagnostic(createDiagnosticForNode(assertClause!, Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
+                context.addDiagnostic(createDiagnosticForNode(
+                    node,
+                    isImportAttributes(node)
+                        ? Diagnostics.resolution_mode_attributes_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next
+                        : Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next,
+                ));
             }
-            return assertClause;
+            return node;
         }
         return undefined;
     }
@@ -1329,6 +1341,7 @@ export function transformDeclarations(context: TransformationContext) {
                         input,
                         factory.updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
                         input.assertions,
+                        input.attributes,
                         input.qualifier,
                         visitNodes(input.typeArguments, visitDeclarationSubtree, isTypeNode),
                         input.isTypeOf,
@@ -1390,7 +1403,8 @@ export function transformDeclarations(context: TransformationContext) {
                     input.isTypeOnly,
                     input.exportClause,
                     rewriteModuleSpecifier(input, input.moduleSpecifier),
-                    getResolutionModeOverrideForClause(input.assertClause) ? input.assertClause : undefined,
+                    getResolutionModeOverrideInNightly(input.assertClause) ? input.assertClause : undefined,
+                    getResolutionModeOverrideInNightly(input.attributes) ? input.attributes : undefined,
                 );
             }
             case SyntaxKind.ExportAssignment: {

@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/importAttributes/importAttributes8.ts] ////
+
+=== /a.ts ===
+export default {
+>{    a: "a",    b: "b",    1: "1",} : { a: string; b: string; 1: string; }
+
+    a: "a",
+>a : string
+>"a" : "a"
+
+    b: "b",
+>b : string
+>"b" : "b"
+
+    1: "1",
+>1 : string
+>"1" : "1"
+}
+
+=== /b.ts ===
+import a from "./a"
+>a : { a: string; b: string; 1: string; }
+
+with { a: "a", "b": "b", 1: "1" }; // ok
+>a : error
+
