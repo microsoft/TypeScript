@@ -2222,7 +2222,7 @@ function loadEntrypointsFromExportMap(
 
     function loadEntrypointsFromTargetExports(target: unknown): boolean | undefined {
         if (typeof target === "string" && startsWith(target, "./")) {
-            if (target.indexOf("*") >= 0 && state.host.readDirectory) {
+            if (target.includes("*") && state.host.readDirectory) {
                 if (target.indexOf("*") !== target.lastIndexOf("*")) {
                     return false;
                 }
@@ -2242,7 +2242,7 @@ function loadEntrypointsFromExportMap(
             }
             else {
                 const partsAfterFirst = getPathComponents(target).slice(2);
-                if (partsAfterFirst.indexOf("..") >= 0 || partsAfterFirst.indexOf(".") >= 0 || partsAfterFirst.indexOf("node_modules") >= 0) {
+                if (partsAfterFirst.includes("..") || partsAfterFirst.includes(".") || partsAfterFirst.includes("node_modules")) {
                     return false;
                 }
                 const resolvedTarget = combinePaths(scope.packageDirectory, target);
@@ -2676,7 +2676,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
             }
             const parts = pathIsRelative(target) ? getPathComponents(target).slice(1) : getPathComponents(target);
             const partsAfterFirst = parts.slice(1);
-            if (partsAfterFirst.indexOf("..") >= 0 || partsAfterFirst.indexOf(".") >= 0 || partsAfterFirst.indexOf("node_modules") >= 0) {
+            if (partsAfterFirst.includes("..") || partsAfterFirst.includes(".") || partsAfterFirst.includes("node_modules")) {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.package_json_scope_0_has_invalid_type_for_target_of_specifier_1, scope.packageDirectory, moduleName);
                 }
@@ -2686,7 +2686,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
             // TODO: Assert that `resolvedTarget` is actually within the package directory? That's what the spec says.... but I'm not sure we need
             // to be in the business of validating everyone's import and export map correctness.
             const subpathParts = getPathComponents(subpath);
-            if (subpathParts.indexOf("..") >= 0 || subpathParts.indexOf(".") >= 0 || subpathParts.indexOf("node_modules") >= 0) {
+            if (subpathParts.includes("..") || subpathParts.includes(".") || subpathParts.includes("node_modules")) {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.package_json_scope_0_has_invalid_type_for_target_of_specifier_1, scope.packageDirectory, moduleName);
                 }
@@ -2705,7 +2705,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
             if (!Array.isArray(target)) {
                 traceIfEnabled(state, Diagnostics.Entering_conditional_exports);
                 for (const condition of getOwnKeys(target as MapLike<unknown>)) {
-                    if (condition === "default" || state.conditions.indexOf(condition) >= 0 || isApplicableVersionedTypesKey(state.conditions, condition)) {
+                    if (condition === "default" || state.conditions.includes(condition) || isApplicableVersionedTypesKey(state.conditions, condition)) {
                         traceIfEnabled(state, Diagnostics.Matched_0_condition_1, isImports ? "imports" : "exports", condition);
                         const subTarget = (target as MapLike<unknown>)[condition];
                         const result = loadModuleFromTargetImportOrExport(subTarget, subpath, pattern, key);

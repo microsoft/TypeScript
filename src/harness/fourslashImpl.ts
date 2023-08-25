@@ -4905,7 +4905,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
                         openMarker = undefined;
                         state = State.none;
                     }
-                    else if (validMarkerChars.indexOf(currentChar) < 0) {
+                    else if (!validMarkerChars.includes(currentChar)) {
                         if (currentChar === "*" && i < content.length - 1 && content.charAt(i + 1) === "/") {
                             // The marker is about to be closed, ignore the 'invalid' char
                         }

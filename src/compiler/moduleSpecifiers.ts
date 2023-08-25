@@ -873,7 +873,7 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
         else {
             // conditional mapping
             for (const key of getOwnKeys(exports as MapLike<unknown>)) {
-                if (key === "default" || conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(conditions, key)) {
+                if (key === "default" || conditions.includes(key) || isApplicableVersionedTypesKey(conditions, key)) {
                     const subTarget = (exports as MapLike<unknown>)[key];
                     const result = tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, packageName, subTarget, conditions, mode);
                     if (result) {

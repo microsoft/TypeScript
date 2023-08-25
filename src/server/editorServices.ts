@@ -4093,7 +4093,7 @@ export class ProjectService {
                         for (const type of rule.types) {
                             // Best-effort de-duping here - doesn't need to be unduplicated but
                             // we don't want the list to become a 400-element array of just 'kendo'
-                            if (typeAcqInclude.indexOf(type) < 0) {
+                            if (!typeAcqInclude.includes(type)) {
                                 typeAcqInclude.push(type);
                             }
                         }
@@ -4155,7 +4155,7 @@ export class ProjectService {
                             exclude = true;
                             // ... but *include* it in the list of types to acquire
                             // Same best-effort dedupe as above
-                            if (typeAcqInclude.indexOf(typeName) < 0) {
+                            if (!typeAcqInclude.includes(typeName)) {
                                 typeAcqInclude.push(typeName);
                             }
                         }

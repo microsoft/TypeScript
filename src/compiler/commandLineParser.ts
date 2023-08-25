@@ -3077,7 +3077,7 @@ function parseConfig(
     basePath = normalizeSlashes(basePath);
     const resolvedPath = getNormalizedAbsolutePath(configFileName || "", basePath);
 
-    if (resolutionStack.indexOf(resolvedPath) >= 0) {
+    if (resolutionStack.includes(resolvedPath)) {
         errors.push(createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> ")));
         return { raw: json || convertToObject(sourceFile!, errors) };
     }
