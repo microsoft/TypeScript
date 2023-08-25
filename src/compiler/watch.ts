@@ -303,7 +303,7 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
     const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file?.fileName === value?.fileName));
     if (distinctFiles.length === 0) return "";
 
-    const numberLength = (num: number) => Math.log(num) * Math.LOG10E + 1;
+    const numberLength = (num: number) => Math.log10(num) + 1;
     const fileToErrorCount = distinctFiles.map(file => ([file, countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName)] as const));
     const maxErrors = fileToErrorCount.reduce((acc, value) => Math.max(acc, value[1] || 0), 0);
 
@@ -316,7 +316,7 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
     tabularData += " ".repeat(headerPadding) + headerRow + "\n";
     fileToErrorCount.forEach(row => {
         const [file, errorCount] = row;
-        const errorCountDigitsLength = Math.log(errorCount) * Math.LOG10E + 1 | 0;
+        const errorCountDigitsLength = Math.log10(errorCount) + 1 | 0;
         const leftPadding = errorCountDigitsLength < leftPaddingGoal ?
             " ".repeat(leftPaddingGoal - errorCountDigitsLength)
             : "";

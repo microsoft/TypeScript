@@ -500,7 +500,7 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         const settingsJson = this.shimHost.getCompilationSettings();
         // eslint-disable-next-line no-null/no-null
         if (settingsJson === null || settingsJson === "") {
-            throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
+            throw new Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
         }
         const compilerOptions = JSON.parse(settingsJson) as CompilerOptions;
         // permit language service to handle all files (filtering should be performed on the host side)

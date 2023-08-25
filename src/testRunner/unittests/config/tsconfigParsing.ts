@@ -60,7 +60,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                     basePath,
                     baselineParsed: (baseline, parsed) => {
                         baseline.push("FileNames::");
-                        baseline.push(parsed.fileNames.join());
+                        baseline.push(parsed.fileNames.join(","));
                     },
                 })),
             skipJson,

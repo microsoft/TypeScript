@@ -9523,7 +9523,7 @@ export function tryParsePattern(pattern: string): string | Pattern | undefined {
     if (indexOfStar === -1) {
         return pattern;
     }
-    return pattern.indexOf("*", indexOfStar + 1) !== -1
+    return pattern.includes("*", indexOfStar + 1)
         ? undefined
         : {
             prefix: pattern.substr(0, indexOfStar),

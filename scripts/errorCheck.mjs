@@ -27,7 +27,7 @@ async function checkErrorBaselines() {
             let g;
             while (g = errRegex.exec(baseline)) {
                 const errCode = +g[1];
-                const msg = keys.filter(k => messages[k].code === errCode)[0];
+                const msg = keys.find(k => messages[k].code === errCode);
                 messages[msg].seen = true;
             }
         });

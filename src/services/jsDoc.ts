@@ -291,12 +291,12 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
                 forEach(templateTag.typeParameters, tp => {
                     displayParts.push(namePart(tp.getText()));
                     if (lastTypeParameter !== tp) {
-                        displayParts.push(...[punctuationPart(SyntaxKind.CommaToken), spacePart()]);
+                        displayParts.push(punctuationPart(SyntaxKind.CommaToken), spacePart());
                     }
                 });
             }
             if (comment) {
-                displayParts.push(...[spacePart(), ...getDisplayPartsFromComment(comment, checker)]);
+                displayParts.push(spacePart(), ...getDisplayPartsFromComment(comment, checker));
             }
             return displayParts;
         case SyntaxKind.JSDocTypeTag:

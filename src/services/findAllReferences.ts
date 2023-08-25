@@ -1751,7 +1751,7 @@ export namespace Core {
                 const called = climbPastPropertyAccess(name);
                 const call = isCallExpression(called.parent) && called.parent.expression === called ? called.parent : undefined;
                 const referenceSymbol = checker.getSymbolAtLocation(name);
-                if (referenceSymbol && checker.getRootSymbols(referenceSymbol).some(s => s === symbol)) {
+                if (referenceSymbol && checker.getRootSymbols(referenceSymbol).includes(symbol)) {
                     if (cb(name, call)) {
                         return true;
                     }

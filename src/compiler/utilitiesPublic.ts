@@ -667,7 +667,7 @@ export function validateLocaleAndSetLanguage(
         try {
             fileContents = sys.readFile(filePath);
         }
-        catch (e) {
+        catch {
             if (errors) {
                 errors.push(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, filePath));
             }

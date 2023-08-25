@@ -219,7 +219,7 @@ export function initializeNodeSystem(): StartInput {
                 try {
                     this.fd = fs.openSync(this.logFilename, "w");
                 }
-                catch (_) {
+                catch {
                     // swallow the error and keep logging disabled if file cannot be opened
                 }
             }
@@ -387,7 +387,7 @@ export function initializeNodeSystem(): StartInput {
         const factory = require("./cancellationToken");
         cancellationToken = factory(sys.args);
     }
-    catch (e) {
+    catch {
         cancellationToken = nullCancellationToken;
     }
 

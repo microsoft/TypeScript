@@ -2615,7 +2615,7 @@ export function getCompilerOptionsDiffValue(options: CompilerOptions, newLine: s
     return getOverwrittenDefaultOptions();
 
     function makePadding(paddingLength: number): string {
-        return Array(paddingLength + 1).join(" ");
+        return new Array(paddingLength + 1).join(" ");
     }
 
     function getOverwrittenDefaultOptions() {
@@ -2659,7 +2659,7 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
     return writeConfigurations();
 
     function makePadding(paddingLength: number): string {
-        return Array(paddingLength + 1).join(" ");
+        return new Array(paddingLength + 1).join(" ");
     }
 
     function isAllowedOptionForOutput({ category, name, isCommandLineOnly }: CommandLineOption): boolean {

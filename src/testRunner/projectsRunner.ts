@@ -269,7 +269,7 @@ class ProjectTestCase {
             }
 
             if (errs.length) {
-                throw Error(errs.join("\n     "));
+                throw new Error(errs.join("\n     "));
             }
         }
     }

@@ -1797,7 +1797,7 @@ export let sys: System = (() => {
             try {
                 buffer = _fs.readFileSync(fileName);
             }
-            catch (e) {
+            catch {
                 return undefined;
             }
             let len = buffer.length;
@@ -1877,7 +1877,7 @@ export let sys: System = (() => {
                                 continue;
                             }
                         }
-                        catch (e) {
+                        catch {
                             continue;
                         }
                     }
@@ -1896,7 +1896,7 @@ export let sys: System = (() => {
                 directories.sort();
                 return { files, directories };
             }
-            catch (e) {
+            catch {
                 return emptyFileSystemEntries;
             }
         }
@@ -1925,7 +1925,7 @@ export let sys: System = (() => {
                         return false;
                 }
             }
-            catch (e) {
+            catch {
                 return false;
             }
             finally {
@@ -1966,7 +1966,7 @@ export let sys: System = (() => {
             try {
                 return statSync(path)?.mtime;
             }
-            catch (e) {
+            catch {
                 return undefined;
             }
             finally {
@@ -1978,7 +1978,7 @@ export let sys: System = (() => {
             try {
                 _fs.utimesSync(path, time, time);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }
@@ -1987,7 +1987,7 @@ export let sys: System = (() => {
             try {
                 return _fs.unlinkSync(path);
             }
-            catch (e) {
+            catch {
                 return;
             }
         }

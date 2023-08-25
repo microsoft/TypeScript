@@ -26,7 +26,7 @@ async function main() {
         owner: "Microsoft",
         repo: "TypeScript",
     })).data.filter(i => !!i.pull_request).map(i => i.number);
-    if (triggeredPR && !prnums.some(n => n === +triggeredPR)) {
+    if (triggeredPR && !prnums.includes(+triggeredPR)) {
         return; // Only have work to do for enlisted PRs
     }
     console.log(`Performing experimental branch updating and merging for pull requests ${prnums.join(", ")}`);

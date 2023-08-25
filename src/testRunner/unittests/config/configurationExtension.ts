@@ -316,7 +316,7 @@ describe("unittests:: config:: configurationExtension", () => {
                         baseline.push("CompilerOptions::");
                         baseline.push(JSON.stringify(parsed.options, undefined, " "));
                         baseline.push("FileNames::");
-                        baseline.push(parsed.fileNames.join());
+                        baseline.push(parsed.fileNames.join(","));
                     },
                 })),
             skipFs: true,

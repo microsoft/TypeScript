@@ -11,7 +11,7 @@ try {
     // @ts-ignore-error
     playwright = await import("playwright");
 }
-catch (error) {
+catch {
     throw new Error("Playwright is expected to be installed manually before running this script");
 }
 

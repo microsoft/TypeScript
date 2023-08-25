@@ -48,7 +48,7 @@ class FileLog implements Log {
         try {
             fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
         }
-        catch (e) {
+        catch {
             this.logFile = undefined;
         }
     };

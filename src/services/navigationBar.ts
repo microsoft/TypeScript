@@ -594,7 +594,7 @@ function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): 
             return true;
         }
 
-        if (itemsWithSameName instanceof Array) {
+        if (Array.isArray(itemsWithSameName)) {
             for (const itemWithSameName of itemsWithSameName) {
                 if (tryMerge(itemWithSameName, child, index, node)) {
                     return false;

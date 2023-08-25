@@ -1048,7 +1048,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function computeColumnWidths(height: number) {
-            const columns: number[] = fill(Array(height), 0);
+            const columns: number[] = fill(new Array(height), 0);
             for (const node of nodes) {
                 columns[node.level] = Math.max(columns[node.level], node.text.length);
             }
@@ -1121,9 +1121,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         function renderGraph() {
             const columnCount = columnWidths.length;
             const laneCount = nodes.reduce((x, n) => Math.max(x, n.lane), 0) + 1;
-            const lanes: string[] = fill(Array(laneCount), "");
-            const grid: (FlowGraphNode | undefined)[][] = columnWidths.map(() => Array(laneCount));
-            const connectors: Connection[][] = columnWidths.map(() => fill(Array(laneCount), 0));
+            const lanes: string[] = fill(new Array(laneCount), "");
+            const grid: (FlowGraphNode | undefined)[][] = columnWidths.map(() => new Array(laneCount));
+            const connectors: Connection[][] = columnWidths.map(() => fill(new Array(laneCount), 0));
 
             // build connectors
             for (const node of nodes) {

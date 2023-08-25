@@ -4672,7 +4672,7 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
             directive = getNonFileNameOptionInObject(globalOptions);
         }
         if (directive) {
-            throw Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
+            throw new Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
         }
     }
 

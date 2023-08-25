@@ -128,7 +128,7 @@ function createNodeIO(): IO {
             }
             return { files, directories };
         }
-        catch (e) {
+        catch {
             return { files: [], directories: [] };
         }
     }

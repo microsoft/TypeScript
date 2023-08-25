@@ -194,7 +194,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         try {
             return createCachedFileSystemEntries(rootDir, rootDirPath);
         }
-        catch (_e) {
+        catch {
             // If there is exception to read directories, dont cache the result and direct the calls to host
             Debug.assert(!cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(rootDirPath)));
             return undefined;

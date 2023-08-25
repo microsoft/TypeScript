@@ -16369,7 +16369,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return readonly ? globalReadonlyArrayType : globalArrayType;
         }
         const memberIds = mapDefined(namedMemberDeclarations, node => node ? getNodeId(node) : undefined);
-        const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join() +
+        const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join(",") +
             (readonly ? "R" : "") +
             (memberIds.length ? "," + memberIds.join(",") : "");
         let type = tupleTypes.get(key);

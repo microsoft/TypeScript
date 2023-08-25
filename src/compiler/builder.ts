@@ -1217,7 +1217,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
 
     function toFileIdListId(set: ReadonlySet<Path>): ProgramBuildInfoFileIdListId {
         const fileIds = arrayFrom(set.keys(), toFileId).sort(compareValues);
-        const key = fileIds.join();
+        const key = fileIds.join(",");
         let fileIdListId = fileNamesToFileIdListId?.get(key);
         if (fileIdListId === undefined) {
             (fileIdsList ||= []).push(fileIds);

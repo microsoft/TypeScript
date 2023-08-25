@@ -32,7 +32,7 @@ try {
     // It may also return undefined if not installed properly
     etwModule = require(etwModulePath);
 }
-catch (e) {
+catch {
     etwModule = undefined;
 }
 
