@@ -3599,6 +3599,10 @@
         "category": "Error",
         "code": 2822
     },
+    "Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+        "category": "Error",
+        "code": 2823
+    },
     "Cannot find namespace '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2833

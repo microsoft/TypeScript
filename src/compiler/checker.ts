@@ -45087,7 +45087,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const message = declaration.attributes
                     ? moduleKind === ModuleKind.NodeNext
                         ? Diagnostics.Import_attributes_are_not_allowed_on_statements_that_transpile_to_CommonJS_require_calls
-                        : Diagnostics.Import_attributes_cannot_be_used_with_type_only_imports_or_exports
+                        : Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext
                     : moduleKind === ModuleKind.NodeNext
                     ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_transpile_to_CommonJS_require_calls
                     : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext;
