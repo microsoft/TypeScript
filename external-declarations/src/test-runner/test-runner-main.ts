@@ -6,9 +6,8 @@ import * as ts from "typescript";
 import * as JSON from 'json5';
 
 import { normalizePath, removeExtension } from "../compiler/path-utils";
-import { parseArgs } from "../utils/cli-parser";
 import { addToQueue, ensureDir, flushQueue, readAllFiles } from "../utils/fs-utils";
-import { testRunnerCLIConfiguration } from "./cli-arg-config";
+import { parsedCliArgs as parsedArgs } from "./cli-arg-config";
 import { excludedTsTests } from "./excluded-ts-tests";
 import { setCompilerOptionsFromHarnessSetting } from "./tsc-infrastructure/compiler-run";
 import { IO } from "./tsc-infrastructure/io";
@@ -21,9 +20,7 @@ import { firstDefined } from "../compiler/lang-utils";
 
 const excludeFilter =/\/fourslash\//;
 
-const { value: parsedArgs, printUsageOnErrors } = parseArgs(process.argv.slice(2), testRunnerCLIConfiguration);
 
-printUsageOnErrors();
 
 const shard = parsedArgs.shard;
 const shardCount = parsedArgs.shardCount;

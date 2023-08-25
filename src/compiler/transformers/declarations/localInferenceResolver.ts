@@ -2,11 +2,10 @@ import { Debug } from "../../debug";
 import { Diagnostics } from "../../diagnosticInformationMap.generated";
 import { isCallSignatureDeclaration, isComputedPropertyName, isConstructSignatureDeclaration, isExportAssignment, isGetAccessorDeclaration, isIdentifier, isLiteralTypeNode, isMethodDeclaration, isMethodSignature, isNoSubstitutionTemplateLiteral, isNumericLiteral, isOmittedExpression, isParameter, isPrivateIdentifier, isPropertyAccessExpression, isPropertyAssignment, isPropertyDeclaration, isPropertySignature, isSetAccessorDeclaration, isShorthandPropertyAssignment, isSpreadAssignment, isSpreadElement, isStringLiteral, isTypeParameterDeclaration, isTypeReferenceNode, isUnionTypeNode, isVariableDeclaration } from "../../factory/nodeTests";
 import { setTextRange } from "../../factory/utilitiesPublic";
-import { forEachChildRecursively } from "../../parser";
 import { nullTransformationContext } from "../../transformer";
 import { ArrayLiteralExpression, ArrowFunction, AsExpression, EntityNameOrEntityNameExpression, ExportAssignment, FunctionExpression, GetAccessorDeclaration, HasInferredType, Identifier, KeywordTypeSyntaxKind, LiteralExpression, MethodSignature, Modifier, Node, NodeArray, NodeFlags, ObjectLiteralElementLike, ObjectLiteralExpression, ParameterDeclaration, ParenthesizedExpression, PrefixUnaryExpression, PropertySignature, SetAccessorDeclaration, SourceFile, SyntaxKind, TransformationContext,TypeAssertion, TypeElement, TypeNode, Visitor, VisitResult } from "../../types";
-import { createDiagnosticForNode,isEntityNameExpression, setParent } from "../../utilities";
-import { isConstTypeReference, isPropertyName, isTypeNode } from "../../utilitiesPublic";
+import { createDiagnosticForNode,isEntityNameExpression } from "../../utilities";
+import { isConstTypeReference, isPropertyName, isRestParameter, isTypeNode } from "../../utilitiesPublic";
 import { visitEachChild,visitNode, visitNodes } from "../../visitorPublic";
 
 enum NarrowBehavior {
@@ -81,22 +80,6 @@ export function createLocalInferenceResolver({
     }
 
     interface LocalTypeInfo { typeNode: TypeNode, sourceNode: Node, flags: LocalTypeInfoFlags }
-
-    function finalizeSyntheticTypeNode<T extends Node | undefined>(typeNode: T, parent: Node): T {
-        if (typeNode && typeNode.parent !== parent) {
-            setParent(typeNode, parent);
-            // Ensure no non synthetic nodes make it in here
-            Debug.assert(typeNode.flags & NodeFlags.Synthesized);
-            forEachChildRecursively(typeNode, (child, parent) => {
-                Debug.assert(typeNode.flags & NodeFlags.Synthesized);
-                if (child.parent === parent) {
-                    return "skip";
-                }
-                setParent(child, parent);
-            });
-        }
-        return typeNode as T & { isSynthetic: true };
-    }
 
     function mergeFlags(existing: LocalTypeInfoFlags, newFlags: LocalTypeInfoFlags): LocalTypeInfoFlags {
         return existing | newFlags;
@@ -383,7 +366,7 @@ export function createLocalInferenceResolver({
         return { typeNode: makeInvalidTypeAndReport(sourceNode), flags: LocalTypeInfoFlags.Invalid, sourceNode };
     }
     function regular(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
-        return { typeNode: finalizeSyntheticTypeNode(typeNode, sourceNode.parent), flags, sourceNode };
+        return { typeNode, flags, sourceNode };
     }
     function normalizeLiteralValue(literal: LiteralExpression) {
         switch (literal.kind) {
@@ -509,20 +492,36 @@ export function createLocalInferenceResolver({
     }
     function localInferenceFromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined): TypeNode | undefined {
         let localType: LocalTypeInfo | undefined;
-        if (isParameter(node) && node.initializer) {
+        if (isParameter(node)) {
             if(type) {
-                localType = {
-                    typeNode: visitNode(type, visitDeclarationSubtree, isTypeNode)!,
-                    sourceNode: node,
-                    flags: LocalTypeInfoFlags.None
-                }
+                localType = regular(
+                    visitNode(type, visitDeclarationSubtree, isTypeNode)!,
+                    node,
+                )
             }
-            else {
+            else if(node.initializer) {
                 localType = localInference(node.initializer);
             }
 
-            if(localType && strictNullChecks && !resolver.isOptionalParameter(node)) {
+            if(node.initializer && localType && strictNullChecks && !resolver.isOptionalParameter(node)) {
                 localType.typeNode = addUndefinedInUnion(localType.typeNode);
+            }
+
+            if(!localType) {
+                if(isRestParameter(node)) {
+                    localType = regular(
+                        factory.createArrayTypeNode(
+                            factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                        ),
+                        node,
+                    )
+                }
+                else {
+                    localType = regular(
+                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                        node,
+                    )
+                }
             }
         }
         else if(type) {
@@ -549,9 +548,6 @@ export function createLocalInferenceResolver({
         if(!localType || localType.flags & LocalTypeInfoFlags.Invalid) {
             return undefined;
         }
-
-        const typeNode = localType.typeNode;
-        setParent(typeNode, node);
-        return typeNode;
+        return localType.typeNode;
     }
 }

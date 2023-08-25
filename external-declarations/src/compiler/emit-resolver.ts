@@ -51,6 +51,11 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         return isIdentifier(expr);
     }
 
+    // Do a best effort to find expando functions 
+    function isExpandoFunctionDeclaration(){
+        return false;
+    }
+
     return {
         isDeclarationVisible,
         isLiteralConstDeclaration,
@@ -203,10 +208,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         getTypeReferenceDirectivesForEntityName(name) {
             return undefined;
         },
-        isExpandoFunctionDeclaration(){
-            // Always return false, we don' support expando functions in isolatedDeclarations
-            return false;
-        },
+        isExpandoFunctionDeclaration,
         getSymbolOfExternalModuleSpecifier() {
             return undefined;
         },

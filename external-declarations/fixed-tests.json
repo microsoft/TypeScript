@@ -22,6 +22,7 @@
             "parserX_ArrowFunction1", // Missing type annotation syntax error
             "typeParameterDirectlyConstrainedToItself", // Circular type constraints makes emit unreliable
             "typeParameterIndirectlyConstrainedToItself", // Circular type constraints makes emit unreliable
+            "callSignaturesWithAccessibilityModifiersOnParameters", // Accessibility modifiers on function parameters
         ],
         "possible-ts-bugs": [
              // Type parameter renamed
@@ -50,6 +51,7 @@
             "paramterDestrcuturingDeclaration",
             "renamingDestructuredPropertyInFunctionType",
             "restParameterWithBindingPattern3",
+            "destructuringInFunctionType",
         ],
         // Need error to turn to isolated declaration error
         "expando-function":[
@@ -127,8 +129,12 @@
             "nodeModulesTripleSlashReferenceModeDeclarationEmit6",
             "keyofAndIndexedAccess",
             "subtypingWithCallSignatures2",
-            // Default type parameter is inlined
-            "conditionalTypesSimplifyWhenTrivial"
+            "conditionalTypesSimplifyWhenTrivial", // Default type parameter is inlined
+            "emitArrowFunctionES6",
+            "stringLiteralTypesInImplementationSignatures",
+            "stringLiteralTypesInImplementationSignatures2",
+            "typeOfOnTypeArg",
+            "stringLiteralObjectLiteralDeclaration1"
         ],
         // Investigate
         "computed-properties": [

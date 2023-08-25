@@ -10,6 +10,7 @@ import { libs } from "./tsc-infrastructure/options";
 import * as TestCaseParser from "./tsc-infrastructure/test-file-parser";
 import { changeExtension } from "./tsc-infrastructure/vpath";
 import * as vpath from "./tsc-infrastructure/vpath";
+import { parsedCliArgs } from "./cli-arg-config";
 
 export interface TestCompilationResult {
     files: readonly FileContent[];
@@ -30,7 +31,7 @@ export async function loadTestCase(fileName: string) {
         BOM: rawText.substring(0, Utils.getByteOrderMarkLength(rawText))
     });
 }
-const forceIsolatedDeclarations = process.argv.some(v => v === "--force-isolated-declarations");
+const forceIsolatedDeclarations = parsedCliArgs.forceIsolatedDeclarations;
 export function runTypeScript(caseData: TestCaseParser.TestCaseContent, settings: ts.CompilerOptions): TestCompilationResult {
     function createHarnessTestFile(lastUnit: TestCaseParser.TestUnitData): TestFile {
         return { unitName: lastUnit.name, content: lastUnit.content, fileOptions: lastUnit.fileOptions };
