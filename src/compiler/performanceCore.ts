@@ -117,5 +117,6 @@ export function tryGetNativePerformanceHooks() {
  * @internal
  */
 export const timestamp = nativePerformance ? () => nativePerformance.now() :
+    // eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
     Date.now ? Date.now :
     () => +(new Date());

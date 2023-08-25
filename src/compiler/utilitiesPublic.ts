@@ -1283,6 +1283,7 @@ export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeP
 }
 
 export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
+    // eslint-disable-next-line unicorn/prefer-logical-operator-over-ternary
     return node.constraint ? node.constraint :
         isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0] ? node.parent.constraint :
         undefined;

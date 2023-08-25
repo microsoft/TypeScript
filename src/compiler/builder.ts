@@ -1783,7 +1783,7 @@ export function toBuilderFileEmit(value: ProgramBuilderInfoFilePendingEmit, full
 
 /** @internal */
 export function toProgramEmitPending(value: ProgramBuildInfoBundlePendingEmit, options: CompilerOptions | undefined): BuilderFileEmit | undefined {
-    return !value ? getBuilderFileEmit(options || {}) : value;
+    return value || getBuilderFileEmit(options || {});
 }
 
 /** @internal */

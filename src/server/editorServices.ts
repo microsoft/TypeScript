@@ -3094,7 +3094,7 @@ export class ProjectService {
                 sourceMapFileInfo.getSnapshot();
                 if (sourceMapFileInfo.documentPositionMapper !== undefined) {
                     sourceMapFileInfo.sourceInfos = this.addSourceInfoToSourceMap(sourceFileName, project, sourceMapFileInfo.sourceInfos);
-                    return sourceMapFileInfo.documentPositionMapper ? sourceMapFileInfo.documentPositionMapper : undefined;
+                    return sourceMapFileInfo.documentPositionMapper || undefined;
                 }
             }
             declarationInfo.sourceMapFilePath = undefined;

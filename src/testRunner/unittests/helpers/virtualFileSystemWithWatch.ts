@@ -678,7 +678,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             // TODO::
             if (this.inodeWatching && inode !== undefined && inode !== currentInode) return;
             let relativeFileName = entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "";
-            if (useTildeSuffix) relativeFileName = (relativeFileName ? relativeFileName : getBaseFileName(fullPath)) + "~";
+            if (useTildeSuffix) relativeFileName = (relativeFileName || getBaseFileName(fullPath)) + "~";
             cb(eventName, relativeFileName, modifiedTime);
         });
     }
@@ -813,7 +813,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         const path = this.toFullPath(s);
         const entry = this.fs.get(path)!;
         if (isFsFile(entry)) {
-            return entry.fileSize ? entry.fileSize : entry.content.length;
+            return entry.fileSize || entry.content.length;
         }
         return undefined!; // TODO: GH#18217
     }

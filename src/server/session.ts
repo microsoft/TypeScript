@@ -2283,7 +2283,7 @@ export class Session<TMessage = string> implements EventSender {
             return {
                 start: scriptInfo.positionToLineOffset(edit.span.start),
                 end: scriptInfo.positionToLineOffset(textSpanEnd(edit.span)),
-                newText: edit.newText ? edit.newText : "",
+                newText: edit.newText || "",
             };
         });
     }
@@ -2931,7 +2931,7 @@ export class Session<TMessage = string> implements EventSender {
         return {
             start: scriptInfo.positionToLineOffset(change.span.start),
             end: scriptInfo.positionToLineOffset(change.span.start + change.span.length),
-            newText: change.newText ? change.newText : "",
+            newText: change.newText || "",
         };
     }
 

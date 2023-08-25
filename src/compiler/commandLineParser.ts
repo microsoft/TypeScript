@@ -2481,7 +2481,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
             version: undefined,
         },
         watchOptions: watchOptionMap && optionMapToObject(watchOptionMap),
-        references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath ? r.originalPath : "", originalPath: undefined })),
+        references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath || "", originalPath: undefined })),
         files: length(files) ? files : undefined,
         ...(configParseResult.options.configFile?.configFileSpecs ? {
             include: filterSameAsDefaultInclude(configParseResult.options.configFile.configFileSpecs.validatedIncludeSpecs),

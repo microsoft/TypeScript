@@ -907,7 +907,7 @@ export class SessionClient implements LanguageService {
     convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): TextChange {
         return {
             span: this.decodeSpan(change, fileName),
-            newText: change.newText ? change.newText : "",
+            newText: change.newText || "",
         };
     }
 

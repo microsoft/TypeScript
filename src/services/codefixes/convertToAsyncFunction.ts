@@ -882,7 +882,7 @@ function getArgBindingName(funcNode: Expression, transformer: Transformer): Synt
     }
 
     function getOriginalNode(node: Node): Node {
-        return node.original ? node.original : node;
+        return node.original ?? node;
     }
 }
 
