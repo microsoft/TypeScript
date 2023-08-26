@@ -166,7 +166,7 @@ function isRegionDelimiter(lineText: string) {
     if (!startsWith(lineText, "//")) {
         return null; // eslint-disable-line no-null/no-null
     }
-    lineText = lineText.slice(2).trimStart();
+    lineText = lineText.slice(2).trim();
     return regionDelimiterRegExp.exec(lineText);
 }
 
