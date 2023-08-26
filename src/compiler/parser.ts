@@ -8268,9 +8268,15 @@ namespace Parser {
         }
         else if (parseOptional(SyntaxKind.NamespaceKeyword)) {
             flags |= NodeFlags.Namespace;
+            if (scanner.hasPrecedingLineBreak()) {
+                parseErrorAtCurrentToken(Diagnostics.Line_break_not_permitted_here);
+            }
         }
         else {
             parseExpected(SyntaxKind.ModuleKeyword);
+            if (scanner.hasPrecedingLineBreak()) {
+                parseErrorAtCurrentToken(Diagnostics.Line_break_not_permitted_here);
+            }
             if (token() === SyntaxKind.StringLiteral) {
                 return parseAmbientExternalModuleDeclaration(pos, hasJSDoc, modifiersIn);
             }
