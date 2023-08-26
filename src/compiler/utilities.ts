@@ -10437,7 +10437,7 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
     return Debug.fail();
 }
 
-/** @intre */
+/** @internal */
 export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined) {
     if (node === undefined) {
         return false;
