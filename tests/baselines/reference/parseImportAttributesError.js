@@ -34,6 +34,6 @@ exports.b = null;
 
 
 //// [index.d.ts]
-export type LocalInterface = import("pkg").RequireInterface & import("pkg").ImportInterface;
+export type LocalInterface = import("pkg", { with: { 1234: , "resolution-mode": "require" } }).RequireInterface & import("pkg", { with: { 1234: , "resolution-mode": "import" } }).ImportInterface;
 export declare const a: import("pkg").RequireInterface;
 export declare const b: any;
