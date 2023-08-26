@@ -899,14 +899,14 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
     if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
-            const override = getResolutionModeOverride(usage.parent.assertClause);
+            const override = getResolutionModeOverride(usage.parent.attributes || usage.parent.assertClause);
             if (override) {
                 return override;
             }
         }
     }
     if (usage.parent.parent && isImportTypeNode(usage.parent.parent)) {
-        const override = getResolutionModeOverride(usage.parent.parent.assertions?.assertClause);
+        const override = getResolutionModeOverride(usage.parent.parent.attributes?.attributes || usage.parent.parent.assertions?.assertClause);
         if (override) {
             return override;
         }

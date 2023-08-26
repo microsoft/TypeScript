@@ -1,8 +1,6 @@
 error TS2468: Cannot find global value 'Promise'.
 /index.ts(2,49): error TS1453: `resolution-mode` should be either `require` or `import`.
-/index.ts(3,62): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
 /index.ts(5,76): error TS1453: `resolution-mode` should be either `require` or `import`.
-/index.ts(6,89): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
 /other.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other.ts(3,22): error TS1005: 'with' expected.
 /other.ts(3,39): error TS1005: ';' expected.
@@ -97,21 +95,17 @@ error TS2468: Cannot find global value 'Promise'.
 ==== /node_modules/pkg/require.d.ts (0 errors) ====
     export interface RequireInterface {}
     
-==== /index.ts (4 errors) ====
+==== /index.ts (2 errors) ====
     export type LocalInterface =
         & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
                                                     ~~~~~~~~
 !!! error TS1453: `resolution-mode` should be either `require` or `import`.
         & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
-                                                                 ~~~~~~~~~~~~~~~
-!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
     
     export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
                                                                                ~~~~~~~~
 !!! error TS1453: `resolution-mode` should be either `require` or `import`.
     export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
-                                                                                            ~~~~~~~~~~~~~~~
-!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
     
 ==== /other.ts (28 errors) ====
     // missing with:

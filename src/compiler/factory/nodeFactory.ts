@@ -2681,8 +2681,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         isTypeOf: boolean = node.isTypeOf,
     ): ImportTypeNode {
         return node.argument !== argument
-                || node.attributes !== attributes
                 || node.assertions !== assertions
+                || node.attributes !== attributes
                 || node.qualifier !== qualifier
                 || node.typeArguments !== typeArguments
                 || node.isTypeOf !== isTypeOf

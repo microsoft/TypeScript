@@ -10,7 +10,7 @@ export interface RequireInterface {}
 
 === /index.ts ===
 export type LocalInterface =
->LocalInterface : any
+>LocalInterface : import("/node_modules/pkg/require").RequireInterface & import("/node_modules/pkg/import").ImportInterface
 
     & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
     & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
@@ -22,9 +22,9 @@ export const a = (null as any as import("pkg", { with: {"resolution-mode": "foob
 >null as any : any
 
 export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
->b : any
->(null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface) : any
->null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface : any
+>b : import("/node_modules/pkg/import").ImportInterface
+>(null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
+>null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface : import("/node_modules/pkg/import").ImportInterface
 >null as any : any
 
 === /other.ts ===

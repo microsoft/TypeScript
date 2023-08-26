@@ -2966,6 +2966,19 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
             writePunctuation("}");
         }
+        if (node.attributes) {
+            writePunctuation(",");
+            writeSpace();
+            writePunctuation("{");
+            writeSpace();
+            writeKeyword("with");
+            writePunctuation(":");
+            writeSpace();
+            const elements = node.attributes.attributes.elements;
+            emitList(node.attributes.attributes, elements, ListFormat.ImportAttributes);
+            writeSpace();
+            writePunctuation("}");
+        }
         writePunctuation(")");
         if (node.qualifier) {
             writePunctuation(".");
