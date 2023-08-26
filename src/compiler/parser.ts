@@ -7163,9 +7163,9 @@ namespace Parser {
                     if (scanner.hasPrecedingLineBreak()) {
                         return false;
                     }
-                    if (previousToken === SyntaxKind.DeclareKeyword && (token() === SyntaxKind.TypeKeyword || token() === SyntaxKind.ModuleKeyword)) {
+                    if (previousToken === SyntaxKind.DeclareKeyword && (token() === SyntaxKind.TypeKeyword || token() === SyntaxKind.ModuleKeyword || token() === SyntaxKind.NamespaceKeyword)) {
                         // If we see 'declare type', then commit to parsing a type alias. parseTypeAliasDeclaration will
-                        // report Line_break_not_permitted_here if needed. Do a similar thing for `declare module`
+                        // report Line_break_not_permitted_here if needed. Do a similar thing for `declare module/namespace`
                         return true;
                     }
                     continue;

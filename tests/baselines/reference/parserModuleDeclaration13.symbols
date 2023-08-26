@@ -15,3 +15,7 @@ declare module
 >able : Symbol(able, Decl(parserModuleDeclaration13.ts, 3, 35))
 >baker : Symbol(baker, Decl(parserModuleDeclaration13.ts, 3, 40))
 
+declare namespace 
+     Something {}
+>Something : Symbol(Something, Decl(parserModuleDeclaration13.ts, 3, 48))
+

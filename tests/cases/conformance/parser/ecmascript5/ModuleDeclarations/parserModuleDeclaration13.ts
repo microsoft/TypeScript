@@ -2,3 +2,6 @@
 
 declare module 
      my.very.long.name.foo.bar.baz.able.baker {}
+
+declare namespace 
+     Something {}
