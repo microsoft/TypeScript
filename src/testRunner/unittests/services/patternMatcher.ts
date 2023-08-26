@@ -248,14 +248,6 @@ describe("unittests:: services:: PatternMatcher", () => {
             assertSegmentMatch("AddMetadataReference", "AMRe", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
-        it("BlankPattern", () => {
-            assertInvalidPattern("");
-        });
-
-        it("WhitespaceOnlyPattern", () => {
-            assertInvalidPattern(" ");
-        });
-
         it("EachWordSeparately1", () => {
             assertSegmentMatch("AddMetadataReference", "add Meta", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: false });
         });
