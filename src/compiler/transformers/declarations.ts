@@ -201,7 +201,6 @@ import {
     SourceFile,
     startsWith,
     Statement,
-    stringContains,
     StringLiteral,
     Symbol,
     SymbolAccessibility,
@@ -242,7 +241,7 @@ export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver
 
 function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
     const comment = currentSourceFile.text.substring(range.pos, range.end);
-    return stringContains(comment, "@internal");
+    return comment.includes("@internal");
 }
 
 /** @internal */

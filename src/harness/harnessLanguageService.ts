@@ -847,7 +847,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
     }
 
     readFile(fileName: string): string | undefined {
-        if (ts.stringContains(fileName, Compiler.defaultLibFileName)) {
+        if (fileName.includes(Compiler.defaultLibFileName)) {
             fileName = Compiler.defaultLibFileName;
         }
 

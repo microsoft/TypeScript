@@ -1493,7 +1493,7 @@ export namespace Baseline {
 
         const referenceDir = referencePath(relativeFileBase, opts && opts.Baselinefolder, opts && opts.Subfolder);
         let existing = IO.readDirectory(referenceDir, referencedExtensions || [extension]);
-        if (extension === ".ts" || referencedExtensions && referencedExtensions.indexOf(".ts") > -1 && referencedExtensions.indexOf(".d.ts") === -1) {
+        if (extension === ".ts" || referencedExtensions && referencedExtensions.includes(".ts") && !referencedExtensions.includes(".d.ts")) {
             // special-case and filter .d.ts out of .ts results
             existing = existing.filter(f => !ts.endsWith(f, ".d.ts"));
         }

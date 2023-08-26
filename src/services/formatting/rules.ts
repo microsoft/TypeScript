@@ -971,5 +971,5 @@ function isSemicolonInsertionContext(context: FormattingContext): boolean {
 function isNotPropertyAccessOnIntegerLiteral(context: FormattingContext): boolean {
     return !isPropertyAccessExpression(context.contextNode)
         || !isNumericLiteral(context.contextNode.expression)
-        || context.contextNode.expression.getText().indexOf(".") !== -1;
+        || context.contextNode.expression.getText().includes(".");
 }

@@ -71,7 +71,6 @@ import {
     some,
     SourceFile,
     startsWith,
-    stringContains,
     StringLiteralLike,
     trace,
     updateResolutionField,
@@ -220,7 +219,7 @@ export function removeIgnoredPath(path: Path): Path | undefined {
         return removeSuffix(path, "/.staging") as Path;
     }
 
-    return some(ignoredPaths, searchPath => stringContains(path, searchPath)) ?
+    return some(ignoredPaths, searchPath => path.includes(searchPath)) ?
         undefined :
         path;
 }

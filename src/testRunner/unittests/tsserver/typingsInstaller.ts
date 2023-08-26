@@ -718,7 +718,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             logger,
             (installer, requestId, packageNames, cb) => {
                 let typingFiles: (File & { typings: string; })[] = [];
-                if (packageNames.indexOf(ts.server.typingsInstaller.typingsName("commander")) >= 0) {
+                if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
                     typingFiles = [commander, jquery, lodash, cordova];
                 }
                 else {
@@ -1244,7 +1244,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             logger,
             (installer, requestId, packageNames, cb) => {
                 let typingFiles: (File & { typings: string; })[] = [];
-                if (packageNames.indexOf(ts.server.typingsInstaller.typingsName("commander")) >= 0) {
+                if (packageNames.includes(ts.server.typingsInstaller.typingsName("commander"))) {
                     typingFiles = [commander];
                 }
                 else {

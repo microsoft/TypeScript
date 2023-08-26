@@ -30,7 +30,6 @@ import {
     some,
     SourceFile,
     SourceFileLike,
-    stringContains,
     TextSpan,
     unorderedRemoveItem,
 } from "./_namespaces/ts";
@@ -340,9 +339,9 @@ export class TextStorage {
 
 export function isDynamicFileName(fileName: NormalizedPath) {
     return fileName[0] === "^" ||
-        ((stringContains(fileName, "walkThroughSnippet:/") || stringContains(fileName, "untitled:/")) &&
+        ((fileName.includes("walkThroughSnippet:/") || fileName.includes("untitled:/")) &&
             getBaseFileName(fileName)[0] === "^") ||
-        (stringContains(fileName, ":^") && !stringContains(fileName, directorySeparator));
+        (fileName.includes(":^") && !fileName.includes(directorySeparator));
 }
 
 /** @internal */

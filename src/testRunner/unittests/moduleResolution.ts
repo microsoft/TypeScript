@@ -63,7 +63,7 @@ function runBaseline(scenario: string, baselines: readonly string[]) {
 describe("unittests:: moduleResolution:: Node module resolution - relative paths", () => {
     // node module resolution does _not_ implicitly append these extensions to an extensionless path (though will still attempt to load them if explicitly)
     const nonImplicitExtensions = [ts.Extension.Mts, ts.Extension.Dmts, ts.Extension.Mjs, ts.Extension.Cts, ts.Extension.Dcts, ts.Extension.Cjs];
-    const autoExtensions = ts.filter(ts.supportedTSExtensionsFlat, e => nonImplicitExtensions.indexOf(e) === -1);
+    const autoExtensions = ts.filter(ts.supportedTSExtensionsFlat, e => !nonImplicitExtensions.includes(e));
 
     it("load as file", () => {
         const baselines: string[] = [];
