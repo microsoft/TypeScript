@@ -23267,8 +23267,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isMutableArrayLikeType(type: Type): boolean {
         // A type is mutable-array-like if it is a reference to the global Array type, or if it is not the
-        // undefined or null type and if it is assignable to Array<any>
-        return isMutableArrayOrTuple(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyArrayType);
+        // any, undefined or null type and if it is assignable to Array<any>
+        return isMutableArrayOrTuple(type) || !(type.flags & (TypeFlags.Any | TypeFlags.Nullable)) && isTypeAssignableTo(type, anyArrayType);
     }
 
     function getSingleBaseForNonAugmentingSubtype(type: Type) {
