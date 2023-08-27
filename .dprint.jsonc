@@ -1,0 +1,56 @@
+{
+    "indentWidth": 4,
+    "lineWidth": 1000,
+    "newLineKind": "auto",
+    "useTabs": false,
+    "typescript": {
+        "newLineKind": "crlf",
+        "semiColons": "always",
+        "quoteStyle": "preferDouble",
+        "quoteProps": "consistent",
+        "useBraces": "whenNotSingleLine",
+        "bracePosition": "sameLineUnlessHanging",
+        "singleBodyPosition": "sameLine",
+        "nextControlFlowPosition": "nextLine", // Stroustrup style braces.
+        "trailingCommas": "onlyMultiLine",
+        "preferHanging": false,
+        "operatorPosition": "maintain",
+
+        "arrowFunction.useParentheses": "preferNone",
+        "conditionalExpression.linePerExpression": false, // Keep our "match/case"-ish conditionals.
+        "functionExpression.spaceAfterFunctionKeyword": true,
+        "importDeclaration.forceMultiLine": true,
+        "constructorType.spaceAfterNewKeyword": true,
+        "constructSignature.spaceAfterNewKeyword": true,
+
+        // Let eslint-plugin-simple-import-sort handle this.
+        "module.sortImportDeclarations": "maintain",
+        "module.sortExportDeclarations": "maintain",
+        "exportDeclaration.sortNamedExports": "maintain",
+        "importDeclaration.sortNamedImports": "maintain"
+    },
+    "prettier": {
+        "associations": [
+            "**/*.{yaml,yml}"
+        ],
+        "yml.tabWidth": 2,
+        "yaml.tabWidth": 2,
+        "yml.singleQuote": true,
+        "yaml.singleQuote": true
+    },
+    "excludes": [
+        "**/node_modules",
+        "**/*-lock.json",
+        "coverage/**",
+        "lib/**",
+        "built/**",
+        "tests/**",
+        "internal/**",
+        "**/*.generated.*",
+        "scripts/*.d.*"
+    ],
+    "plugins": [
+        "https://plugins.dprint.dev/typescript-0.86.1.wasm",
+        "https://plugins.dprint.dev/prettier-0.27.0.json@3557a62b4507c55a47d8cde0683195b14d13c41dda66d0f0b0e111aed107e2fe"
+    ]
+}

@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/argumentsReferenceInFunction1_Js.ts] ////
+
+=== index.js ===
+const format = function(f) {
+>format : Symbol(format, Decl(index.js, 0, 5))
+>f : Symbol(f, Decl(index.js, 0, 24))
+
+  var str = '';
+>str : Symbol(str, Decl(index.js, 1, 5))
+
+  var i = 1;
+>i : Symbol(i, Decl(index.js, 2, 5))
+
+  var args = arguments;
+>args : Symbol(args, Decl(index.js, 3, 5))
+>arguments : Symbol(arguments)
+
+  var len = args.length;
+>len : Symbol(len, Decl(index.js, 4, 5))
+>args.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(index.js, 3, 5))
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+
+  for (var x = args[i]; i < len; x = args[++i]) {
+>x : Symbol(x, Decl(index.js, 5, 10))
+>args : Symbol(args, Decl(index.js, 3, 5))
+>i : Symbol(i, Decl(index.js, 2, 5))
+>i : Symbol(i, Decl(index.js, 2, 5))
+>len : Symbol(len, Decl(index.js, 4, 5))
+>x : Symbol(x, Decl(index.js, 5, 10))
+>args : Symbol(args, Decl(index.js, 3, 5))
+>i : Symbol(i, Decl(index.js, 2, 5))
+
+    str += ' ' + x;
+>str : Symbol(str, Decl(index.js, 1, 5))
+>x : Symbol(x, Decl(index.js, 5, 10))
+  }
+  return str;
+>str : Symbol(str, Decl(index.js, 1, 5))
+
+};
+
+const debuglog = function() {
+>debuglog : Symbol(debuglog, Decl(index.js, 11, 5))
+
+  return format.apply(null, arguments);
+>format.apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>format : Symbol(format, Decl(index.js, 0, 5))
+>apply : Symbol(CallableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+
+};
+
