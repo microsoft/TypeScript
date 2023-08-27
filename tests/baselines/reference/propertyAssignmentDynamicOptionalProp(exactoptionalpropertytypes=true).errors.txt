@@ -1,0 +1,36 @@
+propertyAssignmentDynamicOptionalProp.ts(10,3): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+propertyAssignmentDynamicOptionalProp.ts(21,3): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+
+==== propertyAssignmentDynamicOptionalProp.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55526
+    
+    type Something1 = {
+      a?: string;
+    };
+    
+    const x1: Something1 = {};
+    
+    function assignToKey1(key: keyof Something1, value: string | undefined) {
+      x1[key] = value;
+      ~~~~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    }
+    
+    type Something2 = {
+      a?: string;
+      b?: string;
+    };
+    
+    const x2: Something2 = {};
+    
+    function assignToKey2(key: keyof Something2, value: string | undefined) {
+      x2[key] = value;
+      ~~~~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    }
+    
