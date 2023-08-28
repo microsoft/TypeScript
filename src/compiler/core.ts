@@ -2703,19 +2703,6 @@ function cartesianProductWorker<T>(arrays: readonly (readonly T[])[], result: (r
     }
 }
 
-/**
- * Returns string right-padded with spaces until it reaches the given length.
- *
- * @param s String to pad.
- * @param length Final padded length. If less than or equal to 's.length', returns 's' unchanged.
- * @param padString Character to use as padding (default " ").
- *
- * @internal
- */
-export function padRight(s: string, length: number, padString: " " = " ") {
-    return length <= s.length ? s : s + padString.repeat(length - s.length);
-}
-
 /** @internal */
 export function takeWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): U[];
 /** @internal */

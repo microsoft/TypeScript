@@ -61,7 +61,6 @@ import {
     optionDeclarations,
     optionsForBuild,
     optionsForWatch,
-    padRight,
     parseBuildCommand,
     parseCommandLine,
     parseConfigFileWithSystem,
@@ -329,7 +328,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
             let curLeft = "";
             if (isFirstLine) {
                 curLeft = left.padStart(rightAlignOfLeft);
-                curLeft = padRight(curLeft, leftAlignOfRight);
+                curLeft = curLeft.padEnd(leftAlignOfRight);
                 curLeft = colorLeft ? colors.blue(curLeft) : curLeft;
             }
             else {
@@ -530,7 +529,7 @@ function getHeader(sys: System, message: string) {
         // right align of the icon is 120 at most.
         const rightAlign = terminalWidth > 120 ? 120 : terminalWidth;
         const leftAlign = rightAlign - tsIconLength;
-        header.push(padRight(message, leftAlign) + tsIconFirstLine + sys.newLine);
+        header.push(message.padEnd(leftAlign) + tsIconFirstLine + sys.newLine);
         header.push("".padStart(leftAlign) + tsIconSecondLine + sys.newLine);
     }
     else {
@@ -1260,7 +1259,7 @@ function reportAllStatistics(sys: System, statistics: Statistic[]) {
     }
 
     for (const s of statistics) {
-        sys.write(padRight(s.name + ":", nameSize + 2) + statisticValue(s).toString().padStart(valueSize) + sys.newLine);
+        sys.write(`${s.name}:`.padEnd(nameSize + 2) + statisticValue(s).toString().padStart(valueSize) + sys.newLine);
     }
 }
 
