@@ -2444,6 +2444,9 @@ export function getNameFromPropertyName(name: PropertyName): string | undefined 
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
     export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
+        if (compilerOptions.module === ModuleKind.None){
+            return false;
+        }
         return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
