@@ -316,10 +316,6 @@ describe("unittests:: services:: PatternMatcher", () => {
         assert.deepEqual(ts.createPatternMatcher(pattern)!.getMatchForLastSegmentOfPattern(candidate), expected);
     }
 
-    function assertInvalidPattern(pattern: string) {
-        assert.equal(ts.createPatternMatcher(pattern), undefined);
-    }
-
     function assertFullMatch(dottedContainer: string, candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {
         assert.deepEqual(ts.createPatternMatcher(pattern)!.getFullMatch(dottedContainer.split("."), candidate), expected);
     }
