@@ -1840,8 +1840,7 @@ namespace ts {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
     export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
-        // Prevent ES6 module indication for non-module files
-        if(compilerOptions.module === ModuleKind.None){
+        if (compilerOptions.module === ModuleKind.None){
             return false;
         }
         return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
