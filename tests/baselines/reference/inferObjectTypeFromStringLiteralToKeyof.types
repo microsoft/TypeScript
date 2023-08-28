@@ -14,8 +14,8 @@ declare var two: "a" | "d";
 >two : "a" | "d"
 
 const x = inference1(two);
->x : { a: any; d: any; }
->inference1(two) : { a: any; d: any; }
+>x : { a: unknown; d: unknown; }
+>inference1(two) : { a: unknown; d: unknown; }
 >inference1 : <T>(name: keyof T) => T
 >two : "a" | "d"
 

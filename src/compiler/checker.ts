@@ -24526,7 +24526,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), typeParameter);
     }
 
-    /** Create an object with properties named in the string literal type. Every property has type `any` */
+    /** Create an object with properties named in the string literal type. Every property has type `unknown` */
     function createEmptyObjectTypeFromStringLiteral(type: Type) {
         const members = createSymbolTable();
         forEachType(type, t => {
@@ -24535,7 +24535,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const name = escapeLeadingUnderscores((t as StringLiteralType).value);
             const literalProp = createSymbol(SymbolFlags.Property, name);
-            literalProp.links.type = anyType;
+            literalProp.links.type = unknownType;
             if (t.symbol) {
                 literalProp.declarations = t.symbol.declarations;
                 literalProp.valueDeclaration = t.symbol.valueDeclaration;
