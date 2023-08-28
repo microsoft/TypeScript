@@ -49,7 +49,6 @@ import {
     SourceFile,
     startsWith,
     Statement,
-    stringContains,
     stripQuotes,
     Symbol,
     SymbolFlags,
@@ -443,7 +442,7 @@ export function forEachExternalModuleToImportFrom(
 function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
     const isExcluded = excludePatterns && ((fileName: string) => excludePatterns.some(p => p.test(fileName)));
     for (const ambient of checker.getAmbientModules()) {
-        if (!stringContains(ambient.name, "*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile().fileName)))) {
+        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile().fileName)))) {
             cb(ambient, /*sourceFile*/ undefined);
         }
     }

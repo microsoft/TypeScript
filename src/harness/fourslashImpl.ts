@@ -440,7 +440,7 @@ export class TestState {
             const keys = ts.getAllKeys(ls);
             for (const k of keys) {
                 const key = k as keyof typeof ls;
-                if (cacheableMembers.indexOf(key) === -1) {
+                if (!cacheableMembers.includes(key)) {
                     proxy[key] = (...args: any[]) => (ls[key] as (...args: any[]) => any)(...args);
                     continue;
                 }
@@ -839,6 +839,15 @@ export class TestState {
         const fileName = this.activeFile.fileName;
         const hints = this.languageService.provideInlayHints(fileName, span, preferences);
         const annotations = ts.map(hints.sort(sortHints), hint => {
+            if (hint.displayParts) {
+                hint.displayParts = ts.map(hint.displayParts, part => {
+                    if (part.file && /lib(?:.*)\.d\.ts$/.test(part.file)) {
+                        part.span!.start = -1;
+                    }
+                    return part;
+                });
+            }
+
             const span = { start: hint.position, length: hint.text.length };
             const { character, line } = this.languageServiceAdapterHost.positionToLineAndCharacter(fileName, span.start);
             const underline = " ".repeat(character) + "^";
@@ -4312,7 +4321,7 @@ export class TestState {
     private tryFindFileWorker(name: string): { readonly file: FourSlashFile | undefined; readonly availableNames: readonly string[]; } {
         name = ts.normalizePath(name);
         // names are stored in the compiler with this relative path, this allows people to use goTo.file on just the fileName
-        name = name.indexOf("/") === -1 ? (this.basePath + "/" + name) : name;
+        name = name.includes("/") ? name : (this.basePath + "/" + name);
 
         const availableNames: string[] = [];
         const file = ts.forEach(this.testData.files, file => {
@@ -4896,7 +4905,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
                         openMarker = undefined;
                         state = State.none;
                     }
-                    else if (validMarkerChars.indexOf(currentChar) < 0) {
+                    else if (!validMarkerChars.includes(currentChar)) {
                         if (currentChar === "*" && i < content.length - 1 && content.charAt(i + 1) === "/") {
                             // The marker is about to be closed, ignore the 'invalid' char
                         }

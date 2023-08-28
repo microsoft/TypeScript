@@ -338,7 +338,6 @@ import {
     SpreadElement,
     startsWith,
     Statement,
-    stringContains,
     StringLiteral,
     supportedDeclarationExtensions,
     SwitchStatement,
@@ -6214,7 +6213,9 @@ namespace Parser {
         let dotDotDotToken: DotDotDotToken | undefined;
         let expression: Expression | undefined;
         if (token() !== SyntaxKind.CloseBraceToken) {
-            dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            if (!inExpressionContext) {
+                dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            }
             // Only an AssignmentExpression is valid here per the JSX spec,
             // but we can unambiguously parse a comma sequence and provide
             // a better error message in grammar checking.
@@ -8765,9 +8766,6 @@ namespace Parser {
         }
 
         function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc | undefined {
-            const saveParsingContext = parsingContext;
-            parsingContext |= 1 << ParsingContext.JSDocComment;
-
             const content = sourceText;
             const end = length === undefined ? content.length : start + length;
             length = end - start;
@@ -8788,6 +8786,9 @@ namespace Parser {
             let commentsPos: number | undefined;
             let comments: string[] = [];
             const parts: JSDocComment[] = [];
+
+            const saveParsingContext = parsingContext;
+            parsingContext |= 1 << ParsingContext.JSDocComment;
 
             // + 3 for leading /**, - 5 in total for /** */
             const result = scanner.scanRange(start + 3, length - 5, doJSDocScan);
@@ -10406,7 +10407,7 @@ namespace IncrementalParser {
 
 /** @internal */
 export function isDeclarationFileName(fileName: string): boolean {
-    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions) || (fileExtensionIs(fileName, Extension.Ts) && stringContains(getBaseFileName(fileName), ".d."));
+    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions) || (fileExtensionIs(fileName, Extension.Ts) && getBaseFileName(fileName).includes(".d."));
 }
 
 function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {

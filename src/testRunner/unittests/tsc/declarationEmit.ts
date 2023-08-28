@@ -1,4 +1,3 @@
-import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
     verifyTscWatch,
@@ -131,7 +130,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                 { path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`, symLink: `/user/username/projects/myproject/plugin-two` },
                 libFile,
             ],
-            changeCaseFileTestPath: str => ts.stringContains(str, "/plugin-two"),
+            changeCaseFileTestPath: str => str.includes("/plugin-two"),
         });
 
         verifyDeclarationEmit({
@@ -161,7 +160,7 @@ ${pluginOneAction()}`,
                 { path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`, symLink: `/temp/yarn/data/link/plugin-two` },
                 libFile,
             ],
-            changeCaseFileTestPath: str => ts.stringContains(str, "/plugin-two"),
+            changeCaseFileTestPath: str => str.includes("/plugin-two"),
         });
     });
 
@@ -254,6 +253,6 @@ ${pluginOneAction()}`,
             },
             libFile,
         ],
-        changeCaseFileTestPath: str => ts.stringContains(str, "/pkg1"),
+        changeCaseFileTestPath: str => str.includes("/pkg1"),
     });
 });

@@ -283,7 +283,6 @@ import {
     SourceMapSource,
     startsWith,
     Statement,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     StringLiteralType,
@@ -2959,7 +2958,7 @@ export function createLanguageService(
         }
 
         function isNodeModulesFile(path: string): boolean {
-            return stringContains(path, "/node_modules/");
+            return path.includes("/node_modules/");
         }
     }
 
