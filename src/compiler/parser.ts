@@ -8766,9 +8766,6 @@ namespace Parser {
         }
 
         function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc | undefined {
-            const saveParsingContext = parsingContext;
-            parsingContext |= 1 << ParsingContext.JSDocComment;
-
             const content = sourceText;
             const end = length === undefined ? content.length : start + length;
             length = end - start;
@@ -8789,6 +8786,9 @@ namespace Parser {
             let commentsPos: number | undefined;
             let comments: string[] = [];
             const parts: JSDocComment[] = [];
+
+            const saveParsingContext = parsingContext;
+            parsingContext |= 1 << ParsingContext.JSDocComment;
 
             // + 3 for leading /**, - 5 in total for /** */
             const result = scanner.scanRange(start + 3, length - 5, doJSDocScan);
