@@ -2120,7 +2120,7 @@ export class TestState {
         const output: string[] = [];
         for (let lineNumber = contextStart.line; lineNumber <= contextEnd.line; lineNumber++) {
             const spanLine = contextString.substring(contextLineMap[lineNumber], contextLineMap[lineNumber + 1]);
-            output.push(lineNumbers ? `${ts.padLeft(`${lineNumber + 1}: `, lineNumberPrefixLength)}${spanLine}` : spanLine);
+            output.push(lineNumbers ? `${`${lineNumber + 1}: `.padStart(lineNumberPrefixLength)}${spanLine}` : spanLine);
             if (selection) {
                 if (lineNumber < selectionStart.line || lineNumber > selectionEnd.line) {
                     continue;
