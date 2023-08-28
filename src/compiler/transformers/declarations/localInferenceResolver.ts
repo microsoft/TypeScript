@@ -1,6 +1,6 @@
 import { Debug } from "../../debug";
 import { Diagnostics } from "../../diagnosticInformationMap.generated";
-import { isCallSignatureDeclaration, isComputedPropertyName, isConstructSignatureDeclaration, isExportAssignment, isGetAccessorDeclaration, isIdentifier, isLiteralTypeNode, isMethodDeclaration, isMethodSignature, isNoSubstitutionTemplateLiteral, isNumericLiteral, isOmittedExpression, isParameter, isPrivateIdentifier, isPropertyAccessExpression, isPropertyAssignment, isPropertyDeclaration, isPropertySignature, isSetAccessorDeclaration, isShorthandPropertyAssignment, isSpreadAssignment, isSpreadElement, isStringLiteral, isTypeParameterDeclaration, isTypeReferenceNode, isUnionTypeNode, isVariableDeclaration } from "../../factory/nodeTests";
+import { isComputedPropertyName, isExportAssignment, isGetAccessorDeclaration, isIdentifier, isInterfaceDeclaration, isLiteralTypeNode, isMethodDeclaration, isNoSubstitutionTemplateLiteral, isNumericLiteral, isOmittedExpression, isParameter, isPrivateIdentifier, isPropertyAccessExpression, isPropertyAssignment, isPropertyDeclaration, isSetAccessorDeclaration, isShorthandPropertyAssignment, isSpreadAssignment, isSpreadElement, isStringLiteral, isTypeLiteralNode, isTypeParameterDeclaration, isTypeReferenceNode, isUnionTypeNode, isVariableDeclaration } from "../../factory/nodeTests";
 import { setTextRange } from "../../factory/utilitiesPublic";
 import { nullTransformationContext } from "../../transformer";
 import { ArrayLiteralExpression, ArrowFunction, AsExpression, EntityNameOrEntityNameExpression, ExportAssignment, FunctionExpression, GetAccessorDeclaration, HasInferredType, Identifier, KeywordTypeSyntaxKind, LiteralExpression, MethodSignature, Modifier, Node, NodeArray, NodeFlags, ObjectLiteralElementLike, ObjectLiteralExpression, ParameterDeclaration, ParenthesizedExpression, PrefixUnaryExpression, PropertySignature, SetAccessorDeclaration, SourceFile, SyntaxKind, TransformationContext,TypeAssertion, TypeElement, TypeNode, Visitor, VisitResult } from "../../types";
@@ -254,7 +254,7 @@ export function createLocalInferenceResolver({
 
                 for (let propIndex = 0, length = objectLiteral.properties.length; propIndex < length; propIndex++) {
                     const prop = objectLiteral.properties[propIndex];
-                    
+
                     if (isShorthandPropertyAssignment(prop)) {
                         return invalid(prop);
                     }
@@ -543,10 +543,7 @@ export function createLocalInferenceResolver({
         else if (isPropertyDeclaration(node) && node.initializer) {
             localType = localInference(node.initializer);
         }
-        else if(isMethodSignature(node) 
-            || isConstructSignatureDeclaration(node)
-            || isCallSignatureDeclaration(node)
-            || isPropertySignature(node)) {
+        else if(isInterfaceDeclaration(node.parent) || isTypeLiteralNode(node.parent)) {
             return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
         else {

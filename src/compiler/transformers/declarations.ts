@@ -151,6 +151,7 @@ import {
     isTupleTypeNode,
     isTypeAliasDeclaration,
     isTypeElement,
+    isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
@@ -1147,7 +1148,10 @@ export function transformDeclarations(context: TransformationContext) {
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
             if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
-                if (isolatedDeclarations && hasIdentifierComputedName(input)) {
+                if (isolatedDeclarations && hasIdentifierComputedName(input) &&
+                    // When --noImplicitAny is off, it's automatically 'any' type so we shouldn't complain.
+                    // when it's on, it should be an error on the noImplicitAny side, so we also shouldn't complain.
+                    !isInterfaceDeclaration(input.parent) && !isTypeLiteralNode(input.parent)) {
                     reportIsolatedDeclarationError(input);
                 }
                 else {
