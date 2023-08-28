@@ -8533,13 +8533,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ...oldcontext,
                 usedSymbolNames: new Set(oldcontext.usedSymbolNames),
                 remappedSymbolNames: new Map(),
-                remappedSymbolRefernces: new Map(oldcontext.remappedSymbolRefernces?.entries()),
+                remappedSymbolReferences: new Map(oldcontext.remappedSymbolReferences?.entries()),
                 tracker: undefined!,
             };
             const tracker: SymbolTracker = {
                 ...oldcontext.tracker.inner,
                 trackSymbol: (sym, decl, meaning) => {
-                    if (context.remappedSymbolNames?.has(getSymbolId(sym))) return false; // If the context has a remapped name for the symbol, it *should* mean its been made visible
+                    if (context.remappedSymbolNames?.has(getSymbolId(sym))) return false; // If the context has a remapped name for the symbol, it *should* mean it's been made visible
                     const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*shouldComputeAliasesToMakeVisible*/ false);
                     if (accessibleResult.accessibility === SymbolAccessibility.Accessible) {
                         // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
@@ -8844,13 +8844,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (type.symbol && type.symbol !== symbol && type.symbol.flags & SymbolFlags.Function && some(type.symbol.declarations, isFunctionExpressionOrArrowFunction) && (type.symbol.members?.size || type.symbol.exports?.size)) {
                             // assignment of a anonymous expando/class-like function, the func/ns/merge branch below won't trigger,
                             // and the assignment form has to reference the unreachable anonymous type so will error.
-                            // Instead, serialzie the type's symbol, but with the current symbol's name, rather than the anonymous one.
-                            if (!context.remappedSymbolRefernces) {
-                                context.remappedSymbolRefernces = new Map();
+                            // Instead, serialize the type's symbol, but with the current symbol's name, rather than the anonymous one.
+                            if (!context.remappedSymbolReferences) {
+                                context.remappedSymbolReferences = new Map();
                             }
-                            context.remappedSymbolRefernces.set(getSymbolId(type.symbol), symbol); // save name remapping as local name for target symbol
+                            context.remappedSymbolReferences.set(getSymbolId(type.symbol), symbol); // save name remapping as local name for target symbol
                             serializeSymbolWorker(type.symbol, isPrivate, propertyAsAlias, escapedSymbolName);
-                            context.remappedSymbolRefernces.delete(getSymbolId(type.symbol));
+                            context.remappedSymbolReferences.delete(getSymbolId(type.symbol));
                         }
                         else if (!(symbol.flags & SymbolFlags.Function) && isTypeRepresentableAsFunctionNamespaceMerge(type, symbol)) {
                             // If the type looks like a function declaration + ns could represent it, and it's type is sourced locally, rewrite it into a function declaration + ns
@@ -10172,8 +10172,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * It will also use a representation of a number as written instead of a decimal form, e.g. `0o11` instead of `9`.
      */
     function getNameOfSymbolAsWritten(symbol: Symbol, context?: NodeBuilderContext): string {
-        if (context?.remappedSymbolRefernces?.has(getSymbolId(symbol))) {
-            symbol = context.remappedSymbolRefernces.get(getSymbolId(symbol))!;
+        if (context?.remappedSymbolReferences?.has(getSymbolId(symbol))) {
+            symbol = context.remappedSymbolReferences.get(getSymbolId(symbol))!;
         }
         if (
             context && symbol.escapedName === InternalSymbolName.Default && !(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope) &&
@@ -50002,7 +50002,7 @@ interface NodeBuilderContext {
     typeParameterNamesByTextNextNameCount?: Map<string, number>;
     usedSymbolNames?: Set<string>;
     remappedSymbolNames?: Map<SymbolId, string>;
-    remappedSymbolRefernces?: Map<SymbolId, Symbol>;
+    remappedSymbolReferences?: Map<SymbolId, Symbol>;
     reverseMappedStack?: ReverseMappedSymbol[];
 }
 
