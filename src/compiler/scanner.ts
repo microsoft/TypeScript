@@ -18,7 +18,6 @@ import {
     LanguageVariant,
     LineAndCharacter,
     MapLike,
-    padLeft,
     parsePseudoBigInt,
     positionIsSynthesized,
     PunctuationOrKeywordSyntaxKind,
@@ -1489,7 +1488,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                 if (shouldEmitInvalidEscapeError) {
                     const code = parseInt(text.substring(start + 1, pos), 8);
-                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + padLeft(code.toString(16), 2, "0"));
+                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
                     return String.fromCharCode(code);
                 }
                 return text.substring(start, pos);

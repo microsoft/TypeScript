@@ -250,7 +250,6 @@ import {
     packageIdToPackageName,
     packageIdToString,
     PackageJsonInfoCache,
-    padLeft,
     ParameterDeclaration,
     ParseConfigFileHost,
     ParsedCommandLine,
@@ -721,7 +720,7 @@ function formatCodeSpan(file: SourceFile, start: number, length: number, indent:
         // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
         // so we'll skip ahead to the second-to-last line.
         if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-            context += indent + formatColorAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
+            context += indent + formatColorAndReset(ellipsis.padStart(gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
             i = lastLine - 1;
         }
 
@@ -732,11 +731,11 @@ function formatCodeSpan(file: SourceFile, start: number, length: number, indent:
         lineContent = lineContent.replace(/\t/g, " "); // convert tabs to single spaces
 
         // Output the gutter and the actual contents of the line.
-        context += indent + formatColorAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+        context += indent + formatColorAndReset((i + 1 + "").padStart(gutterWidth), gutterStyleSequence) + gutterSeparator;
         context += lineContent + host.getNewLine();
 
         // Output the gutter and the error span for the line using tildes.
-        context += indent + formatColorAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+        context += indent + formatColorAndReset("".padStart(gutterWidth), gutterStyleSequence) + gutterSeparator;
         context += squiggleColor;
         if (i === firstLine) {
             // If we're on the last line, then limit it to the last character of the last line.

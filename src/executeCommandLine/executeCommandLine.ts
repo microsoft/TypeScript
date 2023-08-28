@@ -61,7 +61,6 @@ import {
     optionDeclarations,
     optionsForBuild,
     optionsForWatch,
-    padLeft,
     padRight,
     parseBuildCommand,
     parseCommandLine,
@@ -329,12 +328,12 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         while (remainRight.length > 0) {
             let curLeft = "";
             if (isFirstLine) {
-                curLeft = padLeft(left, rightAlignOfLeft);
+                curLeft = left.padStart(rightAlignOfLeft);
                 curLeft = padRight(curLeft, leftAlignOfRight);
                 curLeft = colorLeft ? colors.blue(curLeft) : curLeft;
             }
             else {
-                curLeft = padLeft("", leftAlignOfRight);
+                curLeft = "".padStart(leftAlignOfRight);
             }
 
             const curRight = remainRight.substr(0, rightCharacterNumber);
@@ -524,15 +523,15 @@ function getHeader(sys: System, message: string) {
     const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
     const tsIconLength = 5;
 
-    const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));
-    const tsIconSecondLine = colors.blueBackground(colors.brightWhite(padLeft("TS ", tsIconLength)));
+    const tsIconFirstLine = colors.blueBackground("".padStart(tsIconLength));
+    const tsIconSecondLine = colors.blueBackground(colors.brightWhite("TS ".padStart(tsIconLength)));
     // If we have enough space, print TS icon.
     if (terminalWidth >= message.length + tsIconLength) {
         // right align of the icon is 120 at most.
         const rightAlign = terminalWidth > 120 ? 120 : terminalWidth;
         const leftAlign = rightAlign - tsIconLength;
         header.push(padRight(message, leftAlign) + tsIconFirstLine + sys.newLine);
-        header.push(padLeft("", leftAlign) + tsIconSecondLine + sys.newLine);
+        header.push("".padStart(leftAlign) + tsIconSecondLine + sys.newLine);
     }
     else {
         header.push(message + sys.newLine);
@@ -1261,7 +1260,7 @@ function reportAllStatistics(sys: System, statistics: Statistic[]) {
     }
 
     for (const s of statistics) {
-        sys.write(padRight(s.name + ":", nameSize + 2) + padLeft(statisticValue(s).toString(), valueSize) + sys.newLine);
+        sys.write(padRight(s.name + ":", nameSize + 2) + statisticValue(s).toString().padStart(valueSize) + sys.newLine);
     }
 }
 
