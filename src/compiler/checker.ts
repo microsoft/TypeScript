@@ -1919,6 +1919,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var anyType = createIntrinsicType(TypeFlags.Any, "any");
     var autoType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.NonInferrableType, "auto");
     var wildcardType = createIntrinsicType(TypeFlags.Any, "any", /*objectFlags*/ undefined, "wildcard");
+    var blockedStringType = createIntrinsicType(TypeFlags.Any, "any" /*objectFlags*/ undefined, "blocked string");
     var errorType = createIntrinsicType(TypeFlags.Any, "error");
     var unresolvedType = createIntrinsicType(TypeFlags.Any, "unresolved");
     var nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType, "non-inferrable");
@@ -25731,7 +25732,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (!inferredType || inferredType === wildcardType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                if (!inferredType || inferredType === blockedStringType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                     // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
@@ -38547,7 +38548,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral:
                 return hasSkipDirectInferenceFlag(node) ?
-                    wildcardType :
+                    blockedStringType :
                     getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
             case SyntaxKind.NumericLiteral: {
                 checkGrammarNumericLiteral(node as NumericLiteral);
