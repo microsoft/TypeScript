@@ -3,11 +3,11 @@ import "source-map-support/register";
 import * as fs from "fs/promises";
 import * as path from "path";
 import * as ts from "typescript";
+import * as JSON from 'json5';
 
 import { normalizePath, removeExtension } from "../compiler/path-utils";
-import { parseArgs } from "../utils/cli-parser";
 import { addToQueue, ensureDir, flushQueue, readAllFiles } from "../utils/fs-utils";
-import { testRunnerCLIConfiguration } from "./cli-arg-config";
+import { parsedCliArgs as parsedArgs } from "./cli-arg-config";
 import { excludedTsTests } from "./excluded-ts-tests";
 import { setCompilerOptionsFromHarnessSetting } from "./tsc-infrastructure/compiler-run";
 import { IO } from "./tsc-infrastructure/io";
@@ -15,14 +15,12 @@ import { CompilerSettings, TestCaseContent } from "./tsc-infrastructure/test-fil
 import { getFileBasedTestConfigurationDescription, getFileBasedTestConfigurations } from "./tsc-infrastructure/vary-by";
 import { changeExtension } from "./tsc-infrastructure/vpath";
 import { TestCompilationResult, loadTestCase, runIsolated, runTypeScript } from "./utils";
-import { Diagnostics } from "./tsc-infrastructure/diagnosticInformationMap.generated";
+import { firstDefined } from "../compiler/lang-utils";
 
 
 const excludeFilter =/\/fourslash\//;
 
-const { value: parsedArgs, printUsageOnErrors } = parseArgs(process.argv.slice(2), testRunnerCLIConfiguration);
 
-printUsageOnErrors();
 
 const shard = parsedArgs.shard;
 const shardCount = parsedArgs.shardCount;
@@ -57,17 +55,21 @@ const historical = (parsedArgs.histFolder && `/${parsedArgs.histFolder}/`) ?? `/
 function pad(num: number, size: number) {
     return ("000000000" + num).substr(-size);
 }
-const isolatedDeclarationErrors = new Set([
-    Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code
-]);
 
-const unreliableEmitErrors = new Set([
-    Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any.code,
-    Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_have_a_simple_literal_type_or_a_unique_symbol_type.code,
-    Diagnostics.A_parameter_property_may_not_be_declared_using_a_binding_pattern.code,
-])
 
 async function main() {
+
+    let fileConfiguration: undefined | {
+        "error-categories": Record<string, number[]>,
+        "test-categories": Record<string, string[]>,
+    };
+    const testCategories = new Map<string, string>();
+    const errorCategories = new Map<number, string>();
+    if(parsedArgs.configFile) {
+        fileConfiguration = JSON.parse(await fs.readFile(parsedArgs.configFile, { encoding: "utf8" }));
+        Object.entries(fileConfiguration?.["error-categories"] ?? {}).forEach(([name, codes]) => codes.forEach(c => errorCategories.set(c, name)));
+        Object.entries(fileConfiguration?.["test-categories"] ?? {}).forEach(([name, tests]) => tests.forEach(t => testCategories.set(t, name)));
+    }
 
     const libFiles = (await fs.readdir(libFolder)).map(n => normalizePath(path.join("/.lib", n)));
 
@@ -82,6 +84,10 @@ async function main() {
         if(excludedTsTests.has(testFileNoExtension)) {
             continue;
         }
+        const testName = removeExtension(path.basename(testFile), path.extname(testFile));
+        if(parsedArgs.category && testCategories.get(testName) !== parsedArgs.category) {
+            continue;
+        }
         const data = await loadTestCase(testFile);
         const variedConfiguration = getFileBasedTestConfigurations(data.settings) ?? [{}];
         for(const varConfig of variedConfiguration) {
@@ -89,14 +95,14 @@ async function main() {
             if (testVersionFilter && varConfigDescription !== testVersionFilter) continue;
             const file = (prefix ?? pad(count, 5)) + "-" + changeExtension(path.basename(testFile), varConfigDescription + ".d.ts");
 
-            if (runType.tsc) runAndWrite(path.join("./tsc-tests/$now/tsc", file), varConfig, runTypeScript);
+            if (runType.tsc) runAndWrite(testName, path.join("./tsc-tests/$now/tsc", file), varConfig, runTypeScript);
 
-            if (runType.isolated) runAndWrite(path.join("./tsc-tests/$now/isolated", file), varConfig, (t, s) => runIsolated(t, libFiles, s));
+            if (runType.isolated) runAndWrite(testName, path.join("./tsc-tests/$now/isolated", file), varConfig, (t, s) => runIsolated(t, libFiles, s));
 
         }
         console.log(`    Ran: ${pad(count, 5)}/${allTests.length}`);
 
-        function runAndWrite(file: string, varySettings: CompilerSettings, fn: (data: TestCaseContent, opts: ts.CompilerOptions) => TestCompilationResult) {
+        function runAndWrite(testName: string, file: string, varySettings: CompilerSettings, fn: (data: TestCaseContent, opts: ts.CompilerOptions) => TestCompilationResult) {
             const settings: ts.CompilerOptions = {};
             setCompilerOptionsFromHarnessSetting(data.settings, settings);
             setCompilerOptionsFromHarnessSetting(varySettings, settings);
@@ -126,18 +132,16 @@ async function main() {
                     "critical-errors",
                     path.basename(file)
                 );
-            } else if(results.diagnostics.some(d =>isolatedDeclarationErrors.has(d.code))) {
-                file = path.join(
-                    path.dirname(file),
-                    "with-isolated-declaration-errors",
-                    path.basename(file)
-                );
-            } else if(results.diagnostics.some(d =>unreliableEmitErrors.has(d.code))) {
-                file = path.join(
-                    path.dirname(file),
-                    "with-unreliable-errors",
-                    path.basename(file)
-                );
+            } else {
+                
+                const category = firstDefined(results.diagnostics, d => errorCategories.get(d.code)) ?? testCategories.get(testName);
+                if(category) {
+                    file = path.join(
+                        path.dirname(file),
+                        category,
+                        path.basename(file)
+                    );
+                }
             }
             if (allTests.length > 5) {
                 writeResults(file.replace("/$now/", historical), resultText);

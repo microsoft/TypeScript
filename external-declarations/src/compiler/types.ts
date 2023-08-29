@@ -27,10 +27,11 @@ export interface IsolatedEmitHost extends ModuleSpecifierResolutionHost, Resolve
 }
 
 export interface IsolatedEmitResolver {
+    isLiteralComputedName(node: ComputedPropertyName): boolean;
     isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
     isLateBound(node: Declaration): node is LateBoundDeclaration;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
-    isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
+    isExpandoFunction(node: VariableDeclaration | FunctionDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;

@@ -46319,16 +46319,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
     }
 
-    function isExpandoFunctionDeclaration(node: Declaration): boolean {
-        const declaration = getParseTreeNode(node, isFunctionDeclaration);
+    function isExpandoFunction(node: Declaration): boolean {
+        const declaration = getParseTreeNode(node, (n): n is FunctionDeclaration | VariableDeclaration => isFunctionDeclaration(n) || isVariableDeclaration(n));
         if (!declaration) {
             return false;
         }
+        if(isVariableDeclaration(declaration)){
+            if(declaration.type) {
+                return false;
+            }
+            if(!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
+                return false;
+            }
+            
+        }
         const symbol = getSymbolOfDeclaration(declaration);
-        if (!symbol || !(symbol.flags & SymbolFlags.Function)) {
+        if (!symbol || !(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
             return false;
         }
-        return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && p.valueDeclaration && isPropertyAccessExpression(p.valueDeclaration));
+
+        // Temporary, remove when https://github.com/microsoft/TypeScript/pull/5518 is merged.
+        function isExpandoPropertyDeclaration(declaration: Declaration | undefined): declaration is PropertyAccessExpression | ElementAccessExpression | BinaryExpression {
+            return !!declaration && (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration) || isBinaryExpression(declaration));
+        }
+        return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && p.valueDeclaration && isExpandoPropertyDeclaration(p.valueDeclaration));
     }
 
     function getPropertiesOfContainerFunction(node: Declaration): Symbol[] {
@@ -46601,6 +46615,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return false;
     }
+    function isLiteralComputedName(node: ComputedPropertyName) {
+        const expression = node.expression;
+        const type = getTypeOfExpression(expression);
+        if(isFreshLiteralType(type)) {
+            return true;
+        }
+        if(!isTypeUsableAsPropertyName(type)) {
+            return false;
+        }
+        if(!isEntityNameExpression(expression)) {
+            return false;
+        }
+        let symbol = getSymbolAtLocation(expression);
+        if(!symbol) {
+            return false;
+        }
+        let declaredType = getTypeOfSymbol(symbol);
+        return declaredType === type
+    }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
         const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
@@ -46688,7 +46721,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isImplementationOfOverload,
             isRequiredInitializedParameter,
             isOptionalUninitializedParameterProperty,
-            isExpandoFunctionDeclaration,
+            isExpandoFunction,
             getPropertiesOfContainerFunction,
             createTypeOfDeclaration,
             createReturnTypeOfSignatureDeclaration,
@@ -46714,6 +46747,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getTypeReferenceDirectivesForEntityName,
             getTypeReferenceDirectivesForSymbol,
             isLiteralConstDeclaration,
+            isLiteralComputedName,
             isLateBound: (nodeIn: Declaration): nodeIn is LateBoundDeclaration => {
                 const node = getParseTreeNode(nodeIn, isDeclaration);
                 const symbol = node && getSymbolOfDeclaration(node);

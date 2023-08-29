@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "json5": "^2.2.3",
     "source-map-support": "^0.5.21",
     "typescript": "../"
   },
