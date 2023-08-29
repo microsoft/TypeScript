@@ -177,7 +177,7 @@ export function isThisIdentifier(node: Node | undefined): boolean {
 
 /** @internal */
 function identifierIsThisKeyword(id: Identifier): boolean {
-    return id.originalKeywordKind === SyntaxKind.ThisKeyword;
+    return id.escapedText === "this";
 }
 
 
