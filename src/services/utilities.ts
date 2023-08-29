@@ -2447,6 +2447,7 @@ export function getNameFromPropertyName(name: PropertyName): string | undefined 
         if (compilerOptions.module === ModuleKind.None) {
             return false;
         }
+        
         return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
