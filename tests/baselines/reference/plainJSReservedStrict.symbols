@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/plainJSReservedStrict.js ===
+//// [tests/cases/conformance/salsa/plainJSReservedStrict.ts] ////
+
+=== plainJSReservedStrict.js ===
 "use strict"
 const eval = 1
 >eval : Symbol(eval, Decl(plainJSReservedStrict.js, 1, 5))

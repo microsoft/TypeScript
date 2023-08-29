@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionRestParameterArrowFunctions.ts ===
+//// [tests/cases/compiler/collisionRestParameterArrowFunctions.ts] ////
+
+=== collisionRestParameterArrowFunctions.ts ===
 var f1 = (_i: number, ...restParameters) => { //_i is error
 >f1 : Symbol(f1, Decl(collisionRestParameterArrowFunctions.ts, 0, 3))
 >_i : Symbol(_i, Decl(collisionRestParameterArrowFunctions.ts, 0, 10), Decl(collisionRestParameterArrowFunctions.ts, 1, 7))

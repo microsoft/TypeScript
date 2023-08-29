@@ -1,4 +1,6 @@
-=== tests/cases/conformance/directives/ts-expect-error.ts ===
+//// [tests/cases/conformance/directives/ts-expect-error.ts] ////
+
+=== ts-expect-error.ts ===
 // @ts-expect-error additional commenting
 var invalidCommentedFancySingle: number = 'nope';
 >invalidCommentedFancySingle : number
@@ -103,4 +105,15 @@ var validPlain: string = 'nope';
 >true : true
 >a : true
 >false : false
+
+// @ts-expect-error: additional commenting with no whitespace
+var invalidCommentedFancySingle: number = 'nope';
+>invalidCommentedFancySingle : number
+>'nope' : "nope"
+
+/*
+ @ts-expect-error: additional commenting with no whitespace */
+var invalidCommentedFancyMulti: number = 'nope';
+>invalidCommentedFancyMulti : number
+>'nope' : "nope"
 

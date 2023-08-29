@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts] ////
+
 //// [nonPrimitiveIndexingWithForInNoImplicitAny.ts]
 var a: object;
 

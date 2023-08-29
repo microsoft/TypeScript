@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticMemberExportAccess.ts ===
+//// [tests/cases/compiler/staticMemberExportAccess.ts] ////
+
+=== staticMemberExportAccess.ts ===
 class Sammy {
 >Sammy : Sammy
 

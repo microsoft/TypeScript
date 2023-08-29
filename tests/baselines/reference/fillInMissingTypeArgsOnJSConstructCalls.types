@@ -1,9 +1,11 @@
-=== tests/cases/compiler/BaseA.js ===
+//// [tests/cases/compiler/fillInMissingTypeArgsOnJSConstructCalls.ts] ////
+
+=== BaseA.js ===
 // regression test for #18254
 export default class BaseA {
 >BaseA : BaseA
 }
-=== tests/cases/compiler/SubA.js ===
+=== SubA.js ===
 import BaseA from './BaseA';
 >BaseA : typeof BaseA
 
@@ -11,7 +13,7 @@ export default class SubA extends BaseA {
 >SubA : SubA
 >BaseA : BaseA
 }
-=== tests/cases/compiler/BaseB.js ===
+=== BaseB.js ===
 import BaseA from './BaseA';
 >BaseA : typeof BaseA
 
@@ -32,7 +34,7 @@ export default class B<T: BaseA> {
 >AClass : Class<T>
     }
 }
-=== tests/cases/compiler/SubB.js ===
+=== SubB.js ===
 import SubA from './SubA';
 >SubA : typeof SubA
 

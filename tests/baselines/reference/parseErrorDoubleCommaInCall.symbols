@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseErrorDoubleCommaInCall.ts ===
+//// [tests/cases/compiler/parseErrorDoubleCommaInCall.ts] ////
+
+=== parseErrorDoubleCommaInCall.ts ===
 Boolean({
 >Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

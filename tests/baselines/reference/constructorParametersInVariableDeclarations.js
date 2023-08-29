@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorParametersInVariableDeclarations.ts] ////
+
 //// [constructorParametersInVariableDeclarations.ts]
 class A {
     private a = x;

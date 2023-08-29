@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5ExportDefaultFunctionDeclaration3.ts ===
+//// [tests/cases/compiler/es5ExportDefaultFunctionDeclaration3.ts] ////
+
+=== es5ExportDefaultFunctionDeclaration3.ts ===
 var before: typeof func = func();
 >before : Symbol(before, Decl(es5ExportDefaultFunctionDeclaration3.ts, 0, 3))
 >func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration3.ts, 0, 33))

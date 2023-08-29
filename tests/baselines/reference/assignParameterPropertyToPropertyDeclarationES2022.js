@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts] ////
+
 //// [assignParameterPropertyToPropertyDeclarationES2022.ts]
 class C {
     qux = this.bar // should error

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx] ////
+
 //// [reactDefaultPropsInferenceSuccess.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

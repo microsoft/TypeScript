@@ -86,7 +86,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             arguments: {
                 oldFilePath: aOldTs.path,
                 newFilePath: "/a/new.ts",
-            }
+            },
         });
         baselineTsserverLogs("getEditsForFileRename", "works with multiple projects", session);
     });
@@ -105,7 +105,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
             arguments: {
                 oldFilePath: "/b.ts",
                 newFilePath: cTs.path,
-            }
+            },
         });
         baselineTsserverLogs("getEditsForFileRename", "works with file moved to inferred project", session);
     });

@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/destructuring/destructuringTypeAssertionsES5_7.ts(1,27): error TS2304: Cannot find name 'Foo'.
+destructuringTypeAssertionsES5_7.ts(1,27): error TS2304: Cannot find name 'Foo'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringTypeAssertionsES5_7.ts (1 errors) ====
+==== destructuringTypeAssertionsES5_7.ts (1 errors) ====
     var { x } = <any><any>new Foo;
                               ~~~
 !!! error TS2304: Cannot find name 'Foo'.

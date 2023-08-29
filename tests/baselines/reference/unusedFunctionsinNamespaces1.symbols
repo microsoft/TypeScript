@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedFunctionsinNamespaces1.ts ===
+//// [tests/cases/compiler/unusedFunctionsinNamespaces1.ts] ////
+
+=== unusedFunctionsinNamespaces1.ts ===
 namespace Validation {
 >Validation : Symbol(Validation, Decl(unusedFunctionsinNamespaces1.ts, 0, 0))
 

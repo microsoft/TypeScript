@@ -1,4 +1,6 @@
-=== tests/cases/compiler/templateLiteralEscapeSequence.ts ===
+//// [tests/cases/compiler/templateLiteralEscapeSequence.ts] ////
+
+=== templateLiteralEscapeSequence.ts ===
 declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
 >tag : (template: TemplateStringsArray, ...substitutions: any[]) => string
 >template : TemplateStringsArray
@@ -35,132 +37,132 @@ declare function tag(template: TemplateStringsArray, ...substitutions: any[]): s
 >`\x00` : "\0"
 
 `${0}\u`;
->`${0}\u` : string
+>`${0}\u` : "0\\u"
 >0 : 0
 
 `${0}\u0`;
->`${0}\u0` : string
+>`${0}\u0` : "0\\u0"
 >0 : 0
 
 `${0}\u00`;
->`${0}\u00` : string
+>`${0}\u00` : "0\\u00"
 >0 : 0
 
 `${0}\u000`;
->`${0}\u000` : string
+>`${0}\u000` : "0\\u000"
 >0 : 0
 
 `${0}\u0000`;
->`${0}\u0000` : string
+>`${0}\u0000` : "0\0"
 >0 : 0
 
 `${0}\u{}`;
->`${0}\u{}` : string
+>`${0}\u{}` : "0\\u{}"
 >0 : 0
 
 `${0}\u{ffffff}`;
->`${0}\u{ffffff}` : string
+>`${0}\u{ffffff}` : "0\\u{ffffff}"
 >0 : 0
 
 `${0}\x`;
->`${0}\x` : string
+>`${0}\x` : "0\\x"
 >0 : 0
 
 `${0}\x0`;
->`${0}\x0` : string
+>`${0}\x0` : "0\\x0"
 >0 : 0
 
 `${0}\x00`;
->`${0}\x00` : string
+>`${0}\x00` : "0\0"
 >0 : 0
 
 `\u${0}`;
->`\u${0}` : string
+>`\u${0}` : "\\u0"
 >0 : 0
 
 `\u0${0}`;
->`\u0${0}` : string
+>`\u0${0}` : "\\u00"
 >0 : 0
 
 `\u00${0}`;
->`\u00${0}` : string
+>`\u00${0}` : "\\u000"
 >0 : 0
 
 `\u000${0}`;
->`\u000${0}` : string
+>`\u000${0}` : "\\u0000"
 >0 : 0
 
 `\u0000${0}`;
->`\u0000${0}` : string
+>`\u0000${0}` : "\x000"
 >0 : 0
 
 `\u{}${0}`;
->`\u{}${0}` : string
+>`\u{}${0}` : "\\u{}0"
 >0 : 0
 
 `\u{ffffff}${0}`;
->`\u{ffffff}${0}` : string
+>`\u{ffffff}${0}` : "\\u{ffffff}0"
 >0 : 0
 
 `\x${0}`;
->`\x${0}` : string
+>`\x${0}` : "\\x0"
 >0 : 0
 
 `\x0${0}`;
->`\x0${0}` : string
+>`\x0${0}` : "\\x00"
 >0 : 0
 
 `\x00${0}`;
->`\x00${0}` : string
+>`\x00${0}` : "\x000"
 >0 : 0
 
 `${0}\u${0}`;
->`${0}\u${0}` : string
+>`${0}\u${0}` : "0\\u0"
 >0 : 0
 >0 : 0
 
 `${0}\u0${0}`;
->`${0}\u0${0}` : string
+>`${0}\u0${0}` : "0\\u00"
 >0 : 0
 >0 : 0
 
 `${0}\u00${0}`;
->`${0}\u00${0}` : string
+>`${0}\u00${0}` : "0\\u000"
 >0 : 0
 >0 : 0
 
 `${0}\u000${0}`;
->`${0}\u000${0}` : string
+>`${0}\u000${0}` : "0\\u0000"
 >0 : 0
 >0 : 0
 
 `${0}\u0000${0}`;
->`${0}\u0000${0}` : string
+>`${0}\u0000${0}` : "0\x000"
 >0 : 0
 >0 : 0
 
 `${0}\u{}${0}`;
->`${0}\u{}${0}` : string
+>`${0}\u{}${0}` : "0\\u{}0"
 >0 : 0
 >0 : 0
 
 `${0}\u{ffffff}${0}`;
->`${0}\u{ffffff}${0}` : string
+>`${0}\u{ffffff}${0}` : "0\\u{ffffff}0"
 >0 : 0
 >0 : 0
 
 `${0}\x${0}`;
->`${0}\x${0}` : string
+>`${0}\x${0}` : "0\\x0"
 >0 : 0
 >0 : 0
 
 `${0}\x0${0}`;
->`${0}\x0${0}` : string
+>`${0}\x0${0}` : "0\\x00"
 >0 : 0
 >0 : 0
 
 `${0}\x00${0}`;
->`${0}\x00${0}` : string
+>`${0}\x00${0}` : "0\x000"
 >0 : 0
 >0 : 0
 

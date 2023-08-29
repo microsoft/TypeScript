@@ -1,8 +1,8 @@
-tests/cases/compiler/importDeclWithExportModifier.ts(5,19): error TS2708: Cannot use namespace 'x' as a value.
-tests/cases/compiler/importDeclWithExportModifier.ts(5,21): error TS2694: Namespace 'x' has no exported member 'c'.
+importDeclWithExportModifier.ts(5,19): error TS2708: Cannot use namespace 'x' as a value.
+importDeclWithExportModifier.ts(5,21): error TS2694: Namespace 'x' has no exported member 'c'.
 
 
-==== tests/cases/compiler/importDeclWithExportModifier.ts (2 errors) ====
+==== importDeclWithExportModifier.ts (2 errors) ====
     module x {
         interface c {
         }

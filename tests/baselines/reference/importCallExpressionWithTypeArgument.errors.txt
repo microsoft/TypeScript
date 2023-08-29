@@ -1,11 +1,11 @@
-tests/cases/conformance/dynamicImport/1.ts(2,10): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
-tests/cases/conformance/dynamicImport/1.ts(3,10): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
+1.ts(2,10): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
+1.ts(3,10): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
 
 
-==== tests/cases/conformance/dynamicImport/0.ts (0 errors) ====
+==== 0.ts (0 errors) ====
     export function foo() { return "foo"; }
     
-==== tests/cases/conformance/dynamicImport/1.ts (2 errors) ====
+==== 1.ts (2 errors) ====
     "use strict"
     var p1 = import<Promise<any>>("./0");  // error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -63,9 +63,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/f2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json

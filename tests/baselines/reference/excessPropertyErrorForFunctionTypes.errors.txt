@@ -1,12 +1,10 @@
-tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts(4,44): error TS2322: Type '{ a: number; c: number; d: number; }' is not assignable to type 'DoesntWork'.
-  Object literal may only specify known properties, and 'd' does not exist in type 'DoesntWork'.
+excessPropertyErrorForFunctionTypes.ts(4,44): error TS2353: Object literal may only specify known properties, and 'd' does not exist in type 'DoesntWork'.
 
 
-==== tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts (1 errors) ====
+==== excessPropertyErrorForFunctionTypes.ts (1 errors) ====
     type FunctionType = () => any;
     type DoesntWork = { a: number, c: number } | FunctionType;
     
     let doesntWork: DoesntWork = { a: 1, c: 2, d: 3 }
                                                ~
-!!! error TS2322: Type '{ a: number; c: number; d: number; }' is not assignable to type 'DoesntWork'.
-!!! error TS2322:   Object literal may only specify known properties, and 'd' does not exist in type 'DoesntWork'.
+!!! error TS2353: Object literal may only specify known properties, and 'd' does not exist in type 'DoesntWork'.

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentClass_B.ts ===
+//// [tests/cases/compiler/exportAssignmentClass.ts] ////
+
+=== exportAssignmentClass_B.ts ===
 import D = require("exportAssignmentClass_A");
 >D : Symbol(D, Decl(exportAssignmentClass_B.ts, 0, 0))
 
@@ -12,7 +14,7 @@ var x = d.p;
 >d : Symbol(d, Decl(exportAssignmentClass_B.ts, 2, 3))
 >p : Symbol(D.p, Decl(exportAssignmentClass_A.ts, 0, 9))
 
-=== tests/cases/compiler/exportAssignmentClass_A.ts ===
+=== exportAssignmentClass_A.ts ===
 class C { public p = 0; }
 >C : Symbol(C, Decl(exportAssignmentClass_A.ts, 0, 0))
 >p : Symbol(C.p, Decl(exportAssignmentClass_A.ts, 0, 9))

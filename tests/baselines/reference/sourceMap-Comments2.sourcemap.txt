@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMap-Comments2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-Comments2.js
+emittedFile:sourceMap-Comments2.js
 sourceFile:sourceMap-Comments2.ts
 -------------------------------------------------------------------
 >>>function foo(str, num) {

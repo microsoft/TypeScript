@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleRedifinitionErrors.ts] ////
+
 //// [moduleRedifinitionErrors.ts]
 class A {
 }

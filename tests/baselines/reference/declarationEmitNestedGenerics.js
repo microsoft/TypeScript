@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitNestedGenerics.ts] ////
+
 //// [declarationEmitNestedGenerics.ts]
 function f<T>(p: T) {
     let g: <T>(x: T) => typeof p = null as any;

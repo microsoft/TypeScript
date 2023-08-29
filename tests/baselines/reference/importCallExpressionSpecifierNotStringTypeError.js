@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts] ////
+
 //// [importCallExpressionSpecifierNotStringTypeError.ts]
 declare function getSpecifier(): boolean;
 declare var whatToLoad: boolean;

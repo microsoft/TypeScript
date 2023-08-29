@@ -1,36 +1,36 @@
-tests/cases/conformance/jsdoc/declarations/index.js(4,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(6,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(10,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(31,11): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(33,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(35,11): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(37,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(39,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(40,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(42,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(43,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(45,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(49,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(53,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(57,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(61,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(65,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(67,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(71,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(75,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(80,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(84,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(87,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(91,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(95,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(100,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(105,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(107,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(111,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(115,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(4,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(6,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(10,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(31,11): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(33,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
+index.js(35,11): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(37,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
+index.js(39,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(40,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
+index.js(42,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
+index.js(43,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(45,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(49,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(53,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(57,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(61,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(65,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(67,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(71,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(75,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(80,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(84,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(87,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(91,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(95,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(100,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(105,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(107,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(111,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
+index.js(115,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
 
 
-==== tests/cases/conformance/jsdoc/declarations/index.js (30 errors) ====
+==== index.js (30 errors) ====
     // Pretty much all of this should be an error, (since interfaces are forbidden in js),
     // but we should be able to synthesize declarations from the symbols regardless
     

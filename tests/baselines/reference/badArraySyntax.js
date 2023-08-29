@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/badArraySyntax.ts] ////
+
 //// [badArraySyntax.ts]
 class Z {
  public x = "";

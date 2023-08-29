@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionProperty.ts ===
+//// [tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionProperty.ts] ////
+
+=== emitDefaultParametersFunctionProperty.ts ===
 var obj2 = {
 >obj2 : Symbol(obj2, Decl(emitDefaultParametersFunctionProperty.ts, 0, 3))
 

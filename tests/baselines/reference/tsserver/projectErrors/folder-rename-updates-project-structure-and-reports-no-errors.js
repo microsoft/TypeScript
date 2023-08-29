@@ -203,17 +203,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /a/b/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-/a/b/projects/myproject/tsconfig.json: *new*
-  {}
 /a/b/projects/myproject/foo/foo.ts: *new*
+  {}
+/a/b/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -325,11 +325,11 @@ declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }
 //// [/a/b/projects/myproject/foo/foo.ts] deleted
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -393,17 +393,17 @@ After running Timeout callback:: count: 1
 12: checkOne
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
 
 FsWatches::
-/a/b/projects/myproject/tsconfig.json:
-  {}
 /a/b/projects/myproject/foo2/foo.ts: *new*
+  {}
+/a/b/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::

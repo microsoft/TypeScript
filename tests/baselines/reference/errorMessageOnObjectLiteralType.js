@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorMessageOnObjectLiteralType.ts] ////
+
 //// [errorMessageOnObjectLiteralType.ts]
 var x: {
     a: string;

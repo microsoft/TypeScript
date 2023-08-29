@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations-scopes.ts] ////
+
 //// [letDeclarations-scopes.ts]
 // global
 let l = "string";

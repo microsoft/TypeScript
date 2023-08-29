@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/decoratedClassExportsSystem1.ts] ////
+
 //// [a.ts]
 declare function forwardRef(x: any): any;
 declare var Something: any;
@@ -21,11 +23,12 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            exports_1("Testing123", Testing123 = Testing123_1 = class Testing123 {
-            });
+            Testing123 = Testing123_1 = class Testing123 {
+            };
+            exports_1("Testing123", Testing123);
             Testing123.prop1 = Testing123_1.prop0;
             exports_1("Testing123", Testing123 = Testing123_1 = __decorate([
-                Something({ v: () => Testing123_1 })
+                Something({ v: () => Testing123 })
             ], Testing123));
         }
     };

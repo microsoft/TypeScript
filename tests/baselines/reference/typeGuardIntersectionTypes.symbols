@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardIntersectionTypes.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardIntersectionTypes.ts] ////
+
+=== typeGuardIntersectionTypes.ts ===
 interface X {
 >X : Symbol(X, Decl(typeGuardIntersectionTypes.ts, 0, 0))
 

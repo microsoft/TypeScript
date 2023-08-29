@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/typeFromPropertyAssignment36.ts ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment36.ts] ////
+
+=== typeFromPropertyAssignment36.ts ===
 function f(b: boolean) {
 >f : Symbol(f, Decl(typeFromPropertyAssignment36.ts, 0, 0))
 >b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatOnNew.ts] ////
+
 //// [assignmentCompatOnNew.ts]
 class Foo{};
 

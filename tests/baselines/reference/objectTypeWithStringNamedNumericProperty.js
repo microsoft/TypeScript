@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts] ////
+
 //// [objectTypeWithStringNamedNumericProperty.ts]
 // string named numeric properties are legal and distinct when indexed by string values
 // indexed numerically the value is converted to a number

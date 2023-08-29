@@ -1,5 +1,4 @@
-/a.js(11,26): error TS2322: Type '{ r: number; g: number; d: number; }' is not assignable to type 'Color'.
-  Object literal may only specify known properties, and 'd' does not exist in type 'Color'.
+/a.js(11,26): error TS2353: Object literal may only specify known properties, and 'd' does not exist in type 'Color'.
 
 
 ==== /a.js (1 errors) ====
@@ -15,8 +14,7 @@
         white: { r: 255, g: 255, b: 255 },
         black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'
                              ~
-!!! error TS2322: Type '{ r: number; g: number; d: number; }' is not assignable to type 'Color'.
-!!! error TS2322:   Object literal may only specify known properties, and 'd' does not exist in type 'Color'.
+!!! error TS2353: Object literal may only specify known properties, and 'd' does not exist in type 'Color'.
         blue: { r: 0, g: 0, b: 255 },
     });
     
