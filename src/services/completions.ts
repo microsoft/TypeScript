@@ -20,7 +20,7 @@ import {
     compareTextSpans,
     Comparison,
     CompilerOptions,
-    compilerOptionsIndicateEsModules,
+    compilerOptionsIndicateEs6Modules,
     CompletionEntry,
     CompletionEntryData,
     CompletionEntryDataAutoImport,
