@@ -1,25 +1,37 @@
+1.ts(1,27): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
 1.ts(1,27): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+1.ts(2,30): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
 1.ts(2,30): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+2.ts(1,31): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
 2.ts(1,31): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+2.ts(2,33): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
 2.ts(2,33): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
 
 
 ==== 0.ts (0 errors) ====
     export interface I { }
     
-==== 1.ts (2 errors) ====
+==== 1.ts (4 errors) ====
     export type {} from './0' assert { type: "json" }
+                              ~~~~~~
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
                               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     export type { I } from './0' assert { type: "json" }
+                                 ~~~~~~
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
                                  ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     
-==== 2.ts (2 errors) ====
+==== 2.ts (4 errors) ====
     import type { I } from './0'  assert { type: "json" }
+                                  ~~~~~~
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
                                   ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     import type * as foo from './0' assert { type: "json" }
+                                    ~~~~~~
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
                                     ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     
