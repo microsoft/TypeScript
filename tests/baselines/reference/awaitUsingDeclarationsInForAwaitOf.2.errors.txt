@@ -1,0 +1,15 @@
+awaitUsingDeclarationsInForAwaitOf.2.ts(4,7): error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+awaitUsingDeclarationsInForAwaitOf.2.ts(4,32): error TS2448: Block-scoped variable 'of' used before its declaration.
+
+
+==== awaitUsingDeclarationsInForAwaitOf.2.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55555
+    
+    {
+      for await (await using of of of) {};
+          ~~~~~
+!!! error TS1431: 'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+                                   ~~
+!!! error TS2448: Block-scoped variable 'of' used before its declaration.
+!!! related TS2728 awaitUsingDeclarationsInForAwaitOf.2.ts:4:26: 'of' is declared here.
+    }
