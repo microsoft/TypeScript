@@ -1,4 +1,6 @@
-=== tests/cases/compiler/m1.ts ===
+//// [tests/cases/compiler/constEnumMergingWithValues3.ts] ////
+
+=== m1.ts ===
 enum foo { A }
 >foo : foo
 >A : foo.A

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts] ////
+
 //// [thisTypeInFunctions2.ts]
 interface IndexedWithThis {
     // this is a workaround for React

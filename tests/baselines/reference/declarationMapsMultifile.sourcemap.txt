@@ -5,7 +5,7 @@ sourceRoot:
 sources: a.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/a.d.ts
+emittedFile:a.d.ts
 sourceFile:a.ts
 -------------------------------------------------------------------
 >>>export declare class Foo {
@@ -96,7 +96,7 @@ sourceRoot:
 sources: index.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/index.d.ts
+emittedFile:index.d.ts
 sourceFile:index.ts
 -------------------------------------------------------------------
 >>>import { Foo } from "./a";

@@ -1,31 +1,31 @@
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(12,17): error TS2322: Type 'T' is not assignable to type 'object'.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(19,17): error TS2322: Type 'T' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(12,17): error TS2322: Type 'T' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(19,17): error TS2322: Type 'T' is not assignable to type 'object'.
   Type 'string | number' is not assignable to type 'object'.
     Type 'string' is not assignable to type 'object'.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(23,12): error TS2322: Type 'T | U' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(23,12): error TS2322: Type 'T | U' is not assignable to type 'object'.
   Type 'T' is not assignable to type 'object'.
     Type 'string | number' is not assignable to type 'object'.
       Type 'string' is not assignable to type 'object'.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(27,12): error TS2322: Type 'T | U' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(27,12): error TS2322: Type 'T | U' is not assignable to type 'object'.
   Type 'U' is not assignable to type 'object'.
     Type 'string | number' is not assignable to type 'object'.
       Type 'string' is not assignable to type 'object'.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(34,12): error TS2322: Type 'string | number | T' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(34,12): error TS2322: Type 'string | number | T' is not assignable to type 'object'.
   Type 'string' is not assignable to type 'object'.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(36,14): error TS2322: Type 'T' is not assignable to type 'object'.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(41,12): error TS2322: Type 'T' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(36,14): error TS2322: Type 'T' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(41,12): error TS2322: Type 'T' is not assignable to type 'object'.
   Type 'object | "hello"' is not assignable to type 'object'.
     Type 'string' is not assignable to type 'object'.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(53,14): error TS2322: Type 'T | U' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(53,14): error TS2322: Type 'T | U' is not assignable to type 'object'.
   Type 'T' is not assignable to type 'object'.
     Type 'string | object' is not assignable to type 'object'.
       Type 'string' is not assignable to type 'object'.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(60,12): error TS2322: Type 'T & U' is not assignable to type 'object'.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2322: Type 'T & (0 | 1 | 2)' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(60,12): error TS2322: Type 'T & U' is not assignable to type 'object'.
+inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2322: Type 'T & (0 | 1 | 2)' is not assignable to type 'object'.
   Type 'T & 0' is not assignable to type 'object'.
 
 
-==== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts (10 errors) ====
+==== inDoesNotOperateOnPrimitiveTypes.ts (10 errors) ====
     const validHasKey = <T extends object>(
       thing: T,
       key: string,
@@ -40,7 +40,7 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2322: T
       return key in thing; // Ok (as T may be instantiated with a valid type)
                     ~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts:8:26: This type parameter might need an `extends object` constraint.
+!!! related TS2208 inDoesNotOperateOnPrimitiveTypes.ts:8:26: This type parameter might need an `extends object` constraint.
     };
     
     function invalidHasKey<T extends string | number>(
@@ -84,7 +84,7 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2322: T
         "key" in thing; // Ok (because further narrowing is impossible)
                  ~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
-!!! related TS2208 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts:33:17: This type parameter might need an `extends object` constraint.
+!!! related TS2208 inDoesNotOperateOnPrimitiveTypes.ts:33:17: This type parameter might need an `extends object` constraint.
       }
     }
     

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/usingModuleWithExportImportInValuePosition.ts ===
+//// [tests/cases/compiler/usingModuleWithExportImportInValuePosition.ts] ////
+
+=== usingModuleWithExportImportInValuePosition.ts ===
 module A {
 >A : typeof A
 

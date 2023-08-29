@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors4.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors4.ts] ////
+
+=== fatarrowfunctionsOptionalArgsErrors4.ts ===
     false ? (arg?: number = 0) => 47 : null;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgsErrors4.ts, 0, 13))
 

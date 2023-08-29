@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forInModule.ts] ////
+
 //// [forInModule.ts]
 module Foo {
 	for (var i = 0; i < 1; i++) {

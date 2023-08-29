@@ -1,9 +1,9 @@
-tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts(9,1): error TS2322: Type '<S>() => S[]' is not assignable to type '<T>(x: T) => T'.
+functionTypeArgumentAssignmentCompat.ts(9,1): error TS2322: Type '<S>() => S[]' is not assignable to type '<T>(x: T) => T'.
   Type 'unknown[]' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown[]'.
 
 
-==== tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts (1 errors) ====
+==== functionTypeArgumentAssignmentCompat.ts (1 errors) ====
     var f : {
      <T>(x:T): T;
     }

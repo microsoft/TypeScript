@@ -1,8 +1,8 @@
-tests/cases/conformance/types/union/unionTypeFromArrayLiteral.ts(9,5): error TS2322: Type '[number, string, string]' is not assignable to type '[number, string]'.
+unionTypeFromArrayLiteral.ts(9,5): error TS2322: Type '[number, string, string]' is not assignable to type '[number, string]'.
   Source has 3 element(s) but target allows only 2.
 
 
-==== tests/cases/conformance/types/union/unionTypeFromArrayLiteral.ts (1 errors) ====
+==== unionTypeFromArrayLiteral.ts (1 errors) ====
     // The resulting type an array literal expression is determined as follows:
     // If the array literal is empty, the resulting type is an array type with the element type Undefined.
     // Otherwise, if the array literal is contextually typed by a type that has a property with the numeric name ‘0’, the resulting type is a tuple type constructed from the types of the element expressions.

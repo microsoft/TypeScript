@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/scopeTests.ts] ////
+
 //// [scopeTests.ts]
 class C { private v; public p; static s; }
 class D extends C {

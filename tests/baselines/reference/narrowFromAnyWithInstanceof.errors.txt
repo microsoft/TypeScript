@@ -1,8 +1,8 @@
-tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts(17,7): error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
-tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts(22,7): error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
+narrowFromAnyWithInstanceof.ts(17,7): error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
+narrowFromAnyWithInstanceof.ts(22,7): error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
 
 
-==== tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts (2 errors) ====
+==== narrowFromAnyWithInstanceof.ts (2 errors) ====
     declare var x: any;
     
     if (x instanceof Function) { // 'any' is not narrowed when target type is 'Function'
@@ -22,7 +22,7 @@ tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts(22,7): error TS
         x.mesage;
           ~~~~~~
 !!! error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'message' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'message' is declared here.
     }
     
     if (x instanceof Date) {
@@ -30,6 +30,6 @@ tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts(22,7): error TS
         x.getHuors();
           ~~~~~~~~
 !!! error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
-!!! related TS2728 /.ts/lib.es5.d.ts:--:--: 'getHours' is declared here.
+!!! related TS2728 lib.es5.d.ts:--:--: 'getHours' is declared here.
     }
     

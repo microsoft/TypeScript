@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/primitives/void/validVoidValues.ts ===
+//// [tests/cases/conformance/types/primitives/void/validVoidValues.ts] ////
+
+=== validVoidValues.ts ===
 var x: void;
 >x : Symbol(x, Decl(validVoidValues.ts, 0, 3))
 

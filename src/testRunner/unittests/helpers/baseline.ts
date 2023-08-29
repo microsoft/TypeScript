@@ -1,8 +1,12 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { TscCompileSystem } from "./tsc";
-import { TestServerHost } from "./virtualFileSystemWithWatch";
+import {
+    TscCompileSystem,
+} from "./tsc";
+import {
+    TestServerHost,
+} from "./virtualFileSystemWithWatch";
 
 export type CommandLineProgram = [ts.Program, ts.BuilderProgram?];
 export interface CommandLineCallbacks {
@@ -23,9 +27,10 @@ export function commandLineCallbacks(
         cb: program => {
             if (isAnyProgram(program)) {
                 baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall);
-                (programs || (programs = [])).push(ts.isBuilderProgram(program) ?
-                    [program.getProgram(), program] :
-                    [program]
+                (programs || (programs = [])).push(
+                    ts.isBuilderProgram(program) ?
+                        [program.getProgram(), program] :
+                        [program],
                 );
             }
             else {
@@ -36,7 +41,7 @@ export function commandLineCallbacks(
             const result = programs || ts.emptyArray;
             programs = undefined;
             return result;
-        }
+        },
     };
 }
 
@@ -172,13 +177,9 @@ export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo,
     original: T | undefined;
 };
 export type ReadableProgramBuildInfoRoot =
-    [original: ts.ProgramBuildInfoFileId, readable: string] |
-    [orginal: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
-export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo,
-    "fileIdsList" | "fileInfos" | "root" |
-    "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
-    "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
-> & {
+    | [original: ts.ProgramBuildInfoFileId, readable: string]
+    | [orginal: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
+export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
     fileNamesList: readonly (readonly string[])[] | undefined;
     fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
     root: readonly ReadableProgramBuildInfoRoot[];
@@ -221,7 +222,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
                 undefined :
                 [
                     toReadableBuilderFileEmit(ts.toProgramEmitPending(pendingEmit, buildInfo.program.options)),
-                    pendingEmit
+                    pendingEmit,
                 ],
         };
     }

@@ -148,15 +148,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {}
 /a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -226,17 +226,17 @@ After running Timeout callback:: count: 1
 3: checkOne
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /users/username/projects/project/file2.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -320,19 +320,19 @@ After running Timeout callback:: count: 1
 6: checkOne
 
 PolledWatches::
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /users/username/projects/project/file2.ts:
   {}
 /users/username/projects/project/file3.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::

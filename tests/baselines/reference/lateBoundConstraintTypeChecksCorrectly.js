@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lateBoundConstraintTypeChecksCorrectly.ts] ////
+
 //// [lateBoundConstraintTypeChecksCorrectly.ts]
 declare const fooProp: unique symbol;
 declare const barProp: unique symbol;

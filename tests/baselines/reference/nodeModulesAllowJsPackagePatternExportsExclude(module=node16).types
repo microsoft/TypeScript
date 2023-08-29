@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/allowJs/index.js ===
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsPackagePatternExportsExclude.ts] ////
+
+=== index.js ===
 // esm format file
 import * as cjsi from "inner/cjs/exclude/index";
 >cjsi : any
@@ -18,7 +20,7 @@ mjsi;
 typei;
 >typei : any
 
-=== tests/cases/conformance/node/allowJs/index.mjs ===
+=== index.mjs ===
 // esm format file
 import * as cjsi from "inner/cjs/exclude/index";
 >cjsi : any
@@ -38,7 +40,7 @@ mjsi;
 typei;
 >typei : any
 
-=== tests/cases/conformance/node/allowJs/index.cjs ===
+=== index.cjs ===
 // cjs format file
 import * as cjsi from "inner/cjs/exclude/index";
 >cjsi : any
@@ -58,7 +60,7 @@ mjsi;
 typei;
 >typei : any
 
-=== tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.ts ===
+=== node_modules/inner/exclude/index.d.ts ===
 // cjs format file
 import * as cjs from "inner/cjs/exclude/index";
 >cjs : any
@@ -78,7 +80,7 @@ export { mjs };
 export { type };
 >type : any
 
-=== tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.mts ===
+=== node_modules/inner/exclude/index.d.mts ===
 // esm format file
 import * as cjs from "inner/cjs/exclude/index";
 >cjs : any
@@ -98,7 +100,7 @@ export { mjs };
 export { type };
 >type : any
 
-=== tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.cts ===
+=== node_modules/inner/exclude/index.d.cts ===
 // cjs format file
 import * as cjs from "inner/cjs/exclude/index";
 >cjs : any

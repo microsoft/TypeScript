@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts ===
+//// [tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts] ////
+
+=== genericDerivedTypeWithSpecializedBase2.ts ===
 class A<T extends { length: number }> {
 >A : Symbol(A, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 0))
 >T : Symbol(T, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 8))

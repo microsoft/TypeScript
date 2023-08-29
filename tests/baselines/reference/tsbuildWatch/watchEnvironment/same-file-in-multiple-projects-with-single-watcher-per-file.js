@@ -149,25 +149,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
 FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/pkg0/index.ts: *new*
   {}
-/user/username/projects/myproject/typings/xterm.d.ts: *new*
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json: *new*
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg1/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json: *new*
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg2/index.ts: *new*
   {}
-/user/username/projects/myproject/pkg3/tsconfig.json: *new*
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/pkg3/index.ts: *new*
   {}
+/user/username/projects/myproject/pkg3/tsconfig.json: *new*
+  {}
 /user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -339,27 +339,27 @@ Output::
 
 
 FsWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
 /user/username/projects/myproject/pkg0/index.ts:
   {}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
+/user/username/projects/myproject/pkg0/tsconfig.json:
   {}
 /user/username/projects/myproject/pkg1/index.ts:
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
+/user/username/projects/myproject/pkg1/tsconfig.json:
   {}
 /user/username/projects/myproject/pkg2/index.ts:
   {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
 /user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {}
 /user/username/projects/myproject/pkg3/index.ts:
+  {}
+/user/username/projects/myproject/pkg3/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -493,19 +493,19 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {}
 /user/username/projects/myproject/pkg0/index.ts:
   {}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json:
+/user/username/projects/myproject/pkg0/tsconfig.json:
   {}
 /user/username/projects/myproject/pkg1/index.ts:
   {}
-/user/username/projects/myproject/pkg2/tsconfig.json:
+/user/username/projects/myproject/pkg1/tsconfig.json:
   {}
 /user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
   {}
 
 FsWatchesRecursive *deleted*::

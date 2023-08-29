@@ -1,28 +1,28 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(10,51): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => number'.
+genericCallWithGenericSignatureArguments2.ts(10,51): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(15,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
+genericCallWithGenericSignatureArguments2.ts(15,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(16,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+genericCallWithGenericSignatureArguments2.ts(16,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(25,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+genericCallWithGenericSignatureArguments2.ts(25,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
   Types of parameters 'a' and 'x' are incompatible.
     Type 'Date' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(37,43): error TS2322: Type 'F' is not assignable to type 'E'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(50,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
+genericCallWithGenericSignatureArguments2.ts(37,43): error TS2322: Type 'F' is not assignable to type 'E'.
+genericCallWithGenericSignatureArguments2.ts(50,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(51,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+genericCallWithGenericSignatureArguments2.ts(51,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(60,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+genericCallWithGenericSignatureArguments2.ts(60,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
   Types of parameters 'a' and 'x' are incompatible.
     Type 'Date' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(67,51): error TS2304: Cannot find name 'U'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find name 'U'.
+genericCallWithGenericSignatureArguments2.ts(67,51): error TS2304: Cannot find name 'U'.
+genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find name 'U'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts (10 errors) ====
+==== genericCallWithGenericSignatureArguments2.ts (10 errors) ====
     // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
     // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
     
@@ -77,7 +77,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
         var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
                                               ~~~
 !!! error TS2322: Type 'F' is not assignable to type 'E'.
-!!! related TS6502 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:32:47: The expected type comes from the return type of this signature.
+!!! related TS6502 genericCallWithGenericSignatureArguments2.ts:32:47: The expected type comes from the return type of this signature.
     }
     
     module TU {

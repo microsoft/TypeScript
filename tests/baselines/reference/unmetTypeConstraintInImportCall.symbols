@@ -1,11 +1,13 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/unmetTypeConstraintInImportCall.ts] ////
+
+=== file1.ts ===
 export type Foo<T extends string> = { foo: T }
 >Foo : Symbol(Foo, Decl(file1.ts, 0, 0))
 >T : Symbol(T, Decl(file1.ts, 0, 16))
 >foo : Symbol(foo, Decl(file1.ts, 0, 37))
 >T : Symbol(T, Decl(file1.ts, 0, 16))
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 type Bar<T> = import('./file1').Foo<T>;
 >Bar : Symbol(Bar, Decl(file2.ts, 0, 0))
 >T : Symbol(T, Decl(file2.ts, 0, 9))

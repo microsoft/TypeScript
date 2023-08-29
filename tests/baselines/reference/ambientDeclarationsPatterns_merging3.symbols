@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/types.ts ===
+//// [tests/cases/conformance/ambient/ambientDeclarationsPatterns_merging3.ts] ////
+
+=== types.ts ===
 declare module "*.foo" {
 >"*.foo" : Symbol("*.foo", Decl(types.ts, 0, 0))
 
@@ -7,7 +9,7 @@ declare module "*.foo" {
 >star : Symbol(OhNo.star, Decl(types.ts, 1, 25))
 }
 
-=== tests/cases/conformance/ambient/test.ts ===
+=== test.ts ===
 declare module "a.foo" {
 >"a.foo" : Symbol("a.foo", Decl(test.ts, 0, 0), Decl(types.ts, 0, 0))
 

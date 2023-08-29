@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts(1,12): error TS1003: Identifier expected.
+templateStringInFunctionParameterType.ts(1,12): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts (1 errors) ====
+==== templateStringInFunctionParameterType.ts (1 errors) ====
     function f(`hello`);
                ~~~~~~~
 !!! error TS1003: Identifier expected.

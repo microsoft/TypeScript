@@ -1,9 +1,9 @@
-tests/cases/conformance/statements/for-inStatements/for-inStatements.ts(33,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
-tests/cases/conformance/statements/for-inStatements/for-inStatements.ts(50,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
-tests/cases/conformance/statements/for-inStatements/for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'Color.Blue'.
+for-inStatements.ts(33,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+for-inStatements.ts(50,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
+for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'Color.Blue'.
 
 
-==== tests/cases/conformance/statements/for-inStatements/for-inStatements.ts (3 errors) ====
+==== for-inStatements.ts (3 errors) ====
     var aString: string;
     for (aString in {}) { }
     
@@ -39,7 +39,7 @@ tests/cases/conformance/statements/for-inStatements/for-inStatements.ts(79,15): 
             for (var x in this) { }
                      ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
-!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatements.ts:31:18: 'x' was also declared here.
+!!! related TS6203 for-inStatements.ts:31:18: 'x' was also declared here.
             return null;
         }
     
@@ -59,7 +59,7 @@ tests/cases/conformance/statements/for-inStatements/for-inStatements.ts(79,15): 
             for (var x in this) { }
                      ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
-!!! related TS6203 tests/cases/conformance/statements/for-inStatements/for-inStatements.ts:48:18: 'x' was also declared here.
+!!! related TS6203 for-inStatements.ts:48:18: 'x' was also declared here.
     
             for (var x in super.biz) { }
             for (var x in super.biz()) { }

@@ -1,7 +1,7 @@
-tests/cases/compiler/file1.ts(1,21): error TS2307: Cannot find module './b' or its corresponding type declarations.
+file1.ts(1,21): error TS2307: Cannot find module './b' or its corresponding type declarations.
 
 
-==== tests/cases/compiler/file1.ts (1 errors) ====
+==== file1.ts (1 errors) ====
     import b1 = require('./b'); // This should not resolve
                         ~~~~~
 !!! error TS2307: Cannot find module './b' or its corresponding type declarations.
@@ -12,7 +12,7 @@ tests/cases/compiler/file1.ts(1,21): error TS2307: Cannot find module './b' or i
         x = (b1.b === b);
     }
     
-==== tests/cases/compiler/b.json (0 errors) ====
+==== b.json (0 errors) ====
     {
         "a": true,
         "b": "hello"

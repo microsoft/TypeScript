@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitUseStrict_commonjs.ts] ////
+
 //// [noImplicitUseStrict_commonjs.ts]
 export var x = 0;
 

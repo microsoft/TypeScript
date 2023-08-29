@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts] ////
+
 //// [classWithBaseClassButNoConstructor.ts]
 class Base {
     constructor(x: number) { }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/typeInferenceWithTupleType.ts] ////
+
 //// [typeInferenceWithTupleType.ts]
 function combine<T, U>(x: T, y: U): [T, U] {
     return [x, y];

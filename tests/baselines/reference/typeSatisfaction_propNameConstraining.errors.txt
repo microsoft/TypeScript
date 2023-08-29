@@ -1,9 +1,8 @@
-tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propNameConstraining.ts(6,5): error TS1360: Type '{ a: number; b: string; x: number; }' does not satisfy the expected type 'Partial<Record<Keys, unknown>>'.
-  Object literal may only specify known properties, and 'x' does not exist in type 'Partial<Record<Keys, unknown>>'.
-tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propNameConstraining.ts(13,11): error TS2339: Property 'd' does not exist on type '{ a: number; b: string; x: number; }'.
+typeSatisfaction_propNameConstraining.ts(6,5): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type 'Partial<Record<Keys, unknown>>'.
+typeSatisfaction_propNameConstraining.ts(13,11): error TS2339: Property 'd' does not exist on type '{ a: number; b: string; x: number; }'.
 
 
-==== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propNameConstraining.ts (2 errors) ====
+==== typeSatisfaction_propNameConstraining.ts (2 errors) ====
     type Keys = 'a' | 'b' | 'c' | 'd';
     
     const p = {
@@ -11,8 +10,7 @@ tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propNameCo
         b: "hello",
         x: 8 // Should error, 'x' isn't in 'Keys'
         ~
-!!! error TS1360: Type '{ a: number; b: string; x: number; }' does not satisfy the expected type 'Partial<Record<Keys, unknown>>'.
-!!! error TS1360:   Object literal may only specify known properties, and 'x' does not exist in type 'Partial<Record<Keys, unknown>>'.
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type 'Partial<Record<Keys, unknown>>'.
     } satisfies Partial<Record<Keys, unknown>>;
     
     // Should be OK -- retain info that a is number and b is string

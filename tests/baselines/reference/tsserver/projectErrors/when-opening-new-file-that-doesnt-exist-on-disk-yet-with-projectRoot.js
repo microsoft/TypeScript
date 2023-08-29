@@ -72,9 +72,9 @@ After request
 PolledWatches::
 /typings/@epic/core.d.ts: *new*
   {"pollingInterval":500}
-/user/someuser/projects/somefolder/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/someuser/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/someuser/projects/somefolder/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

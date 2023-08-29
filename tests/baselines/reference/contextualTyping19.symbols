@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTyping19.ts ===
+//// [tests/cases/compiler/contextualTyping19.ts] ////
+
+=== contextualTyping19.ts ===
 var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, {id:2}];
 >foo : Symbol(foo, Decl(contextualTyping19.ts, 0, 3))
 >id : Symbol(id, Decl(contextualTyping19.ts, 0, 9))

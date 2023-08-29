@@ -1,7 +1,7 @@
-tests/cases/compiler/mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts(9,9): error TS2322: Type 'HomomorphicMappedType<T>' is not assignable to type 'any[]'.
+mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts(9,9): error TS2322: Type 'HomomorphicMappedType<T>' is not assignable to type 'any[]'.
 
 
-==== tests/cases/compiler/mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts (1 errors) ====
+==== mappedTypeUnionConstrainTupleTreatedAsArrayLike.ts (1 errors) ====
     type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean : null }
     
     function test1<T extends [number] | [string]>(args: T) {

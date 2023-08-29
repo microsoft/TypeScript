@@ -1,5 +1,6 @@
 import * as Harness from "../../_namespaces/Harness";
 import {
+    arrayFrom,
     clear,
     clone,
     combinePaths,
@@ -43,7 +44,9 @@ import {
     sys,
     toPath,
 } from "../../_namespaces/ts";
-import { timeIncrements } from "../../_namespaces/vfs";
+import {
+    timeIncrements,
+} from "../../_namespaces/vfs";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
@@ -57,7 +60,7 @@ interface Number { toExponential: any; }
 interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }`
+interface Array<T> { length: number; [n: number]: T; }`,
 };
 
 function getExecutingFilePathFromLibFile(): string {
@@ -257,7 +260,7 @@ export enum Tsc_WatchFile {
 export enum Tsc_WatchDirectory {
     WatchFile = "RecursiveDirectoryUsingFsWatchFile",
     NonRecursiveWatchDirectory = "RecursiveDirectoryUsingNonRecursiveWatchDirectory",
-    DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling"
+    DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling",
 }
 
 export interface TestServerHostOptions {
@@ -274,7 +277,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     private readonly output: string[] = [];
 
-    private fs: Map<Path, FSEntry> = new Map();
+    private fs = new Map<Path, FSEntry>();
     private time = timeIncrements;
     getCanonicalFileName: (s: string) => string;
     private toPath: (f: string) => Path;
@@ -302,11 +305,17 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     constructor(
         fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         {
-            useCaseSensitiveFileNames, executingFilePath, currentDirectory,
-            newLine, windowsStyleRoot, environmentVariables,
-            runWithoutRecursiveWatches, runWithFallbackPolling,
+            useCaseSensitiveFileNames,
+            executingFilePath,
+            currentDirectory,
+            newLine,
+            windowsStyleRoot,
+            environmentVariables,
+            runWithoutRecursiveWatches,
+            runWithFallbackPolling,
             inodeWatching,
-        }: TestServerHostCreationParameters = {}) {
+        }: TestServerHostCreationParameters = {},
+    ) {
         this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
         this.newLine = newLine || "\n";
         this.windowsStyleRoot = windowsStyleRoot;
@@ -394,10 +403,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     private reloadFS(fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[]) {
         Debug.assert(this.fs.size === 0);
         if (isArray(fileOrFolderOrSymLinkList)) {
-            fileOrFolderOrSymLinkList.forEach(f => this.ensureFileOrFolder(!this.windowsStyleRoot ?
-                f :
-                { ...f, path: this.getHostSpecificPath(f.path) }
-            ));
+            fileOrFolderOrSymLinkList.forEach(f =>
+                this.ensureFileOrFolder(
+                    !this.windowsStyleRoot ?
+                        f :
+                        { ...f, path: this.getHostSpecificPath(f.path) },
+                )
+            );
         }
         else {
             for (const key in fileOrFolderOrSymLinkList) {
@@ -622,7 +634,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
                 map.remove(path, callback);
                 this.hasWatchChanges = true;
                 closed = true;
-            }
+            },
         };
     }
 
@@ -630,7 +642,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return this.createWatcher(
             this.watchedFiles,
             this.toFullPath(fileName),
-            { cb, pollingInterval }
+            { cb, pollingInterval },
         );
     }
 
@@ -648,8 +660,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             path,
             {
                 cb,
-                inode: this.inodes?.get(path)
-            }
+                inode: this.inodes?.get(path),
+            },
         ) as FsWatchWorkerWatcher;
         result.on = noop;
         return result;
@@ -665,7 +677,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         invokeWatcherCallbacks(map.get(path), ({ cb, inode }) => {
             // TODO::
             if (this.inodeWatching && inode !== undefined && inode !== currentInode) return;
-            let relativeFileName = (entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "");
+            let relativeFileName = entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : "";
             if (useTildeSuffix) relativeFileName = (relativeFileName ? relativeFileName : getBaseFileName(fullPath)) + "~";
             cb(eventName, relativeFileName, modifiedTime);
         });
@@ -707,7 +719,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return {
             path: this.toPath(fullPath),
             fullPath,
-            modifiedTime: this.now()
+            modifiedTime: this.now(),
         };
     }
 
@@ -822,12 +834,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
-        return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, (dir) => {
+        return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, dir => {
             const directories: string[] = [];
             const files: string[] = [];
             const folder = this.getRealFolder(this.toPath(dir));
             if (folder) {
-                folder.entries.forEach((entry) => {
+                folder.entries.forEach(entry => {
                     if (this.isFsFolder(entry)) {
                         directories.push(getBaseFileName(entry.fullPath));
                     }
@@ -979,7 +991,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     writtenFiles?: Map<Path, number>;
-    diff(baseline: string[], base: Map<Path, FSEntry> = new Map()) {
+    diff(baseline: string[], base = new Map<Path, FSEntry>()) {
         this.fs.forEach((newFsEntry, path) => {
             diffFsEntry(baseline, base.get(path), newFsEntry, this.inodes?.get(path), this.writtenFiles);
         });
@@ -1118,25 +1130,28 @@ function diffMap<T>(
     caption: string,
     map: Map<string, T[]> | undefined,
     old: Map<string, T[]> | undefined,
-    deleted: boolean
+    deleted: boolean,
 ) {
     let captionAdded = false;
     let baselineChanged = false;
     let hasChange = false;
-    map?.forEach((values, key) => {
-        const existing = old?.get(key);
-        let addedKey = false;
-        for (const value of values) {
-            const hasExisting = contains(existing, value);
-            if (deleted && hasExisting) continue;
-            if (!hasExisting) hasChange = true;
-            if (!addedKey) {
-                addBaseline(`${key}:${deleted || existing ? "" : " *new*"}`);
-                addedKey = true;
+    if (map) {
+        for (const key of arrayFrom(map.keys()).sort(compareStringsCaseSensitive)) {
+            const existing = old?.get(key);
+            let addedKey = false;
+            const values = map.get(key)!;
+            for (const value of values) {
+                const hasExisting = contains(existing, value);
+                if (deleted && hasExisting) continue;
+                if (!hasExisting) hasChange = true;
+                if (!addedKey) {
+                    addBaseline(`${key}:${deleted || existing ? "" : " *new*"}`);
+                    addedKey = true;
+                }
+                addBaseline(`  ${JSON.stringify(value)}${deleted || hasExisting || !existing ? "" : " *new*"}`);
             }
-            addBaseline(`  ${JSON.stringify(value)}${deleted || hasExisting || !existing ? "" : " *new*"}`);
         }
-    });
+    }
     if (baselineChanged) baseline.push("");
     return hasChange;
 
@@ -1180,6 +1195,6 @@ export function getTsBuildProjectFilePath(project: string, file: string) {
 export function getTsBuildProjectFile(project: string, file: string): File {
     return {
         path: getTsBuildProjectFilePath(project, file),
-        content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
+        content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!,
     };
 }

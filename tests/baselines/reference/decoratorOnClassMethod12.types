@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts ===
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts] ////
+
+=== decoratorOnClassMethod12.ts ===
 module M {
 >M : typeof M
 
