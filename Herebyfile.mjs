@@ -240,7 +240,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
         if (downlevelLetConst) {
             options.plugins = (options.plugins ?? []).concat({
                 name: "let-const",
-                setup: (build) => {
+                setup: build => {
                     build.onEnd(async () => {
                         await exec(process.execPath, [
                             "./node_modules/@babel/cli/bin/babel.js",
