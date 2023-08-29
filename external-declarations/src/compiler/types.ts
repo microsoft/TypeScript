@@ -27,6 +27,7 @@ export interface IsolatedEmitHost extends ModuleSpecifierResolutionHost, Resolve
 }
 
 export interface IsolatedEmitResolver {
+    isLiteralComputedName(node: ComputedPropertyName): boolean;
     isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
     isLateBound(node: Declaration): node is LateBoundDeclaration;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;

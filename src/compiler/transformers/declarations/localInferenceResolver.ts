@@ -184,7 +184,7 @@ export function createLocalInferenceResolver({
                                     case SyntaxKind.MinusToken:
                                         return regular(factory.createLiteralTypeNode(deepClone(prefixOp)), node);
                                     case SyntaxKind.PlusToken:
-                                        return regular(factory.createLiteralTypeNode(deepClone(prefixOp)), node);
+                                        return regular(factory.createLiteralTypeNode(deepClone(prefixOp.operand as LiteralExpression)), node);
                                 }
                                 break;
                             case SyntaxKind.BigIntLiteral:
@@ -195,7 +195,7 @@ export function createLocalInferenceResolver({
                     }
 
                     if(prefixOp.operator === SyntaxKind.PlusToken) {
-                        return regular(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword), node);
+                        return regular(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword), prefixOp);
                     }
                     else if(prefixOp.operator === SyntaxKind.MinusToken) {
                         return prefixOp.operand.kind === SyntaxKind.BigIntLiteral?
@@ -267,11 +267,14 @@ export function createLocalInferenceResolver({
                         continue;
                     }
                     if (isComputedPropertyName(prop.name)) {
-                        if(!isEntityNameExpression(prop.name.expression)) {
+                        if (!resolver.isLiteralComputedName(prop.name)) {
                             reportIsolatedDeclarationError(node);
                             continue;
                         }
-                        checkEntityNameVisibility(prop.name.expression, prop);
+
+                        if(isEntityNameExpression(prop.name.expression)) {
+                            checkEntityNameVisibility(prop.name.expression, prop);
+                        }
                     }
 
                     const name = deepClone(visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!);
@@ -422,10 +425,10 @@ export function createLocalInferenceResolver({
             return "I:" + name.escapedText;
         }
         if (isStringLiteral(name)) {
-            return "S:" + name.text;
+            return "I:" + name.text;
         }
         if (isNumericLiteral(name)) {
-            return "N:" + (+name.text);
+            return "I:" + (+name.text);
         }
         if (isComputedPropertyName(name)) {
             let fullId = "C:";

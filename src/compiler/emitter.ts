@@ -1145,6 +1145,7 @@ export const notImplementedResolver: EmitResolver = {
     isRequiredInitializedParameter: notImplemented,
     isOptionalUninitializedParameterProperty: notImplemented,
     isExpandoFunction: notImplemented,
+    isLiteralComputedName: notImplemented,
     getPropertiesOfContainerFunction: notImplemented,
     createTypeOfDeclaration: notImplemented,
     createReturnTypeOfSignatureDeclaration: notImplemented,

@@ -46321,8 +46321,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isExpandoFunction(node: Declaration): boolean {
         const declaration = getParseTreeNode(node, (n): n is FunctionDeclaration | VariableDeclaration => isFunctionDeclaration(n) || isVariableDeclaration(n));
-        if (!declaration || (isVariableDeclaration(declaration) && !(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer)))) {
+        if (!declaration) {
             return false;
+        }
+        if(isVariableDeclaration(declaration)){
+            if(declaration.type) {
+                return false;
+            }
+            if(!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
+                return false;
+            }
+            
         }
         const symbol = getSymbolOfDeclaration(declaration);
         if (!symbol || !(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
@@ -46606,6 +46615,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return false;
     }
+    function isLiteralComputedName(node: ComputedPropertyName) {
+        const expression = node.expression;
+        const type = getTypeOfExpression(expression);
+        if(isFreshLiteralType(type)) {
+            return true;
+        }
+        if(!isTypeUsableAsPropertyName(type)) {
+            return false;
+        }
+        if(!isEntityNameExpression(expression)) {
+            return false;
+        }
+        let symbol = getSymbolAtLocation(expression);
+        if(!symbol) {
+            return false;
+        }
+        let declaredType = getTypeOfSymbol(symbol);
+        return declaredType === type
+    }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
         const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
@@ -46719,6 +46747,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getTypeReferenceDirectivesForEntityName,
             getTypeReferenceDirectivesForSymbol,
             isLiteralConstDeclaration,
+            isLiteralComputedName,
             isLateBound: (nodeIn: Declaration): nodeIn is LateBoundDeclaration => {
                 const node = getParseTreeNode(nodeIn, isDeclaration);
                 const symbol = node && getSymbolOfDeclaration(node);
