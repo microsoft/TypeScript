@@ -1482,7 +1482,7 @@ export let sys: System = (() => {
             from?(input: string, encoding?: string): any;
         } = require("buffer").Buffer;
 
-        const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
+        const isWindows = process.platform === "win32";
 
         const platform: string = _os.platform();
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -1514,7 +1514,7 @@ export let sys: System = (() => {
             tscWatchFile: process.env.TSC_WATCHFILE,
             useNonPollingWatchers: !!process.env.TSC_NONPOLLING_WATCHER,
             tscWatchDirectory: process.env.TSC_WATCHDIRECTORY,
-            inodeWatching: isLinuxOrMacOs,
+            inodeWatching: !isWindows,
             sysLog,
         });
         const nodeSystem: System = {
