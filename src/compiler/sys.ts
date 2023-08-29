@@ -1483,10 +1483,8 @@ export let sys: System = (() => {
         } = require("buffer").Buffer;
 
         const isWindows = process.platform === "win32";
-
-        const platform: string = _os.platform();
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-        const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native : _fs.realpathSync;
+        const fsRealpath = !!_fs.realpathSync.native ? isWindows ? fsRealPathHandlingLongPath : _fs.realpathSync.native : _fs.realpathSync;
 
         // If our filename is "sys.js", then we are executing unbundled on the raw tsc output.
         // In that case, simulate a faked path in the directory where a bundle would normally
@@ -1495,7 +1493,7 @@ export let sys: System = (() => {
         // Note that if we ever emit as files like cjs/mjs, this check will be wrong.
         const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js") : __filename;
 
-        const fsSupportsRecursiveFsWatch = process.platform === "win32" || process.platform === "darwin";
+        const fsSupportsRecursiveFsWatch = isWindows || process.platform === "darwin";
         const getCurrentDirectory = memoize(() => process.cwd());
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
             pollingWatchFileWorker: fsWatchFileWorker,
@@ -1728,8 +1726,8 @@ export let sys: System = (() => {
         }
 
         function isFileSystemCaseSensitive(): boolean {
-            // win32\win64 are case insensitive platforms
-            if (platform === "win32" || platform === "win64") {
+            // We always consider win32 to be case insensitive.
+            if (isWindows) {
                 return false;
             }
             // If this file exists under a different case, we must be case-insensitve.
