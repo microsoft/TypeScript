@@ -20,7 +20,7 @@ import {
     compareTextSpans,
     Comparison,
     CompilerOptions,
-    compilerOptionsIndicateEs6Modules,
+    compilerOptionsIndicateEsModules,
     CompletionEntry,
     CompletionEntryData,
     CompletionEntryDataAutoImport,
@@ -3876,15 +3876,15 @@ function getCompletionData(
 
         function shouldOfferImportCompletions(): boolean {
             // If already typing an import statement, provide completions for it.
-            if (importCompletionNode) return true;
+            if (importStatementCompletion) return true;
             // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
             if (isNonContextualObjectLiteral) return false;
             // If not already a module, must have modules enabled.
             if (!preferences.includeCompletionsForModuleExports) return false;
-            // If already using ES6 modules, OK to continue using them.
+            // If already using ES modules, OK to continue using them.
             if (sourceFile.externalModuleIndicator || sourceFile.commonJsModuleIndicator) return true;
             // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
-            if (compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) return true;
+            if (compilerOptionsIndicateEsModules(program.getCompilerOptions())) return true;
             // If some file is using ES6 modules, assume that it's OK to add more.
             return programContainsModules(program);
         }

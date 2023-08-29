@@ -2437,18 +2437,22 @@ export function getNameFromPropertyName(name: PropertyName): string | undefined 
         : isPrivateIdentifier(name) ? idText(name) : getTextOfIdentifierOrLiteral(name);
 }
 
-    export function programContainsModules(program: Program): boolean {
-        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
+/** @internal */
+export function programContainsModules(program: Program): boolean {
+    return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
+}
+/** @internal */
+export function programContainsEsModules(program: Program): boolean {
+    return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
+}
+// TODO: this function is, at best, poorly named. Use sites are pretty suspicious.
+/** @internal */
+export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
+    if (compilerOptions.module === ModuleKind.None) {
+        return false;
     }
-    export function programContainsEs6Modules(program: Program): boolean {
-        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
-    }
-    export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
-        if (compilerOptions.module === ModuleKind.None) {
-            return false;
-        }
-        return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
-    }
+    return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
+}
 
 /** @internal */
 export function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {
