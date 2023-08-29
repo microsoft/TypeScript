@@ -3874,20 +3874,20 @@ function getCompletionData(
         }
     }
 
-        function shouldOfferImportCompletions(): boolean {
-            // If already typing an import statement, provide completions for it.
-            if (importStatementCompletion) return true;
-            // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
-            if (isNonContextualObjectLiteral) return false;
-            // If not already a module, must have modules enabled.
-            if (!preferences.includeCompletionsForModuleExports) return false;
-            // If already using ES modules, OK to continue using them.
-            if (sourceFile.externalModuleIndicator || sourceFile.commonJsModuleIndicator) return true;
-            // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
-            if (compilerOptionsIndicateEsModules(program.getCompilerOptions())) return true;
-            // If some file is using ES6 modules, assume that it's OK to add more.
-            return programContainsModules(program);
-        }
+    function shouldOfferImportCompletions(): boolean {
+        // If already typing an import statement, provide completions for it.
+        if (importStatementCompletion) return true;
+        // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
+        if (isNonContextualObjectLiteral) return false;
+        // If not already a module, must have modules enabled.
+        if (!preferences.includeCompletionsForModuleExports) return false;
+        // If already using ES modules, OK to continue using them.
+        if (sourceFile.externalModuleIndicator || sourceFile.commonJsModuleIndicator) return true;
+        // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
+        if (compilerOptionsIndicateEsModules(program.getCompilerOptions())) return true;
+        // If some file is using ES6 modules, assume that it's OK to add more.
+        return programContainsModules(program);
+    }
 
     function isSnippetScope(scopeNode: Node): boolean {
         switch (scopeNode.kind) {
