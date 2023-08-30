@@ -1,7 +1,7 @@
-tests/cases/compiler/noTypeArgumentOnReturnType1.ts(3,9): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+noTypeArgumentOnReturnType1.ts(3,9): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/noTypeArgumentOnReturnType1.ts (1 errors) ====
+==== noTypeArgumentOnReturnType1.ts (1 errors) ====
     class A<T>{
      
      foo(): A{

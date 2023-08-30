@@ -1,4 +1,6 @@
-=== tests/cases/compiler/f.ts ===
+//// [tests/cases/compiler/shebangBeforeReferences.ts] ////
+
+=== f.ts ===
 #!/usr/bin/env node
 
 /// <reference path="f.d.ts"/>
@@ -15,7 +17,7 @@ use(x);
 >use : (f: number) => void
 >x : number
 
-=== tests/cases/compiler/f.d.ts ===
+=== f.d.ts ===
 declare module "test" {
 >"test" : typeof import("test")
 

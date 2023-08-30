@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParameterRetainsNull.ts] ////
+
 //// [optionalParameterRetainsNull.ts]
 interface Bar {  bar: number; foo: object | null;  }
 

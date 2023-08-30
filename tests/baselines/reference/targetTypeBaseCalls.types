@@ -1,4 +1,6 @@
-=== tests/cases/compiler/targetTypeBaseCalls.ts ===
+//// [tests/cases/compiler/targetTypeBaseCalls.ts] ////
+
+=== targetTypeBaseCalls.ts ===
 function foo(x: (s: string) => void) { }
 >foo : (x: (s: string) => void) => void
 >x : (s: string) => void

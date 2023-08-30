@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts] ////
+
 //// [invalidBooleanAssignments.ts]
 var x = true;
 

@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/a.ts ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeTagCast.ts] ////
+
+=== a.ts ===
 var W: string;
 >W : string
 
-=== tests/cases/conformance/jsdoc/b.js ===
+=== b.js ===
 // @ts-check
 var W = /** @type {string} */(/** @type {*} */ (4));
 >W : string

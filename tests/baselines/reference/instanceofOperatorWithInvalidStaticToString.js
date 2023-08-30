@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidStaticToString.ts] ////
+
 //// [instanceofOperatorWithInvalidStaticToString.ts]
 declare class StaticToString {
     static toString(): void;

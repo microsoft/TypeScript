@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts] ////
+
 //// [typeofAnExportedType.ts]
 export var x = 1;
 export var r1: typeof x;

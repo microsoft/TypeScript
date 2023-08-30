@@ -1,8 +1,8 @@
-tests/cases/compiler/overEagerReturnTypeSpecialization.ts(8,5): error TS2322: Type 'I1<number>' is not assignable to type 'I1<string>'.
+overEagerReturnTypeSpecialization.ts(8,5): error TS2322: Type 'I1<number>' is not assignable to type 'I1<string>'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/overEagerReturnTypeSpecialization.ts (1 errors) ====
+==== overEagerReturnTypeSpecialization.ts (1 errors) ====
     //Note: Below simpler repro
     
     interface I1<T> {

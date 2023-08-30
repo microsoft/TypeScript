@@ -1,4 +1,6 @@
-=== tests/cases/compiler/variableDeclarator1.ts ===
+//// [tests/cases/compiler/variableDeclarator1.ts] ////
+
+=== variableDeclarator1.ts ===
 var a = function () {
 >a : () => number
 >function () {        var c = 1;        return c;    } : () => number

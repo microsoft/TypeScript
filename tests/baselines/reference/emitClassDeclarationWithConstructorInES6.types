@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithConstructorInES6.ts ===
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithConstructorInES6.ts] ////
+
+=== emitClassDeclarationWithConstructorInES6.ts ===
 class A {
 >A : A
 

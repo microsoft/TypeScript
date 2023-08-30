@@ -41,7 +41,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
-var Main = exports.Main = /** @class */ (function () {
+var Main = /** @class */ (function () {
     function Main() {
     }
     __decorate([
@@ -50,3 +50,4 @@ var Main = exports.Main = /** @class */ (function () {
     ], Main.prototype, "field", void 0);
     return Main;
 }());
+exports.Main = Main;

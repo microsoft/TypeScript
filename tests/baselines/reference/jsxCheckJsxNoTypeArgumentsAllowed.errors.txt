@@ -1,13 +1,13 @@
-tests/cases/conformance/jsx/file.jsx(1,18): error TS18042: 'Prop' is a type and cannot be imported in JavaScript files. Use 'import("./component").Prop' in a JSDoc type annotation.
-tests/cases/conformance/jsx/file.jsx(4,9): error TS2657: JSX expressions must have one parent element.
-tests/cases/conformance/jsx/file.jsx(4,16): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/file.jsx(4,17): error TS2693: 'Prop' only refers to a type, but is being used as a value here.
-tests/cases/conformance/jsx/file.jsx(4,17): error TS17008: JSX element 'Prop' has no corresponding closing tag.
-tests/cases/conformance/jsx/file.jsx(4,38): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
-tests/cases/conformance/jsx/file.jsx(5,1): error TS1005: '</' expected.
+file.jsx(1,18): error TS18042: 'Prop' is a type and cannot be imported in JavaScript files. Use 'import("./component").Prop' in a JSDoc type annotation.
+file.jsx(4,9): error TS2657: JSX expressions must have one parent element.
+file.jsx(4,16): error TS1003: Identifier expected.
+file.jsx(4,17): error TS2693: 'Prop' only refers to a type, but is being used as a value here.
+file.jsx(4,17): error TS17008: JSX element 'Prop' has no corresponding closing tag.
+file.jsx(4,38): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+file.jsx(5,1): error TS1005: '</' expected.
 
 
-==== tests/cases/conformance/jsx/component.d.ts (0 errors) ====
+==== component.d.ts (0 errors) ====
     import * as React from "react";
     export declare class MyComp<P> extends React.Component<P, {}> {
         internalProp: P;
@@ -18,7 +18,7 @@ tests/cases/conformance/jsx/file.jsx(5,1): error TS1005: '</' expected.
         b: string
     }
     
-==== tests/cases/conformance/jsx/file.jsx (7 errors) ====
+==== file.jsx (7 errors) ====
     import { MyComp, Prop } from "./component";
                      ~~~~
 !!! error TS18042: 'Prop' is a type and cannot be imported in JavaScript files. Use 'import("./component").Prop' in a JSDoc type annotation.

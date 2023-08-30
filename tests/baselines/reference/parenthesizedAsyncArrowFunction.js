@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parenthesizedAsyncArrowFunction.ts] ////
+
 //// [parenthesizedAsyncArrowFunction.ts]
 // Repro from #20096
 

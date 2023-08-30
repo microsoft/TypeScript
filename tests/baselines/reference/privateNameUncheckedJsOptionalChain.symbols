@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameUncheckedJsOptionalChain.js ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameUncheckedJsOptionalChain.ts] ////
+
+=== privateNameUncheckedJsOptionalChain.js ===
 class C {
 >C : Symbol(C, Decl(privateNameUncheckedJsOptionalChain.js, 0, 0))
 

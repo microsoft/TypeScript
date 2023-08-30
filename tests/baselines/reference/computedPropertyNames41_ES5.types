@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames41_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames41_ES5.ts] ////
+
+=== computedPropertyNames41_ES5.ts ===
 class Foo { x }
 >Foo : Foo
 >x : any

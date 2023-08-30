@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES6.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES6.ts] ////
+
+=== destructuringParameterDeclaration1ES6.ts ===
 // Conformance for emitting ES6
 
 // A parameter declaration may specify either an identifier or a binding pattern.

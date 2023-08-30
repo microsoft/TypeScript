@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ImportNamedImportParsingError_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportParsingError.ts] ////
+
+=== es6ImportNamedImportParsingError_0.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(es6ImportNamedImportParsingError_0.ts, 0, 10))
 
@@ -10,7 +12,7 @@ export var m = a;
 >m : Symbol(m, Decl(es6ImportNamedImportParsingError_0.ts, 2, 10))
 >a : Symbol(a, Decl(es6ImportNamedImportParsingError_0.ts, 0, 10))
 
-=== tests/cases/compiler/es6ImportNamedImportParsingError_1.ts ===
+=== es6ImportNamedImportParsingError_1.ts ===
 import { * } from "es6ImportNamedImportParsingError_0";
 import defaultBinding, from "es6ImportNamedImportParsingError_0";
 >defaultBinding : Symbol(defaultBinding, Decl(es6ImportNamedImportParsingError_1.ts, 1, 6))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/plainJSBinderErrors.ts] ////
+
 //// [plainJSBinderErrors.js]
 export default 12
 export default 13

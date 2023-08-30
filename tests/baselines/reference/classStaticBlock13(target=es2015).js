@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock13.ts] ////
+
 //// [classStaticBlock13.ts]
 class C {
   static #x = 123;
@@ -21,11 +23,11 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _a, _C_x;
 class C {
     foo() {
-        return __classPrivateFieldGet(C, _a, "f", _C_x);
+        return __classPrivateFieldGet(_a, _a, "f", _C_x);
     }
 }
 _a = C;
 _C_x = { value: 123 };
 (() => {
-    console.log(__classPrivateFieldGet(C, _a, "f", _C_x));
+    console.log(__classPrivateFieldGet(_a, _a, "f", _C_x));
 })();

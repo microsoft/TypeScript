@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doWhileUnreachableCode.ts] ////
+
 //// [doWhileUnreachableCode.ts]
 function test() {
     let foo = 0;

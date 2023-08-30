@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPrivateReadonlyLiterals.ts] ////
+
 //// [declarationEmitPrivateReadonlyLiterals.ts]
 class Foo {
     private static readonly A = "a";

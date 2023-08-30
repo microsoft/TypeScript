@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/number/extendNumberInterface.ts] ////
+
 //// [extendNumberInterface.ts]
 interface Number {
     doStuff(): string;

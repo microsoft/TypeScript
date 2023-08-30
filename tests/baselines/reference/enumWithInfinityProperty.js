@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithInfinityProperty.ts] ////
+
 //// [enumWithInfinityProperty.ts]
 enum A {
     Infinity = 1

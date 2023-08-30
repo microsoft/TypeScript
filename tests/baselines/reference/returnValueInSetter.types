@@ -1,4 +1,6 @@
-=== tests/cases/compiler/returnValueInSetter.ts ===
+//// [tests/cases/compiler/returnValueInSetter.ts] ////
+
+=== returnValueInSetter.ts ===
 class f {
 >f : f
 

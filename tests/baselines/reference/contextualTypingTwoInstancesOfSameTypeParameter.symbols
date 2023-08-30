@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingTwoInstancesOfSameTypeParameter.ts ===
+//// [tests/cases/compiler/contextualTypingTwoInstancesOfSameTypeParameter.ts] ////
+
+=== contextualTypingTwoInstancesOfSameTypeParameter.ts ===
 function f6<T>(x: (a: T) => T) {
 >f6 : Symbol(f6, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(contextualTypingTwoInstancesOfSameTypeParameter.ts, 0, 12))

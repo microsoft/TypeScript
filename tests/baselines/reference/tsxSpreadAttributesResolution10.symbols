@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution10.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 

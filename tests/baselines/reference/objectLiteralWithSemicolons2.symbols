@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralWithSemicolons2.ts ===
+//// [tests/cases/compiler/objectLiteralWithSemicolons2.ts] ////
+
+=== objectLiteralWithSemicolons2.ts ===
 var v = {
 >v : Symbol(v, Decl(objectLiteralWithSemicolons2.ts, 0, 3))
 

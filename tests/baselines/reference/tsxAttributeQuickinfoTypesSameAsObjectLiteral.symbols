@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx ===
+//// [tests/cases/compiler/tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx] ////
+
+=== tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx ===
 namespace JSX {
 >JSX : Symbol(JSX, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 0, 0))
 

@@ -45,19 +45,19 @@ Shape signatures in builder refreshed for::
 /a/username/project/src/file1.ts (used version)
 
 PolledWatches::
-/a/username/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /a/username/project: *new*
+  {"pollingInterval":500}
+/a/username/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /a/username/project/src: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /a/username/project/src/file1.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/a/username/project/tsconfig.json: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -100,19 +100,19 @@ Shape signatures in builder refreshed for::
 /a/username/project/src/file2.ts (used version)
 
 PolledWatches::
-/a/username/project/node_modules/@types:
-  {"pollingInterval":500}
 /a/username/project:
+  {"pollingInterval":500}
+/a/username/project/node_modules/@types:
   {"pollingInterval":500}
 /a/username/project/src:
   {"pollingInterval":500}
 
 FsWatches::
-/a/username/project/tsconfig.json:
-  {}
 /a/lib/lib.d.ts:
   {}
 /a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
   {}
 
 FsWatches *deleted*::

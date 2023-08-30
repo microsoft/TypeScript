@@ -1,4 +1,6 @@
-=== tests/cases/compiler/checkSuperCallBeforeThisAccess.ts ===
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccess.ts] ////
+
+=== checkSuperCallBeforeThisAccess.ts ===
 class A {
 >A : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
 

@@ -137,9 +137,9 @@ PolledWatches::
 FsWatches::
 /user/username/projects/myproject/a/tsconfig.json: *new*
   {}
-/user/username/projects/myproject/b/tsconfig.json: *new*
-  {}
 /user/username/projects/myproject/b/index.ts: *new*
+  {}
+/user/username/projects/myproject/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

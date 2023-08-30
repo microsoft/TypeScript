@@ -1,8 +1,8 @@
-tests/cases/compiler/collisionArgumentsArrowFunctions.ts(1,22): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
-tests/cases/compiler/collisionArgumentsArrowFunctions.ts(4,12): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+collisionArgumentsArrowFunctions.ts(1,22): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+collisionArgumentsArrowFunctions.ts(4,12): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 
-==== tests/cases/compiler/collisionArgumentsArrowFunctions.ts (2 errors) ====
+==== collisionArgumentsArrowFunctions.ts (2 errors) ====
     var f1 = (i: number, ...arguments) => { //arguments is error
                          ~~~~~~~~~~~~
 !!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.

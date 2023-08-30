@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts] ////
+
 //// [objectLiteralErrors.ts]
 // Multiple properties with the same name
 var e1 = { a: 0, a: 0 };

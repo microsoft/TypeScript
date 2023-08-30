@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration3.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
+parserEnumDeclaration3.d.ts(1,1): error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.
 
 
-==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration3.d.ts (1 errors) ====
+==== parserEnumDeclaration3.d.ts (1 errors) ====
     enum E {
     ~~~~
 !!! error TS1046: Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.

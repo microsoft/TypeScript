@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/consumer.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution17.tsx] ////
+
+=== consumer.tsx ===
 ///<reference path="file.tsx" />
 // Should keep s1 and elide s2
 import s1 = require('elements1');
@@ -12,7 +14,7 @@ import s2 = require('elements2');
 >s1 : Symbol(s1, Decl(consumer.tsx, 0, 0))
 >MyElement : Symbol(s1.MyElement, Decl(file.tsx, 5, 28))
 
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 

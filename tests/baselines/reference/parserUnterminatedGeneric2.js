@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts] ////
+
 //// [parserUnterminatedGeneric2.ts]
 declare module ng {
     interfaceICompiledExpression {

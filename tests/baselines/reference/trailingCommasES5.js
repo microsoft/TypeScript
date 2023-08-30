@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/trailingCommasES5.ts] ////
+
 //// [trailingCommasES5.ts]
 var o1 = { a: 1, b: 2 };
 var o2 = { a: 1, b: 2, };

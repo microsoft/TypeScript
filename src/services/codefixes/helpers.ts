@@ -6,27 +6,32 @@ import {
     Block,
     CallExpression,
     CharacterCodes,
+    CheckFlags,
     ClassLikeDeclaration,
     CodeFixContextBase,
     combine,
     Debug,
+    Declaration,
     Diagnostics,
     emptyArray,
     EntityName,
     Expression,
     factory,
     find,
+    firstOrUndefined,
     flatMap,
     FunctionDeclaration,
     FunctionExpression,
     GetAccessorDeclaration,
     getAllAccessorDeclarations,
+    getCheckFlags,
     getEffectiveModifierFlags,
     getEmitScriptTarget,
     getFirstIdentifier,
     getModuleSpecifierResolverHost,
     getNameForExportedSymbol,
     getNameOfDeclaration,
+    getPropertyNameFromType,
     getQuotePreference,
     getSetAccessorValueParameter,
     getSynthesizedDeepClone,
@@ -52,6 +57,7 @@ import {
     isSetAccessorDeclaration,
     isStringLiteral,
     isTypeNode,
+    isTypeUsableAsPropertyName,
     isYieldExpression,
     LanguageServiceHost,
     length,
@@ -69,6 +75,7 @@ import {
     ObjectLiteralExpression,
     ObjectType,
     ParameterDeclaration,
+    PrivateIdentifier,
     Program,
     PropertyAssignment,
     PropertyDeclaration,
@@ -90,6 +97,7 @@ import {
     textChanges,
     TextSpan,
     textSpanEnd,
+    TransientSymbol,
     tryCast,
     TsConfigSourceFile,
     Type,
@@ -97,13 +105,16 @@ import {
     TypeFlags,
     TypeNode,
     TypeParameterDeclaration,
+    unescapeLeadingUnderscores,
     UnionType,
     UserPreferences,
     visitEachChild,
     visitNode,
     visitNodes,
 } from "../_namespaces/ts";
-import { ImportAdder } from "../_namespaces/ts.codefix";
+import {
+    ImportAdder,
+} from "../_namespaces/ts.codefix";
 
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl
@@ -121,7 +132,8 @@ export function createMissingMemberNodes(
     context: TypeConstructionContext,
     preferences: UserPreferences,
     importAdder: ImportAdder | undefined,
-    addClassElement: (node: AddNode) => void): void {
+    addClassElement: (node: AddNode) => void,
+): void {
     const classMembers = classDeclaration.symbol.members!;
     for (const symbol of possiblyMissingSymbols) {
         if (!classMembers.has(symbol.escapedName)) {
@@ -149,9 +161,9 @@ export type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessor
 
 /** @internal */
 export const enum PreserveOptionalFlags {
-    Method  = 1 << 0,
+    Method = 1 << 0,
     Property = 1 << 1,
-    All     = Method | Property
+    All = Method | Property,
 }
 
 /**
@@ -173,7 +185,7 @@ export function addNewNodeForMemberSymbol(
     isAmbient = false,
 ): void {
     const declarations = symbol.getDeclarations();
-    const declaration = declarations?.[0];
+    const declaration = firstOrUndefined(declarations);
     const checker = context.program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
 
@@ -192,10 +204,10 @@ export function addNewNodeForMemberSymbol(
      * In such cases, we assume the declaration to be a `PropertySignature`.
      */
     const kind = declaration?.kind ?? SyntaxKind.PropertySignature;
-    const declarationName = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
+    const declarationName = createDeclarationName(symbol, declaration);
     const effectiveModifierFlags = declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None;
-    let modifierFlags =
-        effectiveModifierFlags & ModifierFlags.Public ? ModifierFlags.Public :
+    let modifierFlags = effectiveModifierFlags & ModifierFlags.Static;
+    modifierFlags |= effectiveModifierFlags & ModifierFlags.Public ? ModifierFlags.Public :
         effectiveModifierFlags & ModifierFlags.Protected ? ModifierFlags.Protected :
         ModifierFlags.None;
     if (declaration && isAutoAccessorPropertyDeclaration(declaration)) {
@@ -224,7 +236,8 @@ export function addNewNodeForMemberSymbol(
                 declaration ? createName(declarationName) : symbol.getName(),
                 optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                 typeNode,
-                /*initializer*/ undefined));
+                /*initializer*/ undefined,
+            ));
             break;
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor: {
@@ -248,7 +261,8 @@ export function addNewNodeForMemberSymbol(
                         createName(declarationName),
                         emptyArray,
                         createTypeNode(typeNode),
-                        createBody(body, quotePreference, ambient)));
+                        createBody(body, quotePreference, ambient),
+                    ));
                 }
                 else {
                     Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
@@ -258,7 +272,8 @@ export function addNewNodeForMemberSymbol(
                         modifiers,
                         createName(declarationName),
                         createDummyParameters(1, [parameterName], [createTypeNode(typeNode)], 1, /*inJs*/ false),
-                        createBody(body, quotePreference, ambient)));
+                        createBody(body, quotePreference, ambient),
+                    ));
                 }
             }
             break;
@@ -308,7 +323,6 @@ export function addNewNodeForMemberSymbol(
         if (method) addClassElement(method);
     }
 
-
     function createModifiers(): NodeArray<Modifier> | undefined {
         let modifiers: Modifier[] | undefined;
 
@@ -342,6 +356,16 @@ export function addNewNodeForMemberSymbol(
     function createTypeNode(typeNode: TypeNode | undefined) {
         return getSynthesizedDeepClone(typeNode, /*includeTrivia*/ false);
     }
+
+    function createDeclarationName(symbol: Symbol, declaration: Declaration | undefined): PropertyName {
+        if (getCheckFlags(symbol) & CheckFlags.Mapped) {
+            const nameType = (symbol as TransientSymbol).links.nameType;
+            if (nameType && isTypeUsableAsPropertyName(nameType)) {
+                return factory.createIdentifier(unescapeLeadingUnderscores(getPropertyNameFromType(nameType)));
+            }
+        }
+        return getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
+    }
 }
 
 /** @internal */
@@ -359,14 +383,13 @@ export function createSignatureDeclarationFromSignature(
     modifiers: NodeArray<Modifier> | undefined,
     optional: boolean | undefined,
     enclosingDeclaration: Node | undefined,
-    importAdder: ImportAdder | undefined
+    importAdder: ImportAdder | undefined,
 ) {
     const program = context.program;
     const checker = program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
     const isJs = isInJSFile(enclosingDeclaration);
-    const flags =
-        NodeBuilderFlags.NoTruncation
+    const flags = NodeBuilderFlags.NoTruncation
         | NodeBuilderFlags.SuppressAnyReturnType
         | NodeBuilderFlags.AllowEmptyTuple
         | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
@@ -402,7 +425,7 @@ export function createSignatureDeclarationFromSignature(
                     typeParameterDecl.modifiers,
                     typeParameterDecl.name,
                     constraint,
-                    defaultType
+                    defaultType,
                 );
             });
             if (typeParameters !== newTypeParameters) {
@@ -425,7 +448,7 @@ export function createSignatureDeclarationFromSignature(
                 parameterDecl.name,
                 isJs ? undefined : parameterDecl.questionToken,
                 type,
-                parameterDecl.initializer
+                parameterDecl.initializer,
             );
         });
         if (parameters !== newParameters) {
@@ -463,9 +486,9 @@ export function createSignatureDeclarationFromCallExpression(
     context: CodeFixContextBase,
     importAdder: ImportAdder,
     call: CallExpression,
-    name: Identifier | string,
+    name: Identifier | PrivateIdentifier | string,
     modifierFlags: ModifierFlags,
-    contextNode: Node
+    contextNode: Node,
 ): MethodDeclaration | FunctionDeclaration | MethodSignature {
     const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
     const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
@@ -475,11 +498,16 @@ export function createSignatureDeclarationFromCallExpression(
     const { typeArguments, arguments: args, parent } = call;
 
     const contextualType = isJs ? undefined : checker.getContextualType(call);
-    const names = map(args, arg =>
-        isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
+    const names = map(args, arg => isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
     const instanceTypes = isJs ? [] : map(args, arg => checker.getTypeAtLocation(arg));
     const { argumentTypeNodes, argumentTypeParameters } = getArgumentTypesAndTypeParameters(
-        checker, importAdder, instanceTypes, contextNode, scriptTarget, /*flags*/ undefined, tracker
+        checker,
+        importAdder,
+        instanceTypes,
+        contextNode,
+        scriptTarget,
+        NodeBuilderFlags.NoTruncation,
+        tracker,
     );
 
     const modifiers = modifierFlags
@@ -504,7 +532,7 @@ export function createSignatureDeclarationFromCallExpression(
                 typeParameters,
                 parameters,
                 type,
-                createStubbedMethodBody(quotePreference)
+                createStubbedMethodBody(quotePreference),
             );
         case SyntaxKind.MethodSignature:
             return factory.createMethodSignature(
@@ -513,9 +541,10 @@ export function createSignatureDeclarationFromCallExpression(
                 /*questionToken*/ undefined,
                 typeParameters,
                 parameters,
-                type === undefined ? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword) : type
+                type === undefined ? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword) : type,
             );
         case SyntaxKind.FunctionDeclaration:
+            Debug.assert(typeof name === "string" || isIdentifier(name), "Unexpected name");
             return factory.createFunctionDeclaration(
                 modifiers,
                 asteriskToken,
@@ -523,7 +552,7 @@ export function createSignatureDeclarationFromCallExpression(
                 typeParameters,
                 parameters,
                 type,
-                createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
+                createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference),
             );
         default:
             Debug.fail("Unexpected kind");
@@ -689,7 +718,8 @@ function createDummyParameters(argCount: number, names: (string | undefined)[] |
             /*name*/ parameterName + (parameterNameCount || ""),
             /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
             /*type*/ inJs ? undefined : types?.[i] || factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
-            /*initializer*/ undefined);
+            /*initializer*/ undefined,
+        );
         parameters.push(newParameter);
     }
     return parameters;
@@ -733,7 +763,8 @@ function createMethodImplementingSignatures(
             maxArgsParameterSymbolNames[maxNonRestArgs] || "rest",
             /*questionToken*/ maxNonRestArgs >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
             factory.createArrayTypeNode(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)),
-            /*initializer*/ undefined);
+            /*initializer*/ undefined,
+        );
         parameters.push(restParameter);
     }
 
@@ -745,7 +776,8 @@ function createMethodImplementingSignatures(
         parameters,
         getReturnTypeFromSignatures(signatures, checker, context, enclosingDeclaration),
         quotePreference,
-        body);
+        body,
+    );
 }
 
 function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
@@ -763,7 +795,7 @@ function createStubbedMethod(
     parameters: readonly ParameterDeclaration[],
     returnType: TypeNode | undefined,
     quotePreference: QuotePreference,
-    body: Block | undefined
+    body: Block | undefined,
 ): MethodDeclaration {
     return factory.createMethodDeclaration(
         modifiers,
@@ -773,7 +805,8 @@ function createStubbedMethod(
         typeParameters,
         parameters,
         returnType,
-        body || createStubbedMethodBody(quotePreference));
+        body || createStubbedMethodBody(quotePreference),
+    );
 }
 
 function createStubbedMethodBody(quotePreference: QuotePreference) {
@@ -788,24 +821,32 @@ export function createStubbedBody(text: string, quotePreference: QuotePreference
                 factory.createIdentifier("Error"),
                 /*typeArguments*/ undefined,
                 // TODO Handle auto quote preference.
-                [factory.createStringLiteral(text, /*isSingleQuote*/ quotePreference === QuotePreference.Single)]))],
-        /*multiLine*/ true);
+                [factory.createStringLiteral(text, /*isSingleQuote*/ quotePreference === QuotePreference.Single)],
+            ),
+        )],
+        /*multiLine*/ true,
+    );
 }
 
 /** @internal */
 export function setJsonCompilerOptionValues(
     changeTracker: textChanges.ChangeTracker,
     configFile: TsConfigSourceFile,
-    options: [string, Expression][]
+    options: [string, Expression][],
 ) {
     const tsconfigObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
     if (!tsconfigObjectLiteral) return undefined;
 
     const compilerOptionsProperty = findJsonProperty(tsconfigObjectLiteral, "compilerOptions");
     if (compilerOptionsProperty === undefined) {
-        changeTracker.insertNodeAtObjectStart(configFile, tsconfigObjectLiteral, createJsonPropertyAssignment(
-            "compilerOptions",
-            factory.createObjectLiteralExpression(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true)));
+        changeTracker.insertNodeAtObjectStart(
+            configFile,
+            tsconfigObjectLiteral,
+            createJsonPropertyAssignment(
+                "compilerOptions",
+                factory.createObjectLiteralExpression(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true),
+            ),
+        );
         return;
     }
 

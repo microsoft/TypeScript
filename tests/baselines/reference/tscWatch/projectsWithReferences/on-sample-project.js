@@ -498,29 +498,29 @@ Dependencies for::
   /user/username/projects/sample1/core/index.d.ts
 
 PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types: *new*
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
+/user/username/projects/sample1/tests/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts: *new*
+  {}
+/user/username/projects/sample1/core/index.d.ts: *new*
   {}
 /user/username/projects/sample1/core/tsconfig.json: *new*
+  {}
+/user/username/projects/sample1/logic/index.d.ts: *new*
   {}
 /user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/tests/index.ts: *new*
   {}
-/user/username/projects/sample1/core/index.d.ts: *new*
-  {}
-/user/username/projects/sample1/logic/index.d.ts: *new*
-  {}
-/user/username/projects/sample1/core/anothermodule.d.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/sample1/tests/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -1121,29 +1121,29 @@ Dependencies for::
   /user/username/projects/sample1/core/index.d.ts
 
 PolledWatches::
-/user/username/projects/sample1/tests/node_modules/@types:
+/user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
+/user/username/projects/sample1/tests/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
   {}
 /user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/decls/index.d.ts: *new*
   {}
 /user/username/projects/sample1/logic/tsconfig.json:
   {}
 /user/username/projects/sample1/tests/index.ts:
   {}
-/user/username/projects/sample1/core/index.d.ts:
-  {}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/sample1/logic/decls/index.d.ts: *new*
+/user/username/projects/sample1/tests/tsconfig.json:
   {}
 
 FsWatches *deleted*::

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override9.ts] ////
+
 //// [override9.ts]
 interface B {
     foo (): void
