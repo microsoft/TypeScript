@@ -1,15 +1,10 @@
 /// <reference path='fourslash.ts'/>
-// @module: none
-// @Filename:test.ts
-//// export function f(){ return false }
+//// import {compilerOptionsIndicateEsModules} from '../../../src/services/utilities.ts
 
-// @Filename:test1.ts
-//// /**/
+//// /* Test scenarios start here */
 
-goTo.marker("");
-verify.completions({
-    excludes: ["f"],
-    preferences: {
-      includeCompletionsForModuleExports: true
-    }
-  });
+// Test scenario 1: module === ModuleKind.None
+//// const compilerOptions1: CompilerOptions = { module: ModuleKind.None };
+//// const result1 = compilerOptionsIndicateEsModules(compilerOptions1);
+//// result1;
+//// /* expectedValue */ false;
