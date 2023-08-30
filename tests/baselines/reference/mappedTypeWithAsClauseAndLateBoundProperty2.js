@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.ts] ////
+
 //// [mappedTypeWithAsClauseAndLateBoundProperty2.ts]
 export const thing = (null as any as { [K in keyof number[] as Exclude<K, "length">]: (number[])[K] });
 
@@ -64,14 +66,42 @@ export declare const thing: {
     flatMap: <U_3, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U_3 | readonly U_3[], thisArg?: This) => U_3[];
     flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
     [Symbol.iterator]: () => IterableIterator<number>;
-    [Symbol.unscopables]: () => {
-        copyWithin: boolean;
-        entries: boolean;
-        fill: boolean;
-        find: boolean;
-        findIndex: boolean;
-        keys: boolean;
-        values: boolean;
+    readonly [Symbol.unscopables]: {
+        [x: number]: boolean;
+        length?: boolean;
+        toString?: boolean;
+        toLocaleString?: boolean;
+        pop?: boolean;
+        push?: boolean;
+        concat?: boolean;
+        join?: boolean;
+        reverse?: boolean;
+        shift?: boolean;
+        slice?: boolean;
+        sort?: boolean;
+        splice?: boolean;
+        unshift?: boolean;
+        indexOf?: boolean;
+        lastIndexOf?: boolean;
+        every?: boolean;
+        some?: boolean;
+        forEach?: boolean;
+        map?: boolean;
+        filter?: boolean;
+        reduce?: boolean;
+        reduceRight?: boolean;
+        find?: boolean;
+        findIndex?: boolean;
+        fill?: boolean;
+        copyWithin?: boolean;
+        entries?: boolean;
+        keys?: boolean;
+        values?: boolean;
+        includes?: boolean;
+        flatMap?: boolean;
+        flat?: boolean;
+        [Symbol.iterator]?: boolean;
+        readonly [Symbol.unscopables]?: boolean;
     };
 };
 
@@ -79,10 +109,10 @@ export declare const thing: {
 //// [DtsFileErrors]
 
 
-tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 
 
-==== tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.d.ts (1 errors) ====
+==== mappedTypeWithAsClauseAndLateBoundProperty2.d.ts (1 errors) ====
     export declare const thing: {
         [x: number]: number;
         toString: () => string;
@@ -142,14 +172,42 @@ tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): e
         flatMap: <U_3, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U_3 | readonly U_3[], thisArg?: This) => U_3[];
         flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
         [Symbol.iterator]: () => IterableIterator<number>;
-        [Symbol.unscopables]: () => {
-            copyWithin: boolean;
-            entries: boolean;
-            fill: boolean;
-            find: boolean;
-            findIndex: boolean;
-            keys: boolean;
-            values: boolean;
+        readonly [Symbol.unscopables]: {
+            [x: number]: boolean;
+            length?: boolean;
+            toString?: boolean;
+            toLocaleString?: boolean;
+            pop?: boolean;
+            push?: boolean;
+            concat?: boolean;
+            join?: boolean;
+            reverse?: boolean;
+            shift?: boolean;
+            slice?: boolean;
+            sort?: boolean;
+            splice?: boolean;
+            unshift?: boolean;
+            indexOf?: boolean;
+            lastIndexOf?: boolean;
+            every?: boolean;
+            some?: boolean;
+            forEach?: boolean;
+            map?: boolean;
+            filter?: boolean;
+            reduce?: boolean;
+            reduceRight?: boolean;
+            find?: boolean;
+            findIndex?: boolean;
+            fill?: boolean;
+            copyWithin?: boolean;
+            entries?: boolean;
+            keys?: boolean;
+            values?: boolean;
+            includes?: boolean;
+            flatMap?: boolean;
+            flat?: boolean;
+            [Symbol.iterator]?: boolean;
+            readonly [Symbol.unscopables]?: boolean;
         };
     };
     

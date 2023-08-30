@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralParameterResolution.ts ===
+//// [tests/cases/compiler/objectLiteralParameterResolution.ts] ////
+
+=== objectLiteralParameterResolution.ts ===
 interface Foo{
     extend<T>(target: T, ...objs: any[]): T;
 >extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }

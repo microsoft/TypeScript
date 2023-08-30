@@ -1,13 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
-    File,
-    libFile,
-} from "../virtualFileSystemWithWatch";
-import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
-    checkProjectActualFiles,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
     createSession,
@@ -15,7 +8,12 @@ import {
     protocolFileLocationFromSubstring,
     TestSession,
     TestSessionRequest,
-} from "./helpers";
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
     function setup() {
@@ -23,25 +21,25 @@ describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
             path: `/user/username/projects/myproject/a.ts`,
             content: `import { y, cc } from "./b";
 import { something } from "something";
-class c { prop = "hello"; foo() { return this.prop; } }`
+class c { prop = "hello"; foo() { return this.prop; } }`,
         };
         const file2: File = {
             path: `/user/username/projects/myproject/b.ts`,
             content: `export { cc } from "./c";
 import { something } from "something";
-                export const y = 10;`
+                export const y = 10;`,
         };
         const file3: File = {
             path: `/user/username/projects/myproject/c.ts`,
-            content: `export const cc = 10;`
+            content: `export const cc = 10;`,
         };
         const something: File = {
             path: `/user/username/projects/myproject/node_modules/something/index.d.ts`,
-            content: "export const something = 10;"
+            content: "export const something = 10;",
         };
         const configFile: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
         const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
@@ -80,21 +78,21 @@ import { something } from "something";
         function verifyCompletions() {
             verifySessionException<ts.server.protocol.CompletionsRequest>(session, {
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
-                arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
+                arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 }),
             });
         }
 
         function verifyGoToDefToB() {
             verifySessionException<ts.server.protocol.DefinitionAndBoundSpanRequest>(session, {
                 command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
-                arguments: protocolFileLocationFromSubstring(file1, "y")
+                arguments: protocolFileLocationFromSubstring(file1, "y"),
             });
         }
 
         function verifyGoToDefToC() {
             verifySessionException<ts.server.protocol.DefinitionAndBoundSpanRequest>(session, {
                 command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
-                arguments: protocolFileLocationFromSubstring(file1, "cc")
+                arguments: protocolFileLocationFromSubstring(file1, "cc"),
             });
         }
     });
@@ -105,7 +103,7 @@ import { something } from "something";
         openFilesForSession([file1], session);
         verifySessionException<ts.server.protocol.SemanticDiagnosticsSyncRequest>(session, {
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-            arguments: { file: file1.path }
+            arguments: { file: file1.path },
         });
 
         const project = service.inferredProjects[0];
@@ -122,7 +120,7 @@ import { something } from "something";
         const { host, session, file1 } = setup();
         const atTypes: File = {
             path: `/node_modules/@types/somemodule/index.d.ts`,
-            content: "export const something = 10;"
+            content: "export const something = 10;",
         };
         host.ensureFileOrFolder(atTypes);
         openFilesForSession([file1], session);
@@ -134,43 +132,38 @@ import { something } from "something";
             path: `/user/username/projects/myproject/a.ts`,
             content: `///<reference path="b.ts"/>
 ///<reference path="/user/username/projects/myproject/node_modules/something/index.d.ts"/>
-function fooA() { }`
+function fooA() { }`,
         };
         const file2: File = {
             path: `/user/username/projects/myproject/b.ts`,
             content: `///<reference path="./c.ts"/>
 ///<reference path="/user/username/projects/myproject/node_modules/something/index.d.ts"/>
-function fooB() { }`
+function fooB() { }`,
         };
         const file3: File = {
             path: `/user/username/projects/myproject/c.ts`,
-            content: `function fooC() { }`
+            content: `function fooC() { }`,
         };
         const something: File = {
             path: `/user/username/projects/myproject/node_modules/something/index.d.ts`,
-            content: "function something() {}"
+            content: "function something() {}",
         };
         const configFile: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
+        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
         const service = session.getProjectService();
         openFilesForSession([file1], session);
-        checkNumberOfProjects(service, { inferredProjects: 1 });
         const project = service.inferredProjects[0];
-        checkProjectActualFiles(project, ts.emptyArray);
 
         openFilesForSession([file2], session);
-        checkNumberOfProjects(service, { inferredProjects: 1 });
         assert.isFalse(project.dirty);
         project.updateGraph();
-        checkProjectActualFiles(project, ts.emptyArray);
 
         closeFilesForSession([file2], session);
-        checkNumberOfProjects(service, { inferredProjects: 1 });
         assert.isTrue(project.dirty);
-        checkProjectActualFiles(project, ts.emptyArray);
+        baselineTsserverLogs("syntacticServer", "should not include referenced files from unopened files", session);
     });
 });

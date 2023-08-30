@@ -1,4 +1,6 @@
-=== tests/cases/compiler/uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts ===
+//// [tests/cases/compiler/uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts] ////
+
+=== uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts ===
 const FOO_SYMBOL = Symbol('Foo');
 >FOO_SYMBOL : Symbol(FOO_SYMBOL, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

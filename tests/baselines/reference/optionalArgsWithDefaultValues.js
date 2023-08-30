@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalArgsWithDefaultValues.ts] ////
+
 //// [optionalArgsWithDefaultValues.ts]
 function foo(x: number, y?:boolean=false, z?=0) {}
 

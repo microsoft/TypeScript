@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts] ////
+
 //// [typeArgumentInferenceWithConstraints.ts]
 // Generic call with no parameters
 function noParams<T extends {}>() { }

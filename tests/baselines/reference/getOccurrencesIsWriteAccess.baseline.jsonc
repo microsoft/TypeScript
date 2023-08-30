@@ -1,0 +1,19 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIsWriteAccess.ts ===
+// <|var /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}x|] = 0;|>
+// var assignmentRightHandSide = [|{| kind: "reference" |}x|];
+// var assignmentRightHandSide2 = 1 + [|{| kind: "reference" |}x|];
+// 
+// [|{| kind: "writtenReference" |}x|] = 1;
+// [|{| kind: "writtenReference" |}x|] = [|{| kind: "reference" |}x|] + [|{| kind: "reference" |}x|];
+// 
+// [|{| kind: "reference" |}x|] == 1;
+// [|{| kind: "reference" |}x|] <= 1;
+// 
+// var preIncrement = ++[|{| kind: "writtenReference" |}x|];
+// var postIncrement = [|{| kind: "writtenReference" |}x|]++;
+// var preDecrement = --[|{| kind: "writtenReference" |}x|];
+// var postDecrement = [|{| kind: "writtenReference" |}x|]--;
+// 
+// [|{| kind: "writtenReference" |}x|] += 1;
+// [|{| kind: "writtenReference" |}x|] <<= 1;

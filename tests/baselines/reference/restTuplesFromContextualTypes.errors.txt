@@ -1,11 +1,11 @@
-tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts(56,7): error TS2345: Argument of type '(a: number, b: T[0], ...x: T[number][]) => void' is not assignable to parameter of type '(x: number, ...args: T) => void'.
+restTuplesFromContextualTypes.ts(56,7): error TS2345: Argument of type '(a: number, b: T[0], ...x: T[number][]) => void' is not assignable to parameter of type '(x: number, ...args: T) => void'.
   Types of parameters 'b' and 'args' are incompatible.
     Type 'T' is not assignable to type '[b: T[0], ...x: T[number][]]'.
       Type 'any[]' is not assignable to type '[b: T[0], ...x: T[number][]]'.
         Source provides no match for required element at position 0 in target.
 
 
-==== tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts (1 errors) ====
+==== restTuplesFromContextualTypes.ts (1 errors) ====
     declare const t1: [number, boolean, string];
     
     (function (a, b, c){})(...t1);

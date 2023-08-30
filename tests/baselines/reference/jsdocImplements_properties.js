@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplements_properties.ts] ////
+
 //// [a.js]
 class A { constructor() { this.x = 0; } }
 /** @implements A*/

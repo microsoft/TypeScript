@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName1.ts] ////
+
+=== parservoidInQualifiedName1.ts ===
 var v : void.x;
 >v : Symbol(v, Decl(parservoidInQualifiedName1.ts, 0, 3))
 >x : Symbol(x, Decl(parservoidInQualifiedName1.ts, 0, 13))

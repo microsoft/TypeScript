@@ -1,11 +1,11 @@
-tests/cases/compiler/unusedPrivateMethodInClass3.ts(2,13): error TS6133: 'function1' is declared but its value is never read.
-tests/cases/compiler/unusedPrivateMethodInClass3.ts(3,13): error TS6133: 'y' is declared but its value is never read.
-tests/cases/compiler/unusedPrivateMethodInClass3.ts(7,13): error TS6133: 'function2' is declared but its value is never read.
-tests/cases/compiler/unusedPrivateMethodInClass3.ts(8,13): error TS6133: 'y' is declared but its value is never read.
-tests/cases/compiler/unusedPrivateMethodInClass3.ts(13,13): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateMethodInClass3.ts(2,13): error TS6133: 'function1' is declared but its value is never read.
+unusedPrivateMethodInClass3.ts(3,13): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateMethodInClass3.ts(6,13): error TS6133: 'function2' is declared but its value is never read.
+unusedPrivateMethodInClass3.ts(7,13): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateMethodInClass3.ts(11,13): error TS6133: 'y' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedPrivateMethodInClass3.ts (5 errors) ====
+==== unusedPrivateMethodInClass3.ts (5 errors) ====
     class greeter {
         private function1() {
                 ~~~~~~~~~
@@ -13,7 +13,6 @@ tests/cases/compiler/unusedPrivateMethodInClass3.ts(13,13): error TS6133: 'y' is
             var y = 10;
                 ~
 !!! error TS6133: 'y' is declared but its value is never read.
-            y++;
         }
     
         private function2() {
@@ -22,13 +21,11 @@ tests/cases/compiler/unusedPrivateMethodInClass3.ts(13,13): error TS6133: 'y' is
             var y = 10;
                 ~
 !!! error TS6133: 'y' is declared but its value is never read.
-            y++;
         }
     
         public function3() {
             var y = 10;
                 ~
 !!! error TS6133: 'y' is declared but its value is never read.
-            y++;
         }
     }

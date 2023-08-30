@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts] ////
+
 //// [excessPropertyChecksWithNestedIntersections.ts]
 // https://github.com/Microsoft/TypeScript/issues/13813
 

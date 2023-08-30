@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letAndVarRedeclaration.ts ===
+//// [tests/cases/compiler/letAndVarRedeclaration.ts] ////
+
+=== letAndVarRedeclaration.ts ===
 let e0
 >e0 : Symbol(e0, Decl(letAndVarRedeclaration.ts, 0, 3))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidFunctionAssignmentCompat.ts] ////
+
 //// [voidFunctionAssignmentCompat.ts]
 var fa = function(): any { return 3; }
 fa = function() { } // should not work

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts] ////
+
 //// [errorSuperCalls.ts]
 //super call in class constructor with no base type
 class NoBase {

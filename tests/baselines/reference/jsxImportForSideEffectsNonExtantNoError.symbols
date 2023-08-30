@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxImportForSideEffectsNonExtantNoError.tsx ===
+//// [tests/cases/compiler/jsxImportForSideEffectsNonExtantNoError.tsx] ////
+
+=== jsxImportForSideEffectsNonExtantNoError.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : Symbol(React, Decl(jsxImportForSideEffectsNonExtantNoError.tsx, 1, 6))

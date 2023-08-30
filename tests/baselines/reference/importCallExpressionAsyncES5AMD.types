@@ -1,11 +1,13 @@
-=== tests/cases/conformance/dynamicImport/test.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionAsyncES5AMD.ts] ////
+
+=== test.ts ===
 export async function fn() {
 >fn : () => Promise<void>
 
     const req = await import('./test') // ONE
->req : typeof import("tests/cases/conformance/dynamicImport/test")
->await import('./test') : typeof import("tests/cases/conformance/dynamicImport/test")
->import('./test') : Promise<typeof import("tests/cases/conformance/dynamicImport/test")>
+>req : typeof import("test")
+>await import('./test') : typeof import("test")
+>import('./test') : Promise<typeof import("test")>
 >'./test' : "./test"
 }
 
@@ -16,9 +18,9 @@ export class cl1 {
 >m : () => Promise<void>
 
         const req = await import('./test') // TWO
->req : typeof import("tests/cases/conformance/dynamicImport/test")
->await import('./test') : typeof import("tests/cases/conformance/dynamicImport/test")
->import('./test') : Promise<typeof import("tests/cases/conformance/dynamicImport/test")>
+>req : typeof import("test")
+>await import('./test') : typeof import("test")
+>import('./test') : Promise<typeof import("test")>
 >'./test' : "./test"
     }
 }
@@ -32,9 +34,9 @@ export const obj = {
 >async () => {        const req = await import('./test') // THREE    } : () => Promise<void>
 
         const req = await import('./test') // THREE
->req : typeof import("tests/cases/conformance/dynamicImport/test")
->await import('./test') : typeof import("tests/cases/conformance/dynamicImport/test")
->import('./test') : Promise<typeof import("tests/cases/conformance/dynamicImport/test")>
+>req : typeof import("test")
+>await import('./test') : typeof import("test")
+>import('./test') : Promise<typeof import("test")>
 >'./test' : "./test"
     }
 }
@@ -51,9 +53,9 @@ export class cl2 {
 >async () => {            const req = await import('./test') // FOUR        } : () => Promise<void>
 
             const req = await import('./test') // FOUR
->req : typeof import("tests/cases/conformance/dynamicImport/test")
->await import('./test') : typeof import("tests/cases/conformance/dynamicImport/test")
->import('./test') : Promise<typeof import("tests/cases/conformance/dynamicImport/test")>
+>req : typeof import("test")
+>await import('./test') : typeof import("test")
+>import('./test') : Promise<typeof import("test")>
 >'./test' : "./test"
         }
     }
@@ -64,9 +66,9 @@ export const l = async () => {
 >async () => {    const req = await import('./test') // FIVE} : () => Promise<void>
 
     const req = await import('./test') // FIVE
->req : typeof import("tests/cases/conformance/dynamicImport/test")
->await import('./test') : typeof import("tests/cases/conformance/dynamicImport/test")
->import('./test') : Promise<typeof import("tests/cases/conformance/dynamicImport/test")>
+>req : typeof import("test")
+>await import('./test') : typeof import("test")
+>import('./test') : Promise<typeof import("test")>
 >'./test' : "./test"
 }
 

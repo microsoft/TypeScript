@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/separate1-2.ts] ////
+
 //// [separate1-2.ts]
 module X {
     export function f() { }

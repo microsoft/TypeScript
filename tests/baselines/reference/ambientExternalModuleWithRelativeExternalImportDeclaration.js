@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ambientExternalModuleWithRelativeExternalImportDeclaration.ts] ////
+
 //// [ambientExternalModuleWithRelativeExternalImportDeclaration.ts]
 declare module "OuterModule" {
     import m2 = require("./SubModule");

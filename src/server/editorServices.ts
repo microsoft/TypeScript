@@ -54,6 +54,7 @@ import {
     getFileNamesFromConfigSpecs,
     getFileWatcherEventKind,
     getNormalizedAbsolutePath,
+    getPathComponents,
     getSnapshotText,
     getWatchFactory,
     hasExtension,
@@ -169,13 +170,13 @@ import {
     ProjectKind,
     ProjectOptions,
     ScriptInfo,
-    ScriptInfoVersion,
     ServerHost,
     Session,
     SetTypings,
     ThrottledOperations,
     toNormalizedPath,
     TypingsCache,
+    WatchTypingLocations,
 } from "./_namespaces/ts.server";
 import * as protocol from "./protocol";
 
@@ -215,12 +216,12 @@ export interface LargeFileReferencedEvent {
 
 export interface ConfigFileDiagEvent {
     eventName: typeof ConfigFileDiagEvent;
-    data: { triggerFile: string, configFileName: string, diagnostics: readonly Diagnostic[] };
+    data: { triggerFile: string; configFileName: string; diagnostics: readonly Diagnostic[]; };
 }
 
 export interface ProjectLanguageServiceStateEvent {
     eventName: typeof ProjectLanguageServiceStateEvent;
-    data: { project: Project, languageServiceEnabled: boolean };
+    data: { project: Project; languageServiceEnabled: boolean; };
 }
 
 /** This will be converted to the payload of a protocol.TelemetryEvent in session.defaultEventHandler. */
@@ -319,7 +320,7 @@ export interface OpenFileInfo {
 }
 
 export type ProjectServiceEvent =
-    LargeFileReferencedEvent
+    | LargeFileReferencedEvent
     | ProjectsUpdatedInBackgroundEvent
     | ProjectLoadingStartEvent
     | ProjectLoadingFinishEvent
@@ -334,7 +335,7 @@ export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 export type PerformanceEventHandler = (event: PerformanceEvent) => void;
 
 export interface SafeList {
-    [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
+    [name: string]: { match: RegExp; exclude?: (string | number)[][]; types?: string[]; };
 }
 
 function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<string, Map<string, number>> {
@@ -357,12 +358,12 @@ const watchOptionsConverters = prepareConvertersForEnumLikeCompilerOptions(optio
 const indentStyle = new Map(Object.entries({
     none: IndentStyle.None,
     block: IndentStyle.Block,
-    smart: IndentStyle.Smart
+    smart: IndentStyle.Smart,
 }));
 
 export interface TypesMapFile {
     typesMap: SafeList;
-    simpleMap: { [libName: string]: string };
+    simpleMap: { [libName: string]: string; };
 }
 
 /**
@@ -386,31 +387,31 @@ export interface TypesMapFile {
 const defaultTypeSafeList: SafeList = {
     "jquery": {
         // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-        match: /jquery(-[\d\.]+)?(\.intellisense)?(\.min)?\.js$/i,
-        types: ["jquery"]
+        match: /jquery(-[\d.]+)?(\.intellisense)?(\.min)?\.js$/i,
+        types: ["jquery"],
     },
     "WinJS": {
         // e.g. c:/temp/UWApp1/lib/winjs-4.0.1/js/base.js
-        match: /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
-        exclude: [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
-        types: ["winjs"]                           // And fetch the @types package for WinJS
+        match: /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i, // If the winjs/base.js file is found..
+        exclude: [["^", 1, "/.*"]], // ..then exclude all files under the winjs folder
+        types: ["winjs"], // And fetch the @types package for WinJS
     },
     "Kendo": {
         // e.g. /Kendo3/wwwroot/lib/kendo/kendo.all.min.js
         match: /^(.*\/kendo(-ui)?)\/kendo\.all(\.min)?\.js$/i,
         exclude: [["^", 1, "/.*"]],
-        types: ["kendo-ui"]
+        types: ["kendo-ui"],
     },
     "Office Nuget": {
         // e.g. /scripts/Office/1/excel-15.debug.js
         match: /^(.*\/office\/1)\/excel-\d+\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
-        exclude: [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
-        types: ["office"]                               // @types package to fetch instead
+        exclude: [["^", 1, "/.*"]], // Exclude that whole folder if the file indicated above is found in it
+        types: ["office"], // @types package to fetch instead
     },
     "References": {
         match: /^(.*\/_references\.js)$/i,
-        exclude: [["^", 1, "$"]]
-    }
+        exclude: [["^", 1, "$"]],
+    },
 };
 
 export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings {
@@ -447,7 +448,7 @@ export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCom
 
 export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined {
     let result: TypeAcquisition | undefined;
-    typeAcquisitionDeclarations.forEach((option) => {
+    typeAcquisitionDeclarations.forEach(option => {
         const propertyValue = protocolOptions[option.name];
         if (propertyValue === undefined) return;
         (result || (result = {}))[option.name] = propertyValue;
@@ -579,7 +580,7 @@ export interface ProjectServiceOptions {
     cancellationToken: HostCancellationToken;
     useSingleInferredProject: boolean;
     useInferredProjectPerProjectRoot: boolean;
-    typingsInstaller: ITypingsInstaller;
+    typingsInstaller?: ITypingsInstaller;
     eventHandler?: ProjectServiceEventHandler;
     suppressDiagnosticEvents?: boolean;
     throttleWaitMilliseconds?: number;
@@ -589,9 +590,13 @@ export interface ProjectServiceOptions {
     typesMapLocation?: string;
     serverMode?: LanguageServiceMode;
     session: Session<unknown> | undefined;
+    /** @internal */ incrementalVerifier?: (service: ProjectService) => void;
 }
 
-interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
+interface OriginalFileInfo {
+    fileName: NormalizedPath;
+    path: Path;
+}
 interface AncestorConfigFileInfo {
     /** config file name */
     fileName: string;
@@ -621,7 +626,7 @@ export enum ProjectReferenceProjectLoadKind {
     /** Find existing project or create one for the project reference */
     FindCreate,
     /** Find existing project or create and load it for the project reference */
-    FindCreateLoad
+    FindCreateLoad,
 }
 
 /** @internal */
@@ -637,14 +642,14 @@ export function forEachResolvedProjectReferenceProject<T>(
     fileName: string | undefined,
     cb: (child: ConfiguredProject) => T | undefined,
     projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
-    reason: string
+    reason: string,
 ): T | undefined;
 export function forEachResolvedProjectReferenceProject<T>(
     project: ConfiguredProject,
     fileName: string | undefined,
     cb: (child: ConfiguredProject) => T | undefined,
     projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
-    reason?: string
+    reason?: string,
 ): T | undefined {
     const resolvedRefs = project.getCurrentProgram()?.getResolvedProjectReferences();
     if (!resolvedRefs) return undefined;
@@ -667,7 +672,7 @@ export function forEachResolvedProjectReferenceProject<T>(
                 (ref, loadKind) => possibleDefaultRef === ref ? callback(ref, loadKind) : undefined,
                 projectReferenceProjectLoadKind,
                 project.projectService,
-                seenResolvedRefs
+                seenResolvedRefs,
             );
             if (result) return result;
             // Cleanup seenResolvedRefs
@@ -681,7 +686,7 @@ export function forEachResolvedProjectReferenceProject<T>(
         (ref, loadKind) => possibleDefaultRef !== ref ? callback(ref, loadKind) : undefined,
         projectReferenceProjectLoadKind,
         project.projectService,
-        seenResolvedRefs
+        seenResolvedRefs,
     );
 
     function callback(ref: ResolvedProjectReference, loadKind: ProjectReferenceProjectLoadKind) {
@@ -690,10 +695,10 @@ export function forEachResolvedProjectReferenceProject<T>(
             loadKind === ProjectReferenceProjectLoadKind.Find ?
                 undefined :
                 loadKind === ProjectReferenceProjectLoadKind.FindCreate ?
-                    project.projectService.createConfiguredProject(configFileName) :
-                    loadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
-                        project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
-                        Debug.assertNever(loadKind)
+                project.projectService.createConfiguredProject(configFileName) :
+                loadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
+                project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
+                Debug.assertNever(loadKind)
         );
 
         return child && cb(child);
@@ -730,7 +735,7 @@ function forEachResolvedProjectReferenceProjectWorker<T>(
 
 function forEachPotentialProjectReference<T>(
     project: ConfiguredProject,
-    cb: (potentialProjectReference: NormalizedPath) => T | undefined
+    cb: (potentialProjectReference: NormalizedPath) => T | undefined,
 ): T | undefined {
     return project.potentialProjectReferences &&
         forEachKey(project.potentialProjectReferences, cb);
@@ -740,19 +745,19 @@ function forEachAnyProjectReferenceKind<T>(
     project: ConfiguredProject,
     cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
     cbProjectRef: (projectReference: ProjectReference) => T | undefined,
-    cbPotentialProjectRef: (potentialProjectReference: NormalizedPath) => T | undefined
+    cbPotentialProjectRef: (potentialProjectReference: NormalizedPath) => T | undefined,
 ): T | undefined {
     return project.getCurrentProgram() ?
         project.forEachResolvedProjectReference(cb) :
         project.isInitialLoadPending() ?
-            forEachPotentialProjectReference(project, cbPotentialProjectRef) :
-            forEach(project.getProjectReferences(), cbProjectRef);
+        forEachPotentialProjectReference(project, cbPotentialProjectRef) :
+        forEach(project.getProjectReferences(), cbProjectRef);
 }
 
 function callbackRefProject<T, P extends string>(
     project: ConfiguredProject,
     cb: (refProj: ConfiguredProject) => T | undefined,
-    refPath: P | undefined
+    refPath: P | undefined,
 ) {
     const refProject = refPath && project.projectService.configuredProjects.get(refPath);
     return refProject && cb(refProject);
@@ -760,13 +765,13 @@ function callbackRefProject<T, P extends string>(
 
 function forEachReferencedProject<T>(
     project: ConfiguredProject,
-    cb: (refProj: ConfiguredProject) => T | undefined
+    cb: (refProj: ConfiguredProject) => T | undefined,
 ): T | undefined {
     return forEachAnyProjectReferenceKind(
         project,
         resolvedRef => callbackRefProject(project, cb, resolvedRef.sourceFile.path),
         projectRef => callbackRefProject(project, cb, project.toPath(resolveProjectReferencePath(projectRef))),
-        potentialProjectRef => callbackRefProject(project, cb, potentialProjectRef)
+        potentialProjectRef => callbackRefProject(project, cb, potentialProjectRef),
     );
 }
 
@@ -828,7 +833,7 @@ export interface WatchOptionsAndErrors {
 }
 
 /** @internal */
-export interface ParsedConfig{
+export interface ParsedConfig {
     cachedDirectoryStructureHost: CachedDirectoryStructureHost;
     /**
      * The map contains
@@ -851,7 +856,6 @@ function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => s
 }
 
 export class ProjectService {
-
     /** @internal */
     readonly typingsCache: TypingsCache;
 
@@ -870,7 +874,7 @@ export class ProjectService {
      * it does not reset when creating script info again
      * (and could have potentially collided with version where contents mismatch)
      */
-    private readonly filenameToScriptInfoVersion = new Map<string, ScriptInfoVersion>();
+    private readonly filenameToScriptInfoVersion = new Map<string, number>();
     // Set of all '.js' files ever opened.
     private readonly allJsFilesForOpenFileTelemetry = new Map<string, true>();
 
@@ -908,7 +912,7 @@ export class ProjectService {
      */
     readonly openFiles: Map<string, NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
     /** @internal */
-    readonly configFileForOpenFiles: Map<Path, NormalizedPath | false> = new Map();
+    readonly configFileForOpenFiles = new Map<Path, NormalizedPath | false>();
     /**
      * Map of open files that are opened without complete path but have projectRoot as current directory
      */
@@ -930,7 +934,6 @@ export class ProjectService {
      *   In this case the exists could be true/false based on config file is present or not
      * - Or it is present if we have configured project open with config file at that location
      *   In this case the exists property is always true
-     *
      *
      * @internal
      */
@@ -962,7 +965,7 @@ export class ProjectService {
     public readonly globalPlugins: readonly string[];
     public readonly pluginProbeLocations: readonly string[];
     public readonly allowLocalPluginLoads: boolean;
-    private currentPluginConfigOverrides: Map<string, any> | undefined;
+    /** @internal */ currentPluginConfigOverrides: Map<string, any> | undefined;
 
     public readonly typesMapLocation: string | undefined;
 
@@ -988,11 +991,12 @@ export class ProjectService {
     /** @internal */
     readonly session: Session<unknown> | undefined;
 
-
     private performanceEventHandler?: PerformanceEventHandler;
 
     private pendingPluginEnablements?: Map<Project, Promise<BeginEnablePluginResult>[]>;
     private currentPluginEnablementPromise?: Promise<void>;
+
+    /** @internal */ verifyDocumentRegistry = noop;
 
     constructor(opts: ProjectServiceOptions) {
         this.host = opts.host;
@@ -1056,6 +1060,7 @@ export class ProjectService {
                 watchDirectory: returnNoopFileWatcher,
             } :
             getWatchFactory(this.host, watchLogLevel, log, getDetailWatchInfo);
+        opts.incrementalVerifier?.(this);
     }
 
     toPath(fileName: string) {
@@ -1101,7 +1106,7 @@ export class ProjectService {
         }
         const event: ProjectLanguageServiceStateEvent = {
             eventName: ProjectLanguageServiceStateEvent,
-            data: { project, languageServiceEnabled }
+            data: { project, languageServiceEnabled },
         };
         this.eventHandler(event);
     }
@@ -1154,6 +1159,11 @@ export class ProjectService {
     }
 
     /** @internal */
+    watchTypingLocations(response: WatchTypingLocations) {
+        this.findProject(response.projectName)?.watchTypingLocations(response.files);
+    }
+
+    /** @internal */
     delayEnsureProjectForOpenFiles() {
         if (!this.openFiles.size) return;
         this.pendingEnsureProjectForOpenFiles = true;
@@ -1200,8 +1210,8 @@ export class ProjectService {
         const event: ProjectsUpdatedInBackgroundEvent = {
             eventName: ProjectsUpdatedInBackgroundEvent,
             data: {
-                openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
-            }
+                openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName),
+            },
         };
         this.eventHandler(event);
     }
@@ -1214,7 +1224,7 @@ export class ProjectService {
 
         const event: LargeFileReferencedEvent = {
             eventName: LargeFileReferencedEvent,
-            data: { file, fileSize, maxFileSize }
+            data: { file, fileSize, maxFileSize },
         };
         this.eventHandler(event);
     }
@@ -1227,7 +1237,7 @@ export class ProjectService {
         project.sendLoadingProjectFinish = true;
         const event: ProjectLoadingStartEvent = {
             eventName: ProjectLoadingStartEvent,
-            data: { project, reason }
+            data: { project, reason },
         };
         this.eventHandler(event);
     }
@@ -1241,7 +1251,7 @@ export class ProjectService {
         project.sendLoadingProjectFinish = false;
         const event: ProjectLoadingFinishEvent = {
             eventName: ProjectLoadingFinishEvent,
-            data: { project }
+            data: { project },
         };
         this.eventHandler(event);
     }
@@ -1301,9 +1311,11 @@ export class ProjectService {
             //   root path
             // - Inferred projects with a projectRootPath, if the new options apply to that
             //   project root path.
-            if (canonicalProjectRootPath ?
-                project.projectRootPath === canonicalProjectRootPath :
-                !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
+            if (
+                canonicalProjectRootPath ?
+                    project.projectRootPath === canonicalProjectRootPath :
+                    !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)
+            ) {
                 project.setCompilerOptions(compilerOptions);
                 project.setTypeAcquisition(typeAcquisition);
                 project.setWatchOptions(watchOptions?.watchOptions);
@@ -1328,7 +1340,7 @@ export class ProjectService {
     }
 
     /** @internal */
-    private forEachProject(cb: (project: Project) => void) {
+    forEachProject(cb: (project: Project) => void) {
         this.externalProjects.forEach(cb);
         this.configuredProjects.forEach(cb);
         this.inferredProjects.forEach(cb);
@@ -1492,7 +1504,8 @@ export class ProjectService {
             fileOrDirectory => {
                 const fileOrDirectoryPath = this.toPath(fileOrDirectory);
                 const fsResult = config.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
-                if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
+                if (
+                    getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
                     (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
                 ) {
                     this.logger.info(`Config: ${configFileName} Detected new package.json: ${fileOrDirectory}`);
@@ -1500,19 +1513,21 @@ export class ProjectService {
                 }
 
                 const configuredProjectForConfig = this.findConfiguredProjectByProjectName(configFileName);
-                if (isIgnoredFileFromWildCardWatching({
-                    watchedDirPath: directory,
-                    fileOrDirectory,
-                    fileOrDirectoryPath,
-                    configFileName,
-                    extraFileExtensions: this.hostConfiguration.extraFileExtensions,
-                    currentDirectory: this.currentDirectory,
-                    options: config.parsedCommandLine!.options,
-                    program: configuredProjectForConfig?.getCurrentProgram() || config.parsedCommandLine!.fileNames,
-                    useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
-                    writeLog: s => this.logger.info(s),
-                    toPath: s => this.toPath(s)
-                })) return;
+                if (
+                    isIgnoredFileFromWildCardWatching({
+                        watchedDirPath: directory,
+                        fileOrDirectory,
+                        fileOrDirectoryPath,
+                        configFileName,
+                        extraFileExtensions: this.hostConfiguration.extraFileExtensions,
+                        currentDirectory: this.currentDirectory,
+                        options: config.parsedCommandLine!.options,
+                        program: configuredProjectForConfig?.getCurrentProgram() || config.parsedCommandLine!.fileNames,
+                        useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
+                        writeLog: s => this.logger.info(s),
+                        toPath: s => this.toPath(s),
+                    })
+                ) return;
 
                 // Reload is pending, do the reload
                 if (config.reloadLevel !== ConfigFileProgramReloadLevel.Full) config.reloadLevel = ConfigFileProgramReloadLevel.Partial;
@@ -1547,7 +1562,7 @@ export class ProjectService {
             flags,
             this.getWatchOptionsFromProjectWatchOptions(config.parsedCommandLine!.watchOptions),
             WatchType.WildcardDirectory,
-            configFileName
+            configFileName,
         );
     }
 
@@ -1616,35 +1631,42 @@ export class ProjectService {
             eventKind !== FileWatcherEventKind.Deleted ?
                 identity : // Reload open files if they are root of inferred project
                 returnTrue, // Reload all the open files impacted by config file
-            "Change in config file detected"
+            "Change in config file detected",
         );
         this.delayEnsureProjectForOpenFiles();
     }
 
     private removeProject(project: Project) {
         this.logger.info("`remove Project::");
-        project.print(/*writeProjectFileNames*/ true);
+        project.print(/*writeProjectFileNames*/ true, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
 
         project.close();
         if (Debug.shouldAssert(AssertionLevel.Normal)) {
-            this.filenameToScriptInfo.forEach(info => Debug.assert(
-                !info.isAttached(project),
-                "Found script Info still attached to project",
-                () => `${project.projectName}: ScriptInfos still attached: ${JSON.stringify(
-                    arrayFrom(
-                        mapDefinedIterator(
-                            this.filenameToScriptInfo.values(),
-                            info => info.isAttached(project) ?
-                                {
-                                    fileName: info.fileName,
-                                    projects: info.containingProjects.map(p => p.projectName),
-                                    hasMixedContent: info.hasMixedContent
-                                } : undefined
-                        )
-                    ),
-                    /*replacer*/ undefined,
-                    " "
-                )}`));
+            this.filenameToScriptInfo.forEach(info =>
+                Debug.assert(
+                    !info.isAttached(project),
+                    "Found script Info still attached to project",
+                    () =>
+                        `${project.projectName}: ScriptInfos still attached: ${
+                            JSON.stringify(
+                                arrayFrom(
+                                    mapDefinedIterator(
+                                        this.filenameToScriptInfo.values(),
+                                        info =>
+                                            info.isAttached(project) ?
+                                                {
+                                                    fileName: info.fileName,
+                                                    projects: info.containingProjects.map(p => p.projectName),
+                                                    hasMixedContent: info.hasMixedContent,
+                                                } : undefined,
+                                    ),
+                                ),
+                                /*replacer*/ undefined,
+                                " ",
+                            )
+                        }`,
+                )
+            );
         }
         // Remove the project from pending project updates
         this.pendingProjectUpdates.delete(project.getProjectName());
@@ -1680,9 +1702,9 @@ export class ProjectService {
                                 info.fileName,
                                 projectRootPath ?
                                     this.getNormalizedAbsolutePath(projectRootPath) :
-                                    this.currentDirectory
-                            )
-                    )
+                                    this.currentDirectory,
+                            ),
+                    ),
             );
 
         project.addRoot(info);
@@ -1812,7 +1834,7 @@ export class ProjectService {
 
     private deleteScriptInfo(info: ScriptInfo) {
         this.filenameToScriptInfo.delete(info.path);
-        this.filenameToScriptInfoVersion.set(info.path, info.getVersion());
+        this.filenameToScriptInfoVersion.set(info.path, info.textStorage.version);
         const realpath = info.getRealpathIfDifferent();
         if (realpath) {
             this.realpathToScriptInfos!.remove(realpath, info); // TODO: GH#18217
@@ -1861,7 +1883,7 @@ export class ProjectService {
                 PollingInterval.High,
                 this.getWatchOptionsFromProjectWatchOptions(configFileExistenceInfo?.config?.parsedCommandLine?.watchOptions),
                 WatchType.ConfigFile,
-                forProject
+                forProject,
             );
         }
         // Watching config file for project, update the map
@@ -1893,7 +1915,7 @@ export class ProjectService {
             // created when any of the script infos are added as root of inferred project
             if (this.configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo)) {
                 // If we cannot watch config file existence without configured project, close the configured file watcher
-                if (!canWatchDirectoryOrFile(getDirectoryPath(canonicalConfigFilePath) as Path)) {
+                if (!canWatchDirectoryOrFile(getPathComponents(getDirectoryPath(canonicalConfigFilePath) as Path))) {
                     configFileExistenceInfo.watcher!.close();
                     configFileExistenceInfo.watcher = noopConfigFileWatcher;
                 }
@@ -1920,9 +1942,11 @@ export class ProjectService {
     private closeConfigFileWatcherOnReleaseOfOpenFile(configFileExistenceInfo: ConfigFileExistenceInfo) {
         // Close the config file watcher if there are no more open files that are root of inferred project
         // or if there are no projects that need to watch this config file existence info
-        if (configFileExistenceInfo.watcher &&
+        if (
+            configFileExistenceInfo.watcher &&
             !configFileExistenceInfo.config &&
-            !this.configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo)) {
+            !this.configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo)
+        ) {
             configFileExistenceInfo.watcher.close();
             configFileExistenceInfo.watcher = undefined;
         }
@@ -1952,8 +1976,10 @@ export class ProjectService {
                 // If there are no open files that are impacted by configFileExistenceInfo after closing this script info
                 // and there is are no projects that need the config file existence or parsed config,
                 // remove the cached existence info
-                if (!configFileExistenceInfo.openFilesImpactedByConfigFile?.size &&
-                    !configFileExistenceInfo.config) {
+                if (
+                    !configFileExistenceInfo.openFilesImpactedByConfigFile?.size &&
+                    !configFileExistenceInfo.config
+                ) {
                     Debug.assert(!configFileExistenceInfo.watcher);
                     this.configFileExistenceInfoCache.delete(canonicalConfigFilePath);
                 }
@@ -1980,13 +2006,13 @@ export class ProjectService {
             (configFileExistenceInfo.openFilesImpactedByConfigFile ||= new Map()).set(info.path, true);
 
             // If there is no configured project for this config file, add the file watcher
-            configFileExistenceInfo.watcher ||= canWatchDirectoryOrFile(getDirectoryPath(canonicalConfigFilePath) as Path) ?
+            configFileExistenceInfo.watcher ||= canWatchDirectoryOrFile(getPathComponents(getDirectoryPath(canonicalConfigFilePath) as Path)) ?
                 this.watchFactory.watchFile(
                     configFileName,
                     (_filename, eventKind) => this.onConfigFileChanged(canonicalConfigFilePath, eventKind),
                     PollingInterval.High,
                     this.hostConfiguration.watchOptions,
-                    WatchType.ConfigFileForInferredRoot
+                    WatchType.ConfigFileForInferredRoot,
                 ) :
                 noopConfigFileWatcher;
         });
@@ -2060,7 +2086,8 @@ export class ProjectService {
             if (parentPath === searchPath) break;
             searchPath = parentPath;
             searchInDirectory = true;
-        } while (anySearchPathOk || isSearchPathInProjectRoot());
+        }
+        while (anySearchPathOk || isSearchPathInProjectRoot());
 
         return undefined;
     }
@@ -2094,8 +2121,7 @@ export class ProjectService {
             if (result !== undefined) return result || undefined;
         }
         this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
-        const configFileName = this.forEachConfigFileLocation(info, (canonicalConfigFilePath, configFileName) =>
-            this.configFileExists(configFileName, canonicalConfigFilePath, info));
+        const configFileName = this.forEachConfigFileLocation(info, (canonicalConfigFilePath, configFileName) => this.configFileExists(configFileName, canonicalConfigFilePath, info));
         if (configFileName) {
             this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
         }
@@ -2152,7 +2178,7 @@ export class ProjectService {
 
         let availableSpace = maxProgramSizeForNonTsFiles;
         this.projectToSizeMap.set(name, 0);
-        this.projectToSizeMap.forEach(val => (availableSpace -= (val || 0)));
+        this.projectToSizeMap.forEach(val => (availableSpace -= val || 0));
 
         let totalNonTsFileSize = 0;
 
@@ -2189,8 +2215,7 @@ export class ProjectService {
             /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
             options.compileOnSave === undefined ? true : options.compileOnSave,
             /*projectFilePath*/ undefined,
-            this.currentPluginConfigOverrides,
-            watchOptionsAndErrors?.watchOptions
+            watchOptionsAndErrors?.watchOptions,
         );
         project.setProjectErrors(watchOptionsAndErrors?.errors);
         project.excludedFiles = excludedFiles;
@@ -2272,7 +2297,7 @@ export class ProjectService {
             configFileExistenceInfo.config = {
                 cachedDirectoryStructureHost: createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!,
                 projects: new Map(),
-                reloadLevel: ConfigFileProgramReloadLevel.Full
+                reloadLevel: ConfigFileProgramReloadLevel.Full,
             };
         }
 
@@ -2281,7 +2306,8 @@ export class ProjectService {
             canonicalConfigFilePath,
             this,
             this.documentRegistry,
-            configFileExistenceInfo.config.cachedDirectoryStructureHost);
+            configFileExistenceInfo.config.cachedDirectoryStructureHost,
+        );
         this.configuredProjects.set(canonicalConfigFilePath, project);
         this.createConfigFileWatcherForParsedConfig(configFileName, canonicalConfigFilePath, project);
         return project;
@@ -2324,7 +2350,7 @@ export class ProjectService {
             configFilename,
             project.canonicalConfigFilePath,
             this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!,
-            project
+            project,
         );
         const parsedCommandLine = configFileExistenceInfo.config!.parsedCommandLine!;
         Debug.assert(!!parsedCommandLine.fileNames);
@@ -2336,7 +2362,7 @@ export class ProjectService {
                 configHasExtendsProperty: parsedCommandLine.raw.extends !== undefined,
                 configHasFilesProperty: parsedCommandLine.raw.files !== undefined,
                 configHasIncludeProperty: parsedCommandLine.raw.include !== undefined,
-                configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined
+                configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined,
             };
         }
         project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
@@ -2345,8 +2371,7 @@ export class ProjectService {
         const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
         if (lastFileExceededProgramSize) {
             project.disableLanguageService(lastFileExceededProgramSize);
-            this.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) =>
-                this.stopWatchingWildCards(canonicalConfigFilePath, project));
+            this.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) => this.stopWatchingWildCards(canonicalConfigFilePath, project));
         }
         else {
             project.setCompilerOptions(compilerOptions);
@@ -2354,7 +2379,7 @@ export class ProjectService {
             project.enableLanguageService();
             this.watchWildcards(configFilename, configFileExistenceInfo, project);
         }
-        project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
+        project.enablePluginsWithOptions(compilerOptions);
         const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
         this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
         tracing?.pop();
@@ -2385,7 +2410,7 @@ export class ProjectService {
             getDirectoryPath(configFilename),
             /*existingOptions*/ {},
             configFilename,
-            /*resolutionStack*/[],
+            /*resolutionStack*/ [],
             this.hostConfiguration.extraFileExtensions,
             this.extendedConfigCache,
         );
@@ -2394,12 +2419,18 @@ export class ProjectService {
             configFileErrors.push(...parsedCommandLine.errors);
         }
 
-        this.logger.info(`Config: ${configFilename} : ${JSON.stringify({
-            rootNames: parsedCommandLine.fileNames,
-            options: parsedCommandLine.options,
-            watchOptions: parsedCommandLine.watchOptions,
-            projectReferences: parsedCommandLine.projectReferences
-        }, /*replacer*/ undefined, " ")}`);
+        this.logger.info(`Config: ${configFilename} : ${
+            JSON.stringify(
+                {
+                    rootNames: parsedCommandLine.fileNames,
+                    options: parsedCommandLine.options,
+                    watchOptions: parsedCommandLine.watchOptions,
+                    projectReferences: parsedCommandLine.projectReferences,
+                },
+                /*replacer*/ undefined,
+                " ",
+            )
+        }`);
 
         const oldCommandLine = configFileExistenceInfo.config?.parsedCommandLine;
         if (!configFileExistenceInfo.config) {
@@ -2412,12 +2443,14 @@ export class ProjectService {
         }
 
         // If watch options different than older options when setting for the first time, update the config file watcher
-        if (!oldCommandLine && !isJsonEqual(
-            // Old options
-            this.getWatchOptionsFromProjectWatchOptions(/*projectOptions*/ undefined),
-            // New options
-            this.getWatchOptionsFromProjectWatchOptions(parsedCommandLine.watchOptions)
-        )) {
+        if (
+            !oldCommandLine && !isJsonEqual(
+                // Old options
+                this.getWatchOptionsFromProjectWatchOptions(/*projectOptions*/ undefined),
+                // New options
+                this.getWatchOptionsFromProjectWatchOptions(parsedCommandLine.watchOptions),
+            )
+        ) {
             // Reset the config file watcher
             configFileExistenceInfo.watcher?.close();
             configFileExistenceInfo.watcher = undefined;
@@ -2430,23 +2463,24 @@ export class ProjectService {
             canonicalConfigFilePath,
             parsedCommandLine.options,
             this.sharedExtendedConfigFileWatchers,
-            (extendedConfigFileName, extendedConfigFilePath) => this.watchFactory.watchFile(
-                extendedConfigFileName,
-                () => {
-                    // Update extended config cache
-                    cleanExtendedConfigCache(this.extendedConfigCache, extendedConfigFilePath, fileName => this.toPath(fileName));
-                    // Update projects
-                    let ensureProjectsForOpenFiles = false;
-                    this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
-                        ensureProjectsForOpenFiles = this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalPath, `Change in extended config file ${extendedConfigFileName} detected`) || ensureProjectsForOpenFiles;
-                    });
-                    if (ensureProjectsForOpenFiles) this.delayEnsureProjectForOpenFiles();
-                },
-                PollingInterval.High,
-                this.hostConfiguration.watchOptions,
-                WatchType.ExtendedConfigFile,
-                configFilename
-            ),
+            (extendedConfigFileName, extendedConfigFilePath) =>
+                this.watchFactory.watchFile(
+                    extendedConfigFileName,
+                    () => {
+                        // Update extended config cache
+                        cleanExtendedConfigCache(this.extendedConfigCache, extendedConfigFilePath, fileName => this.toPath(fileName));
+                        // Update projects
+                        let ensureProjectsForOpenFiles = false;
+                        this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
+                            ensureProjectsForOpenFiles = this.delayUpdateProjectsFromParsedConfigOnConfigFileChange(canonicalPath, `Change in extended config file ${extendedConfigFileName} detected`) || ensureProjectsForOpenFiles;
+                        });
+                        if (ensureProjectsForOpenFiles) this.delayEnsureProjectForOpenFiles();
+                    },
+                    PollingInterval.High,
+                    this.hostConfiguration.watchOptions,
+                    WatchType.ExtendedConfigFile,
+                    configFilename,
+                ),
             fileName => this.toPath(fileName),
         );
         return configFileExistenceInfo;
@@ -2476,8 +2510,10 @@ export class ProjectService {
     /** @internal */
     stopWatchingWildCards(canonicalConfigFilePath: NormalizedPath, forProject: ConfiguredProject) {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath)!;
-        if (!configFileExistenceInfo.config ||
-            !configFileExistenceInfo.config.projects.get(forProject.canonicalConfigFilePath)) {
+        if (
+            !configFileExistenceInfo.config ||
+            !configFileExistenceInfo.config.projects.get(forProject.canonicalConfigFilePath)
+        ) {
             return;
         }
 
@@ -2524,7 +2560,7 @@ export class ProjectService {
                     project.currentDirectory,
                     scriptKind,
                     hasMixedContent,
-                    project.directoryStructureHost
+                    project.directoryStructureHost,
                 ));
                 path = scriptInfo.path;
                 const existingValue = projectRootFilesMap.get(path);
@@ -2598,7 +2634,7 @@ export class ProjectService {
             getDirectoryPath(configFileName),
             config.parsedCommandLine!.options,
             config.cachedDirectoryStructureHost,
-            this.hostConfiguration.extraFileExtensions
+            this.hostConfiguration.extraFileExtensions,
         );
         config.parsedCommandLine = { ...config.parsedCommandLine!, fileNames };
         return fileNames;
@@ -2635,6 +2671,7 @@ export class ProjectService {
     private clearSemanticCache(project: Project) {
         project.resolutionCache.clear();
         project.getLanguageService(/*ensureSynchronized*/ false).cleanupSemanticCache();
+        project.cleanupProgram();
         project.markAsDirty();
     }
 
@@ -2645,16 +2682,20 @@ export class ProjectService {
         const diagnostics = project.getLanguageService().getCompilerOptionsDiagnostics();
         diagnostics.push(...project.getAllProjectErrors());
 
-        this.eventHandler({
-            eventName: ConfigFileDiagEvent,
-            data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile }
-        } satisfies ConfigFileDiagEvent);
+        this.eventHandler(
+            {
+                eventName: ConfigFileDiagEvent,
+                data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile },
+            } satisfies ConfigFileDiagEvent,
+        );
     }
 
     private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {
-        if (!this.useInferredProjectPerProjectRoot ||
+        if (
+            !this.useInferredProjectPerProjectRoot ||
             // Its a dynamic info opened without project root
-            (info.isDynamic && projectRootPath === undefined)) {
+            (info.isDynamic && projectRootPath === undefined)
+        ) {
             return undefined;
         }
 
@@ -2704,17 +2745,19 @@ export class ProjectService {
         }
 
         // Single inferred project does not have a project root and hence no current directory
-        return this.createInferredProject(/*currentDirectory*/ undefined, /*isSingleInferredProject*/ true);
+        return this.createInferredProject("", /*isSingleInferredProject*/ true);
     }
 
-    private getOrCreateSingleInferredWithoutProjectRoot(currentDirectory: string | undefined): InferredProject {
+    private getOrCreateSingleInferredWithoutProjectRoot(currentDirectory: string): InferredProject {
         Debug.assert(!this.useSingleInferredProject);
-        const expectedCurrentDirectory = this.toCanonicalFileName(this.getNormalizedAbsolutePath(currentDirectory || ""));
+        const expectedCurrentDirectory = this.toCanonicalFileName(this.getNormalizedAbsolutePath(currentDirectory));
         // Reuse the project with same current directory but no roots
         for (const inferredProject of this.inferredProjects) {
-            if (!inferredProject.projectRootPath &&
+            if (
+                !inferredProject.projectRootPath &&
                 inferredProject.isOrphan() &&
-                inferredProject.canonicalCurrentDirectory === expectedCurrentDirectory) {
+                inferredProject.canonicalCurrentDirectory === expectedCurrentDirectory
+            ) {
                 return inferredProject;
             }
         }
@@ -2722,7 +2765,7 @@ export class ProjectService {
         return this.createInferredProject(currentDirectory);
     }
 
-    private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
+    private createInferredProject(currentDirectory: string, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
         const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
         let watchOptionsAndErrors: WatchOptionsAndErrors | false | undefined;
         let typeAcquisition: TypeAcquisition | undefined;
@@ -2737,7 +2780,7 @@ export class ProjectService {
             typeAcquisition = this.typeAcquisitionForInferredProjects;
         }
         watchOptionsAndErrors = watchOptionsAndErrors || undefined;
-        const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, typeAcquisition);
+        const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, typeAcquisition);
         project.setProjectErrors(watchOptionsAndErrors?.errors);
         if (isSingleInferredProject) {
             this.inferredProjects.unshift(project);
@@ -2751,8 +2794,11 @@ export class ProjectService {
     /** @internal */
     getOrCreateScriptInfoNotOpenedByClient(uncheckedFileName: string, currentDirectory: string, hostToQueryFileExistsOn: DirectoryStructureHost) {
         return this.getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(
-            toNormalizedPath(uncheckedFileName), currentDirectory, /*scriptKind*/ undefined,
-            /*hasMixedContent*/ undefined, hostToQueryFileExistsOn
+            toNormalizedPath(uncheckedFileName),
+            currentDirectory,
+            /*scriptKind*/ undefined,
+            /*hasMixedContent*/ undefined,
+            hostToQueryFileExistsOn,
         );
     }
 
@@ -2797,10 +2843,12 @@ export class ProjectService {
             if (toAddInfo !== info) {
                 for (const project of toAddInfo.containingProjects) {
                     // Add the projects only if they can use symLink targets and not already in the list
-                    if (project.languageServiceEnabled &&
+                    if (
+                        project.languageServiceEnabled &&
                         !project.isOrphan() &&
                         !project.getCompilerOptions().preserveSymlinks &&
-                        !info.isAttached(project)) {
+                        !info.isAttached(project)
+                    ) {
                         if (!projects) {
                             projects = createMultiMap();
                             projects.add(toAddInfo.path, project);
@@ -2818,9 +2866,11 @@ export class ProjectService {
         Debug.assert(!info.fileWatcher);
         // do not watch files with mixed content - server doesn't know how to interpret it
         // do not watch files in the global cache location
-        if (!info.isDynamicOrHasMixedContent() &&
+        if (
+            !info.isDynamicOrHasMixedContent() &&
             (!this.globalCacheLocationDirectoryPath ||
-                !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
+                !startsWith(info.path, this.globalCacheLocationDirectoryPath))
+        ) {
             const indexOfNodeModules = info.path.indexOf("/node_modules/");
             if (!this.host.getModifiedTime || indexOfNodeModules === -1) {
                 info.fileWatcher = this.watchFactory.watchFile(
@@ -2828,7 +2878,7 @@ export class ProjectService {
                     (_fileName, eventKind) => this.onSourceFileChanged(info, eventKind),
                     PollingInterval.Medium,
                     this.hostConfiguration.watchOptions,
-                    WatchType.ClosedScriptInfo
+                    WatchType.ClosedScriptInfo,
                 );
             }
             else {
@@ -2848,9 +2898,11 @@ export class ProjectService {
                 // Clear module specifier cache for any projects whose cache was affected by
                 // dependency package.jsons in this node_modules directory
                 const basename = getBaseFileName(fileOrDirectoryPath);
-                if (result.affectedModuleSpecifierCacheProjects?.size && (
-                    basename === "package.json" || basename === "node_modules"
-                )) {
+                if (
+                    result.affectedModuleSpecifierCacheProjects?.size && (
+                        basename === "package.json" || basename === "node_modules"
+                    )
+                ) {
                     result.affectedModuleSpecifierCacheProjects.forEach(projectName => {
                         this.findProject(projectName)?.getModuleSpecifierCache()?.clear();
                     });
@@ -2877,7 +2929,7 @@ export class ProjectService {
             },
             WatchDirectoryFlags.Recursive,
             this.hostConfiguration.watchOptions,
-            WatchType.NodeModules
+            WatchType.NodeModules,
         );
         const result: NodeModulesWatcher = {
             refreshScriptInfoRefCount: 0,
@@ -3001,7 +3053,7 @@ export class ProjectService {
             // Opening closed script info
             // either it was created just now, or was part of projects but was closed
             this.stopWatchingScriptInfo(info);
-            info.open(fileContent!);
+            info.open(fileContent);
             if (hasMixedContent) {
                 info.registerFileUpdate();
             }
@@ -3075,8 +3127,8 @@ export class ProjectService {
         const documentPositionMapper = getDocumentPositionMapper(
             { getCanonicalFileName: this.toCanonicalFileName, log: s => this.logger.info(s), getSourceFileLike: f => this.getSourceFileLike(f, projectName, declarationInfo) },
             declarationInfo.fileName,
-            declarationInfo.getLineInfo(),
-            readMapFile
+            declarationInfo.textStorage.getLineInfo(),
+            readMapFile,
         );
         readMapFile = undefined; // Remove ref to project
         if (sourceMapFileInfo) {
@@ -3091,9 +3143,9 @@ export class ProjectService {
                     project.currentDirectory === this.currentDirectory ?
                         mapFileNameFromDeclarationInfo :
                         getNormalizedAbsolutePath(mapFileNameFromDeclarationInfo, project.currentDirectory),
-                    declarationInfo.path
+                    declarationInfo.path,
                 ),
-                sourceInfos: this.addSourceInfoToSourceMap(sourceFileName, project)
+                sourceInfos: this.addSourceInfoToSourceMap(sourceFileName, project),
             };
         }
         else {
@@ -3165,7 +3217,7 @@ export class ProjectService {
                     const lineOffset = info.positionToLineOffset(pos);
                     return { line: lineOffset.line - 1, character: lineOffset.offset - 1 };
                 },
-                getPositionOfLineAndCharacter: (line, character, allowEdits) => info.lineOffsetToPosition(line + 1, character + 1, allowEdits)
+                getPositionOfLineAndCharacter: (line, character, allowEdits) => info.lineOffsetToPosition(line + 1, character + 1, allowEdits),
             };
         }
         return info.sourceFileLike;
@@ -3203,9 +3255,11 @@ export class ProjectService {
                 if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
                     // Load configured projects for external projects that are pending reload
                     this.configuredProjects.forEach(project => {
-                        if (project.hasExternalProjectRef() &&
+                        if (
+                            project.hasExternalProjectRef() &&
                             project.pendingReload === ConfigFileProgramReloadLevel.Full &&
-                            !this.pendingProjectUpdates.has(project.getProjectName())) {
+                            !this.pendingProjectUpdates.has(project.getProjectName())
+                        ) {
                             project.updateGraph();
                         }
                     });
@@ -3339,7 +3393,7 @@ export class ProjectService {
                                     reloadChildProject(child);
                                     return projectContainsInfoDirectly(child, info);
                                 },
-                                ProjectReferenceProjectLoadKind.FindCreate
+                                ProjectReferenceProjectLoadKind.FindCreate,
                             );
                             if (referencedProject) {
                                 // Reload the project's tree that is already present
@@ -3347,7 +3401,7 @@ export class ProjectService {
                                     project,
                                     /*fileName*/ undefined,
                                     reloadChildProject,
-                                    ProjectReferenceProjectLoadKind.Find
+                                    ProjectReferenceProjectLoadKind.Find,
                                 );
                             }
                         }
@@ -3378,10 +3432,12 @@ export class ProjectService {
         Debug.assert(info.containingProjects.length > 0);
         const firstProject = info.containingProjects[0];
 
-        if (!firstProject.isOrphan() &&
+        if (
+            !firstProject.isOrphan() &&
             isInferredProject(firstProject) &&
             firstProject.isRoot(info) &&
-            forEach(info.containingProjects, p => p !== firstProject && !p.isOrphan())) {
+            forEach(info.containingProjects, p => p !== firstProject && !p.isOrphan())
+        ) {
             firstProject.removeFile(info, /*fileExists*/ true, /*detachFromProject*/ true);
         }
     }
@@ -3476,7 +3532,7 @@ export class ProjectService {
                     return projectContainsOriginalInfo(child) ? child : undefined;
                 },
                 ProjectReferenceProjectLoadKind.FindCreateLoad,
-                `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`
+                `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`,
             );
             if (!configuredProject) return undefined;
             if (configuredProject === project) return originalLocation;
@@ -3574,7 +3630,7 @@ export class ProjectService {
                             }
                         },
                         ProjectReferenceProjectLoadKind.FindCreateLoad,
-                        `Creating project referenced in solution ${project.projectName} to find possible configured project for ${info.fileName} to open`
+                        `Creating project referenced in solution ${project.projectName} to find possible configured project for ${info.fileName} to open`,
                     );
                 }
 
@@ -3629,7 +3685,8 @@ export class ProjectService {
         // Create configured project till project root
         while (true) {
             // Skip if project is not composite
-            if (!project.isInitialLoadPending() &&
+            if (
+                !project.isInitialLoadPending() &&
                 (
                     !project.getCompilerOptions().composite ||
                     project.getCompilerOptions().disableSolutionSearching
@@ -3640,7 +3697,7 @@ export class ProjectService {
             const configFileName = this.getConfigFileNameForFile({
                 fileName: project.getConfigFilePath(),
                 path: info.path,
-                configFileInfo: true
+                configFileInfo: true,
             });
             if (!configFileName) return;
 
@@ -3659,7 +3716,7 @@ export class ProjectService {
     loadAncestorProjectTree(forProjects?: ReadonlyCollection<string>) {
         forProjects = forProjects || mapDefinedEntries(
             this.configuredProjects,
-            (key, project) => !project.isInitialLoadPending() ? [key, true] : undefined
+            (key, project) => !project.isInitialLoadPending() ? [key, true] : undefined,
         );
 
         const seenProjects = new Set<NormalizedPath>();
@@ -3736,7 +3793,7 @@ export class ProjectService {
                     (_value, configuredProjectPath) => {
                         const project = this.getConfiguredProjectByCanonicalConfigFilePath(configuredProjectPath);
                         return project && retainConfiguredProject(project);
-                    }
+                    },
                 );
             }
         };
@@ -3761,7 +3818,7 @@ export class ProjectService {
                 // If the configured project for project reference has more than zero references, keep it alive
                 forEachReferencedProject(
                     project,
-                    ref => isRetained(ref) && retainConfiguredProject(project)
+                    ref => isRetained(ref) && retainConfiguredProject(project),
                 );
             }
         });
@@ -3799,10 +3856,12 @@ export class ProjectService {
                     sourceInfos = info.sourceMapFilePath.sourceInfos;
                 }
                 if (!sourceInfos) return;
-                if (!forEachKey(sourceInfos, path => {
-                    const info = this.getScriptInfoForPath(path);
-                    return !!info && (info.isScriptOpen() || !info.isOrphan());
-                })) {
+                if (
+                    !forEachKey(sourceInfos, path => {
+                        const info = this.getScriptInfoForPath(path);
+                        return !!info && (info.isScriptOpen() || !info.isOrphan());
+                    })
+                ) {
                     return;
                 }
             }
@@ -3869,8 +3928,8 @@ export class ProjectService {
         lastKnownProjectVersions: protocol.ProjectVersionInfo[],
         currentProjects: Iterable<Project>,
         includeProjectReferenceRedirectInfo: boolean | undefined,
-        result: ProjectFilesWithTSDiagnostics[]
-        ): void {
+        result: ProjectFilesWithTSDiagnostics[],
+    ): void {
         for (const proj of currentProjects) {
             const knownProject = find(lastKnownProjectVersions, p => p.projectName === proj.getProjectName());
             result.push(proj.getChangesSinceVersion(knownProject && knownProject.version, includeProjectReferenceRedirectInfo));
@@ -3898,7 +3957,7 @@ export class ProjectService {
                     file.content,
                     tryConvertScriptKindName(file.scriptKind!),
                     file.hasMixedContent,
-                    file.projectRootPath ? toNormalizedPath(file.projectRootPath) : undefined
+                    file.projectRootPath ? toNormalizedPath(file.projectRootPath) : undefined,
                 );
                 (openScriptInfos || (openScriptInfos = [])).push(info);
             }
@@ -3999,7 +4058,7 @@ export class ProjectService {
     }
 
     /** Makes a filename safe to insert in a RegExp */
-    private static readonly filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
+    private static readonly filenameEscapeRegexp = /[-/\\^$*+?.()|[\]{}]/g;
     private static escapeFilenameForRegex(filename: string) {
         return filename.replace(this.filenameEscapeRegexp, "\\$&");
     }
@@ -4034,7 +4093,7 @@ export class ProjectService {
                         for (const type of rule.types) {
                             // Best-effort de-duping here - doesn't need to be unduplicated but
                             // we don't want the list to become a 400-element array of just 'kendo'
-                            if (typeAcqInclude.indexOf(type) < 0) {
+                            if (!typeAcqInclude.includes(type)) {
                                 typeAcqInclude.push(type);
                             }
                         }
@@ -4059,7 +4118,7 @@ export class ProjectService {
                                 }).join("");
                             });
 
-                            if (excludeRules.indexOf(processedRule) === -1) {
+                            if (!excludeRules.includes(processedRule)) {
                                 excludeRules.push(processedRule);
                             }
                         }
@@ -4067,7 +4126,7 @@ export class ProjectService {
                     else {
                         // If not rules listed, add the default rule to exclude the matched file
                         const escaped = ProjectService.escapeFilenameForRegex(root);
-                        if (excludeRules.indexOf(escaped) < 0) {
+                        if (!excludeRules.includes(escaped)) {
                             excludeRules.push(escaped);
                         }
                     }
@@ -4096,7 +4155,7 @@ export class ProjectService {
                             exclude = true;
                             // ... but *include* it in the list of types to acquire
                             // Same best-effort dedupe as above
-                            if (typeAcqInclude.indexOf(typeName) < 0) {
+                            if (!typeAcqInclude.includes(typeName)) {
                                 typeAcqInclude.push(typeName);
                             }
                         }
@@ -4104,7 +4163,7 @@ export class ProjectService {
                 }
                 if (!exclude) {
                     // Exclude any minified files that get this far
-                    if (/^.+[\.-]min\.js$/.test(normalizedNames[i])) {
+                    if (/^.+[.-]min\.js$/.test(normalizedNames[i])) {
                         excludedFiles.push(normalizedNames[i]);
                     }
                     else {
@@ -4242,8 +4301,11 @@ export class ProjectService {
         return false;
     }
 
-    /** @internal */
-    requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined) {
+    /**
+     * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin either asynchronously or synchronously
+     * @internal
+     */
+    requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[]) {
         if (!this.host.importPlugin && !this.host.require) {
             this.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
             return;
@@ -4257,7 +4319,12 @@ export class ProjectService {
 
         // If the host supports dynamic import, begin enabling the plugin asynchronously.
         if (this.host.importPlugin) {
-            const importPromise = project.beginEnablePluginAsync(pluginConfigEntry, searchPaths, pluginConfigOverrides);
+            const importPromise = Project.importServicePluginAsync(
+                pluginConfigEntry,
+                searchPaths,
+                this.host,
+                s => this.logger.info(s),
+            ) as Promise<BeginEnablePluginResult>;
             this.pendingPluginEnablements ??= new Map();
             let promises = this.pendingPluginEnablements.get(project);
             if (!promises) this.pendingPluginEnablements.set(project, promises = []);
@@ -4266,7 +4333,36 @@ export class ProjectService {
         }
 
         // Otherwise, load the plugin using `require`
-        project.endEnablePlugin(project.beginEnablePluginSync(pluginConfigEntry, searchPaths, pluginConfigOverrides));
+        this.endEnablePlugin(
+            project,
+            Project.importServicePluginSync(
+                pluginConfigEntry,
+                searchPaths,
+                this.host,
+                s => this.logger.info(s),
+            ),
+        );
+    }
+
+    /**
+     * Performs the remaining steps of enabling a plugin after its module has been instantiated.
+     * @internal
+     */
+    private endEnablePlugin(project: Project, { pluginConfigEntry, resolvedModule, errorLogs }: BeginEnablePluginResult) {
+        if (resolvedModule) {
+            const configurationOverride = this.currentPluginConfigOverrides?.get(pluginConfigEntry.name);
+            if (configurationOverride) {
+                // Preserve the name property since it's immutable
+                const pluginName = pluginConfigEntry.name;
+                pluginConfigEntry = configurationOverride;
+                pluginConfigEntry.name = pluginName;
+            }
+            project.enableProxy(resolvedModule, pluginConfigEntry);
+        }
+        else {
+            forEach(errorLogs, message => this.logger.info(message));
+            this.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
+        }
     }
 
     /** @internal */
@@ -4345,7 +4441,7 @@ export class ProjectService {
         }
 
         for (const result of results) {
-            project.endEnablePlugin(result);
+            this.endEnablePlugin(project, result);
         }
 
         // Plugins may have modified external files, so mark the project as dirty.
@@ -4394,8 +4490,10 @@ export class ProjectService {
     getNearestAncestorDirectoryWithPackageJson(fileName: string): string | undefined {
         return forEachAncestorDirectory(fileName, directory => {
             switch (this.packageJsonCache.directoryHasPackageJson(this.toPath(directory))) {
-                case Ternary.True: return directory;
-                case Ternary.False: return undefined;
+                case Ternary.True:
+                    return directory;
+                case Ternary.False:
+                    return undefined;
                 case Ternary.Maybe:
                     return this.host.fileExists(combinePaths(directory, "package.json"))
                         ? directory
@@ -4409,28 +4507,31 @@ export class ProjectService {
         const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = new Map());
         if (!watchers.has(path)) {
             this.invalidateProjectPackageJson(path);
-            watchers.set(path, this.watchFactory.watchFile(
+            watchers.set(
                 path,
-                (fileName, eventKind) => {
-                    const path = this.toPath(fileName);
-                    switch (eventKind) {
-                        case FileWatcherEventKind.Created:
-                            return Debug.fail();
-                        case FileWatcherEventKind.Changed:
-                            this.packageJsonCache.addOrUpdate(path);
-                            this.invalidateProjectPackageJson(path);
-                            break;
-                        case FileWatcherEventKind.Deleted:
-                            this.packageJsonCache.delete(path);
-                            this.invalidateProjectPackageJson(path);
-                            watchers.get(path)!.close();
-                            watchers.delete(path);
-                    }
-                },
-                PollingInterval.Low,
-                this.hostConfiguration.watchOptions,
-                WatchType.PackageJson,
-            ));
+                this.watchFactory.watchFile(
+                    path,
+                    (fileName, eventKind) => {
+                        const path = this.toPath(fileName);
+                        switch (eventKind) {
+                            case FileWatcherEventKind.Created:
+                                return Debug.fail();
+                            case FileWatcherEventKind.Changed:
+                                this.packageJsonCache.addOrUpdate(path);
+                                this.invalidateProjectPackageJson(path);
+                                break;
+                            case FileWatcherEventKind.Deleted:
+                                this.packageJsonCache.delete(path);
+                                this.invalidateProjectPackageJson(path);
+                                watchers.get(path)!.close();
+                                watchers.delete(path);
+                        }
+                    },
+                    PollingInterval.Low,
+                    this.hostConfiguration.watchOptions,
+                    WatchType.PackageJson,
+                ),
+            );
         }
     }
 
@@ -4443,9 +4544,12 @@ export class ProjectService {
     /** @internal */
     includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
         switch (this.hostConfiguration.preferences.includePackageJsonAutoImports) {
-            case "on": return PackageJsonAutoImportPreference.On;
-            case "off": return PackageJsonAutoImportPreference.Off;
-            default: return PackageJsonAutoImportPreference.Auto;
+            case "on":
+                return PackageJsonAutoImportPreference.On;
+            case "off":
+                return PackageJsonAutoImportPreference.Off;
+            default:
+                return PackageJsonAutoImportPreference.Auto;
         }
     }
 
@@ -4481,7 +4585,7 @@ function createIncompleteCompletionsCache(): IncompleteCompletionsCache {
         },
         clear() {
             info = undefined;
-        }
+        },
     };
 }
 
@@ -4493,5 +4597,5 @@ export function isConfigFile(config: ScriptInfoOrConfig): config is TsConfigSour
 }
 
 function printProjectWithoutFileNames(project: Project) {
-    project.print(/*writeProjectFileNames*/ false);
+    project.print(/*writeProjectFileNames*/ false, /*writeFileExplaination*/ false, /*writeFileVersionAndText*/ false);
 }

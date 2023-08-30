@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedDestructuringParameters.ts ===
+//// [tests/cases/compiler/unusedDestructuringParameters.ts] ////
+
+=== unusedDestructuringParameters.ts ===
 const f = ([a]) => { };
 >f : ([a]: [any]) => void
 >([a]) => { } : ([a]: [any]) => void

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasVar.ts] ////
+
 //// [internalAliasVar.ts]
 module a {
     export var x = 10;
@@ -22,9 +24,9 @@ var c;
 
 
 //// [internalAliasVar.d.ts]
-declare module a {
+declare namespace a {
     var x: number;
 }
-declare module c {
+declare namespace c {
     var bVal: number;
 }

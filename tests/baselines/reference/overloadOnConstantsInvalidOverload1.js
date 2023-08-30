@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts] ////
+
 //// [overloadOnConstantsInvalidOverload1.ts]
 class Base { foo() { } }
 class Derived1 extends Base { bar() { } }

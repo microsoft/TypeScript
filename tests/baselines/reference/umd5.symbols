@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd5.ts] ////
+
+=== a.ts ===
 import * as Bar from './foo';
 >Bar : Symbol(Bar, Decl(a.ts, 0, 6))
 
@@ -23,7 +25,7 @@ let z = Foo;
 >z : Symbol(z, Decl(a.ts, 5, 3))
 >Foo : Symbol(Foo, Decl(foo.d.ts, 2, 38))
 
-=== tests/cases/conformance/externalModules/foo.d.ts ===
+=== foo.d.ts ===
 export var x: number;
 >x : Symbol(x, Decl(foo.d.ts, 0, 10))
 

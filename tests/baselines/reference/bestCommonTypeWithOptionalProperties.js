@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bestCommonTypeWithOptionalProperties.ts] ////
+
 //// [bestCommonTypeWithOptionalProperties.ts]
 interface X { foo: string }
 interface Y extends X { bar?: number }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/node_modules/@types/lodash/object.d.ts ===
+//// [tests/cases/compiler/conflictingDeclarationsImportFromNamespace2.ts] ////
+
+=== node_modules/@types/lodash/object.d.ts ===
 import _ = require("./index");
 >_ : Symbol(_, Decl(object.d.ts, 0, 0))
 
@@ -30,14 +32,14 @@ declare module "./index" {
     }
 }
 
-=== tests/cases/compiler/node_modules/@types/lodash/pick.d.ts ===
+=== node_modules/@types/lodash/pick.d.ts ===
 import { pick } from "./index";
 >pick : Symbol(pick, Decl(pick.d.ts, 0, 8))
 
 export = pick;
 >pick : Symbol(pick, Decl(pick.d.ts, 0, 8))
 
-=== tests/cases/compiler/node_modules/@types/lodash/index.d.ts ===
+=== node_modules/@types/lodash/index.d.ts ===
 /// <reference path="./object.d.ts" />
 export = _;
 >_ : Symbol(_, Decl(index.d.ts, 3, 13), Decl(index.d.ts, 3, 32), Decl(object.d.ts, 0, 30))
@@ -57,7 +59,7 @@ declare namespace _ {
 >LoDashStatic : Symbol(LoDashStatic, Decl(index.d.ts, 4, 21), Decl(object.d.ts, 1, 26))
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as pick from 'lodash/pick';
 >pick : Symbol(pick, Decl(index.ts, 0, 6), Decl(index.ts, 1, 12))
 

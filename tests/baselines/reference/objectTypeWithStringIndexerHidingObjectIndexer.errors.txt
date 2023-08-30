@@ -7,7 +7,7 @@ lib.es5.d.ts(--,--): error TS2411: Property 'isPrototypeOf' of type '(v: Object)
 lib.es5.d.ts(--,--): error TS2411: Property 'propertyIsEnumerable' of type '(v: PropertyKey) => boolean' is not assignable to 'string' index type 'Object'.
 
 
-==== tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts (0 errors) ====
+==== objectTypeWithStringIndexerHidingObjectIndexer.ts (0 errors) ====
     // object types can define string indexers that are more specific than the default 'any' that would be returned
     // no errors expected below 
     

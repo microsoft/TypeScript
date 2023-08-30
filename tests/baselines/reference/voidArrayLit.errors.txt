@@ -1,7 +1,7 @@
-tests/cases/compiler/voidArrayLit.ts(4,5): error TS2345: Argument of type 'void' is not assignable to parameter of type 'string'.
+voidArrayLit.ts(4,5): error TS2345: Argument of type 'void' is not assignable to parameter of type 'string'.
 
 
-==== tests/cases/compiler/voidArrayLit.ts (1 errors) ====
+==== voidArrayLit.ts (1 errors) ====
     var va = [(() => {})()]; // ok
     (() => {})(); // ok
     function foo(s:string) {}

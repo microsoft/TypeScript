@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalTypeBasedContextualTypeReturnTypeWidening.ts] ////
+
 //// [conditionalTypeBasedContextualTypeReturnTypeWidening.ts]
 declare function useState1<S>(initialState: (S extends (() => any) ? never : S) | (() => S)): S; // No args
 declare function useState2<S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)): S; // Any args

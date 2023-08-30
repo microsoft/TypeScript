@@ -1,32 +1,32 @@
-tests/cases/compiler/missingCloseParenStatements.ts(2,26): error TS1005: ')' expected.
-tests/cases/compiler/missingCloseParenStatements.ts(4,5): error TS1005: ')' expected.
-tests/cases/compiler/missingCloseParenStatements.ts(8,39): error TS1005: ')' expected.
-tests/cases/compiler/missingCloseParenStatements.ts(11,35): error TS1005: ')' expected.
+missingCloseParenStatements.ts(2,26): error TS1005: ')' expected.
+missingCloseParenStatements.ts(4,5): error TS1005: ')' expected.
+missingCloseParenStatements.ts(8,39): error TS1005: ')' expected.
+missingCloseParenStatements.ts(11,35): error TS1005: ')' expected.
 
 
-==== tests/cases/compiler/missingCloseParenStatements.ts (4 errors) ====
+==== missingCloseParenStatements.ts (4 errors) ====
     var a1, a2, a3 = 0;
     if ( a1 && (a2 + a3 > 0) {
                              ~
 !!! error TS1005: ')' expected.
-!!! related TS1007 tests/cases/compiler/missingCloseParenStatements.ts:2:4: The parser expected to find a ')' to match the '(' token here.
+!!! related TS1007 missingCloseParenStatements.ts:2:4: The parser expected to find a ')' to match the '(' token here.
         while( (a2 > 0) && a1
         {
         ~
 !!! error TS1005: ')' expected.
-!!! related TS1007 tests/cases/compiler/missingCloseParenStatements.ts:3:10: The parser expected to find a ')' to match the '(' token here.
+!!! related TS1007 missingCloseParenStatements.ts:3:10: The parser expected to find a ')' to match the '(' token here.
             do {
                 var i = i + 1;
                 a1 = a1 + i;
                 with ((a2 + a3 > 0) && a1 {
                                           ~
 !!! error TS1005: ')' expected.
-!!! related TS1007 tests/cases/compiler/missingCloseParenStatements.ts:8:18: The parser expected to find a ')' to match the '(' token here.
+!!! related TS1007 missingCloseParenStatements.ts:8:18: The parser expected to find a ')' to match the '(' token here.
                     console.log(x);
                   }
             } while (i < 5 && (a1 > 5);
                                       ~
 !!! error TS1005: ')' expected.
-!!! related TS1007 tests/cases/compiler/missingCloseParenStatements.ts:11:17: The parser expected to find a ')' to match the '(' token here.
+!!! related TS1007 missingCloseParenStatements.ts:11:17: The parser expected to find a ')' to match the '(' token here.
         }
     }

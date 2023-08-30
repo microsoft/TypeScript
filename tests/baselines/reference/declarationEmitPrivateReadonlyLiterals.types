@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitPrivateReadonlyLiterals.ts ===
+//// [tests/cases/compiler/declarationEmitPrivateReadonlyLiterals.ts] ////
+
+=== declarationEmitPrivateReadonlyLiterals.ts ===
 class Foo {
 >Foo : Foo
 

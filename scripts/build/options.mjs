@@ -4,19 +4,19 @@ import os from "os";
 const ci = ["1", "true"].includes(process.env.CI ?? "");
 
 const parsed = minimist(process.argv.slice(2), {
-    boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci", "bundle", "typecheck"],
+    boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci", "bundle", "typecheck", "lint", "coverage"],
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         /* eslint-disable quote-props */
-        "b": "browser",
-        "i": ["inspect", "inspect-brk", "break", "debug", "debug-brk"],
-        "t": ["tests", "test"],
-        "ru": ["runners", "runner"],
-        "r": "reporter",
-        "c": ["colors", "color"],
-        "skippercent": "skipPercent",
-        "w": "workers",
-        "f": "fix"
+        b: "browser",
+        i: ["inspect", "inspect-brk", "break", "debug", "debug-brk"],
+        t: ["tests", "test"],
+        ru: ["runners", "runner"],
+        r: "reporter",
+        c: ["colors", "color"],
+        skippercent: "skipPercent",
+        w: "workers",
+        f: "fix",
         /* eslint-enable quote-props */
     },
     default: {
@@ -35,20 +35,22 @@ const parsed = minimist(process.argv.slice(2), {
         workers: +(process.env.workerCount ?? 0) || ((os.cpus().length - (ci ? 0 : 1)) || 1),
         failed: false,
         keepFailed: false,
-        lkg: true,
+        lkg: false,
         dirty: false,
         built: false,
         ci,
         bundle: true,
         typecheck: true,
-    }
+        lint: true,
+        coverage: false,
+    },
 });
 
 /** @type {CommandLineOptions} */
 const options = /** @type {any} */ (parsed);
 
-if (options.built) {
-    options.lkg = false;
+if (options.built && options.lkg) {
+    throw new Error("--built and --lkg are mutually exclusive");
 }
 
 if (!options.bundle && !options.typecheck) {
@@ -56,8 +58,6 @@ if (!options.bundle && !options.typecheck) {
 }
 
 export default options;
-
-
 
 /**
  * @typedef CommandLineOptions
@@ -86,5 +86,7 @@ export default options;
  * @property {string} break
  * @property {boolean} bundle
  * @property {boolean} typecheck
+ * @property {boolean} lint
+ * @property {boolean} coverage
  */
 void 0;

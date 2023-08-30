@@ -1,4 +1,6 @@
-=== tests/cases/compiler/f1.d.ts ===
+//// [tests/cases/compiler/newNamesInGlobalAugmentations1.ts] ////
+
+=== f1.d.ts ===
 export {};
 
 declare module M.M1 {
@@ -30,7 +32,7 @@ declare global {
 >x : number
 }
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 Symbol.observable;
 >Symbol.observable : symbol
 >Symbol : SymbolConstructor

@@ -1,6 +1,6 @@
 // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
 // If changing the text in this section, be sure to test `configurePrerelease` too.
-export const versionMajorMinor = "5.0";
+export const versionMajorMinor = "5.3";
 // The following is baselined as a literal template type without intervention
 /** The version of the TypeScript compiler release */
 // eslint-disable-next-line @typescript-eslint/no-inferrable-types
@@ -44,16 +44,6 @@ export interface Collection<K> extends ReadonlyCollection<K> {
     clear(): void;
 }
 
-/**
- * Array that is only intended to be pushed to, never read.
- *
- * @internal
- */
-export interface Push<T> {
-    push(...values: T[]): void;
-    readonly length: number;
-}
-
 /** @internal */
 export type EqualityComparer<T> = (a: T, b: T) => boolean;
 
@@ -65,7 +55,7 @@ export type Comparer<T> = (a: T, b: T) => -1 | 0 | 1;
 
 /** @internal */
 export const enum Comparison {
-    LessThan    = -1,
-    EqualTo     = 0,
-    GreaterThan = 1
+    LessThan = -1,
+    EqualTo = 0,
+    GreaterThan = 1,
 }

@@ -1,6 +1,7 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-// /*FIND ALL REFS*/interface [|Foo|] {
-// }
+// /*FIND ALL REFS*/<|interface [|{| isWriteAccess: true, isDefinition: true |}Foo|] {
+// }|>
 // 
 // module Foo {
 //     export interface Bar { }
@@ -13,83 +14,68 @@
 // var f2: [|Foo|];
 // Foo.bind(this);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-      "kind": "function",
-      "name": "interface Foo\nnamespace Foo",
-      "textSpan": {
-        "start": 73,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 64,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 115,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
+  // /*FIND ALL REFS*/interface Foo {
+  // }
+  // 
+  // module Foo {
+  //     export interface Bar { }
+  // }
+  // 
+  // <|function [|Foo|](): void {
+  // }|>
+  // 
+  // var f1: Foo.Bar;
+  // var f2: Foo;
+  // Foo.bind(this);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "interface Foo\nnamespace Foo",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-// interface /*FIND ALL REFS*/[|Foo|] {
-// }
+// <|interface /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Foo|] {
+// }|>
 // 
 // module Foo {
 //     export interface Bar { }
@@ -102,87 +88,72 @@
 // var f2: [|Foo|];
 // Foo.bind(this);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-      "kind": "function",
-      "name": "interface Foo\nnamespace Foo",
-      "textSpan": {
-        "start": 73,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 64,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 115,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
+  // interface /*FIND ALL REFS*/Foo {
+  // }
+  // 
+  // module Foo {
+  //     export interface Bar { }
+  // }
+  // 
+  // <|function [|Foo|](): void {
+  // }|>
+  // 
+  // var f1: Foo.Bar;
+  // var f2: Foo;
+  // Foo.bind(this);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "interface Foo\nnamespace Foo",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
 // interface Foo {
 // }
 // 
-// /*FIND ALL REFS*/module [|Foo|] {
+// /*FIND ALL REFS*/<|module [|{| isWriteAccess: true, isDefinition: true |}Foo|] {
 //     export interface Bar { }
-// }
+// }|>
 // 
 // function Foo(): void {
 // }
@@ -191,71 +162,56 @@
 // var f2: Foo;
 // Foo.bind(this);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-      "kind": "function",
-      "name": "namespace Foo",
-      "textSpan": {
-        "start": 73,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 64,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "contextSpan": {
-          "start": 19,
-          "length": 43
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
+  // interface Foo {
+  // }
+  // 
+  // /*FIND ALL REFS*/module Foo {
+  //     export interface Bar { }
+  // }
+  // 
+  // <|function [|Foo|](): void {
+  // }|>
+  // 
+  // var f1: Foo.Bar;
+  // var f2: Foo;
+  // Foo.bind(this);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace Foo",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
 // interface Foo {
 // }
 // 
-// module /*FIND ALL REFS*/[|Foo|] {
+// <|module /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Foo|] {
 //     export interface Bar { }
-// }
+// }|>
 // 
 // function Foo(): void {
 // }
@@ -264,289 +220,232 @@
 // var f2: Foo;
 // Foo.bind(this);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-      "kind": "function",
-      "name": "namespace Foo",
-      "textSpan": {
-        "start": 73,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 64,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "contextSpan": {
-          "start": 19,
-          "length": 43
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
+  // interface Foo {
+  // }
+  // 
+  // module /*FIND ALL REFS*/Foo {
+  //     export interface Bar { }
+  // }
+  // 
+  // <|function [|Foo|](): void {
+  // }|>
+  // 
+  // var f1: Foo.Bar;
+  // var f2: Foo;
+  // Foo.bind(this);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace Foo",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-// interface Foo {
-// }
-// 
-// module Foo {
+// --- (line: 4) skipped ---
 //     export interface Bar { }
 // }
 // 
-// /*FIND ALL REFS*/function [|Foo|](): void {
-// }
+// /*FIND ALL REFS*/<|function [|{| isWriteAccess: true, isDefinition: true |}Foo|](): void {
+// }|>
 // 
 // var f1: Foo.Bar;
 // var f2: Foo;
 // [|Foo|].bind(this);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-      "kind": "function",
-      "name": "namespace Foo\nfunction Foo(): void",
-      "textSpan": {
-        "start": 73,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 64,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "contextSpan": {
-          "start": 64,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 120,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
+  // --- (line: 4) skipped ---
+  //     export interface Bar { }
+  // }
+  // 
+  // /*FIND ALL REFS*/<|function [|Foo|](): void {
+  // }|>
+  // 
+  // var f1: Foo.Bar;
+  // var f2: Foo;
+  // Foo.bind(this);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace Foo\nfunction Foo(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-// interface Foo {
-// }
-// 
-// module Foo {
+// --- (line: 4) skipped ---
 //     export interface Bar { }
 // }
 // 
-// function /*FIND ALL REFS*/[|Foo|](): void {
-// }
+// <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Foo|](): void {
+// }|>
 // 
 // var f1: Foo.Bar;
 // var f2: Foo;
 // [|Foo|].bind(this);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-      "kind": "function",
-      "name": "namespace Foo\nfunction Foo(): void",
-      "textSpan": {
-        "start": 73,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 64,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "contextSpan": {
-          "start": 64,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 120,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
+  // --- (line: 4) skipped ---
+  //     export interface Bar { }
+  // }
+  // 
+  // <|function /*FIND ALL REFS*/[|Foo|](): void {
+  // }|>
+  // 
+  // var f1: Foo.Bar;
+  // var f2: Foo;
+  // Foo.bind(this);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace Foo\nfunction Foo(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
 // interface Foo {
 // }
 // 
-// module [|Foo|] {
+// <|module [|{| isWriteAccess: true |}Foo|] {
 //     export interface Bar { }
-// }
+// }|>
 // 
 // function Foo(): void {
 // }
@@ -555,65 +454,49 @@
 // var f2: Foo;
 // Foo.bind(this);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-      "kind": "function",
-      "name": "namespace Foo",
-      "textSpan": {
-        "start": 73,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 64,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "contextSpan": {
-          "start": 19,
-          "length": 43
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
+  // --- (line: 4) skipped ---
+  //     export interface Bar { }
+  // }
+  // 
+  // <|function [|Foo|](): void {
+  // }|>
+  // 
+  // var f1: /*FIND ALL REFS*/Foo.Bar;
+  // var f2: Foo;
+  // Foo.bind(this);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace Foo",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-// interface [|Foo|] {
-// }
+// <|interface [|{| isWriteAccess: true |}Foo|] {
+// }|>
 // 
 // module Foo {
 //     export interface Bar { }
@@ -626,181 +509,143 @@
 // var f2: /*FIND ALL REFS*/[|Foo|];
 // Foo.bind(this);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-      "kind": "function",
-      "name": "interface Foo\nnamespace Foo",
-      "textSpan": {
-        "start": 73,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "interface",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        }
-      ],
-      "contextSpan": {
-        "start": 64,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 10,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 17
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 115,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
+  // --- (line: 4) skipped ---
+  //     export interface Bar { }
+  // }
+  // 
+  // <|function [|Foo|](): void {
+  // }|>
+  // 
+  // var f1: Foo.Bar;
+  // var f2: /*FIND ALL REFS*/Foo;
+  // Foo.bind(this);
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "interface Foo\nnamespace Foo",
+    "displayParts": [
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
-// interface Foo {
-// }
-// 
-// module Foo {
+// --- (line: 4) skipped ---
 //     export interface Bar { }
 // }
 // 
-// function [|Foo|](): void {
-// }
+// <|function [|{| isWriteAccess: true |}Foo|](): void {
+// }|>
 // 
 // var f1: Foo.Bar;
 // var f2: Foo;
 // /*FIND ALL REFS*/[|Foo|].bind(this);
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-      "kind": "function",
-      "name": "namespace Foo\nfunction Foo(): void",
-      "textSpan": {
-        "start": 73,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "function",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 64,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 73,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "contextSpan": {
-          "start": 64,
-          "length": 24
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 120,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations.ts ===
+  // --- (line: 4) skipped ---
+  //     export interface Bar { }
+  // }
+  // 
+  // <|function [|Foo|](): void {
+  // }|>
+  // 
+  // var f1: Foo.Bar;
+  // var f2: Foo;
+  // /*FIND ALL REFS*/Foo.bind(this);
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "namespace Foo\nfunction Foo(): void",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
