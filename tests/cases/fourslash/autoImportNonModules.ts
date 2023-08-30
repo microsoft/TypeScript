@@ -22,6 +22,6 @@ verify.completions({
   marker: "",
   excludes: ["Thing2A"],
   preferences: {
-    includeCompletionsForModuleExports: false
+    includeCompletionsForModuleExports: true
   }
 });
