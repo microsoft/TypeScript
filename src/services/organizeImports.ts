@@ -806,7 +806,7 @@ function getOrganizeImportsUnicodeStringComparer(ignoreCase: boolean, preference
         numeric,
     });
 
-    return (a, b) => compareValues(collator.compare(a, b), 0);
+    return (a, b) => Math.sign(collator.compare(a, b)) as -1 | 0 | 1;
 }
 
 function getOrganizeImportsLocale(preferences: UserPreferences): string {
