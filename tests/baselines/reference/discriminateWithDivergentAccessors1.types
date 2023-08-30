@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/discriminateWithDivergentAccessors1.ts] ////
+
+=== discriminateWithDivergentAccessors1.ts ===
+type WeirdoBox<T> =
+>WeirdoBox : WeirdoBox<T>
+
+  | { get done(): false; set done(v: T | null) }
+>done : false
+>false : false
+>done : false
+>v : T | null
+
+  | { get done(): true; set done(v: T | null); value: T };
+>done : true
+>true : true
+>done : true
+>v : T | null
+>value : T
+
+declare const weirdoBox: WeirdoBox<number>;
+>weirdoBox : WeirdoBox<number>
+
+if (weirdoBox.done) {
+>weirdoBox.done : boolean
+>weirdoBox : WeirdoBox<number>
+>done : boolean
+
+  weirdoBox.value;
+>weirdoBox.value : number
+>weirdoBox : { done: true; value: number; }
+>value : number
+}
+
