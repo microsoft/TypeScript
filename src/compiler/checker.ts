@@ -14389,7 +14389,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (writeTypes || writeType !== type) {
                 writeTypes = append(!writeTypes ? propTypes.slice() : writeTypes, writeType);
             }
-            else if (type !== firstType) {
+            if (type !== firstType) {
                 checkFlags |= CheckFlags.HasNonUniformType;
             }
             if (isLiteralType(type) || isPatternLiteralType(type)) {
