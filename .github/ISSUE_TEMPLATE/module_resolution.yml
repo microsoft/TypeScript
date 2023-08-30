@@ -1,6 +1,6 @@
 name: Module resolution
 description: Report a problem with module resolution
-title: "Module resolution:"
+title: 'Module resolution:'
 labels: []
 body:
   - type: markdown
@@ -11,6 +11,8 @@ body:
         Be sure you've read the docs and asked for help in other places before filling out this form.
 
         Most module resolution bug reports are actually misconfigurations, so we require a thorough pre-investigation before we can look into any potential issues.
+
+        Many module problems can be automatically detected with [Are The Types Wrong?](https://arethetypeswrong.github.io/) and you should use this tool first if it appears that the module shape is wrong.
 
         Let's make sure you're ready to file a module resolution bug.
 
@@ -64,7 +66,7 @@ body:
     attributes:
       label: Run `tsc --showConfig` and paste its output here
       description: Repros that depend on running within external tools (yarn, pnpm, esbuild, etc.) are not TypeScript defects and will not be investigated.
-      placeholder: "> tsc --showConfig"
+      placeholder: '> tsc --showConfig'
     validations:
       required: true
 
@@ -73,7 +75,7 @@ body:
     attributes:
       label: Run `tsc --traceResolution` and paste its output here
       description: Run `tsc --traceResolution` and paste the output here.
-      placeholder: "> tsc --traceResolution"
+      placeholder: '> tsc --traceResolution'
     validations:
       required: true
 
@@ -81,7 +83,7 @@ body:
     id: import-package-json
     attributes:
       label: Paste the `package.json` of the *importing* module, if it exists
-      placeholder: "my_project/package.json"
+      placeholder: 'my_project/package.json'
     validations:
       required: true
 
@@ -89,7 +91,7 @@ body:
     id: export-package-json
     attributes:
       label: Paste the `package.json` of the *target* module, if it exists
-      placeholder: "node_modules/somepkg/package.json"
+      placeholder: 'node_modules/somepkg/package.json'
     validations:
       required: true
 
@@ -97,6 +99,6 @@ body:
     id: comments
     attributes:
       label: Any other comments can go here
-      placeholder: "Have a nice day!"
+      placeholder: 'Have a nice day!'
     validations:
       required: true
