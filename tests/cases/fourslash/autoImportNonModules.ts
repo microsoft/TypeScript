@@ -14,7 +14,6 @@
 //// export function f(){ return false }
 
 verify.completions({
-  marker: "",
   excludes: ["f"],
   preferences: {
     includeCompletionsForModuleExports: true
