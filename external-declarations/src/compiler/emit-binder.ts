@@ -1,8 +1,8 @@
-import { __String, ArrayBindingElement, BindingPattern, ClassDeclaration, ClassElement, CompilerOptions, EnumDeclaration, ExportDeclaration, ExportSpecifier, Extension, findAncestor, forEachChild, FunctionDeclaration, Identifier, InterfaceDeclaration, isBlock, isClassDeclaration, isComputedPropertyName, isConditionalTypeNode, isConstructorDeclaration, isConstructSignatureDeclaration, isEnumDeclaration, isExportAssignment, isExportDeclaration, isExternalModuleReference, isFunctionDeclaration, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isInferTypeNode, isInterfaceDeclaration, isJsxFragment, isJsxOpeningLikeElement, isLiteralExpression, isMappedTypeNode, isMetaProperty, isModuleBlock, isModuleDeclaration, isNamedExports, isPrivateIdentifier, isPropertyAccessExpression, isSourceFile, isTypeAliasDeclaration, isVariableDeclaration,isVariableStatement, JsxEmit, ModifierFlags, ModuleDeclaration, ModuleDetectionKind, ModuleKind, ModuleResolutionKind, Node, NodeArray, ParameterDeclaration, ResolutionMode, SourceFile, Symbol, SymbolFlags, SyntaxKind, TypeElement, TypeParameterDeclaration, VariableDeclaration } from "typescript";
+import { __String, ArrayBindingElement, BindingPattern, ClassDeclaration, ClassElement, CompilerOptions, EnumDeclaration, ExportDeclaration, ExportSpecifier, Extension, findAncestor, forEachChild, FunctionDeclaration, Identifier, InterfaceDeclaration, isBlock, isClassDeclaration, isConditionalTypeNode, isConstructorDeclaration, isConstructSignatureDeclaration, isEnumDeclaration, isExportAssignment, isExportDeclaration, isExternalModuleReference, isFunctionDeclaration, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isInferTypeNode, isInterfaceDeclaration, isJsxFragment, isJsxOpeningLikeElement, isMappedTypeNode, isMetaProperty, isModuleBlock, isModuleDeclaration, isNamedExports, isSourceFile, isTypeAliasDeclaration, isVariableDeclaration,isVariableStatement, JsxEmit, ModifierFlags, ModuleDeclaration, ModuleDetectionKind, ModuleKind, ModuleResolutionKind, Node, NodeArray, ParameterDeclaration, ResolutionMode, SourceFile, Symbol, SymbolFlags, SyntaxKind, TypeElement, TypeParameterDeclaration, VariableDeclaration } from "typescript";
 
 import { Debug } from "./debug";
 import { forEach } from "./lang-utils";
-import { getEmitModuleKind, getEmitModuleResolutionKind, getNodeId, hasSyntacticModifier, isBindingPattern, isEnumConst, nodeHasName } from "./utils";
+import { getEmitModuleKind, getEmitModuleResolutionKind, getMemberKey, getNodeId, hasSyntacticModifier, isBindingPattern, isEnumConst, nodeHasName } from "./utils";
 
 
 export interface NodeLinks {
@@ -107,6 +107,7 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
         tryGetNodeLinks,
         getNodeLinks,
         resolveName,
+        getMemberName,
     };
 
 
@@ -230,45 +231,6 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
             [currentLocalSymbolTable, currentSymbol] = old;
         }
 
-        /**
-         * Gets the symbolic name for a member from its type.
-         */
-        function getMemberName(element: TypeElement | ClassElement): __String | undefined{
-            if (isConstructorDeclaration(element) || isConstructSignatureDeclaration(element)) {
-                return "@constructor" as __String;
-            }
-            const name = element.name;
-            if(!name) return undefined;
-            if(isIdentifier(name)) {
-                return name.escapedText;
-            }
-            else if(isLiteralExpression(name)) {
-                return `${name.text}` as __String;
-            }
-            else if(isComputedPropertyName(name)) {
-                let expr = name.expression;
-
-                if(isLiteralExpression(expr)) {
-                    return `${expr.text}` as __String;
-                }
-
-                let fullName = "";
-                while(isPropertyAccessExpression(expr)) {
-                    fullName = "." + expr.name.escapedText + name;
-                    expr = expr.expression;
-                }
-                if(!isIdentifier(expr)) {
-                    return undefined;
-                }
-                return `[${expr.escapedText}${fullName}]` as __String;
-            }
-            else if(isPrivateIdentifier(name)) {
-                return name.escapedText;
-            }
-            else {
-                assertNever(name);
-            }
-        }
 
         function getStatementName(s: InterfaceDeclaration | ClassDeclaration | FunctionDeclaration) {
             if(hasSyntacticModifier(s, ModifierFlags.Export) && hasSyntacticModifier(s, ModifierFlags.Default)) {
@@ -710,3 +672,15 @@ function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visite
     return ModuleInstanceState.Instantiated; // Couldn't locate, assume could refer to a value
 }
 
+
+/**
+ * Gets the symbolic name for a member from its type.
+ */
+function getMemberName(element: TypeElement | ClassElement): __String | undefined{
+    if (isConstructorDeclaration(element) || isConstructSignatureDeclaration(element)) {
+        return "@constructor" as __String;
+    }
+    const name = element.name;
+    if(!name) return undefined;
+    return getMemberKey(name) as __String;
+}

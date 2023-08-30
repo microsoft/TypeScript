@@ -1,4 +1,4 @@
-import { AsExpression, BinaryExpression, ClassDeclaration, CompilerOptions, ComputedPropertyName, Declaration, DiagnosticWithLocation, ElementAccessExpression, EntityNameExpression, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, FileReference, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedDeclaration, Node, NonNullExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SatisfiesExpression, SignatureDeclaration, SourceFile, StringLiteralLike, Symbol, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, TypeAssertion, VariableDeclaration, VariableStatement, Path, EnumMember, PropertyAccessExpression } from "typescript";
+import { AsExpression, BinaryExpression, ClassDeclaration, CompilerOptions, ComputedPropertyName, Declaration, DiagnosticWithLocation, ElementAccessExpression, EntityNameExpression, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, FileReference, FunctionDeclaration, ImportDeclaration, InterfaceDeclaration, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedDeclaration, Node, NonNullExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SatisfiesExpression, SignatureDeclaration, SourceFile, StringLiteralLike, Symbol, SymbolFlags, TransformationContext as _TransformationContext, TypeAliasDeclaration, TypeAssertion, VariableDeclaration, VariableStatement, Path, EnumMember, PropertyAccessExpression, AccessorDeclaration, GetAccessorDeclaration, SetAccessorDeclaration } from "typescript";
 
 import { AnyImportSyntax } from "./utils";
 
@@ -41,7 +41,16 @@ export interface IsolatedEmitResolver {
     getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined
+    getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
 }
+export interface AllAccessorDeclarations {
+    firstAccessor: AccessorDeclaration;
+    secondAccessor: AccessorDeclaration | undefined;
+    getAccessor: GetAccessorDeclaration | undefined;
+    setAccessor: SetAccessorDeclaration | undefined;
+}
+
+
 /** @internal */
 export interface AmbientModuleDeclaration extends ModuleDeclaration {
     readonly body?: ModuleBlock;

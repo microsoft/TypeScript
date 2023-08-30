@@ -1,4 +1,4 @@
-import { __String, BindingPattern, CompilerOptions, ComputedPropertyName, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, Expression, factory, findAncestor, FunctionDeclaration, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, getParseTreeNode, Identifier, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isArrowFunction, isBigIntLiteral, isBinaryExpression, isBindingElement, isElementAccessExpression, isEnumMember, isExpressionStatement, isFunctionDeclaration, isFunctionExpression, isFunctionLike, isGetAccessor, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSourceFile, isStringLiteralLike, isVariableDeclaration, isVariableStatement, LiteralExpression, ModifierFlags, NamespaceImport, Node, NodeArray, NodeFlags, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, Statement, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
+import { __String, AccessorDeclaration, BindingPattern, CompilerOptions, ComputedPropertyName, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, Expression, factory, findAncestor, FunctionDeclaration, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, getParseTreeNode, Identifier, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isArrowFunction, isBigIntLiteral, isBinaryExpression, isBindingElement, isElementAccessExpression, isEnumMember, isExpressionStatement, isFunctionDeclaration, isFunctionExpression, isFunctionLike, isGetAccessor, isGetAccessorDeclaration, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSetAccessorDeclaration, isSourceFile, isStringLiteralLike, isTemplateExpression, isVariableDeclaration, isVariableStatement, LiteralExpression, ModifierFlags, NamespaceImport, Node, NodeArray, NodeFlags, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, Statement, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
 
 import { Debug } from "./debug";
 import { BasicSymbol, bindSourceFile, NodeLinks } from "./emit-binder";
@@ -12,7 +12,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     const { getNodeLinks, resolveName } = bindSourceFile(file, options, packageModuleType);
 
 
-    function isLiteralValue(node: Expression) {
+    function isLiteralValue(node: Expression): boolean {
         if(isLiteralExpression(node)) return true;
 
         if(node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) return true;
@@ -25,6 +25,9 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             if(node.operator === SyntaxKind.PlusToken) {
                 return isNumericLiteral(operand);
             }
+        }
+        if(isTemplateExpression(node)) {
+            return node.templateSpans.every(t => isLiteralValue(t.expression));
         }
         return false;
     }
@@ -151,6 +154,21 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         isDeclarationVisible,
         isLiteralConstDeclaration,
         isLiteralComputedName,
+        getAllAccessorDeclarations(declaration) {
+            const parentLinks = getNodeLinks(declaration.parent);
+            const key = getMemberKey(declaration.name) as __String;
+            const members = hasSyntacticModifier(declaration, ModifierFlags.Static) ?
+                parentLinks.symbol?.exports :
+                parentLinks.symbol?.members
+            const symbol = key && members?.get(key);
+            const declarations = symbol?.declarations ?? [declaration];
+            return {
+                firstAccessor: declarations[0] as AccessorDeclaration,
+                secondAccessor: declarations[1] as AccessorDeclaration,
+                getAccessor: declarations.find(isGetAccessorDeclaration),
+                setAccessor: declarations.find(isSetAccessorDeclaration)
+            }
+        },
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined {
             function getLiteralValue(value: LiteralExpression) {
                 if(isStringLiteralLike(value)) {

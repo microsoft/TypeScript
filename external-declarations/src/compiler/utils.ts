@@ -1,4 +1,4 @@
-import { BindingPattern, CallExpression, canHaveModifiers, ClassDeclaration, ClassLikeDeclaration, CompilerOptions, Declaration, DeclarationName, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, ExpressionWithTypeArguments, Extension, FunctionDeclaration, FunctionLikeDeclaration, getJSDocDeprecatedTag, getJSDocOverrideTagNoCache, getJSDocPrivateTag, getJSDocProtectedTag, getJSDocPublicTag, getJSDocReadonlyTag, getJSDocTypeTag, getNameOfDeclaration, HasType, Identifier, ImportDeclaration, ImportEqualsDeclaration, ImportTypeNode, InterfaceDeclaration, isElementAccessExpression, isExpressionWithTypeArguments, isHeritageClause, isIdentifier, isModuleDeclaration, isNumericLiteral, isParameter, isParenthesizedExpression, isPrefixUnaryExpression, isSourceFile, isStringLiteralLike, isVariableStatement,JSDocTemplateTag, JsxEmit, ModifierFlags, ModifierLike, ModuleDeclaration, ModuleKind, ModuleResolutionKind, NamedDeclaration, NewLineKind, Node, NodeFlags, NumericLiteral, OuterExpressionKinds, PrefixUnaryExpression, PrinterOptions, PropertyAccessEntityNameExpression, PropertyAccessExpression, QualifiedName, ScriptTarget, SignatureDeclaration, SourceFile, StringLiteralLike, SyntaxKind, sys, TsConfigSourceFile, TypeAliasDeclaration, TypeAssertion, TypeParameterDeclaration, VariableStatement } from "typescript";
+import { __String, BindingPattern, CallExpression, canHaveModifiers, ClassDeclaration, ClassLikeDeclaration, CompilerOptions, Declaration, DeclarationName, EntityNameOrEntityNameExpression, EnumDeclaration, Expression, ExpressionWithTypeArguments, Extension, FunctionDeclaration, FunctionLikeDeclaration, getJSDocDeprecatedTag, getJSDocOverrideTagNoCache, getJSDocPrivateTag, getJSDocProtectedTag, getJSDocPublicTag, getJSDocReadonlyTag, getJSDocTypeTag, getNameOfDeclaration, HasType, Identifier, ImportDeclaration, ImportEqualsDeclaration, ImportTypeNode, InterfaceDeclaration, isElementAccessExpression, isExpressionWithTypeArguments, isHeritageClause, isIdentifier, isModuleDeclaration, isNumericLiteral, isParameter, isParenthesizedExpression, isPrefixUnaryExpression, isPrivateIdentifier, isSourceFile, isStringLiteral, isStringLiteralLike, isVariableStatement,JSDocTemplateTag, JsxEmit, ModifierFlags, ModifierLike, ModuleDeclaration, ModuleKind, ModuleResolutionKind, NamedDeclaration, NewLineKind, Node, NodeFlags, NumericLiteral, OuterExpressionKinds, PrefixUnaryExpression, PrinterOptions, PropertyAccessEntityNameExpression, PropertyAccessExpression, QualifiedName, ScriptTarget, SignatureDeclaration, SourceFile, StringLiteralLike, SyntaxKind, sys, TsConfigSourceFile, TypeAliasDeclaration, TypeAssertion, TypeParameterDeclaration, VariableStatement } from "typescript";
 import * as ts from "typescript";
 
 import { Debug } from "./debug";
@@ -638,19 +638,41 @@ function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: Decl
 
 
 
-export function getMemberKey(name: ts.PropertyName) {
-    if (isIdentifier(name)) {
-        return "I:" + name.escapedText;
+export function getMemberKey(name: ts.PropertyName): string | undefined {
+    if(isPrivateIdentifier(name)) {
+        return ("P:" + name.escapedText);
     }
-    if (ts.isStringLiteral(name)) {
-        return "I:" + name.text;
+    if (isIdentifier(name)) {
+        return ("I:" + name.escapedText);
+    }
+    if (isStringLiteral(name)) {
+        return ("I:" + name.text);
     }
     if (isNumericLiteral(name)) {
-        return "I:" + (+name.text);
+        return ("I:" + (+name.text));
     }
     if (ts.isComputedPropertyName(name)) {
         let fullId = "C:";
-        let computedName = ts.isComputedPropertyName(name)? name.expression: name;
+        let computedName = name.expression;
+        
+        if (isStringLiteral(computedName)) {
+            return ("I:" + computedName.text);
+        }
+        if (isNumericLiteral(computedName)) {
+            return ("I:" + (+computedName.text));
+        }
+        if (isPrefixUnaryExpression(computedName)
+            && isNumericLiteral(computedName.operand)) {
+            if(computedName.operator === SyntaxKind.MinusToken){
+                return ("I:" + (-computedName.operand.text));
+            }
+            else if(computedName.operator === SyntaxKind.PlusToken){
+                return ("I:" + (-computedName.operand.text));
+            }
+            else {
+                return undefined;
+            }
+        }
         // We only support dotted identifiers as property keys
         while (true) {
             if (isIdentifier(computedName)) {
@@ -666,7 +688,7 @@ export function getMemberKey(name: ts.PropertyName) {
                 return undefined;
             }
         }
-        return fullId;
+        return fullId
     }
     return undefined;
 }

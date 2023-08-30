@@ -912,10 +912,7 @@ export function transformDeclarations(context: TransformationContext) {
             if (!isPrivate) {
                 const valueParameter = getSetAccessorValueParameter(input);
                 if (valueParameter) {
-                    const accessorType =
-                        isolatedDeclarations ?
-                        undefined:
-                        getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                     newValueParameter = ensureParameter(valueParameter, /*modifierMask*/ undefined, accessorType);
                 }
             }

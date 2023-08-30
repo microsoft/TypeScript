@@ -4,11 +4,8 @@
             9007 // Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit
         ], 
         "with-unreliable-errors": [
-            2464, // A_computed_property_name_must_be_of_type_string_number_symbol_or_any,
             2314, // Generic type '{0}' requires {1} type argument(s)
             1166, // A_computed_property_name_in_a_class_property_declaration_must_have_a_simple_literal_type_or_a_unique_symbol_type
-            1187, // A_parameter_property_may_not_be_declared_using_a_binding_pattern
-            1003, // Identifier expected.
             2784, // 'get' and 'set' accessors cannot declare 'this' parameters.
             1162, // An object member cannot be declared optional.
         ]
@@ -25,13 +22,10 @@
             "callSignaturesWithAccessibilityModifiersOnParameters", // Accessibility modifiers on function parameters
             // Duplicate properties and variables
             "duplicateObjectLiteralProperty",
-            "duplicatePropertiesInStrictMode",
             "duplicateVariablesWithAny",
             "duplicateVarsAcrossFileBoundaries",
             "gettersAndSettersErrors",
             "jsFileCompilationDuplicateVariableErrorReported",
-            "memberOverride",
-            "noRepeatedPropertyNames",
             "varBlock",
             "duplicatePropertiesInTypeAssertions01",
             "duplicatePropertiesInTypeAssertions02",
@@ -39,18 +33,30 @@
             "invalidMultipleVariableDeclarations",
             "validMultipleVariableDeclarations", 
             "augmentedTypesVar",
-            "twoAccessorsWithSameName",
-            "stringNamedPropertyDuplicates",
-            "numericStringNamedPropertyEquivalence",
-            "numericNamedPropertyDuplicates",
-            "objectTypeWithDuplicateNumericProperty",
             "objectLiteralErrors",
-            "octalIntegerLiteralError",
-            "binaryIntegerLiteralError",
-            "symbolProperty36", 
             "duplicateObjectLiteralProperty_computedName2", 
-            "duplicateIdentifierDifferentSpelling",
-            "castingTuple" // contains both duplicate variables and print differences.
+            "castingTuple", // contains both duplicate variables and print differences.
+            // Identifier expected.
+            "FunctionPropertyAssignments2_es6",
+            "FunctionPropertyAssignments3_es6",
+            "FunctionPropertyAssignments4_es6",
+            "FunctionPropertyAssignments6_es6",
+            // Generic type '{0}' requires {1} type argument(s)
+            "genericTypeReferenceWithoutTypeArgument",
+            "genericTypeReferenceWithoutTypeArgument2",
+            // A_computed_property_name_must_be_of_type_string_number_symbol_or_any,
+            "bigintIndex",
+            "computedPropertyNames14_ES5",
+            "computedPropertyNames14_ES6",
+            "computedPropertyNames15_ES5",
+            "computedPropertyNames15_ES6",
+            "computedPropertyNames17_ES5",
+            "computedPropertyNames17_ES6",
+            "parser.asyncGenerators.classMethods.es2018",
+            // Invalid escape sequences 
+            "invalidTaggedTemplateEscapeSequences",
+            "objectTypeWithStringNamedPropertyOfIllegalCharacters",
+            "noUsedBeforeDefinedErrorInTypeContext" // Variable used before definition in type context
         ],
         "with-isolated-declaration-errors": [
             "typeFromPropertyAssignment38", // Nested expando functions. Can in principle be detected, but are not yet implemented
@@ -116,6 +122,8 @@
             "declarationEmitComputedNameCausesImportToBePainted",
             // Default type parameters is written in declarations
             "conditionalTypesSimplifyWhenTrivial", 
+            // https://github.com/microsoft/TypeScript/issues/55571 
+            "reExportAliasMakesInstantiated"
         ],        
         // Needs TS Fix
         "binding-patterns": [
@@ -210,6 +218,8 @@
             "declarationEmitWithDefaultAsComputedName",
             "declarationEmitComputedNameConstEnumAlias",
             "capturedParametersInInitializers1",
+            "declarationEmitPropertyNumericStringKey",
+            "templateLiteralsSourceMap" // template literal is evaluated in constant value.
         ],
         // Investigate in reference DTE
         "references-import-diffs": [
@@ -233,6 +243,7 @@
             "typeReferenceRelatedFiles",
             "jsxNamespaceGlobalReexport",
             "parseAssertEntriesError",
+            "declarationEmitPrefersPathKindBasedOnBundling2"
         ],
         "bug-binding-pattern-inference": [
             "destructuringWithLiteralInitializers",
