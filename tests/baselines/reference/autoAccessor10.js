@@ -57,11 +57,11 @@ class C3 {
 }
 class C4_1 {
     static #a3_accessor_storage = 1;
-    static get a3() { return this.#a3_accessor_storage; }
-    static set a3(value) { this.#a3_accessor_storage = value; }
+    static get a3() { return C4_1.#a3_accessor_storage; }
+    static set a3(value) { C4_1.#a3_accessor_storage = value; }
 }
 class C4_2 {
     static #a3_accessor_storage = 1;
-    static get a3() { return this.#a3_accessor_storage; }
-    static set a3(value) { this.#a3_accessor_storage = value; }
+    static get a3() { return C4_2.#a3_accessor_storage; }
+    static set a3(value) { C4_2.#a3_accessor_storage = value; }
 }

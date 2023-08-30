@@ -5,7 +5,10 @@
  * bundle as namespaces again, even though the project is modules.
  */
 
-import assert, { fail } from "assert";
+import assert, {
+    fail,
+} from "assert";
+import cp from "child_process";
 import fs from "fs";
 import minimist from "minimist";
 import path from "path";
@@ -48,7 +51,6 @@ function isInternalDeclaration(node) {
 }
 
 /**
- *
  * @param {ts.VariableDeclaration} node
  * @returns {ts.VariableStatement}
  */
@@ -62,7 +64,6 @@ function getParentVariableStatement(node) {
 }
 
 /**
- *
  * @param {ts.Declaration} node
  * @returns {ts.Statement | undefined}
  */
@@ -207,8 +208,8 @@ function nodeToLocation(node) {
 function removeDeclareConstExport(node) {
     switch (node.kind) {
         case ts.SyntaxKind.DeclareKeyword: // No need to emit this in d.ts files.
-        case ts.SyntaxKind.ConstKeyword:   // Remove const from const enums.
-        case ts.SyntaxKind.ExportKeyword:  // No export modifier; we are already in the namespace.
+        case ts.SyntaxKind.ConstKeyword: // Remove const from const enums.
+        case ts.SyntaxKind.ExportKeyword: // No export modifier; we are already in the namespace.
             return undefined;
     }
     return node;
@@ -374,7 +375,7 @@ function emitAsNamespace(name, moduleSymbol) {
 
             const isInternal = isInternalDeclaration(statement);
             if (!isInternal) {
-                const publicStatement = ts.visitEachChild(statement, (node) => {
+                const publicStatement = ts.visitEachChild(statement, node => {
                     // No @internal comments in the public API.
                     if (isInternalDeclaration(node)) {
                         return undefined;
@@ -409,5 +410,25 @@ if (publicContents.includes("@internal")) {
     console.error("Output includes untrimmed @internal nodes!");
 }
 
-fs.writeFileSync(output, publicContents);
-fs.writeFileSync(internalOutput, internalContents);
+const dprintPath = path.resolve(__dirname, "..", "node_modules", "dprint", "bin.js");
+
+/**
+ * @param {string} contents
+ * @returns {string}
+ */
+function dprint(contents) {
+    const result = cp.execFileSync(
+        process.execPath,
+        [dprintPath, "fmt", "--stdin", "ts"],
+        {
+            stdio: ["pipe", "pipe", "inherit"],
+            encoding: "utf-8",
+            input: contents,
+            maxBuffer: 100 * 1024 * 1024, // 100 MB "ought to be enough for anyone"; https://github.com/nodejs/node/issues/9829
+        },
+    );
+    return result.replace(/\r\n/g, "\n");
+}
+
+fs.writeFileSync(output, dprint(publicContents));
+fs.writeFileSync(internalOutput, dprint(internalContents));

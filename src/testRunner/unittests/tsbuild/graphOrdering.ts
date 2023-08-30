@@ -15,7 +15,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         ["H", "I"],
         ["I", "J"],
         ["J", "H"],
-        ["J", "E"]
+        ["J", "E"],
     ];
 
     before(() => {
@@ -59,7 +59,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         if (!circular) {
             for (const dep of deps) {
                 const child = getProjectFileName(dep[0]);
-                if (buildQueue.indexOf(child) < 0) continue;
+                if (!buildQueue.includes(child)) continue;
                 const parent = getProjectFileName(dep[1]);
                 assert.isAbove(buildQueue.indexOf(child), buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
             }
@@ -73,18 +73,22 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     function writeProjects(fileSystem: vfs.FileSystem, projectNames: string[], deps: [string, string][]): string[] {
         const projFileNames: string[] = [];
         for (const dep of deps) {
-            if (projectNames.indexOf(dep[0]) < 0) throw new Error(`Invalid dependency - project ${dep[0]} does not exist`);
-            if (projectNames.indexOf(dep[1]) < 0) throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
+            if (!projectNames.includes(dep[0])) throw new Error(`Invalid dependency - project ${dep[0]} does not exist`);
+            if (!projectNames.includes(dep[1])) throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
         }
         for (const proj of projectNames) {
             fileSystem.mkdirpSync(`/project/${proj}`);
             fileSystem.writeFileSync(`/project/${proj}/${proj}.ts`, "export {}");
             const configFileName = getProjectFileName(proj);
-            const configContent = JSON.stringify({
-                compilerOptions: { composite: true },
-                files: [`./${proj}.ts`],
-                references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` }))
-            }, undefined, 2);
+            const configContent = JSON.stringify(
+                {
+                    compilerOptions: { composite: true },
+                    files: [`./${proj}.ts`],
+                    references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` })),
+                },
+                undefined,
+                2,
+            );
             fileSystem.writeFileSync(configFileName, configContent);
             projFileNames.push(configFileName);
         }

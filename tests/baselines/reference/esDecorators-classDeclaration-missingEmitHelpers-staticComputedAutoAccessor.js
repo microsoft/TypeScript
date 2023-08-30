@@ -33,7 +33,7 @@ let C = (() => {
             tslib_1.__runInitializers(this, _staticExtraInitializers);
         }
         static #_a_accessor_storage = tslib_1.__runInitializers(this, _static_member_initializers, void 0);
-        static get [(_static_member_decorators = [dec], _a = tslib_1.__propKey(x))]() { return this.#_a_accessor_storage; }
-        static set [_a](value) { this.#_a_accessor_storage = value; }
+        static get [(_static_member_decorators = [dec], _a = tslib_1.__propKey(x))]() { return C.#_a_accessor_storage; }
+        static set [_a](value) { C.#_a_accessor_storage = value; }
     };
 })();
