@@ -1,6 +1,5 @@
 /// <reference path="fourslash.ts" />
 
-// @module: none
 // @Filename: /tsconfig.json
 //// {
 ////  "compilerOptions": {
