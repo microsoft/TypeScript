@@ -1786,14 +1786,16 @@ export function transformDeclarations(context: TransformationContext) {
                     // We must add a temporary declaration for the extends clause expression
 
                     // Isolated declarations does not allow inferred type in the extends clause
-                    if (isolatedDeclarations &&
-                        // Checking if it's a separate compiler error so we don't make it an isolatedDeclarations error.
-                        // This is only an approximation as we need type information to figure out if something
-                        // is a constructor type or not.
-                        !isLiteralExpression(extendsClause.expression) &&
-                        extendsClause.expression.kind !== SyntaxKind.FalseKeyword &&
-                        extendsClause.expression.kind !== SyntaxKind.TrueKeyword) {
-                        reportIsolatedDeclarationError(extendsClause);
+                    if (isolatedDeclarations) {
+                        if(
+                            // Checking if it's a separate compiler error so we don't make it an isolatedDeclarations error.
+                            // This is only an approximation as we need type information to figure out if something
+                            // is a constructor type or not.
+                            !isLiteralExpression(extendsClause.expression) &&
+                            extendsClause.expression.kind !== SyntaxKind.FalseKeyword &&
+                            extendsClause.expression.kind !== SyntaxKind.TrueKeyword) {
+                            reportIsolatedDeclarationError(extendsClause);
+                        }
                         return cleanup(factory.updateClassDeclaration(
                             input,
                             modifiers,
