@@ -11337,5 +11337,7 @@ declare namespace ts {
      * @param compilerOptions Optional compiler options.
      */
     function transform<T extends Node>(source: T | T[], transformers: TransformerFactory<T>[], compilerOptions?: CompilerOptions): TransformationResult<T>;
+    /** @deprecated Use `isParameterDeclaration` instead. */
+    const isParameter: (node: Node) => node is ParameterDeclaration;
 }
 export = ts;
