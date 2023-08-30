@@ -11,12 +11,11 @@
 //// export * from "./thing1A";
 
 // @Filename: /src/dirA/thing1A.ts
-//// export class Thing1A {}
-//// Thing/**/
+//// export function f(){ return false }
 
 verify.completions({
   marker: "",
-  includes: ["!Thing1A"],
+  excludes: ["f"],
   preferences: {
     includeCompletionsForModuleExports: true
   }
