@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/discriminateWithDivergentAccessors1.ts] ////
+
+=== discriminateWithDivergentAccessors1.ts ===
+type WeirdoBox<T> =
+>WeirdoBox : Symbol(WeirdoBox, Decl(discriminateWithDivergentAccessors1.ts, 0, 0))
+>T : Symbol(T, Decl(discriminateWithDivergentAccessors1.ts, 0, 15))
+
+  | { get done(): false; set done(v: T | null) }
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 1, 5), Decl(discriminateWithDivergentAccessors1.ts, 1, 24))
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 1, 5), Decl(discriminateWithDivergentAccessors1.ts, 1, 24))
+>v : Symbol(v, Decl(discriminateWithDivergentAccessors1.ts, 1, 34))
+>T : Symbol(T, Decl(discriminateWithDivergentAccessors1.ts, 0, 15))
+
+  | { get done(): true; set done(v: T | null); value: T };
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 2, 5), Decl(discriminateWithDivergentAccessors1.ts, 2, 23))
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 2, 5), Decl(discriminateWithDivergentAccessors1.ts, 2, 23))
+>v : Symbol(v, Decl(discriminateWithDivergentAccessors1.ts, 2, 33))
+>T : Symbol(T, Decl(discriminateWithDivergentAccessors1.ts, 0, 15))
+>value : Symbol(value, Decl(discriminateWithDivergentAccessors1.ts, 2, 46))
+>T : Symbol(T, Decl(discriminateWithDivergentAccessors1.ts, 0, 15))
+
+declare const weirdoBox: WeirdoBox<number>;
+>weirdoBox : Symbol(weirdoBox, Decl(discriminateWithDivergentAccessors1.ts, 4, 13))
+>WeirdoBox : Symbol(WeirdoBox, Decl(discriminateWithDivergentAccessors1.ts, 0, 0))
+
+if (weirdoBox.done) {
+>weirdoBox.done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 1, 5), Decl(discriminateWithDivergentAccessors1.ts, 1, 24), Decl(discriminateWithDivergentAccessors1.ts, 2, 5), Decl(discriminateWithDivergentAccessors1.ts, 2, 23))
+>weirdoBox : Symbol(weirdoBox, Decl(discriminateWithDivergentAccessors1.ts, 4, 13))
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 1, 5), Decl(discriminateWithDivergentAccessors1.ts, 1, 24), Decl(discriminateWithDivergentAccessors1.ts, 2, 5), Decl(discriminateWithDivergentAccessors1.ts, 2, 23))
+
+  weirdoBox.value;
+>weirdoBox.value : Symbol(value, Decl(discriminateWithDivergentAccessors1.ts, 2, 46))
+>weirdoBox : Symbol(weirdoBox, Decl(discriminateWithDivergentAccessors1.ts, 4, 13))
+>value : Symbol(value, Decl(discriminateWithDivergentAccessors1.ts, 2, 46))
+}
+
+type WeirdoBox2<T> =
+>WeirdoBox2 : Symbol(WeirdoBox2, Decl(discriminateWithDivergentAccessors1.ts, 8, 1))
+>T : Symbol(T, Decl(discriminateWithDivergentAccessors1.ts, 10, 16))
+
+  | { get done(): false; set done(v: T | null) }
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 11, 5), Decl(discriminateWithDivergentAccessors1.ts, 11, 24))
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 11, 5), Decl(discriminateWithDivergentAccessors1.ts, 11, 24))
+>v : Symbol(v, Decl(discriminateWithDivergentAccessors1.ts, 11, 34))
+>T : Symbol(T, Decl(discriminateWithDivergentAccessors1.ts, 10, 16))
+
+  | { get done(): true; set done(v: T | null); value: T }
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 12, 5), Decl(discriminateWithDivergentAccessors1.ts, 12, 23))
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 12, 5), Decl(discriminateWithDivergentAccessors1.ts, 12, 23))
+>v : Symbol(v, Decl(discriminateWithDivergentAccessors1.ts, 12, 33))
+>T : Symbol(T, Decl(discriminateWithDivergentAccessors1.ts, 10, 16))
+>value : Symbol(value, Decl(discriminateWithDivergentAccessors1.ts, 12, 46))
+>T : Symbol(T, Decl(discriminateWithDivergentAccessors1.ts, 10, 16))
+
+  | { get done(): true; set done(v: T | null | undefined); value: number };
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 13, 5), Decl(discriminateWithDivergentAccessors1.ts, 13, 23))
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 13, 5), Decl(discriminateWithDivergentAccessors1.ts, 13, 23))
+>v : Symbol(v, Decl(discriminateWithDivergentAccessors1.ts, 13, 33))
+>T : Symbol(T, Decl(discriminateWithDivergentAccessors1.ts, 10, 16))
+>value : Symbol(value, Decl(discriminateWithDivergentAccessors1.ts, 13, 58))
+
+declare const weirdoBox2: WeirdoBox2<string>;
+>weirdoBox2 : Symbol(weirdoBox2, Decl(discriminateWithDivergentAccessors1.ts, 15, 13))
+>WeirdoBox2 : Symbol(WeirdoBox2, Decl(discriminateWithDivergentAccessors1.ts, 8, 1))
+
+if (weirdoBox2.done) {
+>weirdoBox2.done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 11, 5), Decl(discriminateWithDivergentAccessors1.ts, 11, 24), Decl(discriminateWithDivergentAccessors1.ts, 12, 5), Decl(discriminateWithDivergentAccessors1.ts, 12, 23), Decl(discriminateWithDivergentAccessors1.ts, 13, 5) ... and 1 more)
+>weirdoBox2 : Symbol(weirdoBox2, Decl(discriminateWithDivergentAccessors1.ts, 15, 13))
+>done : Symbol(done, Decl(discriminateWithDivergentAccessors1.ts, 11, 5), Decl(discriminateWithDivergentAccessors1.ts, 11, 24), Decl(discriminateWithDivergentAccessors1.ts, 12, 5), Decl(discriminateWithDivergentAccessors1.ts, 12, 23), Decl(discriminateWithDivergentAccessors1.ts, 13, 5) ... and 1 more)
+
+  weirdoBox2.value;
+>weirdoBox2.value : Symbol(value, Decl(discriminateWithDivergentAccessors1.ts, 12, 46), Decl(discriminateWithDivergentAccessors1.ts, 13, 58))
+>weirdoBox2 : Symbol(weirdoBox2, Decl(discriminateWithDivergentAccessors1.ts, 15, 13))
+>value : Symbol(value, Decl(discriminateWithDivergentAccessors1.ts, 12, 46), Decl(discriminateWithDivergentAccessors1.ts, 13, 58))
+}
+

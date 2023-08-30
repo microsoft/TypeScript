@@ -190,7 +190,7 @@ describe("unittests:: canWatch::", () => {
         let result = "|";
         let divider = addDivider ? "|" : undefined;
         columns.forEach((header, index) => {
-            result += " " + ts.padRight(header, maxLengths[index]) + " |";
+            result += " " + header.padEnd(maxLengths[index]) + " |";
             if (addDivider) divider += " " + "-".repeat(maxLengths[index]) + " |";
         });
         baseline.push(result);

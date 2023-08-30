@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/discriminateWithOptionalProperty1.ts] ////
+
+=== discriminateWithOptionalProperty1.ts ===
+type Box<T> = { done?: false } | { done: true; value: T };
+>Box : Symbol(Box, Decl(discriminateWithOptionalProperty1.ts, 0, 0))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty1.ts, 0, 9))
+>done : Symbol(done, Decl(discriminateWithOptionalProperty1.ts, 0, 15))
+>done : Symbol(done, Decl(discriminateWithOptionalProperty1.ts, 0, 34))
+>value : Symbol(value, Decl(discriminateWithOptionalProperty1.ts, 0, 46))
+>T : Symbol(T, Decl(discriminateWithOptionalProperty1.ts, 0, 9))
+
+declare const box: Box<number>;
+>box : Symbol(box, Decl(discriminateWithOptionalProperty1.ts, 2, 13))
+>Box : Symbol(Box, Decl(discriminateWithOptionalProperty1.ts, 0, 0))
+
+if (box.done) {
+>box.done : Symbol(done, Decl(discriminateWithOptionalProperty1.ts, 0, 15), Decl(discriminateWithOptionalProperty1.ts, 0, 34))
+>box : Symbol(box, Decl(discriminateWithOptionalProperty1.ts, 2, 13))
+>done : Symbol(done, Decl(discriminateWithOptionalProperty1.ts, 0, 15), Decl(discriminateWithOptionalProperty1.ts, 0, 34))
+
+  box.value;
+>box.value : Symbol(value, Decl(discriminateWithOptionalProperty1.ts, 0, 46))
+>box : Symbol(box, Decl(discriminateWithOptionalProperty1.ts, 2, 13))
+>value : Symbol(value, Decl(discriminateWithOptionalProperty1.ts, 0, 46))
+}
+

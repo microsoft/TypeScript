@@ -23,7 +23,6 @@ import {
     sortAndDeduplicate,
     SortedReadonlyArray,
     SourceMapGenerator,
-    trimStringEnd,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -393,7 +392,7 @@ export function tryGetSourceMappingURL(lineInfo: LineInfo) {
         const line = lineInfo.getLineText(index);
         const comment = sourceMapCommentRegExp.exec(line);
         if (comment) {
-            return trimStringEnd(comment[1]);
+            return comment[1].trimEnd();
         }
         // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
         else if (!line.match(whitespaceOrMapCommentRegExp)) {

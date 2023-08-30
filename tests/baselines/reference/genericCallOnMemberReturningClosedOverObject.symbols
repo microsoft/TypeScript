@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/genericCallOnMemberReturningClosedOverObject.ts] ////
+
+=== genericCallOnMemberReturningClosedOverObject.ts ===
+// https://github.com/microsoft/TypeScript/issues/11584
+
+function example<T1>() {
+>example : Symbol(example, Decl(genericCallOnMemberReturningClosedOverObject.ts, 0, 0))
+>T1 : Symbol(T1, Decl(genericCallOnMemberReturningClosedOverObject.ts, 2, 17))
+
+  let x = {
+>x : Symbol(x, Decl(genericCallOnMemberReturningClosedOverObject.ts, 3, 5))
+
+    foo: <T2>(t2: T2) => x,
+>foo : Symbol(foo, Decl(genericCallOnMemberReturningClosedOverObject.ts, 3, 11))
+>T2 : Symbol(T2, Decl(genericCallOnMemberReturningClosedOverObject.ts, 4, 10))
+>t2 : Symbol(t2, Decl(genericCallOnMemberReturningClosedOverObject.ts, 4, 14))
+>T2 : Symbol(T2, Decl(genericCallOnMemberReturningClosedOverObject.ts, 4, 10))
+>x : Symbol(x, Decl(genericCallOnMemberReturningClosedOverObject.ts, 3, 5))
+
+    bar: (t1: T1) => x,
+>bar : Symbol(bar, Decl(genericCallOnMemberReturningClosedOverObject.ts, 4, 27))
+>t1 : Symbol(t1, Decl(genericCallOnMemberReturningClosedOverObject.ts, 5, 10))
+>T1 : Symbol(T1, Decl(genericCallOnMemberReturningClosedOverObject.ts, 2, 17))
+>x : Symbol(x, Decl(genericCallOnMemberReturningClosedOverObject.ts, 3, 5))
+
+  };
+  return x;
+>x : Symbol(x, Decl(genericCallOnMemberReturningClosedOverObject.ts, 3, 5))
+}
+
+example<number>().foo("hello").bar(1);
+>example<number>().foo("hello").bar : Symbol(bar, Decl(genericCallOnMemberReturningClosedOverObject.ts, 4, 27))
+>example<number>().foo : Symbol(foo, Decl(genericCallOnMemberReturningClosedOverObject.ts, 3, 11))
+>example : Symbol(example, Decl(genericCallOnMemberReturningClosedOverObject.ts, 0, 0))
+>foo : Symbol(foo, Decl(genericCallOnMemberReturningClosedOverObject.ts, 3, 11))
+>bar : Symbol(bar, Decl(genericCallOnMemberReturningClosedOverObject.ts, 4, 27))
+
