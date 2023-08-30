@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitDecoratorMetadata_object.ts ===
+//// [tests/cases/compiler/emitDecoratorMetadata_object.ts] ////
+
+=== emitDecoratorMetadata_object.ts ===
 declare const MyClassDecorator: ClassDecorator;
 >MyClassDecorator : Symbol(MyClassDecorator, Decl(emitDecoratorMetadata_object.ts, 0, 13))
 >ClassDecorator : Symbol(ClassDecorator, Decl(lib.decorators.legacy.d.ts, --, --))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts] ////
+
 //// [unionSubtypeIfEveryConstituentTypeIsSubtype.ts]
 enum e {
     e1,

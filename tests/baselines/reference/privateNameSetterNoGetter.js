@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameSetterNoGetter.ts] ////
+
 //// [privateNameSetterNoGetter.ts]
 const C = class {
     set #x(x) {}

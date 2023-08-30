@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/systemModule11.ts] ////
+
+=== file1.ts ===
 // set of tests cases that checks generation of local storage for exported names
 
 
@@ -10,7 +12,7 @@ export function foo() {}
 
 export * from 'bar';
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 var x;
 >x : any
 
@@ -26,7 +28,7 @@ export {y as y1}
 
 export * from 'bar';
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 export {x, y as z} from 'a';
 >x : any
 >y : any
@@ -37,7 +39,7 @@ export default function foo() {}
 
 export * from 'bar';
 
-=== tests/cases/compiler/file4.ts ===
+=== file4.ts ===
 export var x;
 >x : any
 
@@ -60,7 +62,7 @@ export {s, s1 as s2} from 'a'
 >s1 : any
 >s2 : any
 
-=== tests/cases/compiler/file5.ts ===
+=== file5.ts ===
 function foo() {}
 >foo : () => void
 

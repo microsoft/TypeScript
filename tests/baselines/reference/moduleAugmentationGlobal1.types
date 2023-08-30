@@ -1,9 +1,11 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal1.ts] ////
+
+=== f1.ts ===
 export class A {x: number;}
 >A : A
 >x : number
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 import {A} from "./f1";
 >A : typeof A
 

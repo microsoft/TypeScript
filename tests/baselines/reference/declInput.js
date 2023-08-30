@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declInput.ts] ////
+
 //// [declInput.ts]
 interface bar {
 

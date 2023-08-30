@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts] ////
+
 //// [arrayLiterals.ts]
 // Empty array literal with no contextual type has type Undefined[]
 

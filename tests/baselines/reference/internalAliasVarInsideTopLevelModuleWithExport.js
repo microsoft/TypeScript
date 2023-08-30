@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasVarInsideTopLevelModuleWithExport.ts] ////
+
 //// [internalAliasVarInsideTopLevelModuleWithExport.ts]
 export module a {
     export var x = 10;
@@ -23,7 +25,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [internalAliasVarInsideTopLevelModuleWithExport.d.ts]
-export declare module a {
+export declare namespace a {
     var x: number;
 }
 export import b = a.x;

@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/Symbols/symbolProperty17.ts(2,5): error TS2411: Property '[Symbol.iterator]' of type 'number' is not assignable to 'symbol' index type 'string'.
+symbolProperty17.ts(2,5): error TS2411: Property '[Symbol.iterator]' of type 'number' is not assignable to 'symbol' index type 'string'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolProperty17.ts (1 errors) ====
+==== symbolProperty17.ts (1 errors) ====
     interface I {
         [Symbol.iterator]: number;
         ~~~~~~~~~~~~~~~~~

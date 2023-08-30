@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope.ts] ////
+
+=== typeParametersAvailableInNestedScope.ts ===
 class C<T> {
 >C : C<T>
 

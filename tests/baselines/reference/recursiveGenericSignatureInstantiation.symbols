@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveGenericSignatureInstantiation.ts ===
+//// [tests/cases/compiler/recursiveGenericSignatureInstantiation.ts] ////
+
+=== recursiveGenericSignatureInstantiation.ts ===
 function f6<T>(x: T) {
 >f6 : Symbol(f6, Decl(recursiveGenericSignatureInstantiation.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveGenericSignatureInstantiation.ts, 0, 12))

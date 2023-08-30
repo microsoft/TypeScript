@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertiesAndIndexers.ts ===
+//// [tests/cases/compiler/propertiesAndIndexers.ts] ////
+
+=== propertiesAndIndexers.ts ===
 interface X { }
 >X : Symbol(X, Decl(propertiesAndIndexers.ts, 0, 0))
 

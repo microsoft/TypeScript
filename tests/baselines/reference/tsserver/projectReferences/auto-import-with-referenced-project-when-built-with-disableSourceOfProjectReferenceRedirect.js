@@ -318,17 +318,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/app/src/program/node_modules: *new*
+/user/username/projects/myproject/app/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/app/src/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/app/src/program/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/app/src/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/app/node_modules/@types: *new*
+/user/username/projects/myproject/app/src/program/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/app/src/program/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -336,17 +336,17 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/app/src/program/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/app/src/program/bar.ts: *new*
   {}
-/user/username/projects/myproject/shared/src/library/tsconfig.json: *new*
+/user/username/projects/myproject/app/src/program/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/shared/bld/library/index.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
-  {}
 /user/username/projects/myproject/shared/package.json: *new*
+  {}
+/user/username/projects/myproject/shared/src/library/tsconfig.json: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
@@ -354,9 +354,9 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/app/src/program: *new*
   {}
-/user/username/projects/myproject/shared/src/library: *new*
-  {}
 /user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/shared/src/library: *new*
   {}
 
 Before request

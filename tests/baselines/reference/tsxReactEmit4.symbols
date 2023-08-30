@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmit4.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
@@ -20,17 +22,17 @@ var p: any;
 
 var openClosed1 = <div>
 >openClosed1 : Symbol(openClosed1, Decl(file.tsx, 9, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
    {blah}
 
 </div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 // Should emit React.__spread({}, p, {x: 0})
 var spread1 = <div {...p} x={0} />;
 >spread1 : Symbol(spread1, Decl(file.tsx, 16, 3))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >p : Symbol(p, Decl(file.tsx, 8, 3))
 >x : Symbol(x, Decl(file.tsx, 16, 25))
 

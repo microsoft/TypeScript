@@ -1,8 +1,8 @@
-tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloads2.ts(27,11): error TS2428: All declarations of 'I' must have identical type parameters.
-tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloads2.ts(32,11): error TS2428: All declarations of 'I' must have identical type parameters.
+constructSignaturesWithOverloads2.ts(27,11): error TS2428: All declarations of 'I' must have identical type parameters.
+constructSignaturesWithOverloads2.ts(32,11): error TS2428: All declarations of 'I' must have identical type parameters.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloads2.ts (2 errors) ====
+==== constructSignaturesWithOverloads2.ts (2 errors) ====
     // No errors expected for basic overloads of construct signatures with merged declarations
     
     // clodules

@@ -51,11 +51,11 @@ Shape signatures in builder refreshed for::
 /a/b/node_modules/@types/node/index.d.ts (used version)
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/app.ts: *new*
   {}
 /a/b/node_modules/@types/node/index.d.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

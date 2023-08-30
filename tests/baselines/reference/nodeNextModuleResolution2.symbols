@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nodeNextModuleResolution2.ts] ////
+
 === /a/node_modules/foo/index.d.ts ===
 export declare let x: number
 >x : Symbol(x, Decl(index.d.ts, 0, 18))

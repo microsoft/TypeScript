@@ -1,8 +1,8 @@
-tests/cases/conformance/jsdoc/mod7.js(5,7): error TS1110: Type expected.
-tests/cases/conformance/jsdoc/mod7.js(8,4): error TS1110: Type expected.
+mod7.js(5,7): error TS1110: Type expected.
+mod7.js(8,4): error TS1110: Type expected.
 
 
-==== tests/cases/conformance/jsdoc/mod1.js (0 errors) ====
+==== mod1.js (0 errors) ====
     /** 
      * @typedef {function(string): boolean}
      * Type1
@@ -19,7 +19,7 @@ tests/cases/conformance/jsdoc/mod7.js(8,4): error TS1110: Type expected.
       return func(arg);
     }
     
-==== tests/cases/conformance/jsdoc/mod2.js (0 errors) ====
+==== mod2.js (0 errors) ====
     /** 
      * @typedef {{
      *   num: number,
@@ -37,7 +37,7 @@ tests/cases/conformance/jsdoc/mod7.js(8,4): error TS1110: Type expected.
       return obj.boo ? obj.num : obj.str;
     }
     
-==== tests/cases/conformance/jsdoc/mod3.js (0 errors) ====
+==== mod3.js (0 errors) ====
     /**
      * A function whose signature is very long.
      *
@@ -57,7 +57,7 @@ tests/cases/conformance/jsdoc/mod7.js(8,4): error TS1110: Type expected.
       return func(bool, str, num)
     }
     
-==== tests/cases/conformance/jsdoc/mod4.js (0 errors) ====
+==== mod4.js (0 errors) ====
     /**
      * A function whose signature is very long.
      *
@@ -78,7 +78,7 @@ tests/cases/conformance/jsdoc/mod7.js(8,4): error TS1110: Type expected.
       return func(bool, str, num)
     }
     
-==== tests/cases/conformance/jsdoc/mod5.js (0 errors) ====
+==== mod5.js (0 errors) ====
     /** 
      * @typedef {{
      *   num:
@@ -99,7 +99,7 @@ tests/cases/conformance/jsdoc/mod7.js(8,4): error TS1110: Type expected.
       return obj.boo ? obj.num : obj.str;
     }
     
-==== tests/cases/conformance/jsdoc/mod6.js (0 errors) ====
+==== mod6.js (0 errors) ====
     /** 
      * @typedef {{
      *   foo:
@@ -119,7 +119,7 @@ tests/cases/conformance/jsdoc/mod7.js(8,4): error TS1110: Type expected.
     }
     
     
-==== tests/cases/conformance/jsdoc/mod7.js (2 errors) ====
+==== mod7.js (2 errors) ====
     /** 
        Multiline type expressions in comments without leading * are not supported.
        @typedef {{

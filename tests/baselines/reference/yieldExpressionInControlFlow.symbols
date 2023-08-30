@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/bug25149.js ===
+//// [tests/cases/conformance/es6/yieldExpressions/yieldExpressionInControlFlow.ts] ////
+
+=== bug25149.js ===
 function* f() {
 >f : Symbol(f, Decl(bug25149.js, 0, 0))
 
@@ -12,7 +14,7 @@ function* f() {
     }
 }
 
-=== tests/cases/conformance/es6/yieldExpressions/alsoFails.ts ===
+=== alsoFails.ts ===
 // fails in Typescript too
 function* g() {
 >g : Symbol(g, Decl(alsoFails.ts, 0, 0))

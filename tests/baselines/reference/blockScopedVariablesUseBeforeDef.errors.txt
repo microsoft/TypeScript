@@ -1,18 +1,18 @@
-tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(2,13): error TS2448: Block-scoped variable 'x' used before its declaration.
-tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(58,20): error TS2448: Block-scoped variable 'x' used before its declaration.
-tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(65,20): error TS2448: Block-scoped variable 'x' used before its declaration.
-tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(100,12): error TS2448: Block-scoped variable 'x' used before its declaration.
-tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(111,28): error TS2448: Block-scoped variable 'a' used before its declaration.
-tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(112,21): error TS2448: Block-scoped variable 'a' used before its declaration.
-tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable 'a' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(2,13): error TS2448: Block-scoped variable 'x' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(58,20): error TS2448: Block-scoped variable 'x' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(65,20): error TS2448: Block-scoped variable 'x' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(100,12): error TS2448: Block-scoped variable 'x' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(111,28): error TS2448: Block-scoped variable 'a' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(112,21): error TS2448: Block-scoped variable 'a' used before its declaration.
+blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable 'a' used before its declaration.
 
 
-==== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts (7 errors) ====
+==== blockScopedVariablesUseBeforeDef.ts (7 errors) ====
     function foo0() {
         let a = x;
                 ~
 !!! error TS2448: Block-scoped variable 'x' used before its declaration.
-!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:3:9: 'x' is declared here.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:3:9: 'x' is declared here.
         let x;
     }
     
@@ -71,7 +71,7 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: 
             static a = x;
                        ~
 !!! error TS2448: Block-scoped variable 'x' used before its declaration.
-!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:60:9: 'x' is declared here.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:60:9: 'x' is declared here.
         }
         let x;
     }
@@ -81,7 +81,7 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: 
             static a = x;
                        ~
 !!! error TS2448: Block-scoped variable 'x' used before its declaration.
-!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:67:9: 'x' is declared here.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:67:9: 'x' is declared here.
         }
         let x;
     }
@@ -119,7 +119,7 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: 
             a: x 
                ~
 !!! error TS2448: Block-scoped variable 'x' used before its declaration.
-!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:102:9: 'x' is declared here.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:102:9: 'x' is declared here.
         }
         let x
     }
@@ -133,11 +133,11 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: 
             (() => console.log(a))();  // should error
                                ~
 !!! error TS2448: Block-scoped variable 'a' used before its declaration.
-!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:108:9: 'a' is declared here.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:108:9: 'a' is declared here.
             console.log(a);            // should error
                         ~
 !!! error TS2448: Block-scoped variable 'a' used before its declaration.
-!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:108:9: 'a' is declared here.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:108:9: 'a' is declared here.
             const b = () => a;         // should be ok
             return [
                 0,
@@ -150,7 +150,7 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: 
         let [a] = (() => a)();
                          ~
 !!! error TS2448: Block-scoped variable 'a' used before its declaration.
-!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:122:10: 'a' is declared here.
+!!! related TS2728 blockScopedVariablesUseBeforeDef.ts:122:10: 'a' is declared here.
     }
     
     function foo17() {
@@ -163,5 +163,20 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: 
         })()
     
         const foo = 1;
+    }
+    
+    // #30907
+    function wrapI1() {
+        const iter = (function* foo() {
+            iter;
+            yield 1;
+        })();
+    }
+    
+    function wrapI2() {
+        const iter = (async function* foo() {
+            iter;
+            yield 1;
+        })();
     }
     

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOnInstance.ts] ////
+
 //// [callOnInstance.ts]
 declare function D(): string; // error
 

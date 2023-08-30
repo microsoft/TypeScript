@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck21.ts(5,13): error TS2488: Type 'Bar' must have a '[Symbol.iterator]()' method that returns an iterator.
+generatorTypeCheck21.ts(5,13): error TS2488: Type 'Bar' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck21.ts (1 errors) ====
+==== generatorTypeCheck21.ts (1 errors) ====
     class Foo { x: number }
     class Bar extends Foo { y: string }
     function* g(): IterableIterator<Foo> {

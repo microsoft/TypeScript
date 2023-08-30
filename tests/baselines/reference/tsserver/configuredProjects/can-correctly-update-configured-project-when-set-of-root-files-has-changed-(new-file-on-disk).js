@@ -104,9 +104,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/f2.ts: *new*
+  {}
+/a/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::

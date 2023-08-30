@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privateVisibility.ts] ////
+
 //// [privateVisibility.ts]
 class Foo {
 	public pubMeth() {this.privMeth();}

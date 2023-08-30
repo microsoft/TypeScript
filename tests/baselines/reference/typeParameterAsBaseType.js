@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterAsBaseType.ts] ////
+
 //// [typeParameterAsBaseType.ts]
 // type parameters cannot be used as base types
 // these are all errors

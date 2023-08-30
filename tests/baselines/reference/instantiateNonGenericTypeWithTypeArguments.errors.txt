@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(8,15): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(11,17): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(14,16): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(18,10): error TS2347: Untyped function calls may not accept type arguments.
+instantiateNonGenericTypeWithTypeArguments.ts(8,15): error TS2558: Expected 0 type arguments, but got 1.
+instantiateNonGenericTypeWithTypeArguments.ts(11,17): error TS2558: Expected 0 type arguments, but got 1.
+instantiateNonGenericTypeWithTypeArguments.ts(14,16): error TS2558: Expected 0 type arguments, but got 1.
+instantiateNonGenericTypeWithTypeArguments.ts(18,10): error TS2347: Untyped function calls may not accept type arguments.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts (4 errors) ====
+==== instantiateNonGenericTypeWithTypeArguments.ts (4 errors) ====
     // it is an error to provide type arguments to a non-generic call
     // all of these are errors
     

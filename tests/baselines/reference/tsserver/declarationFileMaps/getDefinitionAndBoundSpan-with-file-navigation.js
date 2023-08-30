@@ -154,9 +154,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json:
-  {}
 /a/a.ts: *new*
+  {}
+/a/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -243,9 +243,9 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/tsconfig.json:
-  {}
 /a/a.ts:
+  {}
+/a/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -300,9 +300,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/b/tsconfig.json:
-  {}
 /b/b.ts: *new*
+  {}
+/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -421,21 +421,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/a.ts: *new*
+  {}
+/a/tsconfig.json: *new*
+  {}
 /b/tsconfig.json:
   {}
 /user/tsconfig.json: *new*
   {}
-/a/tsconfig.json: *new*
-  {}
-/a/a.ts: *new*
-  {}
 
 FsWatchesRecursive::
+/a: *new*
+  {}
 /b:
   {}
 /user: *new*
-  {}
-/a: *new*
   {}
 
 Before request
@@ -522,23 +522,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/b/tsconfig.json:
-  {}
-/user/tsconfig.json:
+/a/a.ts:
   {}
 /a/tsconfig.json:
   {}
-/a/a.ts:
+/b/tsconfig.json:
+  {}
+/user/tsconfig.json:
   {}
 /user/user.ts: *new*
   {}
 
 FsWatchesRecursive::
+/a:
+  {}
 /b:
   {}
 /user:
-  {}
-/a:
   {}
 
 Before request
@@ -596,11 +596,11 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/tsconfig.json:
+  {}
 /b/tsconfig.json:
   {}
 /user/tsconfig.json:
-  {}
-/a/tsconfig.json:
   {}
 /user/user.ts:
   {}
@@ -610,11 +610,11 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
+/a:
+  {}
 /b:
   {}
 /user:
-  {}
-/a:
   {}
 
 Before request
@@ -653,23 +653,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/a.ts: *new*
+  {}
+/a/tsconfig.json:
+  {}
 /b/tsconfig.json:
   {}
 /user/tsconfig.json:
   {}
-/a/tsconfig.json:
-  {}
 /user/user.ts:
-  {}
-/a/a.ts: *new*
   {}
 
 FsWatchesRecursive::
+/a:
+  {}
 /b:
   {}
 /user:
-  {}
-/a:
   {}
 
 Before request
@@ -762,21 +762,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
+/a/a.ts:
+  {}
+/a/tsconfig.json:
+  {}
 /b/tsconfig.json:
   {}
 /user/tsconfig.json:
   {}
-/a/tsconfig.json:
-  {}
 /user/user.ts:
-  {}
-/a/a.ts:
   {}
 
 FsWatchesRecursive *deleted*::
+/a:
+  {}
 /b:
   {}
 /user:
-  {}
-/a:
   {}

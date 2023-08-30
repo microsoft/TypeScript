@@ -1,3 +1,19 @@
+//// [tests/cases/compiler/nodeColonModuleResolution2.ts] ////
+
+=== /a/b/main.ts ===
+import * as ph from 'fake:thing'
+>ph : Symbol(ph, Decl(main.ts, 0, 6))
+
+console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
+>ph.constants : Symbol(ph.constants, Decl(index.d.ts, 0, 0))
+>ph : Symbol(ph, Decl(main.ts, 0, 6))
+>constants : Symbol(ph.constants, Decl(index.d.ts, 0, 0))
+>NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
+
 === /a/b/node_modules/fake/thing/index.d.ts ===
 export namespace constants {
 >constants : Symbol(constants, Decl(index.d.ts, 0, 0))
@@ -35,17 +51,3 @@ export namespace constants {
     const NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE: number;
 >NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE : Symbol(NODE_PERFORMANCE_GC_FLAGS_SCHEDULE_IDLE, Decl(index.d.ts, 11, 9))
 }
-=== /a/b/main.ts ===
-import * as ph from 'fake:thing'
->ph : Symbol(ph, Decl(main.ts, 0, 6))
-
-console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
->ph.constants : Symbol(ph.constants, Decl(index.d.ts, 0, 0))
->ph : Symbol(ph, Decl(main.ts, 0, 6))
->constants : Symbol(ph.constants, Decl(index.d.ts, 0, 0))
->NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : Symbol(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE, Decl(index.d.ts, 9, 9))
-

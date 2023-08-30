@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessors.ts(9,12): error TS2540: Cannot assign to '#roProp' because it is a read-only property.
+privateNameStaticAccessors.ts(9,12): error TS2540: Cannot assign to '#roProp' because it is a read-only property.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessors.ts (1 errors) ====
+==== privateNameStaticAccessors.ts (1 errors) ====
     class A1 {
         static get #prop() { return ""; }
         static set #prop(param: string) { }

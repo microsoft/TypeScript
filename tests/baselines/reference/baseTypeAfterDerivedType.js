@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/baseTypeAfterDerivedType.ts] ////
+
 //// [baseTypeAfterDerivedType.ts]
 interface Derived extends Base {
     method(...args: any[]): void;

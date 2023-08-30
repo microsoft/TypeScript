@@ -2,7 +2,7 @@ error TS5052: Option 'emitDecoratorMetadata' cannot be specified without specify
 
 
 !!! error TS5052: Option 'emitDecoratorMetadata' cannot be specified without specifying option 'experimentalDecorators'.
-==== tests/cases/conformance/esDecorators/esDecorators-emitDecoratorMetadata.ts (0 errors) ====
+==== esDecorators-emitDecoratorMetadata.ts (0 errors) ====
     declare let dec: any;
     
     @dec

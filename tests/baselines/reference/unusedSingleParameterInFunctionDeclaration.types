@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts ===
+//// [tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts] ////
+
+=== unusedSingleParameterInFunctionDeclaration.ts ===
 function greeter(person: string) {
 >greeter : (person: string) => void
 >person : string

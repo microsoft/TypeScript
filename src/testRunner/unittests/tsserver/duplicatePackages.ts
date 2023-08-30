@@ -43,7 +43,7 @@ describe("unittests:: tsserver:: duplicate packages", () => {
                     endLine: 2,
                     endOffset: 4,
                     errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
-                }
+                },
             });
         }
         baselineTsserverLogs("duplicatePackages", "works with import fixes", session);

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralExcessProperties.ts ===
+//// [tests/cases/compiler/objectLiteralExcessProperties.ts] ////
+
+=== objectLiteralExcessProperties.ts ===
 interface Book {
 >Book : Symbol(Book, Decl(objectLiteralExcessProperties.ts, 0, 0))
 

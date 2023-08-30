@@ -26,9 +26,10 @@ verify.completions({
     includes: [
         {
             name: "method",
-            sortText: completion.SortText.ClassMemberSnippets,
+            sortText: completion.SortText.LocationPriority,
             insertText: "method(): void {\n}",
             replacementSpan: undefined,
+            filterText: "method",
         },
     ],
 });

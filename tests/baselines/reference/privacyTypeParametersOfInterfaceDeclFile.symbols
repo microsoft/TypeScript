@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts ===
+//// [tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts] ////
+
+=== privacyTypeParametersOfInterfaceDeclFile.ts ===
 class privateClass {
 >privateClass : Symbol(privateClass, Decl(privacyTypeParametersOfInterfaceDeclFile.ts, 0, 0))
 }

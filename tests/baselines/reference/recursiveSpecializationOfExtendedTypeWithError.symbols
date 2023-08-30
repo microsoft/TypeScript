@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveSpecializationOfExtendedTypeWithError.ts ===
+//// [tests/cases/compiler/recursiveSpecializationOfExtendedTypeWithError.ts] ////
+
+=== recursiveSpecializationOfExtendedTypeWithError.ts ===
 interface HTMLSelectElement {
 >HTMLSelectElement : Symbol(HTMLSelectElement, Decl(recursiveSpecializationOfExtendedTypeWithError.ts, 0, 0))
 

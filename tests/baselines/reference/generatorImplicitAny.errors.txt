@@ -1,8 +1,8 @@
-tests/cases/conformance/generators/generatorImplicitAny.ts(8,19): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
-tests/cases/conformance/generators/generatorImplicitAny.ts(26,7): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
+generatorImplicitAny.ts(8,19): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
+generatorImplicitAny.ts(26,7): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
 
 
-==== tests/cases/conformance/generators/generatorImplicitAny.ts (2 errors) ====
+==== generatorImplicitAny.ts (2 errors) ====
     function* g() {}
     
     // https://github.com/microsoft/TypeScript/issues/35105

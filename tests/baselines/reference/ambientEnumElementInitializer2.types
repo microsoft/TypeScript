@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientEnumElementInitializer2.ts ===
+//// [tests/cases/compiler/ambientEnumElementInitializer2.ts] ////
+
+=== ambientEnumElementInitializer2.ts ===
 declare enum E {
 >E : E
 

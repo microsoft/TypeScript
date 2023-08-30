@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonNullableTypes1.ts ===
+//// [tests/cases/compiler/nonNullableTypes1.ts] ////
+
+=== nonNullableTypes1.ts ===
 function f1<T>(x: T) {
 >f1 : Symbol(f1, Decl(nonNullableTypes1.ts, 0, 0))
 >T : Symbol(T, Decl(nonNullableTypes1.ts, 0, 12))

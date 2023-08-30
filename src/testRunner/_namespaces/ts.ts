@@ -8,7 +8,6 @@ export * from "../../server/_namespaces/ts";
 export * from "../../typingsInstallerCore/_namespaces/ts";
 export * from "../../deprecatedCompat/_namespaces/ts";
 export * from "../../harness/_namespaces/ts";
-export * from "../../loggedIO/_namespaces/ts";
 import * as server from "./ts.server";
 export { server };
 

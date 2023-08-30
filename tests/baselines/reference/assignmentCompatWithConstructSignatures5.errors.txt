@@ -1,26 +1,26 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures5.ts(40,1): error TS2322: Type 'new <T>(x: T) => void' is not assignable to type 'new <T>(x: T) => T'.
+assignmentCompatWithConstructSignatures5.ts(40,1): error TS2322: Type 'new <T>(x: T) => void' is not assignable to type 'new <T>(x: T) => T'.
   Type 'void' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures5.ts(52,1): error TS2322: Type 'new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base' is not assignable to type 'new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base'.
+assignmentCompatWithConstructSignatures5.ts(52,1): error TS2322: Type 'new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base' is not assignable to type 'new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base'.
   Types of parameters 'y' and 'y' are incompatible.
     Type '{ foo: U; bar: U; }' is not assignable to type '{ foo: T; bar: T; }'.
       Types of property 'foo' are incompatible.
         Type 'U' is not assignable to type 'T'.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures5.ts(55,1): error TS2322: Type 'new <T>(x: { a: T; b: T; }) => T[]' is not assignable to type 'new <U, V>(x: { a: U; b: V; }) => U[]'.
+assignmentCompatWithConstructSignatures5.ts(55,1): error TS2322: Type 'new <T>(x: { a: T; b: T; }) => T[]' is not assignable to type 'new <U, V>(x: { a: U; b: V; }) => U[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '{ a: U; b: V; }' is not assignable to type '{ a: U; b: U; }'.
       Types of property 'b' are incompatible.
         Type 'V' is not assignable to type 'U'.
           'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures5.ts(58,1): error TS2322: Type 'new <T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type 'new <U, V>(x: { a: U; b: V; }) => U[]'.
+assignmentCompatWithConstructSignatures5.ts(58,1): error TS2322: Type 'new <T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type 'new <U, V>(x: { a: U; b: V; }) => U[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '{ a: U; b: V; }' is not assignable to type '{ a: Base; b: Base; }'.
       Types of property 'a' are incompatible.
         Type 'U' is not assignable to type 'Base'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures5.ts (4 errors) ====
+==== assignmentCompatWithConstructSignatures5.ts (4 errors) ====
     // checking assignment compat for function types. All valid
     
     class Base { foo: string; }
@@ -84,7 +84,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:       Types of property 'foo' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'T'.
 !!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures5.ts:50:18: This type parameter might need an `extends T` constraint.
+!!! related TS2208 assignmentCompatWithConstructSignatures5.ts:50:18: This type parameter might need an `extends T` constraint.
     var b15: new <U, V>(x: { a: U; b: V; }) => U[]; 
     a15 = b15; // ok
     b15 = a15; // ok
@@ -95,7 +95,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:       Types of property 'b' are incompatible.
 !!! error TS2322:         Type 'V' is not assignable to type 'U'.
 !!! error TS2322:           'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures5.ts:53:18: This type parameter might need an `extends U` constraint.
+!!! related TS2208 assignmentCompatWithConstructSignatures5.ts:53:18: This type parameter might need an `extends U` constraint.
     var b16: new <T>(x: { a: T; b: T }) => T[]; 
     a15 = b16; // ok
     b15 = a16; // ok
@@ -105,7 +105,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type '{ a: U; b: V; }' is not assignable to type '{ a: Base; b: Base; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'Base'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures5.ts:53:15: This type parameter might need an `extends Base` constraint.
+!!! related TS2208 assignmentCompatWithConstructSignatures5.ts:53:15: This type parameter might need an `extends Base` constraint.
     var b17: new <T>(x: new (a: T) => T) => T[]; 
     a17 = b17; // ok
     b17 = a17; // ok

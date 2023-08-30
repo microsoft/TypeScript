@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowElementAccess2.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowElementAccess2.ts] ////
+
+=== controlFlowElementAccess2.ts ===
 declare const config: {
 >config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
 

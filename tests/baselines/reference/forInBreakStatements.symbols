@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/breakStatements/forInBreakStatements.ts ===
+//// [tests/cases/conformance/statements/breakStatements/forInBreakStatements.ts] ////
+
+=== forInBreakStatements.ts ===
 for(var x in {}) {
 >x : Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11) ... and 6 more)
 

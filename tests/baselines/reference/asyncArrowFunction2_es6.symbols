@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction2_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction2_es6.ts] ////
+
+=== asyncArrowFunction2_es6.ts ===
 var f = (await) => {
 >f : Symbol(f, Decl(asyncArrowFunction2_es6.ts, 0, 3))
 >await : Symbol(await, Decl(asyncArrowFunction2_es6.ts, 0, 9))

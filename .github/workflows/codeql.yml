@@ -1,4 +1,4 @@
-name: "Code Scanning - Action"
+name: 'Code Scanning - Action'
 
 on:
   push:
@@ -23,6 +23,12 @@ on:
 
 permissions:
   contents: read
+
+# Ensure scripts are run with pipefail. See:
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#exit-codes-and-error-action-preference
+defaults:
+  run:
+    shell: bash
 
 jobs:
   CodeQL-Build:

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/input.d.ts ===
+//// [tests/cases/compiler/declarationEmitRecursiveConditionalAliasPreserved.ts] ////
+
+=== input.d.ts ===
 type _BuildPowersOf2LengthArrays<
 >_BuildPowersOf2LengthArrays : _BuildPowersOf2LengthArrays<Length, AccumulatedArray>
 
@@ -112,7 +114,7 @@ type PowerTailRec<
 export type Power<Num extends number, PowerOf extends number> = PowerTailRec<Num, PowerOf, 1>;
 >Power : Power<Num, PowerOf>
 
-=== tests/cases/compiler/a.tsx ===
+=== a.tsx ===
 import { Power } from "./input";
 >Power : any
 

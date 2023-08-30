@@ -98,7 +98,7 @@ const enum TransformationState {
     Uninitialized,
     Initialized,
     Completed,
-    Disposed
+    Disposed,
 }
 
 const enum SyntaxKindFeatureFlags {
@@ -147,11 +147,6 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     if (compilerOptions.experimentalDecorators) {
         transformers.push(transformLegacyDecorators);
     }
-    else if (languageVersion < ScriptTarget.ESNext || !useDefineForClassFields) {
-        transformers.push(transformESDecorators);
-    }
-
-    transformers.push(transformClassFields);
 
     if (getJSXTransformEnabled(compilerOptions)) {
         transformers.push(transformJsx);
@@ -160,6 +155,12 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     if (languageVersion < ScriptTarget.ESNext) {
         transformers.push(transformESNext);
     }
+
+    if (!compilerOptions.experimentalDecorators && (languageVersion < ScriptTarget.ESNext || !useDefineForClassFields)) {
+        transformers.push(transformESDecorators);
+    }
+
+    transformers.push(transformClassFields);
 
     if (languageVersion < ScriptTarget.ES2021) {
         transformers.push(transformES2021);
@@ -305,13 +306,17 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         enableEmitNotification,
         isSubstitutionEnabled,
         isEmitNotificationEnabled,
-        get onSubstituteNode() { return onSubstituteNode; },
+        get onSubstituteNode() {
+            return onSubstituteNode;
+        },
         set onSubstituteNode(value) {
             Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
             Debug.assert(value !== undefined, "Value must not be 'undefined'");
             onSubstituteNode = value;
         },
-        get onEmitNode() { return onEmitNode; },
+        get onEmitNode() {
+            return onEmitNode;
+        },
         set onEmitNode(value) {
             Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
             Debug.assert(value !== undefined, "Value must not be 'undefined'");
@@ -319,7 +324,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         },
         addDiagnostic(diag) {
             diagnostics.push(diag);
-        }
+        },
     };
 
     // Ensure the parse tree is clean before applying transformations
@@ -361,7 +366,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         emitNodeWithNotification,
         isEmitNotificationEnabled,
         dispose,
-        diagnostics
+        diagnostics,
     };
 
     function transformRoot(node: T) {
@@ -532,9 +537,11 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
         let statements: Statement[] | undefined;
-        if (lexicalEnvironmentVariableDeclarations ||
+        if (
+            lexicalEnvironmentVariableDeclarations ||
             lexicalEnvironmentFunctionDeclarations ||
-            lexicalEnvironmentStatements) {
+            lexicalEnvironmentStatements
+        ) {
             if (lexicalEnvironmentFunctionDeclarations) {
                 statements = [...lexicalEnvironmentFunctionDeclarations];
             }
@@ -542,7 +549,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
             if (lexicalEnvironmentVariableDeclarations) {
                 const statement = factory.createVariableStatement(
                     /*modifiers*/ undefined,
-                    factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
+                    factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations),
                 );
 
                 setEmitFlags(statement, EmitFlags.CustomPrologue);
@@ -613,9 +620,9 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
                         blockScopedVariableDeclarations.map(identifier => factory.createVariableDeclaration(identifier)),
-                        NodeFlags.Let
-                    )
-                )
+                        NodeFlags.Let,
+                    ),
+                ),
             ] : undefined;
         blockScopeStackOffset--;
         blockScopedVariableDeclarations = blockScopedVariableDeclarationsStack[blockScopeStackOffset];
