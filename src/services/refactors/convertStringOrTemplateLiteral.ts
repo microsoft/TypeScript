@@ -70,7 +70,7 @@ function getRefactorActionsToConvertToTemplateString(context: RefactorContext): 
         return [refactorInfo];
     }
     else if (context.preferences.provideRefactorNotApplicableReason) {
-        refactorInfo.actions.push({ ...convertStringAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation_or_string_literals) });
+        refactorInfo.actions.push({ ...convertStringAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenations_and_string_literals) });
         return [refactorInfo];
     }
     return emptyArray;
