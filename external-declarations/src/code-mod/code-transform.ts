@@ -30,11 +30,18 @@ const canHaveExplicitTypeAnnotation = new Set<ts.SyntaxKind>([
     ts.SyntaxKind.ArrayBindingPattern,
 ]);
 
-// Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation
-function findNearestParentWithTypeAnnotation(node: ts.Node): ts.Node {
-    while (((ts.isObjectBindingPattern(node) || ts.isArrayBindingPattern(node)) && !ts.isVariableDeclaration(node.parent)) ||
-          !canHaveExplicitTypeAnnotation.has(node.kind)) {
+// Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation.
+// If this is coming from an ill-formed AST with syntax errors, you cannot assume that it'll find a node
+// to annotate types, this will return undefined - meaning that it couldn't find the node to annotate types.
+function findNearestParentWithTypeAnnotation(node: ts.Node): ts.Node | undefined {
+    while (node &&
+           (((ts.isObjectBindingPattern(node) || ts.isArrayBindingPattern(node)) &&
+                !ts.isVariableDeclaration(node.parent)) ||
+           !canHaveExplicitTypeAnnotation.has(node.kind))) {
         node = node.parent;
+    }
+    if (!node) {
+        return undefined;
     }
     if (ts.isObjectBindingPattern(node) || ts.isArrayBindingPattern(node)) {
         // return VariableStatement

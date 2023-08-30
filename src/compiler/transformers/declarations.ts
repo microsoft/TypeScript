@@ -128,6 +128,7 @@ import {
     isInterfaceDeclaration,
     isJsonSourceFile,
     isLateVisibilityPaintedStatement,
+    isLiteralExpression,
     isLiteralImportTypeNode,
     isMappedTypeNode,
     isMethodDeclaration,
@@ -151,6 +152,7 @@ import {
     isTupleTypeNode,
     isTypeAliasDeclaration,
     isTypeElement,
+    isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
@@ -1147,7 +1149,10 @@ export function transformDeclarations(context: TransformationContext) {
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
             if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
-                if (isolatedDeclarations && hasIdentifierComputedName(input)) {
+                if (isolatedDeclarations && hasIdentifierComputedName(input) &&
+                    // When --noImplicitAny is off, it's automatically 'any' type so we shouldn't complain.
+                    // when it's on, it should be an error on the noImplicitAny side, so we also shouldn't complain.
+                    !isInterfaceDeclaration(input.parent) && !isTypeLiteralNode(input.parent)) {
                     reportIsolatedDeclarationError(input);
                 }
                 else {
@@ -1784,7 +1789,13 @@ export function transformDeclarations(context: TransformationContext) {
                     // We must add a temporary declaration for the extends clause expression
 
                     // Isolated declarations does not allow inferred type in the extends clause
-                    if(isolatedDeclarations) {
+                    if (isolatedDeclarations &&
+                        // Checking if it's a separate compiler error so we don't make it an isolatedDeclarations error.
+                        // This is only an approximation as we need type information to figure out if something
+                        // is a constructor type or not.
+                        !isLiteralExpression(extendsClause.expression) &&
+                        extendsClause.expression.kind !== SyntaxKind.FalseKeyword &&
+                        extendsClause.expression.kind !== SyntaxKind.TrueKeyword) {
                         reportIsolatedDeclarationError(extendsClause);
                         return cleanup(factory.updateClassDeclaration(
                             input,
@@ -1850,12 +1861,14 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.EnumDeclaration: {
                 return cleanup(factory.updateEnumDeclaration(
                     input,
-                    factory.createNodeArray(ensureModifiers(input)),
+                    factory.createNodeArray(ensureModifiers(input)), 
                     input.name,
                     factory.createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
                         if (isolatedDeclarations) {
-                            if (m.initializer && !resolver.isLiteralConstDeclaration(m)) {
+                            if (m.initializer && !resolver.isLiteralConstDeclaration(m) &&
+                                // This will be its own compiler error instead, so don't report.
+                                !isComputedPropertyName(m.name)) {
                                 reportIsolatedDeclarationError(m);
                             }
                         }

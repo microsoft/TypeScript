@@ -90,13 +90,18 @@ registerCodeFix({
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, typeChecker: TypeChecker, nodeWithDiag: Node): void {
     const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag);
-    fixupForIsolatedDeclarations(nodeWithNoType, nodeWithDiag, sourceFile, typeChecker, changes);
+    if (nodeWithNoType) {
+        fixupForIsolatedDeclarations(nodeWithNoType, nodeWithDiag, sourceFile, typeChecker, changes);
+    }
 }
 
-// Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation
-function findNearestParentWithTypeAnnotation(node: Node): Node {
-    while (((isObjectBindingPattern(node) || isArrayBindingPattern(node)) && !isVariableDeclaration(node.parent)) ||
-          !canHaveExplicitTypeAnnotation.has(node.kind)) {
+// Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation.
+// If this is coming from an ill-formed AST with syntax errors, you cannot assume that it'll find a node
+// to annotate types, this will return undefined - meaning that it couldn't find the node to annotate types.
+function findNearestParentWithTypeAnnotation(node: Node): Node | undefined {
+    while (node &&
+           (((isObjectBindingPattern(node) || isArrayBindingPattern(node)) &&
+           !isVariableDeclaration(node.parent)) || !canHaveExplicitTypeAnnotation.has(node.kind))) {
         node = node.parent;
     }
     return node;
