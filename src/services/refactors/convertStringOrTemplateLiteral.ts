@@ -15,6 +15,7 @@ import {
     getTokenAtPosition,
     getTrailingCommentRanges,
     isBinaryExpression,
+    isExpressionNode,
     isNoSubstitutionTemplateLiteral,
     isParenthesizedExpression,
     isStringLiteral,
@@ -65,7 +66,7 @@ function getRefactorActionsToConvertToTemplateString(context: RefactorContext): 
         return emptyArray;
     }
 
-    if (nodeIsStringLiteral || isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation) {
+    if (isExpressionNode(maybeBinary) && (nodeIsStringLiteral || isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation)) {
         refactorInfo.actions.push(convertStringAction);
         return [refactorInfo];
     }
