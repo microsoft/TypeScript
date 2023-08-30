@@ -1,4 +1,6 @@
-=== tests/cases/compiler/flowControlTypeGuardThenSwitch.ts ===
+//// [tests/cases/compiler/flowControlTypeGuardThenSwitch.ts] ////
+
+=== flowControlTypeGuardThenSwitch.ts ===
 enum Kind {
 >Kind : Symbol(Kind, Decl(flowControlTypeGuardThenSwitch.ts, 0, 0))
 

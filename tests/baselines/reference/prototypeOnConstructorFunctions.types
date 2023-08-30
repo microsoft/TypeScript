@@ -1,4 +1,6 @@
-=== tests/cases/compiler/prototypeOnConstructorFunctions.ts ===
+//// [tests/cases/compiler/prototypeOnConstructorFunctions.ts] ////
+
+=== prototypeOnConstructorFunctions.ts ===
 interface I1 {
     const: new (options?, element?) => any;
 >const : new (options?: any, element?: any) => any

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithLHSIsTypeParameter.ts] ////
+
 //// [instanceofOperatorWithLHSIsTypeParameter.ts]
 function foo<T>(t: T) {
     var x: any;

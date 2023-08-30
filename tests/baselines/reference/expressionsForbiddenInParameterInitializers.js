@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expressionsForbiddenInParameterInitializers.ts] ////
+
 //// [bar.ts]
 export async function foo({ foo = await import("./bar") }) {
 }

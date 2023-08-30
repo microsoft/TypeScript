@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numericIndexerTyping2.ts ===
+//// [tests/cases/compiler/numericIndexerTyping2.ts] ////
+
+=== numericIndexerTyping2.ts ===
 class I {
 >I : I
 

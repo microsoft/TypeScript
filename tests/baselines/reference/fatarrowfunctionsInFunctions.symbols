@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatarrowfunctionsInFunctions.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsInFunctions.ts] ////
+
+=== fatarrowfunctionsInFunctions.ts ===
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
 >setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(fatarrowfunctionsInFunctions.ts, 0, 0))
 >expression : Symbol(expression, Decl(fatarrowfunctionsInFunctions.ts, 0, 28))

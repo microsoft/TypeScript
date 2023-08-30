@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitFirstTypeArgumentGenericFunctionType.ts] ////
+
 //// [declarationEmitFirstTypeArgumentGenericFunctionType.ts]
 class X<A> {
 }

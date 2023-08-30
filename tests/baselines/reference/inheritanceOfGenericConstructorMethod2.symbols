@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritanceOfGenericConstructorMethod2.ts ===
+//// [tests/cases/compiler/inheritanceOfGenericConstructorMethod2.ts] ////
+
+=== inheritanceOfGenericConstructorMethod2.ts ===
 module M {
 >M : Symbol(M, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 0))
 

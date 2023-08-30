@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/variadicTuples1.ts ===
+//// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
+
+=== variadicTuples1.ts ===
 // Variadics in tuple types
 
 type TV0<T extends unknown[]> = [string, ...T];
@@ -342,9 +344,9 @@ function f1<T extends unknown[]>(t: [string, ...T, number], n: number) {
 >t : [string, ...T, number]
 >0 : 0
 
-    const b = t[1];  // [string, ...T, number][1]
->b : [string, ...T, number][1]
->t[1] : [string, ...T, number][1]
+    const b = t[1];  // number | T[number]
+>b : number | T[number]
+>t[1] : number | T[number]
 >t : [string, ...T, number]
 >1 : 1
 
@@ -396,9 +398,9 @@ function f3<T extends unknown[]>(t: [string, ...T, number]) {
 >bx : [...T, number]
 >t : [string, ...T, number]
 
-    let [c1, c2, ...cx] = t;  // string, [string, ...T, number][1], (number | T[number])[]
+    let [c1, c2, ...cx] = t;  // string, number | T[number], (number | T[number])[]
 >c1 : string
->c2 : [string, ...T, number][1]
+>c2 : number | T[number]
 >cx : (number | T[number])[]
 >t : [string, ...T, number]
 }
@@ -768,6 +770,41 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 >k3 = '2' : "2"
 >k3 : keyof [1, 2, ...T]
 >'2' : "2"
+}
+
+// Constraints of variadic tuple types
+
+function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+>ft16 : <T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
+>x : [unknown, unknown]
+>y : [...T, ...T]
+
+    x = y;
+>x = y : [...T, ...T]
+>x : [unknown, unknown]
+>y : [...T, ...T]
+}
+
+function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
+>ft17 : <T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
+>x : [unknown, unknown]
+>y : [...T, ...T]
+
+    x = y;
+>x = y : [...T, ...T]
+>x : [unknown, unknown]
+>y : [...T, ...T]
+}
+
+function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
+>ft18 : <T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) => void
+>x : [unknown, unknown]
+>y : [...T, ...T]
+
+    x = y;
+>x = y : [...T, ...T]
+>x : [unknown, unknown]
+>y : [...T, ...T]
 }
 
 // Inference between variadic tuple types
@@ -1409,4 +1446,12 @@ type U2 = [...[string, ...Numbers], boolean];
 
 type U3 = [...[string, number], boolean];
 >U3 : [string, number, boolean]
+
+// Repro from #53563
+
+type ToStringLength1<T extends any[]> = `${T['length']}`;
+>ToStringLength1 : `${T["length"]}`
+
+type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+>ToStringLength2 : `${[...T]["length"]}`
 

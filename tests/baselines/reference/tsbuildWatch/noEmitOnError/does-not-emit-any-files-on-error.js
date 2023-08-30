@@ -75,13 +75,13 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 FsWatches::
-/user/username/projects/noemitonerror/tsconfig.json: *new*
-  {}
 /user/username/projects/noemitonerror/shared/types/db.ts: *new*
   {}
 /user/username/projects/noemitonerror/src/main.ts: *new*
   {}
 /user/username/projects/noemitonerror/src/other.ts: *new*
+  {}
+/user/username/projects/noemitonerror/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

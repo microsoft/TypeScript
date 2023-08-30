@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/templateLiteralsAndDecoratorMetadata.ts] ////
+
 //// [templateLiteralsAndDecoratorMetadata.ts]
 declare var format: any;
 export class Greeter {
@@ -18,7 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Greeter = void 0;
-var Greeter = exports.Greeter = /** @class */ (function () {
+var Greeter = /** @class */ (function () {
     function Greeter() {
         this.greeting = "employee"; //template literals on this line cause the issue
     }
@@ -28,3 +30,4 @@ var Greeter = exports.Greeter = /** @class */ (function () {
     ], Greeter.prototype, "greeting", void 0);
     return Greeter;
 }());
+exports.Greeter = Greeter;

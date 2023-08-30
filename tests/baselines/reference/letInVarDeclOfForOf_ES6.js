@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letInVarDeclOfForOf_ES6.ts] ////
+
 //// [letInVarDeclOfForOf_ES6.ts]
 // should not be an error
 for (var let of [1,2,3]) {}

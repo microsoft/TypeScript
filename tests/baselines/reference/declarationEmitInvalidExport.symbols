@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitInvalidExport.ts ===
+//// [tests/cases/compiler/declarationEmitInvalidExport.ts] ////
+
+=== declarationEmitInvalidExport.ts ===
 if (false) {
   export var myClass = 0;
 >myClass : Symbol(myClass, Decl(declarationEmitInvalidExport.ts, 1, 12))

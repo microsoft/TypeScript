@@ -144,9 +144,9 @@ FsWatches::
   {}
 /a/b/f2.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /a/c/f3.ts: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 exitCode:: ExitStatus.undefined

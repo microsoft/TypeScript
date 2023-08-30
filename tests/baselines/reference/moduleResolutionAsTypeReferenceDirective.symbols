@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionAsTypeReferenceDirective.ts] ////
+
 === /a.ts ===
 import { a2 } from "phaser";
 >a2 : Symbol(a2, Decl(a.ts, 0, 8))

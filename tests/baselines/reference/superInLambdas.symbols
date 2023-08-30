@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superInLambdas.ts ===
+//// [tests/cases/compiler/superInLambdas.ts] ////
+
+=== superInLambdas.ts ===
 class User {
 >User : Symbol(User, Decl(superInLambdas.ts, 0, 0))
 

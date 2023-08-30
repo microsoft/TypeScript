@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/reExportAliasMakesInstantiated.ts] ////
+
+=== reExportAliasMakesInstantiated.ts ===
+declare module pack1 {
+>pack1 : Symbol(pack1, Decl(reExportAliasMakesInstantiated.ts, 0, 0))
+
+  const test1: string;
+>test1 : Symbol(test1, Decl(reExportAliasMakesInstantiated.ts, 1, 7))
+
+  export { test1 };
+>test1 : Symbol(test1, Decl(reExportAliasMakesInstantiated.ts, 2, 10))
+}
+declare module pack2 {
+>pack2 : Symbol(pack2, Decl(reExportAliasMakesInstantiated.ts, 3, 1))
+
+  import test1 = pack1.test1;
+>test1 : Symbol(test1, Decl(reExportAliasMakesInstantiated.ts, 4, 22))
+>pack1 : Symbol(pack1, Decl(reExportAliasMakesInstantiated.ts, 0, 0))
+>test1 : Symbol(pack1.test1, Decl(reExportAliasMakesInstantiated.ts, 2, 10))
+
+  export { test1 };
+>test1 : Symbol(test1, Decl(reExportAliasMakesInstantiated.ts, 6, 10))
+}
+export import test1 = pack2.test1;
+>test1 : Symbol(test1, Decl(reExportAliasMakesInstantiated.ts, 7, 1))
+>pack2 : Symbol(pack2, Decl(reExportAliasMakesInstantiated.ts, 3, 1))
+>test1 : Symbol(pack2.test1, Decl(reExportAliasMakesInstantiated.ts, 6, 10))
+
+declare module mod1 {
+>mod1 : Symbol(mod1, Decl(reExportAliasMakesInstantiated.ts, 8, 34))
+
+  type test1 = string;
+>test1 : Symbol(test1, Decl(reExportAliasMakesInstantiated.ts, 10, 21))
+
+  export { test1 };
+>test1 : Symbol(test1, Decl(reExportAliasMakesInstantiated.ts, 12, 10))
+}
+declare module mod2 {
+>mod2 : Symbol(mod2, Decl(reExportAliasMakesInstantiated.ts, 13, 1))
+
+  import test1 = mod1.test1;
+>test1 : Symbol(test1, Decl(reExportAliasMakesInstantiated.ts, 14, 21))
+>mod1 : Symbol(mod1, Decl(reExportAliasMakesInstantiated.ts, 8, 34))
+>test1 : Symbol(mod1.test1, Decl(reExportAliasMakesInstantiated.ts, 12, 10))
+
+  export { test1 };
+>test1 : Symbol(test1, Decl(reExportAliasMakesInstantiated.ts, 16, 10))
+}
+const test2 = mod2; // Possible false positive instantiation, but ok
+>test2 : Symbol(test2, Decl(reExportAliasMakesInstantiated.ts, 18, 5))
+>mod2 : Symbol(mod2, Decl(reExportAliasMakesInstantiated.ts, 13, 1))
+

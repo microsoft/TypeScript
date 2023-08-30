@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ArrayLiteralExpressions/parserArrayLiteralExpression8.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ArrayLiteralExpressions/parserArrayLiteralExpression8.ts] ////
+
+=== parserArrayLiteralExpression8.ts ===
 var v = [,1,];
 >v : Symbol(v, Decl(parserArrayLiteralExpression8.ts, 0, 3))
 

@@ -63,4 +63,4 @@ TEST-results.xml
 package-lock.json
 .eslintcache
 *v8.log
-lib/
+/lib/

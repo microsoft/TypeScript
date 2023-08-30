@@ -51,11 +51,11 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (used version)
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/f1.ts: *new*
   {}
 /a/b/f2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -113,9 +113,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
-  {}
 /a/b/f1.ts:
+  {}
+/a/b/tsconfig.json:
   {}
 /a/lib/lib.d.ts:
   {}

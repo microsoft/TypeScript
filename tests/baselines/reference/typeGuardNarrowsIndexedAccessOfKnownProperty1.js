@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty1.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty1.ts]
 interface Square {
     ["dash-ok"]: "square";

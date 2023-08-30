@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multipleInferenceContexts.ts ===
+//// [tests/cases/compiler/multipleInferenceContexts.ts] ////
+
+=== multipleInferenceContexts.ts ===
 type ConstructorOptions<Data> =
 >ConstructorOptions : ConstructorOptions<Data>
 

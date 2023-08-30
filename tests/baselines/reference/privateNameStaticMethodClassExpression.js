@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodClassExpression.ts] ////
+
 //// [privateNameStaticMethodClassExpression.ts]
 const C = class D {
     static #field = D.#method();
@@ -20,7 +22,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _a, _D_field, _D_method;
 const C = (_a = class D {
-        static getClass() { return D; }
+        static getClass() { return _a; }
         static getField() { return __classPrivateFieldGet(C, _a, "f", _D_field); }
         ;
     },

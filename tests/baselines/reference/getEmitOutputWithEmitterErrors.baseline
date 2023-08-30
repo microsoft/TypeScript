@@ -12,7 +12,7 @@ var M;
 })(M || (M = {}));
 
 FileName : /tests/cases/fourslash/inputFile.d.ts
-declare module M {
+declare namespace M {
     class C {
     }
     export var foo: C;

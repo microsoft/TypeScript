@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/mergeClassInterfaceAndModule.ts] ////
+
 //// [mergeClassInterfaceAndModule.ts]
 interface C1 {}
 declare class C1 {}

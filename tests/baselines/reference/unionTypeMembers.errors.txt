@@ -1,16 +1,16 @@
-tests/cases/conformance/types/union/unionTypeMembers.ts(44,38): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'never'.
+unionTypeMembers.ts(44,38): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'never'.
   Type 'string' is not assignable to type 'never'.
-tests/cases/conformance/types/union/unionTypeMembers.ts(51,3): error TS2339: Property 'propertyOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
+unionTypeMembers.ts(51,3): error TS2339: Property 'propertyOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
   Property 'propertyOnlyInI1' does not exist on type 'I2<number>'.
-tests/cases/conformance/types/union/unionTypeMembers.ts(52,3): error TS2339: Property 'propertyOnlyInI2' does not exist on type 'I1<number> | I2<number>'.
+unionTypeMembers.ts(52,3): error TS2339: Property 'propertyOnlyInI2' does not exist on type 'I1<number> | I2<number>'.
   Property 'propertyOnlyInI2' does not exist on type 'I1<number>'.
-tests/cases/conformance/types/union/unionTypeMembers.ts(53,3): error TS2339: Property 'methodOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
+unionTypeMembers.ts(53,3): error TS2339: Property 'methodOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
   Property 'methodOnlyInI1' does not exist on type 'I2<number>'.
-tests/cases/conformance/types/union/unionTypeMembers.ts(54,3): error TS2339: Property 'methodOnlyInI2' does not exist on type 'I1<number> | I2<number>'.
+unionTypeMembers.ts(54,3): error TS2339: Property 'methodOnlyInI2' does not exist on type 'I1<number> | I2<number>'.
   Property 'methodOnlyInI2' does not exist on type 'I1<number>'.
 
 
-==== tests/cases/conformance/types/union/unionTypeMembers.ts (5 errors) ====
+==== unionTypeMembers.ts (5 errors) ====
     interface I1<T> {
         commonMethodType(a: string): string;
         commonPropertyType: string;

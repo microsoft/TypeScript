@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/decoratedClassExportsCommonJS1.ts ===
+//// [tests/cases/conformance/decorators/class/decoratedClassExportsCommonJS1.ts] ////
+
+=== decoratedClassExportsCommonJS1.ts ===
 declare var Something: any;
 >Something : Symbol(Something, Decl(decoratedClassExportsCommonJS1.ts, 0, 11))
 

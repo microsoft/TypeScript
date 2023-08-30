@@ -51,19 +51,19 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/file1.ts: *new*
   {}
 /user/username/projects/myproject/src/file2.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src: *new*
-  {}
 /user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/src: *new*
   {}
 
 exitCode:: ExitStatus.undefined
@@ -134,21 +134,21 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/file1.ts:
   {}
 /user/username/projects/myproject/src/file2.ts:
   {}
-/a/lib/lib.d.ts:
-  {}
 /user/username/projects/myproject/src/file3.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
 /user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/src:
   {}
 
 exitCode:: ExitStatus.undefined

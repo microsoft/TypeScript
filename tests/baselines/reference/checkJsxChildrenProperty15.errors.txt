@@ -1,12 +1,12 @@
-tests/cases/conformance/jsx/file.tsx(10,17): error TS2322: Type '{ children: Element; }' is not assignable to type 'IntrinsicAttributes'.
+file.tsx(10,17): error TS2322: Type '{ children: Element; }' is not assignable to type 'IntrinsicAttributes'.
   Property 'children' does not exist on type 'IntrinsicAttributes'.
-tests/cases/conformance/jsx/file.tsx(11,13): error TS2322: Type '{ children: Element; key: string; }' is not assignable to type 'IntrinsicAttributes'.
+file.tsx(11,13): error TS2322: Type '{ children: Element; key: string; }' is not assignable to type 'IntrinsicAttributes'.
   Property 'children' does not exist on type 'IntrinsicAttributes'.
-tests/cases/conformance/jsx/file.tsx(12,13): error TS2322: Type '{ children: Element[]; key: string; }' is not assignable to type 'IntrinsicAttributes'.
+file.tsx(12,13): error TS2322: Type '{ children: Element[]; key: string; }' is not assignable to type 'IntrinsicAttributes'.
   Property 'children' does not exist on type 'IntrinsicAttributes'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== file.tsx (3 errors) ====
     import React = require('react');
     
     const Tag = (x: {}) => <div></div>;

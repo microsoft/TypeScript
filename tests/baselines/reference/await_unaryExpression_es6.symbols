@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/await_unaryExpression_es6.ts ===
+//// [tests/cases/conformance/async/es6/await_unaryExpression_es6.ts] ////
+
+=== await_unaryExpression_es6.ts ===
 async function bar() {
 >bar : Symbol(bar, Decl(await_unaryExpression_es6.ts, 0, 0))
 

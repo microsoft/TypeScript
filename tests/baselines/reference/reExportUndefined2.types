@@ -1,11 +1,13 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/reExportUndefined2.ts] ////
+
+=== a.ts ===
 var undefined;
 >undefined : any
 
 export { undefined };
 >undefined : any
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { undefined } from "./a";
 >undefined : any
 

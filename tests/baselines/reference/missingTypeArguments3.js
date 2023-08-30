@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingTypeArguments3.ts] ////
+
 //// [missingTypeArguments3.ts]
 declare module linq {
 

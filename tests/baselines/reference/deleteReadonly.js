@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deleteReadonly.ts] ////
+
 //// [deleteReadonly.ts]
 interface A {
   readonly b

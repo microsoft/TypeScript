@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowPropertyDeclarations.ts ===
+//// [tests/cases/compiler/controlFlowPropertyDeclarations.ts] ////
+
+=== controlFlowPropertyDeclarations.ts ===
 // Repro from ##8913
 
 declare var require:any;

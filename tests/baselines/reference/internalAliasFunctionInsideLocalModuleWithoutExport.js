@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasFunctionInsideLocalModuleWithoutExport.ts] ////
+
 //// [internalAliasFunctionInsideLocalModuleWithoutExport.ts]
 export module a {
     export function foo(x: number) {
@@ -32,10 +34,10 @@ var c;
 
 
 //// [internalAliasFunctionInsideLocalModuleWithoutExport.d.ts]
-export declare module a {
+export declare namespace a {
     function foo(x: number): number;
 }
-export declare module c {
+export declare namespace c {
     import b = a.foo;
     var bVal2: typeof b;
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeTest1.ts] ////
+
 //// [targetTypeTest1.ts]
 declare class Point
 {

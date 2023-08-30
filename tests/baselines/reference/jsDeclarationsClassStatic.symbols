@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassStatic.ts] ////
+
+=== source.js ===
 class Handler {
 >Handler : Symbol(Handler, Decl(source.js, 0, 0), Decl(source.js, 7, 1))
 

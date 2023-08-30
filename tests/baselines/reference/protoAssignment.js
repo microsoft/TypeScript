@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/protoAssignment.ts] ////
+
 //// [protoAssignment.ts]
 interface Number extends Comparable<number> {
 

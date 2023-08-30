@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalFunctionArgAssignability.ts] ////
+
 //// [optionalFunctionArgAssignability.ts]
 interface Promise<T> {
     then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
