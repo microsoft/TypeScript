@@ -1,6 +1,10 @@
 import * as ts from "../../_namespaces/ts";
-import { libContent } from "../helpers/contents";
-import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
+import {
+    libContent,
+} from "../helpers/contents";
+import {
+    solutionBuildWithBaseline,
+} from "../helpers/solutionBuilder";
 import {
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
@@ -28,7 +32,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             alreadyBuilt ? (sys, originalRead) => {
                 solutionBuildWithBaseline(sys, [config], originalRead);
                 sys.clearOutput();
-            } : undefined
+            } : undefined,
         );
         const host = createWatchCompilerHostOfConfigFileForBaseline({
             configFileName: config,
@@ -45,7 +49,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             baseline,
             oldSnap,
             getPrograms,
-            watchOrSolution: watch
+            watchOrSolution: watch,
         });
     }
 
@@ -71,7 +75,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             return {
                 files: [{ path: libFile.path, content: libContent }, baseConfig, coreTs, coreConfig, animalTs, dogTs, indexTs, animalsConfig],
                 config: animalsConfig.path,
-                subScenario: "with simple project"
+                subScenario: "with simple project",
             };
         });
     });
@@ -102,7 +106,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
                 return {
                     files: [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink],
                     config: aConfig.path,
-                    subScenario: `${subScenario}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`
+                    subScenario: `${subScenario}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`,
                 };
             });
         }
@@ -115,18 +119,18 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
                         outDir: "lib",
                         rootDir: "src",
                         composite: true,
-                        ...extraOptions
+                        ...extraOptions,
                     },
                     include: ["src"],
-                    ...(references ? { references: references.map(path => ({ path })) } : {})
-                })
+                    ...(references ? { references: references.map(path => ({ path })) } : {}),
+                }),
             };
         }
 
         function file(packageName: string, fileName: string, content: string): File {
             return {
                 path: `/user/username/projects/myproject/packages/${packageName}/src/${fileName}`,
-                content
+                content,
             };
         }
 
@@ -137,21 +141,25 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
                         path: `/user/username/projects/myproject/packages/B/package.json`,
                         content: JSON.stringify({
                             main: "lib/index.js",
-                            types: "lib/index.d.ts"
-                        })
+                            types: "lib/index.d.ts",
+                        }),
                     },
-                    aTest: file("A", "index.ts", `import { foo } from '${scope}b';
+                    aTest: file(
+                        "A",
+                        "index.ts",
+                        `import { foo } from '${scope}b';
 import { bar } from '${scope}b/lib/bar';
 foo();
 bar();
-`),
+`,
+                    ),
                     bFoo: file("B", "index.ts", `export function foo() { }`),
                     bBar: file("B", "bar.ts", `export function bar() { }`),
                     bSymlink: {
                         path: `/user/username/projects/myproject/node_modules/${scope}b`,
-                        symLink: `/user/username/projects/myproject/packages/B`
+                        symLink: `/user/username/projects/myproject/packages/B`,
                     },
-                    subScenario: `when packageJson has types field${scope ? " with scoped package" : ""}`
+                    subScenario: `when packageJson has types field${scope ? " with scoped package" : ""}`,
                 }));
             });
 
@@ -159,20 +167,24 @@ bar();
                 verifySymlinkScenario(() => ({
                     bPackageJson: {
                         path: `/user/username/projects/myproject/packages/B/package.json`,
-                        content: "{}"
+                        content: "{}",
                     },
-                    aTest: file("A", "test.ts", `import { foo } from '${scope}b/lib/foo';
+                    aTest: file(
+                        "A",
+                        "test.ts",
+                        `import { foo } from '${scope}b/lib/foo';
 import { bar } from '${scope}b/lib/bar/foo';
 foo();
 bar();
-`),
+`,
+                    ),
                     bFoo: file("B", "foo.ts", `export function foo() { }`),
                     bBar: file("B", "bar/foo.ts", `export function bar() { }`),
                     bSymlink: {
                         path: `/user/username/projects/myproject/node_modules/${scope}b`,
-                        symLink: `/user/username/projects/myproject/packages/B`
+                        symLink: `/user/username/projects/myproject/packages/B`,
                     },
-                    subScenario: `when referencing file from subFolder${scope ? " with scoped package" : ""}`
+                    subScenario: `when referencing file from subFolder${scope ? " with scoped package" : ""}`,
                 }));
             });
         }

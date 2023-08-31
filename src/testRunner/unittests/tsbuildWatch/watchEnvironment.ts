@@ -18,7 +18,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
         const configPath = `${project}/tsconfig.json`;
         const typing: File = {
             path: `${project}/typings/xterm.d.ts`,
-            content: "export const typing = 10;"
+            content: "export const typing = 10;",
         };
 
         const allPkgFiles = pkgs(pkgFiles);
@@ -43,7 +43,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 {
                     // Make change
@@ -60,7 +60,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 {
                     // Make change to remove all watches
@@ -77,7 +77,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                     timeouts: sys => sys.logTimeoutQueueLength(),
                 },
             ],
-            watchOrSolution: solutionBuilder
+            watchOrSolution: solutionBuilder,
         });
 
         function flatArray<T>(arr: T[][]): readonly T[] {
@@ -97,7 +97,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             return [
                 {
                     path: `${project}/pkg${index}/index.ts`,
-                    content: `export const pkg${index} = ${index};`
+                    content: `export const pkg${index} = ${index};`,
                 },
                 {
                     path: `${project}/pkg${index}/tsconfig.json`,
@@ -105,18 +105,21 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                         complerOptions: { composite: true },
                         include: [
                             "**/*.ts",
-                            "../typings/xterm.d.ts"
-                        ]
-                    })
-                }
+                            "../typings/xterm.d.ts",
+                        ],
+                    }),
+                },
             ];
         }
         function writePkgReferences(system: TestServerHost) {
-            system.writeFile(configPath, JSON.stringify({
-                files: [],
-                include: [],
-                references: pkgs(createPkgReference)
-            }));
+            system.writeFile(
+                configPath,
+                JSON.stringify({
+                    files: [],
+                    include: [],
+                    references: pkgs(createPkgReference),
+                }),
+            );
         }
     });
 });

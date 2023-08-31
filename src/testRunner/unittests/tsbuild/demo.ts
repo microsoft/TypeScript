@@ -5,7 +5,7 @@ import {
 import {
     loadProjectFromDisk,
     prependText,
-    replaceText
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: on demo project", () => {
@@ -22,7 +22,7 @@ describe("unittests:: tsbuild:: on demo project", () => {
         scenario: "demo",
         subScenario: "in master branch with everything setup correctly and reports no error",
         fs: () => projFs,
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"]
+        commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
     });
 
     verifyTsc({
@@ -30,28 +30,30 @@ describe("unittests:: tsbuild:: on demo project", () => {
         subScenario: "in circular branch reports the error about it by stopping build",
         fs: () => projFs,
         commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
-        modifyFs: fs => replaceText(
-            fs,
-            "/src/core/tsconfig.json",
-            "}",
-            `},
+        modifyFs: fs =>
+            replaceText(
+                fs,
+                "/src/core/tsconfig.json",
+                "}",
+                `},
   "references": [
     {
       "path": "../zoo"
     }
-  ]`
-        )
+  ]`,
+            ),
     });
     verifyTsc({
         scenario: "demo",
         subScenario: "in bad-ref branch reports the error about files not in rootDir at the import location",
         fs: () => projFs,
         commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
-        modifyFs: fs => prependText(
-            fs,
-            "/src/core/utilities.ts",
-            `import * as A from '../animals';
-`
-        )
+        modifyFs: fs =>
+            prependText(
+                fs,
+                "/src/core/utilities.ts",
+                `import * as A from '../animals';
+`,
+            ),
     });
 });

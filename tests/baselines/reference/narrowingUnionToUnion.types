@@ -507,3 +507,70 @@ function f1x(obj: (string | number)[] | null) {
 >obj : string[] | null
 }
 
+// Repro from #55425
+
+type MyDiscriminatedUnion = { type: 'A', aProp: number } | { type: 'B', bProp: string };
+>MyDiscriminatedUnion : { type: 'A'; aProp: number; } | { type: 'B'; bProp: string; }
+>type : "A"
+>aProp : number
+>type : "B"
+>bProp : string
+
+declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
+>isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
+>item : unknown
+
+declare const working: unknown;
+>working : unknown
+
+declare const broken: Record<string, any> | undefined;
+>broken : Record<string, any> | undefined
+
+declare const workingAgain: Record<string, any> | undefined | unknown;
+>workingAgain : unknown
+
+isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
+>isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp : number | false
+>isMyDiscriminatedUnion(working) && working.type === 'A' : boolean
+>isMyDiscriminatedUnion(working) : boolean
+>isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
+>working : unknown
+>working.type === 'A' : boolean
+>working.type : "A" | "B"
+>working : MyDiscriminatedUnion
+>type : "A" | "B"
+>'A' : "A"
+>working.aProp : number
+>working : { type: "A"; aProp: number; }
+>aProp : number
+
+isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
+>isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp : number | false
+>isMyDiscriminatedUnion(broken) && broken.type === 'A' : boolean
+>isMyDiscriminatedUnion(broken) : boolean
+>isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
+>broken : Record<string, any> | undefined
+>broken.type === 'A' : boolean
+>broken.type : "A" | "B"
+>broken : MyDiscriminatedUnion
+>type : "A" | "B"
+>'A' : "A"
+>broken.aProp : number
+>broken : { type: "A"; aProp: number; }
+>aProp : number
+
+isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp;
+>isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp : number | false
+>isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' : boolean
+>isMyDiscriminatedUnion(workingAgain) : boolean
+>isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
+>workingAgain : unknown
+>workingAgain.type === 'A' : boolean
+>workingAgain.type : "A" | "B"
+>workingAgain : MyDiscriminatedUnion
+>type : "A" | "B"
+>'A' : "A"
+>workingAgain.aProp : number
+>workingAgain : { type: "A"; aProp: number; }
+>aProp : number
+
