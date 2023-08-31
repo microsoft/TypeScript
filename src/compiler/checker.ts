@@ -34007,7 +34007,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // them now (and keeping do so for any subsequent candidates) and perform a second
                     // round of type inference and applicability checking for this particular candidate.
                     argCheckMode = CheckMode.Normal;
-                    // argCheckMode = checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
                     if (inferenceContext) {
                         const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
