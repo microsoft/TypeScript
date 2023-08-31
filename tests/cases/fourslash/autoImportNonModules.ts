@@ -9,6 +9,5 @@
 //// export function f() { return true }
 
 verify.completions({
-  marker: "",
   includes: [],
 });
