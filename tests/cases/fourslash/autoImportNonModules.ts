@@ -6,11 +6,9 @@
 //// export * from "./thing1A";
 
 // @Filename: /src/dirA/thing1A.ts
-//// export function f(){ return false }
+//// export function f() { return true }
 
 verify.completions({
-  excludes: ["f"],
-  preferences: {
-    includeCompletionsForModuleExports: true
-  }
+  marker: "",
+  includes: [],
 });
