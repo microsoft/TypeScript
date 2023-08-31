@@ -492,6 +492,7 @@ import {
     startsWith,
     startsWithUseStrict,
     Statement,
+    StatementsContainer,
     StringLiteral,
     StringLiteralLike,
     StringLiteralType,
@@ -4614,6 +4615,19 @@ export function isNodeWithPossibleHoistedDeclaration(node: Node): node is NodeWi
         case SyntaxKind.WhileStatement:
         case SyntaxKind.TryStatement:
         case SyntaxKind.CatchClause:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function isStatementsContainer(node: Node): node is StatementsContainer {
+    switch (node.kind) {
+        case SyntaxKind.Block:
+        case SyntaxKind.ModuleBlock:
+        case SyntaxKind.SourceFile:
+        case SyntaxKind.DefaultClause:
+        case SyntaxKind.CaseClause:
             return true;
     }
     return false;
