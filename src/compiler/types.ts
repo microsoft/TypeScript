@@ -822,7 +822,6 @@ export const enum NodeFlags {
     /** @internal */ InWithStatement               = 1 << 26, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
     JsonFile                                       = 1 << 27, // If node was parsed in a Json
     /** @internal */ TypeCached                    = 1 << 28, // If a type was cached for node at any point
-    /** @internal */ Deprecated                    = 1 << 29, // If has '@deprecated' JSDoc tag
 
     BlockScoped = Let | Const | Using,
     Constant = Const | Using,

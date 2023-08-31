@@ -1804,7 +1804,6 @@ namespace Parser {
         }
     }
 
-    let hasDeprecatedTag = false;
     function withJSDoc<T extends HasJSDoc>(node: T, hasJSDoc: boolean): T {
         if (!hasJSDoc) {
             return node;
@@ -1813,10 +1812,6 @@ namespace Parser {
         Debug.assert(!node.jsDoc); // Should only be called once per node
         const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
         if (jsDoc.length) node.jsDoc = jsDoc;
-        if (hasDeprecatedTag) {
-            hasDeprecatedTag = false;
-            (node as Mutable<T>).flags |= NodeFlags.Deprecated;
-        }
         return node;
     }
 
@@ -9013,7 +9008,6 @@ namespace Parser {
                         tag = parseSimpleTag(start, factory.createJSDocOverrideTag, tagName, margin, indentText);
                         break;
                     case "deprecated":
-                        hasDeprecatedTag = true;
                         tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
                         break;
                     case "this":

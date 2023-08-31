@@ -2413,7 +2413,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDeprecatedDeclaration(declaration: Declaration) {
-        return !!(getCombinedNodeFlagsCached(declaration) & NodeFlags.Deprecated);
+        return !!getJSDocDeprecatedTag(declaration);
     }
 
     function addDeprecatedSuggestion(location: Node, declarations: Node[], deprecatedEntity: string) {
@@ -34941,7 +34941,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkDeprecatedSignature(signature: Signature, node: CallLikeExpression) {
         if (signature.flags & SignatureFlags.IsSignatureCandidateForOverloadFailure) return;
-        if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
+        if (signature.declaration && !isExpression(signature.declaration) && isDeprecatedDeclaration(signature.declaration)) {
+            // Debug.assert(signature.declaration.flags & NodeFlags.Deprecated);
             const suggestionNode = getDeprecatedSuggestionNode(node);
             const name = tryGetPropertyAccessOrIdentifierToString(getInvokedExpression(node));
             addDeprecatedSuggestionWithSignature(suggestionNode, signature.declaration, name, signatureToString(signature));
@@ -39438,7 +39439,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol) {
-                if (some(symbol.declarations, d => isTypeDeclaration(d) && !!(d.flags & NodeFlags.Deprecated))) {
+                if (some(symbol.declarations, d => isTypeDeclaration(d) && isDeprecatedDeclaration(d))) {
                     addDeprecatedSuggestion(
                         getDeprecatedSuggestionNode(node),
                         symbol.declarations!,
