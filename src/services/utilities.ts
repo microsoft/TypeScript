@@ -2448,9 +2448,6 @@ export function programContainsEsModules(program: Program): boolean {
 // TODO: this function is, at best, poorly named. Use sites are pretty suspicious.
 /** @internal */
 export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
-    if (compilerOptions.module === ModuleKind.None) {
-        return false;
-    }
     return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
 }
 
