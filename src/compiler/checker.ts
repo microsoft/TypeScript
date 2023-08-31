@@ -15563,7 +15563,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const typeArguments = !node ? emptyArray :
                 node.kind === SyntaxKind.TypeReference ? concatenate(type.target.outerTypeParameters, getEffectiveTypeArguments(node, type.target.localTypeParameters!)) :
                 node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] :
-                map(node.elements, element => removeMissingType(getTypeFromTypeNode(element), element.kind === SyntaxKind.OptionalType));
+                map(node.elements, element => getTypeFromTypeNode(element.kind === SyntaxKind.OptionalType && exactOptionalPropertyTypes ? (element as OptionalTypeNode).type : element));
             if (popTypeResolution()) {
                 type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
             }
