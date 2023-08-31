@@ -1,11 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @Filename: /tsconfig.json
-//// {
-////  "compilerOptions": {
-////    "module": "none"
-////  }
-////}
+// @module: none
 
 // @Filename: /src/dirA/index.ts
 //// export * from "./thing1A";
