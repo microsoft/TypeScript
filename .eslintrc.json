@@ -144,9 +144,9 @@
         "unicorn/prefer-object-from-entries": "error",
         "unicorn/no-new-buffer": "error",
         "unicorn/prefer-set-has": "error",
+        "unicorn/prefer-string-trim-start-end": "error",
         // TODO(jakebailey): Require manual fixups
         // "unicorn/prefer-string-slice": "error",
-        // "unicorn/prefer-string-trim-start-end": "error", // check perf vs helper
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
