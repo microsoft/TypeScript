@@ -1,0 +1,24 @@
+invalid-incomplete-groupname-without-group-3-u.ts(14,2): error TS1508: '\k' must be followed by a capturing group name enclosed in angle brackets.
+invalid-incomplete-groupname-without-group-3-u.ts(14,5): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+
+
+==== invalid-incomplete-groupname-without-group-3-u.ts (2 errors) ====
+    // Copyright 2017 the V8 project authors. All rights reserved.
+    // This code is governed by the BSD license found in the LICENSE file.
+    
+    /*---
+    description: GroupName is `< RegExpIdentifierName >`.
+    esid: prod-GroupName
+    negative:
+      phase: parse
+      type: SyntaxError
+    features: [regexp-named-groups]
+    ---*/
+    
+    
+    /\k/u;
+     ~~
+!!! error TS1508: '\k' must be followed by a capturing group name enclosed in angle brackets.
+        ~
+!!! error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+    

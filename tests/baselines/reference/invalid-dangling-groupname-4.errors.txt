@@ -1,0 +1,29 @@
+invalid-dangling-groupname-4.ts(19,5): error TS1530: There is no capturing group named 'a' in this regular expression.
+invalid-dangling-groupname-4.ts(19,9): error TS1501: Named capturing groups are only available when targeting 'ES2018' or later.
+
+
+==== invalid-dangling-groupname-4.ts (2 errors) ====
+    // Copyright 2017 the V8 project authors. All rights reserved.
+    // This code is governed by the BSD license found in the LICENSE file.
+    
+    /*---
+    description: Group reference must have corresponding group.
+    info: |
+      It is a Syntax Error if the enclosing Pattern does not contain a
+      GroupSpecifier with an enclosed RegExpIdentifierName whose StringValue
+      equals the StringValue of the RegExpIdentifierName of this production's
+      GroupName.
+    esid: sec-patterns-static-semantics-early-errors
+    negative:
+      phase: parse
+      type: SyntaxError
+    features: [regexp-named-groups]
+    ---*/
+    
+    
+    /\k<a>(?<ab>a)/;
+        ~
+!!! error TS1530: There is no capturing group named 'a' in this regular expression.
+            ~~~~
+!!! error TS1501: Named capturing groups are only available when targeting 'ES2018' or later.
+    

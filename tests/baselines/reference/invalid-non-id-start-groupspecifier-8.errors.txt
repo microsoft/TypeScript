@@ -1,0 +1,24 @@
+invalid-non-id-start-groupspecifier-8.ts(14,4): error TS1501: Named capturing groups are only available when targeting 'ES2018' or later.
+invalid-non-id-start-groupspecifier-8.ts(14,5): error TS1512: Expected a capturing group name.
+
+
+==== invalid-non-id-start-groupspecifier-8.ts (2 errors) ====
+    // Copyright 2017 the V8 project authors. All rights reserved.
+    // This code is governed by the BSD license found in the LICENSE file.
+    
+    /*---
+    description: GroupSpecifier must be identifier-like.
+    esid: prod-GroupSpecifier
+    negative:
+      phase: parse
+      type: SyntaxError
+    features: [regexp-named-groups]
+    ---*/
+    
+    
+    /(?<\>.)/;
+       ~
+!!! error TS1501: Named capturing groups are only available when targeting 'ES2018' or later.
+        
+!!! error TS1512: Expected a capturing group name.
+    

@@ -1,0 +1,27 @@
+invalid-incomplete-groupname-without-group-u.ts(14,5): error TS1530: There is no capturing group named 'a' in this regular expression.
+invalid-incomplete-groupname-without-group-u.ts(14,6): error TS1005: '>' expected.
+invalid-incomplete-groupname-without-group-u.ts(14,7): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+
+
+==== invalid-incomplete-groupname-without-group-u.ts (3 errors) ====
+    // Copyright 2017 the V8 project authors. All rights reserved.
+    // This code is governed by the BSD license found in the LICENSE file.
+    
+    /*---
+    description: GroupName is `< RegExpIdentifierName >`.
+    esid: prod-GroupName
+    negative:
+      phase: parse
+      type: SyntaxError
+    features: [regexp-named-groups]
+    ---*/
+    
+    
+    /\k<a/u;
+        ~
+!!! error TS1530: There is no capturing group named 'a' in this regular expression.
+         
+!!! error TS1005: '>' expected.
+          ~
+!!! error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+    

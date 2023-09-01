@@ -1,0 +1,24 @@
+S7.8.4_A7.1_T4.ts(17,7): error TS1125: Hexadecimal digit expected.
+
+
+==== S7.8.4_A7.1_T4.ts (1 errors) ====
+    // Copyright 2009 the Sputnik authors.  All rights reserved.
+    // This code is governed by the BSD license found in the LICENSE file.
+    
+    /*---
+    info: |
+        EscapeSequence :: UnicodeEscapeSequence :: u HexDigit HexDigit HexDigit
+        HexDigit
+    es5id: 7.8.4_A7.1_T4
+    description: "UnicodeEscapeSequence :: u000G is incorrect"
+    negative:
+      phase: parse
+      type: SyntaxError
+    ---*/
+    
+    
+    //CHECK#
+    "\u000G"
+          
+!!! error TS1125: Hexadecimal digit expected.
+    

@@ -1,0 +1,32 @@
+bigint-binary-invalid-digit.ts(25,3): error TS1177: Binary digit expected.
+
+
+==== bigint-binary-invalid-digit.ts (1 errors) ====
+    // Copyright (C) 2017 Robin Templeton. All rights reserved.
+    // This code is governed by the BSD license found in the LICENSE file.
+    
+    /*---
+    description: Binary BigInt literal containing an invalid digit
+    esid: prod-NumericLiteral
+    info: |
+      NumericLiteral ::
+        NumericLiteralBase NumericLiteralSuffix
+    
+      NumericLiteralBase ::
+        DecimalLiteral
+        BinaryIntegerLiteral
+        OctalIntegerLiteral
+        HexIntegerLiteral
+    
+      NumericLiteralSuffix :: n
+    negative:
+      phase: parse
+      type: SyntaxError
+    features: [BigInt]
+    ---*/
+    
+    
+    0b2n;
+      
+!!! error TS1177: Binary digit expected.
+    
