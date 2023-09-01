@@ -2897,6 +2897,10 @@ declare namespace ts {
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */
                 readonly disableLineTextInReferences?: boolean;
+                /**
+                 * Indicates whether to exclude standard library and node_modules files from navTo results.
+                 */
+                readonly excludeLibrarySymbols?: boolean;
             }
             interface CompilerOptions {
                 allowJs?: boolean;
@@ -8640,6 +8644,7 @@ declare namespace ts {
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+        readonly excludeLibrarySymbols?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
@@ -10396,7 +10401,7 @@ declare namespace ts {
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         getFileReferences(fileName: string): ReferenceEntry[];
-        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean, excludeLibFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
