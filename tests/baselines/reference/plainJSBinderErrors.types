@@ -82,7 +82,7 @@ class C {
         }
     }
     label() {
->label : () => number
+>label : () => void
 
         for(;;) {
             label: var x = 1

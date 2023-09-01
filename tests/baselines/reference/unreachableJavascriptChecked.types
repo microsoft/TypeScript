@@ -2,7 +2,7 @@
 
 === unreachable.js ===
 function unreachable() {
->unreachable : () => void | 2 | 3 | 4
+>unreachable : () => void
 
     return f();
 >f() : void

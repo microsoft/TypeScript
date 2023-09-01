@@ -2,7 +2,7 @@
 
 === unreachable.js ===
 function unreachable() {
->unreachable : () => 1 | 2
+>unreachable : () => number
 
     return 1;
 >1 : 1

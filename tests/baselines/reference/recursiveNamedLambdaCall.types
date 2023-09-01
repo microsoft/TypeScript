@@ -14,10 +14,10 @@ var promise = function( obj ) {
 >doScroll : any
 
 			(function doScrollCheck() {
->(function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			})() : any
->(function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			}) : () => any
->function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			} : () => any
->doScrollCheck : () => any
+>(function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			})() : void
+>(function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			}) : () => void
+>function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			} : () => void
+>doScrollCheck : () => void
 
 				if ( false ) {
 >false : false
@@ -36,7 +36,7 @@ var promise = function( obj ) {
 						return setTimeout( doScrollCheck, 50 );
 >setTimeout( doScrollCheck, 50 ) : any
 >setTimeout : any
->doScrollCheck : () => any
+>doScrollCheck : () => void
 >50 : 50
 					}
 
