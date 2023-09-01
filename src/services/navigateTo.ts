@@ -16,6 +16,7 @@ import {
     ImportClause,
     ImportEqualsDeclaration,
     ImportSpecifier,
+    isInsideNodeModules,
     isPropertyAccessExpression,
     isPropertyNameLiteral,
     NavigateToItem,
@@ -37,7 +38,7 @@ interface RawNavigateToItem {
 }
 
 /** @internal */
-export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): NavigateToItem[] {
+export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean, excludeExternalFiles?: boolean): NavigateToItem[] {
     const patternMatcher = createPatternMatcher(searchValue);
     if (!patternMatcher) return emptyArray;
     const rawItems: RawNavigateToItem[] = [];
@@ -50,8 +51,12 @@ export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: 
             continue;
         }
 
+        if (shouldExcludeFile(sourceFile, !!excludeExternalFiles)) {
+            continue;
+        }
+
         sourceFile.getNamedDeclarations().forEach((declarations, name) => {
-            getItemsFromNamedDeclaration(patternMatcher, name, declarations, checker, sourceFile.fileName, rawItems);
+            getItemsFromNamedDeclaration(patternMatcher, name, declarations, checker, sourceFile.fileName, !!excludeExternalFiles, rawItems);
         });
     }
 
@@ -59,7 +64,14 @@ export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: 
     return (maxResultCount === undefined ? rawItems : rawItems.slice(0, maxResultCount)).map(createNavigateToItem);
 }
 
-function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: readonly Declaration[], checker: TypeChecker, fileName: string, rawItems: RawNavigateToItem[]): void {
+/**
+ * Exclude 'node_modules/' files and standard library files if 'excludeExternalFiles' is true.
+ */
+function shouldExcludeFile(file: SourceFile, excludeExternalFiles: boolean): boolean {
+    return excludeExternalFiles && (isInsideNodeModules(file.path) || file.hasNoDefaultLib);
+}
+
+function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: readonly Declaration[], checker: TypeChecker, fileName: string, excludeExternalFiles: boolean, rawItems: RawNavigateToItem[]): void {
     // First do a quick check to see if the name of the declaration matches the
     // last portion of the (possibly) dotted name they're searching for.
     const match = patternMatcher.getMatchForLastSegmentOfPattern(name);
@@ -68,7 +80,7 @@ function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: stri
     }
 
     for (const declaration of declarations) {
-        if (!shouldKeepItem(declaration, checker)) continue;
+        if (!shouldKeepItem(declaration, checker, excludeExternalFiles)) continue;
 
         if (patternMatcher.patternContainsDots) {
             // If the pattern has dots in it, then also see if the declaration container matches as well.
@@ -83,14 +95,15 @@ function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: stri
     }
 }
 
-function shouldKeepItem(declaration: Declaration, checker: TypeChecker): boolean {
+function shouldKeepItem(declaration: Declaration, checker: TypeChecker, excludeExternalFiles: boolean): boolean {
     switch (declaration.kind) {
         case SyntaxKind.ImportClause:
         case SyntaxKind.ImportSpecifier:
         case SyntaxKind.ImportEqualsDeclaration:
             const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!)!; // TODO: GH#18217
             const imported = checker.getAliasedSymbol(importer);
-            return importer.escapedName !== imported.escapedName;
+            return importer.escapedName !== imported.escapedName
+                && !imported.declarations?.some(d => shouldExcludeFile(d.getSourceFile(), excludeExternalFiles));
         default:
             return true;
     }
