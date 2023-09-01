@@ -2898,7 +2898,7 @@ declare namespace ts {
                  */
                 readonly disableLineTextInReferences?: boolean;
                 /**
-                 * Indicates whether to exclude standard library and node_modules files from navTo results.
+                 * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
                  */
                 readonly excludeLibrarySymbols?: boolean;
             }
