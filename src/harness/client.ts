@@ -579,14 +579,13 @@ export class SessionClient implements LanguageService {
             const providePrefixAndSuffixTextForRename = typeof preferences === "boolean" ? preferences : preferences?.providePrefixAndSuffixTextForRename;
             const quotePreference = typeof preferences === "boolean" ? undefined : preferences?.quotePreference;
             if (providePrefixAndSuffixTextForRename !== undefined || quotePreference !== undefined) {
+                const oldPreferences = this.preferences;
                 // User preferences have to be set through the `Configure` command
                 this.configure({ providePrefixAndSuffixTextForRename, quotePreference });
                 // Options argument is not used, so don't pass in options
                 this.getRenameInfo(fileName, position, /*preferences*/ {}, findInStrings, findInComments);
                 // Restore previous user preferences
-                if (this.preferences) {
-                    this.configure(this.preferences);
-                }
+                this.configure(oldPreferences || {});
             }
             else {
                 this.getRenameInfo(fileName, position, /*preferences*/ {}, findInStrings, findInComments);
@@ -812,6 +811,7 @@ export class SessionClient implements LanguageService {
         kind?: string,
         includeInteractiveActions?: boolean,
     ): ApplicableRefactorInfo[] {
+        const oldPreferences = this.preferences;
         if (preferences) { // Temporarily set preferences
             this.configure(preferences);
         }
@@ -822,7 +822,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(protocol.CommandTypes.GetApplicableRefactors, args);
         const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
         if (preferences) { // Restore preferences
-            this.configure(this.preferences || {});
+            this.configure(oldPreferences || {});
         }
         return response.body!; // TODO: GH#18217
     }
@@ -844,6 +844,7 @@ export class SessionClient implements LanguageService {
         preferences: UserPreferences | undefined,
         interactiveRefactorArguments?: InteractiveRefactorArguments,
     ): RefactorEditInfo {
+        const oldPreferences = this.preferences;
         if (preferences) { // Temporarily set preferences
             this.configure(preferences);
         }
@@ -868,7 +869,7 @@ export class SessionClient implements LanguageService {
         }
 
         if (preferences) { // Restore preferences
-            this.configure(this.preferences || {});
+            this.configure(oldPreferences || {});
         }
 
         return {
