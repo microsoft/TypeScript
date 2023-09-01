@@ -314,14 +314,24 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getNavigateToItems(searchValue: string): NavigateToItem[] {
+    getNavigateToItems(searchValue: string, maxResultCount: number, file: string | undefined, _excludeDtsFiles: boolean | undefined, excludeExternalFiles: boolean | undefined): NavigateToItem[] {
         const args: protocol.NavtoRequestArgs = {
             searchValue,
-            file: this.host.getScriptFileNames()[0],
+            file,
+            currentFileOnly: !!file,
+            maxResultCount,
         };
+        const oldPreferences = this.preferences;
+        if (excludeExternalFiles) {
+            this.configure({ excludeExternalFileSymbols: true });
+        }
 
         const request = this.processRequest<protocol.NavtoRequest>(protocol.CommandTypes.Navto, args);
         const response = this.processResponse<protocol.NavtoResponse>(request);
+
+        if (excludeExternalFiles) {
+            this.configure(oldPreferences || {});
+        }
 
         return response.body!.map(entry => ({ // TODO: GH#18217
             name: entry.name,

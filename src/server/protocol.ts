@@ -3599,6 +3599,11 @@ export interface UserPreferences {
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
      */
     readonly disableLineTextInReferences?: boolean;
+
+    /**
+     * Indicates whether to exclude standard library and node_modules files from navTo results.
+     */
+    readonly excludeExternalFileSymbols?: boolean;
 }
 
 export interface CompilerOptions {
