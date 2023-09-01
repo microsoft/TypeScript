@@ -12,6 +12,7 @@ import {
     DiagnosticMessage,
     Diagnostics,
     forEach,
+    getSpellingSuggestion,
     identity,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
@@ -3302,6 +3303,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 }
                                 else if (propertyName === undefined) {
                                     error(Diagnostics.Unknown_Unicode_property_name, propertyNameOrValueStart, pos - propertyNameOrValueStart);
+                                    const suggestion = getSpellingSuggestion(propertyNameOrValue, nonBinaryUnicodeProperties.keys(), identity);
+                                    if (suggestion) {
+                                        error(Diagnostics.Did_you_mean_0, propertyNameOrValueStart, pos - propertyNameOrValueStart, suggestion);
+                                    }
                                 }
                                 pos++;
                                 const propertyValueStart = pos;
@@ -3311,6 +3316,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 }
                                 else if (propertyName !== undefined && !valuesOfNonBinaryUnicodeProperties[propertyName].has(propertyValue)) {
                                     error(Diagnostics.Unknown_Unicode_property_value, propertyValueStart, pos - propertyValueStart);
+                                    const suggestion = getSpellingSuggestion(propertyValue, valuesOfNonBinaryUnicodeProperties[propertyName], identity);
+                                    if (suggestion) {
+                                        error(Diagnostics.Did_you_mean_0, propertyValueStart, pos - propertyValueStart, suggestion);
+                                    }
                                 }
                             }
                             else {
@@ -3330,6 +3339,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 }
                                 else if (!valuesOfNonBinaryUnicodeProperties.General_Category.has(propertyNameOrValue) && !binaryUnicodeProperties.has(propertyNameOrValue)) {
                                     error(Diagnostics.Unknown_Unicode_property_name_or_value, propertyNameOrValueStart, pos - propertyNameOrValueStart);
+                                    const suggestion = getSpellingSuggestion(propertyNameOrValue, [...valuesOfNonBinaryUnicodeProperties.General_Category, ...binaryUnicodeProperties, ...binaryUnicodePropertiesOfStrings], identity);
+                                    if (suggestion) {
+                                        error(Diagnostics.Did_you_mean_0, propertyNameOrValueStart, pos - propertyNameOrValueStart, suggestion);
+                                    }
                                 }
                             }
                             scanExpectedChar(CharacterCodes.closeBrace);

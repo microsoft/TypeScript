@@ -64,6 +64,7 @@ import {
     DeleteExpression,
     Diagnostic,
     DiagnosticArguments,
+    DiagnosticCategory,
     DiagnosticMessage,
     Diagnostics,
     DiagnosticWithDetachedLocation,
@@ -115,6 +116,7 @@ import {
     HasModifiers,
     HeritageClause,
     Identifier,
+    identity,
     idText,
     IfStatement,
     ImportClause,
@@ -2114,7 +2116,11 @@ namespace Parser {
         // Don't report another error if it would just be at the same position as the last error.
         const lastError = lastOrUndefined(parseDiagnostics);
         let result: DiagnosticWithDetachedLocation | undefined;
-        if (!lastError || start !== lastError.start) {
+        if (message.category === DiagnosticCategory.Message && lastError && start === lastError.start && length === lastError.length) {
+            result = createDetachedDiagnostic(fileName, sourceText, start, length, message, ...args);
+            addRelatedInfo(lastError, result);
+        }
+        else if (!lastError || start !== lastError.start) {
             result = createDetachedDiagnostic(fileName, sourceText, start, length, message, ...args);
             parseDiagnostics.push(result);
         }
@@ -2370,7 +2376,7 @@ namespace Parser {
         }
 
         // The user alternatively might have misspelled or forgotten to add a space after a common keyword.
-        const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions, n => n) ?? getSpaceSuggestion(expressionText);
+        const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions, identity) ?? getSpaceSuggestion(expressionText);
         if (suggestion) {
             parseErrorAt(pos, node.end, Diagnostics.Unknown_keyword_or_identifier_Did_you_mean_0, suggestion);
             return;
