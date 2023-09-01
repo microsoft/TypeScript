@@ -12725,7 +12725,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // or if we have another early-bound symbol declaration with the same name and
                 // conflicting flags.
                 const earlySymbol = earlySymbols && earlySymbols.get(memberName);
-                if (lateSymbol.flags & getExcludedSymbolFlags(symbolFlags) || earlySymbol) {
+                // Duplicate property declarations of classes are checked in checkClassForDuplicateDeclarations.
+                if (!(parent.flags & SymbolFlags.Class) && (lateSymbol.flags & getExcludedSymbolFlags(symbolFlags) || earlySymbol)) {
                     // If we have an existing early-bound member, combine its declarations so that we can
                     // report an error at each declaration.
                     const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
@@ -38963,7 +38964,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     isStaticMember ? staticNames :
                     instanceNames;
 
-                const memberName = name && getPropertyNameForPropertyNameNode(name);
+                const memberName = name && getEffectivePropertyNameForPropertyNameNode(name);
                 if (memberName) {
                     switch (member.kind) {
                         case SyntaxKind.GetAccessor:
@@ -39032,7 +39033,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const memberNameNode = member.name;
             const isStaticMember = isStatic(member);
             if (isStaticMember && memberNameNode) {
-                const memberName = getPropertyNameForPropertyNameNode(memberNameNode);
+                const memberName = getEffectivePropertyNameForPropertyNameNode(memberNameNode);
                 switch (memberName) {
                     case "name":
                     case "length":
