@@ -480,5 +480,19 @@ function reduction<T extends keyof BB, U extends "c" | "d">(x: T, y: U): AA<T>[U
 >undefined : undefined
 }
 
-// TODO: test substitution type
+// Conditional with substitution types should also be narrowed
+function subsCond<T extends 1 | 2 | 3>(x: T): T extends 1 | 2 ? (T extends 1 ? string : boolean) : number {
+>subsCond : <T extends 1 | 2 | 3>(x: T) => T extends 1 | 2 ? (T extends 1 ? string : boolean) : number
+>x : T
+
+    if (x === 1) {
+>x === 1 : boolean
+>x : T
+>1 : 1
+
+        return "";
+>"" : ""
+    }
+}
+
 // TODO: test non-tail recursive and tail recursive conditionals

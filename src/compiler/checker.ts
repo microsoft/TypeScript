@@ -18024,16 +18024,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
             }
-            // >> TODO: we should only do this instantiation with `narrowMapper` if checktype is distributive
-            // >> TODO: what about if root is substitution type? should we still instantiate it??
-            const checkType = root.isDistributive ?
-                instantiateType(getActualTypeVariable(root.checkType), combineTypeMappers(mapper, narrowMapper)) :
+            // >> We instantiate checkType with the narrow mapper information
+            const checkTypeVariable = getActualTypeVariable(root.checkType);
+            const checkType = checkTypeVariable.flags & TypeFlags.TypeParameter ?
+                instantiateType(checkTypeVariable, combineTypeMappers2(narrowMapper, mapper)) :
                 // >> TODO: in what order can we combine mappers? mapper first guarantess the mapping from check type to a
                 // type of a union comes first in the distributive case,
                 // but then if narrow mapper refers to a variable in mapper, it won't be properly instantiated.
                 // but can that even happen?
-                instantiateType(getActualTypeVariable(root.checkType), mapper);
-            const extendsType = instantiateType(root.extendsType, mapper); // >> TODO: Type parameter narrowing should not affect the extends type. Except it does here, because the mapper will have info from `narrowType` in case this is distributive, from the `getNarrowConditionalTypeInstantiation` caller
+                instantiateType(checkTypeVariable, mapper);
+            const extendsType = instantiateType(root.extendsType, mapper); // >> Type parameter narrowing should not affect the extends type.
             if (checkType === errorType || extendsType === errorType) {
                 return errorType;
             }
@@ -18113,7 +18113,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             root = newRoot;
                             continue;
                         }
-                        if (canTailRecurse(falseType, narrowMapper, mapper)) { // >> TODO: should this be `mapper` or `narrowMapper`?
+                        if (canTailRecurse(falseType, narrowMapper, mapper)) {
                             continue;
                         }
                     }
@@ -18154,7 +18154,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             result.combinedMapper = combinedMapper;
             result.aliasSymbol = aliasSymbol || root.aliasSymbol;
             result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
-            // >> TODO: narrowly instantiate true and false branch? No, it doesn't seem that useful
+            // >> Narrowly instantiate true and false branch? No, it doesn't seem that useful
             break;
         }
         return extraTypes ? getIntersectionType(append(extraTypes, result)) : result;
@@ -18171,7 +18171,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const newRootMapper = createTypeMapper(newRoot.outerTypeParameters, typeArguments);
                     const newCheckType = newRoot.isDistributive ?
                         // getMappedType(newRoot.checkType, newRootMapper) :
-                        instantiateType(getActualTypeVariable(root.checkType), combineTypeMappers(mapper, narrowMapper)) : // >> TODO: I think now we need to actually instantiate it fully to see if the new check type is union or not, because now we have two mappers
+                        instantiateType(getActualTypeVariable(root.checkType), combineTypeMappers2(narrowMapper, mapper)) : // >> I think now we need to actually instantiate it fully to see if the new check type is union or not, because now we have two mappers
                         undefined;
                     if (!newCheckType || newCheckType === newRoot.checkType || !(newCheckType.flags & (TypeFlags.Union | TypeFlags.Never))) {
                         root = newRoot;
@@ -18848,6 +18848,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return mapper1 ? makeCompositeTypeMapper(TypeMapKind.Composite, mapper1, mapper2) : mapper2;
     }
 
+    function combineTypeMappers2(mapper1: TypeMapper, mapper2: TypeMapper | undefined): TypeMapper {
+        return mapper2 ? makeCompositeTypeMapper(TypeMapKind.Composite, mapper1, mapper2) : mapper1;
+    }
+
     function mergeTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper {
         return mapper1 ? makeCompositeTypeMapper(TypeMapKind.Merged, mapper1, mapper2) : mapper2;
     }
@@ -19427,8 +19431,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     getReducedType(distributionType),
                     t => getNarrowConditionalType(
                         root,
-                        narrowMapper,
-                        prependTypeMapping(checkType, t, newMapper)),
+                        prependTypeMapping(checkType, t, narrowMapper),
+                        newMapper),
                     aliasSymbol,
                     aliasTypeArguments,
                     /*useIntersection*/ true); // We use the intersection instead of unioning over the conditional types,

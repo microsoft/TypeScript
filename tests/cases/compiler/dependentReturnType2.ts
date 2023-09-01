@@ -1,11 +1,14 @@
 // @strict: true
 // @noEmit: true
 
-function f3<T extends 1 | 2 | 3>(x: T): T extends 1 ? number : T extends 2 ? string : T extends 3 ? boolean : never {
-    if (x === 1) {
-        return 0;
-    }
-    else {
-        return ""; // Error, returned expression needs to have type string & boolean (= never)
+declare function q(x: object): x is { b: number };
+
+function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: string } ? number : (string | number) {
+    if (q(x)) {
+        x.b;
+        return "";
     }
 }
+
+let y = { a: "", b: 1 }
+const r = foo<{ a: string }>(y); // number

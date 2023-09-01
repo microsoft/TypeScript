@@ -102,6 +102,7 @@ interface Dog extends Animal {
     bark: () => string;
 }
 
+// TODO: this is unsafe
 declare function isDog(x: Animal): x is Dog;
 declare function doggy(x: Dog): number;
 function f12<T extends Animal>(x: T): T extends Dog ? number : string {
@@ -201,5 +202,11 @@ function reduction<T extends keyof BB, U extends "c" | "d">(x: T, y: U): AA<T>[U
     return undefined as never;
 }
 
-// TODO: test substitution type
+// Conditional with substitution types should also be narrowed
+function subsCond<T extends 1 | 2 | 3>(x: T): T extends 1 | 2 ? (T extends 1 ? string : boolean) : number {
+    if (x === 1) {
+        return "";
+    }
+}
+
 // TODO: test non-tail recursive and tail recursive conditionals
