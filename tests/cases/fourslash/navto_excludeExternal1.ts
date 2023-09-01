@@ -1,7 +1,11 @@
 /// <reference path="fourslash.ts"/>
 
 // @filename: /index.ts
+//// import { weirdName as otherName } from "bar";
 //// const [|weirdName: number = 1|];
+
+// @filename: /tsconfig.json
+//// {}
 
 // @filename: /node_modules/bar/index.d.ts
 //// export const [|weirdName: number|];
@@ -17,14 +21,14 @@ verify.navigateTo({
     expected: [{
         name: "weirdName",
         kind: "const",
-        range: weird,
+        kindModifiers: "export,declare",
+        range: otherWeird,
         matchKind: "exact",
     },
     {
         name: "weirdName",
         kind: "const",
-        kindModifiers: "export,declare",
-        range: otherWeird,
+        range: weird,
         matchKind: "exact",
     }],
 });

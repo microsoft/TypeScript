@@ -3,6 +3,9 @@
 // @filename: /index.ts
 //// import { [|someName as weirdName|] } from "bar";
 
+// @filename: /tsconfig.json
+//// {}
+
 // @filename: /node_modules/bar/index.d.ts
 //// export const someName: number;
 
