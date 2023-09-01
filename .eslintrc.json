@@ -145,8 +145,6 @@
         "unicorn/no-new-buffer": "error",
         "unicorn/prefer-set-has": "error",
         "unicorn/prefer-string-trim-start-end": "error",
-        // TODO(jakebailey): Require manual fixups
-        // "unicorn/prefer-string-slice": "error",
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
