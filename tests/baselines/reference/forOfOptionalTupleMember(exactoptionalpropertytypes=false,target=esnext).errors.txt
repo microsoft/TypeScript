@@ -1,7 +1,10 @@
-forOfOptionalTupleMember.ts(12,3): error TS18048: 'item' is possibly 'undefined'.
+forOfOptionalTupleMember.ts(10,3): error TS18048: 'item' is possibly 'undefined'.
+forOfOptionalTupleMember.ts(16,3): error TS18048: 'item' is possibly 'undefined'.
+forOfOptionalTupleMember.ts(21,5): error TS18048: 'num' is possibly 'undefined'.
+forOfOptionalTupleMember.ts(27,5): error TS18048: 'num' is possibly 'undefined'.
 
 
-==== forOfOptionalTupleMember.ts (1 errors) ====
+==== forOfOptionalTupleMember.ts (4 errors) ====
     // repro from https://github.com/microsoft/TypeScript/issues/54302
     
     type Item = {
@@ -9,12 +12,34 @@ forOfOptionalTupleMember.ts(12,3): error TS18048: 'item' is possibly 'undefined'
     };
     
     type Foo = [Item?];
-    
     declare const foo: Foo;
-    
     for (let item of foo) {
       item.value;
       ~~~~
 !!! error TS18048: 'item' is possibly 'undefined'.
+    }
+    
+    type Foo2 = [item?: Item];
+    declare const foo2: Foo2;
+    for (let item of foo2) {
+      item.value;
+      ~~~~
+!!! error TS18048: 'item' is possibly 'undefined'.
+    }
+    
+    function fn1(t: [number, number?, number?]) {
+      for (let num of t) {
+        num.toString()
+        ~~~
+!!! error TS18048: 'num' is possibly 'undefined'.
+      }
+    }
+    
+    function fn2(t: [a: number, b?: number, c?: number]) {
+      for (let num of t) {
+        num.toString()
+        ~~~
+!!! error TS18048: 'num' is possibly 'undefined'.
+      }
     }
     

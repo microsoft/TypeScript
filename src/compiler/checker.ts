@@ -12863,7 +12863,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else {
             mapper = createTypeMapper(typeParameters, typeArguments);
-            members = createInstantiatedSymbolTable(source.declaredProperties, mapper, /*mappingThisOnly*/ typeParameters.length === 1);
+            const propertiesMapper = isTupleType(type)
+                ? createTypeMapper(typeParameters, sameMap(typeArguments, (t, i) => addOptionality(t, /*isProperty*/ true, !!(type.target.elementFlags[i] & ElementFlags.Optional))))
+                : mapper;
+            members = createInstantiatedSymbolTable(source.declaredProperties, propertiesMapper, /*mappingThisOnly*/ typeParameters.length === 1);
             callSignatures = instantiateSignatures(source.declaredCallSignatures, mapper);
             constructSignatures = instantiateSignatures(source.declaredConstructSignatures, mapper);
             indexInfos = instantiateIndexInfos(source.declaredIndexInfos, mapper);
@@ -15563,7 +15566,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const typeArguments = !node ? emptyArray :
                 node.kind === SyntaxKind.TypeReference ? concatenate(type.target.outerTypeParameters, getEffectiveTypeArguments(node, type.target.localTypeParameters!)) :
                 node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] :
-                map(node.elements, element => getTypeFromTypeNode(element.kind === SyntaxKind.OptionalType && exactOptionalPropertyTypes ? (element as OptionalTypeNode).type : element));
+                map(node.elements, getTypeFromTypeNode);
             if (popTypeResolution()) {
                 type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
             }
@@ -16552,7 +16555,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (flags & (ElementFlags.Optional | ElementFlags.Rest)) {
                 lastOptionalOrRestIndex = expandedFlags.length;
             }
-            expandedTypes.push(flags & ElementFlags.Optional ? addOptionality(type, /*isProperty*/ true) : type);
+            expandedTypes.push(flags & ElementFlags.Optional && !exactOptionalPropertyTypes ? addOptionality(type, /*isProperty*/ true) : type);
             expandedFlags.push(flags);
             expandedDeclarations.push(declaration);
         }
@@ -16591,7 +16594,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
-        return addOptionality(getTypeFromTypeNode(node.type), /*isProperty*/ true);
+        const type = getTypeFromTypeNode(node.type);
+        return exactOptionalPropertyTypes ? type : addOptionality(type, /*isProperty*/ true);
     }
 
     function getTypeId(type: Type): TypeId {
@@ -18829,8 +18833,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeFromNamedTupleTypeNode(node: NamedTupleMember): Type {
         const links = getNodeLinks(node);
-        return links.resolvedType || (links.resolvedType = node.dotDotDotToken ? getTypeFromRestTypeNode(node) :
-            addOptionality(getTypeFromTypeNode(node.type), /*isProperty*/ true, !!node.questionToken));
+        if (links.resolvedType) {
+            return links.resolvedType;
+        }
+        let type: Type;
+        if (node.dotDotDotToken) {
+            type = getTypeFromRestTypeNode(node);
+        }
+        else {
+            type = getTypeFromTypeNode(node.type);
+            if (!exactOptionalPropertyTypes) {
+                type = addOptionality(type, /*isProperty*/ true, !!node.questionToken);
+            }
+        }
+        return links.resolvedType = type;
     }
 
     function getTypeFromTypeNode(node: TypeNode): Type {
@@ -22723,11 +22739,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
 
-                        const sourceType = removeMissingType(sourceTypeArguments[sourcePosition], !!(sourceFlags & targetFlags & ElementFlags.Optional));
+                        const sourceType = sourceTypeArguments[sourcePosition];
                         const targetType = targetTypeArguments[targetPosition];
+                        const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) : targetType;
 
-                        const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) :
-                            removeMissingType(targetType, !!(targetFlags & ElementFlags.Optional));
                         const related = isRelatedTo(sourceType, targetCheckType, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
                         if (!related) {
                             if (reportErrors && (targetArity > 1 || sourceArity > 1)) {

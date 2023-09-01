@@ -27,3 +27,51 @@ for (let item of foo) {
 >value : string
 }
 
+type Foo2 = [item?: Item];
+>Foo2 : [item?: Item | undefined]
+
+declare const foo2: Foo2;
+>foo2 : Foo2
+
+for (let item of foo2) {
+>item : Item | undefined
+>foo2 : Foo2
+
+  item.value;
+>item.value : string
+>item : Item | undefined
+>value : string
+}
+
+function fn1(t: [number, number?, number?]) {
+>fn1 : (t: [number, number?, number?]) => void
+>t : [number, (number | undefined)?, (number | undefined)?]
+
+  for (let num of t) {
+>num : number | undefined
+>t : [number, (number | undefined)?, (number | undefined)?]
+
+    num.toString()
+>num.toString() : string
+>num.toString : (radix?: number | undefined) => string
+>num : number | undefined
+>toString : (radix?: number | undefined) => string
+  }
+}
+
+function fn2(t: [a: number, b?: number, c?: number]) {
+>fn2 : (t: [a: number, b?: number, c?: number]) => void
+>t : [a: number, b?: number | undefined, c?: number | undefined]
+
+  for (let num of t) {
+>num : number | undefined
+>t : [a: number, b?: number | undefined, c?: number | undefined]
+
+    num.toString()
+>num.toString() : string
+>num.toString : (radix?: number | undefined) => string
+>num : number | undefined
+>toString : (radix?: number | undefined) => string
+  }
+}
+

@@ -27,3 +27,51 @@ for (let item of foo) {
 >value : string
 }
 
+type Foo2 = [item?: Item];
+>Foo2 : [item?: Item]
+
+declare const foo2: Foo2;
+>foo2 : Foo2
+
+for (let item of foo2) {
+>item : Item
+>foo2 : Foo2
+
+  item.value;
+>item.value : string
+>item : Item
+>value : string
+}
+
+function fn1(t: [number, number?, number?]) {
+>fn1 : (t: [number, number?, number?]) => void
+>t : [number, number?, number?]
+
+  for (let num of t) {
+>num : number
+>t : [number, number?, number?]
+
+    num.toString()
+>num.toString() : string
+>num.toString : (radix?: number | undefined) => string
+>num : number
+>toString : (radix?: number | undefined) => string
+  }
+}
+
+function fn2(t: [a: number, b?: number, c?: number]) {
+>fn2 : (t: [a: number, b?: number, c?: number]) => void
+>t : [a: number, b?: number, c?: number]
+
+  for (let num of t) {
+>num : number
+>t : [a: number, b?: number, c?: number]
+
+    num.toString()
+>num.toString() : string
+>num.toString : (radix?: number | undefined) => string
+>num : number
+>toString : (radix?: number | undefined) => string
+  }
+}
+

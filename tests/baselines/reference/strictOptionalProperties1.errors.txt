@@ -7,6 +7,12 @@ strictOptionalProperties1.ts(53,5): error TS2412: Type 'undefined' is not assign
 strictOptionalProperties1.ts(60,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
 strictOptionalProperties1.ts(64,5): error TS2322: Type '[number, string?, string?]' is not assignable to type '[number, string?]'.
   Target allows only 2 element(s) but source may have more.
+strictOptionalProperties1.ts(71,5): error TS2322: Type '[number, never?]' is not assignable to type '[number, string?, boolean?]'.
+  Type at position 1 in source is not compatible with type at position 1 in target.
+    Type 'undefined' is not assignable to type 'string'.
+strictOptionalProperties1.ts(72,5): error TS2322: Type '[number, never?, never?]' is not assignable to type '[number, string?, boolean?]'.
+  Type at position 1 in source is not compatible with type at position 1 in target.
+    Type 'undefined' is not assignable to type 'string'.
 strictOptionalProperties1.ts(73,5): error TS2322: Type '[number, never?, never?, never?]' is not assignable to type '[number, string?, boolean?]'.
   Target allows only 3 element(s) but source may have more.
 strictOptionalProperties1.ts(74,5): error TS2322: Type '[never?, never?, true?]' is not assignable to type '[number, string?, boolean?]'.
@@ -47,7 +53,7 @@ strictOptionalProperties1.ts(211,1): error TS2322: Type 'string | boolean | unde
   Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
 
 
-==== strictOptionalProperties1.ts (23 errors) ====
+==== strictOptionalProperties1.ts (25 errors) ====
     function f1(obj: { a?: string, b?: string | undefined }) {
         let a = obj.a;  // string | undefined
         let b = obj.b;  // string | undefined
@@ -135,7 +141,15 @@ strictOptionalProperties1.ts(211,1): error TS2322: Type 'string | boolean | unde
         t = [42, 'abc'];
         t = [42, 'abc', true];
         t = [42, ,];
+        ~
+!!! error TS2322: Type '[number, never?]' is not assignable to type '[number, string?, boolean?]'.
+!!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
         t = [42, , ,];
+        ~
+!!! error TS2322: Type '[number, never?, never?]' is not assignable to type '[number, string?, boolean?]'.
+!!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
         t = [42, , , ,];  // Error
         ~
 !!! error TS2322: Type '[number, never?, never?, never?]' is not assignable to type '[number, string?, boolean?]'.
