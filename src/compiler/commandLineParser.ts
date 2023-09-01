@@ -110,7 +110,6 @@ import {
     toFileNameLowerCase,
     toPath,
     tracing,
-    trimString,
     TsConfigOnlyOption,
     TsConfigSourceFile,
     TypeAcquisition,
@@ -1699,13 +1698,13 @@ function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType
 }
 
 /** @internal */
-export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
-    return convertJsonOptionOfCustomType(opt, trimString(value || ""), errors);
+export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string | undefined, errors: Diagnostic[]) {
+    return convertJsonOptionOfCustomType(opt, (value ?? "").trim(), errors);
 }
 
 /** @internal */
 export function parseListTypeOption(opt: CommandLineOptionOfListType, value = "", errors: Diagnostic[]): string | (string | number)[] | undefined {
-    value = trimString(value);
+    value = value.trim();
     if (startsWith(value, "-")) {
         return undefined;
     }

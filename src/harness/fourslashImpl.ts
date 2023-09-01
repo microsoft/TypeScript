@@ -2120,7 +2120,7 @@ export class TestState {
         const output: string[] = [];
         for (let lineNumber = contextStart.line; lineNumber <= contextEnd.line; lineNumber++) {
             const spanLine = contextString.substring(contextLineMap[lineNumber], contextLineMap[lineNumber + 1]);
-            output.push(lineNumbers ? `${ts.padLeft(`${lineNumber + 1}: `, lineNumberPrefixLength)}${spanLine}` : spanLine);
+            output.push(lineNumbers ? `${`${lineNumber + 1}: `.padStart(lineNumberPrefixLength)}${spanLine}` : spanLine);
             if (selection) {
                 if (lineNumber < selectionStart.line || lineNumber > selectionEnd.line) {
                     continue;
@@ -3766,7 +3766,8 @@ export class TestState {
 
     public verifyNavigateTo(options: readonly FourSlashInterface.VerifyNavigateToOptions[]): void {
         for (const { pattern, expected, fileName } of options) {
-            const items = this.languageService.getNavigateToItems(pattern, /*maxResultCount*/ undefined, fileName);
+            const file = fileName && this.findFile(fileName).fileName;
+            const items = this.languageService.getNavigateToItems(pattern, /*maxResultCount*/ undefined, file);
             this.assertObjectsEqual(
                 items,
                 expected.map((e): ts.NavigateToItem => ({

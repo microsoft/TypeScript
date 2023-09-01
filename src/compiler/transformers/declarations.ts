@@ -100,6 +100,7 @@ import {
     isBindingPattern,
     isClassDeclaration,
     isClassElement,
+    isComputedPropertyName,
     isDeclaration,
     isElementAccessExpression,
     isEntityName,
@@ -700,6 +701,9 @@ export function transformDeclarations(context: TransformationContext) {
         function visitBindingElement(elem: ArrayBindingElement): ArrayBindingElement {
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
+            }
+            if (elem.propertyName && isComputedPropertyName(elem.propertyName) && isEntityNameExpression(elem.propertyName.expression)) {
+                checkEntityNameVisibility(elem.propertyName.expression, enclosingDeclaration);
             }
             if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
                 // Unnecessary property renaming is forbidden in types, so remove renaming
