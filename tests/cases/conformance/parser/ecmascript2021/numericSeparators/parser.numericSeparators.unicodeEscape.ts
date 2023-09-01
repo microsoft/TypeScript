@@ -1,3 +1,5 @@
+// @target: es2021
+
 // @filename: 1.ts
 "\u{10_ffff}"
 

@@ -1,0 +1,6 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions01.ts] ////
+
+=== unicodeExtendedEscapesInRegularExpressions01.ts ===
+var x = /\u{0}/gu;
+>x : Symbol(x, Decl(unicodeExtendedEscapesInRegularExpressions01.ts, 0, 3))
+

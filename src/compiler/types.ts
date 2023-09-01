@@ -2729,6 +2729,21 @@ export interface RegularExpressionLiteral extends LiteralExpression {
     readonly kind: SyntaxKind.RegularExpressionLiteral;
 }
 
+// dprint-ignore
+export const enum RegularExpressionFlags {
+    None        = 0,
+    HasIndices  = 1 << 0, // d
+    Global      = 1 << 1, // g
+    IgnoreCase  = 1 << 2, // i
+    Multiline   = 1 << 3, // m
+    DotAll      = 1 << 4, // s
+    Unicode     = 1 << 5, // u
+    UnicodeSets = 1 << 6, // v
+    Sticky      = 1 << 7, // y
+    UnicodeMode = Unicode | UnicodeSets,
+    Modifiers   = IgnoreCase | Multiline | DotAll,
+}
+
 export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
     readonly kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     /** @internal */
@@ -7256,7 +7271,7 @@ export const enum ScriptKind {
     Deferred = 7,
 }
 
-export const enum ScriptTarget {
+export enum ScriptTarget {
     ES3 = 0,
     ES5 = 1,
     ES2015 = 2,
@@ -7267,6 +7282,8 @@ export const enum ScriptTarget {
     ES2020 = 7,
     ES2021 = 8,
     ES2022 = 9,
+    ES2023 = 10,
+    ES2024 = 11,
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,

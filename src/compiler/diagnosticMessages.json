@@ -1625,6 +1625,154 @@
         "category": "Error",
         "code": 1495
     },
+    "'\\{0}' is not a valid character escape.": {
+        "category": "Error",
+        "code": 1496
+    },
+    "Unknown regular expression flag.": {
+        "category": "Error",
+        "code": 1497
+    },
+    "Duplicate regular expression flag.": {
+        "category": "Error",
+        "code": 1498
+    },
+    "This regular expression flag is only available when targeting '{0}' or later.": {
+        "category": "Error",
+        "code": 1499
+    },
+    "The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.": {
+        "category": "Error",
+        "code": 1500
+    },
+    "Named capturing groups are only available when targeting 'ES2018' or later.": {
+        "category": "Error",
+        "code": 1501
+    },
+    "Subpattern flags must be present when there is a minus sign.": {
+        "category": "Error",
+        "code": 1502
+    },
+    "Incomplete quantifier. Digit expected.": {
+        "category": "Error",
+        "code": 1503
+    },
+    "Numbers out of order in quantifier.": {
+        "category": "Error",
+        "code": 1504
+    },
+    "There is nothing available for repetition.": {
+        "category": "Error",
+        "code": 1505
+    },
+    "Unexpected '{0}'. Did you mean to escape it with backslash?": {
+        "category": "Error",
+        "code": 1506
+    },
+    "This regular expression flag cannot be toggled within a subpattern.": {
+        "category": "Error",
+        "code": 1507
+    },
+    "'\\k' must be followed by a capturing group name enclosed in angle brackets.": {
+        "category": "Error",
+        "code": 1508
+    },
+    "'\\q' is only available inside character class.": {
+        "category": "Error",
+        "code": 1509
+    },
+    "'\\c' must be followed by an ASCII letter.": {
+        "category": "Error",
+        "code": 1510
+    },
+    "Undetermined character escape.": {
+        "category": "Error",
+        "code": 1511
+    },
+    "Expected a capturing group name.": {
+        "category": "Error",
+        "code": 1512
+    },
+    "Named capturing groups with the same name must be mutually exclusive to each other.": {
+        "category": "Error",
+        "code": 1513
+    },
+    "A character class range must not be bounded by another character class.": {
+        "category": "Error",
+        "code": 1514
+    },
+    "Range out of order in character class.": {
+        "category": "Error",
+        "code": 1515
+    },
+    "Anything that would possibly match more than a single character is invalid inside a negated character class.": {
+        "category": "Error",
+        "code": 1516
+    },
+    "Operators must not be mixed within a character class. Wrap it in a nested class instead.": {
+        "category": "Error",
+        "code": 1517
+    },
+    "Expected a class set oprand.": {
+        "category": "Error",
+        "code": 1518
+    },
+    "'\\q' must be followed by string alternatives enclosed in braces.": {
+        "category": "Error",
+        "code": 1519
+    },
+    "A character class must not contain a reserved double punctuator. Did you mean to escape it with backslash?": {
+        "category": "Error",
+        "code": 1520
+    },
+    "Expected a Unicode property name.": {
+        "category": "Error",
+        "code": 1521
+    },
+    "Unknown Unicode property name.": {
+        "category": "Error",
+        "code": 1522
+    },
+    "Expected a Unicode property value.": {
+        "category": "Error",
+        "code": 1523
+    },
+    "Unknown Unicode property value.": {
+        "category": "Error",
+        "code": 1524
+    },
+    "Expected a Unicode property name or value.": {
+        "category": "Error",
+        "code": 1525
+    },
+    "Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.": {
+        "category": "Error",
+        "code": 1526
+    },
+    "Unknown Unicode property name or value.": {
+        "category": "Error",
+        "code": 1527
+    },
+    "Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.": {
+        "category": "Error",
+        "code": 1528
+    },
+    "'\\{0}' must be followed by a Unicode property value expression enclosed in braces.": {
+        "category": "Error",
+        "code": 1529
+    },
+    "There is no capturing group named '{0}' in this regular expression.": {
+        "category": "Error",
+        "code": 1530
+    },
+    "A decimal escape must refer to an existent capturing group. There are only {0} capturing groups in this regular expression.": {
+        "category": "Error",
+        "code": 1531
+    },
+    "Decimal escapes are invalid when there are no capturing groups in a regular expression.": {
+        "category": "Error",
+        "code": 1532
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
