@@ -2652,7 +2652,7 @@ export class Session<TMessage = string> implements EventSender {
                 maxResultCount,
                 /*fileName*/ undefined,
                 /*excludeDts*/ project.isNonTsProject(),
-                /*excludeExternalFiles*/ preferences.excludeExternalFileSymbols,
+                /*excludeLibFiles*/ preferences.excludeLibrarySymbols,
             );
             const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !getMappedLocationForProject(documentSpanLocation(item), project));
             if (unseenItems.length) {

@@ -9936,7 +9936,7 @@ export interface UserPreferences {
     readonly organizeImportsNumericCollation?: boolean;
     readonly organizeImportsAccentCollation?: boolean;
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
-    readonly excludeExternalFileSymbols?: boolean;
+    readonly excludeLibrarySymbols?: boolean;
 }
 
 /** Represents a bigint literal value without requiring bigint support */

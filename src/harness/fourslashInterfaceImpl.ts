@@ -1809,7 +1809,7 @@ export interface VerifyNavigateToOptions {
     readonly pattern: string;
     readonly fileName?: string;
     readonly expected: readonly ExpectedNavigateToItem[];
-    readonly excludeExternalFiles?: boolean;
+    readonly excludeLibFiles?: boolean;
 }
 
 export interface ExpectedNavigateToItem {

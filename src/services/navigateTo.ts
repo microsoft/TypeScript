@@ -38,7 +38,7 @@ interface RawNavigateToItem {
 }
 
 /** @internal */
-export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean, excludeExternalFiles?: boolean): NavigateToItem[] {
+export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean, excludeLibFiles?: boolean): NavigateToItem[] {
     const patternMatcher = createPatternMatcher(searchValue);
     if (!patternMatcher) return emptyArray;
     const rawItems: RawNavigateToItem[] = [];
@@ -51,12 +51,12 @@ export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: 
             continue;
         }
 
-        if (shouldExcludeFile(sourceFile, !!excludeExternalFiles)) {
+        if (shouldExcludeFile(sourceFile, !!excludeLibFiles)) {
             continue;
         }
 
         sourceFile.getNamedDeclarations().forEach((declarations, name) => {
-            getItemsFromNamedDeclaration(patternMatcher, name, declarations, checker, sourceFile.fileName, !!excludeExternalFiles, rawItems);
+            getItemsFromNamedDeclaration(patternMatcher, name, declarations, checker, sourceFile.fileName, !!excludeLibFiles, rawItems);
         });
     }
 
@@ -65,13 +65,13 @@ export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: 
 }
 
 /**
- * Exclude 'node_modules/' files and standard library files if 'excludeExternalFiles' is true.
+ * Exclude 'node_modules/' files and standard library files if 'excludeLibFiles' is true.
  */
-function shouldExcludeFile(file: SourceFile, excludeExternalFiles: boolean): boolean {
-    return excludeExternalFiles && (isInsideNodeModules(file.path) || file.hasNoDefaultLib);
+function shouldExcludeFile(file: SourceFile, excludeLibFiles: boolean): boolean {
+    return excludeLibFiles && (isInsideNodeModules(file.path) || file.hasNoDefaultLib);
 }
 
-function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: readonly Declaration[], checker: TypeChecker, fileName: string, excludeExternalFiles: boolean, rawItems: RawNavigateToItem[]): void {
+function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: readonly Declaration[], checker: TypeChecker, fileName: string, excludeLibFiles: boolean, rawItems: RawNavigateToItem[]): void {
     // First do a quick check to see if the name of the declaration matches the
     // last portion of the (possibly) dotted name they're searching for.
     const match = patternMatcher.getMatchForLastSegmentOfPattern(name);
@@ -80,7 +80,7 @@ function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: stri
     }
 
     for (const declaration of declarations) {
-        if (!shouldKeepItem(declaration, checker, excludeExternalFiles)) continue;
+        if (!shouldKeepItem(declaration, checker, excludeLibFiles)) continue;
 
         if (patternMatcher.patternContainsDots) {
             // If the pattern has dots in it, then also see if the declaration container matches as well.
@@ -95,7 +95,7 @@ function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: stri
     }
 }
 
-function shouldKeepItem(declaration: Declaration, checker: TypeChecker, excludeExternalFiles: boolean): boolean {
+function shouldKeepItem(declaration: Declaration, checker: TypeChecker, excludeLibFiles: boolean): boolean {
     switch (declaration.kind) {
         case SyntaxKind.ImportClause:
         case SyntaxKind.ImportSpecifier:
@@ -103,7 +103,7 @@ function shouldKeepItem(declaration: Declaration, checker: TypeChecker, excludeE
             const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!)!; // TODO: GH#18217
             const imported = checker.getAliasedSymbol(importer);
             return importer.escapedName !== imported.escapedName
-                && !imported.declarations?.some(d => shouldExcludeFile(d.getSourceFile(), excludeExternalFiles));
+                && !imported.declarations?.some(d => shouldExcludeFile(d.getSourceFile(), excludeLibFiles));
         default:
             return true;
     }

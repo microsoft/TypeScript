@@ -35,7 +35,7 @@ verify.navigateTo({
 
 verify.navigateTo({
     pattern: "weirdName",
-    excludeExternalFiles: true,
+    excludeLibFiles: true,
     expected: [{
         name: "weirdName",
         kind: "const",

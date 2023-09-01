@@ -314,7 +314,7 @@ export class SessionClient implements LanguageService {
         return notImplemented();
     }
 
-    getNavigateToItems(searchValue: string, maxResultCount: number, file: string | undefined, _excludeDtsFiles: boolean | undefined, excludeExternalFiles: boolean | undefined): NavigateToItem[] {
+    getNavigateToItems(searchValue: string, maxResultCount: number, file: string | undefined, _excludeDtsFiles: boolean | undefined, excludeLibFiles: boolean | undefined): NavigateToItem[] {
         const args: protocol.NavtoRequestArgs = {
             searchValue,
             file,
@@ -322,14 +322,14 @@ export class SessionClient implements LanguageService {
             maxResultCount,
         };
         const oldPreferences = this.preferences;
-        if (excludeExternalFiles) {
-            this.configure({ excludeExternalFileSymbols: true });
+        if (excludeLibFiles) {
+            this.configure({ excludeLibrarySymbols: true });
         }
 
         const request = this.processRequest<protocol.NavtoRequest>(protocol.CommandTypes.Navto, args);
         const response = this.processResponse<protocol.NavtoResponse>(request);
 
-        if (excludeExternalFiles) {
+        if (excludeLibFiles) {
             this.configure(oldPreferences || {});
         }
 

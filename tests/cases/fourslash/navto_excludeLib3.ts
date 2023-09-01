@@ -7,7 +7,7 @@ const [local] = test.ranges();
 
 verify.navigateTo({
     pattern: "parseInt",
-    excludeExternalFiles: true,
+    excludeLibFiles: true,
     expected: [
         {
             name: "parseInt",
