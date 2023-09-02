@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/neverAsDiscriminantType.ts] ////
+
 //// [neverAsDiscriminantType.ts]
 type Foo1 = { kind: 'a', a: number } | { kind: 'b' } | { kind: never };
 

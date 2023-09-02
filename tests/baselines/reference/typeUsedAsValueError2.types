@@ -1,4 +1,6 @@
-=== tests/cases/compiler/world.ts ===
+//// [tests/cases/compiler/typeUsedAsValueError2.ts] ////
+
+=== world.ts ===
 import HelloInterface = require("helloInterface");
 >HelloInterface : any
 
@@ -15,7 +17,7 @@ HelloNamespace.world;
 >HelloNamespace : any
 >world : any
 
-=== tests/cases/compiler/helloInterface.ts ===
+=== helloInterface.ts ===
 interface HelloInterface {
     world: any;
 >world : any
@@ -24,7 +26,7 @@ interface HelloInterface {
 export = HelloInterface;
 >HelloInterface : HelloInterface
 
-=== tests/cases/compiler/helloNamespace.ts ===
+=== helloNamespace.ts ===
 namespace HelloNamespace {
     export type world = any;
 >world : any

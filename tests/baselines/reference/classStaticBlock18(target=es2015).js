@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock18.ts] ////
+
 //// [classStaticBlock18.ts]
 function foo () {
   return class {
@@ -25,15 +27,15 @@ function foo() {
         },
         _a.foo = 1,
         (() => {
-            var _a;
-            const c = (_a = class {
+            var _b;
+            const c = (_b = class {
                 },
-                __setFunctionName(_a, "c"),
-                _a.bar = 2,
+                __setFunctionName(_b, "c"),
+                _b.bar = 2,
                 (() => {
                     // do
                 })(),
-                _a);
+                _b);
         })(),
         _a;
 }

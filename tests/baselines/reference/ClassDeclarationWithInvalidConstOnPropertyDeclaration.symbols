@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts ===
+//// [tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts] ////
+
+=== ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts ===
 class AtomicNumbers {
 >AtomicNumbers : Symbol(AtomicNumbers, Decl(ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts, 0, 0))
 

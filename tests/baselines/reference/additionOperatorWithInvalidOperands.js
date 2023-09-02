@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts] ////
+
 //// [additionOperatorWithInvalidOperands.ts]
 function foo() { }
 class C {

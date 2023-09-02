@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyAccess3.ts ===
+//// [tests/cases/compiler/propertyAccess3.ts] ////
+
+=== propertyAccess3.ts ===
 var foo: boolean;
 >foo : Symbol(foo, Decl(propertyAccess3.ts, 0, 3))
 

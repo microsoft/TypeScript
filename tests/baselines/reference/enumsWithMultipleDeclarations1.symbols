@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumsWithMultipleDeclarations1.ts ===
+//// [tests/cases/compiler/enumsWithMultipleDeclarations1.ts] ////
+
+=== enumsWithMultipleDeclarations1.ts ===
 enum E {
 >E : Symbol(E, Decl(enumsWithMultipleDeclarations1.ts, 0, 0), Decl(enumsWithMultipleDeclarations1.ts, 2, 1), Decl(enumsWithMultipleDeclarations1.ts, 6, 1))
 

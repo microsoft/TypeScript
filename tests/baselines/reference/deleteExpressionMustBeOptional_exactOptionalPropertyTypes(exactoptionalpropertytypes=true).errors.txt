@@ -1,12 +1,12 @@
-tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(26,8): error TS2790: The operand of a 'delete' operator must be optional.
-tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(27,8): error TS2790: The operand of a 'delete' operator must be optional.
-tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(28,8): error TS2790: The operand of a 'delete' operator must be optional.
-tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(30,8): error TS2790: The operand of a 'delete' operator must be optional.
-tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(35,10): error TS2339: Property 'j' does not exist on type 'Foo'.
-tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(46,10): error TS2339: Property 'j' does not exist on type 'Partial<Foo>'.
+deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(26,8): error TS2790: The operand of a 'delete' operator must be optional.
+deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(27,8): error TS2790: The operand of a 'delete' operator must be optional.
+deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(28,8): error TS2790: The operand of a 'delete' operator must be optional.
+deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(30,8): error TS2790: The operand of a 'delete' operator must be optional.
+deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(35,10): error TS2339: Property 'j' does not exist on type 'Foo'.
+deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(46,10): error TS2339: Property 'j' does not exist on type 'Partial<Foo>'.
 
 
-==== tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts (6 errors) ====
+==== deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts (6 errors) ====
     interface Foo {
         a: number
         b: number | undefined

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_externalModule.ts ===
+//// [tests/cases/compiler/privacyFunctionReturnTypeDeclFile.ts] ////
+
+=== privacyFunctionReturnTypeDeclFile_externalModule.ts ===
 class privateClass {
 >privateClass : Symbol(privateClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 0, 0))
 }
@@ -1528,7 +1530,7 @@ module privateModule {
 >publicClass : Symbol(publicClass, Decl(privacyFunctionReturnTypeDeclFile_externalModule.ts, 460, 5))
 }
 
-=== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalFile.ts ===
+=== privacyFunctionReturnTypeDeclFile_GlobalFile.ts ===
 class publicClassInGlobal {
 >publicClassInGlobal : Symbol(publicClassInGlobal, Decl(privacyFunctionReturnTypeDeclFile_GlobalFile.ts, 0, 0))
 }

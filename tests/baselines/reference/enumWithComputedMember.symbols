@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumWithComputedMember.ts ===
+//// [tests/cases/compiler/enumWithComputedMember.ts] ////
+
+=== enumWithComputedMember.ts ===
 enum A { 
 >A : Symbol(A, Decl(enumWithComputedMember.ts, 0, 0))
 

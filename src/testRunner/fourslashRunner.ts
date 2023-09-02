@@ -53,7 +53,7 @@ export class FourSlashRunner extends RunnerBase {
                 const file = typeof test === "string" ? test : test.file;
                 describe(file, () => {
                     let fn = ts.normalizeSlashes(file);
-                    const justName = fn.replace(/^.*[\\\/]/, "");
+                    const justName = fn.replace(/^.*[\\/]/, "");
 
                     // Convert to relative path
                     const testIndex = fn.indexOf("tests/");

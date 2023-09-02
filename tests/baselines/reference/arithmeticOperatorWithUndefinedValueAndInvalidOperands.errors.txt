@@ -1,246 +1,246 @@
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(9,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(9,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(10,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(10,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(11,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(11,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(13,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(13,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(14,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(14,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(15,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(15,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(17,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(17,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(18,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(18,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(19,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(19,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(21,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(21,19): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(22,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(22,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(23,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(23,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(26,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(26,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(27,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(27,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(28,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(28,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(30,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(30,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(31,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(31,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(32,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(32,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(34,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(34,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(35,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(35,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(36,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(36,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(38,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(38,19): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(39,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(39,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(40,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(40,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(43,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(43,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(44,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(44,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(45,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(45,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(47,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(47,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(48,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(48,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(49,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(49,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(51,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(51,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(52,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(52,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(53,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(53,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(55,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(55,19): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(56,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(56,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(57,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(57,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(60,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(60,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(61,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(61,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(62,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(62,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(64,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(64,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(65,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(65,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(66,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(66,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(68,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(68,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(69,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(69,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(70,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(70,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(72,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(72,19): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(73,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(73,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(74,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(74,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(77,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(77,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(78,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(78,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(79,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(79,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(81,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(81,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(82,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(82,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(83,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(83,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(85,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(85,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(86,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(86,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(87,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(87,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(89,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(89,20): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(90,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(90,18): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(91,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(91,18): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(94,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(94,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(95,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(95,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(96,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(96,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(98,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(98,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(99,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(99,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(100,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(100,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(102,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(102,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(103,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(103,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(104,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(104,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(106,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(106,20): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(107,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(107,18): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(108,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(108,18): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(111,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(111,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(112,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(112,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(113,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(113,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(115,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(115,18): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(116,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(116,18): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(117,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(117,18): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(119,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(119,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(120,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(120,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(121,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(121,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(123,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(123,21): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(124,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(124,19): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(125,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(125,19): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(128,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(128,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(129,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(129,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(130,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(130,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(132,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(132,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(133,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(133,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(134,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(134,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(136,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(136,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(137,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(137,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(138,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(138,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(140,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(140,19): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(141,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(141,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(142,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(142,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(145,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(145,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(146,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(146,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(147,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(147,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(149,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(149,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(150,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(150,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(151,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(151,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(153,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(153,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(154,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(154,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(155,12): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(155,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(157,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(157,19): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(158,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(158,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(159,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(159,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(162,13): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(162,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(163,13): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(163,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(164,13): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(164,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(166,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(166,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(167,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(167,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(168,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(168,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(170,13): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(170,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(171,13): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(171,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(172,13): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(172,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(174,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(174,20): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(175,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(175,18): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(176,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(176,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(9,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(9,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(10,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(10,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(11,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(11,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(13,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(13,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(14,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(14,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(15,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(15,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(17,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(17,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(18,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(18,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(19,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(19,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(21,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(21,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(22,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(22,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(23,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(23,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(26,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(26,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(27,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(27,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(28,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(28,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(30,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(30,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(31,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(31,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(32,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(32,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(34,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(34,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(35,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(35,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(36,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(36,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(38,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(38,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(39,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(39,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(40,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(40,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(43,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(43,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(44,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(44,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(45,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(45,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(47,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(47,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(48,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(48,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(49,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(49,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(51,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(51,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(52,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(52,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(53,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(53,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(55,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(55,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(56,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(56,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(57,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(57,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(60,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(60,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(61,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(61,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(62,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(62,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(64,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(64,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(65,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(65,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(66,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(66,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(68,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(68,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(69,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(69,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(70,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(70,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(72,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(72,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(73,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(73,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(74,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(74,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(77,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(77,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(78,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(78,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(79,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(79,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(81,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(81,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(82,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(82,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(83,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(83,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(85,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(85,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(86,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(86,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(87,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(87,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(89,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(89,20): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(90,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(90,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(91,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(91,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(94,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(94,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(95,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(95,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(96,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(96,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(98,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(98,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(99,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(99,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(100,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(100,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(102,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(102,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(103,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(103,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(104,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(104,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(106,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(106,20): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(107,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(107,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(108,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(108,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(111,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(111,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(112,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(112,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(113,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(113,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(115,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(115,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(116,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(116,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(117,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(117,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(119,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(119,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(120,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(120,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(121,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(121,26): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(123,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(123,21): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(124,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(124,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(125,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(125,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(128,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(128,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(129,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(129,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(130,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(130,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(132,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(132,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(133,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(133,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(134,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(134,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(136,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(136,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(137,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(137,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(138,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(138,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(140,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(140,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(141,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(141,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(142,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(142,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(145,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(145,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(146,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(146,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(147,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(147,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(149,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(149,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(150,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(150,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(151,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(151,16): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(153,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(153,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(154,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(154,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(155,12): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(155,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(157,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(157,19): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(158,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(158,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(159,12): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(159,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(162,13): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(162,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(163,13): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(163,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(164,13): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(164,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(166,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(166,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(167,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(167,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(168,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(168,17): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(170,13): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(170,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(171,13): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(171,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(172,13): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(172,25): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(174,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(174,20): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(175,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(175,18): error TS18050: The value 'undefined' cannot be used here.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(176,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts(176,18): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts (240 errors) ====
+==== arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts (240 errors) ====
     // If one operand is the undefined or undefined value, it is treated as having the type of the
     // other operand.
     

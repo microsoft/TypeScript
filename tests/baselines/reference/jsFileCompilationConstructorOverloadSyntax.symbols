@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/jsFileCompilationConstructorOverloadSyntax.ts] ////
+
+=== a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+  constructor();
+}
+

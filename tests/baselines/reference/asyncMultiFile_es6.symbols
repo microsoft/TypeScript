@@ -1,8 +1,10 @@
-=== tests/cases/conformance/async/es6/a.ts ===
+//// [tests/cases/conformance/async/es6/asyncMultiFile_es6.ts] ////
+
+=== a.ts ===
 async function f() {}
 >f : Symbol(f, Decl(a.ts, 0, 0))
 
-=== tests/cases/conformance/async/es6/b.ts ===
+=== b.ts ===
 function g() { }
 >g : Symbol(g, Decl(b.ts, 0, 0))
 

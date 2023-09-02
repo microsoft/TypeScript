@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasFunctionInsideTopLevelModuleWithoutExport.ts] ////
+
 //// [internalAliasFunctionInsideTopLevelModuleWithoutExport.ts]
 export module a {
     export function foo(x: number) {
@@ -27,7 +29,7 @@ exports.bVal2 = b;
 
 
 //// [internalAliasFunctionInsideTopLevelModuleWithoutExport.d.ts]
-export declare module a {
+export declare namespace a {
     function foo(x: number): number;
 }
 import b = a.foo;

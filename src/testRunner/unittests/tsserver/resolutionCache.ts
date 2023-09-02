@@ -1,7 +1,8 @@
-
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { compilerOptionsToConfigJson } from "../helpers/contents";
+import {
+    compilerOptionsToConfigJson,
+} from "../helpers/contents";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
@@ -24,17 +25,17 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra r
     it("can load typings that are proper modules", () => {
         const file1 = {
             path: "/a/b/app.js",
-            content: `var x = require("lib")`
+            content: `var x = require("lib")`,
         };
         const lib = {
             path: "/a/cache/node_modules/@types/lib/index.d.ts",
-            content: "export let x = 1"
+            content: "export let x = 1",
         };
         const host: TestServerHost & ts.ModuleResolutionHost = createServerHost([file1, lib]);
         const logger = createLoggerWithInMemoryLogs(host);
         const projectService = createProjectService(host, {
-            typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host, logger),
-            logger
+            typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/ 5, host, logger),
+            logger,
         });
 
         projectService.setCompilerOptionsForInferredProjects({ traceResolution: true, allowJs: true });
@@ -47,22 +48,22 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem watchin
     it("works correctly when typings are added or removed", () => {
         const f1 = {
             path: "/users/username/projects/project/app.ts",
-            content: "let x = 1;"
+            content: "let x = 1;",
         };
         const t1 = {
             path: "/users/username/projects/project/node_modules/@types/lib1/index.d.ts",
-            content: "export let a: number"
+            content: "export let a: number",
         };
         const t2 = {
             path: "/users/username/projects/project/node_modules/@types/lib2/index.d.ts",
-            content: "export let b: number"
+            content: "export let b: number",
         };
         const tsconfig = {
             path: "/users/username/projects/project/tsconfig.json",
             content: JSON.stringify({
                 compilerOptions: {},
-                exclude: ["node_modules"]
-            })
+                exclude: ["node_modules"],
+            }),
         };
         const host = createServerHost([f1, t1, tsconfig]);
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -87,18 +88,18 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
     it("should remove the `module not found` error", () => {
         const moduleFile = {
             path: "/users/username/projects/project/moduleFile.ts",
-            content: "export function bar() { };"
+            content: "export function bar() { };",
         };
         const file1 = {
             path: "/users/username/projects/project/file1.ts",
-            content: "import * as T from './moduleFile'; T.bar();"
+            content: "import * as T from './moduleFile'; T.bar();",
         };
         const host = createServerHost([file1]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-            arguments: { file: file1.path }
+            arguments: { file: file1.path },
         });
 
         host.writeFile(moduleFile.path, moduleFile.content);
@@ -107,13 +108,13 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
         // Make a change to trigger the program rebuild
         session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
             command: ts.server.protocol.CommandTypes.Change,
-            arguments: { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
+            arguments: { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" },
         });
 
         // Recheck
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-            arguments: { file: file1.path }
+            arguments: { file: file1.path },
         });
         baselineTsserverLogs("resolutionCache", "should remove the module not found error", session);
     });
@@ -122,7 +123,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
         const folderPath = "/a/b/projects/temp";
         const file1: File = {
             path: `${folderPath}/a.ts`,
-            content: 'import f = require("pad"); f;'
+            content: 'import f = require("pad"); f;',
         };
         const host = createServerHost([file1, libFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
@@ -132,15 +133,15 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
                 file: file1.path,
                 fileContent: file1.content,
                 scriptKindName: "TS",
-                projectRootPath: folderPath
-            }
+                projectRootPath: folderPath,
+            },
         });
 
         verifyGetErrRequest({ session, files: [file1] });
 
         const padIndex: File = {
             path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
-            content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
+            content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;",
         };
         host.ensureFileOrFolder(padIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
         host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
@@ -185,7 +186,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
-                preferences: { disableSuggestions: true }
+                preferences: { disableSuggestions: true },
             },
         });
 
@@ -213,7 +214,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             arguments: {
                 delay: 0,
                 files: [file.path],
-            }
+            },
         });
 
         session.testhost.logTimeoutQueueLength();
@@ -222,7 +223,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
             arguments: {
                 delay: 0,
                 file: file.path,
-            }
+            },
         });
 
         session.testhost.logTimeoutQueueLength();
@@ -234,11 +235,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
     it("should restore the states for inferred projects", () => {
         const moduleFile = {
             path: "/users/username/projects/project/moduleFile.ts",
-            content: "export function bar() { };"
+            content: "export function bar() { };",
         };
         const file1 = {
             path: "/users/username/projects/project/file1.ts",
-            content: "import * as T from './moduleFile'; T.bar();"
+            content: "import * as T from './moduleFile'; T.bar();",
         };
         const host = createServerHost([moduleFile, file1]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -246,7 +247,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-            arguments: { file: file1.path }
+            arguments: { file: file1.path },
         });
 
         const moduleFileNewPath = "/users/username/projects/project/moduleFile1.ts";
@@ -254,7 +255,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         host.runQueuedTimeoutCallbacks();
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-            arguments: { file: file1.path }
+            arguments: { file: file1.path },
         });
 
         host.renameFile(moduleFileNewPath, moduleFile.path);
@@ -263,13 +264,13 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         // Make a change to trigger the program rebuild
         session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
             command: ts.server.protocol.CommandTypes.Change,
-            arguments: { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
+            arguments: { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" },
         });
         host.runQueuedTimeoutCallbacks();
 
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-            arguments: { file: file1.path }
+            arguments: { file: file1.path },
         });
         baselineTsserverLogs("resolutionCache", "renaming module should restore the states for inferred projects", session);
     });
@@ -277,15 +278,15 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
     it("should restore the states for configured projects", () => {
         const moduleFile = {
             path: "/users/username/projects/project/moduleFile.ts",
-            content: "export function bar() { };"
+            content: "export function bar() { };",
         };
         const file1 = {
             path: "/users/username/projects/project/file1.ts",
-            content: "import * as T from './moduleFile'; T.bar();"
+            content: "import * as T from './moduleFile'; T.bar();",
         };
         const configFile = {
             path: "/users/username/projects/project/tsconfig.json",
-            content: `{}`
+            content: `{}`,
         };
         const host = createServerHost([moduleFile, file1, configFile]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -293,7 +294,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-            arguments: { file: file1.path }
+            arguments: { file: file1.path },
         });
 
         const moduleFileNewPath = "/users/username/projects/project/moduleFile1.ts";
@@ -301,14 +302,14 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         host.runQueuedTimeoutCallbacks();
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-            arguments: { file: file1.path }
+            arguments: { file: file1.path },
         });
 
         host.renameFile(moduleFileNewPath, moduleFile.path);
         host.runQueuedTimeoutCallbacks();
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-            arguments: { file: file1.path }
+            arguments: { file: file1.path },
         });
         baselineTsserverLogs("resolutionCache", "renaming module should restore the states for configured projects", session);
     });
@@ -316,11 +317,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
     it("should property handle missing config files", () => {
         const f1 = {
             path: "/a/b/app.ts",
-            content: "let x = 1"
+            content: "let x = 1",
         };
         const config = {
             path: "/a/b/tsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const projectName = "project1";
         const host = createServerHost([f1]);
@@ -339,18 +340,18 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
             it(subScenario, () => {
                 const f1 = {
                     path: "/a/b/app.ts",
-                    content: "let x = 1"
+                    content: "let x = 1",
                 };
                 const config = {
                     path: "/a/b/tsconfig.json",
-                    content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } })
+                    content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
                 };
                 const node = {
                     path: "/a/b/node_modules/@types/node/index.d.ts",
-                    content: "declare var process: any"
+                    content: "declare var process: any",
                 };
                 const cwd = {
-                    path: "/a/c"
+                    path: "/a/c",
                 };
                 const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
                 const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -366,17 +367,17 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module resolution caching", () => {
     const configFile: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
-        content: JSON.stringify({ compilerOptions: { traceResolution: true } })
+        content: JSON.stringify({ compilerOptions: { traceResolution: true } }),
     };
 
     function getModules(module1Path: string, module2Path: string) {
         const module1: File = {
             path: module1Path,
-            content: `export function module1() {}`
+            content: `export function module1() {}`,
         };
         const module2: File = {
             path: module2Path,
-            content: `export function module2() {}`
+            content: `export function module2() {}`,
         };
         return { module1, module2 };
     }
@@ -385,11 +386,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
         function getFiles(fileContent: string) {
             const file1: File = {
                 path: `/user/username/projects/myproject/src/file1.ts`,
-                content: fileContent
+                content: fileContent,
             };
             const file2: File = {
                 path: `/user/username/projects/myproject/src/file2.ts`,
-                content: fileContent
+                content: fileContent,
             };
             return { file1, file2 };
         }
@@ -430,19 +431,19 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
         function getFiles(fileContent1: string, fileContent2 = fileContent1, fileContent3 = fileContent1, fileContent4 = fileContent1) {
             const file1: File = {
                 path: `/user/username/projects/myproject/product/src/file1.ts`,
-                content: fileContent1
+                content: fileContent1,
             };
             const file2: File = {
                 path: `/user/username/projects/myproject/product/src/feature/file2.ts`,
-                content: fileContent2
+                content: fileContent2,
             };
             const file3: File = {
                 path: `/user/username/projects/myproject/product/test/src/file3.ts`,
-                content: fileContent3
+                content: fileContent3,
             };
             const file4: File = {
                 path: `/user/username/projects/myproject/product/test/file4.ts`,
-                content: fileContent4
+                content: fileContent4,
             };
             return { file1, file2, file3, file4 };
         }
@@ -516,7 +517,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module 
 declare module "fs" {
     export interface something {
     }
-}`
+}`,
                 };
                 const electronFile: File = {
                     path: `/user/username/projects/myproject/src/typings/electron.d.ts`,
@@ -524,19 +525,19 @@ declare module "fs" {
 declare module 'original-fs' {
     import * as fs from 'fs';
     export = fs;
-}`
+}`,
                 };
                 const srcFile: File = {
                     path: `/user/username/projects/myproject/src/somefolder/srcfile.ts`,
                     content: `
 import { x } from "somefolder/module1";
 import { x } from "somefolder/module2";
-const y = x;`
+const y = x;`,
                 };
                 const moduleFile: File = {
                     path: `/user/username/projects/myproject/src/somefolder/module1.ts`,
                     content: `
-export const x = 10;`
+export const x = 10;`,
                 };
                 const configFile: File = {
                     path: `/user/username/projects/myproject/src/tsconfig.json`,
@@ -547,9 +548,9 @@ export const x = 10;`
                             target: "es5",
                             outDir: "../out",
                             baseUrl: "./",
-                            typeRoots: ["typings"]
-                        }
-                    })
+                            typeRoots: ["typings"],
+                        },
+                    }),
                 };
 
                 const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
@@ -566,15 +567,15 @@ export const x = 10;`
     describe("ignores files/folder changes in node_modules that start with '.'", () => {
         const npmCacheFile: File = {
             path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
-            content: JSON.stringify({ something: 10 })
+            content: JSON.stringify({ something: 10 }),
         };
         const file1: File = {
             path: `/user/username/projects/myproject/test.ts`,
-            content: `import { x } from "somemodule";`
+            content: `import { x } from "somemodule";`,
         };
         const file2: File = {
             path: `/user/username/projects/myproject/node_modules/somemodule/index.d.ts`,
-            content: `export const x = 10;`
+            content: `export const x = 10;`,
         };
         it("when watching node_modules in inferred project for failed lookup/closed script infos", () => {
             const files = [libFile, file1, file2];
@@ -590,7 +591,7 @@ export const x = 10;`
         it("when watching node_modules as part of wild card directories in config project", () => {
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: "{}"
+                content: "{}",
             };
             const files = [libFile, file1, file2, config];
             const host = createServerHost(files);
@@ -609,7 +610,7 @@ export const x = 10;`
             const fileContent = `import { module1 } from "module1";import { module2 } from "module2";`;
             const file1: File = {
                 path: `/user/username/projects/myproject/src/file1.ts`,
-                content: fileContent
+                content: fileContent,
             };
             const { module1, module2 } = getModules(`/user/username/projects/myproject/src/node_modules/module1/index.ts`, `/user/username/projects/myproject/node_modules/module2/index.ts`);
             const files = [module1, module2, file1, configFile, libFile];

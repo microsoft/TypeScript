@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts] ////
+
 //// [multiLinePropertyAccessAndArrowFunctionIndent1.ts]
 return this.edit(role)
     .then((role: Role) =>

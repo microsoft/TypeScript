@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping3.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping3.ts] ////
+
+=== typeSatisfaction_contextualTyping3.ts ===
 // see https://github.com/microsoft/TypeScript/issues/53920#issuecomment-1516616255
 
 const obj = {

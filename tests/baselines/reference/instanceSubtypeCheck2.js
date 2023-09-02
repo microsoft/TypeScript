@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceSubtypeCheck2.ts] ////
+
 //// [instanceSubtypeCheck2.ts]
 class C1<T> {
     x: C2<T>;

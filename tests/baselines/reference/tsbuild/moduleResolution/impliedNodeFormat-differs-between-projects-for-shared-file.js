@@ -91,6 +91,7 @@ Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/src/projects/b/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/b/package.json' exists according to earlier cached lookups.
 Loading module 'pg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/src/projects/b/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/src/projects/b/node_modules' does not exist, skipping all lookups in it.
 File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.

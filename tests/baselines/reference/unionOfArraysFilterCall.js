@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionOfArraysFilterCall.ts] ////
+
 //// [unionOfArraysFilterCall.ts]
 interface Fizz {
     id: number;

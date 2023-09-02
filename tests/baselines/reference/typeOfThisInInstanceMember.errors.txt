@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember.ts(10,11): error TS2339: Property 'z' does not exist on type 'C'.
+typeOfThisInInstanceMember.ts(10,11): error TS2339: Property 'z' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember.ts (1 errors) ====
+==== typeOfThisInInstanceMember.ts (1 errors) ====
     class C {
         x = this;
         foo() {

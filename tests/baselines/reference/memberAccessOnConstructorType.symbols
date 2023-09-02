@@ -1,4 +1,6 @@
-=== tests/cases/compiler/memberAccessOnConstructorType.ts ===
+//// [tests/cases/compiler/memberAccessOnConstructorType.ts] ////
+
+=== memberAccessOnConstructorType.ts ===
 var f: new () => void;
 >f : Symbol(f, Decl(memberAccessOnConstructorType.ts, 0, 3))
 

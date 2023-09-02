@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticMismatchBecauseOfPrototype.ts ===
+//// [tests/cases/compiler/staticMismatchBecauseOfPrototype.ts] ////
+
+=== staticMismatchBecauseOfPrototype.ts ===
 interface A {
     n: number;
 >n : number

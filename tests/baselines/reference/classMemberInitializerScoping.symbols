@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classMemberInitializerScoping.ts ===
+//// [tests/cases/compiler/classMemberInitializerScoping.ts] ////
+
+=== classMemberInitializerScoping.ts ===
 var aaa = 1;
 >aaa : Symbol(aaa, Decl(classMemberInitializerScoping.ts, 0, 3))
 

@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedVisibility.ts] ////
+
+=== index.js ===
 const Obj = require("./obj");
 >Obj : Symbol(Obj, Decl(index.js, 0, 5))
 >require : Symbol(require)
->"./obj" : Symbol("tests/cases/conformance/jsdoc/declarations/obj", Decl(obj.js, 0, 0))
+>"./obj" : Symbol("obj", Decl(obj.js, 0, 0))
 
 class Container {
 >Container : Symbol(Container, Decl(index.js, 0, 29))
@@ -22,7 +24,7 @@ module.exports = Container;
 >exports : Symbol(export=, Decl(index.js, 6, 1))
 >Container : Symbol(Container, Decl(index.js, 0, 29))
 
-=== tests/cases/conformance/jsdoc/declarations/obj.js ===
+=== obj.js ===
 module.exports = class Obj {
 >module.exports : Symbol(module.exports, Decl(obj.js, 0, 0))
 >module : Symbol(export=, Decl(obj.js, 0, 0))

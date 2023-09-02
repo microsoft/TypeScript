@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2017/useObjectValuesAndEntries4.ts] ////
+
 //// [useObjectValuesAndEntries4.ts]
 var o = { a: 1, b: 2 };
 

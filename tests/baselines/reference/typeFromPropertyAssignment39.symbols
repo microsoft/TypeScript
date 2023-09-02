@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment39.ts] ////
+
+=== a.js ===
 const foo = {};
 >foo : Symbol(foo, Decl(a.js, 0, 5), Decl(a.js, 0, 15), Decl(a.js, 1, 16))
 

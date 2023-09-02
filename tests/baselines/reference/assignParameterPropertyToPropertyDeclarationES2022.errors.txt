@@ -1,25 +1,26 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts(2,16): error TS2729: Property 'bar' is used before its initialization.
-tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts(3,16): error TS2729: Property 'foo' is used before its initialization.
-tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts(6,19): error TS2729: Property 'm3' is used before its initialization.
-tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts(12,17): error TS2729: Property 'baz' is used before its initialization.
+assignParameterPropertyToPropertyDeclarationES2022.ts(2,16): error TS2729: Property 'bar' is used before its initialization.
+assignParameterPropertyToPropertyDeclarationES2022.ts(3,16): error TS2729: Property 'foo' is used before its initialization.
+assignParameterPropertyToPropertyDeclarationES2022.ts(6,19): error TS2729: Property 'm3' is used before its initialization.
+assignParameterPropertyToPropertyDeclarationES2022.ts(12,17): error TS2729: Property 'baz' is used before its initialization.
+assignParameterPropertyToPropertyDeclarationES2022.ts(13,16): error TS2729: Property 'foo' is used before its initialization.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts (4 errors) ====
+==== assignParameterPropertyToPropertyDeclarationES2022.ts (5 errors) ====
     class C {
         qux = this.bar // should error
                    ~~~
 !!! error TS2729: Property 'bar' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts:3:5: 'bar' is declared here.
+!!! related TS2728 assignParameterPropertyToPropertyDeclarationES2022.ts:3:5: 'bar' is declared here.
         bar = this.foo // should error
                    ~~~
 !!! error TS2729: Property 'foo' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts:11:17: 'foo' is declared here.
+!!! related TS2728 assignParameterPropertyToPropertyDeclarationES2022.ts:11:17: 'foo' is declared here.
         quiz = this.bar // ok
         quench = this.m1() // ok
         quanch = this.m3() // should error
                       ~~
 !!! error TS2729: Property 'm3' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts:10:5: 'm3' is declared here.
+!!! related TS2728 assignParameterPropertyToPropertyDeclarationES2022.ts:10:5: 'm3' is declared here.
         m1() {
             this.foo // ok
         }
@@ -28,8 +29,11 @@ tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterProper
         quim = this.baz // should error
                     ~~~
 !!! error TS2729: Property 'baz' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts:13:5: 'baz' is declared here.
+!!! related TS2728 assignParameterPropertyToPropertyDeclarationES2022.ts:13:5: 'baz' is declared here.
         baz = this.foo; // should error
+                   ~~~
+!!! error TS2729: Property 'foo' is used before its initialization.
+!!! related TS2728 assignParameterPropertyToPropertyDeclarationES2022.ts:11:17: 'foo' is declared here.
         quid = this.baz // ok
         m2() {
             this.foo // ok

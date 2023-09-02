@@ -3,12 +3,15 @@ import {
     ArrowFunction,
     CallExpression,
     createPrinterWithRemoveComments,
+    createTextSpanFromNode,
     Debug,
+    ElementFlags,
     EmitHint,
     EnumMember,
     equateStringsCaseInsensitive,
     Expression,
     findChildOfKind,
+    findIndex,
     forEachChild,
     FunctionDeclaration,
     FunctionExpression,
@@ -21,6 +24,7 @@ import {
     hasContextSensitiveParameters,
     Identifier,
     InlayHint,
+    InlayHintDisplayPart,
     InlayHintKind,
     InlayHintsContext,
     isArrowFunction,
@@ -44,6 +48,7 @@ import {
     isParameterDeclaration,
     isPropertyAccessExpression,
     isPropertyDeclaration,
+    isSpreadElement,
     isTypeNode,
     isVarConst,
     isVariableDeclaration,
@@ -61,15 +66,15 @@ import {
     SymbolFlags,
     SyntaxKind,
     textSpanIntersectsWith,
+    TupleTypeReference,
     Type,
-    TypeFormatFlags,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
     VariableDeclaration,
 } from "./_namespaces/ts";
 
-const maxHintsLength = 30;
+const maxTypeHintLength = 30;
 
 const leadingParameterNameCommentRegexFactory = (name: string) => {
     return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
@@ -81,6 +86,10 @@ function shouldShowParameterNameHints(preferences: UserPreferences) {
 
 function shouldShowLiteralParameterNameHintsOnly(preferences: UserPreferences) {
     return preferences.includeInlayParameterNameHints === "literals";
+}
+
+function shouldUseInteractiveInlayHints(preferences: UserPreferences) {
+    return preferences.interactiveInlayHints === true;
 }
 
 /** @internal */
@@ -147,18 +156,29 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
     }
 
-    function addParameterHints(text: string, position: number, isFirstVariadicArgument: boolean) {
+    function addParameterHints(text: string, parameter: Identifier, position: number, isFirstVariadicArgument: boolean) {
+        let hintText = `${isFirstVariadicArgument ? "..." : ""}${text}`;
+        let displayParts: InlayHintDisplayPart[] | undefined;
+        if (shouldUseInteractiveInlayHints(preferences)) {
+            displayParts = [getNodeDisplayPart(hintText, parameter), { text: ":" }];
+            hintText = "";
+        }
+        else {
+            hintText += ":";
+        }
+
         result.push({
-            text: `${isFirstVariadicArgument ? "..." : ""}${truncation(text, maxHintsLength)}:`,
+            text: hintText,
             position,
             kind: InlayHintKind.Parameter,
             whitespaceAfter: true,
+            displayParts,
         });
     }
 
     function addTypeHints(text: string, position: number) {
         result.push({
-            text: `: ${truncation(text, maxHintsLength)}`,
+            text: `: ${text.length > maxTypeHintLength ? text.substr(0, maxTypeHintLength - "...".length) + "..." : text}`,
             position,
             kind: InlayHintKind.Type,
             whitespaceBefore: true,
@@ -167,7 +187,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function addEnumMemberValueHints(text: string, position: number) {
         result.push({
-            text: `= ${truncation(text, maxHintsLength)}`,
+            text: `= ${text}`,
             position,
             kind: InlayHintKind.Enum,
             whitespaceBefore: true,
@@ -226,16 +246,34 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        for (let i = 0; i < args.length; ++i) {
-            const originalArg = args[i];
+        let signatureParamPos = 0;
+        for (const originalArg of args) {
             const arg = skipParentheses(originalArg);
             if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
+                signatureParamPos++;
                 continue;
             }
 
-            const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, i);
-            if (identifierNameInfo) {
-                const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
+            let spreadArgs = 0;
+            if (isSpreadElement(arg)) {
+                const spreadType = checker.getTypeAtLocation(arg.expression);
+                if (checker.isTupleType(spreadType)) {
+                    const { elementFlags, fixedLength } = (spreadType as TupleTypeReference).target;
+                    if (fixedLength === 0) {
+                        continue;
+                    }
+                    const firstOptionalIndex = findIndex(elementFlags, f => !(f & ElementFlags.Required));
+                    const requiredArgs = firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+                    if (requiredArgs > 0) {
+                        spreadArgs = firstOptionalIndex < 0 ? fixedLength : firstOptionalIndex;
+                    }
+                }
+            }
+
+            const identifierInfo = checker.getParameterIdentifierInfoAtPosition(signature, signatureParamPos);
+            signatureParamPos = signatureParamPos + (spreadArgs || 1);
+            if (identifierInfo) {
+                const { parameter, parameterName, isRestParameter: isFirstVariadicArgument } = identifierInfo;
                 const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);
                 if (!isParameterNameNotSameAsArgument && !isFirstVariadicArgument) {
                     continue;
@@ -246,7 +284,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     continue;
                 }
 
-                addParameterHints(name, originalArg.getStart(), isFirstVariadicArgument);
+                addParameterHints(name, parameter, originalArg.getStart(), isFirstVariadicArgument);
             }
         }
     }
@@ -373,15 +411,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return printTypeInSingleLine(signatureParamType);
     }
 
-    function truncation(text: string, maxLength: number) {
-        if (text.length > maxLength) {
-            return text.substr(0, maxLength - "...".length) + "...";
-        }
-        return text;
-    }
-
     function printTypeInSingleLine(type: Type) {
-        const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const printer = createPrinterWithRemoveComments();
 
         return usingSingleLineStringWriter(writer => {
@@ -401,5 +432,14 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
         }
         return true;
+    }
+
+    function getNodeDisplayPart(text: string, node: Node): InlayHintDisplayPart {
+        const sourceFile = node.getSourceFile();
+        return {
+            text,
+            span: createTextSpanFromNode(node, sourceFile),
+            file: sourceFile.fileName,
+        };
     }
 }

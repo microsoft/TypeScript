@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts ===
+//// [tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts] ////
+
+=== reservedNamesInAliases.ts ===
 interface I {}
 >I : Symbol(I, Decl(reservedNamesInAliases.ts, 0, 0))
 
