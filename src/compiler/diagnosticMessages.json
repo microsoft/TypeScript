@@ -3619,7 +3619,7 @@
         "category": "Error",
         "code": 2839
     },
-    "An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes": {
+    "An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes.": {
         "category": "Error",
         "code": 2840
     },
@@ -3698,6 +3698,14 @@
     "An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression.": {
         "category": "Error",
         "code": 2861
+    },
+    "A class cannot extend a primitive type like '{0}'; a class can only extend named types and classes.": {
+        "category": "Error",
+        "code": 2862
+    },
+    "A class cannot implement a primitive type like '{0}'; a class can only implement interfaces.": {
+        "category": "Error",
+        "code": 2863
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

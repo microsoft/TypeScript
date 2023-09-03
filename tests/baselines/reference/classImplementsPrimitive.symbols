@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/classImplementsPrimitive.ts] ////
+
+=== classImplementsPrimitive.ts ===
+// classes cannot implement primitives
+
+class C implements number { }
+>C : Symbol(C, Decl(classImplementsPrimitive.ts, 0, 0))
+
+class C2 implements string { }
+>C2 : Symbol(C2, Decl(classImplementsPrimitive.ts, 2, 29))
+
+class C3 implements boolean { }
+>C3 : Symbol(C3, Decl(classImplementsPrimitive.ts, 3, 30))
+
+class C4 implements Void  { }
+>C4 : Symbol(C4, Decl(classImplementsPrimitive.ts, 4, 31))
+
+class C4a implements void {}
+>C4a : Symbol(C4a, Decl(classImplementsPrimitive.ts, 5, 29))
+
+class C5 implements Null { }
+>C5 : Symbol(C5, Decl(classImplementsPrimitive.ts, 6, 28))
+
+class C5a implements null { }
+>C5a : Symbol(C5a, Decl(classImplementsPrimitive.ts, 7, 28))
+
+class C6 implements undefined { }
+>C6 : Symbol(C6, Decl(classImplementsPrimitive.ts, 8, 29))
+
+class C7 implements Undefined { }
+>C7 : Symbol(C7, Decl(classImplementsPrimitive.ts, 9, 33))
+
+enum E { A }
+>E : Symbol(E, Decl(classImplementsPrimitive.ts, 10, 33))
+>A : Symbol(E.A, Decl(classImplementsPrimitive.ts, 12, 8))
+
+class C8 implements E { }
+>C8 : Symbol(C8, Decl(classImplementsPrimitive.ts, 12, 12))
+>E : Symbol(E, Decl(classImplementsPrimitive.ts, 10, 33))
+
+class C4a implements void {}
+>C4a : Symbol(C4a, Decl(classImplementsPrimitive.ts, 13, 25))
+
+class C5a implements null { }
+>C5a : Symbol(C5a, Decl(classImplementsPrimitive.ts, 15, 28))
+

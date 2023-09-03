@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/classImplementsPrimitive.ts] ////
+
+=== classImplementsPrimitive.ts ===
+// classes cannot implement primitives
+
+class C implements number { }
+>C : C
+
+class C2 implements string { }
+>C2 : C2
+
+class C3 implements boolean { }
+>C3 : C3
+
+class C4 implements Void  { }
+>C4 : C4
+
+class C4a implements void {}
+>C4a : C4a
+>void {} : undefined
+>{} : {}
+
+class C5 implements Null { }
+>C5 : C5
+
+class C5a implements null { }
+>C5a : C5a
+
+class C6 implements undefined { }
+>C6 : C6
+
+class C7 implements Undefined { }
+>C7 : C7
+
+enum E { A }
+>E : E
+>A : E.A
+
+class C8 implements E { }
+>C8 : C8
+
+class C4a implements void {}
+>C4a : C4a
+>void {} : undefined
+>{} : {}
+
+class C5a implements null { }
+>C5a : C5a
+
