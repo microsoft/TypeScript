@@ -19927,10 +19927,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let reportedError = false;
         for (const value of iterator) {
             const { errorNode: prop, innerExpression: next, nameType, errorMessage } = value;
-            const targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
+            let targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
             if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
-            const sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
+            let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
             if (!sourcePropType) continue;
+            const propName = getPropertyNameFromIndex(nameType, /*accessNode*/ undefined);
             if (!checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
                 const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
                 reportedError = true;
@@ -19945,6 +19946,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         resultObj.errors = [diag];
                     }
                     else {
+                        const targetIsOptional = !!(propName && (getPropertyOfType(target, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                        const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                        targetPropType = removeMissingType(targetPropType, targetIsOptional);
+                        sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
                         const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
                         if (result && specificSource !== sourcePropType) {
                             // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType

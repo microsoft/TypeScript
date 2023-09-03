@@ -1,0 +1,9 @@
+strictOptionalPropertiesErrors1.ts(2,15): error TS2322: Type 'string' is not assignable to type 'number | boolean'.
+
+
+==== strictOptionalPropertiesErrors1.ts (1 errors) ====
+    function test1(arg: [string, (boolean | number)?]) {}
+    test1(['foo', 'bar']);
+                  ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number | boolean'.
+    

@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/strictOptionalPropertiesErrors1.ts] ////
+
+=== strictOptionalPropertiesErrors1.ts ===
+function test1(arg: [string, (boolean | number)?]) {}
+>test1 : (arg: [string, (boolean | number)?]) => void
+>arg : [string, (number | boolean)?]
+
+test1(['foo', 'bar']);
+>test1(['foo', 'bar']) : void
+>test1 : (arg: [string, (number | boolean)?]) => void
+>['foo', 'bar'] : [string, string]
+>'foo' : "foo"
+>'bar' : "bar"
+
