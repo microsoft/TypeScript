@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/strictOptionalPropertiesOmittedExpressions1.ts] ////
+
+=== strictOptionalPropertiesOmittedExpressions1.ts ===
+function test1(arg: [number, undefined, string]) {}
+>test1 : (arg: [number, undefined, string]) => void
+>arg : [number, undefined, string]
+
+test1([10, , "foo"]); // ok
+>test1([10, , "foo"]) : void
+>test1 : (arg: [number, undefined, string]) => void
+>[10, , "foo"] : [number, undefined, string]
+>10 : 10
+> : undefined
+>"foo" : "foo"
+
+const test2 = ["foo", ,] as const;
+>test2 : readonly ["foo", undefined]
+>["foo", ,] as const : readonly ["foo", undefined]
+>["foo", ,] : readonly ["foo", undefined]
+>"foo" : "foo"
+> : undefined
+
+const length2 = test2.length; // 2
+>length2 : 2
+>test2.length : 2
+>test2 : readonly ["foo", undefined]
+>length : 2
+
