@@ -1263,11 +1263,10 @@ export const enum CheckMode {
     SkipContextSensitive = 1 << 2,                  // Skip context sensitive function expressions
     SkipGenericFunctions = 1 << 3,                  // Skip single signature generic functions
     IsForSignatureHelp = 1 << 4,                    // Call resolution for purposes of signature help
-    IsForStringLiteralArgumentCompletions = 1 << 5, // Do not infer from the argument currently being typed
-    RestBindingElement = 1 << 6,                    // Checking a type that is going to be used to determine the type of a rest binding element
+    RestBindingElement = 1 << 5,                    // Checking a type that is going to be used to determine the type of a rest binding element
                                                     //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                                     //   we need to preserve generic types instead of substituting them for constraints
-    TypeOnly = 1 << 7,                              // Called from getTypeOfExpression, diagnostics may be omitted
+    TypeOnly = 1 << 6,                              // Called from getTypeOfExpression, diagnostics may be omitted
 }
 
 /** @internal */
@@ -1839,7 +1838,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const candidates: Signature[] = [];
 
         // first, get candidates when inference is blocked from the source node.
-        runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, CheckMode.IsForStringLiteralArgumentCompletions));
+        runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, CheckMode.Normal));
         for (const candidate of candidates) {
             candidatesSet.add(candidate);
         }
@@ -24976,7 +24975,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!couldContainTypeVariables(target)) {
                 return;
             }
-            if (source === wildcardType) {
+            if (source === wildcardType || source === blockedStringType) {
                 // We are inferring from an 'any' type. We want to infer this type for every type parameter
                 // referenced in the target type, so we record it as the propagation type and infer from the
                 // target to itself. Then, as we find candidates we substitute the propagation type.
@@ -25076,6 +25075,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return;
                     }
                     if (!inference.isFixed) {
+                        const candidate = propagationType || source;
+                        if (candidate === blockedStringType) {
+                            return;
+                        }
                         if (inference.priority === undefined || priority < inference.priority) {
                             inference.candidates = undefined;
                             inference.contraCandidates = undefined;
@@ -25083,7 +25086,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             inference.priority = priority;
                         }
                         if (priority === inference.priority) {
-                            const candidate = propagationType || source;
                             // We make contravariant inferences only if we are in a pure contravariant position,
                             // i.e. only if we have not descended into a bivariant position.
                             if (contravariant && !bivariant) {
@@ -25816,7 +25818,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (!inferredType || inferredType === blockedStringType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                     // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
@@ -33226,7 +33228,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         for (let i = 0; i < argCount; i++) {
             const arg = args[i];
-            if (arg.kind !== SyntaxKind.OmittedExpression && !(checkMode & CheckMode.IsForStringLiteralArgumentCompletions && hasSkipDirectInferenceFlag(arg))) {
+            if (arg.kind !== SyntaxKind.OmittedExpression) {
                 const paramType = getTypeAtPosition(signature, i);
                 if (couldContainTypeVariables(paramType)) {
                     const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
@@ -33868,7 +33870,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // decorators are applied to a declaration by the emitter, and not to an expression.
         const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
         let argCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
-        argCheckMode |= checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
 
         // The following variables are captured and modified by calls to chooseOverload.
         // If overload resolution or type argument inference fails, we want to report the
