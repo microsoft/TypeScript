@@ -1831,23 +1831,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typeHasCallOrConstructSignatures,
     };
 
-    function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node, checkMode = CheckMode.IsForStringLiteralArgumentCompletions) {
+    function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node) {
         const candidatesSet = new Set<Signature>();
         const candidates: Signature[] = [];
 
-        if (checkMode & CheckMode.IsForStringLiteralArgumentCompletions) {
-            // first, get candidates when inference is blocked from the source node.
-            runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, checkMode));
-            for (const candidate of candidates) {
-                candidatesSet.add(candidate);
-            }
-
-            // reset candidates for second pass
-            candidates.length = 0;
+        // first, get candidates when inference is blocked from the source node.
+        runWithInferenceBlockedFromSourceNode(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, CheckMode.IsForStringLiteralArgumentCompletions));
+        for (const candidate of candidates) {
+            candidatesSet.add(candidate);
         }
 
+        // reset candidates for second pass
+        candidates.length = 0;
+
         // next, get candidates where the source node is considered for inference.
-        runWithoutResolvedSignatureCaching(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, checkMode & ~CheckMode.IsForStringLiteralArgumentCompletions));
+        runWithoutResolvedSignatureCaching(editingArgument, () => getResolvedSignatureWorker(call, candidates, /*argumentCount*/ undefined, CheckMode.Normal));
         for (const candidate of candidates) {
             candidatesSet.add(candidate);
         }
