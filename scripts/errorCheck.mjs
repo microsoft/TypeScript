@@ -2,6 +2,7 @@ import fs from "fs";
 import fsPromises from "fs/promises";
 import _glob from "glob";
 import util from "util";
+import assert from "assert";
 
 const glob = util.promisify(_glob);
 
@@ -28,6 +29,7 @@ async function checkErrorBaselines() {
             while (g = errRegex.exec(baseline)) {
                 const errCode = +g[1];
                 const msg = keys.find(k => messages[k].code === errCode);
+                assert(msg);
                 messages[msg].seen = true;
             }
         });
