@@ -18405,16 +18405,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
             }
-            // >> We instantiate checkType with the narrow mapper information
+            // We instantiate a distributive checkType with the narrow mapper information
             const checkTypeVariable = getActualTypeVariable(root.checkType);
-            const checkType = checkTypeVariable.flags & TypeFlags.TypeParameter ?
+            const checkType = root.isDistributive ?
                 instantiateType(checkTypeVariable, combineTypeMappers2(narrowMapper, mapper)) :
-                // >> TODO: in what order can we combine mappers? mapper first guarantess the mapping from check type to a
-                // type of a union comes first in the distributive case,
-                // but then if narrow mapper refers to a variable in mapper, it won't be properly instantiated.
-                // but can that even happen?
                 instantiateType(checkTypeVariable, mapper);
-            const extendsType = instantiateType(root.extendsType, mapper); // >> Type parameter narrowing should not affect the extends type.
+            const extendsType = instantiateType(root.extendsType, mapper);
             if (checkType === errorType || extendsType === errorType) {
                 return errorType;
             }
@@ -18424,10 +18420,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // When the check and extends types are simple tuple types of the same arity, we defer resolution of the
             // conditional type when any tuple elements are generic. This is such that non-distributable conditional
             // types can be written `[X] extends [Y] ? ...` and be deferred similarly to `X extends Y ? ...`.
-            // const checkTuples = isSimpleTupleType(root.node.checkType) && isSimpleTupleType(root.node.extendsType) &&
-                // length((root.node.checkType as TupleTypeNode).elements) === length((root.node.extendsType as TupleTypeNode).elements);
-            // const checkTypeDeferred = isDeferredType(checkType, checkTuples); // >> TODO: what do we do about this?
-            const checkTypeDeferred = false;
+            const checkTuples = isSimpleTupleType(root.node.checkType) && isSimpleTupleType(root.node.extendsType) &&
+                length((root.node.checkType as TupleTypeNode).elements) === length((root.node.extendsType as TupleTypeNode).elements);
+            const forceEagerNarrowing = root.isDistributive && getMappedType(getActualTypeVariable(root.checkType), narrowMapper) !== root.checkType;
+            const checkTypeDeferred = isDeferredType(checkType, checkTuples) && !forceEagerNarrowing;
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
                 // When we're looking at making an inference for an infer type, when we get its constraint, it'll automagically be
@@ -18474,7 +18470,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
             // if (!checkTypeDeferred && !isDeferredType(inferredExtendsType, checkTuples)) {
-            if (true) {
+            if (!checkTypeDeferred && !isDeferredType(inferredExtendsType, checkTuples)) {
                 // Return falseType for a definitely false extends check. We check an instantiation of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
@@ -18535,7 +18531,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             result.combinedMapper = combinedMapper;
             result.aliasSymbol = aliasSymbol || root.aliasSymbol;
             result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
-            // >> Narrowly instantiate true and false branch? No, it doesn't seem that useful
             break;
         }
         return extraTypes ? getIntersectionType(append(extraTypes, result)) : result;
@@ -18544,15 +18539,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // type. Note that recursion is possible only through aliased conditional types, so we only increment the tail
         // recursion counter for those.
         function canTailRecurse(newType: Type, narrowMapper: TypeMapper, newMapper: TypeMapper | undefined) {
-            if (newType.flags & TypeFlags.Conditional && newMapper) { // >> TODO: do we need to use `narrowMapper` here?
+            if (newType.flags & TypeFlags.Conditional && (newMapper || (newType as ConditionalType).root.isDistributive)) {
                 const newRoot = (newType as ConditionalType).root;
                 if (newRoot.outerTypeParameters) {
-                    const typeParamMapper = combineTypeMappers((newType as ConditionalType).mapper, newMapper);
-                    const typeArguments = map(newRoot.outerTypeParameters, t => getMappedType(t, typeParamMapper));
+                    const typeParamMapper = newMapper ? combineTypeMappers((newType as ConditionalType).mapper, newMapper) : (newType as ConditionalType).mapper;
+                    const typeArguments = typeParamMapper ? map(newRoot.outerTypeParameters, t => getMappedType(t, typeParamMapper)) : newRoot.outerTypeParameters;
                     const newRootMapper = createTypeMapper(newRoot.outerTypeParameters, typeArguments);
                     const newCheckType = newRoot.isDistributive ?
-                        // getMappedType(newRoot.checkType, newRootMapper) :
-                        instantiateType(getActualTypeVariable(root.checkType), combineTypeMappers2(narrowMapper, mapper)) : // >> I think now we need to actually instantiate it fully to see if the new check type is union or not, because now we have two mappers
+                        instantiateType(getActualTypeVariable(root.checkType), combineTypeMappers2(narrowMapper, mapper)) :
                         undefined;
                     if (!newCheckType || newCheckType === newRoot.checkType || !(newCheckType.flags & (TypeFlags.Union | TypeFlags.Never))) {
                         root = newRoot;
@@ -19811,13 +19805,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // instantiation cache key from the type IDs of the type arguments.
             const typeArguments = mapper ? map(root.outerTypeParameters, t => getMappedType(t, mapper)) : root.outerTypeParameters;
             // >> No caching yet
-            // const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
-            // let result = root.instantiations!.get(id);
-            // if (!result) {
             let result;
             const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
             const checkType = root.checkType;
-            // >> TODO: what should be the mapper order here??
             const distributionType = root.isDistributive ? getMappedType(checkType, combineTypeMappers(narrowMapper, newMapper)) : undefined;
             // Distributive conditional types are distributed over union types. For example, when the
             // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
@@ -19837,11 +19827,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 result = getNarrowConditionalType(root, narrowMapper, newMapper, aliasSymbol, aliasTypeArguments);
             }
-            // root.instantiations!.set(id, result);
-            // }
             return result;
         }
-        return type; // >> TODO: narrowly instantiate true and false branch
+        return type;
     }
 
     function instantiateReverseMappedType(type: ReverseMappedType, mapper: TypeMapper) {
