@@ -82,6 +82,30 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
         ],
     }, { outDir: undefined });
 
+    verfiyJson({
+        subScenario: "include only with json not in rootDir",
+        modifyFs: fs => {
+            fs.renameSync("/src/src/hello.json", "/src/hello.json");
+            replaceText(fs, "/src/src/index.ts", "./hello.json", "../hello.json");
+        },
+    }, {
+        include: [
+            "src/**/*",
+        ],
+    }, { rootDir: "src" });
+
+    verfiyJson({
+        subScenario: "include only with json without rootDir but outside configDirectory",
+        modifyFs: fs => {
+            fs.renameSync("/src/src/hello.json", "/hello.json");
+            replaceText(fs, "/src/src/index.ts", "./hello.json", "../../hello.json");
+        },
+    }, {
+        include: [
+            "src/**/*",
+        ],
+    });
+
     verfiyJson("include of json along with other include", {
         include: [
             "src/**/*",
