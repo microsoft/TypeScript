@@ -43473,7 +43473,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 function checkReturnStatementExpression(expr: Expression | undefined): void {
                     let actualReturnType = unwrappedReturnType;
                     if (expr) {
-                        expr = skipParentheses(expr);
+                        expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
                         if (isConditionalExpression(expr)) {
                             return checkReturnConditionalExpression(expr);
                         }
@@ -43499,7 +43499,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     if (getConstraintOfTypeParameter(tp)) {
                                         const narrowableConstraintType = mapType(tp.constraint!, getBaseConstraintOrType);
                                         if (narrowableConstraintType === exprType) {
-                                            return undefined; // Don't narrow if narrowing didn't do anything but obtain constraints
+                                            return undefined; // Don't narrow if narrowing didn't do anything but default to constraints
                                         }
                                     }
                                     return [tp, exprType];
