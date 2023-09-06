@@ -7,6 +7,7 @@ import {
 import {
     noChangeOnlyRuns,
     verifyTsc,
+    VerifyTscWithEditsInput,
 } from "../helpers/tsc";
 import {
     loadProjectFromFiles,
@@ -48,115 +49,94 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
         });
     }
 
-    verifyTsc({
-        scenario: "resolveJsonModule",
-        subScenario: "include only",
-        fs: () =>
-            getProjFs({
-                include: [
-                    "src/**/*",
-                ],
-            }),
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles"],
+    function verfiyJson(
+        input: Pick<VerifyTscWithEditsInput, "subScenario" | "modifyFs" | "edits"> | string,
+        tsconfigFiles: object,
+        additionalCompilerOptions?: CompilerOptions,
+    ) {
+        if (typeof input === "string") input = { subScenario: input };
+        verifyTsc({
+            scenario: "resolveJsonModule",
+            fs: () => getProjFs(tsconfigFiles, additionalCompilerOptions),
+            commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles", "--listEmittedFiles"],
+            ...input,
+        });
+        verifyTsc({
+            scenario: "resolveJsonModule",
+            fs: () => getProjFs(tsconfigFiles, { composite: undefined, ...additionalCompilerOptions }),
+            commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles", "--listEmittedFiles"],
+            ...input,
+            subScenario: `${input.subScenario} non-composite`,
+        });
+    }
+
+    verfiyJson("include only", {
+        include: [
+            "src/**/*",
+        ],
     });
 
-    verifyTsc({
-        scenario: "resolveJsonModule",
-        subScenario: "include only without outDir",
-        fs: () =>
-            getProjFs({
-                include: [
-                    "src/**/*",
-                ],
-            }, { outDir: undefined }),
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles"],
+    verfiyJson("include only without outDir", {
+        include: [
+            "src/**/*",
+        ],
+    }, { outDir: undefined });
+
+    verfiyJson("include of json along with other include", {
+        include: [
+            "src/**/*",
+            "src/**/*.json",
+        ],
     });
 
-    verifyTsc({
-        scenario: "resolveJsonModule",
-        subScenario: "include of json along with other include",
-        fs: () =>
-            getProjFs({
-                include: [
-                    "src/**/*",
-                    "src/**/*.json",
-                ],
-            }),
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles"],
-    });
-
-    verifyTsc({
-        scenario: "resolveJsonModule",
+    verfiyJson({
         subScenario: "include of json along with other include and file name matches ts file",
-        fs: () =>
-            getProjFs({
-                include: [
-                    "src/**/*",
-                    "src/**/*.json",
-                ],
-            }),
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles"],
         modifyFs: fs => {
             fs.renameSync("/src/src/hello.json", "/src/src/index.json");
             replaceText(fs, "/src/src/index.ts", "hello.json", "index.json");
         },
+    }, {
+        include: [
+            "src/**/*",
+            "src/**/*.json",
+        ],
     });
 
-    verifyTsc({
-        scenario: "resolveJsonModule",
-        subScenario: "files containing json file",
-        fs: () =>
-            getProjFs({
-                files: [
-                    "src/index.ts",
-                    "src/hello.json",
-                ],
-            }),
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles"],
+    verfiyJson("files containing json file", {
+        files: [
+            "src/index.ts",
+            "src/hello.json",
+        ],
     });
 
-    verifyTsc({
-        scenario: "resolveJsonModule",
-        subScenario: "include and files",
-        fs: () =>
-            getProjFs({
-                files: [
-                    "src/hello.json",
-                ],
-                include: [
-                    "src/**/*",
-                ],
-            }),
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--explainFiles"],
+    verfiyJson("include and files", {
+        files: [
+            "src/hello.json",
+        ],
+        include: [
+            "src/**/*",
+        ],
     });
 
-    verifyTsc({
-        scenario: "resolveJsonModule",
+    verfiyJson({
         subScenario: "sourcemap",
-        fs: () =>
-            getProjFs({
-                files: [
-                    "src/index.ts",
-                    "src/hello.json",
-                ],
-            }, { sourceMap: true }),
-        commandLineArgs: ["--b", "src/tsconfig.json", "--verbose", "--explainFiles"],
         edits: noChangeOnlyRuns,
-    });
+    }, {
+        files: [
+            "src/index.ts",
+            "src/hello.json",
+        ],
+    }, { sourceMap: true });
 
-    verifyTsc({
-        scenario: "resolveJsonModule",
+    verfiyJson({
         subScenario: "without outDir",
-        fs: () =>
-            getProjFs({
-                files: [
-                    "src/index.ts",
-                    "src/hello.json",
-                ],
-            }, { outDir: undefined }),
-        commandLineArgs: ["--b", "src/tsconfig.json", "--verbose"],
         edits: noChangeOnlyRuns,
-    });
+    }, {
+        files: [
+            "src/index.ts",
+            "src/hello.json",
+        ],
+    }, { outDir: undefined });
 });
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project importJsonFromProjectReference", () => {

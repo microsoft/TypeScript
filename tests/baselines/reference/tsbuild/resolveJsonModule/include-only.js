@@ -45,7 +45,7 @@ export default hello.hello
 
 
 Output::
-/lib/tsc --b /src/tsconfig.json --v --explainFiles
+/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 [[90m12:00:10 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -58,6 +58,7 @@ Output::
 [7m1[0m import hello from "./hello.json"
 [7m [0m [91m                  ~~~~~~~~~~~~~~[0m
 
+TSFILE: /src/dist/tsconfig.tsbuildinfo
 lib/lib.d.ts
   Default library for target 'es5'
 src/src/hello.json

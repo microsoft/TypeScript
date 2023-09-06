@@ -44,7 +44,7 @@ export default hello.hello
 
 
 Output::
-/lib/tsc --b /src/tsconfig.json --v --explainFiles
+/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 [[90m12:00:10 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -52,6 +52,9 @@ Output::
 
 [[90m12:00:12 AM[0m] Building project '/src/tsconfig.json'...
 
+TSFILE: /src/src/index.js
+TSFILE: /src/src/index.d.ts
+TSFILE: /src/tsconfig.tsbuildinfo
 lib/lib.d.ts
   Default library for target 'es5'
 src/src/hello.json
