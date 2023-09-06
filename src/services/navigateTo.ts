@@ -42,7 +42,7 @@ export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: 
     const patternMatcher = createPatternMatcher(searchValue);
     if (!patternMatcher) return emptyArray;
     const rawItems: RawNavigateToItem[] = [];
-
+    const singleCurrentFile = sourceFiles.length === 1 ? sourceFiles[0] : undefined;
     // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
     for (const sourceFile of sourceFiles) {
         cancellationToken.throwIfCancellationRequested();
@@ -51,12 +51,12 @@ export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: 
             continue;
         }
 
-        if (shouldExcludeFile(sourceFile, !!excludeLibFiles)) {
+        if (shouldExcludeFile(sourceFile, !!excludeLibFiles, singleCurrentFile)) {
             continue;
         }
 
         sourceFile.getNamedDeclarations().forEach((declarations, name) => {
-            getItemsFromNamedDeclaration(patternMatcher, name, declarations, checker, sourceFile.fileName, !!excludeLibFiles, rawItems);
+            getItemsFromNamedDeclaration(patternMatcher, name, declarations, checker, sourceFile.fileName, !!excludeLibFiles, singleCurrentFile, rawItems);
         });
     }
 
@@ -66,12 +66,22 @@ export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: 
 
 /**
  * Exclude 'node_modules/' files and standard library files if 'excludeLibFiles' is true.
+ * If we're in current file only mode, we don't exclude the current file, even if it is a library file.
  */
-function shouldExcludeFile(file: SourceFile, excludeLibFiles: boolean): boolean {
-    return excludeLibFiles && (isInsideNodeModules(file.path) || file.hasNoDefaultLib);
+function shouldExcludeFile(file: SourceFile, excludeLibFiles: boolean, singleCurrentFile: SourceFile | undefined): boolean {
+    return file !== singleCurrentFile && excludeLibFiles && (isInsideNodeModules(file.path) || file.hasNoDefaultLib);
 }
 
-function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: readonly Declaration[], checker: TypeChecker, fileName: string, excludeLibFiles: boolean, rawItems: RawNavigateToItem[]): void {
+function getItemsFromNamedDeclaration(
+    patternMatcher: PatternMatcher,
+    name: string,
+    declarations: readonly Declaration[],
+    checker: TypeChecker,
+    fileName: string,
+    excludeLibFiles: boolean,
+    singleCurrentFile: SourceFile | undefined,
+    rawItems: RawNavigateToItem[],
+): void {
     // First do a quick check to see if the name of the declaration matches the
     // last portion of the (possibly) dotted name they're searching for.
     const match = patternMatcher.getMatchForLastSegmentOfPattern(name);
@@ -80,7 +90,7 @@ function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: stri
     }
 
     for (const declaration of declarations) {
-        if (!shouldKeepItem(declaration, checker, excludeLibFiles)) continue;
+        if (!shouldKeepItem(declaration, checker, excludeLibFiles, singleCurrentFile)) continue;
 
         if (patternMatcher.patternContainsDots) {
             // If the pattern has dots in it, then also see if the declaration container matches as well.
@@ -95,7 +105,12 @@ function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: stri
     }
 }
 
-function shouldKeepItem(declaration: Declaration, checker: TypeChecker, excludeLibFiles: boolean): boolean {
+function shouldKeepItem(
+    declaration: Declaration,
+    checker: TypeChecker,
+    excludeLibFiles: boolean,
+    singleCurrentFile: SourceFile | undefined,
+): boolean {
     switch (declaration.kind) {
         case SyntaxKind.ImportClause:
         case SyntaxKind.ImportSpecifier:
@@ -103,7 +118,7 @@ function shouldKeepItem(declaration: Declaration, checker: TypeChecker, excludeL
             const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!)!; // TODO: GH#18217
             const imported = checker.getAliasedSymbol(importer);
             return importer.escapedName !== imported.escapedName
-                && !imported.declarations?.some(d => shouldExcludeFile(d.getSourceFile(), excludeLibFiles));
+                && !imported.declarations?.every(d => shouldExcludeFile(d.getSourceFile(), excludeLibFiles, singleCurrentFile));
         default:
             return true;
     }
