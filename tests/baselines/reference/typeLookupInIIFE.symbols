@@ -1,9 +1,0 @@
-=== tests/cases/conformance/salsa/a.js ===
-// #22973
-var ns = (function() {})();
->ns : Symbol(ns, Decl(a.js, 1, 3))
-
-/** @type {ns.NotFound} */
-var crash;
->crash : Symbol(crash, Decl(a.js, 3, 3))
-

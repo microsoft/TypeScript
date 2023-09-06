@@ -1,6 +1,0 @@
-=== tests/cases/compiler/breakInIterationOrSwitchStatement1.ts ===
-while (true) {
->true : true
-
-  break;
-}

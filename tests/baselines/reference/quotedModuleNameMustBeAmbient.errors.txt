@@ -1,9 +1,0 @@
-tests/cases/compiler/quotedModuleNameMustBeAmbient.ts(1,8): error TS1035: Only ambient modules can use quoted names.
-
-
-==== tests/cases/compiler/quotedModuleNameMustBeAmbient.ts (1 errors) ====
-    module 'M' {}
-           ~~~
-!!! error TS1035: Only ambient modules can use quoted names.
-    
-    declare module 'M2' {}

@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/MethodSignatures/parserMethodSignature7.ts ===
-interface I {
->I : Symbol(I, Decl(parserMethodSignature7.ts, 0, 0))
-
-  "G"<T>();
->"G" : Symbol(I["G"], Decl(parserMethodSignature7.ts, 0, 13))
->T : Symbol(T, Decl(parserMethodSignature7.ts, 1, 6))
-}

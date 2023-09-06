@@ -1,3 +1,0 @@
-class Outer
-{
-static public

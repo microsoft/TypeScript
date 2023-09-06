@@ -1,8 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts(1,13): error TS1176: Interface declaration cannot have 'implements' clause.
-
-
-==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts (1 errors) ====
-    interface I implements A {
-                ~~~~~~~~~~
-!!! error TS1176: Interface declaration cannot have 'implements' clause.
-    }

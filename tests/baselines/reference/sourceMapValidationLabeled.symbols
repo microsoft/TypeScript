@@ -1,5 +1,0 @@
-=== tests/cases/compiler/sourceMapValidationLabeled.ts ===
-x:
-var b = 10;
->b : Symbol(b, Decl(sourceMapValidationLabeled.ts, 1, 3))
-

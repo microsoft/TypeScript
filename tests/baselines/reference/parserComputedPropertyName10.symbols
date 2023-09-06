@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName10.ts ===
-class C {
->C : Symbol(C, Decl(parserComputedPropertyName10.ts, 0, 0))
-
-   [e] = 1
->[e] : Symbol(C[e], Decl(parserComputedPropertyName10.ts, 0, 9))
-}

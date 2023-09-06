@@ -1,6 +1,0 @@
-=== tests/cases/compiler/modulePrologueAMD.ts ===
-"use strict";
-
-export class Foo {}
->Foo : Symbol(Foo, Decl(modulePrologueAMD.ts, 0, 13))
-

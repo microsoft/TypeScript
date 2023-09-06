@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolIndexer2.ts ===
-class C {
->C : C
-
-    [s: symbol]: string;
->s : symbol
-}

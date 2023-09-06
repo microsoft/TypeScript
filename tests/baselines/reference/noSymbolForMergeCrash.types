@@ -1,9 +1,0 @@
-=== tests/cases/compiler/initial.ts ===
-
-interface A { }
-namespace A {}
-
-=== tests/cases/compiler/final.ts ===
-type A = {}
->A : {}
-

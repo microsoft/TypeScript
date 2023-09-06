@@ -1,9 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInWhileES6.ts ===
-while (`abc${0}abc`) {
->`abc${0}abc` : string
->0 : 0
-
-    `def${1}def`;
->`def${1}def` : string
->1 : 1
-}

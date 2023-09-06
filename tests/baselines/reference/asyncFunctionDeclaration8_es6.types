@@ -1,8 +1,0 @@
-=== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration8_es6.ts ===
-var v = { [await]: foo }
->v : { [x: number]: any; }
->{ [await]: foo } : { [x: number]: any; }
->[await] : any
->await : any
->foo : any
-

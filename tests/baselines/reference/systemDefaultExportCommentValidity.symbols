@@ -1,8 +1,0 @@
-=== tests/cases/compiler/systemDefaultExportCommentValidity.ts ===
-const Home = {}
->Home : Symbol(Home, Decl(systemDefaultExportCommentValidity.ts, 0, 5))
-
-export default Home
->Home : Symbol(Home, Decl(systemDefaultExportCommentValidity.ts, 0, 5))
-
-// There is intentionally no semicolon on the prior line, this comment should not break emit

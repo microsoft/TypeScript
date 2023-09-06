@@ -1,7 +1,0 @@
-=== /src/projects/file1.ts ===
-import d = require("d.json"); // Should fail
->d : Symbol(d, Decl(file1.ts, 0, 0))
-
-import e = require("e"); // Should fail
->e : Symbol(e, Decl(file1.ts, 0, 29))
-

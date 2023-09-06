@@ -1,4 +1,0 @@
-=== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors3.ts ===
-(...) => 105;
-> : Symbol((Missing), Decl(fatarrowfunctionsOptionalArgsErrors3.ts, 0, 1))
-

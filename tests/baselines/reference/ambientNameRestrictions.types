@@ -1,8 +1,0 @@
-=== tests/cases/compiler/ambientNameRestrictions.ts ===
-export declare namespace Foo {
->Foo : typeof Foo
-
-  export var static: any;
->static : any
-}
-

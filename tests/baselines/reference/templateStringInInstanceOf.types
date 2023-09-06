@@ -1,8 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInInstanceOf.ts ===
-var x = `abc${ 0 }def` instanceof String;
->x : boolean
->`abc${ 0 }def` instanceof String : boolean
->`abc${ 0 }def` : string
->0 : 0
->String : StringConstructor
-

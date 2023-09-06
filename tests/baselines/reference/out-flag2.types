@@ -1,8 +1,0 @@
-=== tests/cases/compiler/a.ts ===
-class A { }
->A : A
-
-=== tests/cases/compiler/b.ts ===
-class B { }
->B : B
-

@@ -1,5 +1,0 @@
-=== /a.js ===
-/** @type {function(): number} */
-function f() {}
->f : () => number
-

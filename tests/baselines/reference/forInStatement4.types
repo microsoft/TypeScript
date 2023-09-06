@@ -1,8 +1,0 @@
-=== tests/cases/compiler/forInStatement4.ts ===
-var expr: any;
->expr : any
-
-for (var a: number in expr) {
->a : string
->expr : any
-}

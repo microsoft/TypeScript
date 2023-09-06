@@ -1,8 +1,0 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames46_ES6.ts ===
-var o = {
->o : Symbol(o, Decl(computedPropertyNames46_ES6.ts, 0, 3))
-
-    ["" || 0]: 0
->["" || 0] : Symbol(["" || 0], Decl(computedPropertyNames46_ES6.ts, 0, 9))
-
-};

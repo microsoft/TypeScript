@@ -1,7 +1,0 @@
-=== tests/cases/compiler/0.d.ts ===
-export = a;
->a : number
-
-declare var a: number;
->a : number
-

@@ -1,9 +1,0 @@
-=== tests/cases/conformance/types/tuple/wideningTuples3.ts ===
-var a: [any];
->a : Symbol(a, Decl(wideningTuples3.ts, 0, 3))
-
-var b = a = [undefined, null];
->b : Symbol(b, Decl(wideningTuples3.ts, 2, 3))
->a : Symbol(a, Decl(wideningTuples3.ts, 0, 3))
->undefined : Symbol(undefined)
-

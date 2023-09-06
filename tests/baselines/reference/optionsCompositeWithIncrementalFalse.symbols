@@ -1,4 +1,0 @@
-=== tests/cases/compiler/optionsCompositeWithIncrementalFalse.ts ===
-const x = "Hello World";
->x : Symbol(x, Decl(optionsCompositeWithIncrementalFalse.ts, 0, 5))
-

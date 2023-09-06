@@ -1,9 +1,0 @@
-=== tests/cases/compiler/dynamicImportTrailingComma.ts ===
-const path = './foo';
->path : "./foo"
->'./foo' : "./foo"
-
-import(path,);
->import(path,) : Promise<any>
->path : "./foo"
-

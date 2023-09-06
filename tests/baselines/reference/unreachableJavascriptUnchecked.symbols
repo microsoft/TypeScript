@@ -1,7 +1,0 @@
-=== tests/cases/compiler/unreachable.js ===
-function unreachable() {
->unreachable : Symbol(unreachable, Decl(unreachable.js, 0, 0))
-
-    return 1;
-    return 2;
-}

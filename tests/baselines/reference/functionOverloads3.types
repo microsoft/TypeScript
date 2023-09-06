@@ -1,4 +1,0 @@
-=== tests/cases/compiler/functionOverloads3.ts ===
-function foo():string;
->foo : () => string
-

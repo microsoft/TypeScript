@@ -1,8 +1,0 @@
-=== tests/cases/compiler/file1.ts ===
-export var x;
->x : Symbol(x, Decl(file1.ts, 0, 10))
-
-=== tests/cases/compiler/file2.ts ===
-var y;
->y : Symbol(y, Decl(file2.ts, 0, 3))
-

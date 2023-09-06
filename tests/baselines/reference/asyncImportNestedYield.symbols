@@ -1,6 +1,0 @@
-=== tests/cases/compiler/asyncImportNestedYield.ts ===
-async function* foo() {
->foo : Symbol(foo, Decl(asyncImportNestedYield.ts, 0, 0))
-
-    import((await import(yield "foo")).default);
-}

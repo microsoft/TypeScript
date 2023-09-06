@@ -1,9 +1,0 @@
-tests/cases/compiler/functionOverloadImplementationOfWrongName.ts(3,10): error TS2389: Function implementation name must be 'foo'.
-
-
-==== tests/cases/compiler/functionOverloadImplementationOfWrongName.ts (1 errors) ====
-    function foo(x);
-    function foo(x, y);
-    function bar() { }
-             ~~~
-!!! error TS2389: Function implementation name must be 'foo'.

@@ -1,8 +1,0 @@
-tests/cases/compiler/es6ExportAssignment.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-
-
-==== tests/cases/compiler/es6ExportAssignment.ts (1 errors) ====
-    var a = 10;
-    export = a;
-    ~~~~~~~~~~~
-!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

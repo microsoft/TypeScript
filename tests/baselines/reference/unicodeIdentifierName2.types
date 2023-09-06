@@ -1,8 +1,0 @@
-=== tests/cases/compiler/unicodeIdentifierName2.ts ===
-var a₁ = "hello"; alert(a₁)
->a : any
->"hello" : "hello"
->alert(a₁) : void
->alert : (message?: any) => void
->a : any
-

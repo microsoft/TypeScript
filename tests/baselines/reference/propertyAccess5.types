@@ -1,7 +1,0 @@
-=== tests/cases/compiler/propertyAccess5.ts ===
-undefined.toBAZ();
->undefined.toBAZ() : any
->undefined.toBAZ : any
->undefined : undefined
->toBAZ : any
-

@@ -1,4 +1,0 @@
-=== tests/cases/compiler/a.js ===
-class C implements D { }
->C : Symbol(C, Decl(a.js, 0, 0))
-

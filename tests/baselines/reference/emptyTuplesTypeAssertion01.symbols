@@ -1,8 +1,0 @@
-=== tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion01.ts ===
-let x = <[]>[];
->x : Symbol(x, Decl(emptyTuplesTypeAssertion01.ts, 0, 3))
-
-let y = x[0];
->y : Symbol(y, Decl(emptyTuplesTypeAssertion01.ts, 1, 3))
->x : Symbol(x, Decl(emptyTuplesTypeAssertion01.ts, 0, 3))
-

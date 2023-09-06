@@ -1,5 +1,0 @@
-=== tests/cases/compiler/typeCheckReturnExpression.ts ===
-var foo = () => undefined;
->foo : Symbol(foo, Decl(typeCheckReturnExpression.ts, 0, 3))
->undefined : Symbol(undefined)
-

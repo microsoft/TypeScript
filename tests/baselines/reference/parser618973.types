@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser618973.ts ===
-export export class Foo {
->Foo : Foo
-
-  public Bar() {
->Bar : () => void
-  }
-}

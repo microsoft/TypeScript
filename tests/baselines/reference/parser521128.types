@@ -1,6 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser521128.ts ===
-module.module { }
->module.module : any
->module : any
->module : any
-

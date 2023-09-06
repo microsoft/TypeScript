@@ -1,5 +1,0 @@
-=== tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers05.ts ===
-var { as } = { as: 1 }
->as : Symbol(as, Decl(objectBindingPatternKeywordIdentifiers05.ts, 0, 5))
->as : Symbol(as, Decl(objectBindingPatternKeywordIdentifiers05.ts, 0, 14))
-

@@ -1,8 +1,0 @@
-=== /a.ts ===
-import { x } from "foo/bar";
->x : number
-
-=== /node_modules/foo/bar/types.d.ts ===
-export const x: number;
->x : number
-

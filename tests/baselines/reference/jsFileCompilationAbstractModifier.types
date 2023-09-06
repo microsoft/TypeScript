@@ -1,7 +1,0 @@
-=== tests/cases/compiler/a.js ===
-abstract class c {
->c : c
-
-    abstract x;
->x : any
-}

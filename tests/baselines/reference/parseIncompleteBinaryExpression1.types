@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Expressions/parseIncompleteBinaryExpression1.ts ===
-var v = || b;
->v : any
->|| b : any
-> : any
->b : any
-

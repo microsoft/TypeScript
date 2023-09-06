@@ -1,7 +1,0 @@
-tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts(1,13): error TS2304: Cannot find name 'foo'.
-
-
-==== tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts (1 errors) ====
-    var v = { *[foo()]() { } }
-                ~~~
-!!! error TS2304: Cannot find name 'foo'.

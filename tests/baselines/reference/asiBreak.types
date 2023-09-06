@@ -1,4 +1,0 @@
-=== tests/cases/compiler/asiBreak.ts ===
-while (true) break
->true : true
-

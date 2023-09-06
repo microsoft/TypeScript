@@ -1,5 +1,0 @@
-=== tests/cases/compiler/systemModule1.ts ===
-export var x = 1;
->x : number
->1 : 1
-

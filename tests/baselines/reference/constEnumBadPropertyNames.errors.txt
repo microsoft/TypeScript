@@ -1,8 +1,0 @@
-tests/cases/compiler/constEnumBadPropertyNames.ts(2,11): error TS2339: Property 'B' does not exist on type 'typeof E'.
-
-
-==== tests/cases/compiler/constEnumBadPropertyNames.ts (1 errors) ====
-    const enum E { A }
-    var x = E["B"]
-              ~~~
-!!! error TS2339: Property 'B' does not exist on type 'typeof E'.

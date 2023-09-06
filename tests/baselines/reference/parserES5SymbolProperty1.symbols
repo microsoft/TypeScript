@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty1.ts ===
-interface I {
->I : Symbol(I, Decl(parserES5SymbolProperty1.ts, 0, 0))
-
-    [Symbol.iterator]: string;
->[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(parserES5SymbolProperty1.ts, 0, 13))
-}

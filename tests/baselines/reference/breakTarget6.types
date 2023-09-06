@@ -1,7 +1,0 @@
-=== tests/cases/compiler/breakTarget6.ts ===
-while (true) {
->true : true
-
-  break target;
->target : any
-}

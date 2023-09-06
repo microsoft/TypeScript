@@ -1,5 +1,0 @@
-=== tests/cases/compiler/es5-commonjs6.ts ===
-export default "test";
-var __esModule = 1;
->__esModule : Symbol(__esModule, Decl(es5-commonjs6.ts, 1, 3))
-

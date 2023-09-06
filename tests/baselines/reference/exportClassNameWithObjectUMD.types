@@ -1,4 +1,0 @@
-=== tests/cases/conformance/externalModules/exportClassNameWithObjectUMD.ts ===
-export class Object {}
->Object : Object
-

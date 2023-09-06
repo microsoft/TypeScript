@@ -1,8 +1,0 @@
-=== tests/cases/compiler/methodInAmbientClass1.ts ===
-    declare class Foo {
->Foo : Foo
-
-    	fn(): boolean {
->fn : () => boolean
-    	}
-    }

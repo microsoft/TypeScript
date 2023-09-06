@@ -1,7 +1,0 @@
-tests/cases/compiler/undeclaredVarEmit.ts(1,4): error TS2693: 'number' only refers to a type, but is being used as a value here.
-
-
-==== tests/cases/compiler/undeclaredVarEmit.ts (1 errors) ====
-    f: number;
-       ~~~~~~
-!!! error TS2693: 'number' only refers to a type, but is being used as a value here.

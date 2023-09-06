@@ -1,3 +1,0 @@
-interface Foo{
-    public biz;
-}

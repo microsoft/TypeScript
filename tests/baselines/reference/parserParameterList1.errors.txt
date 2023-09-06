@@ -1,9 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList1.ts(2,6): error TS1014: A rest parameter must be last in a parameter list.
-
-
-==== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList1.ts (1 errors) ====
-    class C {
-       F(...A, B) { }
-         ~~~
-!!! error TS1014: A rest parameter must be last in a parameter list.
-    }

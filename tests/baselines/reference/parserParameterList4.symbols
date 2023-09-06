@@ -1,5 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList4.ts ===
-function F(public A) {
->F : Symbol(F, Decl(parserParameterList4.ts, 0, 0))
->A : Symbol(A, Decl(parserParameterList4.ts, 0, 11))
-}

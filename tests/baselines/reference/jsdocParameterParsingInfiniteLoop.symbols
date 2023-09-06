@@ -1,8 +1,0 @@
-=== tests/cases/compiler/example.js ===
-// @ts-check
-/**
- * @type {function(@foo)}
- */
-let x;
->x : Symbol(x, Decl(example.js, 4, 3))
-

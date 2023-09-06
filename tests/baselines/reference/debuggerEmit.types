@@ -1,9 +1,0 @@
-=== tests/cases/compiler/debuggerEmit.ts ===
-var x = function () { debugger; }
->x : () => void
->function () { debugger; } : () => void
-
-x();
->x() : void
->x : () => void
-

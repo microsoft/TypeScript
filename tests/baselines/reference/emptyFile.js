@@ -1,4 +1,0 @@
-//// [emptyFile.ts]
-
-
-//// [emptyFile.js]

@@ -1,4 +1,0 @@
-=== tests/cases/compiler/a.ts ===
-export { undefined };
->undefined : undefined
-

@@ -1,8 +1,0 @@
-=== tests/cases/compiler/ExportAssignment7.ts ===
-export class C {
->C : C
-}
-
-export = B;
->B : any
-

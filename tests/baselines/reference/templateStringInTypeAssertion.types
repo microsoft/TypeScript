@@ -1,7 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInTypeAssertion.ts ===
-var x = <any>`abc${ 123 }def`;
->x : any
-><any>`abc${ 123 }def` : any
->`abc${ 123 }def` : string
->123 : 123
-

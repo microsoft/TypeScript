@@ -1,4 +1,0 @@
-=== tests/cases/compiler/ClassDeclaration24.ts ===
-class any {
->any : any
-}

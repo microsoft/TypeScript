@@ -1,8 +1,0 @@
-=== tests/cases/compiler/a.js ===
-class C {
->C : Symbol(C, Decl(a.js, 0, 0))
-
-    public foo() {
->foo : Symbol(C.foo, Decl(a.js, 0, 9))
-    }
-}

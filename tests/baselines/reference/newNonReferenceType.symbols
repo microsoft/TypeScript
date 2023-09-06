@@ -1,7 +1,0 @@
-=== tests/cases/compiler/newNonReferenceType.ts ===
-var a = new any();
->a : Symbol(a, Decl(newNonReferenceType.ts, 0, 3))
-
-var b = new boolean(); // error
->b : Symbol(b, Decl(newNonReferenceType.ts, 1, 3))
-

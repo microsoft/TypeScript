@@ -1,7 +1,0 @@
-=== tests/cases/compiler/assignmentToParenthesizedExpression1.ts ===
-var x;
->x : Symbol(x, Decl(assignmentToParenthesizedExpression1.ts, 0, 3))
-
-(1, x)=0;
->x : Symbol(x, Decl(assignmentToParenthesizedExpression1.ts, 0, 3))
-

@@ -1,9 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic6.ts(3,14): error TS1005: '}' expected.
-
-
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic6.ts (1 errors) ====
-    class Outer
-    {
-    static public
-                 
-!!! error TS1005: '}' expected.

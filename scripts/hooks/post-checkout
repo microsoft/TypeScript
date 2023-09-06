@@ -1,2 +1,0 @@
-#!/bin/sh
-npm run npx hereby -- generate-diagnostics

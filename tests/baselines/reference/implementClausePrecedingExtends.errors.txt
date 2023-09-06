@@ -1,8 +1,0 @@
-tests/cases/compiler/implementClausePrecedingExtends.ts(2,22): error TS1173: 'extends' clause must precede 'implements' clause.
-
-
-==== tests/cases/compiler/implementClausePrecedingExtends.ts (1 errors) ====
-    class C { foo: number }
-    class D implements C extends C { }
-                         ~~~~~~~
-!!! error TS1173: 'extends' clause must precede 'implements' clause.

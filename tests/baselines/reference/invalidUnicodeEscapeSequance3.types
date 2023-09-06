@@ -1,5 +1,0 @@
-=== tests/cases/compiler/invalidUnicodeEscapeSequance3.ts ===
-a\u
->a : any
->u : any
-

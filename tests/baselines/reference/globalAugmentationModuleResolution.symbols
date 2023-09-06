@@ -1,9 +1,0 @@
-=== tests/cases/conformance/externalModules/a.ts ===
-export { };
-
-declare global {
->global : Symbol(global, Decl(a.ts, 0, 11))
-
-  var x: number;
->x : Symbol(x, Decl(a.ts, 3, 5))
-}

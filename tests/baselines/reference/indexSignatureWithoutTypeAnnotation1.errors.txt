@@ -1,9 +1,0 @@
-tests/cases/compiler/indexSignatureWithoutTypeAnnotation1.ts(2,3): error TS1021: An index signature must have a type annotation.
-
-
-==== tests/cases/compiler/indexSignatureWithoutTypeAnnotation1.ts (1 errors) ====
-    class C {
-      [a: number];
-      ~~~~~~~~~~~~
-!!! error TS1021: An index signature must have a type annotation.
-    }

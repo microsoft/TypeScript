@@ -1,9 +1,0 @@
-tests/cases/conformance/externalModules/vs/foo_0.ts(2,22): error TS1141: String literal expected.
-
-
-==== tests/cases/conformance/externalModules/vs/foo_0.ts (1 errors) ====
-    var x = "filename";
-    import foo = require(x); // invalid
-                         ~
-!!! error TS1141: String literal expected.
-    

@@ -1,5 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement1.d.ts ===
-for (var i in e) {
->i : string
->e : any
-}

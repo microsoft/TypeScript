@@ -1,6 +1,0 @@
-=== tests/cases/compiler/objectLiteralMemberWithoutBlock1.ts ===
-var v = { foo(); }
->v : { foo(): any; }
->{ foo(); } : { foo(): any; }
->foo : () => any
-

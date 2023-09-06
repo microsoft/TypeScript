@@ -1,4 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringControlCharacterEscapes02.ts ===
-var x = `\x19\u0019 19`;
->x : Symbol(x, Decl(templateStringControlCharacterEscapes02.ts, 0, 3))
-

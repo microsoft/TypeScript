@@ -1,6 +1,0 @@
-=== tests/cases/compiler/alwaysStrictModule4.ts ===
-// Module commonjs
-export const a = 1
->a : 1
->1 : 1
-

@@ -1,5 +1,0 @@
-=== /src/a.js ===
-0 as number;
-var v = <string>undefined;
->v : Symbol(v, Decl(a.js, 1, 3))
-

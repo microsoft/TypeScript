@@ -1,9 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakInIterationOrSwitchStatement4.ts(1,15): error TS2304: Cannot find name 'something'.
-
-
-==== tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakInIterationOrSwitchStatement4.ts (1 errors) ====
-    for (var i in something) {
-                  ~~~~~~~~~
-!!! error TS2304: Cannot find name 'something'.
-      break;
-    }

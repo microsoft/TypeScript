@@ -1,6 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedArrowFunctionES6.ts ===
-var x = `abc${ x => x }def`;
->x : Symbol(x, Decl(templateStringWithEmbeddedArrowFunctionES6.ts, 0, 3))
->x : Symbol(x, Decl(templateStringWithEmbeddedArrowFunctionES6.ts, 0, 14))
->x : Symbol(x, Decl(templateStringWithEmbeddedArrowFunctionES6.ts, 0, 14))
-

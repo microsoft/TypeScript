@@ -1,7 +1,0 @@
-error TS5069: Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or option 'composite'.
-
-
-!!! error TS5069: Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or option 'composite'.
-==== tests/cases/compiler/optionsTsBuildInfoFileWithoutIncrementalAndComposite.ts (0 errors) ====
-    const x = "Hello World";
-    

@@ -1,5 +1,0 @@
-=== tests/cases/compiler/fromAsIdentifier2.ts ===
-"use strict";
-var from;
->from : Symbol(from, Decl(fromAsIdentifier2.ts, 1, 3))
-

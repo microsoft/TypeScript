@@ -1,9 +1,0 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignedToUndefined.ts ===
-var x = undefined = null; // error
->x : Symbol(x, Decl(nullAssignedToUndefined.ts, 0, 3))
->undefined : Symbol(undefined)
-
-var y: typeof undefined = null; // ok, widened
->y : Symbol(y, Decl(nullAssignedToUndefined.ts, 1, 3))
->undefined : Symbol(undefined)
-

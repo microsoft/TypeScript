@@ -1,9 +1,0 @@
-=== tests/cases/conformance/es6/destructuring/declarationWithNoInitializer.ts ===
-var [a, b];          // Error, no initializer
->a : any
->b : any
-
-var {c, d};          // Error, no initializer
->c : any
->d : any
-

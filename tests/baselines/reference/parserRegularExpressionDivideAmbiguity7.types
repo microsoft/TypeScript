@@ -1,9 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity7.ts ===
-(a/8
->(a/8 ) : number
->a/8 : number
->a : any
->8 : 8
-
- ){}
-

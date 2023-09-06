@@ -1,9 +1,0 @@
-=== tests/cases/conformance/types/tuple/tupleElementTypes4.ts ===
-function f([a, b] = [0, undefined]) { }
->f : ([a, b]?: [number, any]) => void
->a : number
->b : any
->[0, undefined] : [number, undefined]
->0 : 0
->undefined : undefined
-

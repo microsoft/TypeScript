@@ -1,8 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement14.ts(1,20): error TS2304: Cannot find name 'X'.
-
-
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement14.ts (1 errors) ====
-    for (let [a, b] of X) {
-                       ~
-!!! error TS2304: Cannot find name 'X'.
-    }

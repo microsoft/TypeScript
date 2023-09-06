@@ -1,9 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration16.ts(2,8): error TS1052: A 'set' accessor parameter cannot have an initializer.
-
-
-==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration16.ts (1 errors) ====
-    class C {
-       set Foo(a = 1) { }
-           ~~~
-!!! error TS1052: A 'set' accessor parameter cannot have an initializer.
-    }

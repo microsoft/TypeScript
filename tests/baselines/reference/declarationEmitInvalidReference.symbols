@@ -1,5 +1,0 @@
-=== tests/cases/compiler/declarationEmitInvalidReference.ts ===
-/// <reference path="invalid.ts" />
-var x = 0;
->x : Symbol(x, Decl(declarationEmitInvalidReference.ts, 1, 3))
-

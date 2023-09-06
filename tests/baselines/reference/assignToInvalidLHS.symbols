@@ -1,9 +1,0 @@
-=== tests/cases/compiler/assignToInvalidLHS.ts ===
-declare var y:any;
->y : Symbol(y, Decl(assignToInvalidLHS.ts, 0, 11))
-
-// Below is actually valid JavaScript (see http://es5.github.com/#x8.7 ), even though will always fail at runtime with 'invalid left-hand side'
-var x = new y = 5;
->x : Symbol(x, Decl(assignToInvalidLHS.ts, 3, 3))
->y : Symbol(y, Decl(assignToInvalidLHS.ts, 0, 11))
-

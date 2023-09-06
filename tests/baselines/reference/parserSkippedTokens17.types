@@ -1,6 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens17.ts ===
-foo(a, \
->foo(a, \ : any
->foo : any
->a : any
-

@@ -1,4 +1,0 @@
-=== tests/cases/conformance/async/es6/asyncModule_es6.ts ===
-async module M {   
->M : Symbol(M, Decl(asyncModule_es6.ts, 0, 0))
-}

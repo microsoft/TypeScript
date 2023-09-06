@@ -1,4 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList11.ts ===
-(...arg?) => 102;
->arg : Symbol(arg, Decl(parserParameterList11.ts, 0, 1))
-

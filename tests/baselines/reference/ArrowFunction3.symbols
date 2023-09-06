@@ -1,5 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/ArrowFunction3.ts ===
-var v = (a): => {
->v : Symbol(v, Decl(ArrowFunction3.ts, 0, 3))
-   
-};

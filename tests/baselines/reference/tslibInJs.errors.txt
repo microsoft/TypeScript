@@ -1,8 +1,0 @@
-tests/cases/compiler/main.js(2,25): error TS2307: Cannot find module 'bar' or its corresponding type declarations.
-
-
-==== tests/cases/compiler/main.js (1 errors) ====
-    "use strict";
-    const { foo } = require("bar");
-                            ~~~~~
-!!! error TS2307: Cannot find module 'bar' or its corresponding type declarations.

@@ -1,5 +1,0 @@
-=== tests/cases/compiler/restArgMissingName.ts ===
-function sum (...) {} 
->sum : (...: any[]) => void
-> : any[]
-

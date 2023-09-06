@@ -1,7 +1,0 @@
-=== tests/cases/compiler/classExpressionWithStaticPropertiesES64.ts ===
-(class { static x = 0; });
->(class { static x = 0; }) : typeof (Anonymous class)
->class { static x = 0; } : typeof (Anonymous class)
->x : number
->0 : 0
-

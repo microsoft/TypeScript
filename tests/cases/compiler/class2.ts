@@ -1,1 +1,0 @@
-class foo { constructor() { static f = 3; } }

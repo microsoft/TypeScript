@@ -1,7 +1,0 @@
-=== tests/cases/compiler/enumWithQuotedElementName2.ts ===
-enum E {
->E : Symbol(E, Decl(enumWithQuotedElementName2.ts, 0, 0))
-
-   "fo'o",
->"fo'o" : Symbol(E["fo'o"], Decl(enumWithQuotedElementName2.ts, 0, 8))
-}

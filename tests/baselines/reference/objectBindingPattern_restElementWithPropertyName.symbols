@@ -1,4 +1,0 @@
-=== tests/cases/compiler/objectBindingPattern_restElementWithPropertyName.ts ===
-const { ...a: b } = {};
->b : Symbol(b, Decl(objectBindingPattern_restElementWithPropertyName.ts, 0, 7))
-

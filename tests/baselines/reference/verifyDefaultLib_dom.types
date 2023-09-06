@@ -1,4 +1,0 @@
-=== tests/cases/compiler/verifyDefaultLib_dom.ts ===
-var x: HTMLElement;
->x : HTMLElement
-

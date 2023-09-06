@@ -1,4 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInTypeOfES6.ts ===
-var x = typeof `abc${ 123 }def`;
->x : Symbol(x, Decl(templateStringInTypeOfES6.ts, 0, 3))
-

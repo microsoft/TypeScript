@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty9.ts ===
-var x: {
->x : Symbol(x, Decl(parserES5SymbolProperty9.ts, 0, 3))
-
-    [Symbol.toPrimitive]: string
->[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(parserES5SymbolProperty9.ts, 0, 8))
-}

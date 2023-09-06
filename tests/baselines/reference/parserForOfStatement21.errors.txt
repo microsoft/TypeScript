@@ -1,7 +1,0 @@
-tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement21.ts(1,9): error TS1123: Variable declaration list cannot be empty.
-
-
-==== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement21.ts (1 errors) ====
-    for (var of of) { }
-            
-!!! error TS1123: Variable declaration list cannot be empty.

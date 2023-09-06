@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueLabel.ts ===
-label1: for(var i = 0; i < 1; i++) {
->i : Symbol(i, Decl(parser_continueLabel.ts, 0, 15))
->i : Symbol(i, Decl(parser_continueLabel.ts, 0, 15))
->i : Symbol(i, Decl(parser_continueLabel.ts, 0, 15))
-
-    continue label1;
-}

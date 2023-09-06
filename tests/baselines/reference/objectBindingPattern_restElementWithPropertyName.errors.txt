@@ -1,8 +1,0 @@
-tests/cases/compiler/objectBindingPattern_restElementWithPropertyName.ts(1,15): error TS2566: A rest element cannot have a property name.
-
-
-==== tests/cases/compiler/objectBindingPattern_restElementWithPropertyName.ts (1 errors) ====
-    const { ...a: b } = {};
-                  ~
-!!! error TS2566: A rest element cannot have a property name.
-    

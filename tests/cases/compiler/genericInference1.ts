@@ -1,1 +1,0 @@
-['a', 'b', 'c'].map(x => x.length);

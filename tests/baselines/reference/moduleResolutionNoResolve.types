@@ -1,9 +1,0 @@
-=== tests/cases/compiler/a.ts ===
-import a = require('./b');
->a : typeof a
-
-=== tests/cases/compiler/b.ts ===
-export var c = '';
->c : string
->'' : ""
-

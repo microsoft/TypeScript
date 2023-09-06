@@ -1,4 +1,0 @@
-=== tests/cases/compiler/downlevelLetConst8.ts ===
-let a = 1
->a : Symbol(a, Decl(downlevelLetConst8.ts, 0, 3))
-

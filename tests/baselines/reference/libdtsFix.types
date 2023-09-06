@@ -1,6 +1,0 @@
-=== tests/cases/compiler/libdtsFix.ts ===
-interface HTMLElement {
-    type: string;
->type : string
-}
-

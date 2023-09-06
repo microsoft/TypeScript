@@ -1,9 +1,0 @@
-tests/cases/compiler/alwaysStrict.ts(2,9): error TS1100: Invalid use of 'arguments' in strict mode.
-
-
-==== tests/cases/compiler/alwaysStrict.ts (1 errors) ====
-    function f() {
-        var arguments = [];
-            ~~~~~~~~~
-!!! error TS1100: Invalid use of 'arguments' in strict mode.
-    }

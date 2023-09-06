@@ -1,4 +1,0 @@
-=== tests/cases/conformance/ambient/ambientShorthand_declarationEmit.ts ===
-declare module "foo";
->"foo" : any
-

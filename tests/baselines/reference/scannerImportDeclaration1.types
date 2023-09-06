@@ -1,6 +1,0 @@
-=== tests/cases/conformance/scanner/ecmascript5/scannerImportDeclaration1.ts ===
-import TypeScript = TypeScriptServices.TypeScript;
->TypeScript : any
->TypeScriptServices : any
->TypeScript : any
-

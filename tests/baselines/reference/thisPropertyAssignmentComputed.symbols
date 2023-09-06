@@ -1,4 +1,0 @@
-=== tests/cases/conformance/salsa/thisPropertyAssignmentComputed.js ===
-this["a" + "b"] = 0
->this : Symbol(globalThis)
-

@@ -1,9 +1,0 @@
-=== tests/cases/compiler/nameCollisionsInPropertyAssignments.ts ===
-var x = 1
->x : Symbol(x, Decl(nameCollisionsInPropertyAssignments.ts, 0, 3))
-
-var y = { x() { x++; } }; 
->y : Symbol(y, Decl(nameCollisionsInPropertyAssignments.ts, 1, 3))
->x : Symbol(x, Decl(nameCollisionsInPropertyAssignments.ts, 1, 9))
->x : Symbol(x, Decl(nameCollisionsInPropertyAssignments.ts, 0, 3))
-

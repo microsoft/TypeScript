@@ -1,6 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression2.ts ===
-++function(e) { }
->++function(e) { } : number
->function(e) { } : (e: any) => void
->e : any
-

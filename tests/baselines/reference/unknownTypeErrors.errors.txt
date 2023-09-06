@@ -1,7 +1,0 @@
-tests/cases/compiler/unknownTypeErrors.ts(1,10): error TS2304: Cannot find name 'Unknown'.
-
-
-==== tests/cases/compiler/unknownTypeErrors.ts (1 errors) ====
-    var foo: Unknown = 0;
-             ~~~~~~~
-!!! error TS2304: Cannot find name 'Unknown'.

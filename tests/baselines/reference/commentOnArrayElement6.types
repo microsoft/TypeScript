@@ -1,6 +1,0 @@
-=== tests/cases/compiler/commentOnArrayElement6.ts ===
-const array = [1, /* comment */];
->array : number[]
->[1, /* comment */] : number[]
->1 : 1
-

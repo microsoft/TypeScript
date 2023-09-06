@@ -1,5 +1,0 @@
-=== tests/cases/compiler/modifiersOnInterfaceIndexSignature1.ts ===
-interface I {
-  public [a: string]: number;
->a : string
-}

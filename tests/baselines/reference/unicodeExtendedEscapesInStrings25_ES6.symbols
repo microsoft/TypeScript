@@ -1,4 +1,0 @@
-=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings25_ES6.ts ===
-var x = "\u{00000000000067}
->x : Symbol(x, Decl(unicodeExtendedEscapesInStrings25_ES6.ts, 0, 3))
-

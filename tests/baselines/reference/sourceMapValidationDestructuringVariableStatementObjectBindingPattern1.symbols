@@ -1,5 +1,0 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts ===
-var {x} = { x: 20 };
->x : Symbol(x, Decl(sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts, 0, 5))
->x : Symbol(x, Decl(sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts, 0, 11))
-

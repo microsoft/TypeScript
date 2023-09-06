@@ -1,5 +1,0 @@
-=== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration2_es6.ts ===
-function f(await) {
->f : (await: any) => void
->await : any
-}

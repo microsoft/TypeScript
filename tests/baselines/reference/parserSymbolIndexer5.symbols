@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts ===
-var x = {
->x : Symbol(x, Decl(parserSymbolIndexer5.ts, 0, 3))
-
-    [s: symbol]: ""
->[s : Symbol([s, Decl(parserSymbolIndexer5.ts, 0, 9))
->"" : Symbol("", Decl(parserSymbolIndexer5.ts, 1, 16))
-}

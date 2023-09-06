@@ -1,7 +1,0 @@
-tests/cases/compiler/downlevelLetConst4.ts(1,7): error TS1155: 'const' declarations must be initialized.
-
-
-==== tests/cases/compiler/downlevelLetConst4.ts (1 errors) ====
-    const a: number
-          ~
-!!! error TS1155: 'const' declarations must be initialized.

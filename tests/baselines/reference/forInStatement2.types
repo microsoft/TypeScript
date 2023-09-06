@@ -1,8 +1,0 @@
-=== tests/cases/compiler/forInStatement2.ts ===
-var expr: number;
->expr : number
-
-for (var a in expr) {
->a : string
->expr : number
-}

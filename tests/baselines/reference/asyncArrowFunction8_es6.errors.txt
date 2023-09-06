@@ -1,9 +1,0 @@
-tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction8_es6.ts(2,19): error TS1109: Expression expected.
-
-
-==== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction8_es6.ts (1 errors) ====
-    var foo = async (): Promise<void> => {
-      var v = { [await]: foo }
-                      ~
-!!! error TS1109: Expression expected.
-    }

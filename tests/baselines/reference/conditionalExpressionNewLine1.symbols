@@ -1,4 +1,0 @@
-=== tests/cases/compiler/conditionalExpressionNewLine1.ts ===
-var v = a ? b : c;
->v : Symbol(v, Decl(conditionalExpressionNewLine1.ts, 0, 3))
-

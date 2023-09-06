@@ -1,8 +1,0 @@
-=== tests/cases/compiler/indexSignatureWithInitializer1.ts ===
-class C {
->C : C
-
-  [a: number = 1]: number;
->a : number
->1 : 1
-}

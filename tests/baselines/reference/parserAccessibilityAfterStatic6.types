@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic6.ts ===
-class Outer
->Outer : Outer
-{
-static public
->public : any
-

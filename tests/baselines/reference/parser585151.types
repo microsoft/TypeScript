@@ -1,9 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser585151.ts ===
-class Foo2 {
->Foo2 : Foo2
-
-  var icecream = "chocolate";
->icecream : string
->"chocolate" : "chocolate"
-}
-

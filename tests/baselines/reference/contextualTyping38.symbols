@@ -1,6 +1,0 @@
-=== tests/cases/compiler/contextualTyping38.ts ===
-var foo = <{ (): number; }> function(a) { return a };
->foo : Symbol(foo, Decl(contextualTyping38.ts, 0, 3))
->a : Symbol(a, Decl(contextualTyping38.ts, 0, 37))
->a : Symbol(a, Decl(contextualTyping38.ts, 0, 37))
-

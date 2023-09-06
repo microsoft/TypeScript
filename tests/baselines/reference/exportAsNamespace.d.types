@@ -1,9 +1,0 @@
-=== tests/cases/compiler/exportAsNamespace.d.ts ===
-// issue: https://github.com/Microsoft/TypeScript/issues/11545
-
-export var X;
->X : any
-
-export as namespace N
->N : typeof import("tests/cases/compiler/exportAsNamespace")
-

@@ -1,9 +1,0 @@
-tests/cases/compiler/unusedModuleInModule.ts(2,12): error TS6133: 'B' is declared but its value is never read.
-
-
-==== tests/cases/compiler/unusedModuleInModule.ts (1 errors) ====
-    module A {
-        module B {}
-               ~
-!!! error TS6133: 'B' is declared but its value is never read.
-    }

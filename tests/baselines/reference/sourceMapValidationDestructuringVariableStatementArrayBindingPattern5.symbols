@@ -1,8 +1,0 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern5.ts ===
-var [x] = [1, 2];
->x : Symbol(x, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern5.ts, 0, 5))
-
-var [y, z] = [1, 2];
->y : Symbol(y, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern5.ts, 1, 5))
->z : Symbol(z, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern5.ts, 1, 7))
-

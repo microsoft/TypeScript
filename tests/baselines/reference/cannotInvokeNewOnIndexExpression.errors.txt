@@ -1,7 +1,0 @@
-tests/cases/compiler/cannotInvokeNewOnIndexExpression.ts(1,23): error TS2693: 'any' only refers to a type, but is being used as a value here.
-
-
-==== tests/cases/compiler/cannotInvokeNewOnIndexExpression.ts (1 errors) ====
-    var test: any[] = new any[1];
-                          ~~~
-!!! error TS2693: 'any' only refers to a type, but is being used as a value here.

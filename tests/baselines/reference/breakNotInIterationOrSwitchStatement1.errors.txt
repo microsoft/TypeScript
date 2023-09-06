@@ -1,7 +1,0 @@
-tests/cases/compiler/breakNotInIterationOrSwitchStatement1.ts(1,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
-
-
-==== tests/cases/compiler/breakNotInIterationOrSwitchStatement1.ts (1 errors) ====
-    break;
-    ~~~~~~
-!!! error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.

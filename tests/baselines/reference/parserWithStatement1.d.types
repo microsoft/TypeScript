@@ -1,4 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement1.d.ts ===
-with (foo) {
->foo : any
-}

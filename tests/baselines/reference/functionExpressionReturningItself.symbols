@@ -1,6 +1,0 @@
-=== tests/cases/compiler/functionExpressionReturningItself.ts ===
-var x = function somefn() { return somefn; };
->x : Symbol(x, Decl(functionExpressionReturningItself.ts, 0, 3))
->somefn : Symbol(somefn, Decl(functionExpressionReturningItself.ts, 0, 7))
->somefn : Symbol(somefn, Decl(functionExpressionReturningItself.ts, 0, 7))
-

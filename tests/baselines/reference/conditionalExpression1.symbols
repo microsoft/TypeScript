@@ -1,4 +1,0 @@
-=== tests/cases/compiler/conditionalExpression1.ts ===
-var x: boolean = (true ? 1 : ""); // should be an error
->x : Symbol(x, Decl(conditionalExpression1.ts, 0, 3))
-

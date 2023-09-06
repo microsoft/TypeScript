@@ -1,9 +1,0 @@
-=== tests/cases/compiler/contextualTyping3.ts ===
-class foo { public bar:{id:number;} = {id:5}; }
->foo : foo
->bar : { id: number; }
->id : number
->{id:5} : { id: number; }
->id : number
->5 : 5
-

@@ -1,6 +1,0 @@
-=== /a.js ===
-/** @param {string} colour */
-function f(color) {}
->f : Symbol(f, Decl(a.js, 0, 0))
->color : Symbol(color, Decl(a.js, 1, 11))
-

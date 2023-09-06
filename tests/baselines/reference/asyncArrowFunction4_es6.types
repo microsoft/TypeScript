@@ -1,5 +1,0 @@
-=== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction4_es6.ts ===
-var await = () => {
->await : () => void
->() => {} : () => void
-}

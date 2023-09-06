@@ -1,6 +1,0 @@
-=== tests/cases/compiler/declarationEmitDefaultExport5.ts ===
-export default 1 + 2;
->1 + 2 : number
->1 : 1
->2 : 2
-

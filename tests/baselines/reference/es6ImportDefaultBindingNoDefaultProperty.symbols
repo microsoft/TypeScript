@@ -1,8 +1,0 @@
-=== tests/cases/compiler/es6ImportDefaultBindingNoDefaultProperty_0.ts ===
-export var a = 10;
->a : Symbol(a, Decl(es6ImportDefaultBindingNoDefaultProperty_0.ts, 0, 10))
-
-=== tests/cases/compiler/es6ImportDefaultBindingNoDefaultProperty_1.ts ===
-import defaultBinding from "./es6ImportDefaultBindingNoDefaultProperty_0";
->defaultBinding : Symbol(defaultBinding, Decl(es6ImportDefaultBindingNoDefaultProperty_1.ts, 0, 6))
-

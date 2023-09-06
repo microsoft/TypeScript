@@ -1,9 +1,0 @@
-=== tests/cases/conformance/es7/trailingCommasInGetter.ts ===
-class X {
->X : X
-
-    get x(,) { return 0; }
->x : number
->0 : 0
-}
-

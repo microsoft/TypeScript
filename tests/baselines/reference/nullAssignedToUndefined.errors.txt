@@ -1,8 +1,0 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignedToUndefined.ts(1,9): error TS2539: Cannot assign to 'undefined' because it is not a variable.
-
-
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignedToUndefined.ts (1 errors) ====
-    var x = undefined = null; // error
-            ~~~~~~~~~
-!!! error TS2539: Cannot assign to 'undefined' because it is not a variable.
-    var y: typeof undefined = null; // ok, widened

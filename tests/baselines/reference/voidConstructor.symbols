@@ -1,4 +1,0 @@
-=== tests/cases/compiler/voidConstructor.ts ===
-var foo:{ new ( ): void; }
->foo : Symbol(foo, Decl(voidConstructor.ts, 0, 3))
-

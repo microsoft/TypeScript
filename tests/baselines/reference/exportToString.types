@@ -1,8 +1,0 @@
-=== tests/cases/compiler/exportToString.ts ===
-const toString = 0;
->toString : 0
->0 : 0
-
-export { toString };
->toString : 0
-

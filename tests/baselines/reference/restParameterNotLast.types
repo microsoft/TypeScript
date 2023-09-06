@@ -1,6 +1,0 @@
-=== tests/cases/compiler/restParameterNotLast.ts ===
-function f(...x, y) { }
->f : (...x: any[], y: any) => void
->x : any[]
->y : any
-

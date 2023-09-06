@@ -1,7 +1,0 @@
-=== tests/cases/compiler/propertyAccess3.ts ===
-var foo: boolean;
->foo : Symbol(foo, Decl(propertyAccess3.ts, 0, 3))
-
-foo.toBAZ();
->foo : Symbol(foo, Decl(propertyAccess3.ts, 0, 3))
-

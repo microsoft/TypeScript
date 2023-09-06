@@ -1,5 +1,0 @@
-=== tests/cases/compiler/unterminatedRegexAtEndOfSource1.ts ===
-var a = /
->a : RegExp
->/ : RegExp
-

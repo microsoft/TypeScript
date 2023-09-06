@@ -1,7 +1,0 @@
-=== tests/cases/conformance/es6/destructuring/nonIterableRestElement2.ts ===
-var c = {};
->c : Symbol(c, Decl(nonIterableRestElement2.ts, 0, 3))
-
-[...c] = ["", 0];
->c : Symbol(c, Decl(nonIterableRestElement2.ts, 0, 3))
-

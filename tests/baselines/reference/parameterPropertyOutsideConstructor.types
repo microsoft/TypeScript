@@ -1,9 +1,0 @@
-=== tests/cases/compiler/parameterPropertyOutsideConstructor.ts ===
-class C {
->C : C
-
-    foo(public x) {
->foo : (x: any) => void
->x : any
-    }
-}

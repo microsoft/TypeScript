@@ -1,9 +1,0 @@
-tests/cases/compiler/typeofUnknownSymbol.ts(2,16): error TS2304: Cannot find name 'whatsthis'.
-
-
-==== tests/cases/compiler/typeofUnknownSymbol.ts (1 errors) ====
-    // previously gave no error here
-    var x = typeof whatsthis
-                   ~~~~~~~~~
-!!! error TS2304: Cannot find name 'whatsthis'.
-    

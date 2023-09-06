@@ -1,4 +1,0 @@
-=== tests/cases/compiler/declarationEmitDefaultExport1.ts ===
-export default class C {
->C : C
-}

@@ -1,9 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts ===
-var export;
-var foo;
->foo : Symbol(foo, Decl(parserInvalidIdentifiersInVariableStatements1.ts, 1, 3))
-
-var class;
-var bar;
->bar : Symbol(bar, Decl(parserInvalidIdentifiersInVariableStatements1.ts, 3, 3))
-

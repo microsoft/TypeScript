@@ -1,1 +1,0 @@
-function f() => 4;

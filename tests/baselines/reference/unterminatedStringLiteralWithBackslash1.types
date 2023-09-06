@@ -1,4 +1,0 @@
-=== tests/cases/compiler/unterminatedStringLiteralWithBackslash1.ts ===
-"\
->"\ : ""
-

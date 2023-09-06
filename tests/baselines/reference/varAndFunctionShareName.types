@@ -1,7 +1,0 @@
-=== tests/cases/compiler/varAndFunctionShareName.ts ===
-var myFn;
->myFn : any
-
-function myFn(): any { }
->myFn : () => any
-

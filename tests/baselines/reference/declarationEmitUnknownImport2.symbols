@@ -1,7 +1,0 @@
-=== tests/cases/compiler/declarationEmitUnknownImport2.ts ===
-import Foo From './Foo'; // Syntax error
->Foo : Symbol(Foo, Decl(declarationEmitUnknownImport2.ts, 0, 0))
-
-export default Foo
->Foo : Symbol(Foo, Decl(declarationEmitUnknownImport2.ts, 0, 0))
-

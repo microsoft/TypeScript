@@ -1,8 +1,0 @@
-=== tests/cases/compiler/functionOverloads4.ts ===
-function foo():number;
->foo : () => number
-
-function foo():string { return "a" }
->foo : () => number
->"a" : "a"
-

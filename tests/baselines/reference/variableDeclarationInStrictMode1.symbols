@@ -1,5 +1,0 @@
-=== tests/cases/compiler/variableDeclarationInStrictMode1.ts ===
-"use strict";
-var eval;
->eval : Symbol(eval, Decl(variableDeclarationInStrictMode1.ts, 1, 3))
-

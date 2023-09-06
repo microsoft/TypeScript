@@ -1,4 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInParentheses.ts ===
-var x = (`abc${0}abc`);
->x : Symbol(x, Decl(templateStringInParentheses.ts, 0, 3))
-

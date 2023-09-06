@@ -1,4 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration3.ts ===
-class C implements A extends B {
->C : Symbol(C, Decl(parserClassDeclaration3.ts, 0, 0))
-}

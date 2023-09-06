@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment5.ts ===
-var greet = "hello";
->greet : Symbol(greet, Decl(parserShorthandPropertyAssignment5.ts, 0, 3))
-
-var obj = { greet? }; 
->obj : Symbol(obj, Decl(parserShorthandPropertyAssignment5.ts, 1, 3))
->greet : Symbol(greet, Decl(parserShorthandPropertyAssignment5.ts, 1, 11))
-

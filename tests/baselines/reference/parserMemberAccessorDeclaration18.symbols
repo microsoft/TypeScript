@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration18.ts ===
-class C {
->C : Symbol(C, Decl(parserMemberAccessorDeclaration18.ts, 0, 0))
-
-   set Foo(...a) { }
->Foo : Symbol(C.Foo, Decl(parserMemberAccessorDeclaration18.ts, 0, 9))
->a : Symbol(a, Decl(parserMemberAccessorDeclaration18.ts, 1, 11))
-}

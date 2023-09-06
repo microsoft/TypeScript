@@ -1,9 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInObjectLiteral.ts ===
-var x = {
->x : Symbol(x, Decl(templateStringInObjectLiteral.ts, 0, 3))
-
-    a: `abc${ 123 }def`,
->a : Symbol(a, Decl(templateStringInObjectLiteral.ts, 0, 9))
-
-    `b`: 321
-}

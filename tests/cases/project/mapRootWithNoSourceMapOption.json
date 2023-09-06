@@ -1,8 +1,0 @@
-{
-    "scenario": "Maproot is specified without specifying --sourcemap",
-    "projectRoot": "tests/cases/projects/outputdir_simple",
-    "inputFiles": [
-        "test.ts"
-    ],
-    "mapRoot": "../mapFiles"
-}

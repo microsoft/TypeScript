@@ -1,8 +1,0 @@
-=== /b.js ===
-class A {}
->A : Symbol(A, Decl(b.js, 0, 0))
-
-/** @augments A */
-function b() {}
->b : Symbol(b, Decl(b.js, 0, 10))
-

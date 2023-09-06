@@ -1,4 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken2.ts ===
-/ b;
->/ b; : RegExp
-

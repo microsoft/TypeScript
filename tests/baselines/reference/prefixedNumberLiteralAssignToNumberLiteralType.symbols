@@ -1,7 +1,0 @@
-=== tests/cases/compiler/prefixedNumberLiteralAssignToNumberLiteralType.ts ===
-let x: 1 = +1;
->x : Symbol(x, Decl(prefixedNumberLiteralAssignToNumberLiteralType.ts, 0, 3))
-
-let y: -1 = -1;
->y : Symbol(y, Decl(prefixedNumberLiteralAssignToNumberLiteralType.ts, 2, 3))
-

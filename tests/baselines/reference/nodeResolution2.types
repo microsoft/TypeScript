@@ -1,8 +1,0 @@
-=== tests/cases/compiler/b.ts ===
-import y = require("a");
->y : typeof y
-
-=== tests/cases/compiler/node_modules/a.d.ts ===
-export var x: number;
->x : number
-

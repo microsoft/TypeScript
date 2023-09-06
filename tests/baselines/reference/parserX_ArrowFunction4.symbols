@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction4.ts ===
-var v = (a, b) => {
->v : Symbol(v, Decl(parserX_ArrowFunction4.ts, 0, 3))
->a : Symbol(a, Decl(parserX_ArrowFunction4.ts, 0, 9))
->b : Symbol(b, Decl(parserX_ArrowFunction4.ts, 0, 11))
-   
-};

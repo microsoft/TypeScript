@@ -1,5 +1,0 @@
-=== tests/cases/compiler/noSubstitutionTemplateStringLiteralTypes.ts ===
-const x: `foo` = "foo";
->x : "foo"
->"foo" : "foo"
-

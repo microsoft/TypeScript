@@ -1,9 +1,0 @@
-=== tests/cases/compiler/a.ts ===
-class c {
->c : Symbol(c, Decl(a.ts, 0, 0))
-}
-
-=== tests/cases/compiler/a.d.ts ===
-declare function isC(): boolean;
->isC : Symbol(isC, Decl(a.d.ts, 0, 0))
-

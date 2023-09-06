@@ -1,7 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity8.ts(1,9): error TS1109: Expression expected.
-
-
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity8.ts (1 errors) ====
-    1 >>/**/> 2;
-            ~
-!!! error TS1109: Expression expected.

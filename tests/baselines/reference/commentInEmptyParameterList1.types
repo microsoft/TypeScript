@@ -1,4 +1,0 @@
-=== tests/cases/compiler/commentInEmptyParameterList1.ts ===
-function foo(/** nothing */) {
->foo : () => void
-}

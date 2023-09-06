@@ -1,4 +1,0 @@
-=== tests/cases/compiler/cannotInvokeNewOnIndexExpression.ts ===
-var test: any[] = new any[1];
->test : Symbol(test, Decl(cannotInvokeNewOnIndexExpression.ts, 0, 3))
-

@@ -1,7 +1,0 @@
-=== tests/cases/conformance/async/es6/asyncConstructor_es6.ts ===
-class C {  
->C : C
-
-  async constructor() {    
-  }
-}

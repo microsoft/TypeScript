@@ -1,7 +1,0 @@
-=== tests/cases/compiler/functionCall15.ts ===
-function foo(a?:string, b?:number, ...b:number[]){}
->foo : (a?: string, b?: number, ...b: number[]) => void
->a : string
->b : number
->b : number[]
-

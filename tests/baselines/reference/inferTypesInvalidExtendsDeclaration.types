@@ -1,4 +1,0 @@
-=== tests/cases/conformance/types/conditional/inferTypesInvalidExtendsDeclaration.ts ===
-type Test<T> = T extends infer A extends B ? number : string;
->Test : Test<T>
-

@@ -1,6 +1,0 @@
-=== tests/cases/conformance/es6/functionExpressions/FunctionExpression2_es6.ts ===
-var v = function * foo() { }
->v : () => Generator<never, void, unknown>
->function * foo() { } : () => Generator<never, void, unknown>
->foo : () => Generator<never, void, unknown>
-

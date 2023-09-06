@@ -1,5 +1,0 @@
-=== tests/cases/compiler/varArgWithNoParamName.ts ===
-function t1(...) {}
->t1 : (...: any[]) => void
-> : any[]
-

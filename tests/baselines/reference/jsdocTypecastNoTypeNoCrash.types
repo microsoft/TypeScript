@@ -1,9 +1,0 @@
-=== tests/cases/compiler/index.js ===
-function Foo() {}
->Foo : () => void
-
-const a = /* @type string */(Foo);
->a : () => void
->(Foo) : () => void
->Foo : () => void
-

@@ -1,4 +1,0 @@
-=== tests/cases/compiler/genericNumberIndex.ts ===
-type X<I extends number> = ['a'][I];
->X : X<I>
-

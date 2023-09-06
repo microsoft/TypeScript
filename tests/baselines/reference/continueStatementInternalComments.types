@@ -1,7 +1,0 @@
-=== tests/cases/compiler/continueStatementInternalComments.ts ===
-foo: for (;;) {
->foo : any
-
-    /*1*/ continue /*2*/ foo /*3*/;
->foo : any
-}

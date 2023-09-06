@@ -1,4 +1,0 @@
-=== tests/cases/compiler/a.js ===
-var v: () => number;
->v : () => number
-

@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration8.ts ===
-declare module M {
->M : typeof M
-
-   function foo();
->foo : () => any
-}

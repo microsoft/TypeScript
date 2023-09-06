@@ -1,4 +1,0 @@
-=== tests/cases/compiler/slashBeforeVariableDeclaration1.ts ===
-\ declare var v;
->v : any
-

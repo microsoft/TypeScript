@@ -1,5 +1,0 @@
-=== tests/cases/compiler/exportTwoInterfacesWithSameName.ts ===
-
-export interface I {}
-export interface I {}
-

@@ -1,8 +1,0 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameEnum.ts ===
-enum E {
->E : E
-
-    #x
->#x : E.__missing
-}
-

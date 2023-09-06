@@ -1,4 +1,0 @@
-//// [assignmentCompatWithWithGenericConstructSignatures.ts]
-
-
-//// [assignmentCompatWithWithGenericConstructSignatures.js]

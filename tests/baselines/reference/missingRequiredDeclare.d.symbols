@@ -1,4 +1,0 @@
-=== tests/cases/compiler/missingRequiredDeclare.d.ts ===
-var x = 1;
->x : Symbol(x, Decl(missingRequiredDeclare.d.ts, 0, 3))
-

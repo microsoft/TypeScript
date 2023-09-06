@@ -1,7 +1,0 @@
-=== tests/cases/compiler/selfReferencingFile2.ts ===
-///<reference path='../selfReferencingFile2.ts'/>
-
-class selfReferencingFile2 {
->selfReferencingFile2 : Symbol(selfReferencingFile2, Decl(selfReferencingFile2.ts, 0, 0))
-
-}

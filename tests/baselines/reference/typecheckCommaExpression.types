@@ -1,7 +1,0 @@
-=== tests/cases/compiler/typecheckCommaExpression.ts ===
-(a, b)
->(a, b) : any
->a, b : any
->a : any
->b : any
-

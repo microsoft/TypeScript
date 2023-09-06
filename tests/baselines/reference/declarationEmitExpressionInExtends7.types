@@ -1,4 +1,0 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends7.ts ===
-export default class extends SomeUndefinedFunction {}
->SomeUndefinedFunction : any
-

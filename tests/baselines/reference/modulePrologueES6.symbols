@@ -1,6 +1,0 @@
-=== tests/cases/compiler/modulePrologueES6.ts ===
-"use strict";
-
-export class Foo {}
->Foo : Symbol(Foo, Decl(modulePrologueES6.ts, 0, 13))
-

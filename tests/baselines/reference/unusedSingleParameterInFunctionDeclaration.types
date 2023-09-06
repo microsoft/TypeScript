@@ -1,9 +1,0 @@
-=== tests/cases/compiler/unusedSingleParameterInFunctionDeclaration.ts ===
-function greeter(person: string) {
->greeter : (person: string) => void
->person : string
-
-    var unused = 20;
->unused : number
->20 : 20
-}

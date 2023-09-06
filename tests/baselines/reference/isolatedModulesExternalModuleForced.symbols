@@ -1,4 +1,0 @@
-=== tests/cases/compiler/file1.ts ===
-var x;
->x : Symbol(x, Decl(file1.ts, 0, 3))
-

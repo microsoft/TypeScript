@@ -1,7 +1,0 @@
-=== tests/cases/compiler/exportSameNameFuncVar.ts ===
-export var a = 10;
->a : Symbol(a, Decl(exportSameNameFuncVar.ts, 0, 10))
-
-export function a() {
->a : Symbol(a, Decl(exportSameNameFuncVar.ts, 0, 18))
-}

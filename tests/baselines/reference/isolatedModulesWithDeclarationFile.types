@@ -1,8 +1,0 @@
-=== tests/cases/compiler/file1.d.ts ===
-declare function foo(): void;
->foo : () => void
-
-=== tests/cases/compiler/file1.ts ===
-export var x;
->x : any
-

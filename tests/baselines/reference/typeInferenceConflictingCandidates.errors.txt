@@ -1,9 +1,0 @@
-tests/cases/compiler/typeInferenceConflictingCandidates.ts(3,7): error TS2345: Argument of type '3' is not assignable to parameter of type '""'.
-
-
-==== tests/cases/compiler/typeInferenceConflictingCandidates.ts (1 errors) ====
-    declare function g<T>(a: T, b: T, c: (t: T) => T): T;
-    
-    g("", 3, a => a);
-          ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type '""'.

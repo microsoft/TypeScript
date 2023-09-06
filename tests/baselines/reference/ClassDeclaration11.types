@@ -1,8 +1,0 @@
-=== tests/cases/compiler/ClassDeclaration11.ts ===
-class C {
->C : C
-
-   constructor();
-   foo() { }
->foo : () => void
-}

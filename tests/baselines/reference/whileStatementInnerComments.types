@@ -1,7 +1,0 @@
-=== tests/cases/compiler/whileStatementInnerComments.ts ===
-/*a*/ while /*b*/ ( /*c*/ false /*d*/ ) /*e*/ {}
->false : false
-
-/*a*/ do /*b*/ {} /*c*/ while /*d*/ ( /*e*/ true /*f*/ );
->true : true
-

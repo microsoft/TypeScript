@@ -1,9 +1,0 @@
-=== tests/cases/compiler/sourceMapForFunctionWithCommentPrecedingStatement01.ts ===
-function P() {
->P : () => void
-
-    // Test this
-    var a = 1;
->a : number
->1 : 1
-}

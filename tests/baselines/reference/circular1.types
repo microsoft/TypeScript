@@ -1,8 +1,0 @@
-=== /a.ts ===
-export type { A } from './b';
->A : any
-
-=== /b.ts ===
-export type { A } from './a';
->A : any
-

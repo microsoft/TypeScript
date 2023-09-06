@@ -1,4 +1,0 @@
-=== tests/cases/compiler/anyIndexedAccessArrayNoException.ts ===
-var x: any[[]];
->x : any
-

@@ -1,7 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedUnaryPlus.ts ===
-var x = `abc${ +Infinity }def`;
->x : string
->`abc${ +Infinity }def` : string
->+Infinity : number
->Infinity : number
-

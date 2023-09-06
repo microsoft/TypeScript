@@ -1,9 +1,0 @@
-{
-    "scenario": "declarations_ImportedInPrivate",
-    "projectRoot": "tests/cases/projects/declarations_ImportedInPrivate",
-    "inputFiles": [
-        "useModule.ts"
-    ],
-    "declaration": true,
-    "baselineCheck": true
-}

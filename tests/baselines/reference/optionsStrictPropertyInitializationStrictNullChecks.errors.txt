@@ -1,7 +1,0 @@
-error TS5052: Option 'strictPropertyInitialization' cannot be specified without specifying option 'strictNullChecks'.
-
-
-!!! error TS5052: Option 'strictPropertyInitialization' cannot be specified without specifying option 'strictNullChecks'.
-==== tests/cases/compiler/optionsStrictPropertyInitializationStrictNullChecks.ts (0 errors) ====
-    var x;
-    

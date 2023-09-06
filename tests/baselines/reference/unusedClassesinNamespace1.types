@@ -1,9 +1,0 @@
-=== tests/cases/compiler/unusedClassesinNamespace1.ts ===
-namespace Validation {
->Validation : typeof Validation
-
-    class c1 {
->c1 : c1
-
-    }
-}

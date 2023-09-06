@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode13.ts ===
-"use strict";
-try {
-}
-catch(eval) {
->eval : Symbol(eval, Decl(parserStrictMode13.ts, 3, 6))
-}

@@ -1,5 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement11.ts ===
-for (const [a, b] of X) {
->a : Symbol(a, Decl(parserForOfStatement11.ts, 0, 12))
->b : Symbol(b, Decl(parserForOfStatement11.ts, 0, 14))
-}

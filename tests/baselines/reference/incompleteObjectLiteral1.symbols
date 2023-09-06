@@ -1,9 +1,0 @@
-=== tests/cases/compiler/incompleteObjectLiteral1.ts ===
-var tt = { aa; }
->tt : Symbol(tt, Decl(incompleteObjectLiteral1.ts, 0, 3))
->aa : Symbol(aa, Decl(incompleteObjectLiteral1.ts, 0, 10))
-
-var x = tt;
->x : Symbol(x, Decl(incompleteObjectLiteral1.ts, 1, 3))
->tt : Symbol(tt, Decl(incompleteObjectLiteral1.ts, 0, 3))
-

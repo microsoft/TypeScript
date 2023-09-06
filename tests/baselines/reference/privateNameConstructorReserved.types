@@ -1,8 +1,0 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameConstructorReserved.ts ===
-class A {
->A : A
-
-    #constructor() {}      // Error: `#constructor` is a reserved word.
->#constructor : () => void
-}
-

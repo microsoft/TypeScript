@@ -1,6 +1,0 @@
-=== tests/cases/compiler/typeCheckObjectLiteralMethodBody.ts ===
-var foo = { bar() { return undefined } };
->foo : Symbol(foo, Decl(typeCheckObjectLiteralMethodBody.ts, 0, 3))
->bar : Symbol(bar, Decl(typeCheckObjectLiteralMethodBody.ts, 0, 11))
->undefined : Symbol(undefined)
-

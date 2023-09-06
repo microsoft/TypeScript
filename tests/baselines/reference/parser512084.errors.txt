@@ -1,8 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512084.ts(2,1): error TS1005: '}' expected.
-
-
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512084.ts (1 errors) ====
-    class foo {
-    
-    
-!!! error TS1005: '}' expected.

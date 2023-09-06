@@ -1,8 +1,0 @@
-=== tests/cases/compiler/tripleSlashInCommentNotParsed.ts ===
-/*
-/// <reference path="non-existing-file.d.ts" />
-*/
-void 0;
->void 0 : undefined
->0 : 0
-

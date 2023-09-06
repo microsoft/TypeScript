@@ -1,2 +1,0 @@
-interface I implements A {
-}

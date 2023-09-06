@@ -1,6 +1,0 @@
-=== tests/cases/compiler/check.js ===
-function container() {
->container : () => void
-
-    import "fs";
-}

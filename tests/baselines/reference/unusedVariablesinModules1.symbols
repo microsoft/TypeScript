@@ -1,9 +1,0 @@
-=== tests/cases/compiler/unusedVariablesinModules1.ts ===
-export {};
-
-var x: string;
->x : Symbol(x, Decl(unusedVariablesinModules1.ts, 2, 3))
-
-export var y: string;
->y : Symbol(y, Decl(unusedVariablesinModules1.ts, 4, 10))
-

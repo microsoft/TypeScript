@@ -1,8 +1,0 @@
-=== tests/cases/compiler/parenthesizedAsyncArrowFunction.ts ===
-// Repro from #20096
-
-let foo = (async bar => bar);
->foo : Symbol(foo, Decl(parenthesizedAsyncArrowFunction.ts, 2, 3))
->bar : Symbol(bar, Decl(parenthesizedAsyncArrowFunction.ts, 2, 16))
->bar : Symbol(bar, Decl(parenthesizedAsyncArrowFunction.ts, 2, 16))
-

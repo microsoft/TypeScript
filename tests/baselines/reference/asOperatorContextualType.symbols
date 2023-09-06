@@ -1,8 +1,0 @@
-=== tests/cases/conformance/expressions/asOperator/asOperatorContextualType.ts ===
-// should error
-var x = (v => v) as (x: number) => string;
->x : Symbol(x, Decl(asOperatorContextualType.ts, 1, 3))
->v : Symbol(v, Decl(asOperatorContextualType.ts, 1, 9))
->v : Symbol(v, Decl(asOperatorContextualType.ts, 1, 9))
->x : Symbol(x, Decl(asOperatorContextualType.ts, 1, 21))
-

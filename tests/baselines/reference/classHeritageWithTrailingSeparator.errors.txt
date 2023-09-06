@@ -1,9 +1,0 @@
-tests/cases/compiler/classHeritageWithTrailingSeparator.ts(2,18): error TS1009: Trailing comma not allowed.
-
-
-==== tests/cases/compiler/classHeritageWithTrailingSeparator.ts (1 errors) ====
-    class C { foo: number }
-    class D extends C, {
-                     ~
-!!! error TS1009: Trailing comma not allowed.
-    }

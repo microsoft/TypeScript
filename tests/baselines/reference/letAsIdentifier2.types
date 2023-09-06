@@ -1,4 +1,0 @@
-=== tests/cases/compiler/letAsIdentifier2.ts ===
-function let() {}
->let : () => void
-

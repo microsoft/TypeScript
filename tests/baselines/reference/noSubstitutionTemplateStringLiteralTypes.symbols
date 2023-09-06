@@ -1,4 +1,0 @@
-=== tests/cases/compiler/noSubstitutionTemplateStringLiteralTypes.ts ===
-const x: `foo` = "foo";
->x : Symbol(x, Decl(noSubstitutionTemplateStringLiteralTypes.ts, 0, 5))
-

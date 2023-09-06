@@ -1,9 +1,0 @@
-=== /node_modules/A/index.d.ts ===
-declare module "ext" {
->"ext" : error
-}
-export {};
-
-=== /src/app.ts ===
-
-import "A"

@@ -1,4 +1,0 @@
-=== tests/cases/compiler/downlevelLetConst7.ts ===
-let a
->a : any
-

@@ -1,4 +1,0 @@
-=== tests/cases/compiler/index.ts ===
-if (true) {
->true : true
-

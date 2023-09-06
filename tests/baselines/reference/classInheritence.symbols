@@ -1,9 +1,0 @@
-=== tests/cases/compiler/classInheritence.ts ===
-class B extends A { }
->B : Symbol(B, Decl(classInheritence.ts, 0, 0))
->A : Symbol(A, Decl(classInheritence.ts, 0, 21))
-
-class A extends A { }
->A : Symbol(A, Decl(classInheritence.ts, 0, 21))
->A : Symbol(A, Decl(classInheritence.ts, 0, 21))
-

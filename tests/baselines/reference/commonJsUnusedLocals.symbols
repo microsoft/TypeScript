@@ -1,9 +1,0 @@
-=== /a.js ===
-const x = 0;
->x : Symbol(x, Decl(a.js, 0, 5))
-
-exports.y = 1;
->exports.y : Symbol(y, Decl(a.js, 0, 12))
->exports : Symbol(y, Decl(a.js, 0, 12))
->y : Symbol(y, Decl(a.js, 0, 12))
-

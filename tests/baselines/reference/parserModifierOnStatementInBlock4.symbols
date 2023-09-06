@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock4.ts ===
-{
-   export function bar() {
->bar : Symbol(bar, Decl(parserModifierOnStatementInBlock4.ts, 0, 1))
-   }
-}
-

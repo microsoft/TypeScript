@@ -1,7 +1,0 @@
-=== tests/cases/compiler/catchClauseWithInitializer1.ts ===
-try {
-}
-catch (e = 1) {
->e : any
->1 : 1
-}

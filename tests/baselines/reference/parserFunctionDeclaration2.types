@@ -1,4 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.ts ===
-declare function Foo() {
->Foo : () => void
-}

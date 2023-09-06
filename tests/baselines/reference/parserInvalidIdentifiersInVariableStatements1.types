@@ -1,9 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts ===
-var export;
-var foo;
->foo : any
-
-var class;
-var bar;
->bar : any
-

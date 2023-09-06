@@ -1,7 +1,0 @@
-=== tests/cases/compiler/modulePrologueUmd.ts ===
-"use strict";
->"use strict" : "use strict"
-
-export class Foo {}
->Foo : Foo
-

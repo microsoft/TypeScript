@@ -1,4 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedTypeOfOperator.ts ===
-var x = `abc${ typeof "hi" }def`;
->x : Symbol(x, Decl(templateStringWithEmbeddedTypeOfOperator.ts, 0, 3))
-

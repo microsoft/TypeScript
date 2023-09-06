@@ -1,2 +1,0 @@
-declare function Foo() {
-}

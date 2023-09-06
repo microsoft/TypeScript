@@ -1,9 +1,0 @@
-=== tests/cases/compiler/extendsJavaScript.js ===
-/**
- * @extends {SomeBase}
- */
-class MyClass {
->MyClass : MyClass
-
-}
-

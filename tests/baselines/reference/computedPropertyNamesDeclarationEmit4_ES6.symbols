@@ -1,7 +1,0 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit4_ES6.ts ===
-var v: {
->v : Symbol(v, Decl(computedPropertyNamesDeclarationEmit4_ES6.ts, 0, 3))
-
-    ["" + ""](): void;
->["" + ""] : Symbol(["" + ""], Decl(computedPropertyNamesDeclarationEmit4_ES6.ts, 0, 8))
-}

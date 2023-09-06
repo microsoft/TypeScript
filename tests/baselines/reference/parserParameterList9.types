@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList9.ts ===
-class C {
->C : C
-
-   foo(...bar?) { }
->foo : (...bar?: any[]) => void
->bar : any[]
-}

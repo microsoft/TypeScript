@@ -1,6 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration2.ts ===
-class C {
->C : Symbol(C, Decl(parserConstructorDeclaration2.ts, 0, 0))
-
-  static constructor() { }
-}

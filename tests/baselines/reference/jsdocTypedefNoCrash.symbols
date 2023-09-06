@@ -1,8 +1,0 @@
-=== tests/cases/compiler/export.js ===
-/**
- * @typedef {{
- * }}
- */
-export const foo = 5;
->foo : Symbol(foo, Decl(export.js, 4, 12), Decl(export.js, 1, 3))
-

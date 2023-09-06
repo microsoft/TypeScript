@@ -1,7 +1,0 @@
-=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target4.ts ===
-class E { }
->E : E
-
-export default E;
->E : E
-

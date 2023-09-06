@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueNotInIterationStatement3.ts ===
-switch (0) {
->0 : 0
-
-  default:
-    continue;
-}

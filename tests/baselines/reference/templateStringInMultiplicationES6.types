@@ -1,8 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInMultiplicationES6.ts ===
-var x = 1 * `abc${ 1 }def`;
->x : number
->1 * `abc${ 1 }def` : number
->1 : 1
->`abc${ 1 }def` : string
->1 : 1
-

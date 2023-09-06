@@ -1,7 +1,0 @@
-=== tests/cases/compiler/noReachabilityErrorsOnEmptyStatement.ts ===
-function foo() {
->foo : () => number
-
-    return 1;;
->1 : 1
-}

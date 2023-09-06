@@ -1,9 +1,0 @@
-=== tests/cases/compiler/contextualTyping41.ts ===
-var foo = <{():number; (i:number):number; }> (function(){return "err";});
->foo : { (): number; (i: number): number; }
-><{():number; (i:number):number; }> (function(){return "err";}) : { (): number; (i: number): number; }
->i : number
->(function(){return "err";}) : () => string
->function(){return "err";} : () => string
->"err" : "err"
-

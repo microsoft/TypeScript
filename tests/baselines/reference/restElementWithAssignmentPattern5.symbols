@@ -1,9 +1,0 @@
-=== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern5.ts ===
-var s: string, s2: string;
->s : Symbol(s, Decl(restElementWithAssignmentPattern5.ts, 0, 3))
->s2 : Symbol(s2, Decl(restElementWithAssignmentPattern5.ts, 0, 14))
-
-[...[s, s2]] = ["", ""];
->s : Symbol(s, Decl(restElementWithAssignmentPattern5.ts, 0, 3))
->s2 : Symbol(s2, Decl(restElementWithAssignmentPattern5.ts, 0, 14))
-

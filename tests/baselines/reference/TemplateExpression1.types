@@ -1,6 +1,0 @@
-=== tests/cases/conformance/es6/templates/TemplateExpression1.ts ===
-var v = `foo ${ a 
->v : string
->`foo ${ a : string
->a : any
-

@@ -1,9 +1,0 @@
-=== tests/cases/compiler/classInheritence.ts ===
-class B extends A { }
->B : B
->A : A
-
-class A extends A { }
->A : A
->A : typeof A
-

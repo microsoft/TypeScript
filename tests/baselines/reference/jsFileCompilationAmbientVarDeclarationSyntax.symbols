@@ -1,4 +1,0 @@
-=== tests/cases/compiler/a.js ===
-declare var v;
->v : Symbol(v, Decl(a.js, 0, 11))
-

@@ -1,9 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum6.ts ===
-enum E {
->E : Symbol(E, Decl(parserEnum6.ts, 0, 0))
-
-  "A", "B", "C"
->"A" : Symbol(E["A"], Decl(parserEnum6.ts, 0, 8))
->"B" : Symbol(E["B"], Decl(parserEnum6.ts, 1, 6))
->"C" : Symbol(E["C"], Decl(parserEnum6.ts, 1, 11))
-}

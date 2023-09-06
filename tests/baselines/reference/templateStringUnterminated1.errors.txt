@@ -1,7 +1,0 @@
-tests/cases/conformance/es6/templates/templateStringUnterminated1.ts(1,2): error TS1160: Unterminated template literal.
-
-
-==== tests/cases/conformance/es6/templates/templateStringUnterminated1.ts (1 errors) ====
-    `
-     
-!!! error TS1160: Unterminated template literal.

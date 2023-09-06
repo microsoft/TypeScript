@@ -1,5 +1,0 @@
-=== tests/cases/compiler/a.js ===
-import a = b;
->a : any
->b : any
-

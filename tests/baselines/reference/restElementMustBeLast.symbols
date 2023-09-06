@@ -1,9 +1,0 @@
-=== tests/cases/conformance/types/rest/restElementMustBeLast.ts ===
-var [...a, x] = [1, 2, 3];  // Error, rest must be last element
->a : Symbol(a, Decl(restElementMustBeLast.ts, 0, 5))
->x : Symbol(x, Decl(restElementMustBeLast.ts, 0, 10))
-
-[...a, x] = [1, 2, 3];      // Error, rest must be last element
->a : Symbol(a, Decl(restElementMustBeLast.ts, 0, 5))
->x : Symbol(x, Decl(restElementMustBeLast.ts, 0, 10))
-

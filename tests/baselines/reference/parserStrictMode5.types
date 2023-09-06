@@ -1,9 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode5.ts ===
-"use strict";
->"use strict" : "use strict"
-
-eval += 1;
->eval += 1 : any
->eval : any
->1 : 1
-

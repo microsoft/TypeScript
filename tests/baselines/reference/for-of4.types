@@ -1,9 +1,0 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of4.ts ===
-for (var v of [0]) {
->v : number
->[0] : number[]
->0 : 0
-
-    v;
->v : number
-}

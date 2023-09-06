@@ -1,8 +1,0 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck6.ts ===
-var union: string[] | number[];
->union : string[] | number[]
-
-for (var v of union) { }
->v : string | number
->union : string[] | number[]
-

@@ -1,5 +1,0 @@
-=== tests/cases/compiler/a.js ===
-class C { constructor(public x) { }}
->C : C
->x : any
-

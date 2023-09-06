@@ -1,5 +1,0 @@
-=== tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts ===
-var v = { get foo() { yield foo; } }
->v : Symbol(v, Decl(YieldExpression17_es6.ts, 0, 3))
->foo : Symbol(foo, Decl(YieldExpression17_es6.ts, 0, 9))
-

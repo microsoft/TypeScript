@@ -1,4 +1,0 @@
-=== /src/index.ts ===
-import { y } from "../node_modules/foo";
->y : any
-

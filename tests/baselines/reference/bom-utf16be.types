@@ -1,5 +1,0 @@
-=== tests/cases/compiler/bom-utf16be.ts ===
-var x=10;
->x : number
->10 : 10
-

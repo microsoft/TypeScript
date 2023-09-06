@@ -1,4 +1,0 @@
-=== tests/cases/compiler/negativeZero.ts ===
-var x = -0
->x : Symbol(x, Decl(negativeZero.ts, 0, 3))
-

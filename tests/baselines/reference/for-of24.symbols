@@ -1,8 +1,0 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of24.ts ===
-var x: any;
->x : Symbol(x, Decl(for-of24.ts, 0, 3))
-
-for (var v of x) { }
->v : Symbol(v, Decl(for-of24.ts, 1, 8))
->x : Symbol(x, Decl(for-of24.ts, 0, 3))
-
