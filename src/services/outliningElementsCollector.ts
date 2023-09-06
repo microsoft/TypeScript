@@ -52,8 +52,6 @@ import {
     SyntaxKind,
     TemplateExpression,
     TextSpan,
-    trimString,
-    trimStringStart,
     TryStatement,
 } from "./_namespaces/ts";
 
@@ -164,11 +162,11 @@ const regionDelimiterRegExp = /^#(end)?region(?:\s+(.*))?(?:\r)?$/;
 function isRegionDelimiter(lineText: string) {
     // We trim the leading whitespace and // without the regex since the
     // multiple potential whitespace matches can make for some gnarly backtracking behavior
-    lineText = trimStringStart(lineText);
+    lineText = lineText.trimStart();
     if (!startsWith(lineText, "//")) {
         return null; // eslint-disable-line no-null/no-null
     }
-    lineText = trimString(lineText.slice(2));
+    lineText = lineText.slice(2).trim();
     return regionDelimiterRegExp.exec(lineText);
 }
 

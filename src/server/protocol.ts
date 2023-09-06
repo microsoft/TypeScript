@@ -172,7 +172,7 @@ export const enum CommandTypes {
     PrepareCallHierarchy = "prepareCallHierarchy",
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-    ProvideInlayHints = "provideInlayHints"
+    ProvideInlayHints = "provideInlayHints",
 }
 
 /**
@@ -295,8 +295,8 @@ export interface FileRequestArgs {
     file: string;
 
     /*
-    * Optional name of project that contains file
-    */
+     * Optional name of project that contains file
+     */
     projectFileName?: string;
 }
 
@@ -707,7 +707,6 @@ export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
     interactiveRefactorArguments?: InteractiveRefactorArguments;
 };
 
-
 export interface GetEditsForRefactorResponse extends Response {
     body?: RefactorEditInfo;
 }
@@ -792,7 +791,7 @@ export interface ApplyCodeActionCommandRequest extends Request {
 }
 
 // All we need is the `success` and `message` fields of Response.
-export interface ApplyCodeActionCommandResponse extends Response { }
+export interface ApplyCodeActionCommandResponse extends Response {}
 
 export interface FileRangeRequestArgs extends FileRequestArgs {
     /**
@@ -935,12 +934,12 @@ export interface EncodedSemanticClassificationsRequestArgs extends FileRequestAr
      * Optional parameter for the semantic highlighting response, if absent it
      * defaults to "original".
      */
-    format?: "original" | "2020"
+    format?: "original" | "2020";
 }
 
 /** The response for a EncodedSemanticClassificationsRequest */
 export interface EncodedSemanticClassificationsResponse extends Response {
-    body?: EncodedSemanticClassificationsResponseBody
+    body?: EncodedSemanticClassificationsResponseBody;
 }
 
 /**
@@ -1136,7 +1135,7 @@ export interface JsxClosingTagRequest extends FileLocationRequest {
     readonly arguments: JsxClosingTagRequestArgs;
 }
 
-export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs { }
+export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
 
 export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
@@ -1578,12 +1577,10 @@ export interface ChangedOpenFile {
     changes: TextChange[];
 }
 
-
 /**
  * Information found in a configure request.
  */
 export interface ConfigureRequestArguments {
-
     /**
      * Information about the host, for example 'Emacs 24.4' or
      * 'Sublime Text version 3075'
@@ -2491,7 +2488,6 @@ export interface CompletionDetailsResponse extends Response {
  * Signature help information for a single parameter
  */
 export interface SignatureHelpParameter {
-
     /**
      * The parameter's name
      */
@@ -2517,7 +2513,6 @@ export interface SignatureHelpParameter {
  * Represents a single signature to show in signature help.
  */
 export interface SignatureHelpItem {
-
     /**
      * Whether the signature accepts a variable number of arguments.
      */
@@ -2558,7 +2553,6 @@ export interface SignatureHelpItem {
  * Signature help items found in the response of a signature help request.
  */
 export interface SignatureHelpItems {
-
     /**
      * The signature help items.
      */
@@ -3026,7 +3020,7 @@ export interface LargeFileReferencedEventBody {
 
 /** @internal */
 export type AnyEvent =
-    RequestCompletedEvent
+    | RequestCompletedEvent
     | DiagnosticEvent
     | ConfigFileDiagnosticEvent
     | ProjectLanguageServiceStateEvent
@@ -3388,7 +3382,7 @@ export interface NavTreeResponse extends Response {
 export interface CallHierarchyItem {
     name: string;
     kind: ScriptElementKind;
-    kindModifiers?: string
+    kindModifiers?: string;
     file: string;
     span: TextSpan;
     selectionSpan: TextSpan;
@@ -3537,7 +3531,7 @@ export interface UserPreferences {
 
     readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
     readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-    readonly includeInlayFunctionParameterTypeHints?: boolean,
+    readonly includeInlayFunctionParameterTypeHints?: boolean;
     readonly includeInlayVariableTypeHints?: boolean;
     readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
     readonly includeInlayPropertyDeclarationTypeHints?: boolean;
@@ -3695,7 +3689,7 @@ export const enum ModuleKind {
     System = "System",
     ES6 = "ES6",
     ES2015 = "ES2015",
-    ESNext = "ESNext"
+    ESNext = "ESNext",
 }
 
 export const enum ModuleResolutionKind {
@@ -3720,7 +3714,7 @@ export const enum ScriptTarget {
     ES2020 = "ES2020",
     ES2021 = "ES2021",
     ES2022 = "ES2022",
-    ESNext = "ESNext"
+    ESNext = "ESNext",
 }
 
 export const enum ClassificationType {

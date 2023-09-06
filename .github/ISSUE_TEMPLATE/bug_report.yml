@@ -1,5 +1,5 @@
-name: "Bug report"
-description: "Create a report to help us improve TypeScript"
+name: 'Bug report'
+description: 'Create a report to help us improve TypeScript'
 body:
   - type: markdown
     attributes:
@@ -7,7 +7,7 @@ body:
   - type: textarea
     id: search_terms
     attributes:
-      label: "🔎 Search Terms"
+      label: '🔎 Search Terms'
       description: |
         What search terms did you use when trying to find an existing bug report?
 
@@ -22,7 +22,7 @@ body:
   - type: textarea
     id: version_info
     attributes:
-      label: "🕗 Version & Regression Information"
+      label: '🕗 Version & Regression Information'
       description: |
         When did you start seeing this bug occur?
 
@@ -33,7 +33,7 @@ body:
         If possible, please try testing the nightly version of TS to see if it's already been fixed. For npm: `typescript@next`
 
         This is also the 'Nightly' version in the playground: http://www.typescriptlang.org/play/?ts=Nightly
-  
+
 
         Note: The TypeScript Playground can be used to try older versions of TypeScript.
 
@@ -56,7 +56,7 @@ body:
 
 
         As a last resort, you can link to a repo, but these will be slower for us to investigate.
-      placeholder: "Playground link with relevant code: https://www.typescriptlang.org/play?#code/PTAEFkE9QYwewCYFNQHM5IM6gBZIE5JA"
+      placeholder: 'Playground link with relevant code: https://www.typescriptlang.org/play?#code/PTAEFkE9QYwewCYFNQHM5IM6gBZIE5JA'
     validations:
       required: false
   - type: textarea
@@ -87,7 +87,7 @@ body:
     id: actual_behavior
     attributes:
       label: 🙁 Actual behavior
-      description: "What happened, and why it was wrong."
+      description: 'What happened, and why it was wrong.'
     validations:
       required: true
   - type: textarea

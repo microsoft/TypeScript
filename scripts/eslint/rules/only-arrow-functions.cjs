@@ -27,12 +27,11 @@ module.exports = createRule({
     }],
 
     create(context, [{ allowNamedFunctions, allowDeclarations }]) {
-
         /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => boolean} */
-        const isThisParameter = (node) => !!node.params.length && !!node.params.find(param => param.type === AST_NODE_TYPES.Identifier && param.name === "this");
+        const isThisParameter = node => !!node.params.length && !!node.params.find(param => param.type === AST_NODE_TYPES.Identifier && param.name === "this");
 
         /** @type {(node: TSESTree.Node) => boolean} */
-        const isMethodType = (node) => {
+        const isMethodType = node => {
             const types = [
                 AST_NODE_TYPES.MethodDefinition,
                 AST_NODE_TYPES.Property,
@@ -59,7 +58,7 @@ module.exports = createRule({
         };
 
         /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => void} */
-        const exitFunction = (node) => {
+        const exitFunction = node => {
             const methodUsesThis = stack.pop();
 
             if (node.type === AST_NODE_TYPES.FunctionDeclaration && allowDeclarations) {
