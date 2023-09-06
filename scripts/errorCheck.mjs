@@ -1,8 +1,8 @@
+import assert from "assert";
 import fs from "fs";
 import fsPromises from "fs/promises";
 import _glob from "glob";
 import util from "util";
-import assert from "assert";
 
 const glob = util.promisify(_glob);
 
