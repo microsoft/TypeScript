@@ -1896,7 +1896,6 @@ function realPath(path: string, host: ModuleResolutionHost, traceEnabled: boolea
     if (traceEnabled) {
         trace(host, Diagnostics.Resolving_real_path_for_0_result_1, path, real);
     }
-    Debug.assert(host.fileExists(real), `${path} linked to nonexistent file ${real}`);
     return real;
 }
 
