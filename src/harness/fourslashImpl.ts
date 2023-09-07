@@ -3765,9 +3765,9 @@ export class TestState {
     }
 
     public verifyNavigateTo(options: readonly FourSlashInterface.VerifyNavigateToOptions[]): void {
-        for (const { pattern, expected, fileName } of options) {
+        for (const { pattern, expected, fileName, excludeLibFiles } of options) {
             const file = fileName && this.findFile(fileName).fileName;
-            const items = this.languageService.getNavigateToItems(pattern, /*maxResultCount*/ undefined, file);
+            const items = this.languageService.getNavigateToItems(pattern, /*maxResultCount*/ undefined, file, /*excludeDtsFiles*/ undefined, excludeLibFiles);
             this.assertObjectsEqual(
                 items,
                 expected.map((e): ts.NavigateToItem => ({
