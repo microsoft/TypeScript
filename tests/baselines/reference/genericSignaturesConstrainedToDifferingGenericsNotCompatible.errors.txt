@@ -1,0 +1,58 @@
+genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts(12,5): error TS2322: Type 'Concrete2' is not assignable to type 'Concrete1'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'U' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
+genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts(13,5): error TS2322: Type 'Concrete1' is not assignable to type 'Concrete2'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'U' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
+genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts(15,5): error TS2322: Type 'Concrete1' is not assignable to type 'Fn<T1>'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'U' is not assignable to type 'number'.
+      Type 'T1' is not assignable to type 'number'.
+genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts(16,5): error TS2322: Type 'Fn<T1>' is not assignable to type 'Concrete1'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'U' is not assignable to type 'T1'.
+      'T1' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+
+
+==== genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts (4 errors) ====
+    type Fn<T> = <U extends T>(x: U) => U;
+    
+    type Concrete1 = <U extends number>(x: U) => U;
+    type Concrete2 = <U extends string>(x: U) => U;
+    
+    function f<T1, T2>(t1: Fn<T1>, t2: Fn<T2>, c1: Concrete1, c2: Concrete2) {
+        // every single one of these assignments should error
+    
+        t1 = t2;
+        t2 = t1;
+    
+        c1 = c2;
+        ~~
+!!! error TS2322: Type 'Concrete2' is not assignable to type 'Concrete1'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'U' is not assignable to type 'string'.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
+        c2 = c1;
+        ~~
+!!! error TS2322: Type 'Concrete1' is not assignable to type 'Concrete2'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'U' is not assignable to type 'number'.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+    
+        t1 = c1;
+        ~~
+!!! error TS2322: Type 'Concrete1' is not assignable to type 'Fn<T1>'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'U' is not assignable to type 'number'.
+!!! error TS2322:       Type 'T1' is not assignable to type 'number'.
+!!! related TS2208 genericSignaturesConstrainedToDifferingGenericsNotCompatible.ts:6:12: This type parameter might need an `extends number` constraint.
+        c1 = t1;
+        ~~
+!!! error TS2322: Type 'Fn<T1>' is not assignable to type 'Concrete1'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'U' is not assignable to type 'T1'.
+!!! error TS2322:       'T1' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+    }
+    
