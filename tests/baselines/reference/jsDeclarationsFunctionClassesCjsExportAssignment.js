@@ -231,6 +231,14 @@ type Input = {
 /**
  * Imports
  */
+type Timer = import("./timer");
+/**
+ * Imports
+ */
+type Hook = import("./hook");
+/**
+ * Imports
+ */
 type HookHandler = import("./hook").HookHandler;
 /**
  * State type definition
@@ -239,14 +247,6 @@ type State = {
     timer: Timer;
     hook: Hook;
 };
-/**
- * Imports
- */
-type Timer = import("./timer");
-/**
- * Imports
- */
-type Hook = import("./hook");
 //// [hook.d.ts]
 export = Hook;
 /**

@@ -40,7 +40,7 @@
 >k : Symbol(k, Decl(contextuallyTypedIifeStrict.ts, 14, 2))
 >k : Symbol(k, Decl(contextuallyTypedIifeStrict.ts, 14, 2))
 
-((l, o?) => l + o)(12); // o should be any
+((l, o?) => l + o)(12);
 >l : Symbol(l, Decl(contextuallyTypedIifeStrict.ts, 15, 2))
 >o : Symbol(o, Decl(contextuallyTypedIifeStrict.ts, 15, 4))
 >l : Symbol(l, Decl(contextuallyTypedIifeStrict.ts, 15, 2))

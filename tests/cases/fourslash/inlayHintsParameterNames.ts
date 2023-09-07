@@ -6,6 +6,9 @@
 //// function foo2 (a: number, { c }: any) {}
 //// foo2(1, { c: 1 });
 
+////function foo3(a: any, b: number) {}
+////foo3({}, 1);
+
 ////const foo3 = (a = 1) => class { }
 ////const C1 = class extends foo3(1) { }
 ////class C2 extends foo3(1) { }

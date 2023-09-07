@@ -49,7 +49,6 @@ import {
     SourceFile,
     startsWith,
     Statement,
-    stringContains,
     stripQuotes,
     Symbol,
     SymbolFlags,
@@ -288,13 +287,17 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         const checker = (isFromPackageJson
             ? host.getPackageJsonAutoImportProvider()!
             : host.getCurrentProgram()!).getTypeChecker();
-        const moduleSymbol = info.moduleSymbol || cachedModuleSymbol || Debug.checkDefined(info.moduleFile
-            ? checker.getMergedSymbol(info.moduleFile.symbol)
-            : checker.tryFindAmbientModule(info.moduleName));
-        const symbol = info.symbol || cachedSymbol || Debug.checkDefined(exportKind === ExportKind.ExportEquals
-            ? checker.resolveExternalModuleSymbol(moduleSymbol)
-            : checker.tryGetMemberInModuleExportsAndProperties(unescapeLeadingUnderscores(info.symbolTableKey), moduleSymbol),
-            `Could not find symbol '${info.symbolName}' by key '${info.symbolTableKey}' in module ${moduleSymbol.name}`);
+        const moduleSymbol = info.moduleSymbol || cachedModuleSymbol || Debug.checkDefined(
+            info.moduleFile
+                ? checker.getMergedSymbol(info.moduleFile.symbol)
+                : checker.tryFindAmbientModule(info.moduleName),
+        );
+        const symbol = info.symbol || cachedSymbol || Debug.checkDefined(
+            exportKind === ExportKind.ExportEquals
+                ? checker.resolveExternalModuleSymbol(moduleSymbol)
+                : checker.tryGetMemberInModuleExportsAndProperties(unescapeLeadingUnderscores(info.symbolTableKey), moduleSymbol),
+            `Could not find symbol '${info.symbolName}' by key '${info.symbolTableKey}' in module ${moduleSymbol.name}`,
+        );
         symbols.set(id, [symbol, moduleSymbol]);
         return {
             symbol,
@@ -377,7 +380,7 @@ export function isImportableFile(
             // or there doesnt exist the file in the program by the symlink
             return (toFile === to || !toFile) &&
                 isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
-        }
+        },
     );
 
     if (packageJsonFilter) {
@@ -439,7 +442,7 @@ export function forEachExternalModuleToImportFrom(
 function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
     const isExcluded = excludePatterns && ((fileName: string) => excludePatterns.some(p => p.test(fileName)));
     for (const ambient of checker.getAmbientModules()) {
-        if (!stringContains(ambient.name, "*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile().fileName)))) {
+        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile().fileName)))) {
             cb(ambient, /*sourceFile*/ undefined);
         }
     }
@@ -488,7 +491,8 @@ export function getExportInfoMap(importingFile: SourceFile, host: LanguageServic
                     moduleFile,
                     defaultInfo.exportKind,
                     isFromPackageJson,
-                    checker);
+                    checker,
+                );
             }
             checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
                 if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
@@ -500,7 +504,8 @@ export function getExportInfoMap(importingFile: SourceFile, host: LanguageServic
                         moduleFile,
                         ExportKind.Named,
                         isFromPackageJson,
-                        checker);
+                        checker,
+                    );
                 }
             });
         });
@@ -528,7 +533,7 @@ function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
     return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
 }
 
-function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol, readonly exportKind: ExportKind } | undefined {
+function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol; readonly exportKind: ExportKind; } | undefined {
     const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
     if (exportEquals !== moduleSymbol) return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
     const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
@@ -536,7 +541,7 @@ function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker):
 }
 
 /** @internal */
-export function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly resolvedSymbol: Symbol, readonly name: string } | undefined {
+export function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly resolvedSymbol: Symbol; readonly name: string; } | undefined {
     const localSymbol = getLocalSymbolForExportDefault(defaultExport);
     if (localSymbol) return { resolvedSymbol: localSymbol, name: localSymbol.name };
 
@@ -554,8 +559,10 @@ export function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeC
         }
     }
 
-    if (defaultExport.escapedName !== InternalSymbolName.Default &&
-        defaultExport.escapedName !== InternalSymbolName.ExportEquals) {
+    if (
+        defaultExport.escapedName !== InternalSymbolName.Default &&
+        defaultExport.escapedName !== InternalSymbolName.ExportEquals
+    ) {
         return { resolvedSymbol: defaultExport, name: defaultExport.getName() };
     }
     return { resolvedSymbol: defaultExport, name: getNameForExportedSymbol(defaultExport, compilerOptions.target) };

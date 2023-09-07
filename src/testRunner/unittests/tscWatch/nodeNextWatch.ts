@@ -1,5 +1,7 @@
 import * as Utils from "../../_namespaces/Utils";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import {
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
@@ -20,9 +22,9 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                         target: "es2020",
                         module: "nodenext",
                         moduleResolution: "nodenext",
-                        outDir: "../dist"
-                    }
-                })
+                        outDir: "../dist",
+                    },
+                }),
             };
             const packageFile: File = {
                 path: "/project/package.json",
@@ -32,33 +34,34 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                     description: "",
                     type: "module",
                     main: "index.js",
-                })
+                }),
             };
             const file1: File = {
                 path: "/project/src/index.ts",
                 content: Utils.dedent`
                         import * as Thing from "thing";
 
-                        Thing.fn();`
+                        Thing.fn();`,
             };
             const declFile: File = {
                 path: "/project/src/deps.d.ts",
-                content: `declare module "thing";`
+                content: `declare module "thing";`,
             };
             return createWatchedSystem([configFile, file1, declFile, packageFile, { ...libFile, path: "/a/lib/lib.es2020.full.d.ts" }]);
         },
         edits: [
             {
                 caption: "Modify typescript file",
-                edit: sys => sys.modifyFile(
-                    "/project/src/index.ts",
-                    Utils.dedent`
+                edit: sys =>
+                    sys.modifyFile(
+                        "/project/src/index.ts",
+                        Utils.dedent`
                             import * as Thing from "thing";
                             Thing.fn();`,
-                    {},
-                ),
+                        {},
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
+            },
         ],
     });
 });
