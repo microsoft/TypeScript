@@ -1,7 +1,8 @@
 {
     "error-categories": {
         "with-isolated-declaration-errors": [
-            9007 // Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit
+            9007, // Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit
+            9008, // Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit
         ], 
         "with-unreliable-errors": [
             2314, // Generic type '{0}' requires {1} type argument(s)
@@ -67,6 +68,26 @@
             "objectTypeWithStringNamedPropertyOfIllegalCharacters",
             "noUsedBeforeDefinedErrorInTypeContext", // Variable used before definition in type context
             "accessorBodyInTypeContext", //An implementation cannot be declared in ambient contexts.
+            "commonJsExportTypeDeclarationError", // Duplicate name, TS resolves to the type alias symbol, DTE resolves to import. Neither is wrong, code is wrong.
+            "parseAssertEntriesError", // Syntactic invalid import assertions.
+            "decoratorMetadataWithImportDeclarationNameCollision7", // Import does not have the accessed member. TS removes the import as unused. A DTE will keep it as it is syntactically used.
+            "classExtendingNonConstructor", // Not reported as isolated declaration error, but the extends clause is invalid.
+            "nodeModulesImportTypeModeDeclarationEmitErrors1", // Invalid import asserts
+        ],
+        "with-isolated-declaration-errors/9008": [
+            "declarationEmitHasTypesRefOnNamespaceUse",
+            "declarationFilesWithTypeReferences2",
+            "typeReferenceDirectives11",
+            "typeReferenceDirectives12",
+            "typeReferenceDirectives2",
+            "typeReferenceDirectives8",
+            "typeReferenceDirectives9",
+            "importingExportingTypes",
+            // Will not actually error because of https://github.com/microsoft/TypeScript/issues/55636
+            // In isolated declarations we walk the type in the return as if it was hand written in the variable
+            // This triggers the difference in behavior described in the issue.
+            "jsxNamespaceGlobalReexport", 
+            
         ],
         "with-isolated-declaration-errors": [
             "typeFromPropertyAssignment38", // Nested expando functions. Can in principle be detected, but are not yet implemented
@@ -111,6 +132,7 @@
         ],
         "possible-ts-bugs": [
              // Type parameter renamed
+             // Reported as https://github.com/microsoft/TypeScript/issues/55653
             "objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts",
             "objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames",
             "objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts",
@@ -120,6 +142,7 @@
             "reExportAliasMakesInstantiated"
         ],        
         // Needs TS Fix
+        // Reported as https://github.com/microsoft/TypeScript/issues/55654
         "binding-patterns": [
             "declarationsAndAssignments",
             "excessPropertyCheckWithSpread",
@@ -201,31 +224,9 @@
             "declarationEmitComputedNameConstEnumAlias",
             "capturedParametersInInitializers1",
             "declarationEmitPropertyNumericStringKey",
-            "templateLiteralsSourceMap" // template literal is evaluated in constant value.
-        ],
-        // Investigate in reference DTE
-        "references-import-diffs": [
-            "commonJsExportTypeDeclarationError",
-            "declarationEmitForModuleImportingModuleAugmentationRetainsImport",
-            "declarationEmitHasTypesRefOnNamespaceUse",
-            "declarationFilesWithTypeReferences2",
-            "decoratorMetadataWithImportDeclarationNameCollision7",
-            "jsxCallElaborationCheckNoCrash1",
-            "nodeModulesImportTypeModeDeclarationEmit1",
-            "nodeModulesImportTypeModeDeclarationEmitErrors1",
-            "typeReferenceDirectives1",
-            "typeReferenceDirectives11",
-            "typeReferenceDirectives12",
-            "typeReferenceDirectives13",
-            "typeReferenceDirectives2",
-            "typeReferenceDirectives5",
-            "typeReferenceDirectives6",
-            "typeReferenceDirectives8",
-            "typeReferenceDirectives9",
-            "typeReferenceRelatedFiles",
-            "jsxNamespaceGlobalReexport",
-            "parseAssertEntriesError",
-            "declarationEmitPrefersPathKindBasedOnBundling2"
+            "templateLiteralsSourceMap", // template literal is evaluated in constant value.
+            "nodeModulesImportTypeModeDeclarationEmit1", // resolution-mode in assert from type assertion is preserved
+            "declarationEmitPrefersPathKindBasedOnBundling2", // Import path has .. in it. A similar type written by hand would not.
         ],
         "bug-binding-pattern-inference": [
             "destructuringWithLiteralInitializers",
@@ -234,6 +235,44 @@
         "bug-preserve-comments": [
             "commentsOnObjectLiteral4"
         ],
+        "need-to-discuss": [
+            // Technically the emit is correct. We just can't remove an import because we can't be sure if the symbol in the import is used.
+            // In this case the import is a value, and the $ is used as a type and comes from the type reference directive
+            "typeReferenceDirectives5",
+            "typeReferenceDirectives13",
+            // We always keep reference directives
+            "declarationFilesWithTypeReferences4",
+            "moduleResolutionWithSymlinks_preserveSymlinks",
+            "moduleResolutionWithSymlinks_referenceTypes",
+            "tripleSlashTypesReferenceWithMissingExports",
+            "tripleSlashTypesReferenceWithMissingExports",
+            "typeReferenceDirectives10",
+            "typeReferenceDirectives3",
+            "typeReferenceDirectives4",
+            "typeReferenceDirectives7",
+            "nodeModulesTripleSlashReferenceModeOverride1",
+            "nodeModulesTripleSlashReferenceModeOverride2",
+            "nodeModulesTripleSlashReferenceModeOverride3",
+            "nodeModulesTripleSlashReferenceModeOverride4",
+            "nodeModulesTripleSlashReferenceModeOverride5",
+            "nodeModulesTripleSlashReferenceModeOverrideModeError",
+            "nodeModulesTripleSlashReferenceModeOverrideOldResolutionError",
+            "library-reference-1",
+            "library-reference-10",
+            "library-reference-11",
+            "library-reference-12",
+            "library-reference-2",
+            "library-reference-3",
+            "library-reference-4",
+            "library-reference-5",
+            "library-reference-6",
+            "library-reference-7",
+            "library-reference-8",
+            "library-reference-scoped-packages",
+            "typingsLookup1",
+            "typingsLookup3",
+            "declarationEmitForModuleImportingModuleAugmentationRetainsImport", //Import required by augmentation issues
+        ]
     }
 }
 

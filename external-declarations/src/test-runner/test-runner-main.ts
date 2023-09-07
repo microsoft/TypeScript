@@ -71,7 +71,22 @@ async function main() {
         Object.entries(fileConfiguration?.["test-categories"] ?? {}).forEach(([name, tests]) => tests.forEach(t => testCategories.set(t, name)));
     }
 
-    const libFiles = (await fs.readdir(libFolder)).map(n => normalizePath(path.join("/.lib", n)));
+    async function readDirRecursive (dir: string, relativePath: string = ""): Promise<string[]> {
+        const content = await fs.readdir(dir);
+        const result: string[] = [];
+        for (const entry of content) {
+            const relativeChildPath = path.join(relativePath, entry);
+            const fsPath = path.join(dir, entry)
+            const stat = await fs.stat(fsPath);
+            if(stat.isDirectory()) {
+                result.push(...await readDirRecursive(fsPath, relativeChildPath))
+            } else {
+                result.push(relativeChildPath);
+            }
+        }
+        return result;
+    }
+    const libFiles = (await readDirRecursive(libFolder)).map(n => normalizePath(path.join("/.lib", n)));
 
     const testsPerShared = shardCount && Math.round(allTests.length / shardCount);
     const [start, end] = shard === undefined || shardCount === undefined || testsPerShared === undefined ?
@@ -134,7 +149,11 @@ async function main() {
                 );
             } else {
                 
-                const category = firstDefined(results.diagnostics, d => errorCategories.get(d.code)) ?? testCategories.get(testName);
+                const error = firstDefined(results.diagnostics, d => {
+                    let category = errorCategories.get(d.code);
+                    return category ? { category, code: d.code }: undefined;
+                });
+                const category =  error? path.join(error.category, error.code.toString()) : testCategories.get(testName);
                 if(category) {
                     file = path.join(
                         path.dirname(file),

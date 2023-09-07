@@ -1,3 +1,4 @@
+import { appendFileSync } from "fs";
 import {
     __String,
     AccessorDeclaration,
@@ -299,7 +300,8 @@ export function transformDeclarations(context: TransformationContext) {
     let needsScopeFixMarker = false;
     let resultHasScopeMarker = false;
     let enclosingDeclaration: Node;
-    let necessaryTypeReferences: Set<[specifier: string, mode: ResolutionMode]> | undefined;
+    let necessaryTypeReferences: Map<[specifier: string, mode: ResolutionMode], Node | undefined> | undefined;
+    let existingTypeReferencesSources: readonly SourceFile[] | undefined;
     let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
     let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment | undefined>>;
     let suppressNewDiagnosticContexts: boolean;
@@ -355,26 +357,41 @@ export function transformDeclarations(context: TransformationContext) {
         );
         context.addDiagnostic(message);
     }
-    function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined): void {
+    function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined, requestingNode: Node | undefined): void {
         if (!typeReferenceDirectives) {
             return;
         }
-        necessaryTypeReferences = necessaryTypeReferences || new Set();
+        necessaryTypeReferences = necessaryTypeReferences || new Map();
         for (const ref of typeReferenceDirectives) {
-            necessaryTypeReferences.add(ref);
+            necessaryTypeReferences.set(ref, requestingNode);
         }
     }
 
     function trackReferencedAmbientModule(node: ModuleDeclaration, symbol: Symbol) {
         // If it is visible via `// <reference types="..."/>`, then we should just use that
-        // TODO: isolatedDeclarations: see about .All flag
         const directives = resolver.getTypeReferenceDirectivesForSymbol(symbol, SymbolFlags.All);
         if (length(directives)) {
-            return recordTypeReferenceDirectivesIfNecessary(directives);
+            return recordTypeReferenceDirectivesIfNecessary(directives, node);
         }
         // Otherwise we should emit a path-based reference
         const container = getSourceFileOfNode(node);
         refs.set(getOriginalNodeId(container), container);
+    }
+
+    function handleTypeReferenceError(typeReferenceDirective: [specifier: string, mode: ResolutionMode], requestingNode: Node) {
+        if(!isolatedDeclarations) {
+            return;
+        }
+        const existingDirective = existingTypeReferencesSources?.some(s => s.typeReferenceDirectives.some(d => d.fileName === typeReferenceDirective[0]));
+        if(!existingDirective) {
+            const message = createDiagnosticForNode(
+                requestingNode,
+                Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit,
+                typeReferenceDirective[0]
+            );
+            context.addDiagnostic(message);
+        }
+        
     }
 
     function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -418,7 +435,7 @@ export function transformDeclarations(context: TransformationContext) {
     function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
         if (symbol.flags & SymbolFlags.TypeParameter) return false;
         const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasToMarkVisible*/ true));
-        recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
+        recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning), enclosingDeclaration ?? currentSourceFile);
         return issuedDiagnostic;
     }
 
@@ -517,6 +534,7 @@ export function transformDeclarations(context: TransformationContext) {
             isBundledEmit = true;
             refs = new Map();
             libs = new Map();
+            existingTypeReferencesSources = node.sourceFiles;
             let hasNoDefaultLib = false;
             const bundle = factory.createBundle(
                 map(node.sourceFiles, sourceFile => {
@@ -560,7 +578,7 @@ export function transformDeclarations(context: TransformationContext) {
                         const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
                         hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
                         collectReferences(sourceFile, refs);
-                        recordTypeReferenceDirectivesIfNecessary(map(sourceFile.typeReferenceDirectives, ref => [ref.fileName, ref.resolutionMode]));
+                        recordTypeReferenceDirectivesIfNecessary(map(sourceFile.typeReferenceDirectives, ref => [ref.fileName, ref.resolutionMode]), undefined);
                         collectLibs(sourceFile, libs);
                         return sourceFile;
                     }
@@ -583,6 +601,7 @@ export function transformDeclarations(context: TransformationContext) {
         resultHasScopeMarker = false;
         enclosingDeclaration = node;
         currentSourceFile = node;
+        existingTypeReferencesSources = [node];
         getSymbolAccessibilityDiagnostic = throwDiagnostic;
         isBundledEmit = false;
         resultHasExternalModuleIndicator = false;
@@ -610,8 +629,18 @@ export function transformDeclarations(context: TransformationContext) {
                 combinedStatements = setTextRange(factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]), combinedStatements);
             }
         }
-        const typeReferences = isolatedDeclarations? node.typeReferenceDirectives: getFileReferencesForUsedTypeReferences();
-        const updated = factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, references, typeReferences, node.hasNoDefaultLib, getLibReferences());
+        const typeReferences = getFileReferencesForUsedTypeReferences();
+        const libReferences = getLibReferences();
+
+        const updated = factory.updateSourceFile(
+            node,
+            combinedStatements,
+            /*isDeclarationFile*/ true,
+            references,
+            isolatedDeclarations? node.typeReferenceDirectives : typeReferences,
+            node.hasNoDefaultLib,
+            libReferences
+        );
         updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
         return updated;
 
@@ -620,10 +649,10 @@ export function transformDeclarations(context: TransformationContext) {
         }
 
         function getFileReferencesForUsedTypeReferences() {
-            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
+            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.entries()), getFileReferenceForSpecifierModeTuple) : [];
         }
 
-        function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: ResolutionMode]): FileReference | undefined {
+        function getFileReferenceForSpecifierModeTuple([[typeName, mode], requestingNode]: [[specifier: string, mode: ResolutionMode], Node | undefined]): FileReference | undefined {
             // Elide type references for which we have imports
             if (emittedImports) {
                 for (const importStatement of emittedImports) {
@@ -637,6 +666,9 @@ export function transformDeclarations(context: TransformationContext) {
                         return undefined;
                     }
                 }
+            }
+            if(requestingNode) {
+                handleTypeReferenceError([typeName, mode], requestingNode)
             }
             return { fileName: typeName, pos: -1, end: -1, ...(mode ? { resolutionMode: mode } : undefined) };
         }
@@ -665,7 +697,7 @@ export function transformDeclarations(context: TransformationContext) {
                         // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
                         // via a non-relative name, emit a type reference directive to that non-relative name, rather than
                         // a relative path to the declaration file
-                        recordTypeReferenceDirectivesIfNecessary([[specifier, /*mode*/ undefined]]);
+                        recordTypeReferenceDirectivesIfNecessary([[specifier, /*mode*/ undefined]], undefined);
                         return;
                     }
 
@@ -946,7 +978,7 @@ export function transformDeclarations(context: TransformationContext) {
     function checkEntityNameVisibility(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node) {
         const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
         handleSymbolAccessibilityError(visibilityResult);
-        recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
+        recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName), entityName);
     }
 
     function preserveJsDoc<T extends Node>(updated: T, original: Node): T {

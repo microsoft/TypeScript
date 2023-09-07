@@ -106,6 +106,10 @@ async function main() {
 ================= CODE MOD ERROR ==============
 ${result.message}
 ${result.stack}
+
+// ==================
+// Original test file: ${testFile}
+// ${caseData.code.split("\n").join("\n// ")}
 `);
             continue;
         }
@@ -134,10 +138,11 @@ ${result.stack}
                 ]);
 
                 const printer = ts.createPrinter({
-                    onlyPrintJsDocStyle: true,
+                    onlyPrintJsDocStyle: false,
                     newLine: settings.newLine,
                     target: settings.target,
                     removeComments: false,
+                    omitTrailingSemicolon: true,
                 } as ts.PrinterOptions);
 
 
@@ -152,6 +157,9 @@ ${result.stack}
 ================= CODE MOD ERROR ==============
 ${e.message}
 ${e.stack}
+// ==================
+// Original test file: ${testFile}
+// ${caseData.code.split("\n").join("\n// ")}
 `;
                 debugger;
             }

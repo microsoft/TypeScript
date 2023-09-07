@@ -6666,6 +6666,10 @@
         "category": "Error",
         "code": 9007
     },
+    "Declaration emit for this file requires adding a type reference directive. Add a type reference directive to ${0} to unblock declaration emit": {
+        "category": "Error",
+        "code": 9008
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
