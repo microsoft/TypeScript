@@ -1,6 +1,8 @@
 --excludeFiles **/../*
 buildOptions::
-{}
+{
+ "skipJSDocParsing": true
+}
 WatchOptions::
 {
  "excludeFiles": []

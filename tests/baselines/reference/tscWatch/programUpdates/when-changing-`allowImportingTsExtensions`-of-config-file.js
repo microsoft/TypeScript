@@ -32,7 +32,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-  options: {"noEmit":true,"allowImportingTsExtensions":false,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"noEmit":true,"allowImportingTsExtensions":false,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
@@ -52,7 +52,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"noEmit":true,"allowImportingTsExtensions":false,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"noEmit":true,"allowImportingTsExtensions":false,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -112,13 +112,13 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-  options: {"noEmit":true,"allowImportingTsExtensions":true,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"noEmit":true,"allowImportingTsExtensions":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"noEmit":true,"allowImportingTsExtensions":true,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"noEmit":true,"allowImportingTsExtensions":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

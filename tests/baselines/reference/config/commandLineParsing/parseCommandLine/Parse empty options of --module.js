@@ -1,6 +1,8 @@
 0.ts --module
 CompilerOptions::
-{}
+{
+ "skipJSDocParsing": true
+}
 WatchOptions::
 
 FileNames::

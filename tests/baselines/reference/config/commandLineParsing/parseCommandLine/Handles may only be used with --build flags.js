@@ -1,6 +1,8 @@
 --clean --dry --force --verbose
 CompilerOptions::
-{}
+{
+ "skipJSDocParsing": true
+}
 WatchOptions::
 
 FileNames::

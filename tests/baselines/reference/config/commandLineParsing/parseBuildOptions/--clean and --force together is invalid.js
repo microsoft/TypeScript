@@ -1,6 +1,7 @@
 --clean --force
 buildOptions::
 {
+ "skipJSDocParsing": true,
  "clean": true,
  "force": true
 }

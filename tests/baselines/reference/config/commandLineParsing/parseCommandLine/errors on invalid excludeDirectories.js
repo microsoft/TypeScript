@@ -1,6 +1,8 @@
 --excludeDirectories **/../* 0.ts
 CompilerOptions::
-{}
+{
+ "skipJSDocParsing": true
+}
 WatchOptions::
 {
  "excludeDirectories": []

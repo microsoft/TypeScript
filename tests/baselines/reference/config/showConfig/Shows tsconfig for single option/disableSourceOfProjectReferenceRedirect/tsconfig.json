@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
-        "disableSourceOfProjectReferenceRedirect": true
+        "disableSourceOfProjectReferenceRedirect": true,
+        "skipJSDocParsing": true
     }
 }

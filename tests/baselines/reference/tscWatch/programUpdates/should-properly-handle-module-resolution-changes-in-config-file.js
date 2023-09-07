@@ -41,7 +41,7 @@ Output::
 
 
 Program root files: ["/a/b/file1.ts"]
-Program options: {"moduleResolution":2,"watch":true,"project":"/a/b/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/a/b/tsconfig.json"}
+Program options: {"moduleResolution":2,"skipJSDocParsing":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -100,7 +100,7 @@ Output::
 
 
 Program root files: ["/a/b/file1.ts"]
-Program options: {"moduleResolution":1,"watch":true,"project":"/a/b/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/a/b/tsconfig.json"}
+Program options: {"moduleResolution":1,"skipJSDocParsing":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

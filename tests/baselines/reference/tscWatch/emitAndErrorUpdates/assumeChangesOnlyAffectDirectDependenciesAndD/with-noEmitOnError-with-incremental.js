@@ -55,7 +55,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"skipJSDocParsing":true,"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -229,7 +229,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"skipJSDocParsing":true,"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -392,7 +392,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"skipJSDocParsing":true,"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -548,7 +548,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"skipJSDocParsing":true,"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

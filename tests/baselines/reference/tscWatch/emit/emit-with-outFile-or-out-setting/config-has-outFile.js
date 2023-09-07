@@ -33,7 +33,7 @@ Output::
 
 
 Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/a/tsconfig.json"}
+Program options: {"outFile":"/a/out.js","skipJSDocParsing":true,"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/a.ts
@@ -85,7 +85,7 @@ Output::
 
 
 Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/a/tsconfig.json"}
+Program options: {"outFile":"/a/out.js","skipJSDocParsing":true,"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/a.ts
@@ -123,7 +123,7 @@ Output::
 
 
 Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/a/tsconfig.json"}
+Program options: {"outFile":"/a/out.js","skipJSDocParsing":true,"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/a.ts

@@ -38,7 +38,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-  options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+  options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 Loading config file: /user/username/projects/myproject/projects/project1/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/tsconfig.json 2000 undefined Config file of referened project
@@ -62,7 +62,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -205,7 +205,7 @@ Reloading new file names and options
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-  options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+  options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
@@ -222,7 +222,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -321,7 +321,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-  options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+  options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
 [[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
@@ -329,7 +329,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -496,7 +496,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-  options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+  options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
@@ -514,7 +514,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -682,7 +682,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-  options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+  options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
 [[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
@@ -690,7 +690,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 
 Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program options: {"module":0,"composite":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

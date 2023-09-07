@@ -25,7 +25,7 @@ Current directory: / CaseSensitiveFileNames: false
 Synchronizing program
 CreatingProgramWith::
   roots: ["/f.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true}
 FileWatcher:: Added:: WatchInfo: /f.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 [[90m12:00:14 AM[0m] Found 0 errors. Watching for file changes.
@@ -33,7 +33,7 @@ FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 
 
 Program root files: ["/f.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -78,13 +78,13 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/f.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true}
 [[90m12:00:21 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/f.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

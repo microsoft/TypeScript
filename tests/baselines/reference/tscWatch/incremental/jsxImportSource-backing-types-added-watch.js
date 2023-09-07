@@ -37,7 +37,7 @@ Output::
 
 
 Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","watch":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","skipJSDocParsing":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -196,7 +196,7 @@ Output::
 
 
 Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","watch":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","skipJSDocParsing":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

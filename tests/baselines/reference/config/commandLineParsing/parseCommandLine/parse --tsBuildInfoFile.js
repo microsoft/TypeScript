@@ -1,6 +1,7 @@
 --tsBuildInfoFile build.tsbuildinfo 0.ts
 CompilerOptions::
 {
+ "skipJSDocParsing": true,
  "tsBuildInfoFile": "build.tsbuildinfo"
 }
 WatchOptions::

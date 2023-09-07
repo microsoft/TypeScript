@@ -1,6 +1,7 @@
 --lib es5,es2015.symbol.wellknown --target es5 0.ts
 CompilerOptions::
 {
+ "skipJSDocParsing": true,
  "lib": [
   "lib.es5.d.ts",
   "lib.es2015.symbol.wellknown.d.ts"

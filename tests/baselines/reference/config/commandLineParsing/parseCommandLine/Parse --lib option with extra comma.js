@@ -1,6 +1,7 @@
 --lib es5, es7 0.ts
 CompilerOptions::
 {
+ "skipJSDocParsing": true,
  "lib": [
   "lib.es5.d.ts"
  ]

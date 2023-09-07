@@ -1,6 +1,7 @@
 --watch --dry
 buildOptions::
 {
+ "skipJSDocParsing": true,
  "watch": true,
  "dry": true
 }

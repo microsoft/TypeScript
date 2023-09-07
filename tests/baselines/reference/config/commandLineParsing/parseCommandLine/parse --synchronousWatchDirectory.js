@@ -1,6 +1,8 @@
 --synchronousWatchDirectory 0.ts
 CompilerOptions::
-{}
+{
+ "skipJSDocParsing": true
+}
 WatchOptions::
 {
  "synchronousWatchDirectory": true

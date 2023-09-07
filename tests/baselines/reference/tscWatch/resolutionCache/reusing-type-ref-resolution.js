@@ -44,7 +44,7 @@ FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 
 Synchronizing program
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-  options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+  options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","skipJSDocParsing":true,"watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/fileWithImports.ts 250 undefined Source file
 ======== Resolving module 'pkg0' from '/users/username/projects/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -154,7 +154,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/pro
 
 
 Program root files: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","skipJSDocParsing":true,"watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -384,7 +384,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-  options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+  options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","skipJSDocParsing":true,"watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Reusing resolution of module 'pkg0' from '/users/username/projects/project/fileWithImports.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/users/username/projects/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -429,7 +429,7 @@ fileWithTypeRefs.ts
 
 
 Program root files: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","skipJSDocParsing":true,"watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -633,7 +633,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-  options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+  options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","skipJSDocParsing":true,"watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Reusing resolution of module 'pkg0' from '/users/username/projects/project/fileWithImports.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/users/username/projects/project/fileWithImports.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg1/index.d.ts'.
 Reusing resolution of type reference directive 'pkg2' from '/users/username/projects/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg2/index.d.ts'.
@@ -676,7 +676,7 @@ fileWithTypeRefs.ts
 
 
 Program root files: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
-Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","skipJSDocParsing":true,"watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

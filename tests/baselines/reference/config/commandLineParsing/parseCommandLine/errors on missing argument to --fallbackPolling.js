@@ -1,6 +1,8 @@
 0.ts --fallbackPolling
 CompilerOptions::
-{}
+{
+ "skipJSDocParsing": true
+}
 WatchOptions::
 {}
 FileNames::

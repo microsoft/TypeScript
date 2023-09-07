@@ -99,7 +99,7 @@ src/bin.ts
 
 
 Program root files: ["/Users/name/projects/web/src/bin.ts"]
-Program options: {"moduleResolution":99,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
+Program options: {"moduleResolution":99,"forceConsistentCasingInFileNames":true,"traceResolution":true,"skipJSDocParsing":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

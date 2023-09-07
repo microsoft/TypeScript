@@ -1,6 +1,7 @@
 --watchFile UseFsEvents --verbose
 buildOptions::
 {
+ "skipJSDocParsing": true,
  "verbose": true
 }
 WatchOptions::

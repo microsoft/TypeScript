@@ -3,7 +3,8 @@
         "esModuleInterop": true,
         "target": "es5",
         "module": "commonjs",
-        "strict": true
+        "strict": true,
+        "skipJSDocParsing": true
     },
     "references": [
         {

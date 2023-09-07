@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
-        "rootDirs": []
+        "rootDirs": [],
+        "skipJSDocParsing": true
     }
 }

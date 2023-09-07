@@ -59,7 +59,7 @@ b.ts
 
 
 Program root files: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -182,7 +182,7 @@ b.ts
 
 
 Program root files: ["/user/username/projects/myproject/b.ts","/user/username/projects/myproject/XY/a.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"forceConsistentCasingInFileNames":true,"outFile":"/user/username/projects/myproject/out.js","module":4,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

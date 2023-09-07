@@ -1,6 +1,7 @@
 --verbose --fallbackPolling
 buildOptions::
 {
+ "skipJSDocParsing": true,
  "verbose": true
 }
 WatchOptions::

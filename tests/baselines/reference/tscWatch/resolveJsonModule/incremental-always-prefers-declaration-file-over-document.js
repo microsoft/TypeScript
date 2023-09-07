@@ -45,7 +45,7 @@ Output::
 
 
 Program root files: ["/src/project/data.d.json.ts","/src/project/main.ts"]
-Program options: {"resolveJsonModule":true,"project":"/src/project","incremental":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"resolveJsonModule":true,"skipJSDocParsing":true,"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -178,7 +178,7 @@ Output::
 
 
 Program root files: ["/src/project/data.d.json.ts","/src/project/main.ts"]
-Program options: {"resolveJsonModule":false,"project":"/src/project","incremental":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"resolveJsonModule":false,"skipJSDocParsing":true,"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

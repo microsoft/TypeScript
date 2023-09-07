@@ -32,7 +32,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
@@ -49,7 +49,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 Program root files: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -163,7 +163,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 [96mmain.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2724: [0m'"./foo"' has no exported member named 'foo'. Did you mean 'foo2'?
 
 [7m1[0m import { foo } from "./foo"; foo();
@@ -179,7 +179,7 @@ CreatingProgramWith::
 
 
 Program root files: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -267,13 +267,13 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-  options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 [[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/foo.d.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

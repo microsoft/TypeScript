@@ -30,7 +30,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/Project/file1.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -93,7 +93,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/Project/file1.ts","/user/username/projects/myproject/Project/file2.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

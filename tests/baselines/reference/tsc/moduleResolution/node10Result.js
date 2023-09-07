@@ -333,7 +333,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -636,7 +636,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -859,7 +859,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1071,7 +1071,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1270,7 +1270,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1441,7 +1441,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1682,7 +1682,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1971,7 +1971,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -2276,7 +2276,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -2568,7 +2568,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -2791,7 +2791,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -3003,7 +3003,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -3202,7 +3202,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"project":"/home/src/projects/project","skipJSDocParsing":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"skipJSDocParsing":true,"project":"/home/src/projects/project","configFilePath":"/home/src/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

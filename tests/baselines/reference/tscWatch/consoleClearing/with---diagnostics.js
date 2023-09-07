@@ -25,13 +25,13 @@ Current directory: / CaseSensitiveFileNames: false
 Synchronizing program
 CreatingProgramWith::
   roots: ["/f.ts"]
-  options: {"watch":true,"diagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"diagnostics":true}
 [[90m12:00:14 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/f.ts"]
-Program options: {"watch":true,"diagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"diagnostics":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -76,13 +76,13 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/f.ts"]
-  options: {"watch":true,"diagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"diagnostics":true}
 [[90m12:00:21 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/f.ts"]
-Program options: {"watch":true,"diagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"diagnostics":true}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

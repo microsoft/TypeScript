@@ -102,7 +102,7 @@ Current directory: /home/src/projects CaseSensitiveFileNames: false
 Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-  options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 FileWatcher:: Added:: WatchInfo: project1/core.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: project1/utils.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: project1/file.ts 250 undefined Source file
@@ -232,7 +232,7 @@ project1/file2.ts
 
 
 Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.es5.d.ts
@@ -345,7 +345,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-  options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
@@ -388,7 +388,7 @@ project1/file2.ts
 
 
 Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 Program structureReused: SafeModules
 Program files::
 /home/src/lib/lib.es5.d.ts
@@ -479,7 +479,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-  options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
@@ -508,7 +508,7 @@ project1/file2.ts
 
 
 Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 Program structureReused: Completely
 Program files::
 /home/src/lib/lib.es5.d.ts
@@ -555,7 +555,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-  options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 FileWatcher:: Close:: WatchInfo: project1/core.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
@@ -588,7 +588,7 @@ project1/file2.ts
 
 
 Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.es5.d.ts
@@ -660,7 +660,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-  options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 FileWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
@@ -722,7 +722,7 @@ project1/file2.ts
 
 
 Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.es5.d.ts
@@ -810,7 +810,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-  options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -855,7 +855,7 @@ project1/file2.ts
 
 
 Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 Program structureReused: SafeModules
 Program files::
 /home/src/lib/lib.es5.d.ts
@@ -937,7 +937,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-  options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+  options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 FileWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -999,7 +999,7 @@ project1/file2.ts
 
 
 Program root files: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
-Program options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true,"skipJSDocParsing":true}
+Program options: {"skipJSDocParsing":true,"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
 Program structureReused: Not
 Program files::
 /home/src/lib/lib.es5.d.ts

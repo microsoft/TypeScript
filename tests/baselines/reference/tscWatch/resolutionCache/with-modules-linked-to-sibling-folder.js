@@ -40,7 +40,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/main/index.ts"]
-Program options: {"module":1,"moduleResolution":2,"baseUrl":"/user/username/projects/myproject/main","rootDir":"/user/username/projects/myproject/main","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/main/tsconfig.json"}
+Program options: {"module":1,"moduleResolution":2,"baseUrl":"/user/username/projects/myproject/main","rootDir":"/user/username/projects/myproject/main","skipJSDocParsing":true,"watch":true,"configFilePath":"/user/username/projects/myproject/main/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

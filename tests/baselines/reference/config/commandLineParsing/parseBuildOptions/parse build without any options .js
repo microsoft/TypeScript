@@ -1,6 +1,8 @@
 
 buildOptions::
-{}
+{
+ "skipJSDocParsing": true
+}
 WatchOptions::
 
 Projects::

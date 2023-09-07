@@ -77,7 +77,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 
 
 Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","project":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","watch":true,"traceResolution":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","skipJSDocParsing":true,"project":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -193,7 +193,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 
 
 Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","project":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","watch":true,"traceResolution":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","skipJSDocParsing":true,"project":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -307,7 +307,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 
 
 Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","project":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","watch":true,"traceResolution":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","skipJSDocParsing":true,"project":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

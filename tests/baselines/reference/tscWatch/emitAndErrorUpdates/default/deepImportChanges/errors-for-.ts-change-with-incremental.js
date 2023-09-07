@@ -46,7 +46,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"watch":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -236,7 +236,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"watch":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -398,7 +398,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"watch":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -551,7 +551,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"watch":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

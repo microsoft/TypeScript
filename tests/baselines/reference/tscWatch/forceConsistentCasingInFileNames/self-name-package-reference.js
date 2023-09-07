@@ -54,7 +54,7 @@ index.ts
 
 
 Program root files: ["/Users/name/projects/web/index.ts"]
-Program options: {"module":199,"outDir":"/Users/name/projects/web/dist","declarationDir":"/Users/name/projects/web/types","composite":true,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
+Program options: {"module":199,"outDir":"/Users/name/projects/web/dist","declarationDir":"/Users/name/projects/web/types","composite":true,"forceConsistentCasingInFileNames":true,"traceResolution":true,"skipJSDocParsing":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/web/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.esnext.full.d.ts

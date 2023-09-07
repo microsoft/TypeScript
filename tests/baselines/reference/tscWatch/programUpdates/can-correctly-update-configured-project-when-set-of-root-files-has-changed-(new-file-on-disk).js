@@ -30,7 +30,7 @@ Output::
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/a/b/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -82,7 +82,7 @@ Output::
 
 
 Program root files: ["/a/b/f1.ts","/a/b/f2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/a/b/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

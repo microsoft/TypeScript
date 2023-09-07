@@ -1,6 +1,7 @@
 --verbose --invalidOption
 buildOptions::
 {
+ "skipJSDocParsing": true,
  "verbose": true
 }
 WatchOptions::

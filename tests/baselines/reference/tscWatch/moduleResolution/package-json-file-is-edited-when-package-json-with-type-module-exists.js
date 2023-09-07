@@ -39,7 +39,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
-  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/user/username/projects/myproject/src/package.json' does not exist.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileA.ts 250 undefined Source file
@@ -84,7 +84,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 
 
 Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -156,7 +156,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
-  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -199,7 +199,7 @@ src/fileA.ts
 
 
 Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -273,7 +273,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
-  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -311,7 +311,7 @@ src/fileA.ts
 
 
 Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -383,7 +383,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
-  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -435,7 +435,7 @@ src/fileA.ts
 
 
 Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -511,7 +511,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
-  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -539,7 +539,7 @@ src/fileA.ts
 
 
 Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
@@ -606,7 +606,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/fileA.ts"]
-  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -642,7 +642,7 @@ src/fileA.ts
 
 
 Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts

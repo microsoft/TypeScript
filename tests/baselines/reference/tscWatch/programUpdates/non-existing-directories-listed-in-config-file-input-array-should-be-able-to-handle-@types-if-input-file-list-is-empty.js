@@ -41,7 +41,7 @@ Output::
 
 
 Program root files: []
-Program options: {"watch":true,"project":"/a/tsconfig.json","skipJSDocParsing":true,"configFilePath":"/a/tsconfig.json"}
+Program options: {"skipJSDocParsing":true,"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
 Program structureReused: Not
 Program files::
 

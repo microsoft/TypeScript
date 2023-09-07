@@ -1,6 +1,7 @@
 --clean --watch
 buildOptions::
 {
+ "skipJSDocParsing": true,
  "clean": true,
  "watch": true
 }

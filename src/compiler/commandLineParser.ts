@@ -1778,6 +1778,7 @@ export function parseCommandLineWorker(
     const fileNames: string[] = [];
     const errors: Diagnostic[] = [];
 
+    options.skipJSDocParsing = true;
     parseStrings(commandLine);
     return {
         options,

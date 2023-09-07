@@ -242,7 +242,7 @@ project1/typeroot1/sometype/index.d.ts
   Entry point for implicit type library 'sometype'
 exitCode:: ExitStatus.Success
 Program root files: ["/home/src/projects/project1/core.d.ts","/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"project":"/home/src/projects/project1","explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"skipJSDocParsing":true,"project":"/home/src/projects/project1","explainFiles":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts

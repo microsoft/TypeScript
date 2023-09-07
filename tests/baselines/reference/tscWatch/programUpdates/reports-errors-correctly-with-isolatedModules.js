@@ -34,7 +34,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"isolatedModules":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"isolatedModules":true,"skipJSDocParsing":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -112,7 +112,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"isolatedModules":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"isolatedModules":true,"skipJSDocParsing":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

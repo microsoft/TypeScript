@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
-        "paths": {}
+        "paths": {},
+        "skipJSDocParsing": true
     }
 }

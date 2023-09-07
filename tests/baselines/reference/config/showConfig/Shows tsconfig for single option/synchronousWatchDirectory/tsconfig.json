@@ -1,5 +1,7 @@
 {
-    "compilerOptions": {},
+    "compilerOptions": {
+        "skipJSDocParsing": true
+    },
     "watchOptions": {
         "synchronousWatchDirectory": true
     }

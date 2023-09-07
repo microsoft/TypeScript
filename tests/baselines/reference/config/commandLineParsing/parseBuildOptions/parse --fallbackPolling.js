@@ -1,6 +1,7 @@
 --fallbackPolling PriorityInterval --verbose
 buildOptions::
 {
+ "skipJSDocParsing": true,
  "verbose": true
 }
 WatchOptions::

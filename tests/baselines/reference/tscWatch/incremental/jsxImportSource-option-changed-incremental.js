@@ -67,7 +67,7 @@ index.tsx
 
 
 Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","skipJSDocParsing":true,"explainFiles":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -188,7 +188,7 @@ Found 1 error in index.tsx[90m:1[0m
 
 
 Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"preact","explainFiles":true,"skipJSDocParsing":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"preact","skipJSDocParsing":true,"explainFiles":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

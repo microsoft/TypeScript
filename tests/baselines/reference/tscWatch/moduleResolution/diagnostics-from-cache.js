@@ -61,7 +61,7 @@ File '/package.json' does not exist.
 
 
 Program root files: ["/user/username/projects/myproject/index.ts","/user/username/projects/myproject/index2.ts"]
-Program options: {"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","skipJSDocParsing":true,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -168,7 +168,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 Program root files: ["/user/username/projects/myproject/index.ts","/user/username/projects/myproject/index2.ts"]
-Program options: {"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","watch":true,"traceResolution":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"moduleResolution":99,"outDir":"/user/username/projects/myproject/dist","declaration":true,"declarationDir":"/user/username/projects/myproject/types","skipJSDocParsing":true,"watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

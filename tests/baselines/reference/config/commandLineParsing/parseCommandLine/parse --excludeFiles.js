@@ -1,6 +1,8 @@
 --excludeFiles **/temp/*.ts 0.ts
 CompilerOptions::
-{}
+{
+ "skipJSDocParsing": true
+}
 WatchOptions::
 {
  "excludeFiles": [

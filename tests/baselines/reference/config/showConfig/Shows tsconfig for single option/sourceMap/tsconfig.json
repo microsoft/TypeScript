@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "skipJSDocParsing": true,
         "sourceMap": true
     }
 }

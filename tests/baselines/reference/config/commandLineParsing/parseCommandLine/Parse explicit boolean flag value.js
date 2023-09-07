@@ -1,6 +1,7 @@
 --strictNullChecks false 0.ts
 CompilerOptions::
 {
+ "skipJSDocParsing": true,
  "strictNullChecks": false
 }
 WatchOptions::

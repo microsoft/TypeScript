@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "skipJSDocParsing": true,
         "moduleResolution": "node10"
     }
 }

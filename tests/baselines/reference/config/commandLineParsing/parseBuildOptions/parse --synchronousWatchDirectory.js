@@ -1,6 +1,7 @@
 --synchronousWatchDirectory --verbose
 buildOptions::
 {
+ "skipJSDocParsing": true,
  "verbose": true
 }
 WatchOptions::
