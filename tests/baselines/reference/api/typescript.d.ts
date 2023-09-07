@@ -2900,7 +2900,7 @@ declare namespace ts {
                 /**
                  * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
                  */
-                readonly excludeLibrarySymbols?: boolean;
+                readonly excludeLibrarySymbolsInNavTo?: boolean;
             }
             interface CompilerOptions {
                 allowJs?: boolean;
@@ -8644,7 +8644,7 @@ declare namespace ts {
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
-        readonly excludeLibrarySymbols?: boolean;
+        readonly excludeLibrarySymbolsInNavTo?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {

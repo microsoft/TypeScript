@@ -323,7 +323,7 @@ export class SessionClient implements LanguageService {
         };
         const oldPreferences = this.preferences;
         if (excludeLibFiles) {
-            this.configure({ excludeLibrarySymbols: true });
+            this.configure({ excludeLibrarySymbolsInNavTo: true });
         }
 
         const request = this.processRequest<protocol.NavtoRequest>(protocol.CommandTypes.Navto, args);

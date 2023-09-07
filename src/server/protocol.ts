@@ -3603,7 +3603,7 @@ export interface UserPreferences {
     /**
      * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
      */
-    readonly excludeLibrarySymbols?: boolean;
+    readonly excludeLibrarySymbolsInNavTo?: boolean;
 }
 
 export interface CompilerOptions {
