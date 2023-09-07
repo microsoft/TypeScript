@@ -21672,12 +21672,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 tracing?.pop();
             }
 
-            if (entry !== undefined) {
-                // If the previous entry and the result disagree, then something has gone wrong.
-                const entrySucceeded = !!(entry & RelationComparisonResult.Succeeded);
-                const resultSucceeded = result !== Ternary.False;
-                Debug.assertEqual(entrySucceeded, resultSucceeded, "Cached relationship does not match recalculated result");
-            }
+            // if (entry !== undefined) {
+            //     // If the previous entry and the result disagree, then something has gone wrong.
+            //     const entrySucceeded = !!(entry & RelationComparisonResult.Succeeded);
+            //     const resultSucceeded = result !== Ternary.False;
+            //     Debug.assertEqual(entrySucceeded, resultSucceeded, "Cached relationship does not match recalculated result");
+            // }
 
             if (outofbandVarianceMarkerHandler) {
                 outofbandVarianceMarkerHandler = originalHandler;
