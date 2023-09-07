@@ -47476,11 +47476,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if(!isEntityNameExpression(expression)) {
             return false;
         }
-        let symbol = getSymbolAtLocation(expression);
+        const symbol = getSymbolAtLocation(expression);
         if(!symbol) {
             return false;
         }
-        let declaredType = getTypeOfSymbol(symbol);
+        const declaredType = getTypeOfSymbol(symbol);
         return declaredType === type
     }
 

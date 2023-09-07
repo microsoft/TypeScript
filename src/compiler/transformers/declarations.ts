@@ -1,4 +1,3 @@
-import { appendFileSync } from "fs";
 import {
     __String,
     AccessorDeclaration,
@@ -578,7 +577,7 @@ export function transformDeclarations(context: TransformationContext) {
                         const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
                         hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
                         collectReferences(sourceFile, refs);
-                        recordTypeReferenceDirectivesIfNecessary(map(sourceFile.typeReferenceDirectives, ref => [ref.fileName, ref.resolutionMode]), undefined);
+                        recordTypeReferenceDirectivesIfNecessary(map(sourceFile.typeReferenceDirectives, ref => [ref.fileName, ref.resolutionMode]), /*requestingNode*/ undefined);
                         collectLibs(sourceFile, libs);
                         return sourceFile;
                     }
@@ -697,7 +696,7 @@ export function transformDeclarations(context: TransformationContext) {
                         // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
                         // via a non-relative name, emit a type reference directive to that non-relative name, rather than
                         // a relative path to the declaration file
-                        recordTypeReferenceDirectivesIfNecessary([[specifier, /*mode*/ undefined]], undefined);
+                        recordTypeReferenceDirectivesIfNecessary([[specifier, /*mode*/ undefined]], /*requestingNode*/ undefined);
                         return;
                     }
 
@@ -1481,7 +1480,7 @@ export function transformDeclarations(context: TransformationContext) {
                     });
                     errorFallbackNode = input;
                     const type = isolatedDeclarations ?
-                        localInferenceResolver?.fromInitializer(input, undefined, currentSourceFile) :
+                        localInferenceResolver?.fromInitializer(input, /*type*/ undefined, currentSourceFile) :
                         resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker);
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                     errorFallbackNode = undefined;

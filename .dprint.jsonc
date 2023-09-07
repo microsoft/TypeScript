@@ -47,7 +47,9 @@
         "tests/**",
         "internal/**",
         "**/*.generated.*",
-        "scripts/*.d.*"
+        "scripts/*.d.*",
+        "external-declarations/tsc-tests/**",
+        "external-declarations/fixer-test/**"
     ],
     "plugins": [
         "https://plugins.dprint.dev/typescript-0.86.1.wasm",

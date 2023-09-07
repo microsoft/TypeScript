@@ -2,11 +2,11 @@
 import * as ts from "typescript";
 import { SourceFile } from "typescript";
 
+import { Utils } from "../test-runner/tsc-infrastructure/compiler-run";
 import { createEmitHost } from "./emit-host";
 import { createEmitResolver } from "./emit-resolver";
 import { tracer } from "./perf-tracer";
 import { TransformationContext } from "./types";
-import { Utils } from "../test-runner/tsc-infrastructure/compiler-run";
 
 const transformDeclarations: (context: TransformationContext) => (node: SourceFile) => SourceFile = (ts as any).transformDeclarations;
 

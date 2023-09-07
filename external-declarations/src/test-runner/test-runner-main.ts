@@ -1,10 +1,11 @@
 import "source-map-support/register";
 
 import * as fs from "fs/promises";
+import * as JSON from 'json5';
 import * as path from "path";
 import * as ts from "typescript";
-import * as JSON from 'json5';
 
+import { firstDefined } from "../compiler/lang-utils";
 import { normalizePath, removeExtension } from "../compiler/path-utils";
 import { addToQueue, ensureDir, flushQueue, readAllFiles } from "../utils/fs-utils";
 import { parsedCliArgs as parsedArgs } from "./cli-arg-config";
@@ -14,8 +15,7 @@ import { IO } from "./tsc-infrastructure/io";
 import { CompilerSettings, TestCaseContent } from "./tsc-infrastructure/test-file-parser";
 import { getFileBasedTestConfigurationDescription, getFileBasedTestConfigurations } from "./tsc-infrastructure/vary-by";
 import { changeExtension } from "./tsc-infrastructure/vpath";
-import { TestCompilationResult, loadTestCase, runIsolated, runTypeScript } from "./utils";
-import { firstDefined } from "../compiler/lang-utils";
+import { loadTestCase, runIsolated, runTypeScript,TestCompilationResult } from "./utils";
 
 
 const excludeFilter =/\/fourslash\//;
@@ -71,7 +71,7 @@ async function main() {
         Object.entries(fileConfiguration?.["test-categories"] ?? {}).forEach(([name, tests]) => tests.forEach(t => testCategories.set(t, name)));
     }
 
-    async function readDirRecursive (dir: string, relativePath: string = ""): Promise<string[]> {
+    async function readDirRecursive (dir: string, relativePath = ""): Promise<string[]> {
         const content = await fs.readdir(dir);
         const result: string[] = [];
         for (const entry of content) {
@@ -150,7 +150,7 @@ async function main() {
             } else {
                 
                 const error = firstDefined(results.diagnostics, d => {
-                    let category = errorCategories.get(d.code);
+                    const category = errorCategories.get(d.code);
                     return category ? { category, code: d.code }: undefined;
                 });
                 const category =  error? path.join(error.category, error.code.toString()) : testCategories.get(testName);

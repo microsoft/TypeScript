@@ -1,4 +1,4 @@
-import { ArgType,parserConfiguration, parseArgs } from "../utils/cli-parser";
+import { ArgType,parseArgs,parserConfiguration } from "../utils/cli-parser";
 
 export const testRunnerCLIConfiguration = parserConfiguration({
     default: {

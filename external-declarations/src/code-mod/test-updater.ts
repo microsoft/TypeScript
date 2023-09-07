@@ -161,6 +161,7 @@ ${e.stack}
 // Original test file: ${testFile}
 // ${caseData.code.split("\n").join("\n// ")}
 `;
+                // eslint-disable-next-line no-debugger
                 debugger;
             }
         }

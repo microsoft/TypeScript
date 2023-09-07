@@ -91,7 +91,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
                     name = assignment.left.name;
                 }
                 else {
-                    const argumentExpression = assignment.left.argumentExpression;;
+                    const argumentExpression = assignment.left.argumentExpression;
                     name = factory.createComputedPropertyName(argumentExpression);
                 }
                 const key = getMemberKey(name)
@@ -200,7 +200,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             }
             function updateEnumValues(node: EnumDeclaration) {
                 let prevEnumValueLinks: NodeLinks | undefined;  
-                let isDeclaration = isAmbientDeclaration(node) && !hasSyntacticModifier(node, ModifierFlags.Const);
+                const isDeclaration = isAmbientDeclaration(node) && !hasSyntacticModifier(node, ModifierFlags.Const);
                 for(const enumValue of node.members) {
                     const links = getNodeLinks(enumValue);
                     const value = getEnumMemberInitializerValue(enumValue);

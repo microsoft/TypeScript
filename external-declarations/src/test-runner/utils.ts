@@ -5,12 +5,12 @@ import { ModuleKind } from "typescript";
 
 import { getDeclarationExtension, isDeclarationFile, isTypeScriptFile } from "../compiler/path-utils";
 import { transformFile } from "../compiler/transform-file";
+import { parsedCliArgs } from "./cli-arg-config";
 import { compileFiles, TestFile, Utils } from "./tsc-infrastructure/compiler-run";
 import { libs } from "./tsc-infrastructure/options";
 import * as TestCaseParser from "./tsc-infrastructure/test-file-parser";
 import { changeExtension } from "./tsc-infrastructure/vpath";
 import * as vpath from "./tsc-infrastructure/vpath";
-import { parsedCliArgs } from "./cli-arg-config";
 
 export interface TestCompilationResult {
     files: readonly FileContent[];

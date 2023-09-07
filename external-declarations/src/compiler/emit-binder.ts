@@ -345,7 +345,6 @@ export function bindSourceFile(file: SourceFile, options: CompilerOptions, packa
                             addLocalOnlyDeclaration(namedBindings.name.escapedText, namedBindings, getSymbolFlagsForNode(namedBindings));
                         }
                         else {
-                            debugger;
                             throw new Error("Not supported");
                         }
                     }
