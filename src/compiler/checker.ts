@@ -454,6 +454,7 @@ import {
     isAssignmentTarget,
     isAutoAccessorPropertyDeclaration,
     isAwaitExpression,
+    isBigIntLiteral,
     isBinaryExpression,
     isBindableObjectDefinePropertyCall,
     isBindableStaticElementAccessExpression,
@@ -708,6 +709,7 @@ import {
     isSuperCall,
     isSuperProperty,
     isTaggedTemplateExpression,
+    isTemplateExpression,
     isTemplateSpan,
     isThisContainerOrFunctionBlock,
     isThisIdentifier,
@@ -47458,21 +47460,46 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
+    function isPrimitiveLiteralValue(node: Expression): boolean {
+        if(isNumericLiteral(node) || isBigIntLiteral(node) || isStringLiteralLike(node)) return true;
+
+        if(node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) return true;
+
+        if(isPrefixUnaryExpression(node)) {
+            const operand = node.operand;
+            if(node.operator === SyntaxKind.MinusToken) {
+                return isNumericLiteral(operand) || isBigIntLiteral(operand);
+            }
+            if(node.operator === SyntaxKind.PlusToken) {
+                return isNumericLiteral(operand);
+            }
+        }
+        if(isTemplateExpression(node)) {
+            return node.templateSpans.every(t => isPrimitiveLiteralValue(t.expression));
+        }
+        return false;
+    }
+
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || (isVariableDeclaration(node) && isVarConstLike(node)) || isEnumMember(node)) {
+            if (compilerOptions.isolatedDeclarations) {
+                return !!node.initializer && isPrimitiveLiteralValue(node.initializer);
+            }
             return isFreshLiteralType(getTypeOfSymbol(getSymbolOfDeclaration(node)));
         }
         return false;
     }
     function isLiteralComputedName(node: ComputedPropertyName) {
         const expression = node.expression;
-        const type = getTypeOfExpression(expression);
-        if(isFreshLiteralType(type)) {
+        if(isPrimitiveLiteralValue(expression)) {
             return true;
         }
+        const type = getTypeOfExpression(expression);
         if(!isTypeUsableAsPropertyName(type)) {
             return false;
         }
+
+        // Only identifiers of the for A.B.C can be used
         if(!isEntityNameExpression(expression)) {
             return false;
         }
@@ -47480,6 +47507,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if(!symbol) {
             return false;
         }
+        // Ensure not type narrowing
         const declaredType = getTypeOfSymbol(symbol);
         return declaredType === type
     }

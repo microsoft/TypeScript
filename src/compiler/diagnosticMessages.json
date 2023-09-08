@@ -6670,6 +6670,10 @@
         "category": "Error",
         "code": 9008
     },
+    "Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function": {
+        "category": "Error",
+        "code": 9009
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
