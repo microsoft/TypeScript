@@ -26,7 +26,7 @@ function shouldKeep({ name: alias }) {
 
 
 //// [declarationEmitBindingPatternsUnused.d.ts]
-declare function shouldNotKeep({ name }: {
+declare function shouldNotKeep({ name: alias }: {
     name: string;
 }): void;
 declare function shouldNotKeepButIsKept({ name: alias }: {
