@@ -141,7 +141,7 @@ const caseSensitiveOrderingDiffersWithCaseHost = new fakes.ParseConfigHost(
     }),
 );
 
-const caseInsensiiveHostWithSameFileNamesWithDifferentExtensions = new fakes.ParseConfigHost(
+const caseInsensitiveHostWithSameFileNamesWithDifferentExtensions = new fakes.ParseConfigHost(
     new vfs.FileSystem(/*ignoreCase*/ true, {
         cwd: caseInsensitiveBasePath,
         files: {
@@ -864,43 +864,43 @@ describe("unittests:: config:: matchFiles", () => {
             baselineMatches(
                 "same named declarations with include ts",
                 { include: ["*.ts"] },
-                caseInsensiiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
                 caseInsensitiveBasePath,
             );
             baselineMatches(
                 "same named declarations with include ts dts",
                 { include: ["*.ts", "*.d.ts"] },
-                caseInsensiiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
                 caseInsensitiveBasePath,
             );
             baselineMatches(
                 "same named declarations with include tsx",
                 { include: ["*.tsx"] },
-                caseInsensiiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
                 caseInsensitiveBasePath,
             );
             baselineMatches(
                 "same named declarations with include tsx ts",
                 { include: ["*.tsx", "*.ts"] },
-                caseInsensiiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
                 caseInsensitiveBasePath,
             );
             baselineMatches(
                 "same named declarations with include ts tsx",
                 { include: ["*.tsx", "*.ts"] },
-                caseInsensiiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
                 caseInsensitiveBasePath,
             );
             baselineMatches(
                 "same named declarations with include tsx dts",
                 { include: ["*.tsx", "*.d.ts"] },
-                caseInsensiiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
                 caseInsensitiveBasePath,
             );
             baselineMatches(
                 "same named declarations with include dts tsx",
                 { include: ["*.tsx", "*.d.ts"] },
-                caseInsensiiveHostWithSameFileNamesWithDifferentExtensions,
+                caseInsensitiveHostWithSameFileNamesWithDifferentExtensions,
                 caseInsensitiveBasePath,
             );
         });
