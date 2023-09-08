@@ -149,11 +149,16 @@ async function main() {
                 );
             } else {
                 
-                const error = firstDefined(results.diagnostics, d => {
-                    const category = errorCategories.get(d.code);
-                    return category ? { category, code: d.code }: undefined;
-                });
-                const category =  error? path.join(error.category, error.code.toString()) : testCategories.get(testName);
+                let category = testCategories.get(testName);
+                if(!category) {
+                    const error = firstDefined(results.diagnostics, d => {
+                        const category = errorCategories.get(d.code);
+                        return category ? { category, code: d.code }: undefined;
+                    });
+                    if(error) {
+                        category = path.join(error.category, error.code.toString());
+                    }
+                }
                 if(category) {
                     file = path.join(
                         path.dirname(file),

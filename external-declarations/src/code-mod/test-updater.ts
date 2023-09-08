@@ -102,7 +102,8 @@ async function main() {
             }
         })();
         if(result instanceof Error) {
-            fs.writeFile(updatedTestFileName, `
+            await ensureDir(fsPath.dirname(updatedTestFileName));
+            await fs.writeFile(updatedTestFileName, `
 ================= CODE MOD ERROR ==============
 ${result.message}
 ${result.stack}
