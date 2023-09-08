@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternsUnused.ts] ////
+
+=== declarationEmitBindingPatternsUnused.ts ===
+function shouldNotKeep({ name: alias }: { name: string }) {
+>shouldNotKeep : ({ name: alias }: {    name: string;}) => void
+>name : any
+>alias : string
+>name : string
+
+}
+
+function shouldNotKeepButIsKept({ name: alias }: { name: string }) {
+>shouldNotKeepButIsKept : ({ name: alias }: {    name: string;}) => string
+>name : any
+>alias : string
+>name : string
+
+    return alias;
+>alias : string
+}
+
+function shouldKeep({ name: alias }: { name: string }): typeof alias {
+>shouldKeep : ({ name: alias }: {    name: string;}) => typeof alias
+>name : any
+>alias : string
+>name : string
+>alias : string
+
+    return alias;
+>alias : string
+}
+

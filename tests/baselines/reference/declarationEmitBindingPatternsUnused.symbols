@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternsUnused.ts] ////
+
+=== declarationEmitBindingPatternsUnused.ts ===
+function shouldNotKeep({ name: alias }: { name: string }) {
+>shouldNotKeep : Symbol(shouldNotKeep, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 41))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 0, 24))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 41))
+
+}
+
+function shouldNotKeepButIsKept({ name: alias }: { name: string }) {
+>shouldNotKeepButIsKept : Symbol(shouldNotKeepButIsKept, Decl(declarationEmitBindingPatternsUnused.ts, 2, 1))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 4, 50))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 4, 33))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 4, 50))
+
+    return alias;
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 4, 33))
+}
+
+function shouldKeep({ name: alias }: { name: string }): typeof alias {
+>shouldKeep : Symbol(shouldKeep, Decl(declarationEmitBindingPatternsUnused.ts, 6, 1))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 8, 38))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 8, 21))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 8, 38))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 8, 21))
+
+    return alias;
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 8, 21))
+}
+
