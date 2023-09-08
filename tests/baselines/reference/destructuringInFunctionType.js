@@ -54,7 +54,7 @@ type T3 = ([{
 }, {
     b: a;
 }]);
-type F3 = ([{ a: b }, { b: a }]: [{
+type F3 = ([{ a }, { b }]: [{
     a: any;
 }, {
     b: any;
