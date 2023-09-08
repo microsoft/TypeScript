@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/arrayFlatUnlimitedDepth.ts] ////
+
+=== arrayFlatUnlimitedDepth.ts ===
+const foo = [ [ ['string' ] ] ]
+>foo : string[][][]
+>[ [ ['string' ] ] ] : string[][][]
+>[ ['string' ] ] : string[][]
+>['string' ] : string[]
+>'string' : "string"
+
+const flatFoo : string[] = foo.flat(1000) 
+>flatFoo : string[]
+>foo.flat(1000) : string[]
+>foo.flat : <A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D, []>[]
+>foo : string[][][]
+>flat : <A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D, []>[]
+>1000 : 1000
+

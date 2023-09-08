@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/arrayFlatUnlimitedDepth.ts] ////
+
+=== arrayFlatUnlimitedDepth.ts ===
+const foo = [ [ ['string' ] ] ]
+>foo : Symbol(foo, Decl(arrayFlatUnlimitedDepth.ts, 0, 5))
+
+const flatFoo : string[] = foo.flat(1000) 
+>flatFoo : Symbol(flatFoo, Decl(arrayFlatUnlimitedDepth.ts, 1, 5))
+>foo.flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFlatUnlimitedDepth.ts, 0, 5))
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --))
+
