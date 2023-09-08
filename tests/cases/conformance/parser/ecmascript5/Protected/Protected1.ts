@@ -1,2 +1,0 @@
-protected class C {
-}

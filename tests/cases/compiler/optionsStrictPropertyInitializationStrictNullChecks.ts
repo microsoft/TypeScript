@@ -1,3 +1,0 @@
-// @strictPropertyInitialization: true
-
-var x;

@@ -1,3 +1,0 @@
-
-let exports: number;
-exports = '';

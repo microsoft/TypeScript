@@ -1,7 +1,0 @@
-{
-    "scenario": "Reference-path-static",
-    "projectRoot": "tests/cases/projects/reference-path-static",
-    "inputFiles": [
-        "test.ts"
-    ]
-}

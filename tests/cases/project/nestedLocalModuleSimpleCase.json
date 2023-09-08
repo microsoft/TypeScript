@@ -1,7 +1,0 @@
-{
-    "scenario": "nested local module - simple case",
-    "projectRoot": "tests/cases/projects/NestedLocalModule-SimpleCase",
-    "inputFiles": [
-        "test1.ts"
-    ]
-}

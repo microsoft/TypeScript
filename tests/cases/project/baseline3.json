@@ -1,9 +1,0 @@
-{
-    "scenario": "baseline 3",
-    "projectRoot": "tests/cases/projects/baseline",
-    "inputFiles": [
-        "nestedModule.ts"
-    ],
-    "baselineCheck": true,
-    "runTest": true
-}

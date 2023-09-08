@@ -1,6 +1,0 @@
-//// [tests/cases/compiler/jsFileCompilationDecoratorSyntax.ts] ////
-
-=== a.js ===
-@internal class C { }
->C : Symbol(C, Decl(a.js, 0, 0))
-

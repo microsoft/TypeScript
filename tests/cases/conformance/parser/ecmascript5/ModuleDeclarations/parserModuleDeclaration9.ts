@@ -1,2 +1,0 @@
-module a.number.b {
-}

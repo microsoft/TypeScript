@@ -1,7 +1,0 @@
-//// [tests/cases/compiler/jsFileCompilationRestParameter.ts] ////
-
-=== a.js ===
-function foo(...a) { }
->foo : (...a: any[]) => void
->a : any[]
-

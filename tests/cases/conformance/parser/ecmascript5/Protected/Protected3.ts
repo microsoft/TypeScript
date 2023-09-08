@@ -1,3 +1,0 @@
-class C {
-  protected constructor() { }
-}

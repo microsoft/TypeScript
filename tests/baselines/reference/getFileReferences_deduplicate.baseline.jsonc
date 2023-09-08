@@ -1,8 +1,0 @@
-// === getFileReferences ===
-// fileName: /util.ts
-
-// === /index.ts ===
-// export * from "[|./util|]";
-
-// === /test.ts ===
-// import "[|./util|]";

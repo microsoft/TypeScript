@@ -1,3 +1,0 @@
-interface HTMLElement {
-    type: string;
-}

@@ -1,1 +1,0 @@
-declare import a = b;

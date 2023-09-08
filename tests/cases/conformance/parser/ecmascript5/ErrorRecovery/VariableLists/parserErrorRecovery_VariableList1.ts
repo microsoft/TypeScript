@@ -1,2 +1,0 @@
-var a,
-return;

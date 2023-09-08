@@ -1,5 +1,0 @@
-// === goToDefinition ===
-// === /tests/cases/fourslash/foo.ts ===
-// /// <reference no-default-lib="true"/>
-// /// <reference path='./bar.d.ts' />
-// import.me/*GOTO DEF*/ta;

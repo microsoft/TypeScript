@@ -1,1 +1,0 @@
-var foo = <{ (): number; }> function(a) { return a };
