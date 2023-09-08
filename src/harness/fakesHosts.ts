@@ -153,7 +153,10 @@ export class System implements ts.System {
     }
 
     public setModifiedTime(path: string, time: Date) {
-        this.vfs.utimesSync(path, time, time);
+        try {
+            this.vfs.utimesSync(path, time, time);
+        }
+        catch { /* ignored */ }
     }
 
     public createHash(data: string): string {

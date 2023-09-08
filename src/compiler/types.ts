@@ -8085,6 +8085,9 @@ export interface SourceFileMayBeEmittedHost {
     isSourceFileFromExternalLibrary(file: SourceFile): boolean;
     getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    getCurrentDirectory(): string;
+    getCanonicalFileName: GetCanonicalFileName;
+    useCaseSensitiveFileNames(): boolean;
 }
 
 /** @internal */
