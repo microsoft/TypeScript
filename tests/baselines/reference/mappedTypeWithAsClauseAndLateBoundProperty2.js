@@ -64,7 +64,7 @@ export declare const thing: {
     values: () => IterableIterator<number>;
     includes: (searchElement: number, fromIndex?: number) => boolean;
     flatMap: <U_3, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U_3 | readonly U_3[], thisArg?: This) => U_3[];
-    flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
+    flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D, []>[];
     [Symbol.iterator]: () => IterableIterator<number>;
     readonly [Symbol.unscopables]: {
         [x: number]: boolean;
@@ -170,7 +170,7 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): error TS2526: A 'this'
         values: () => IterableIterator<number>;
         includes: (searchElement: number, fromIndex?: number) => boolean;
         flatMap: <U_3, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U_3 | readonly U_3[], thisArg?: This) => U_3[];
-        flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
+        flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D, []>[];
         [Symbol.iterator]: () => IterableIterator<number>;
         readonly [Symbol.unscopables]: {
             [x: number]: boolean;
