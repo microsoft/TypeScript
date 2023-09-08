@@ -62,6 +62,7 @@ import {
     CommentDirectivesMap,
     CommentDirectiveType,
     CommentRange,
+    comparePaths,
     compareStringsCaseSensitive,
     compareValues,
     Comparison,
@@ -162,6 +163,7 @@ import {
     GetCanonicalFileName,
     getCombinedModifierFlags,
     getCombinedNodeFlags,
+    getCommonSourceDirectory,
     getContainerFlags,
     getDirectoryPath,
     getJSDocAugmentsTag,
@@ -6382,8 +6384,17 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     // Any non json file should be emitted
     if (!isJsonSourceFile(sourceFile)) return true;
     if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
-    // Emit json file if outdir or outFile is specified
-    return !!options.outDir || !!outFile(options);
+    // Emit json file if outFile is specified
+    if (outFile(options)) return true;
+    // Json file is not emitted if outDir is not specified
+    if (!options.outDir) return false;
+    // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
+    if (options.rootDir || (options.composite && options.configFilePath)) {
+        const commonDir = getNormalizedAbsolutePath(getCommonSourceDirectory(options, () => [], host.getCurrentDirectory(), host.getCanonicalFileName), host.getCurrentDirectory());
+        const outputPath = getSourceFilePathInNewDirWorker(sourceFile.fileName, options.outDir, host.getCurrentDirectory(), commonDir, host.getCanonicalFileName);
+        if (comparePaths(sourceFile.fileName, outputPath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) return false;
+    }
+    return true;
 }
 
 /** @internal */

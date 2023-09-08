@@ -53,20 +53,23 @@ Output::
 
 [[90m12:00:14 AM[0m] Building project '/src/tsconfig.json'...
 
-[96msrc/src/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/src/hello.json' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
-
-[7m1[0m import hello from "../hello.json"
-[7m [0m [91m                  ~~~~~~~~~~~~~~~[0m
-
+TSFILE: /src/dist/index.js
 lib/lib.d.ts
   Default library for target 'es5'
 src/hello.json
   Imported via "../hello.json" from file 'src/src/index.ts'
 src/src/index.ts
   Matched by include pattern 'src/**/*' in 'src/tsconfig.json'
+exitCode:: ExitStatus.Success
 
-Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+//// [/src/dist/index.js]
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var hello_json_1 = __importDefault(require("../hello.json"));
+exports.default = hello_json_1.default.hello;
 
 
