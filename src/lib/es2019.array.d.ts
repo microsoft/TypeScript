@@ -1,8 +1,19 @@
-type FlatArray<Arr, Depth extends number> = {
-    done: Arr;
-    recur: Arr extends ReadonlyArray<infer InnerArr> ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]>
-        : Arr;
-}[Depth extends -1 ? "done" : "recur"];
+type Integer = any[];
+
+type Increment<N extends Integer> = [...N, any];
+
+type FlatArrayHelper <Arr> = Arr extends ReadonlyArray<infer InnerArr> ? InnerArr : Arr;
+
+type FlatArray<Arr, Depth extends number, Counter extends Integer = []> = 
+    Arr extends ReadonlyArray<any>
+    ? (
+        Counter['length'] extends 999
+        ? unknown
+        : Counter['length'] extends Depth
+        ? FlatArrayHelper<Arr>
+        : FlatArray<FlatArrayHelper<Arr>, Depth, Increment<Counter>>
+    )
+    : Arr;
 
 interface ReadonlyArray<T> {
     /**
