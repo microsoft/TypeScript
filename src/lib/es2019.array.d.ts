@@ -2,7 +2,7 @@ type Integer = any[];
 
 type Increment<N extends Integer> = [...N, any];
 
-type FlatArrayHelper <Arr> = Arr extends ReadonlyArray<infer InnerArr> ? InnerArr : Arr;
+type FlattenArrayByOneLevel <Arr> = Arr extends ReadonlyArray<infer InnerArr> ? InnerArr : Arr;
 
 type FlatArray<Arr, Depth extends number, Counter extends Integer = []> = 
     Arr extends ReadonlyArray<any>
@@ -10,8 +10,8 @@ type FlatArray<Arr, Depth extends number, Counter extends Integer = []> =
         Counter['length'] extends 999
         ? unknown
         : Counter['length'] extends Depth
-        ? FlatArrayHelper<Arr>
-        : FlatArray<FlatArrayHelper<Arr>, Depth, Increment<Counter>>
+        ? FlattenArrayByOneLevel<Arr>
+        : FlatArray<FlattenArrayByOneLevel<Arr>, Depth, Increment<Counter>>
     )
     : Arr;
 
