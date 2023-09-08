@@ -54,9 +54,7 @@ Result
   "c:/dev/b.tsx",
   "c:/dev/c.tsx",
   "c:/dev/n.tsx",
-  "c:/dev/a.d.ts",
   "c:/dev/m.d.ts",
-  "c:/dev/n.d.ts",
   "c:/dev/x.d.ts"
  ],
  "typeAcquisition": {

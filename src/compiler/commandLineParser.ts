@@ -3849,7 +3849,10 @@ function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<stri
         return false;
     }
     for (const ext of extensionGroup) {
-        if (fileExtensionIs(file, ext)) {
+        // d.ts files match with .ts extension and with case sensitive sorting the file order for same files with ts tsx and dts extension is
+        // d.ts, .ts, .tsx in that order so we need to handle tsx and dts of same same name case here and in remove files with same extensions
+        // So dont match .d.ts files with .ts extension
+        if (fileExtensionIs(file, ext) && (ext !== Extension.Ts || !fileExtensionIs(file, Extension.Dts))) {
             return false;
         }
         const higherPriorityPath = keyMapper(changeExtension(file, ext));

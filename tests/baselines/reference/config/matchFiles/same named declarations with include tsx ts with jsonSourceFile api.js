@@ -52,7 +52,6 @@ Result
  "fileNames": [
   "c:/dev/a.tsx",
   "c:/dev/c.tsx",
-  "c:/dev/a.d.ts",
   "c:/dev/b.ts",
   "c:/dev/m.ts",
   "c:/dev/n.ts",
