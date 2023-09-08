@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/declarationEmitTypeParameterNameInOuterScope.ts] ////
+
+=== declarationEmitTypeParameterNameInOuterScope.ts ===
+class A { }
+>A : A
+
+var a = <A,>(x: A) => x;
+>a : <A_1>(x: A_1) => A_1
+><A,>(x: A) => x : <A_1>(x: A_1) => A_1
+>x : A
+>x : A
+
+function a2<A,>(x: A) { return x }
+>a2 : <A>(x: A) => A
+>x : A
+>x : A
+
+var a3 = <A,>(x: A) => new A();
+>a3 : <A_1>(x: A_1) => A
+><A,>(x: A) => new A() : <A_1>(x: A_1) => A
+>x : A
+>new A() : globalThis.A
+>A : typeof A
+
+function a4<A,>(x: A) { return new A() }
+>a4 : <A>(x: A) => globalThis.A
+>x : A
+>new A() : globalThis.A
+>A : typeof A
+
+
+interface B { }
+
+var b = <B,>(x: B) => x;
+>b : <B_1>(x: B_1) => B_1
+><B,>(x: B) => x : <B_1>(x: B_1) => B_1
+>x : B
+>x : B
+
+function b2<B,>(x: B) { return x }
+>b2 : <B>(x: B) => B
+>x : B
+>x : B
+
