@@ -492,7 +492,6 @@ import {
     startsWith,
     startsWithUseStrict,
     Statement,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     StringLiteralType,
@@ -522,8 +521,6 @@ import {
     tracing,
     TransformFlags,
     TransientSymbol,
-    trimString,
-    trimStringStart,
     TriviaSyntaxKind,
     tryCast,
     tryRemovePrefix,
@@ -802,7 +799,7 @@ export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeChec
             /*details*/ undefined,
             Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
             node10Result,
-            node10Result.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
+            node10Result.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
         )
         : host.typesPackageExists(packageName)
         ? chainDiagnosticMessages(
@@ -1232,7 +1229,7 @@ export function getTextOfNodeFromSourceText(sourceText: string, node: Node, incl
 
     if (isJSDocTypeExpressionOrChild(node)) {
         // strip space + asterisk at line start
-        text = text.split(/\r\n|\n|\r/).map(line => trimStringStart(line.replace(/^\s*\*/, ""))).join("\n");
+        text = text.split(/\r\n|\n|\r/).map(line => line.replace(/^\s*\*/, "").trimStart()).join("\n");
     }
 
     return text;
@@ -5986,7 +5983,7 @@ function isQuoteOrBacktick(charCode: number) {
 /** @internal */
 export function isIntrinsicJsxName(name: __String | string) {
     const ch = (name as string).charCodeAt(0);
-    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains(name as string, "-");
+    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || (name as string).includes("-");
 }
 
 const indentStrings: string[] = ["", "    "];
@@ -6007,7 +6004,7 @@ export function getIndentSize() {
 
 /** @internal */
 export function isNightly() {
-    return stringContains(version, "-dev") || stringContains(version, "-insiders");
+    return version.includes("-dev") || version.includes("-insiders");
 }
 
 /** @internal */
@@ -6236,7 +6233,7 @@ export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameReso
     const specifier = getExternalModuleName(declaration);
     if (
         specifier && isStringLiteralLike(specifier) && !pathIsRelative(specifier.text) &&
-        getCanonicalAbsolutePath(host, file.path).indexOf(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory()))) === -1
+        !getCanonicalAbsolutePath(host, file.path).includes(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory())))
     ) {
         return undefined;
     }
@@ -6829,7 +6826,7 @@ export function writeCommentRange(text: string, lineMap: readonly number[], writ
 
 function writeTrimmedCurrentLine(text: string, commentEnd: number, writer: EmitTextWriter, newLine: string, pos: number, nextLineStart: number) {
     const end = Math.min(commentEnd, nextLineStart - 1);
-    const currentLineText = trimString(text.substring(pos, end));
+    const currentLineText = text.substring(pos, end).trim();
     if (currentLineText) {
         // trimmed forward and ending spaces text
         writer.writeComment(currentLineText);
@@ -9335,7 +9332,7 @@ export function getSupportedExtensions(options?: CompilerOptions, extraFileExten
     const flatBuiltins = flatten(builtins);
     const extensions = [
         ...builtins,
-        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && flatBuiltins.indexOf(x.extension as Extension) === -1 ? [x.extension] : undefined),
+        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && !flatBuiltins.includes(x.extension as Extension) ? [x.extension] : undefined),
     ];
 
     return extensions;
@@ -10052,7 +10049,7 @@ export function expressionResultIsUnused(node: Expression): boolean {
 
 /** @internal */
 export function containsIgnoredPath(path: string) {
-    return some(ignoredPaths, p => stringContains(path, p));
+    return some(ignoredPaths, p => path.includes(p));
 }
 
 /** @internal */

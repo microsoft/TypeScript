@@ -18,7 +18,6 @@ import {
     LanguageVariant,
     LineAndCharacter,
     MapLike,
-    padLeft,
     parsePseudoBigInt,
     positionIsSynthesized,
     PunctuationOrKeywordSyntaxKind,
@@ -26,7 +25,6 @@ import {
     SourceFileLike,
     SyntaxKind,
     TokenFlags,
-    trimStringStart,
 } from "./_namespaces/ts";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
@@ -1490,7 +1488,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                 if (shouldEmitInvalidEscapeError) {
                     const code = parseInt(text.substring(start + 1, pos), 8);
-                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + padLeft(code.toString(16), 2, "0"));
+                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
                     return String.fromCharCode(code);
                 }
                 return text.substring(start, pos);
@@ -2392,7 +2390,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         commentDirectiveRegEx: RegExp,
         lineStart: number,
     ) {
-        const type = getDirectiveFromComment(trimStringStart(text), commentDirectiveRegEx);
+        const type = getDirectiveFromComment(text.trimStart(), commentDirectiveRegEx);
         if (type === undefined) {
             return commentDirectives;
         }
@@ -2793,25 +2791,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 }
 
 /** @internal */
-const codePointAt: (s: string, i: number) => number = (String.prototype as any).codePointAt ? (s, i) => (s as any).codePointAt(i) : function codePointAt(str, i): number {
-    // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt
-    const size = str.length;
-    // Account for out-of-bounds indices:
-    if (i < 0 || i >= size) {
-        return undefined!; // String.codePointAt returns `undefined` for OOB indexes
-    }
-    // Get the first code unit
-    const first = str.charCodeAt(i);
-    // check if it's the start of a surrogate pair
-    if (first >= 0xD800 && first <= 0xDBFF && size > i + 1) { // high surrogate and there is a next code unit
-        const second = str.charCodeAt(i + 1);
-        if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate
-            // https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
-            return (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
-        }
-    }
-    return first;
-};
+function codePointAt(s: string, i: number): number {
+    // TODO(jakebailey): this is wrong and should have ?? 0; but all users are okay with it
+    return s.codePointAt(i)!;
+}
 
 /** @internal */
 function charSize(ch: number) {

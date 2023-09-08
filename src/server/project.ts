@@ -1503,7 +1503,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     protected removeExistingTypings(include: string[]): string[] {
         const existing = getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
-        return include.filter(i => existing.indexOf(i) < 0);
+        return include.filter(i => !existing.includes(i));
     }
 
     private updateGraphWorker() {

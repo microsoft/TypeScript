@@ -1809,6 +1809,7 @@ export interface VerifyNavigateToOptions {
     readonly pattern: string;
     readonly fileName?: string;
     readonly expected: readonly ExpectedNavigateToItem[];
+    readonly excludeLibFiles?: boolean;
 }
 
 export interface ExpectedNavigateToItem {

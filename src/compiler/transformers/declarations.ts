@@ -100,6 +100,7 @@ import {
     isBindingPattern,
     isClassDeclaration,
     isClassElement,
+    isComputedPropertyName,
     isDeclaration,
     isElementAccessExpression,
     isEntityName,
@@ -202,7 +203,6 @@ import {
     SourceFile,
     startsWith,
     Statement,
-    stringContains,
     StringLiteral,
     Symbol,
     SymbolAccessibility,
@@ -241,7 +241,7 @@ export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver
 
 function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
     const comment = currentSourceFile.text.substring(range.pos, range.end);
-    return stringContains(comment, "@internal");
+    return comment.includes("@internal");
 }
 
 /** @internal */
@@ -701,6 +701,9 @@ export function transformDeclarations(context: TransformationContext) {
         function visitBindingElement(elem: ArrayBindingElement): ArrayBindingElement {
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
+            }
+            if (elem.propertyName && isComputedPropertyName(elem.propertyName) && isEntityNameExpression(elem.propertyName.expression)) {
+                checkEntityNameVisibility(elem.propertyName.expression, enclosingDeclaration);
             }
             if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
                 // Unnecessary property renaming is forbidden in types, so remove renaming

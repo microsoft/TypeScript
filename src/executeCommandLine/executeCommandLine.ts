@@ -61,8 +61,6 @@ import {
     optionDeclarations,
     optionsForBuild,
     optionsForWatch,
-    padLeft,
-    padRight,
     parseBuildCommand,
     parseCommandLine,
     parseConfigFileWithSystem,
@@ -77,7 +75,6 @@ import {
     SourceFile,
     startsWith,
     startTracing,
-    stringContains,
     supportedJSExtensionsFlat,
     supportedTSExtensionsFlat,
     sys,
@@ -193,7 +190,7 @@ function createColors(sys: System) {
         return `\x1b[1m${str}\x1b[22m`;
     }
 
-    const isWindows = sys.getEnvironmentVariable("OS") && stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
+    const isWindows = sys.getEnvironmentVariable("OS") && sys.getEnvironmentVariable("OS").toLowerCase().includes("windows");
     const isWindowsTerminal = sys.getEnvironmentVariable("WT_SESSION");
     const isVSCode = sys.getEnvironmentVariable("TERM_PROGRAM") && sys.getEnvironmentVariable("TERM_PROGRAM") === "vscode";
 
@@ -330,12 +327,12 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         while (remainRight.length > 0) {
             let curLeft = "";
             if (isFirstLine) {
-                curLeft = padLeft(left, rightAlignOfLeft);
-                curLeft = padRight(curLeft, leftAlignOfRight);
+                curLeft = left.padStart(rightAlignOfLeft);
+                curLeft = curLeft.padEnd(leftAlignOfRight);
                 curLeft = colorLeft ? colors.blue(curLeft) : curLeft;
             }
             else {
-                curLeft = padLeft("", leftAlignOfRight);
+                curLeft = "".padStart(leftAlignOfRight);
             }
 
             const curRight = remainRight.substr(0, rightCharacterNumber);
@@ -525,15 +522,15 @@ function getHeader(sys: System, message: string) {
     const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
     const tsIconLength = 5;
 
-    const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));
-    const tsIconSecondLine = colors.blueBackground(colors.brightWhite(padLeft("TS ", tsIconLength)));
+    const tsIconFirstLine = colors.blueBackground("".padStart(tsIconLength));
+    const tsIconSecondLine = colors.blueBackground(colors.brightWhite("TS ".padStart(tsIconLength)));
     // If we have enough space, print TS icon.
     if (terminalWidth >= message.length + tsIconLength) {
         // right align of the icon is 120 at most.
         const rightAlign = terminalWidth > 120 ? 120 : terminalWidth;
         const leftAlign = rightAlign - tsIconLength;
-        header.push(padRight(message, leftAlign) + tsIconFirstLine + sys.newLine);
-        header.push(padLeft("", leftAlign) + tsIconSecondLine + sys.newLine);
+        header.push(message.padEnd(leftAlign) + tsIconFirstLine + sys.newLine);
+        header.push("".padStart(leftAlign) + tsIconSecondLine + sys.newLine);
     }
     else {
         header.push(message + sys.newLine);
@@ -1262,7 +1259,7 @@ function reportAllStatistics(sys: System, statistics: Statistic[]) {
     }
 
     for (const s of statistics) {
-        sys.write(padRight(s.name + ":", nameSize + 2) + padLeft(statisticValue(s).toString(), valueSize) + sys.newLine);
+        sys.write(`${s.name}:`.padEnd(nameSize + 2) + statisticValue(s).toString().padStart(valueSize) + sys.newLine);
     }
 }
 
