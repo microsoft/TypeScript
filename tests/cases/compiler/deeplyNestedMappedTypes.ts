@@ -11,6 +11,14 @@ type Foo2 = Id<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
 declare const foo1: Foo1;
 const foo2: Foo2 = foo1;  // Error expected
 
+type Id2<T> = { [K in keyof T]: Id2<Id2<T[K]>> };
+
+type Foo3 = Id2<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
+type Foo4 = Id2<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
+
+declare const foo3: Foo3;
+const foo4: Foo4 = foo3;  // Error expected
+
 // Repro from issue linked in #55535
 
 type RequiredDeep<T> = { [K in keyof T]-?: RequiredDeep<T[K]> };
