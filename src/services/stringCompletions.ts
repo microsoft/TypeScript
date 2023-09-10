@@ -654,7 +654,7 @@ function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, sc
 
     // Now find a path for each potential directory that is to be merged with the one containing the script
     return deduplicate<string>(
-        [...rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)), scriptDirectory],
+        [...rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)), scriptDirectory].map(baseDir => removeTrailingDirectorySeparator(baseDir)),
         equateStringsCaseSensitive,
         compareStringsCaseSensitive,
     );
