@@ -44426,8 +44426,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function computeConstantValue(member: EnumMember): string | number | undefined {
         const isConstEnum = isEnumConst(member.parent);
         const initializer = member.initializer!;
-        const value = evaluate(initializer, member);
-        if (value !== undefined) {
+        const evaluated = evaluate(initializer, member);
+        if (evaluated) {
+            const { value } = evaluated;
             if (isConstEnum && typeof value === "number" && !isFinite(value)) {
                 error(
                     initializer,
@@ -44436,6 +44437,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value,
                 );
             }
+            else if (typeof value !== "string" && typeof value !== "number") {
+                checkTypeAssignableTo(checkExpression(initializer), numberType, initializer, Diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values);
+                return undefined;
+            }
+            return value;
         }
         else if (isConstEnum) {
             error(initializer, Diagnostics.const_enum_member_initializers_must_be_constant_expressions);
@@ -44446,77 +44452,125 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             checkTypeAssignableTo(checkExpression(initializer), numberType, initializer, Diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values);
         }
-        return value;
+        return undefined;
     }
 
-    function evaluate(expr: Expression, location?: Declaration): string | number | undefined {
+    function evaluate(expr: Expression, location?: Declaration): { value: string | number | bigint | boolean | null | undefined; } | undefined {
         switch (expr.kind) {
-            case SyntaxKind.PrefixUnaryExpression:
-                const value = evaluate((expr as PrefixUnaryExpression).operand, location);
+            case SyntaxKind.PrefixUnaryExpression: {
+                const evaluated = evaluate((expr as PrefixUnaryExpression).operand, location);
+                if (!evaluated) {
+                    break;
+                }
+                const { value } = evaluated;
                 if (typeof value === "number") {
                     switch ((expr as PrefixUnaryExpression).operator) {
                         case SyntaxKind.PlusToken:
-                            return value;
+                            return { value };
                         case SyntaxKind.MinusToken:
-                            return -value;
+                            return { value: -value };
                         case SyntaxKind.TildeToken:
-                            return ~value;
+                            return { value: ~value };
                     }
                 }
+                if (typeof value === "boolean" && (expr as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken) {
+                    return { value: !value };
+                }
                 break;
-            case SyntaxKind.BinaryExpression:
-                const left = evaluate((expr as BinaryExpression).left, location);
-                const right = evaluate((expr as BinaryExpression).right, location);
+            }
+            case SyntaxKind.BinaryExpression: {
+                const evaluatedLeft = evaluate((expr as BinaryExpression).left, location);
+                if (!evaluatedLeft) {
+                    break;
+                }
+                const evaluatedRight = evaluate((expr as BinaryExpression).right, location);
+                if (!evaluatedRight) {
+                    break;
+                }
+                const left = evaluatedLeft.value;
+                const right = evaluatedRight.value;
                 if (typeof left === "number" && typeof right === "number") {
                     switch ((expr as BinaryExpression).operatorToken.kind) {
                         case SyntaxKind.BarToken:
-                            return left | right;
+                            return { value: left | right };
                         case SyntaxKind.AmpersandToken:
-                            return left & right;
+                            return { value: left & right };
                         case SyntaxKind.GreaterThanGreaterThanToken:
-                            return left >> right;
+                            return { value: left >> right };
                         case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                            return left >>> right;
+                            return { value: left >>> right };
                         case SyntaxKind.LessThanLessThanToken:
-                            return left << right;
+                            return { value: left << right };
                         case SyntaxKind.CaretToken:
-                            return left ^ right;
+                            return { value: left ^ right };
                         case SyntaxKind.AsteriskToken:
-                            return left * right;
+                            return { value: left * right };
                         case SyntaxKind.SlashToken:
-                            return left / right;
+                            return { value: left / right };
                         case SyntaxKind.PlusToken:
-                            return left + right;
+                            return { value: left + right };
                         case SyntaxKind.MinusToken:
-                            return left - right;
+                            return { value: left - right };
                         case SyntaxKind.PercentToken:
-                            return left % right;
+                            return { value: left % right };
                         case SyntaxKind.AsteriskAsteriskToken:
-                            return left ** right;
+                            return { value: left ** right };
+                    }
+                }
+                else if (typeof left === "bigint" && typeof right === "bigint") {
+                    switch ((expr as BinaryExpression).operatorToken.kind) {
+                        case SyntaxKind.BarToken:
+                            return { value: left | right };
+                        case SyntaxKind.AmpersandToken:
+                            return { value: left & right };
+                        case SyntaxKind.GreaterThanGreaterThanToken:
+                            return { value: left >> right };
+                        case SyntaxKind.LessThanLessThanToken:
+                            return { value: left << right };
+                        case SyntaxKind.CaretToken:
+                            return { value: left ^ right };
+                        case SyntaxKind.AsteriskToken:
+                            return { value: left * right };
+                        case SyntaxKind.SlashToken:
+                            return { value: left / right };
+                        case SyntaxKind.PlusToken:
+                            return { value: left + right };
+                        case SyntaxKind.MinusToken:
+                            return { value: left - right };
+                        case SyntaxKind.PercentToken:
+                            return { value: left % right };
+                        case SyntaxKind.AsteriskAsteriskToken:
+                            return { value: left ** right };
                     }
                 }
                 else if (
-                    (typeof left === "string" || typeof left === "number") &&
-                    (typeof right === "string" || typeof right === "number") &&
+                    (typeof left === "string" || typeof right === "string") &&
                     (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
                 ) {
-                    return "" + left + right;
+                    return { value: "" + left + right };
                 }
                 break;
+            }
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return (expr as StringLiteralLike).text;
-            case SyntaxKind.TemplateExpression:
-                return evaluateTemplateExpression(expr as TemplateExpression, location);
+                return { value: (expr as StringLiteralLike).text };
+            case SyntaxKind.TemplateExpression: {
+                const value = evaluateTemplateExpression(expr as TemplateExpression, location);
+                if (typeof value === "undefined") {
+                    break;
+                }
+                return { value };
+            }
             case SyntaxKind.NumericLiteral:
-                checkGrammarNumericLiteral(expr as NumericLiteral);
-                return +(expr as NumericLiteral).text;
+                return { value: +(expr as NumericLiteral).text };
+            case SyntaxKind.BigIntLiteral:
+                return { value: BigInt((expr as BigIntLiteral).text) };
             case SyntaxKind.ParenthesizedExpression:
                 return evaluate((expr as ParenthesizedExpression).expression, location);
             case SyntaxKind.Identifier: {
                 const identifier = expr as Identifier;
                 if (isInfinityOrNaNString(identifier.escapedText) && (resolveEntityName(identifier, SymbolFlags.Value, /*ignoreErrors*/ true) === getGlobalSymbol(identifier.escapedText, SymbolFlags.Value, /*diagnostic*/ undefined))) {
-                    return +(identifier.escapedText);
+                    return { value: +(identifier.escapedText) };
                 }
                 // falls through
             }
@@ -44525,7 +44579,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const symbol = resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true);
                     if (symbol) {
                         if (symbol.flags & SymbolFlags.EnumMember) {
-                            return location ? evaluateEnumMember(expr, symbol, location) : getEnumMemberValue(symbol.valueDeclaration as EnumMember);
+                            const value = location ? evaluateEnumMember(expr, symbol, location) : getEnumMemberValue(symbol.valueDeclaration as EnumMember);
+                            if (typeof value === "undefined") {
+                                break;
+                            }
+                            return { value };
                         }
                         if (isConstantVariable(symbol)) {
                             const declaration = symbol.valueDeclaration as VariableDeclaration | undefined;
@@ -44544,11 +44602,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const name = escapeLeadingUnderscores(((expr as ElementAccessExpression).argumentExpression as StringLiteralLike).text);
                         const member = rootSymbol.exports!.get(name);
                         if (member) {
-                            return location ? evaluateEnumMember(expr, member, location) : getEnumMemberValue(member.valueDeclaration as EnumMember);
+                            const value = location ? evaluateEnumMember(expr, member, location) : getEnumMemberValue(member.valueDeclaration as EnumMember);
+                            if (typeof value === "undefined") {
+                                break;
+                            }
+                            return { value };
                         }
                     }
                 }
                 break;
+            case SyntaxKind.TrueKeyword:
+                return { value: true };
+            case SyntaxKind.FalseKeyword:
+                return { value: false };
+            case SyntaxKind.NullKeyword:
+                // eslint-disable-next-line no-null/no-null
+                return { value: null };
+            case SyntaxKind.UndefinedKeyword:
+                return { value: undefined };
         }
         return undefined;
     }
@@ -44569,11 +44640,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration) {
         let result = expr.head.text;
         for (const span of expr.templateSpans) {
-            const value = evaluate(span.expression, location);
-            if (value === undefined) {
+            const evaluated = evaluate(span.expression, location);
+            if (!evaluated) {
                 return undefined;
             }
-            result += value;
+            result += evaluated.value;
             result += span.literal.text;
         }
         return result;

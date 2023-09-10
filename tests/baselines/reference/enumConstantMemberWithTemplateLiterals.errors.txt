@@ -51,3 +51,9 @@ enumConstantMemberWithTemplateLiterals.ts(28,15): error TS2363: The right-hand s
         c = "2" + `1`
     }
     
+    declare enum T8 {
+      X = `${1}`,
+      Y = `${true}`,
+      Z = `pre${!false}middle${"foo" + true}`,
+    }
+    
