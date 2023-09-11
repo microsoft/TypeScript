@@ -27,8 +27,8 @@ import * as React from "./renderer";
 >React : Symbol(React, Decl(reacty.tsx, 1, 6))
 
 <><h></h></>
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 
 === index.tsx ===
 /** @jsx dom */
@@ -36,6 +36,6 @@ import { dom } from "./renderer";
 >dom : Symbol(dom, Decl(index.tsx, 1, 8))
 
 <><h></h></>
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 

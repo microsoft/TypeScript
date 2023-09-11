@@ -180,7 +180,7 @@ const extractFunctionAction = {
 registerRefactor(refactorName, {
     kinds: [
         extractConstantAction.kind,
-        extractFunctionAction.kind
+        extractFunctionAction.kind,
     ],
     getEditsForAction: getRefactorEditsToExtractSymbol,
     getAvailableActions: getRefactorActionsToExtractSymbol,
@@ -207,14 +207,14 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
             errors.push({
                 name: refactorName,
                 description: extractFunctionAction.description,
-                actions: [{ ...extractFunctionAction, notApplicableReason: getStringError(rangeToExtract.errors) }]
+                actions: [{ ...extractFunctionAction, notApplicableReason: getStringError(rangeToExtract.errors) }],
             });
         }
         if (refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
             errors.push({
                 name: refactorName,
                 description: extractConstantAction.description,
-                actions: [{ ...extractConstantAction, notApplicableReason: getStringError(rangeToExtract.errors) }]
+                actions: [{ ...extractConstantAction, notApplicableReason: getStringError(rangeToExtract.errors) }],
             });
         }
         return errors;
@@ -247,7 +247,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                     functionActions.push({
                         description,
                         name: `function_scope_${i}`,
-                        kind: extractFunctionAction.kind
+                        kind: extractFunctionAction.kind,
                     });
                 }
             }
@@ -256,7 +256,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                     description,
                     name: `function_scope_${i}`,
                     notApplicableReason: getStringError(functionExtraction.errors),
-                    kind: extractFunctionAction.kind
+                    kind: extractFunctionAction.kind,
                 };
             }
         }
@@ -272,7 +272,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                     constantActions.push({
                         description,
                         name: `constant_scope_${i}`,
-                        kind: extractConstantAction.kind
+                        kind: extractConstantAction.kind,
                     });
                 }
             }
@@ -281,7 +281,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                     description,
                     name: `constant_scope_${i}`,
                     notApplicableReason: getStringError(constantExtraction.errors),
-                    kind: extractConstantAction.kind
+                    kind: extractConstantAction.kind,
                 };
             }
         }
@@ -304,7 +304,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
         infos.push({
             name: refactorName,
             description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-            actions: [ innermostErrorFunctionAction ]
+            actions: [innermostErrorFunctionAction],
         });
     }
 
@@ -312,14 +312,14 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
         infos.push({
             name: refactorName,
             description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-            actions: constantActions
+            actions: constantActions,
         });
     }
     else if (context.preferences.provideRefactorNotApplicableReason && innermostErrorConstantAction) {
         infos.push({
             name: refactorName,
             description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-            actions: [ innermostErrorConstantAction ]
+            actions: [innermostErrorConstantAction],
         });
     }
 
@@ -604,7 +604,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
             None = 0,
             Break = 1 << 0,
             Continue = 1 << 1,
-            Return = 1 << 2
+            Return = 1 << 2,
         }
 
         // We believe it's true because the node is from the (unmodified) tree.
@@ -920,8 +920,8 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
         const scopeDescription = isFunctionLikeDeclaration(scope)
             ? getDescriptionForFunctionLikeDeclaration(scope)
             : isClassLike(scope)
-                ? getDescriptionForClassLikeDeclaration(scope)
-                : getDescriptionForModuleLikeDeclaration(scope);
+            ? getDescriptionForClassLikeDeclaration(scope)
+            : getDescriptionForModuleLikeDeclaration(scope);
 
         let functionDescription: string;
         let constantDescription: string;
@@ -957,7 +957,7 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
     return extractions;
 }
 
-function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
+function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[]; readonly readsAndWrites: ReadsAndWrites; } {
     const { file: sourceFile } = context;
 
     const scopes = collectEnclosingScopes(targetRange);
@@ -968,7 +968,8 @@ function getPossibleExtractionsWorker(targetRange: TargetRange, context: Refacto
         enclosingTextRange,
         sourceFile,
         context.program.getTypeChecker(),
-        context.cancellationToken!);
+        context.cancellationToken!,
+    );
     return { scopes, readsAndWrites };
 }
 
@@ -976,8 +977,8 @@ function getDescriptionForFunctionInScope(scope: Scope): string {
     return isFunctionLikeDeclaration(scope)
         ? "inner function"
         : isClassLike(scope)
-            ? "method"
-            : "function";
+        ? "method"
+        : "function";
 }
 function getDescriptionForConstantInScope(scope: Scope): string {
     return isClassLike(scope)
@@ -1031,8 +1032,8 @@ function extractFunctionInScope(
     { usages: usagesInScope, typeParameterUsages, substitutions }: ScopeUsages,
     exposedVariableDeclarations: readonly VariableDeclaration[],
     range: TargetRange,
-    context: RefactorContext): RefactorEditInfo {
-
+    context: RefactorContext,
+): RefactorEditInfo {
     const checker = context.program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
     const importAdder = codefix.createImportAdder(context.file, context.program, context.preferences, context.host);
@@ -1062,7 +1063,7 @@ function extractFunctionInScope(
             /*dotDotDotToken*/ undefined,
             /*name*/ name,
             /*questionToken*/ undefined,
-            typeNode
+            typeNode,
         );
         parameters.push(paramDecl);
         if (usage.usage === Usage.Write) {
@@ -1115,7 +1116,7 @@ function extractFunctionInScope(
             typeParameters,
             parameters,
             returnType,
-            body
+            body,
         );
     }
     else {
@@ -1129,10 +1130,10 @@ function extractFunctionInScope(
                     checker.typeToTypeNode(
                         checker.getTypeAtLocation(range.thisNode!),
                         scope,
-                        NodeBuilderFlags.NoTruncation
+                        NodeBuilderFlags.NoTruncation,
                     ),
                     /*initializer*/ undefined,
-                )
+                ),
             );
         }
         newFunction = factory.createFunctionDeclaration(
@@ -1142,7 +1143,7 @@ function extractFunctionInScope(
             typeParameters,
             parameters,
             returnType,
-            body
+            body,
         );
     }
 
@@ -1168,10 +1169,11 @@ function extractFunctionInScope(
     let call: Expression = factory.createCallExpression(
         callThis ? factory.createPropertyAccessExpression(
             called,
-            "call"
+            "call",
         ) : called,
         callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
-        callArguments);
+        callArguments,
+    );
     if (range.facts & RangeFacts.IsGenerator) {
         call = factory.createYieldExpression(factory.createToken(SyntaxKind.AsteriskToken), call);
     }
@@ -1196,7 +1198,9 @@ function extractFunctionInScope(
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList(
                     [factory.createVariableDeclaration(getSynthesizedDeepClone(variableDeclaration.name), /*exclamationToken*/ undefined, /*type*/ getSynthesizedDeepClone(variableDeclaration.type), /*initializer*/ call)],
-                    variableDeclaration.parent.flags)));
+                    variableDeclaration.parent.flags,
+                ),
+            ));
         }
         else {
             // Declaring multiple variables / return properties:
@@ -1209,19 +1213,22 @@ function extractFunctionInScope(
                 bindingElements.push(factory.createBindingElement(
                     /*dotDotDotToken*/ undefined,
                     /*propertyName*/ undefined,
-                    /*name*/ getSynthesizedDeepClone(variableDeclaration.name)));
+                    /*name*/ getSynthesizedDeepClone(variableDeclaration.name),
+                ));
 
                 // Being returned through an object literal will have widened the type.
                 const variableType: TypeNode | undefined = checker.typeToTypeNode(
                     checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(variableDeclaration)),
                     scope,
-                    NodeBuilderFlags.NoTruncation);
+                    NodeBuilderFlags.NoTruncation,
+                );
 
                 typeElements.push(factory.createPropertySignature(
                     /*modifiers*/ undefined,
                     /*name*/ variableDeclaration.symbol.name,
                     /*questionToken*/ undefined,
-                    /*type*/ variableType));
+                    /*type*/ variableType,
+                ));
                 sawExplicitType = sawExplicitType || variableDeclaration.type !== undefined;
                 commonNodeFlags = commonNodeFlags & variableDeclaration.parent.flags;
             }
@@ -1238,8 +1245,11 @@ function extractFunctionInScope(
                         factory.createObjectBindingPattern(bindingElements),
                         /*exclamationToken*/ undefined,
                         /*type*/ typeLiteral,
-                        /*initializer*/call)],
-                    commonNodeFlags)));
+                        /*initializer*/ call,
+                    )],
+                    commonNodeFlags,
+                ),
+            ));
         }
     }
     else if (exposedVariableDeclarations.length || writes) {
@@ -1255,7 +1265,9 @@ function extractFunctionInScope(
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
                         [factory.createVariableDeclaration(variableDeclaration.symbol.name, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(variableDeclaration.type))],
-                        flags)));
+                        flags,
+                    ),
+                ));
             }
         }
 
@@ -1265,7 +1277,9 @@ function extractFunctionInScope(
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList(
                     [factory.createVariableDeclaration(returnValueProperty, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(returnType))],
-                    NodeFlags.Let)));
+                    NodeFlags.Let,
+                ),
+            ));
         }
 
         const assignments = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
@@ -1346,8 +1360,8 @@ function extractConstantInScope(
     scope: Scope,
     { substitutions }: ScopeUsages,
     rangeFacts: RangeFacts,
-    context: RefactorContext): RefactorEditInfo {
-
+    context: RefactorContext,
+): RefactorEditInfo {
     const checker = context.program.getTypeChecker();
 
     // Make a unique name for the extracted variable
@@ -1383,13 +1397,15 @@ function extractConstantInScope(
             localNameText,
             /*questionOrExclamationToken*/ undefined,
             variableType,
-            initializer);
+            initializer,
+        );
 
         let localReference: Expression = factory.createPropertyAccessExpression(
             rangeFacts & RangeFacts.InStaticRegion
                 ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
                 : factory.createThis(),
-                factory.createIdentifier(localNameText));
+            factory.createIdentifier(localNameText),
+        );
 
         if (isInJSXContent(node)) {
             localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
@@ -1425,13 +1441,15 @@ function extractConstantInScope(
             // replace the statement with the declaration.
             const newVariableStatement = factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
+                factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const),
+            );
             changeTracker.replaceNode(context.file, node.parent, newVariableStatement);
         }
         else {
             const newVariableStatement = factory.createVariableStatement(
                 /*modifiers*/ undefined,
-                factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
+                factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const),
+            );
 
             // Declare
             const nodeToInsertBefore = getNodeToInsertConstantBefore(node, scope);
@@ -1465,7 +1483,7 @@ function extractConstantInScope(
     const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*preferLastLocation*/ true);
     return { renameFilename, renameLocation, edits };
 
-    function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
+    function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined; initializer: Expression; } {
         // If no contextual type exists there is nothing to transfer to the function signature
         if (variableType === undefined) return { variableType, initializer };
         // Only do this for function expressions and arrow functions that are not generic
@@ -1489,9 +1507,7 @@ function extractConstantInScope(
                 const paramType = checker.getTypeAtLocation(p);
                 if (paramType === checker.getAnyType()) hasAny = true;
 
-                parameters.push(factory.updateParameterDeclaration(p,
-                    p.modifiers, p.dotDotDotToken,
-                    p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
+                parameters.push(factory.updateParameterDeclaration(p, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
             }
         }
         // If a parameter was inferred as any we skip adding function parameters at all.
@@ -1500,11 +1516,7 @@ function extractConstantInScope(
         if (hasAny) return { variableType, initializer };
         variableType = undefined;
         if (isArrowFunction(initializer)) {
-            initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters,
-                parameters,
-                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
-                initializer.equalsGreaterThanToken,
-                initializer.body);
+            initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation), initializer.equalsGreaterThanToken, initializer.body);
         }
         else {
             if (functionSignature && !!functionSignature.thisParameter) {
@@ -1513,20 +1525,20 @@ function extractConstantInScope(
                 // Note: If this parameter was already there, it would have been previously updated with the type if not type was present
                 if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
                     const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
-                    parameters.splice(0, 0, factory.createParameterDeclaration(
-                        /*modifiers*/ undefined,
-                        /*dotDotDotToken*/ undefined,
-                        "this",
-                        /*questionToken*/ undefined,
-                        checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation)
-                    ));
+                    parameters.splice(
+                        0,
+                        0,
+                        factory.createParameterDeclaration(
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
+                            "this",
+                            /*questionToken*/ undefined,
+                            checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation),
+                        ),
+                    );
                 }
             }
-            initializer = factory.updateFunctionExpression(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.asteriskToken,
-                initializer.name, initializer.typeParameters,
-                parameters,
-                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
-                initializer.body);
+            initializer = factory.updateFunctionExpression(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.asteriskToken, initializer.name, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation), initializer.body);
         }
         return { variableType, initializer };
     }
@@ -1535,11 +1547,12 @@ function extractConstantInScope(
 function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
     let prevNode;
     while (node !== undefined && node !== scope) {
-        if (isVariableDeclaration(node) &&
+        if (
+            isVariableDeclaration(node) &&
             node.initializer === prevNode &&
             isVariableDeclarationList(node.parent) &&
-            node.parent.declarations.length > 1) {
-
+            node.parent.declarations.length > 1
+        ) {
             return node;
         }
 
@@ -1564,13 +1577,14 @@ function getFirstDeclarationBeforePosition(type: Type, position: number): Declar
 }
 
 function compareTypesByDeclarationOrder(
-    { type: type1, declaration: declaration1 }: { type: Type, declaration?: Declaration },
-    { type: type2, declaration: declaration2 }: { type: Type, declaration?: Declaration }) {
-
+    { type: type1, declaration: declaration1 }: { type: Type; declaration?: Declaration; },
+    { type: type2, declaration: declaration2 }: { type: Type; declaration?: Declaration; },
+) {
     return compareProperties(declaration1, declaration2, "pos", compareValues)
         || compareStringsCaseSensitive(
             type1.symbol ? type1.symbol.getName() : "",
-            type2.symbol ? type2.symbol.getName() : "")
+            type2.symbol ? type2.symbol.getName() : "",
+        )
         || compareValues(type1.id, type2.id);
 }
 
@@ -1585,7 +1599,7 @@ function getCalledExpression(scope: Node, range: TargetRange, functionNameText: 
     }
 }
 
-function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyMap<string, Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
+function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyMap<string, Node>, hasReturn: boolean): { body: Block; returnValueProperty: string | undefined; } {
     const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
     if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
         // already block, no declarations or writes to propagate back, no substitutions - can use node as is
@@ -1677,8 +1691,7 @@ function getStatementsOrClassElements(scope: Scope): readonly Statement[] | read
  * Otherwise, return `undefined`.
  */
 function getNodeToInsertFunctionBefore(minPos: number, scope: Scope): Statement | ClassElement | undefined {
-    return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child =>
-        child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
+    return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child => child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
 }
 
 function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): ClassElement {
@@ -1717,7 +1730,7 @@ function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {
         }
     }
 
-    for (let curr = (prevScope || node).parent; ; curr = curr.parent) {
+    for (let curr = (prevScope || node).parent;; curr = curr.parent) {
         if (isBlockLike(curr)) {
             let prevStatement: Statement | undefined;
             for (const statement of curr.statements) {
@@ -1743,7 +1756,7 @@ function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {
 
 function getPropertyAssignmentsForWritesAndVariableDeclarations(
     exposedVariableDeclarations: readonly VariableDeclaration[],
-    writes: readonly UsageEntry[] | undefined
+    writes: readonly UsageEntry[] | undefined,
 ): ShorthandPropertyAssignment[] {
     const variableAssignments = map(exposedVariableDeclarations, v => factory.createShorthandPropertyAssignment(v.symbol.name));
     const writeAssignments = map(writes, w => factory.createShorthandPropertyAssignment(w.symbol.name));
@@ -1752,8 +1765,8 @@ function getPropertyAssignmentsForWritesAndVariableDeclarations(
     return variableAssignments === undefined
         ? writeAssignments!
         : writeAssignments === undefined
-            ? variableAssignments
-            : variableAssignments.concat(writeAssignments);
+        ? variableAssignments
+        : variableAssignments.concat(writeAssignments);
 }
 
 function isReadonlyArray(v: any): v is readonly any[] {
@@ -1779,7 +1792,7 @@ const enum Usage {
     // value should be passed to extracted method
     Read = 1,
     // value should be passed to extracted method and propagated back
-    Write = 2
+    Write = 2,
 }
 
 interface UsageEntry {
@@ -1807,8 +1820,8 @@ function collectReadsAndWrites(
     enclosingTextRange: TextRange,
     sourceFile: SourceFile,
     checker: TypeChecker,
-    cancellationToken: CancellationToken): ReadsAndWrites {
-
+    cancellationToken: CancellationToken,
+): ReadsAndWrites {
     const allTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
     const usagesPerScope: ScopeUsages[] = [];
     const substitutionsPerScope: Map<string, Node>[] = [];
@@ -1822,8 +1835,8 @@ function collectReadsAndWrites(
     const expression = !isReadonlyArray(targetRange.range)
         ? targetRange.range
         : targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0])
-            ? targetRange.range[0].expression
-            : undefined;
+        ? targetRange.range[0].expression
+        : undefined;
 
     let expressionDiagnostic: Diagnostic | undefined;
     if (expression === undefined) {
@@ -1932,9 +1945,11 @@ function collectReadsAndWrites(
         usagesPerScope[i].usages.forEach(value => {
             if (value.usage === Usage.Write) {
                 hasWrite = true;
-                if (value.symbol.flags & SymbolFlags.ClassMember &&
+                if (
+                    value.symbol.flags & SymbolFlags.ClassMember &&
                     value.symbol.valueDeclaration &&
-                    hasEffectiveModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)) {
+                    hasEffectiveModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)
+                ) {
                     readonlyClassPropertyWrite = value.symbol.valueDeclaration;
                 }
             }

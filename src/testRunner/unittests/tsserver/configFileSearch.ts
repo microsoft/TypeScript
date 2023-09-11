@@ -13,11 +13,11 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
     it("should stop at projectRootPath if given", () => {
         const f1 = {
             path: "/a/file1.ts",
-            content: ""
+            content: "",
         };
         const configFile = {
             path: "/tsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([f1, configFile]);
         const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -33,15 +33,15 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         const configFileLocation = `${projectDir}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
-            content: ""
+            content: "",
         };
         const configFile = {
             path: `${configFileLocation}/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const configFile2 = {
             path: "/a/b/projects/tsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([f1, libFile, configFile, configFile2]);
         const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -58,15 +58,15 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         const configFileLocation = `${projectDir}/src`;
         const f1 = {
             path: `${configFileLocation}/file1.ts`,
-            content: ""
+            content: "",
         };
         const configFile = {
             path: `${configFileLocation}/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const configFile2 = {
             path: "/a/b/projects/tsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([f1, libFile, configFile, configFile2]);
         const service = createProjectService(host, {
@@ -86,11 +86,11 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         const projectRoot = "/a/b/projects/project";
         const file: File = {
             path: `${projectRoot}/src/index.ts`,
-            content: "let y = 10"
+            content: "let y = 10",
         };
         const tsconfig: File = {
             path: `${projectRoot}/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         function openClientFile(files: File[]) {
             const host = createServerHost(files);

@@ -23,31 +23,31 @@ describe("unittests:: tsserver:: rename", () => {
         // rename fails with allowRenameOfImportPath disabled
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(bTs, 'a";')
+            arguments: protocolFileLocationFromSubstring(bTs, 'a";'),
         });
 
         // rename succeeds with allowRenameOfImportPath enabled in host
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { preferences: { allowRenameOfImportPath: true } }
+            arguments: { preferences: { allowRenameOfImportPath: true } },
         });
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(bTs, 'a";')
+            arguments: protocolFileLocationFromSubstring(bTs, 'a";'),
         });
 
         // rename succeeds with allowRenameOfImportPath enabled in file
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { preferences: { allowRenameOfImportPath: false } }
+            arguments: { preferences: { allowRenameOfImportPath: false } },
         });
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { file: "/b.ts", formatOptions: {}, preferences: { allowRenameOfImportPath: true } }
+            arguments: { file: "/b.ts", formatOptions: {}, preferences: { allowRenameOfImportPath: true } },
         });
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(bTs, 'a";')
+            arguments: protocolFileLocationFromSubstring(bTs, 'a";'),
         });
         baselineTsserverLogs("rename", "works with fileToRename", session);
     });
@@ -61,30 +61,30 @@ describe("unittests:: tsserver:: rename", () => {
         // rename with prefixText and suffixText disabled
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(aTs, "x")
+            arguments: protocolFileLocationFromSubstring(aTs, "x"),
         });
         // rename with prefixText and suffixText enabled in host
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { preferences: { providePrefixAndSuffixTextForRename: true } }
+            arguments: { preferences: { providePrefixAndSuffixTextForRename: true } },
         });
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(aTs, "x")
+            arguments: protocolFileLocationFromSubstring(aTs, "x"),
         });
 
         // rename with prefixText and suffixText enabled for file
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { preferences: { providePrefixAndSuffixTextForRename: false } }
+            arguments: { preferences: { providePrefixAndSuffixTextForRename: false } },
         });
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } }
+            arguments: { file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } },
         });
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(aTs, "x")
+            arguments: protocolFileLocationFromSubstring(aTs, "x"),
         });
         baselineTsserverLogs("rename", "works with prefixText and suffixText when enabled", session);
     });
@@ -99,11 +99,11 @@ describe("unittests:: tsserver:: rename", () => {
 
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { preferences: { providePrefixAndSuffixTextForRename: false } }
+            arguments: { preferences: { providePrefixAndSuffixTextForRename: false } },
         });
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(bTs, "aTest(")
+            arguments: protocolFileLocationFromSubstring(bTs, "aTest("),
         });
         baselineTsserverLogs("rename", "export default anonymous function works with prefixText and suffixText when disabled", session);
     });
@@ -118,17 +118,17 @@ describe("unittests:: tsserver:: rename", () => {
         // rename from file with prefixText and suffixText enabled
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } }
+            arguments: { file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } },
         });
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(aTs, "x")
+            arguments: protocolFileLocationFromSubstring(aTs, "x"),
         });
 
         // rename from file with prefixText and suffixText disabled
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: protocolFileLocationFromSubstring(bTs, "x")
+            arguments: protocolFileLocationFromSubstring(bTs, "x"),
         });
         baselineTsserverLogs("rename", "rename behavior is based on file of rename initiation", session);
     });

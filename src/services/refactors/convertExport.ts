@@ -62,18 +62,18 @@ const refactorName = "Convert export";
 const defaultToNamedAction = {
     name: "Convert default export to named export",
     description: getLocaleSpecificMessage(Diagnostics.Convert_default_export_to_named_export),
-    kind: "refactor.rewrite.export.named"
+    kind: "refactor.rewrite.export.named",
 };
 const namedToDefaultAction = {
     name: "Convert named export to default export",
     description: getLocaleSpecificMessage(Diagnostics.Convert_named_export_to_default_export),
-    kind: "refactor.rewrite.export.default"
+    kind: "refactor.rewrite.export.default",
 };
 
 registerRefactor(refactorName, {
     kinds: [
         defaultToNamedAction.kind,
-        namedToDefaultAction.kind
+        namedToDefaultAction.kind,
     ],
     getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndDefaultExports(context): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
@@ -86,10 +86,14 @@ registerRefactor(refactorName, {
 
         if (context.preferences.provideRefactorNotApplicableReason) {
             return [
-                { name: refactorName, description: getLocaleSpecificMessage(Diagnostics.Convert_default_export_to_named_export), actions: [
-                    { ...defaultToNamedAction, notApplicableReason: info.error },
-                    { ...namedToDefaultAction, notApplicableReason: info.error },
-                ]}
+                {
+                    name: refactorName,
+                    description: getLocaleSpecificMessage(Diagnostics.Convert_default_export_to_named_export),
+                    actions: [
+                        { ...defaultToNamedAction, notApplicableReason: info.error },
+                        { ...namedToDefaultAction, notApplicableReason: info.error },
+                    ],
+                },
             ];
         }
 
@@ -134,7 +138,7 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
 
     const noSymbolError = (id: Node) =>
         (isIdentifier(id) && checker.getSymbolAtLocation(id)) ? undefined
-        : { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_named_export) };
+            : { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_named_export) };
 
     switch (exportNode.kind) {
         case SyntaxKind.FunctionDeclaration:
@@ -309,7 +313,6 @@ function changeNamedToDefaultImport(importingSourceFile: SourceFile, ref: Identi
         default:
             Debug.assertNever(parent, `Unexpected parent kind ${(parent as Node).kind}`);
     }
-
 }
 
 function makeImportSpecifier(propertyName: string, name: string): ImportSpecifier {

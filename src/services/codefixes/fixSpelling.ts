@@ -75,24 +75,28 @@ registerCodeFix({
         return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, diag.start, context, diag.code);
-        const target = getEmitScriptTarget(context.host.getCompilationSettings());
-        if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, diag.start, context, diag.code);
+            const target = getEmitScriptTarget(context.host.getCompilationSettings());
+            if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target);
+        }),
 });
 
-function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBase, errorCode: number): { node: Node, suggestedSymbol: Symbol } | undefined {
+function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBase, errorCode: number): { node: Node; suggestedSymbol: Symbol; } | undefined {
     // This is the identifier of the misspelled word. eg:
     // this.speling = 1;
     //      ^^^^^^^
     const node = getTokenAtPosition(sourceFile, pos);
     const parent = node.parent;
     // Only fix spelling for No_overload_matches_this_call emitted on the React class component
-    if ((
-        errorCode === Diagnostics.No_overload_matches_this_call.code ||
-        errorCode === Diagnostics.Type_0_is_not_assignable_to_type_1.code) &&
-        !isJsxAttribute(parent)) return undefined;
+    if (
+        (
+            errorCode === Diagnostics.No_overload_matches_this_call.code ||
+            errorCode === Diagnostics.Type_0_is_not_assignable_to_type_1.code
+        ) &&
+        !isJsxAttribute(parent)
+    ) return undefined;
     const checker = context.program.getTypeChecker();
 
     let suggestedSymbol: Symbol | undefined;

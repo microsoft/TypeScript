@@ -43,7 +43,7 @@ describe("unittests:: tsserver:: completions", () => {
                 ...requestLocation,
                 includeExternalModuleExports: true,
                 prefix: "foo",
-            }
+            },
         }).response as ts.server.protocol.CompletionInfo;
         const exportMapKey = (response?.entries[0].data as any)?.exportMapKey;
         session.executeCommandSeq<ts.server.protocol.CompletionDetailsRequest>({
@@ -51,7 +51,7 @@ describe("unittests:: tsserver:: completions", () => {
             arguments: {
                 ...requestLocation,
                 entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
-            }
+            },
         });
 
         interface CompletionDetailsFullRequest extends ts.server.protocol.FileLocationRequest {
@@ -63,7 +63,7 @@ describe("unittests:: tsserver:: completions", () => {
             arguments: {
                 ...requestLocation,
                 entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
-            }
+            },
         });
         baselineTsserverLogs("completions", "works", session);
     });
@@ -78,8 +78,8 @@ describe("unittests:: tsserver:: completions", () => {
                 dependencies: {
                     "react": "^16.12.0",
                     "react-router-dom": "^5.1.2",
-                }
-            })
+                },
+            }),
         };
         const appFile: File = {
             path: `${projectRoot}/src/app.js`,
@@ -87,7 +87,7 @@ describe("unittests:: tsserver:: completions", () => {
 import {
   BrowserRouter as Router,
 } from "react-router-dom";
-`
+`,
         };
         const localNodeModules = `${projectRoot}/node_modules`;
         const localAtTypes = `${localNodeModules}/@types`;
@@ -96,30 +96,30 @@ import {
             content: JSON.stringify({
                 name: "@types/react",
                 version: "16.9.14",
-            })
+            }),
         };
         const localReact: File = {
             path: `${localAtTypes}/react/index.d.ts`,
             content: `import * as PropTypes from 'prop-types';
-`
+`,
         };
         const localReactRouterDomPackage: File = {
             path: `${localNodeModules}/react-router-dom/package.json`,
             content: JSON.stringify({
                 name: "react-router-dom",
                 version: "5.1.2",
-            })
+            }),
         };
         const localReactRouterDom: File = {
             path: `${localNodeModules}/react-router-dom/index.js`,
-            content: `export function foo() {}`
+            content: `export function foo() {}`,
         };
         const localPropTypesPackage: File = {
             path: `${localAtTypes}/prop-types/package.json`,
             content: JSON.stringify({
                 name: "@types/prop-types",
                 version: "15.7.3",
-            })
+            }),
         };
         const localPropTypes: File = {
             path: `${localAtTypes}/prop-types/index.d.ts`,
@@ -127,7 +127,7 @@ import {
     | string
     | ((props: any, context?: any) => any)
     | (new (props: any, context?: any) => any);
-`
+`,
         };
 
         const globalCacheLocation = `c:/typescript`;
@@ -137,7 +137,7 @@ import {
             content: JSON.stringify({
                 name: "@types/react-router-dom",
                 version: "5.1.2",
-            })
+            }),
         };
         const globalReactRouterDom: File = {
             path: `${globalAtTypes}/react-router-dom/index.d.ts`,
@@ -147,15 +147,15 @@ export interface BrowserRouterProps {
     getUserConfirmation?: ((message: string, callback: (ok: boolean) => void) => void);
     forceRefresh?: boolean;
     keyLength?: number;
-}`
+}`,
         };
         const globalReactPackage: File = {
             path: `${globalAtTypes}/react/package.json`,
-            content: localReactPackage.content
+            content: localReactPackage.content,
         };
         const globalReact: File = {
             path: `${globalAtTypes}/react/index.d.ts`,
-            content: localReact.content
+            content: localReact.content,
         };
 
         const filesInProject = [
@@ -167,9 +167,11 @@ export interface BrowserRouterProps {
         ];
         const files = [
             ...filesInProject,
-            appPackage, libFile,
+            appPackage,
+            libFile,
             localReactPackage,
-            localReactRouterDomPackage, localReactRouterDom,
+            localReactRouterDomPackage,
+            localReactRouterDom,
             localPropTypesPackage,
             globalReactRouterDomPackage,
             globalReactPackage,
@@ -189,8 +191,8 @@ export interface BrowserRouterProps {
                 line: 5,
                 offset: 1,
                 includeExternalModuleExports: true,
-                includeInsertTextCompletions: true
-            }
+                includeInsertTextCompletions: true,
+            },
         });
         baselineTsserverLogs("completions", "works when files are included from two different drives of windows", session);
     });
