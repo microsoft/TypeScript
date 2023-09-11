@@ -1,6 +1,6 @@
-inferTypes1.ts(36,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
-inferTypes1.ts(37,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
-  Type 'Function' provides no match for the signature '(...args: any): any'.
+inferTypes1.ts(36,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: never) => any'.
+inferTypes1.ts(37,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: never) => any'.
+  Type 'Function' provides no match for the signature '(...args: never): any'.
 inferTypes1.ts(43,25): error TS2344: Type 'string' does not satisfy the constraint 'abstract new (...args: any) => any'.
 inferTypes1.ts(44,25): error TS2344: Type 'Function' does not satisfy the constraint 'abstract new (...args: any) => any'.
   Type 'Function' provides no match for the signature 'new (...args: any): any'.
@@ -59,11 +59,11 @@ inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string
     type T16 = ReturnType<never>;  // never
     type T17 = ReturnType<string>;  // Error
                           ~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344: Type 'string' does not satisfy the constraint '(...args: never) => any'.
     type T18 = ReturnType<Function>;  // Error
                           ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
-!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any): any'.
+!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: never) => any'.
+!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: never): any'.
     type T19<T extends any[]> = ReturnType<(x: string, ...args: T) => T[]>;  // T[]
     
     type U10 = InstanceType<typeof C>;  // C

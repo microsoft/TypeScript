@@ -1,5 +1,5 @@
-genericRestParameters1.ts(135,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
-  Type 'Function' provides no match for the signature '(...args: any): any'.
+genericRestParameters1.ts(135,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: never) => any'.
+  Type 'Function' provides no match for the signature '(...args: never): any'.
 genericRestParameters1.ts(164,1): error TS2322: Type '(a: never) => void' is not assignable to type '(...args: any[]) => void'.
   Types of parameters 'a' and 'args' are incompatible.
     Type 'any' is not assignable to type 'never'.
@@ -142,8 +142,8 @@ genericRestParameters1.ts(164,1): error TS2322: Type '(a: never) => void' is not
     type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
     type T09 = Parameters<Function>;
                           ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
-!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any): any'.
+!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: never) => any'.
+!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: never): any'.
     
     type Record1 = {
       move: [number, 'left' | 'right'];

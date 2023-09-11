@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/types/conditional/inferTypesBuiltinHelpers.ts] ////
+
+=== inferTypesBuiltinHelpers.ts ===
+// https://github.com/microsoft/TypeScript/issues/55667
+
+type _1 = ReturnType<(...args: never) => 'foo'>
+>_1 : "foo"
+>args : never
+
+type _2 = InstanceType<new (...args: never) => 'foo'>
+>_2 : any
+>args : never
+

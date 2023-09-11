@@ -609,8 +609,8 @@ console.log(a);`,
                     fs,
                     "/lib/lib.d.ts",
                     Utils.dedent`
-                    type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
-                    type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`,
+                    type ReturnType<T extends (...args: never) => any> = T extends (...args: never) => infer R ? R : any;
+                    type InstanceType<T extends abstract new (...args: never) => any> = T extends abstract new (...args: never) => infer R ? R : any;`,
                 ),
             edits: [
                 {
