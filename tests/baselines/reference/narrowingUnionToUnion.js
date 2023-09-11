@@ -213,6 +213,20 @@ function f1x(obj: (string | number)[] | null) {
     obj;  // string[] | null
 }
 
+// Repro from #55425
+
+type MyDiscriminatedUnion = { type: 'A', aProp: number } | { type: 'B', bProp: string };
+
+declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
+
+declare const working: unknown;
+declare const broken: Record<string, any> | undefined;
+declare const workingAgain: Record<string, any> | undefined | unknown;
+
+isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
+isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
+isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp;
+
 
 //// [narrowingUnionToUnion.js]
 "use strict";
@@ -370,6 +384,9 @@ function f1x(obj) {
     assertRelationIsNullOrStringArray(obj);
     obj; // string[] | null
 }
+isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
+isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
+isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp;
 
 
 //// [narrowingUnionToUnion.d.ts]
@@ -423,3 +440,14 @@ declare function check2(x: unknown): x is ("hello" | 0);
 declare function test3(x: unknown): void;
 declare function assertRelationIsNullOrStringArray(v: (string | number)[] | null): asserts v is string[] | null;
 declare function f1x(obj: (string | number)[] | null): void;
+type MyDiscriminatedUnion = {
+    type: 'A';
+    aProp: number;
+} | {
+    type: 'B';
+    bProp: string;
+};
+declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
+declare const working: unknown;
+declare const broken: Record<string, any> | undefined;
+declare const workingAgain: Record<string, any> | undefined | unknown;

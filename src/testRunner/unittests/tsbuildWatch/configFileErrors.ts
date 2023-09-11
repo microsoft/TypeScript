@@ -1,5 +1,9 @@
-import { dedent } from "../../_namespaces/Utils";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
+import {
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     libFile,
@@ -9,13 +13,14 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
     verifyTscWatch({
         scenario: "configFileErrors",
         subScenario: "reports syntax errors in config file",
-        sys: () => createWatchedSystem(
-            [
-                { path: `/user/username/projects/myproject/a.ts`, content: "export function foo() { }" },
-                { path: `/user/username/projects/myproject/b.ts`, content: "export function bar() { }" },
-                {
-                    path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: dedent`
+        sys: () =>
+            createWatchedSystem(
+                [
+                    { path: `/user/username/projects/myproject/a.ts`, content: "export function foo() { }" },
+                    { path: `/user/username/projects/myproject/b.ts`, content: "export function bar() { }" },
+                    {
+                        path: `/user/username/projects/myproject/tsconfig.json`,
+                        content: dedent`
 {
     "compilerOptions": {
         "composite": true,
@@ -24,18 +29,23 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
         "a.ts"
         "b.ts"
     ]
-}`
-                },
-                libFile
-            ],
-            { currentDirectory: "/user/username/projects/myproject" }
-        ),
+}`,
+                    },
+                    libFile,
+                ],
+                { currentDirectory: "/user/username/projects/myproject" },
+            ),
         commandLineArgs: ["--b", "-w"],
         edits: [
             {
                 caption: "reports syntax errors after change to config file",
-                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, ",", `,
-        "declaration": true,`),
+                edit: sys =>
+                    sys.replaceFileText(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        ",",
+                        `,
+        "declaration": true,`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
             },
             {
@@ -50,12 +60,16 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
             },
             {
                 caption: "builds after fixing config file errors",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
-                    compilerOptions: { composite: true, declaration: true },
-                    files: ["a.ts", "b.ts"]
-                })),
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        JSON.stringify({
+                            compilerOptions: { composite: true, declaration: true },
+                            files: ["a.ts", "b.ts"],
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
-            }
-        ]
+            },
+        ],
     });
 });
