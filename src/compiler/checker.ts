@@ -7002,11 +7002,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             for (let i = 0; i < tupleConstituentNodes.length; i++) {
                                 const flags = (type.target as TupleType).elementFlags[i];
                                 const labeledElementDeclaration = labeledElementDeclarations?.[i];
+                                const label = labeledElementDeclaration && getTupleElementLabel(type as TupleTypeReference, labeledElementDeclaration);
 
-                                if (labeledElementDeclaration) {
+                                if (label) {
                                     tupleConstituentNodes[i] = factory.createNamedTupleMember(
                                         flags & ElementFlags.Variable ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined,
-                                        factory.createIdentifier(unescapeLeadingUnderscores(getTupleElementLabel(labeledElementDeclaration))),
+                                        factory.createIdentifier(unescapeLeadingUnderscores(label)),
                                         flags & ElementFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                                         flags & ElementFlags.Rest ? factory.createArrayTypeNode(tupleConstituentNodes[i]) :
                                             tupleConstituentNodes[i],
@@ -13004,7 +13005,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference, restName: __String) {
             const associatedNamesMap = new Map<__String, number>();
             return map(type.target.labeledElementDeclarations, (labeledElement, i) => {
-                const name = getTupleElementLabel(labeledElement, i, restName);
+                const name = getTupleElementLabel(type, labeledElement, i, restName);
                 const prevCounter = associatedNamesMap.get(name);
                 if (prevCounter === undefined) {
                     associatedNamesMap.set(name, 1);
@@ -35379,13 +35380,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember): __String;
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index: number, restParameterName?: __String): __String;
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index?: number, restParameterName = "arg" as __String) {
+    function getTupleElementLabel(tupleType: TupleTypeReference, d: ParameterDeclaration | NamedTupleMember): __String | undefined;
+    function getTupleElementLabel(tupleType: TupleTypeReference, d: ParameterDeclaration | NamedTupleMember | undefined, index: number, restParameterName?: __String): __String;
+    function getTupleElementLabel(tupleType: TupleTypeReference, d: ParameterDeclaration | NamedTupleMember | undefined, index?: number, restParameterName = "arg" as __String) {
         if (!d) {
             return `${restParameterName}_${index}` as __String;
         }
-        Debug.assert(isIdentifier(d.name)); // Parameter declarations could be binding patterns, but we only allow identifier names
+        Debug.assert(!isBindingPattern(d.name)); // Parameter declarations could be binding patterns, but we only allow identifier names with them
+        if (d.name.kind === SyntaxKind.TemplateLiteralType) {
+            const label = instantiateType(getTypeFromTypeNode(d.name), tupleType.mapper);
+            return label.flags & TypeFlags.StringLiteral
+                ? escapeLeadingUnderscores((label as StringLiteralType).value)
+                : typeof index === "number"
+                ? `${restParameterName}_${index}` as __String
+                : undefined;
+        }
+        if (d.name.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
+            return escapeLeadingUnderscores(d.name.text);
+        }
         return d.name.escapedText;
     }
 
@@ -35397,9 +35409,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const restParameter = signature.parameters[paramCount] || unknownSymbol;
         const restType = overrideRestType || getTypeOfSymbol(restParameter);
         if (isTupleType(restType)) {
-            const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
+            const associatedNames = restType.target.labeledElementDeclarations;
             const index = pos - paramCount;
-            return getTupleElementLabel(associatedNames?.[index], index, restParameter.escapedName);
+            return getTupleElementLabel(restType, associatedNames?.[index], index, restParameter.escapedName);
         }
         return restParameter.escapedName;
     }
@@ -35427,13 +35439,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const restType = getTypeOfSymbol(restParameter);
         if (isTupleType(restType)) {
-            const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
+            const associatedNames = restType.target.labeledElementDeclarations;
             const index = pos - paramCount;
             const associatedName = associatedNames?.[index];
             const isRestTupleElement = !!associatedName?.dotDotDotToken;
 
-            if (associatedName) {
-                Debug.assert(isIdentifier(associatedName.name));
+            // TODO: figure out the non-identifier case here
+            if (associatedName && isIdentifier(associatedName.name)) {
                 return { parameter: associatedName.name, parameterName: associatedName.name.escapedText, isRestParameter: isRestTupleElement };
             }
 
@@ -35462,7 +35474,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const restParameter = signature.parameters[paramCount] || unknownSymbol;
         const restType = getTypeOfSymbol(restParameter);
         if (isTupleType(restType)) {
-            const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
+            const associatedNames = restType.target.labeledElementDeclarations;
             const index = pos - paramCount;
             return associatedNames && associatedNames[index];
         }
@@ -39665,6 +39677,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (node.type.kind === SyntaxKind.RestType) {
             grammarErrorOnNode(node.type, Diagnostics.A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type);
+        }
+        if (node.name.kind === SyntaxKind.TemplateLiteralType) {
+            checkSourceElement(node.name);
         }
         checkSourceElement(node.type);
         getTypeFromTypeNode(node);

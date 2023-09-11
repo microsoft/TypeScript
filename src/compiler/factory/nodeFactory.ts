@@ -326,6 +326,7 @@ import {
     NamedImportBindings,
     NamedImports,
     NamedTupleMember,
+    NamedTupleMemberName,
     NamespaceExport,
     NamespaceExportDeclaration,
     NamespaceImport,
@@ -2499,7 +2500,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createNamedTupleMember(dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode) {
+    function createNamedTupleMember(dotDotDotToken: DotDotDotToken | undefined, name: NamedTupleMemberName, questionToken: QuestionToken | undefined, type: TypeNode) {
         const node = createBaseDeclaration<NamedTupleMember>(SyntaxKind.NamedTupleMember);
         node.dotDotDotToken = dotDotDotToken;
         node.name = name;
@@ -2512,7 +2513,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode) {
+    function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: NamedTupleMemberName, questionToken: QuestionToken | undefined, type: TypeNode) {
         return node.dotDotDotToken !== dotDotDotToken
                 || node.name !== name
                 || node.questionToken !== questionToken

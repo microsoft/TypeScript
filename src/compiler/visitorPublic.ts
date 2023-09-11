@@ -63,6 +63,7 @@ import {
     isModuleReference,
     isNamedExportBindings,
     isNamedImportBindings,
+    isNamedTupleMemberName,
     isObjectLiteralElementLike,
     isOptionalChain,
     isParameter,
@@ -913,7 +914,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateNamedTupleMember(
             node,
             tokenVisitor ? nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken) : node.dotDotDotToken,
-            Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
+            Debug.checkDefined(nodeVisitor(node.name, visitor, isNamedTupleMemberName)),
             tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken) : node.questionToken,
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
         );
