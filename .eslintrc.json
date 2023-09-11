@@ -24,6 +24,8 @@
         "/tests/**",
         "/external-declarations/tests/**",
         "/external-declarations/build/**",
+        "/external-declarations/tsc-tests/**",
+        "/external-declarations/fixer-test/**",
         "/lib/**",
         "/src/lib/*.generated.d.ts",
         "/scripts/**/*.js",

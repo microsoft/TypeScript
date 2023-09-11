@@ -49,6 +49,7 @@ import {
 const fixId = "fixMissingTypeAnnotationOnExports";
 const errorCodes = [
     Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
+    Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
 ];
 const canHaveExplicitTypeAnnotation = new Set<SyntaxKind>([
     SyntaxKind.GetAccessor,

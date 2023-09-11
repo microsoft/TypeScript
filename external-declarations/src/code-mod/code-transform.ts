@@ -54,7 +54,7 @@ function findNearestParentWithTypeAnnotation(node: ts.Node): ts.Node | undefined
 export function addTypeAnnotationTransformer(sourceFile: ts.SourceFile, program: ts.Program, moduleResolutionHost?: ts.ModuleResolutionHost) {
     const typeChecker = program.getTypeChecker();
     const nodesToFix = new Map(program.getDeclarationDiagnostics(sourceFile).
-                                filter((diag) => diag.code === 9007).
+                                filter((diag) => diag.code === 9007 || diag.code === 9009).
                                 map((diag) => {
                                     const nodeWithDiag = (ts as any).getTokenAtPosition(sourceFile, diag.start)! as ts.Node;
                                     return [findNearestParentWithTypeAnnotation(nodeWithDiag), nodeWithDiag];

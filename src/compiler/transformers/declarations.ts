@@ -299,7 +299,8 @@ export function transformDeclarations(context: TransformationContext) {
     let needsScopeFixMarker = false;
     let resultHasScopeMarker = false;
     let enclosingDeclaration: Node;
-    let necessaryTypeReferences: Set<[specifier: string, mode: ResolutionMode]> | undefined;
+    let necessaryTypeReferences: Map<[specifier: string, mode: ResolutionMode], Node | undefined> | undefined;
+    let existingTypeReferencesSources: readonly SourceFile[] | undefined;
     let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
     let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment | undefined>>;
     let suppressNewDiagnosticContexts: boolean;
@@ -355,26 +356,41 @@ export function transformDeclarations(context: TransformationContext) {
         );
         context.addDiagnostic(message);
     }
-    function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined): void {
+    function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined, requestingNode: Node | undefined): void {
         if (!typeReferenceDirectives) {
             return;
         }
-        necessaryTypeReferences = necessaryTypeReferences || new Set();
+        necessaryTypeReferences = necessaryTypeReferences || new Map();
         for (const ref of typeReferenceDirectives) {
-            necessaryTypeReferences.add(ref);
+            necessaryTypeReferences.set(ref, requestingNode);
         }
     }
 
     function trackReferencedAmbientModule(node: ModuleDeclaration, symbol: Symbol) {
         // If it is visible via `// <reference types="..."/>`, then we should just use that
-        // TODO: isolatedDeclarations: see about .All flag
         const directives = resolver.getTypeReferenceDirectivesForSymbol(symbol, SymbolFlags.All);
         if (length(directives)) {
-            return recordTypeReferenceDirectivesIfNecessary(directives);
+            return recordTypeReferenceDirectivesIfNecessary(directives, node);
         }
         // Otherwise we should emit a path-based reference
         const container = getSourceFileOfNode(node);
         refs.set(getOriginalNodeId(container), container);
+    }
+
+    function handleTypeReferenceError(typeReferenceDirective: [specifier: string, mode: ResolutionMode], requestingNode: Node) {
+        if(!isolatedDeclarations) {
+            return;
+        }
+        const existingDirective = existingTypeReferencesSources?.some(s => s.typeReferenceDirectives.some(d => d.fileName === typeReferenceDirective[0]));
+        if(!existingDirective) {
+            const message = createDiagnosticForNode(
+                requestingNode,
+                Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit,
+                typeReferenceDirective[0]
+            );
+            context.addDiagnostic(message);
+        }
+        
     }
 
     function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -418,7 +434,7 @@ export function transformDeclarations(context: TransformationContext) {
     function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
         if (symbol.flags & SymbolFlags.TypeParameter) return false;
         const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasToMarkVisible*/ true));
-        recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
+        recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning), enclosingDeclaration ?? currentSourceFile);
         return issuedDiagnostic;
     }
 
@@ -517,6 +533,7 @@ export function transformDeclarations(context: TransformationContext) {
             isBundledEmit = true;
             refs = new Map();
             libs = new Map();
+            existingTypeReferencesSources = node.sourceFiles;
             let hasNoDefaultLib = false;
             const bundle = factory.createBundle(
                 map(node.sourceFiles, sourceFile => {
@@ -560,7 +577,7 @@ export function transformDeclarations(context: TransformationContext) {
                         const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
                         hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
                         collectReferences(sourceFile, refs);
-                        recordTypeReferenceDirectivesIfNecessary(map(sourceFile.typeReferenceDirectives, ref => [ref.fileName, ref.resolutionMode]));
+                        recordTypeReferenceDirectivesIfNecessary(map(sourceFile.typeReferenceDirectives, ref => [ref.fileName, ref.resolutionMode]), /*requestingNode*/ undefined);
                         collectLibs(sourceFile, libs);
                         return sourceFile;
                     }
@@ -583,6 +600,7 @@ export function transformDeclarations(context: TransformationContext) {
         resultHasScopeMarker = false;
         enclosingDeclaration = node;
         currentSourceFile = node;
+        existingTypeReferencesSources = [node];
         getSymbolAccessibilityDiagnostic = throwDiagnostic;
         isBundledEmit = false;
         resultHasExternalModuleIndicator = false;
@@ -610,8 +628,18 @@ export function transformDeclarations(context: TransformationContext) {
                 combinedStatements = setTextRange(factory.createNodeArray([...combinedStatements, createEmptyExports(factory)]), combinedStatements);
             }
         }
-        const typeReferences = isolatedDeclarations? node.typeReferenceDirectives: getFileReferencesForUsedTypeReferences();
-        const updated = factory.updateSourceFile(node, combinedStatements, /*isDeclarationFile*/ true, references, typeReferences, node.hasNoDefaultLib, getLibReferences());
+        const typeReferences = getFileReferencesForUsedTypeReferences();
+        const libReferences = getLibReferences();
+
+        const updated = factory.updateSourceFile(
+            node,
+            combinedStatements,
+            /*isDeclarationFile*/ true,
+            references,
+            isolatedDeclarations? node.typeReferenceDirectives : typeReferences,
+            node.hasNoDefaultLib,
+            libReferences
+        );
         updated.exportedModulesFromDeclarationEmit = exportedModulesFromDeclarationEmit;
         return updated;
 
@@ -620,10 +648,10 @@ export function transformDeclarations(context: TransformationContext) {
         }
 
         function getFileReferencesForUsedTypeReferences() {
-            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
+            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.entries()), getFileReferenceForSpecifierModeTuple) : [];
         }
 
-        function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: ResolutionMode]): FileReference | undefined {
+        function getFileReferenceForSpecifierModeTuple([[typeName, mode], requestingNode]: [[specifier: string, mode: ResolutionMode], Node | undefined]): FileReference | undefined {
             // Elide type references for which we have imports
             if (emittedImports) {
                 for (const importStatement of emittedImports) {
@@ -637,6 +665,9 @@ export function transformDeclarations(context: TransformationContext) {
                         return undefined;
                     }
                 }
+            }
+            if(requestingNode) {
+                handleTypeReferenceError([typeName, mode], requestingNode)
             }
             return { fileName: typeName, pos: -1, end: -1, ...(mode ? { resolutionMode: mode } : undefined) };
         }
@@ -665,7 +696,7 @@ export function transformDeclarations(context: TransformationContext) {
                         // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
                         // via a non-relative name, emit a type reference directive to that non-relative name, rather than
                         // a relative path to the declaration file
-                        recordTypeReferenceDirectivesIfNecessary([[specifier, /*mode*/ undefined]]);
+                        recordTypeReferenceDirectivesIfNecessary([[specifier, /*mode*/ undefined]], /*requestingNode*/ undefined);
                         return;
                     }
 
@@ -912,10 +943,7 @@ export function transformDeclarations(context: TransformationContext) {
             if (!isPrivate) {
                 const valueParameter = getSetAccessorValueParameter(input);
                 if (valueParameter) {
-                    const accessorType =
-                        isolatedDeclarations ?
-                        undefined:
-                        getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
+                    const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                     newValueParameter = ensureParameter(valueParameter, /*modifierMask*/ undefined, accessorType);
                 }
             }
@@ -949,7 +977,7 @@ export function transformDeclarations(context: TransformationContext) {
     function checkEntityNameVisibility(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node) {
         const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
         handleSymbolAccessibilityError(visibilityResult);
-        recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
+        recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName), entityName);
     }
 
     function preserveJsDoc<T extends Node>(updated: T, original: Node): T {
@@ -1452,7 +1480,7 @@ export function transformDeclarations(context: TransformationContext) {
                     });
                     errorFallbackNode = input;
                     const type = isolatedDeclarations ?
-                        localInferenceResolver?.fromInitializer(input, undefined, currentSourceFile) :
+                        localInferenceResolver?.fromInitializer(input, /*type*/ undefined, currentSourceFile) :
                         resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker);
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
                     errorFallbackNode = undefined;
@@ -1575,7 +1603,10 @@ export function transformDeclarations(context: TransformationContext) {
                 ));
                 if (clean && resolver.isExpandoFunction(input) && shouldEmitFunctionProperties(input)) {
                     if(isolatedDeclarations) {
-                        reportIsolatedDeclarationError(input);
+                        context.addDiagnostic(createDiagnosticForNode(
+                            input,
+                            Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+                        ));
                         return clean;
                     }
                     const props = resolver.getPropertiesOfContainerFunction(input);
@@ -1789,14 +1820,16 @@ export function transformDeclarations(context: TransformationContext) {
                     // We must add a temporary declaration for the extends clause expression
 
                     // Isolated declarations does not allow inferred type in the extends clause
-                    if (isolatedDeclarations &&
-                        // Checking if it's a separate compiler error so we don't make it an isolatedDeclarations error.
-                        // This is only an approximation as we need type information to figure out if something
-                        // is a constructor type or not.
-                        !isLiteralExpression(extendsClause.expression) &&
-                        extendsClause.expression.kind !== SyntaxKind.FalseKeyword &&
-                        extendsClause.expression.kind !== SyntaxKind.TrueKeyword) {
-                        reportIsolatedDeclarationError(extendsClause);
+                    if (isolatedDeclarations) {
+                        if(
+                            // Checking if it's a separate compiler error so we don't make it an isolatedDeclarations error.
+                            // This is only an approximation as we need type information to figure out if something
+                            // is a constructor type or not.
+                            !isLiteralExpression(extendsClause.expression) &&
+                            extendsClause.expression.kind !== SyntaxKind.FalseKeyword &&
+                            extendsClause.expression.kind !== SyntaxKind.TrueKeyword) {
+                            reportIsolatedDeclarationError(extendsClause);
+                        }
                         return cleanup(factory.updateClassDeclaration(
                             input,
                             modifiers,

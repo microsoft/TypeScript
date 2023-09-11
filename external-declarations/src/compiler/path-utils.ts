@@ -833,7 +833,7 @@ function toFileNameLowerCase(x: string) {
 //
 // But to avoid having to do string building for most common cases, also ignore
 // a-z, 0-9, \u0131, \u00DF, \, /, ., : and space
-const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_\. ]+/g;
+const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_. ]+/g;
 
 
 /** @internal */

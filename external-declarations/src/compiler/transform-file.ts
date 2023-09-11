@@ -2,6 +2,7 @@
 import * as ts from "typescript";
 import { SourceFile } from "typescript";
 
+import { Utils } from "../test-runner/tsc-infrastructure/compiler-run";
 import { createEmitHost } from "./emit-host";
 import { createEmitResolver } from "./emit-resolver";
 import { tracer } from "./perf-tracer";
@@ -42,8 +43,9 @@ export function transformFile(sourceFile: ts.SourceFile, allProjectFiles: string
     } as ts.PrinterOptions);
 
     try {
+        const code = printer.printFile(result);
         return {
-            code: printer.printFile(result),
+            code: options.emitBOM ? Utils.addUTF8ByteOrderMark(code): code,
             diagnostics,
         };
     }

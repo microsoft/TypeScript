@@ -160,6 +160,7 @@ ${result.stack}
 ${e.message}
 ${e.stack}
 `;
+                // eslint-disable-next-line no-debugger
                 debugger;
             }
         }
