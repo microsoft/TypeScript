@@ -69,7 +69,7 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 DocumentRegistry::
-  Key:: undefined|undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
+  Key:: undefined|undefined|undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
     /user/username/projects/myproject/index.ts: TS 1
     /user/username/projects/myproject/module1.d.ts: TS 1
     /a/lib/lib.d.ts: TS 1
@@ -88,7 +88,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 DocumentRegistry::
-  Key:: undefined|undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
+  Key:: undefined|undefined|undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
     /user/username/projects/myproject/index.ts: TS 1
     /a/lib/lib.d.ts: TS 1
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -109,7 +109,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 DocumentRegistry::
-  Key:: undefined|undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
+  Key:: undefined|undefined|undefined|undefined|undefined|false|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined|undefined
     /user/username/projects/myproject/index.ts: TS 1
     /a/lib/lib.d.ts: TS 1
     /user/username/projects/myproject/module1.d.ts: TS 1

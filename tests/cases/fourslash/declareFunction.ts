@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @filename: index.ts
 ////declare function
 
-verify.navigateTo({ pattern: "", expected: [] });
+verify.navigateTo({ pattern: "", fileName: "index.ts", expected: [] });
