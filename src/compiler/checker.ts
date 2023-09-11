@@ -16392,10 +16392,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // [...X[]] is equivalent to just X[]
             return readonly ? globalReadonlyArrayType : globalArrayType;
         }
-        const memberIds = mapDefined(namedMemberDeclarations, node => node ? getNodeId(node) : undefined);
         const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join() +
             (readonly ? "R" : "") +
-            (memberIds.length ? "," + memberIds.join(",") : "");
+            (some(namedMemberDeclarations, node => !!node) ? "," + map(namedMemberDeclarations, node => node ? getNodeId(node) : "_").join(",") : "");
         let type = tupleTypes.get(key);
         if (!type) {
             tupleTypes.set(key, type = createTupleTargetType(elementFlags, readonly, namedMemberDeclarations));
