@@ -240,7 +240,7 @@ jobs:
       - name: Self build
         run: npx hereby build-src --built
 
-  unused-baselines:
+  baselines:
     runs-on: ubuntu-latest
 
     steps:
@@ -258,11 +258,22 @@ jobs:
         run: npm test &> /dev/null || exit 0
 
       - name: Accept baselines
-        run: npx hereby baseline-accept
-
-      - name: Check for unused baselines
         run: |
-          if ! git diff --exit-code --quiet; then
-            echo "Unused baselines:"
-            git diff --exit-code --name-only
+          npx hereby baseline-accept
+          git add tests/baselines/reference
+
+      - name: Check baselines
+        run: |
+          function print_diff() {
+            if ! git diff --staged --exit-code --quiet --diff-filter=$1; then
+              echo "$2:"
+              git diff --staged --name-only --diff-filter=$1
+            fi
+          }
+
+          if ! git diff --staged --exit-code --quiet; then
+            print_diff ACR "Missing baselines"
+            print_diff MTUXB "Modified baselines"
+            print_diff D "Unused baselines"
+            exit 1
           fi

@@ -25,7 +25,7 @@ export class TextElement extends HTMLElement {
 
 //// [thisPropertyAssignmentInherited.d.ts]
 export class Element {
-    set textContent(arg: string);
+    set textContent(x: string);
     /**
      * @returns {String}
      */
@@ -35,7 +35,7 @@ export class Element {
 export class HTMLElement extends Element {
 }
 export class TextElement extends HTMLElement {
-    set innerHTML(arg: string);
+    set innerHTML(html: string);
     get innerHTML(): string;
     toString(): void;
 }

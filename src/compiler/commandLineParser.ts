@@ -104,14 +104,12 @@ import {
     returnTrue,
     ScriptTarget,
     startsWith,
-    stringContains,
     StringLiteral,
     SyntaxKind,
     sys,
     toFileNameLowerCase,
     toPath,
     tracing,
-    trimString,
     TsConfigOnlyOption,
     TsConfigSourceFile,
     TypeAcquisition,
@@ -1700,17 +1698,17 @@ function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType
 }
 
 /** @internal */
-export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
-    return convertJsonOptionOfCustomType(opt, trimString(value || ""), errors);
+export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string | undefined, errors: Diagnostic[]) {
+    return convertJsonOptionOfCustomType(opt, (value ?? "").trim(), errors);
 }
 
 /** @internal */
 export function parseListTypeOption(opt: CommandLineOptionOfListType, value = "", errors: Diagnostic[]): string | (string | number)[] | undefined {
-    value = trimString(value);
+    value = value.trim();
     if (startsWith(value, "-")) {
         return undefined;
     }
-    if (opt.type === "listOrElement" && !stringContains(value, ",")) {
+    if (opt.type === "listOrElement" && !value.includes(",")) {
         return validateJsonOptionValue(opt, value, errors);
     }
     if (value === "") {
@@ -3078,7 +3076,7 @@ function parseConfig(
     basePath = normalizeSlashes(basePath);
     const resolvedPath = getNormalizedAbsolutePath(configFileName || "", basePath);
 
-    if (resolutionStack.indexOf(resolvedPath) >= 0) {
+    if (resolutionStack.includes(resolvedPath)) {
         errors.push(createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> ")));
         return { raw: json || convertToObject(sourceFile!, errors) };
     }

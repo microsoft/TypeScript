@@ -39,7 +39,6 @@ import {
     resolveJSModule,
     some,
     startsWith,
-    stringContains,
     timestamp,
     unorderedRemoveItem,
     WatchDirectoryKind,
@@ -814,9 +813,9 @@ function createDirectoryWatcherSupportingRecursive({
     }
 
     function isInPath(path: string, searchPath: string) {
-        if (stringContains(path, searchPath)) return true;
+        if (path.includes(searchPath)) return true;
         if (useCaseSensitiveFileNames) return false;
-        return stringContains(toCanonicalFilePath(path), searchPath);
+        return toCanonicalFilePath(path).includes(searchPath);
     }
 }
 

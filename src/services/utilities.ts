@@ -330,7 +330,6 @@ import {
     SpreadElement,
     stableSort,
     startsWith,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     stringToToken,
@@ -3854,7 +3853,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
     }
 
     function getNodeModulesPackageNameFromFileName(importedFileName: string, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): string | undefined {
-        if (!stringContains(importedFileName, "node_modules")) {
+        if (!importedFileName.includes("node_modules")) {
             return undefined;
         }
         const specifier = moduleSpecifiers.getNodeModulesPackageName(
