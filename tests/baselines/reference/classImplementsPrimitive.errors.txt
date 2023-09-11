@@ -1,6 +1,6 @@
-classImplementsPrimitive.ts(3,20): error TS2856: A class cannot implement a primitive type like 'number'; a class can only implement interfaces.
-classImplementsPrimitive.ts(4,21): error TS2856: A class cannot implement a primitive type like 'string'; a class can only implement interfaces.
-classImplementsPrimitive.ts(5,21): error TS2856: A class cannot implement a primitive type like 'boolean'; a class can only implement interfaces.
+classImplementsPrimitive.ts(3,20): error TS2856: A class cannot implement a primitive type like 'number'. It can only extend other named object types.
+classImplementsPrimitive.ts(4,21): error TS2856: A class cannot implement a primitive type like 'string'. It can only extend other named object types.
+classImplementsPrimitive.ts(5,21): error TS2856: A class cannot implement a primitive type like 'boolean'. It can only extend other named object types.
 classImplementsPrimitive.ts(6,21): error TS2304: Cannot find name 'Void'.
 classImplementsPrimitive.ts(7,7): error TS2300: Duplicate identifier 'C4a'.
 classImplementsPrimitive.ts(7,22): error TS1109: Expression expected.
@@ -21,13 +21,13 @@ classImplementsPrimitive.ts(17,22): error TS2500: A class can only implement an 
     
     class C implements number { }
                        ~~~~~~
-!!! error TS2856: A class cannot implement a primitive type like 'number'; a class can only implement interfaces.
+!!! error TS2856: A class cannot implement a primitive type like 'number'. It can only extend other named object types.
     class C2 implements string { }
                         ~~~~~~
-!!! error TS2856: A class cannot implement a primitive type like 'string'; a class can only implement interfaces.
+!!! error TS2856: A class cannot implement a primitive type like 'string'. It can only extend other named object types.
     class C3 implements boolean { }
                         ~~~~~~~
-!!! error TS2856: A class cannot implement a primitive type like 'boolean'; a class can only implement interfaces.
+!!! error TS2856: A class cannot implement a primitive type like 'boolean'. It can only extend other named object types.
     class C4 implements Void  { }
                         ~~~~
 !!! error TS2304: Cannot find name 'Void'.

@@ -3789,13 +3789,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (meaning & SymbolFlags.Value) {
             if (isPrimitiveTypeName(name)) {
                 if (isExtendedByInterface(errorLocation)) {
-                    error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_an_interface_can_only_extend_named_types_and_classes, unescapeLeadingUnderscores(name));
+                    error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_It_can_only_extend_other_named_object_types, unescapeLeadingUnderscores(name));
                 }
                 else if (isExtendedByClass(errorLocation)) {
-                    error(errorLocation, Diagnostics.A_class_cannot_extend_a_primitive_type_like_0_a_class_can_only_extend_named_types_and_classes, unescapeLeadingUnderscores(name));
+                    error(errorLocation, Diagnostics.A_class_cannot_extend_a_primitive_type_like_0_Classes_can_only_extend_constructable_values, unescapeLeadingUnderscores(name));
                 }
                 else if (isImplementedByClass(errorLocation)) {
-                    error(errorLocation, Diagnostics.A_class_cannot_implement_a_primitive_type_like_0_a_class_can_only_implement_interfaces, unescapeLeadingUnderscores(name));
+                    error(errorLocation, Diagnostics.A_class_cannot_implement_a_primitive_type_like_0_It_can_only_extend_other_named_object_types, unescapeLeadingUnderscores(name));
                 }
                 else {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
@@ -3835,7 +3835,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isExtendedByClass(node: Node): boolean {
         const grandparent = node.parent.parent;
         const parentOfGrandparent = grandparent.parent;
-        if(grandparent && parentOfGrandparent){
+        if (grandparent && parentOfGrandparent) {
             const isExtending = isHeritageClause(grandparent) && grandparent.token === SyntaxKind.ExtendsKeyword;
             const isClass = isClassDeclaration(parentOfGrandparent);
             return isExtending && isClass;
@@ -3846,7 +3846,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isImplementedByClass(node: Node): boolean {
         const grandparent = node.parent.parent;
         const parentOfGrandparent = grandparent.parent;
-        if(grandparent && parentOfGrandparent){
+        if (grandparent && parentOfGrandparent) {
             const isImplementing = isHeritageClause(grandparent) && grandparent.token === SyntaxKind.ImplementsKeyword;
             const isClass = isClassDeclaration(parentOfGrandparent);
             return isImplementing && isClass;

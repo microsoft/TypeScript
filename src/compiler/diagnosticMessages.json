@@ -3619,7 +3619,7 @@
         "category": "Error",
         "code": 2839
     },
-    "An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes.": {
+    "An interface cannot extend a primitive type like '{0}'. It can only extend other named object types.": {
         "category": "Error",
         "code": 2840
     },
@@ -3699,11 +3699,11 @@
         "category": "Error",
         "code": 2861
     },
-    "A class cannot extend a primitive type like '{0}'; a class can only extend named types and classes.": {
+    "A class cannot extend a primitive type like '{0}'. Classes can only extend constructable values.": {
         "category": "Error",
         "code": 2862
     },
-    "A class cannot implement a primitive type like '{0}'; a class can only implement interfaces.": {
+    "A class cannot implement a primitive type like '{0}'. It can only extend other named object types.": {
         "category": "Error",
         "code": 2863
     },
