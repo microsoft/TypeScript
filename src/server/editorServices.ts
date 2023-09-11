@@ -1526,6 +1526,7 @@ export class ProjectService {
                         useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
                         writeLog: s => this.logger.info(s),
                         toPath: s => this.toPath(s),
+                        getScriptKind: configuredProjectForConfig ? (fileName => configuredProjectForConfig.getScriptKind(fileName)) : undefined,
                     })
                 ) return;
 
