@@ -8,6 +8,6 @@ type _1 = ReturnType<(...args: never) => 'foo'>
 >args : never
 
 type _2 = InstanceType<new (...args: never) => 'foo'>
->_2 : any
+>_2 : "foo"
 >args : never
 

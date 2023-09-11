@@ -1618,7 +1618,7 @@ type ReturnType<T extends (...args: never) => any> = T extends (...args: never) 
 /**
  * Obtain the return type of a constructor function type
  */
-type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;
+type InstanceType<T extends abstract new (...args: never) => any> = T extends abstract new (...args: never) => infer R ? R : any;
 
 /**
  * Convert string literal type to uppercase
