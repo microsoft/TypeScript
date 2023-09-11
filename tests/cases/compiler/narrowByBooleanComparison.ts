@@ -57,3 +57,57 @@ function test3(foo: unknown) {
     }
     foo;
 }
+
+// https://github.com/microsoft/TypeScript/issues/55395
+class WebError extends URIError {
+    status?: number;
+}
+function test4() {
+    try {
+        // make a request
+    } catch (err) {
+        if (err instanceof WebError === false || err.status != 401) {
+            console.error(err);
+        }
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/44366
+interface Entity {
+    type: string;
+}
+const ACTOR_TYPE = "actor";
+interface Actor extends Entity {
+    type: typeof ACTOR_TYPE;
+}
+function isActor(entity: Entity): entity is Actor {
+    return entity.type === ACTOR_TYPE;
+}
+function test5(bin: Entity) {
+    if (isActor(bin) === false) {
+        bin;
+    } else {
+        bin;
+    }
+}
+function test6(bin: Entity) {
+    if (isActor(bin) == false) {
+        bin;
+    } else {
+        bin;
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/53005
+function isFunction(x: unknown): x is Function {
+    return typeof x === "function";
+}
+
+function test7(x: unknown) {
+    if (isFunction(x) !== false) {
+        x;
+    }
+    if (isFunction(x) === true) {
+        x;
+    }
+}
