@@ -1,8 +1,21 @@
+capturedLetConstInLoop5_ES6.ts(44,12): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(66,14): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(100,12): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(122,14): error TS2845: This condition will always return 'true'.
 capturedLetConstInLoop5_ES6.ts(174,13): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop5_ES6.ts(183,12): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(188,13): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(202,13): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(205,14): error TS2845: This condition will always return 'true'.
 capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+capturedLetConstInLoop5_ES6.ts(239,12): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(244,13): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(258,13): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(261,14): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop5_ES6.ts(273,13): error TS2845: This condition will always return 'true'.
 
 
-==== capturedLetConstInLoop5_ES6.ts (2 errors) ====
+==== capturedLetConstInLoop5_ES6.ts (15 errors) ====
     declare function use(a: any);
     
     //====let
@@ -47,6 +60,8 @@ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to
     
     function foo2(x) {
         while (1 === 1) {
+               ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             let x = 1;
             var v = x;
             (function() { return x + v });
@@ -69,6 +84,8 @@ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to
                 return;
             }
         } while (1 === 1)
+                 ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         
         use(v);
     }
@@ -103,6 +120,8 @@ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to
     
     function foo6(x) {
         while (1 === 1) {
+               ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             let x, y;
             var v = x;
             (function() { return x + y + v });
@@ -125,6 +144,8 @@ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to
                 return;
             }
         } while (1 === 1);
+                 ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         
         use(v);
     }
@@ -188,11 +209,15 @@ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to
     
     function foo2_c(x) {
         while (1 === 1) {
+               ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             const x = 1;
             var v = x;
             (function() { return x + v });
             (() => x + v);
             if (x == 1) {
+                ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
                 return;
             }
         }
@@ -207,9 +232,13 @@ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to
             (function() { return x + v });
             (() => x + v);
             if (x == 1) {
+                ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
                 return;
             }
         } while (1 === 1)
+                 ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         
         use(v);
     }
@@ -246,11 +275,15 @@ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to
     
     function foo6_c(x) {
         while (1 === 1) {
+               ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
             const x = 1, y = 1;
             var v = x;
             (function() { return x + y + v });
             (() => x + y + v);
             if (x == 1) {
+                ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
                 return;
             }
         }
@@ -265,9 +298,13 @@ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to
             (function() { return x + y + v });
             (() => x + y + v);
             if (x == 1) {
+                ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
                 return;
             }
         } while (1 === 1)
+                 ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         
         use(v);
     }
@@ -280,6 +317,8 @@ capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This comparison appears to
             (function() { return x + y + v });
             (() => x + y + v);
             if (x == 1) {
+                ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
                 return;
             }
         }

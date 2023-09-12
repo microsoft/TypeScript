@@ -1,10 +1,12 @@
+equalityStrictNulls.ts(37,9): error TS2845: This condition will always return 'true'.
+equalityStrictNulls.ts(43,9): error TS2845: This condition will always return 'true'.
 equalityStrictNulls.ts(59,13): error TS18050: The value 'undefined' cannot be used here.
 equalityStrictNulls.ts(61,13): error TS18050: The value 'undefined' cannot be used here.
 equalityStrictNulls.ts(63,14): error TS18050: The value 'undefined' cannot be used here.
 equalityStrictNulls.ts(65,14): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== equalityStrictNulls.ts (4 errors) ====
+==== equalityStrictNulls.ts (6 errors) ====
     function f1(x: string) {
         if (x == undefined) {
         }
@@ -42,12 +44,16 @@ equalityStrictNulls.ts(65,14): error TS18050: The value 'undefined' cannot be us
     
     function f2() {
         if (undefined == undefined) {
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         }
         if (undefined == null) {
         }
         if (null == undefined) {
         }
         if (null == null) {
+            ~~~~~~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
         }
     }
     

@@ -1,0 +1,165 @@
+capturedLetConstInLoop1.ts(19,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1.ts(29,10): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1.ts(42,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1.ts(52,10): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1.ts(89,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1.ts(99,10): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1.ts(112,8): error TS2845: This condition will always return 'true'.
+capturedLetConstInLoop1.ts(122,10): error TS2845: This condition will always return 'true'.
+
+
+==== capturedLetConstInLoop1.ts (8 errors) ====
+    declare function use(x: any): any;
+    
+    //==== let
+    for (let x in {}) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (let x of []) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (let x = 0; x < 1; ++x) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        let x;
+        (function() { return x});
+        (() => x);
+    }
+    
+    do {
+        let x;
+        (function() { return x});
+        (() => x);
+    } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    for (let y = 0; y < 1; ++y) {
+        let x = 1;
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (let x = 0, y = 1; x < 1; ++x) {
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        let x, y;
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    do {
+        let x, y;
+        (function() { return x + y});
+        (() => x + y);
+    } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    for (let y = 0; y < 1; ++y) {
+        let x = 1;
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    for (let y = (use(() => y), 0); y < 1; ++y) {
+    }
+    
+    for (let y = 0; use(() => y), y < 1; ++y) {
+    }
+    
+    for (let y = 0; y < 1; use(() => y), ++y) {
+    }
+    
+    for (let y = (use(() => y), 0); use(() => y), y < 1; use(() => y), ++y) {
+        use(() => y);
+    }
+    
+    //=========const
+    for (const x in {}) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (const x of []) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (const x = 0; x < 1;) {
+        (function() { return x});
+        (() => x);
+    }
+    
+    while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        const x = 1;
+        (function() { return x});
+        (() => x);
+    }
+    
+    do {
+        const x = 1;
+        (function() { return x});
+        (() => x);
+    } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    for (const y = 0; y < 1;) {
+        const x = 1;
+        (function() { return x});
+        (() => x);
+    }
+    
+    for (const x = 0, y = 1; x < 1;) {
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    while (1 === 1) {
+           ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+        const x = 1, y = 1;
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    do {
+        const x = 1, y = 1;
+        (function() { return x + y});
+        (() => x + y);
+    } while (1 === 1)
+             ~~~~~~~
+!!! error TS2845: This condition will always return 'true'.
+    
+    for (const y = 0; y < 1;) {
+        const x = 1;
+        (function() { return x + y});
+        (() => x + y);
+    }
+    
+    // https://github.com/Microsoft/TypeScript/issues/20594
+    declare const sobj: { [x: string]: any };
+    for (let sx in sobj) {
+        (() => sobj[sx]);
+    }
+    declare const iobj: { [x: number]: any };
+    for (let ix in iobj) {
+        (() => iobj[ix]);
+    }

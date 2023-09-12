@@ -8,9 +8,10 @@ assignmentCompatWithDiscriminatedUnion.ts(58,5): error TS2322: Type 'S' is not a
   Type 'S' is not assignable to type '{ a: 0; b: 4 | 1; } | { a: 2; b: 4 | 3; c: string; }'.
     Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 4 | 3; c: string; }'.
 assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not assignable to type 'T'.
+assignmentCompatWithDiscriminatedUnion.ts(132,13): error TS2845: This condition will always return 'true'.
 
 
-==== assignmentCompatWithDiscriminatedUnion.ts (3 errors) ====
+==== assignmentCompatWithDiscriminatedUnion.ts (4 errors) ====
     // see 'typeRelatedToDiscriminatedType' in checker.ts:
     
     // IteratorResult
@@ -157,6 +158,8 @@ assignmentCompatWithDiscriminatedUnion.ts(82,5): error TS2322: Type 'S' is not a
     
         function getAxisType(): IAxisType {
             if (1 == 1) {
+                ~~~~~~
+!!! error TS2845: This condition will always return 'true'.
                 return "categorical";
             } else {
                 return "linear";
