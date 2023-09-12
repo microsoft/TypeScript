@@ -37695,7 +37695,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
                     }
                     checkNaNEquality(errorNode, operator, left, right);
-                    reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
+                    if (isUnitType(leftType) && isUnitType(rightType) && isTypeIdenticalTo(leftType, rightType)) {
+                        error(errorNode, Diagnostics.This_condition_will_always_return_0, operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.EqualsEqualsToken ? "true" : "false");
+                    }
+                    else {
+                        reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
+                    }
                 }
                 return booleanType;
             case SyntaxKind.InstanceOfKeyword:
