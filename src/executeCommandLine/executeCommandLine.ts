@@ -896,7 +896,7 @@ function performCompilation(
     config: ParsedCommandLine,
 ) {
     const { fileNames, options, projectReferences } = config;
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, /*skipJSDocParsing*/ true, sys);
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, skipJSDocParsing, sys);
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
