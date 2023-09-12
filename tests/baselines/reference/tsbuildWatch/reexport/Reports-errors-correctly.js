@@ -88,7 +88,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -106,7 +106,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/pure/index.ts (used version)
 
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
-Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -317,7 +317,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -333,7 +333,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/pure/index.ts (used version)
 
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
-Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -475,7 +475,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -491,7 +491,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/pure/index.ts (used version)
 
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
-Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

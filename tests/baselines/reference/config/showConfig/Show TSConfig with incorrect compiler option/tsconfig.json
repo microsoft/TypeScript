@@ -1,5 +1,3 @@
 {
-    "compilerOptions": {
-        "skipJSDocParsing": true
-    }
+    "compilerOptions": {}
 }

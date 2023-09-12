@@ -43,7 +43,7 @@ Output::
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"importsNotUsedAsValues":2,"skipJSDocParsing":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program options: {"target":2,"importsNotUsedAsValues":2,"watch":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /b.ts
@@ -165,7 +165,7 @@ Output::
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"skipJSDocParsing":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"watch":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /b.ts
@@ -222,7 +222,7 @@ Output::
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"emitDecoratorMetadata":true,"skipJSDocParsing":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"emitDecoratorMetadata":true,"watch":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /b.ts

@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "skipJSDocParsing": true,
         "declaration": true,
         "declarationDir": "./lib",
         "skipLibCheck": true,

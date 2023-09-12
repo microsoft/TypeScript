@@ -64,7 +64,7 @@ index.tsx
 
 
 Program root files: ["/user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts","/user/username/projects/myproject/index.tsx"]
-Program options: {"jsx":4,"jsxImportSource":"react","forceConsistentCasingInFileNames":true,"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"jsx":4,"jsxImportSource":"react","forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

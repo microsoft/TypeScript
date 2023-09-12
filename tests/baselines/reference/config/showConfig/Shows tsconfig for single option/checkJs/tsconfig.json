@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "skipJSDocParsing": true,
         "checkJs": true
     }
 }

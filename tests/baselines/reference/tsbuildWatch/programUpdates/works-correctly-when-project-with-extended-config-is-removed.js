@@ -61,7 +61,7 @@ Output::
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project1.tsconfig.json"}
+Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -79,7 +79,7 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts during emit)
 
 Program root files: ["/a/b/other.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

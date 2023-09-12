@@ -118,7 +118,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -133,7 +133,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts during emit)
 
 Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -148,7 +148,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg1/index.ts (computed .d.ts during emit)
 
 Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -163,7 +163,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg2/index.ts (computed .d.ts during emit)
 
 Program root files: ["/user/username/projects/myproject/pkg3/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -178,7 +178,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg3/index.ts (computed .d.ts during emit)
 
 Program root files: ["/user/username/projects/myproject/pkg4/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -193,7 +193,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg4/index.ts (computed .d.ts during emit)
 
 Program root files: ["/user/username/projects/myproject/pkg5/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -208,7 +208,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg5/index.ts (computed .d.ts during emit)
 
 Program root files: ["/user/username/projects/myproject/pkg6/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -223,7 +223,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg6/index.ts (computed .d.ts during emit)
 
 Program root files: ["/user/username/projects/myproject/pkg7/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -833,7 +833,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -946,7 +946,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1067,7 +1067,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1078,7 +1078,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1089,7 +1089,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg3/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1100,7 +1100,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg4/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1111,7 +1111,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg5/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1154,7 +1154,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/pkg6/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1165,7 +1165,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg7/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1213,7 +1213,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1336,7 +1336,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/pkg1/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg1/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1347,7 +1347,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg2/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg2/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1358,7 +1358,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg3/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1369,7 +1369,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg4/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg4/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1380,7 +1380,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg5/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg5/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1440,7 +1440,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/pkg0/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg0/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1546,7 +1546,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/pkg6/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg6/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1557,7 +1557,7 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/pkg7/index.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/myproject/pkg7/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

@@ -36,7 +36,7 @@ Output::
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"skipJSDocParsing":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program options: {"target":2,"watch":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -101,7 +101,7 @@ Output::
 
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"useDefineForClassFields":true,"skipJSDocParsing":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program options: {"target":2,"useDefineForClassFields":true,"watch":true,"configFilePath":"/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a.ts

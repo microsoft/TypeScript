@@ -151,7 +151,7 @@ plugin-one/index.ts
 
 
 Program root files: ["/user/username/projects/myproject/plugin-one/action.ts","/user/username/projects/myproject/plugin-one/index.ts"]
-Program options: {"target":1,"declaration":true,"traceResolution":true,"skipJSDocParsing":true,"project":"/user/username/projects/myproject/plugin-one","explainFiles":true,"configFilePath":"/user/username/projects/myproject/plugin-one/tsconfig.json"}
+Program options: {"target":1,"declaration":true,"traceResolution":true,"project":"/user/username/projects/myproject/plugin-one","explainFiles":true,"configFilePath":"/user/username/projects/myproject/plugin-one/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

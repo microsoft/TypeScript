@@ -43,7 +43,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"composite":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -235,7 +235,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"sourceMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"composite":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -414,7 +414,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"composite":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -612,7 +612,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"declaration":true,"declarationMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"declarationMap":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -776,7 +776,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"composite":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -961,7 +961,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"composite":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1121,7 +1121,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"inlineSourceMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"composite":true,"inlineSourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1288,7 +1288,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/project/a.ts","/src/project/b.ts","/src/project/c.ts","/src/project/d.ts"]
-Program options: {"composite":true,"sourceMap":true,"skipJSDocParsing":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"composite":true,"sourceMap":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

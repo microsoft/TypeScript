@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "skipJSDocParsing": true,
         "target": "es5",
         "jsx": "react"
     }

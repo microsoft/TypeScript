@@ -42,7 +42,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/a.ts"]
-Program options: {"noEmit":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/src/tsconfig.json"}
+Program options: {"noEmit":true,"incremental":true,"configFilePath":"/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -125,7 +125,7 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/a.ts"]
-Program options: {"noEmit":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/src/tsconfig.json"}
+Program options: {"noEmit":true,"incremental":true,"configFilePath":"/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -156,7 +156,7 @@ Output::
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/a.ts"]
-Program options: {"noEmit":true,"incremental":true,"skipJSDocParsing":true,"configFilePath":"/src/tsconfig.json"}
+Program options: {"noEmit":true,"incremental":true,"configFilePath":"/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

@@ -33,7 +33,7 @@ Output::
 
 
 Program root files: ["/user/someone/projects/myproject/file3.ts"]
-Program options: {"skipJSDocParsing":true,"watch":true}
+Program options: {"watch":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -101,7 +101,7 @@ Output::
 
 
 Program root files: ["/user/someone/projects/myproject/file3.ts"]
-Program options: {"skipJSDocParsing":true,"watch":true}
+Program options: {"watch":true}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

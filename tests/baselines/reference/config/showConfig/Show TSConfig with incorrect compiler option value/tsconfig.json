@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "skipJSDocParsing": true,
         "lib": [
             "es5",
             "es2015.promise"

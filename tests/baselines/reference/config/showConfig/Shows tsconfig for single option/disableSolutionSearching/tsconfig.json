@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "disableSolutionSearching": true,
-        "skipJSDocParsing": true
+        "disableSolutionSearching": true
     }
 }

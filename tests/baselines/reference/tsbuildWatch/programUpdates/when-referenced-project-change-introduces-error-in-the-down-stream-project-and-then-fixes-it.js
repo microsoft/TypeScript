@@ -48,7 +48,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -63,7 +63,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.ts (computed .d.ts during emit)
 
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
-Program options: {"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -220,7 +220,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -233,7 +233,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.ts (computed .d.ts)
 
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
-Program options: {"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -355,7 +355,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -368,7 +368,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.ts (computed .d.ts)
 
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
-Program options: {"watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

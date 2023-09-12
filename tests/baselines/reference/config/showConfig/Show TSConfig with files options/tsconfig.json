@@ -1,7 +1,5 @@
 {
-    "compilerOptions": {
-        "skipJSDocParsing": true
-    },
+    "compilerOptions": {},
     "files": [
         "./file0.ts",
         "./file1.ts",

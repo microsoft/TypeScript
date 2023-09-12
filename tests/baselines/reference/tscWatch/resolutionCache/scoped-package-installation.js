@@ -33,7 +33,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/lib/app.ts"]
-  options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/app.ts 250 undefined Source file
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -85,7 +85,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 
 
 Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -206,7 +206,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/lib/app.ts"]
-  options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -241,7 +241,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 
 Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -295,7 +295,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/lib/app.ts"]
-  options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -335,7 +335,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 
 Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -416,7 +416,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/lib/app.ts"]
-  options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module '@myapp/ts-types' from '/user/username/projects/myproject/lib/app.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -440,7 +440,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node
 
 
 Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

@@ -36,7 +36,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -47,7 +47,7 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -304,7 +304,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -416,7 +416,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program options: {"ignoreDeprecations":"5.0","composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -579,7 +579,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"skipJSDocParsing":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

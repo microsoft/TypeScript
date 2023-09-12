@@ -38,7 +38,7 @@ Found 1 error in src/project/file1.ts[90m:1[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/project/file1.ts","/src/project/file2.ts"]
-Program options: {"outDir":"/src/project/outDir","noEmitOnError":true,"skipJSDocParsing":true,"project":"/src/project","incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"outDir":"/src/project/outDir","noEmitOnError":true,"project":"/src/project","incremental":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -153,7 +153,7 @@ Found 1 error in src/project/file1.ts[90m:1[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/project/file1.ts"]
-Program options: {"outDir":"/src/project/outDir","noEmitOnError":true,"skipJSDocParsing":true,"project":"/src/project","incremental":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"outDir":"/src/project/outDir","noEmitOnError":true,"project":"/src/project","incremental":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

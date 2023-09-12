@@ -77,7 +77,7 @@ Output::
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project1.tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -95,7 +95,7 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts during emit)
 
 Program root files: ["/a/b/other.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -110,7 +110,7 @@ Shape signatures in builder refreshed for::
 /a/b/other.ts (computed .d.ts during emit)
 
 Program root files: ["/a/b/other2.ts"]
-Program options: {"composite":false,"strictNullChecks":false,"noImplicitAny":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program options: {"composite":false,"strictNullChecks":false,"noImplicitAny":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -323,7 +323,7 @@ Output::
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project1.tsconfig.json"}
+Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -436,7 +436,7 @@ Output::
 
 
 Program root files: ["/a/b/other.ts"]
-Program options: {"strict":true,"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -532,7 +532,7 @@ Output::
 
 
 Program root files: ["/a/b/other.ts"]
-Program options: {"strict":false,"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program options: {"strict":false,"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -627,7 +627,7 @@ Output::
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts","/a/b/other.ts","/a/b/other2.ts"]
-Program options: {"strict":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program options: {"strict":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -718,7 +718,7 @@ Output::
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"composite":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project1.tsconfig.json"}
+Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -828,7 +828,7 @@ Output::
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts","/a/b/other.ts","/a/b/other2.ts"]
-Program options: {"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program options: {"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -884,7 +884,7 @@ Output::
 
 
 Program root files: ["/a/b/other2.ts"]
-Program options: {"composite":false,"strictNullChecks":true,"noImplicitAny":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program options: {"composite":false,"strictNullChecks":true,"noImplicitAny":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -925,7 +925,7 @@ Output::
 
 
 Program root files: ["/a/b/other2.ts"]
-Program options: {"composite":false,"strictNullChecks":true,"watch":true,"skipJSDocParsing":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program options: {"composite":false,"strictNullChecks":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

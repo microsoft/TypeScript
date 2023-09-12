@@ -42,7 +42,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/src/main.ts"]
-Program options: {"skipJSDocParsing":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

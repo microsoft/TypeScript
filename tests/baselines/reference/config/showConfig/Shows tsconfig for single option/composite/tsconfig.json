@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "composite": true,
-        "skipJSDocParsing": true
+        "composite": true
     }
 }

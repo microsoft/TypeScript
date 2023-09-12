@@ -27,7 +27,7 @@ Output::
 
 
 Program root files: ["/a/username/project/typescript.ts"]
-Program options: {"skipJSDocParsing":true,"watch":true}
+Program options: {"watch":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -351,7 +351,7 @@ Output::
 
 
 Program root files: ["/a/username/project/typescript.ts"]
-Program options: {"skipJSDocParsing":true,"watch":true}
+Program options: {"watch":true}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

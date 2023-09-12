@@ -25,8 +25,7 @@
         },
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "resolveJsonModule": true,
-        "skipJSDocParsing": true
+        "resolveJsonModule": true
     },
     "include": [
         "./src/**/*"

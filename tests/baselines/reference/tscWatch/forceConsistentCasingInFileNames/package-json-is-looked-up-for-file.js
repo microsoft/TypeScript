@@ -63,7 +63,7 @@ test/basic.spec.ts
 
 
 Program root files: ["/Users/name/projects/lib-boilerplate/src/index.ts","/Users/name/projects/lib-boilerplate/test/basic.spec.ts"]
-Program options: {"module":100,"target":8,"forceConsistentCasingInFileNames":true,"traceResolution":true,"skipJSDocParsing":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/lib-boilerplate/tsconfig.json"}
+Program options: {"module":100,"target":8,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/lib-boilerplate/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2021.full.d.ts

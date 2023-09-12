@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "plugins": [],
-        "skipJSDocParsing": true
+        "plugins": []
     }
 }

@@ -265,7 +265,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -459,7 +459,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -556,7 +556,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./nrefs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./nrefs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -684,7 +684,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -797,7 +797,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -906,7 +906,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1017,7 +1017,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1132,7 +1132,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1243,7 +1243,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1351,7 +1351,7 @@ c.ts
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","skipJSDocParsing":true,"watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

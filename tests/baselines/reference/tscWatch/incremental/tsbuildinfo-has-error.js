@@ -33,7 +33,7 @@ Output::
 
 
 Program root files: ["/src/project/main.ts"]
-Program options: {"skipJSDocParsing":true,"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
+Program options: {"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

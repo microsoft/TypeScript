@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "disableReferencedProjectLoad": true,
-        "skipJSDocParsing": true
+        "disableReferencedProjectLoad": true
     }
 }
