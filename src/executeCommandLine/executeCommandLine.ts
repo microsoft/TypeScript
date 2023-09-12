@@ -928,7 +928,7 @@ function performIncrementalCompilation(
 ) {
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
-    const host = createIncrementalCompilerHost(options, sys);
+    const host = createIncrementalCompilerHost(options, sys, skipJSDocParsing);
     const exitStatus = ts_performIncrementalCompilation({
         host,
         system: sys,
