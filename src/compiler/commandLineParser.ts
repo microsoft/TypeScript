@@ -647,6 +647,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "allowJs",
         type: "boolean",
+        allowJsFlag: true,
+        affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJS_option_to_get_errors_from_these_files,
@@ -655,9 +657,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "checkJs",
         type: "boolean",
-        affectsBuildInfo: true,
-        affectsSemanticDiagnostics: true,
         affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Enable_error_reporting_in_type_checked_JavaScript_files,

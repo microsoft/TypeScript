@@ -7349,6 +7349,7 @@ export interface CommandLineOptionBase {
     showInSimplifiedHelpView?: boolean;
     category?: DiagnosticMessage;
     strictFlag?: true;                                      // true if the option is one of the flag under strict
+    allowJsFlag?: true;
     affectsSourceFile?: true;                               // true if we should recreate SourceFiles after this option changes
     affectsModuleResolution?: true;                         // currently same effect as `affectsSourceFile`
     affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
