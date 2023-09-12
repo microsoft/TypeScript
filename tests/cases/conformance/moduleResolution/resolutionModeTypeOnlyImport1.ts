@@ -35,5 +35,13 @@ import type { x as RequireRelative } from "./other" assert { "resolution-mode": 
 type _ImportRelative = typeof ImportRelative;
 type _RequireRelative = typeof RequireRelative;
 
+export {
+  _Default,
+  _Import,
+  _Require,
+  _ImportRelative,
+  _RequireRelative
+}
+
 // @Filename: /other.ts
 export const x = "other";

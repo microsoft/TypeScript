@@ -41,6 +41,14 @@ error TS2688: Cannot find type definition file for 'foo'.
     type _ImportRelative = typeof ImportRelative;
     type _RequireRelative = typeof RequireRelative;
     
+    export {
+      _Default,
+      _Import,
+      _Require,
+      _ImportRelative,
+      _RequireRelative
+    }
+    
 ==== /other.ts (0 errors) ====
     export const x = "other";
     

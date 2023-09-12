@@ -50,6 +50,23 @@ type _RequireRelative = typeof RequireRelative;
 >_RequireRelative : "other"
 >RequireRelative : "other"
 
+export {
+  _Default,
+>_Default : any
+
+  _Import,
+>_Import : any
+
+  _Require,
+>_Require : any
+
+  _ImportRelative,
+>_ImportRelative : any
+
+  _RequireRelative
+>_RequireRelative : any
+}
+
 === /other.ts ===
 export const x = "other";
 >x : "other"

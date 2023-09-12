@@ -39,3 +39,6 @@ declare global {
 /// <reference types="foo" resolution-mode="require" />
 MODULE; // error
 SCRIPT; // ok
+function foo() {
+    return SCRIPT;
+}
