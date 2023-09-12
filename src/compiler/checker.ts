@@ -39662,9 +39662,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!isNightly()) {
                     grammarErrorOnNode(node.assertions.assertClause, Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next);
                 }
-                if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
-                    grammarErrorOnNode(node.assertions.assertClause, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext);
-                }
             }
         }
 
@@ -45104,9 +45101,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     grammarErrorOnNode(declaration.assertClause, Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next);
                 }
 
-                if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
-                    return grammarErrorOnNode(declaration.assertClause, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext);
-                }
                 return; // Other grammar checks do not apply to type-only imports with resolution mode assertions
             }
 

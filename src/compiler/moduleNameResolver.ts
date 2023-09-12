@@ -308,6 +308,7 @@ export interface ModuleResolutionState {
     reportDiagnostic: DiagnosticReporter;
     isConfigLookup: boolean;
     candidateIsFromPackageJsonField: boolean;
+    overrideResolutionMode: ResolutionMode;
 }
 
 /** Just the fields that we use for module resolution.
@@ -558,18 +559,21 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
 
     const failedLookupLocations: string[] = [];
     const affectingLocations: string[] = [];
+    // Allow type reference directives to opt into `exports` resolution in any resolution mode
+    // when a `resolution-mode` override is present.
     let features = getNodeResolutionFeatures(options);
-    // Unlike `import` statements, whose mode-calculating APIs are all guaranteed to return `undefined` if we're in an un-mode-ed module resolution
-    // setting, type references will return their target mode regardless of options because of how the parser works, so we guard against the mode being
-    // set in a non-modal module resolution setting here. Do note that our behavior is not particularly well defined when these mode-overriding imports
-    // are present in a non-modal project; while in theory we'd like to either ignore the mode or provide faithful modern resolution, depending on what we feel is best,
-    // in practice, not every cache has the options available to intelligently make the choice to ignore the mode request, and it's unclear how modern "faithful modern
-    // resolution" should be (`node16`? `nodenext`?). As such, witnessing a mode-overriding triple-slash reference in a non-modal module resolution
-    // context should _probably_ be an error - and that should likely be handled by the `Program` (which is what we do).
-    if (resolutionMode === ModuleKind.ESNext && (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext)) {
+    if (resolutionMode !== undefined) {
+        features |= NodeResolutionFeatures.ResolutionModeAttributeFeatures;
+    }
+    const moduleResolution = getEmitModuleResolutionKind(options);
+    if (resolutionMode === ModuleKind.ESNext && (ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext)) {
         features |= NodeResolutionFeatures.EsmMode;
     }
-    const conditions = features & NodeResolutionFeatures.Exports ? getConditions(options, !!(features & NodeResolutionFeatures.EsmMode)) : [];
+    // true: "import" / false: "require" / undefined: default based on settings
+    const useImportCondition = resolutionMode === ModuleKind.ESNext || (resolutionMode !== undefined ? false : undefined);
+    const conditions = (features & NodeResolutionFeatures.Exports)
+        ? getConditions(options, useImportCondition)
+        : [];
     const diagnostics: Diagnostic[] = [];
     const moduleResolutionState: ModuleResolutionState = {
         compilerOptions: options,
@@ -584,6 +588,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        overrideResolutionMode: resolutionMode,
     };
     let resolved = primaryLookup();
     let primary = true;
@@ -728,7 +733,7 @@ function getNodeResolutionFeatures(options: CompilerOptions) {
 export function getConditions(options: CompilerOptions, esmMode?: boolean) {
     // conditions are only used by the node16/nodenext/bundler resolvers - there's no priority order in the list,
     // it's essentially a set (priority is determined by object insertion order in the object we look at).
-    const conditions = esmMode || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Bundler
+    const conditions = esmMode || (esmMode !== false && getEmitModuleResolutionKind(options) === ModuleResolutionKind.Bundler)
         ? ["import"]
         : ["require"];
     if (!options.noDtsResolution) {
@@ -1411,13 +1416,13 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
                 result = nodeNextModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
                 break;
             case ModuleResolutionKind.Node10:
-                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
+                result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
                 break;
             case ModuleResolutionKind.Classic:
                 result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                 break;
             case ModuleResolutionKind.Bundler:
-                result = bundlerModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
+                result = bundlerModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
                 break;
             default:
                 return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
@@ -1670,6 +1675,10 @@ export enum NodeResolutionFeatures {
 
     BundlerDefault = Imports | SelfName | Exports | ExportsPatternTrailers,
 
+    // features required to resolve `resolution-mode` overrides in
+    // type reference directives, import() types, and type-only imports
+    ResolutionModeAttributeFeatures = Imports | SelfName | Exports | ExportsPatternTrailers,
+
     EsmMode = 1 << 5,
 }
 
@@ -1708,7 +1717,7 @@ function nodeNextModuleNameResolverWorker(features: NodeResolutionFeatures, modu
     if (getResolveJsonModule(compilerOptions)) {
         extensions |= Extensions.Json;
     }
-    return nodeModuleNameResolverWorker(features | esmMode, moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference);
+    return nodeModuleNameResolverWorker(features | esmMode, moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference, /*overrideResolutionMode*/ undefined);
 }
 
 function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -1722,21 +1731,22 @@ function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: 
         Extensions.JavaScript,
         /*isConfigLookup*/ false,
         /*redirectedReference*/ undefined,
+        /*overrideResolutionMode*/ undefined,
     );
 }
 
-export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
+export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
     const containingDirectory = getDirectoryPath(containingFile);
     let extensions = compilerOptions.noDtsResolution ? Extensions.ImplementationFiles : Extensions.TypeScript | Extensions.JavaScript | Extensions.Declaration;
     if (getResolveJsonModule(compilerOptions)) {
         extensions |= Extensions.Json;
     }
-    return nodeModuleNameResolverWorker(getNodeResolutionFeatures(compilerOptions), moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference);
+    return nodeModuleNameResolverWorker(getNodeResolutionFeatures(compilerOptions), moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference, resolutionMode);
 }
 
 export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-/** @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
-export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, isConfigLookup?: boolean): ResolvedModuleWithFailedLookupLocations {
+/** @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
+export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode, isConfigLookup?: boolean): ResolvedModuleWithFailedLookupLocations {
     let extensions;
     if (isConfigLookup) {
         extensions = Extensions.Json;
@@ -1750,20 +1760,35 @@ export function nodeModuleNameResolver(moduleName: string, containingFile: strin
             ? Extensions.TypeScript | Extensions.JavaScript | Extensions.Declaration | Extensions.Json
             : Extensions.TypeScript | Extensions.JavaScript | Extensions.Declaration;
     }
-    return nodeModuleNameResolverWorker(NodeResolutionFeatures.None, moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, extensions, !!isConfigLookup, redirectedReference);
+    return nodeModuleNameResolverWorker(NodeResolutionFeatures.None, moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, extensions, !!isConfigLookup, redirectedReference, resolutionMode);
 }
 
 /** @internal */
 export function nodeNextJsonConfigResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-    return nodeModuleNameResolverWorker(NodeResolutionFeatures.NodeNextDefault, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, Extensions.Json, /*isConfigLookup*/ true, /*redirectedReference*/ undefined);
+    return nodeModuleNameResolverWorker(NodeResolutionFeatures.NodeNextDefault, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, Extensions.Json, /*isConfigLookup*/ true, /*redirectedReference*/ undefined, /*overrideResolutionMode*/ undefined);
 }
 
-function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleName: string, containingDirectory: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache: ModuleResolutionCache | undefined, extensions: Extensions, isConfigLookup: boolean, redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations {
+function nodeModuleNameResolverWorker(
+    features: NodeResolutionFeatures,
+    moduleName: string,
+    containingDirectory: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleResolutionHost,
+    cache: ModuleResolutionCache | undefined,
+    extensions: Extensions,
+    isConfigLookup: boolean,
+    redirectedReference: ResolvedProjectReference | undefined,
+    overrideResolutionMode: ResolutionMode,
+): ResolvedModuleWithFailedLookupLocations {
     const traceEnabled = isTraceEnabled(compilerOptions, host);
 
     const failedLookupLocations: string[] = [];
     const affectingLocations: string[] = [];
-    const conditions = getConditions(compilerOptions, !!(features & NodeResolutionFeatures.EsmMode));
+    if (overrideResolutionMode) {
+        features |= NodeResolutionFeatures.ResolutionModeAttributeFeatures;
+    }
+    const useImportCondition = !!(features & NodeResolutionFeatures.EsmMode) || (overrideResolutionMode ? overrideResolutionMode === ModuleKind.ESNext : undefined);
+    const conditions = getConditions(compilerOptions, useImportCondition);
 
     const diagnostics: Diagnostic[] = [];
     const state: ModuleResolutionState = {
@@ -1779,6 +1804,7 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup,
         candidateIsFromPackageJsonField: false,
+        overrideResolutionMode,
     };
 
     if (traceEnabled && moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(compilerOptions))) {
@@ -2288,6 +2314,7 @@ export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJ
         reportDiagnostic: noop,
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        overrideResolutionMode: undefined,
     };
 }
 
@@ -2657,7 +2684,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                     const combinedLookup = pattern ? target.replace(/\*/g, subpath) : target + subpath;
                     traceIfEnabled(state, Diagnostics.Using_0_subpath_1_with_target_2, "imports", key, combinedLookup);
                     traceIfEnabled(state, Diagnostics.Resolving_module_0_from_1, combinedLookup, scope.packageDirectory + "/");
-                    const result = nodeModuleNameResolverWorker(state.features, combinedLookup, scope.packageDirectory + "/", state.compilerOptions, state.host, cache, extensions, /*isConfigLookup*/ false, redirectedReference);
+                    const result = nodeModuleNameResolverWorker(state.features, combinedLookup, scope.packageDirectory + "/", state.compilerOptions, state.host, cache, extensions, /*isConfigLookup*/ false, redirectedReference, state.overrideResolutionMode);
                     return toSearchResult(
                         result.resolvedModule ? {
                             path: result.resolvedModule.resolvedFileName,
@@ -3140,6 +3167,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        overrideResolutionMode: undefined,
     };
 
     const resolved = tryResolve(Extensions.TypeScript | Extensions.Declaration) ||
@@ -3239,6 +3267,7 @@ export function loadModuleFromGlobalCache(moduleName: string, projectName: strin
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        overrideResolutionMode: undefined,
     };
     const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.Declaration, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
     return createResolvedModuleWithFailedLookupLocations(

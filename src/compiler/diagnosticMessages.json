@@ -1480,10 +1480,6 @@
         "category": "Error",
         "code": 1451
     },
-    "'resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.": {
-        "category": "Error",
-        "code": 1452
-    },
     "`resolution-mode` should be either `require` or `import`.": {
         "category": "Error",
         "code": 1453
