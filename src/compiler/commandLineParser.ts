@@ -504,13 +504,6 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
         defaultValueDescription: Diagnostics.Platform_specific,
     },
-    {
-        name: "skipJSDocParsing",
-        type: "boolean",
-        defaultValueDescription: false,
-        hiddenInAllViews: true,
-        affectsSourceFile: true,
-    },
 ];
 
 /** @internal */
@@ -1778,7 +1771,6 @@ export function parseCommandLineWorker(
     const fileNames: string[] = [];
     const errors: Diagnostic[] = [];
 
-    options.skipJSDocParsing = true;
     parseStrings(commandLine);
     return {
         options,

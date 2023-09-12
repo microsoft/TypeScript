@@ -370,10 +370,10 @@ export class TestState {
 
             // Check if no-default-lib flag is false and if so add default library
             if (!resolvedResult.isLibFile) {
-                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.getDefaultLibrarySourceFile(compilationOptions)!.text, /*isRootFile*/ false);
+                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
 
                 compilationOptions.lib?.forEach(fileName => {
-                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(compilationOptions, fileName);
+                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                     ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
                     if (libFile) {
                         this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
@@ -398,7 +398,7 @@ export class TestState {
                 const addSourceFile = (fileName: string) => {
                     if (seen.has(fileName)) return;
                     seen.add(fileName);
-                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(compilationOptions, fileName);
+                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                     ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
                     this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
                     if (!ts.some(libFile.libReferenceDirectives)) return;

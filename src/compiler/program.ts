@@ -3545,8 +3545,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const languageVersion = getEmitScriptTarget(options);
         const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
         return typeof result === "object" ?
-            { ...result, languageVersion, setExternalModuleIndicator, skipJSDoc: options.skipJSDocParsing } :
-            { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator, skipJSDoc: options.skipJSDocParsing };
+            { ...result, languageVersion, setExternalModuleIndicator } :
+            { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator };
     }
 
     function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {

@@ -270,7 +270,6 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
                 languageVersion: scriptTarget,
                 impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
-                skipJSDoc: compilationSettings.skipJSDocParsing,
             };
         sourceFileOptions.languageVersion = scriptTarget;
         const oldBucketCount = buckets.size;
