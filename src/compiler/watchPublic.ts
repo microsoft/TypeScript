@@ -118,7 +118,6 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-// Dont think we need this since user can override getSourceFile on CompilerHost returned?
 export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, skipJSDocParsing?: boolean): CompilerHost {
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, skipJSDocParsing, system);
     host.createHash = maybeBind(system, system.createHash);
