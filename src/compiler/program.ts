@@ -402,7 +402,7 @@ export function createGetSourceFile(
     readFile: ProgramHost<any>["readFile"],
     getCompilerOptions: () => CompilerOptions,
     setParentNodes: boolean | undefined,
-    skipJSDoc: boolean | undefined,
+    skipJSDocParsing: boolean | undefined,
 ): CompilerHost["getSourceFile"] {
     return (fileName, languageVersionOrOptions, onError) => {
         let text: string | undefined;
@@ -418,7 +418,7 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, skipJSDoc) : undefined;
+        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, skipJSDocParsing) : undefined;
     };
 }
 
@@ -459,7 +459,7 @@ export function createWriteFileMeasuringIO(
 export function createCompilerHostWorker(
     options: CompilerOptions,
     setParentNodes?: boolean,
-    skipJSDoc?: boolean,
+    skipJSDocParsing?: boolean,
     system: System = sys,
 ): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
@@ -482,7 +482,7 @@ export function createCompilerHostWorker(
     const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
-        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, skipJSDoc),
+        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, skipJSDocParsing),
         getDefaultLibLocation,
         getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
         writeFile: createWriteFileMeasuringIO(

@@ -119,8 +119,8 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
 }
 
 // Dont think we need this since user can override getSourceFile on CompilerHost returned?
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, skipJSDoc?: boolean): CompilerHost {
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, skipJSDoc, system);
+export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, skipJSDocParsing?: boolean): CompilerHost {
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, skipJSDocParsing, system);
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
@@ -170,7 +170,6 @@ export interface WatchHost {
     clearTimeout?(timeoutId: any): void;
 }
 export interface ProgramHost<T extends BuilderProgram> {
-    skipJSDoc?: boolean;
     /**
      * Used to create the program when need for program creation or recreation detected
      */
@@ -256,6 +255,9 @@ export interface ProgramHost<T extends BuilderProgram> {
      * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+
+    /** True if it's safe for the parser to skip parsing JSDoc tags. */
+    skipJSDocParsing?: boolean;
 }
 /**
  * Internal interface used to wire emit through same host

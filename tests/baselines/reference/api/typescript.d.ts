@@ -9925,7 +9925,7 @@ declare namespace ts {
         emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
     function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
-    function createIncrementalCompilerHost(options: CompilerOptions, system?: System, skipJSDoc?: boolean): CompilerHost;
+    function createIncrementalCompilerHost(options: CompilerOptions, system?: System, skipJSDocParsing?: boolean): CompilerHost;
     function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram }: IncrementalProgramOptions<T>): T;
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
@@ -9970,7 +9970,6 @@ declare namespace ts {
         clearTimeout?(timeoutId: any): void;
     }
     interface ProgramHost<T extends BuilderProgram> {
-        skipJSDoc?: boolean;
         /**
          * Used to create the program when need for program creation or recreation detected
          */
@@ -10023,6 +10022,8 @@ declare namespace ts {
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
         getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+        /** True if it's safe for the parser to skip parsing JSDoc tags. */
+        skipJSDocParsing?: boolean;
     }
     interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** Instead of using output d.ts file from project reference, use its source file */

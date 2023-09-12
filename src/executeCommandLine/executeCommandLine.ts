@@ -840,7 +840,7 @@ function performBuild(
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createWatchStatusReporter(sys, buildOptions),
         );
-        buildHost.skipJSDoc = true;
+        buildHost.skipJSDocParsing = true;
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
         const onWatchStatusChange = buildHost.onWatchStatusChange;
@@ -870,7 +870,7 @@ function performBuild(
         createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
         createReportErrorSummary(sys, buildOptions),
     );
-    buildHost.skipJSDoc = true;
+    buildHost.skipJSDocParsing = true;
     const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
     updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
     const builder = createSolutionBuilder(buildHost, projects, buildOptions);
@@ -893,7 +893,7 @@ function performCompilation(
     config: ParsedCommandLine,
 ) {
     const { fileNames, options, projectReferences } = config;
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, /*skipJSDoc*/ true, sys);
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, /*skipJSDocParsing*/ true, sys);
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -978,7 +978,7 @@ function updateWatchCompilationHost(
     cb: ExecuteCommandLineCallbacks,
     watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
 ) {
-    watchCompilerHost.skipJSDoc = true;
+    watchCompilerHost.skipJSDocParsing = true;
     updateCreateProgram(sys, watchCompilerHost, /*isBuildMode*/ false);
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
     watchCompilerHost.afterProgramCreate = builderProgram => {
