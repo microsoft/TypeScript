@@ -118,8 +118,9 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, /*skipJSDoc*/ true, system);
+// Dont think we need this since user can override getSourceFile on CompilerHost returned?
+export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, skipJSDoc?: boolean): CompilerHost {
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, skipJSDoc, system);
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
@@ -169,6 +170,7 @@ export interface WatchHost {
     clearTimeout?(timeoutId: any): void;
 }
 export interface ProgramHost<T extends BuilderProgram> {
+    skipJSDoc?: boolean;
     /**
      * Used to create the program when need for program creation or recreation detected
      */
