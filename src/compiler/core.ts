@@ -5,13 +5,18 @@ import {
     Comparison,
     Debug,
     EqualityComparer,
+    isTaggedStruct,
     isWhiteSpaceLike,
     MapLike,
     Queue,
+    SharedNodeArray,
     SortedArray,
     SortedReadonlyArray,
     TextSpan,
 } from "./_namespaces/ts";
+import { SharedNodeBase } from "./sharing/sharedNode";
+import { isShareableNonPrimitive, isSharedArray } from "./sharing/structs/shareable";
+import { Tag } from "./sharing/structs/taggedStruct";
 
 
 /** @internal */
@@ -660,21 +665,22 @@ export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined,
 }
 
 /** @internal */
-export function some<T>(array: readonly T[] | undefined): array is readonly T[];
+export function some<T>(array: readonly T[] | SharedNodeArray<Extract<T, SharedNodeBase>> | undefined): array is readonly T[] | SharedNodeArray<Extract<T, SharedNodeBase>>;
 /** @internal */
-export function some<T>(array: readonly T[] | undefined, predicate: (value: T) => boolean): boolean;
+export function some<T>(array: readonly T[] | SharedNodeArray<Extract<T, SharedNodeBase>> | undefined, predicate: (value: T) => boolean): boolean;
 /** @internal */
-export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) => boolean): boolean {
+export function some<T>(array: readonly T[] | SharedNodeArray<Extract<T, SharedNodeBase>> | undefined, predicate?: (value: T) => boolean): boolean {
     if (array) {
         if (predicate) {
-            for (const v of array) {
+            const iterable = isTaggedStruct(array, Tag.NodeArray) ? SharedNodeArray.values(array) : array;
+            for (const v of iterable) {
                 if (predicate(v)) {
                     return true;
                 }
             }
         }
         else {
-            return array.length > 0;
+            return (array instanceof SharedNodeArray ? array.items.length : array.length) > 0;
         }
     }
     return false;
@@ -1841,12 +1847,12 @@ export function isArray(value: any): value is readonly unknown[] {
 }
 
 /** @internal */
-export function toArray<T>(value: T | T[]): T[];
+export function toArray<T>(value: T | T[] | SharedArray<Extract<T, Shareable>>): T[];
 /** @internal */
-export function toArray<T>(value: T | readonly T[]): readonly T[];
+export function toArray<T>(value: T | readonly T[] | SharedArray<Extract<T, Shareable>>): readonly T[];
 /** @internal */
-export function toArray<T>(value: T | T[]): T[] {
-    return isArray(value) ? value : [value];
+export function toArray<T>(value: T | T[] | SharedArray<Extract<T, Shareable>>): T[] {
+    return isSharedArray(value) ? Array.from(value) : isArray(value) ? value : [value];
 }
 
 /**
@@ -1857,9 +1863,15 @@ export function toArray<T>(value: T | T[]): T[] {
 export function isString(text: unknown): text is string {
     return typeof text === "string";
 }
+
 /** @internal */
 export function isNumber(x: unknown): x is number {
     return typeof x === "number";
+}
+
+/** @internal */
+export function isNull(x: unknown): x is null { // eslint-disable-line no-null/no-null
+    return x === null; // eslint-disable-line no-null/no-null
 }
 
 /** @internal */
@@ -1871,7 +1883,24 @@ export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, tes
 export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
     if (value !== undefined && test(value)) return value;
 
-    return Debug.fail(`Invalid cast. The supplied value ${value} did not pass the test '${Debug.getFunctionName(test)}'.`);
+    let valueArg: unknown = value;
+    if (isShareableNonPrimitive(valueArg)) {
+        if ("__tag__" in valueArg) {
+            const tag = valueArg.__tag__ as Tag;
+            if (tag === Tag.Node) {
+                const kind = (valueArg as SharedNodeBase).kind;
+                valueArg = `[object SharedNodeBase(${Debug.formatSyntaxKind(kind)})]`;
+            }
+            else {
+                valueArg = `[object TaggedStruct(${Debug.formatTag(tag)})]`;
+            }
+        }
+        else {
+            valueArg = "[object SharedStruct]";
+        }
+    }
+
+    return Debug.fail(`Invalid cast. The supplied value ${valueArg} did not pass the test '${Debug.getFunctionName(test)}'.`);
 }
 
 /**
@@ -2882,4 +2911,39 @@ export function isNodeLikeSystem(): boolean {
         && !!process.nextTick
         && !(process as any).browser
         && typeof module === "object";
+}
+
+/** @internal */
+export class Lazy<T> {
+    private static circular = (): any => { throw new Error("Lazy instantiation was circular"); };
+
+    private _value: T | (() => T);
+    private _hasValue: boolean;
+
+    constructor(valueFactory: () => T) {
+        this._value = valueFactory;
+        this._hasValue = false;
+    }
+
+    get hasValue() {
+        return this._value;
+    }
+
+    get value() {
+        if (this._hasValue) {
+            return this._value as T;
+        }
+        const valueFactory = this._value as (() => T);
+        try {
+            this._value = Lazy.circular;
+            this._value = valueFactory();
+            this._hasValue = true;
+            return this._value;
+        }
+        finally {
+            if (!this._hasValue) {
+                this._value = valueFactory;
+            }
+        }
+    }
 }

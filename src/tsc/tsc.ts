@@ -9,6 +9,8 @@ ts.Debug.loggingHost = {
     }
 };
 
+ts.sys.tryEnableSharedStructs?.();
+
 if (ts.Debug.isDebugging) {
     ts.Debug.enableDebugInfo();
 }
@@ -21,4 +23,9 @@ if (ts.sys.setBlocking) {
     ts.sys.setBlocking();
 }
 
-ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args);
+if (ts.workerThreads?.isWorkerThread()) {
+    ts.executeWorker(ts.sys, ts.workerThreads);
+}
+else {
+    ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args, ts.workerThreads);
+}

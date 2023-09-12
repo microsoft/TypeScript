@@ -18,6 +18,7 @@ import {
     createIncrementalCompilerHost,
     createIncrementalProgram,
     CreateProgram,
+    createRequestSourceFile,
     createWriteFileMeasuringIO,
     CustomTransformers,
     Debug,
@@ -95,6 +96,7 @@ import {
     sys,
     System,
     targetOptionDeclaration,
+    ThreadPool,
     WatchCompilerHost,
     WatchCompilerHostOfConfigFile,
     WatchCompilerHostOfFilesAndCompilerOptions,
@@ -105,6 +107,7 @@ import {
     WatchOptions,
     WatchStatusReporter,
     whitespaceOrMapCommentRegExp,
+    WorkerThreadsHost,
     WriteFileCallback,
 } from "./_namespaces/ts";
 
@@ -741,10 +744,12 @@ export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { tra
 export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const compilerHost: CompilerHost = {
+        requestSourceFile: host.threadPool && createRequestSourceFile(host.threadPool, /*setParentNodes*/ undefined),
         getSourceFile: createGetSourceFile(
             (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
             getCompilerOptions,
-            /*setParentNodes*/ undefined
+            /*setParentNodes*/ undefined,
+            /*overrideObjectAllocator*/ undefined,
         ),
         getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
         getDefaultLibFileName: options => host.getDefaultLibFileName(options),
@@ -767,6 +772,8 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         createHash: maybeBind(host, host.createHash),
         readDirectory: maybeBind(host, host.readDirectory),
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
+        workerThreads: host.workerThreads,
+        threadPool: host.threadPool,
     };
     return compilerHost;
 }
@@ -820,6 +827,12 @@ export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
         }
         return result;
     };
+    const originalRequestSourceFile = compilerHost.requestSourceFile;
+    if (originalRequestSourceFile) {
+        compilerHost.requestSourceFile = (parserState, fileName, languageVersionOrOptions, shouldCreateNewSourceFile) => {
+            originalRequestSourceFile.call(compilerHost, parserState, fileName, languageVersionOrOptions, shouldCreateNewSourceFile, /*setFileVersion*/ true);
+        };
+    }
 }
 
 /**
@@ -827,9 +840,11 @@ export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
  *
  * @internal
  */
-export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
+export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined, workerThreads: WorkerThreadsHost | undefined, threadPool: ThreadPool | undefined): ProgramHost<T> {
     const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
     return {
+        workerThreads,
+        threadPool,
         useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
         getNewLine: () => system.newLine,
         getCurrentDirectory: memoize(() => system.getCurrentDirectory()),
@@ -855,9 +870,9 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
 /**
  * Creates the watch compiler host that can be extended with config file or root file names and options host
  */
-function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
+function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, workerThreads?: WorkerThreadsHost, threadPool?: ThreadPool | undefined): WatchCompilerHost<T> {
     const write = (s: string) => system.write(s + system.newLine);
-    const result = createProgramHost(system, createProgram) as WatchCompilerHost<T>;
+    const result = createProgramHost(system, createProgram, workerThreads, threadPool) as WatchCompilerHost<T>;
     copyProperties(result, createWatchHost(system, reportWatchStatus));
     result.afterProgramCreate = builderProgram => {
         const compilerOptions = builderProgram.getCompilerOptions();
@@ -892,6 +907,8 @@ export interface CreateWatchCompilerHostInput<T extends BuilderProgram> {
     createProgram?: CreateProgram<T>;
     reportDiagnostic?: DiagnosticReporter;
     reportWatchStatus?: WatchStatusReporter;
+    workerThreads?: WorkerThreadsHost;
+    threadPool?: ThreadPool;
 }
 
 /** @internal */
@@ -908,10 +925,11 @@ export interface CreateWatchCompilerHostOfConfigFileInput<T extends BuilderProgr
  */
 export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
     configFileName, optionsToExtend, watchOptionsToExtend, extraFileExtensions,
-    system, createProgram, reportDiagnostic, reportWatchStatus
+    system, createProgram, reportDiagnostic, reportWatchStatus,
+    workerThreads, threadPool,
 }: CreateWatchCompilerHostOfConfigFileInput<T>): WatchCompilerHostOfConfigFile<T> {
     const diagnosticReporter = reportDiagnostic || createDiagnosticReporter(system);
-    const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
+    const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus, workerThreads, threadPool) as WatchCompilerHostOfConfigFile<T>;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, diagnosticReporter, diagnostic);
     host.configFileName = configFileName;
     host.optionsToExtend = optionsToExtend;
@@ -934,9 +952,10 @@ export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends
  */
 export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
     rootFiles, options, watchOptions, projectReferences,
-    system, createProgram, reportDiagnostic, reportWatchStatus
+    system, createProgram, reportDiagnostic, reportWatchStatus,
+    workerThreads, threadPool,
 }: CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
-    const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
+    const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus, workerThreads, threadPool) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
     host.rootFiles = rootFiles;
     host.options = options;
     host.watchOptions = watchOptions;

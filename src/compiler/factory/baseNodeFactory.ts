@@ -1,7 +1,8 @@
 import {
     Node,
+    NodeArray,
     objectAllocator,
-    SyntaxKind,
+    SyntaxKind
 } from "../_namespaces/ts";
 
 /**
@@ -11,6 +12,7 @@ import {
  * @internal
  */
 export interface BaseNodeFactory {
+    createBaseNodeArray<T extends Node>(items: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
     createBaseSourceFileNode(kind: SyntaxKind.SourceFile): Node;
     createBaseIdentifierNode(kind: SyntaxKind.Identifier): Node;
     createBasePrivateIdentifierNode(kind: SyntaxKind.PrivateIdentifier): Node;
@@ -24,6 +26,7 @@ export interface BaseNodeFactory {
  * @internal
  */
 export function createBaseNodeFactory(): BaseNodeFactory {
+    let NodeArrayContructor: new <T extends Node>(elements: readonly T[], hasTrailingComma?: boolean) => NodeArray<T>;
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Node;
@@ -35,7 +38,8 @@ export function createBaseNodeFactory(): BaseNodeFactory {
         createBaseIdentifierNode,
         createBasePrivateIdentifierNode,
         createBaseTokenNode,
-        createBaseNode
+        createBaseNode,
+        createBaseNodeArray,
     };
 
     function createBaseSourceFileNode(kind: SyntaxKind.SourceFile): Node {
@@ -56,5 +60,9 @@ export function createBaseNodeFactory(): BaseNodeFactory {
 
     function createBaseNode(kind: SyntaxKind): Node {
         return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+    }
+
+    function createBaseNodeArray<T extends Node>(elements: readonly T[], hasTrailingComma?: boolean): NodeArray<T> {
+        return new (NodeArrayContructor || (NodeArrayContructor = objectAllocator.getNodeArrayConstructor()))(elements, hasTrailingComma);
     }
 }

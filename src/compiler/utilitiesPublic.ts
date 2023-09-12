@@ -1605,13 +1605,17 @@ export function isEntityName(node: Node): node is EntityName {
         || kind === SyntaxKind.Identifier;
 }
 
-export function isPropertyName(node: Node): node is PropertyName {
-    const kind = node.kind;
+/** @internal */
+export function isPropertyNameKind(kind: SyntaxKind): kind is PropertyName["kind"] {
     return kind === SyntaxKind.Identifier
         || kind === SyntaxKind.PrivateIdentifier
         || kind === SyntaxKind.StringLiteral
         || kind === SyntaxKind.NumericLiteral
         || kind === SyntaxKind.ComputedPropertyName;
+}
+
+export function isPropertyName(node: Node): node is PropertyName {
+    return isPropertyNameKind(node.kind);
 }
 
 export function isBindingName(node: Node): node is BindingName {

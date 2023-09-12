@@ -736,6 +736,7 @@ import {
     isUMDExportSymbol,
     isValidBigIntString,
     isValidESSymbolDeclaration,
+    isValidNumberString,
     isValidTypeOnlyAliasUseSite,
     isValueSignatureDeclaration,
     isVariableDeclaration,
@@ -24320,17 +24321,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const endLen = Math.min(sourceEnd.length, targetEnd.length);
         return sourceStart.slice(0, startLen) !== targetStart.slice(0, startLen) ||
             sourceEnd.slice(sourceEnd.length - endLen) !== targetEnd.slice(targetEnd.length - endLen);
-    }
-
-    /**
-     * Tests whether the provided string can be parsed as a number.
-     * @param s The string to test.
-     * @param roundTripOnly Indicates the resulting number matches the input when converted back to a string.
-     */
-    function isValidNumberString(s: string, roundTripOnly: boolean): boolean {
-        if (s === "") return false;
-        const n = +s;
-        return isFinite(n) && (!roundTripOnly || "" + n === s);
     }
 
     /**

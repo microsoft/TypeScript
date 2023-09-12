@@ -225,6 +225,7 @@ import {
     normalizePath,
     NumberLiteralType,
     NumericLiteral,
+    objectAllocator,
     ObjectAllocator,
     ObjectFlags,
     ObjectLiteralElement,
@@ -1259,6 +1260,7 @@ class SourceMapSourceObject implements SourceMapSource {
 
 function getServicesObjectAllocator(): ObjectAllocator {
     return {
+        getNodeArrayConstructor: objectAllocator.getNodeArrayConstructor,
         getNodeConstructor: () => NodeObject,
         getTokenConstructor: () => TokenObject,
 

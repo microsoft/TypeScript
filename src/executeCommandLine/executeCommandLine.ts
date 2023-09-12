@@ -29,7 +29,6 @@ import {
     createWatchCompilerHostOfConfigFile,
     createWatchCompilerHostOfFilesAndCompilerOptions,
     createWatchProgram,
-    createWatchStatusReporter as ts_createWatchStatusReporter,
     Debug,
     Diagnostic,
     DiagnosticMessage,
@@ -54,6 +53,7 @@ import {
     getDiagnosticText,
     getErrorSummaryText,
     getLineStarts,
+    getMaxCpuCount,
     getNormalizedAbsolutePath,
     isIncrementalCompilation,
     isWatchSet,
@@ -67,7 +67,6 @@ import {
     parseCommandLine,
     parseConfigFileWithSystem,
     ParsedCommandLine,
-    performIncrementalCompilation as ts_performIncrementalCompilation,
     Program,
     reduceLeftIterator,
     ReportEmitErrorSummary,
@@ -82,12 +81,16 @@ import {
     supportedTSExtensionsFlat,
     sys,
     System,
+    ThreadPool,
     toPath,
     tracing,
+    createWatchStatusReporter as ts_createWatchStatusReporter,
+    performIncrementalCompilation as ts_performIncrementalCompilation,
     validateLocaleAndSetLanguage,
     version,
     WatchCompilerHost,
     WatchOptions,
+    WorkerThreadsHost,
 } from "./_namespaces/ts";
 
 interface Statistic {
@@ -556,6 +559,7 @@ function executeCommandLineWorker(
     sys: System,
     cb: ExecuteCommandLineCallbacks,
     commandLine: ParsedCommandLine,
+    workerThreads: WorkerThreadsHost | undefined,
 ) {
     let reportDiagnostic = createDiagnosticReporter(sys);
     if (commandLine.options.build) {
@@ -634,6 +638,13 @@ function executeCommandLineWorker(
         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
+    let threadPool: ThreadPool | undefined;
+    const maxCpuCount = getMaxCpuCount(commandLine.options);
+    if (maxCpuCount > 1 && workerThreads?.isMainThread()) {
+        threadPool = new ThreadPool(maxCpuCount, workerThreads);
+        threadPool.start();
+    }
+
     const currentDirectory = sys.getCurrentDirectory();
     const commandLineOptions = convertToOptionsWithAbsolutePaths(
         commandLine.options,
@@ -671,6 +682,8 @@ function executeCommandLineWorker(
                 commandLineOptions,
                 commandLine.watchOptions,
                 extendedConfigCache,
+                workerThreads,
+                threadPool,
             );
         }
         else if (isIncrementalCompilation(configParseResult.options)) {
@@ -678,7 +691,9 @@ function executeCommandLineWorker(
                 sys,
                 cb,
                 reportDiagnostic,
-                configParseResult
+                configParseResult,
+                workerThreads,
+                threadPool,
             );
         }
         else {
@@ -686,7 +701,9 @@ function executeCommandLineWorker(
                 sys,
                 cb,
                 reportDiagnostic,
-                configParseResult
+                configParseResult,
+                workerThreads,
+                threadPool,
             );
         }
     }
@@ -710,6 +727,8 @@ function executeCommandLineWorker(
                 commandLine.fileNames,
                 commandLineOptions,
                 commandLine.watchOptions,
+                workerThreads,
+                threadPool,
             );
         }
         else if (isIncrementalCompilation(commandLineOptions)) {
@@ -717,7 +736,9 @@ function executeCommandLineWorker(
                 sys,
                 cb,
                 reportDiagnostic,
-                { ...commandLine, options: commandLineOptions }
+                { ...commandLine, options: commandLineOptions },
+                workerThreads,
+                threadPool,
             );
         }
         else {
@@ -725,7 +746,9 @@ function executeCommandLineWorker(
                 sys,
                 cb,
                 reportDiagnostic,
-                { ...commandLine, options: commandLineOptions }
+                { ...commandLine, options: commandLineOptions },
+                workerThreads,
+                threadPool,
             );
         }
     }
@@ -744,6 +767,7 @@ export function executeCommandLine(
     system: System,
     cb: ExecuteCommandLineCallbacks,
     commandLineArgs: readonly string[],
+    workerThreads?: WorkerThreadsHost
 ) {
     if (isBuild(commandLineArgs)) {
         const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs.slice(1));
@@ -754,7 +778,8 @@ export function executeCommandLine(
                 buildOptions,
                 watchOptions,
                 projects,
-                errors
+                errors,
+                workerThreads
             ));
         }
         else {
@@ -764,7 +789,8 @@ export function executeCommandLine(
                 buildOptions,
                 watchOptions,
                 projects,
-                errors
+                errors,
+                workerThreads
             );
         }
     }
@@ -775,10 +801,11 @@ export function executeCommandLine(
             system,
             cb,
             commandLine,
+            workerThreads,
         ));
     }
     else {
-        return executeCommandLineWorker(system, cb, commandLine);
+        return executeCommandLineWorker(system, cb, commandLine, workerThreads);
     }
 }
 
@@ -797,7 +824,8 @@ function performBuild(
     buildOptions: BuildOptions,
     watchOptions: WatchOptions | undefined,
     projects: string[],
-    errors: Diagnostic[]
+    errors: Diagnostic[],
+    workerThreads: WorkerThreadsHost | undefined,
 ) {
     // Update to pretty if host supports it
     const reportDiagnostic = updateReportDiagnostic(
@@ -832,14 +860,23 @@ function performBuild(
         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
+    let threadPool: ThreadPool | undefined;
+    const maxCpuCount = getMaxCpuCount(buildOptions);
+    if (maxCpuCount > 1 && workerThreads?.isMainThread()) {
+        threadPool = new ThreadPool(maxCpuCount, workerThreads);
+    }
+
     if (buildOptions.watch) {
         if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
+        threadPool?.start();
         const buildHost = createSolutionBuilderWithWatchHost(
             sys,
             /*createProgram*/ undefined,
             reportDiagnostic,
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
-            createWatchStatusReporter(sys, buildOptions)
+            createWatchStatusReporter(sys, buildOptions),
+            workerThreads,
+            threadPool
         );
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
@@ -861,12 +898,15 @@ function performBuild(
         return builder;
     }
 
+    threadPool?.start();
     const buildHost = createSolutionBuilderHost(
         sys,
         /*createProgram*/ undefined,
         reportDiagnostic,
         createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
-        createReportErrorSummary(sys, buildOptions)
+        createReportErrorSummary(sys, buildOptions),
+        workerThreads,
+        threadPool
     );
     const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
     updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
@@ -874,6 +914,7 @@ function performBuild(
     const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
     reportSolutionBuilderTimes(builder, solutionPerformance);
     dumpTracingLegend(); // Will no-op if there hasn't been any tracing
+    threadPool?.stop();
     return sys.exit(exitStatus);
 }
 
@@ -887,10 +928,12 @@ function performCompilation(
     sys: System,
     cb: ExecuteCommandLineCallbacks,
     reportDiagnostic: DiagnosticReporter,
-    config: ParsedCommandLine
+    config: ParsedCommandLine,
+    workerThreads: WorkerThreadsHost | undefined,
+    threadPool: ThreadPool | undefined,
 ) {
     const { fileNames, options, projectReferences } = config;
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys, workerThreads, threadPool);
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -912,6 +955,7 @@ function performCompilation(
     );
     reportStatistics(sys, program, /*solutionPerformance*/ undefined);
     cb(program);
+    threadPool?.stop();
     return sys.exit(exitStatus);
 }
 
@@ -919,11 +963,13 @@ function performIncrementalCompilation(
     sys: System,
     cb: ExecuteCommandLineCallbacks,
     reportDiagnostic: DiagnosticReporter,
-    config: ParsedCommandLine
+    config: ParsedCommandLine,
+    workerThreads: WorkerThreadsHost | undefined,
+    threadPool: ThreadPool | undefined,
 ) {
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
-    const host = createIncrementalCompilerHost(options, sys);
+    const host = createIncrementalCompilerHost(options, sys, workerThreads, threadPool);
     const exitStatus = ts_performIncrementalCompilation({
         host,
         system: sys,
@@ -938,6 +984,7 @@ function performIncrementalCompilation(
             cb(builderProgram);
         }
     });
+    threadPool?.stop();
     return sys.exit(exitStatus);
 }
 
@@ -996,6 +1043,8 @@ function createWatchOfConfigFile(
     optionsToExtend: CompilerOptions,
     watchOptionsToExtend: WatchOptions | undefined,
     extendedConfigCache: Map<string, ExtendedConfigCacheEntry>,
+    workerThreads: WorkerThreadsHost | undefined,
+    threadPool: ThreadPool | undefined,
 ) {
     const watchCompilerHost = createWatchCompilerHostOfConfigFile({
         configFileName: configParseResult.options.configFilePath!,
@@ -1003,7 +1052,9 @@ function createWatchOfConfigFile(
         watchOptionsToExtend,
         system,
         reportDiagnostic,
-        reportWatchStatus: createWatchStatusReporter(system, configParseResult.options)
+        reportWatchStatus: createWatchStatusReporter(system, configParseResult.options),
+        workerThreads,
+        threadPool,
     });
     updateWatchCompilationHost(system, cb, watchCompilerHost);
     watchCompilerHost.configFileParsingResult = configParseResult;
@@ -1018,6 +1069,8 @@ function createWatchOfFilesAndCompilerOptions(
     rootFiles: string[],
     options: CompilerOptions,
     watchOptions: WatchOptions | undefined,
+    workerThreads: WorkerThreadsHost | undefined,
+    threadPool: ThreadPool | undefined,
 ) {
     const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions({
         rootFiles,
@@ -1025,7 +1078,9 @@ function createWatchOfFilesAndCompilerOptions(
         watchOptions,
         system,
         reportDiagnostic,
-        reportWatchStatus: createWatchStatusReporter(system, options)
+        reportWatchStatus: createWatchStatusReporter(system, options),
+        workerThreads,
+        threadPool,
     });
     updateWatchCompilationHost(system, cb, watchCompilerHost);
     return createWatchProgram(watchCompilerHost);

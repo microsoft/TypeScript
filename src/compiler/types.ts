@@ -17,7 +17,11 @@ import {
     ProgramBuildInfo,
     SymlinkCache,
     ThisContainer,
+    ThreadPool,
+    WorkerThreadsHost,
 } from "./_namespaces/ts";
+import { SharedNodeBase } from "./sharing/sharedNode";
+import { SharedParserState } from "./sharing/sharedParserState";
 
 // branded string type used to store absolute, normalized and canonicalized paths
 // arbitrary file name can be converted to Path via toPath function
@@ -927,6 +931,7 @@ export interface Node extends ReadonlyTextRange {
     //       `locals` and `nextContainer` have been moved to `LocalsContainer`
     //       `flowNode` has been moved to `FlowContainer`
     //       see: https://github.com/microsoft/TypeScript/pull/51682
+    /** @internal */ __shared__?: SharedNodeBase;
 }
 
 export interface JSDocContainer extends Node {
@@ -935,7 +940,7 @@ export interface JSDocContainer extends Node {
 }
 
 /** @internal */
-export interface JSDocArray extends Array<JSDoc> {
+export interface JSDocArray extends ReadonlyArray<JSDoc> {
     jsDocCache?: readonly JSDocTag[];                      // Cache for getJSDocTags
 }
 
@@ -4364,7 +4369,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ lineMap: readonly number[];
     /** @internal */ classifiableNames?: ReadonlySet<__String>;
     // Comments containing @ts-* directives, in order.
-    /** @internal */ commentDirectives?: CommentDirective[];
+    /** @internal */ commentDirectives?: readonly CommentDirective[];
     // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
     // It is used to resolve module names in the checker.
     // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -4385,6 +4390,8 @@ export interface SourceFile extends Declaration, LocalsContainer {
 
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
+
+    /** @internal */ __sharedCache__?: ReadonlyMap<ShareableNonPrimitive, object>;
 }
 
 /** @internal */
@@ -4959,6 +4966,9 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
     typesPackageExists(packageName: string): boolean;
     packageBundlesTypes(packageName: string): boolean;
+
+    workerThreads: WorkerThreadsHost | undefined;
+    threadPool: ThreadPool | undefined;
 }
 
 export interface TypeChecker {
@@ -7147,6 +7157,7 @@ export interface CompilerOptions {
     /** @internal */listFilesOnly?: boolean;
     locale?: string;
     mapRoot?: string;
+    maxCpuCount?: number;
     maxNodeModuleJsDepth?: number;
     module?: ModuleKind;
     moduleResolution?: ModuleResolutionKind;
@@ -7426,6 +7437,7 @@ export interface CommandLineOptionOfStringType extends CommandLineOptionBase {
 export interface CommandLineOptionOfNumberType extends CommandLineOptionBase {
     type: "number";
     defaultValueDescription: number | undefined | DiagnosticMessage;
+    defaultIfValueMissing?: () => number | undefined;
 }
 
 /** @internal */
@@ -7760,6 +7772,7 @@ export type HasInvalidatedLibResolutions = (libFileName: string) => boolean;
 export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
 export interface CompilerHost extends ModuleResolutionHost {
+    /** @internal */ requestSourceFile?(parserState: SharedParserState, fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, shouldCreateNewSourceFile?: boolean, setFileVersion?: boolean): void;
     getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
     getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
     getCancellationToken?(): CancellationToken;
@@ -7836,6 +7849,8 @@ export interface CompilerHost extends ModuleResolutionHost {
     // For testing:
     /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
+    /** @internal */ workerThreads?: WorkerThreadsHost | undefined;
+    /** @internal */ threadPool?: ThreadPool | undefined;
 }
 
 /** true if --out otherwise source file name *
@@ -8764,7 +8779,8 @@ export interface NodeFactory {
     createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
     updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
     createJsxOpeningFragment(): JsxOpeningFragment;
-    createJsxJsxClosingFragment(): JsxClosingFragment;
+    /** @deprecated Use `createJsxClosingFragment` */ createJsxJsxClosingFragment(): JsxClosingFragment;
+    createJsxClosingFragment(): JsxClosingFragment;
     updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
     createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
     updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
@@ -10007,3 +10023,9 @@ export interface Queue<T> {
     dequeue(): T;
     isEmpty(): boolean;
 }
+
+/** @internal */
+export type Constructor<T = any, A extends any[] = any[]> = new (...args: A) => T;
+
+/** @internal */
+export type AbstractConstructor<T = any, A extends any[] = any[]> = abstract new (...args: A) => T;

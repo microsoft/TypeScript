@@ -1,4 +1,5 @@
 import "./unittests/asserts";
+import "./unittests/utf8";
 import "./unittests/base64";
 import "./unittests/builder";
 import "./unittests/canWatch";
@@ -18,6 +19,8 @@ import "./unittests/programApi";
 import "./unittests/publicApi";
 import "./unittests/reuseProgramStructure";
 import "./unittests/semver";
+import "./unittests/sharing/hashData";
+import "./unittests/sharing/resizableArray";
 import "./unittests/transform";
 import "./unittests/typeParameterIsPossiblyReferenced";
 import "./unittests/config/commandLineParsing";

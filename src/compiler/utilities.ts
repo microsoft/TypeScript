@@ -34,6 +34,7 @@ import {
     BindingElement,
     BindingElementOfBareOrAccessedRequire,
     Block,
+    BuildOptions,
     BundleFileSection,
     BundleFileSectionKind,
     BundleFileTextLike,
@@ -400,6 +401,7 @@ import {
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
     MultiMap,
+    MutableNodeArray,
     NamedDeclaration,
     NamedExports,
     NamedImports,
@@ -501,7 +503,7 @@ import {
     SuperExpression,
     SuperProperty,
     SwitchStatement,
-    Symbol,
+    type Symbol,
     SymbolFlags,
     SymbolTable,
     SyntaxKind,
@@ -562,6 +564,8 @@ import {
     WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts";
+import { SharedModifierLike } from "./sharing/sharedNode";
+import { SharedNodeArray } from "./sharing/sharedNodeArray";
 
 /** @internal */
 export const resolvingEmptyArray: never[] = [];
@@ -1131,7 +1135,7 @@ export function isPinnedComment(text: string, start: number) {
 }
 
 /** @internal */
-export function createCommentDirectivesMap(sourceFile: SourceFile, commentDirectives: CommentDirective[]): CommentDirectivesMap {
+export function createCommentDirectivesMap(sourceFile: SourceFile, commentDirectives: readonly CommentDirective[]): CommentDirectivesMap {
     const directivesByLine = new Map(
         commentDirectives.map(commentDirective => ([
             `${getLineAndCharacterOfPosition(sourceFile, commentDirective.range.end).line}`,
@@ -6945,7 +6949,11 @@ export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
 }
 
 /** @internal */
-export function modifiersToFlags(modifiers: readonly ModifierLike[] | undefined) {
+export function modifiersToFlags(modifiers: Iterable<ModifierLike | SharedModifierLike> | SharedNodeArray<SharedModifierLike> | undefined) {
+    if (modifiers instanceof SharedNodeArray) {
+        modifiers = SharedNodeArray.values(modifiers);
+    }
+
     let flags = ModifierFlags.None;
     if (modifiers) {
         for (const modifier of modifiers) {
@@ -7197,41 +7205,91 @@ function isExportDefaultSymbol(symbol: Symbol): boolean {
 export function tryExtractTSExtension(fileName: string): string | undefined {
     return find(supportedTSExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
 }
-/**
- * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
- * representing the UTF-8 encoding of the character, and return the expanded char code list.
- */
-function getExpandedCharCodes(input: string): number[] {
-    const output: number[] = [];
-    const length = input.length;
 
+function writeByte(output: number[] | Uint8Array | undefined, index: number, value: number) {
+    if (output) {
+        output[index] = value;
+    }
+}
+
+/**
+ * NOTE: Use `utf8encodeInto` instead. This function is a fallback implementation and is only exposed for testing
+ * purposes.
+ * @internal
+ */
+export function utf8encodeIntoCompat(input: string, output: number[] | Uint8Array | undefined) {
+    const length = input.length;
+    let written = 0;
     for (let i = 0; i < length; i++) {
-        const charCode = input.charCodeAt(i);
+        let charCode = input.charCodeAt(i);
+
+        // decode UCS2 surrogate pairs
+        if (/*is leading surrogate*/ (charCode & 0xd800) === 0xd800 &&
+            /*is not last character*/ i < length - 1) {
+            const charCode2 = input.charCodeAt(i + 1);
+            if (/*is trailing surrogate*/ (charCode2 & 0xdc00) === 0xdc00) {
+                charCode = ((charCode & 0x3ff) << 10) + (charCode2 & 0x3ff) + 0x10000;
+                i++;
+            }
+        }
 
         // handle utf8
         if (charCode < 0x80) {
-            output.push(charCode);
+            writeByte(output, written++, charCode);
         }
         else if (charCode < 0x800) {
-            output.push((charCode >> 6) | 0B11000000);
-            output.push((charCode & 0B00111111) | 0B10000000);
+            writeByte(output, written++, (charCode >> 6) | 0B11000000);
+            writeByte(output, written++, (charCode & 0B00111111) | 0B10000000);
         }
         else if (charCode < 0x10000) {
-            output.push((charCode >> 12) | 0B11100000);
-            output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
-            output.push((charCode & 0B00111111) | 0B10000000);
+            writeByte(output, written++, (charCode >> 12) | 0B11100000);
+            writeByte(output, written++, ((charCode >> 6) & 0B00111111) | 0B10000000);
+            writeByte(output, written++, (charCode & 0B00111111) | 0B10000000);
         }
         else if (charCode < 0x20000) {
-            output.push((charCode >> 18) | 0B11110000);
-            output.push(((charCode >> 12) & 0B00111111) | 0B10000000);
-            output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
-            output.push((charCode & 0B00111111) | 0B10000000);
+            writeByte(output, written++, (charCode >> 18) | 0B11110000);
+            writeByte(output, written++, ((charCode >> 12) & 0B00111111) | 0B10000000);
+            writeByte(output, written++, ((charCode >> 6) & 0B00111111) | 0B10000000);
+            writeByte(output, written++, (charCode & 0B00111111) | 0B10000000);
         }
         else {
             Debug.assert(false, "Unexpected code point");
         }
     }
 
+    return written;
+}
+
+/**
+ * Encodes a string into UTF-8 bytes.
+ * If `output` is a `Uint8Array`, it must have enough capacity to hold the output.
+ * `output` may be `undefined`, in which case only the total number of bytes necessary to encode the input will be
+ * calculated.
+ * @internal
+ */
+export const utf8encodeInto = (() => {
+    if (typeof TextEncoder === "function") {
+        const encoder = new TextEncoder();
+        return (input: string, output: number[] | Uint8Array | undefined) => {
+            if (output === undefined || isArray(output)) {
+                return utf8encodeIntoCompat(input, output);
+            }
+
+            const { written = 0 } = encoder.encodeInto(input, output);
+            return written;
+        };
+    }
+
+    return utf8encodeIntoCompat;
+})();
+
+/**
+ * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
+ * representing the UTF-8 encoding of the character, and return the expanded char code list.
+ */
+function getExpandedCharCodes(input: string): number[] {
+    const output: number[] = [];
+    utf8encodeInto(input, output);
     return output;
 }
 
@@ -7275,38 +7333,70 @@ export function convertToBase64(input: string): string {
     return result;
 }
 
-function getStringFromExpandedCharCodes(codes: number[]): string {
+/**
+ * NOTE: Use `utf8decode` instead. This function is a fallback implementation and is only exposed for testing
+ * purposes.
+ * @internal
+ */
+export function utf8decodeCompat(input: readonly number[] | Uint8Array) {
     let output = "";
     let i = 0;
-    const length = codes.length;
+    const length = input.length;
     while (i < length) {
-        const charCode = codes[i];
-
+        const charCode = input[i];
+        i++;
         if (charCode < 0x80) {
             output += String.fromCharCode(charCode);
-            i++;
+            continue;
         }
-        else if ((charCode & 0B11000000) === 0B11000000) {
-            let value = charCode & 0B00111111;
-            i++;
-            let nextCode: number = codes[i];
-            while ((nextCode & 0B11000000) === 0B10000000) {
-                value = (value << 6) | (nextCode & 0B00111111);
-                i++;
-                nextCode = codes[i];
-            }
-            // `value` may be greater than 10FFFF (the maximum unicode codepoint) - JS will just make this into an invalid character for us
-            output += String.fromCharCode(value);
+
+        let value: number;
+        let remaining: number;
+        if ((charCode & 0B11111000) === 0B11110000) {
+            value = charCode & 0B00000111;
+            remaining = 3;
+        }
+        else if ((charCode & 0B11110000) === 0B11100000) {
+            value = charCode & 0B00001111;
+            remaining = 2;
+        }
+        else if ((charCode & 0B11100000) === 0B11000000) {
+            value = charCode & 0B00011111;
+            remaining = 1;
         }
         else {
             // We don't want to kill the process when decoding fails (due to a following char byte not
             // following a leading char), so we just print the (bad) value
-            output += String.fromCharCode(charCode);
-            i++;
+            value = charCode;
+            remaining = 0;
         }
+
+        while (remaining > 0 && i < input.length) {
+            const nextCode = input[i];
+            i++;
+            remaining--;
+            value = (value << 6) | (nextCode & 0B00111111);
+        }
+
+        // `value` may be greater than 10FFFF (the maximum unicode codepoint) - JS will just make this into an invalid character for us
+        output += String.fromCodePoint(value);
     }
     return output;
 }
+
+/** @internal */
+export const utf8decode = (() => {
+    if (typeof TextDecoder === "function") {
+        const decoder = new TextDecoder();
+        return (input: readonly number[] | Uint8Array) => {
+            if (isArray(input)) {
+                return decoder.decode(new Uint8Array(input));
+            }
+            return decoder.decode(input);
+        };
+    }
+    return utf8decodeCompat;
+})();
 
 /** @internal */
 export function base64encode(host: { base64encode?(input: string): string } | undefined, input: string): string {
@@ -7350,7 +7440,7 @@ export function base64decode(host: { base64decode?(input: string): string } | un
         }
         i += 4;
     }
-    return getStringFromExpandedCharCodes(expandedCharCodes);
+    return utf8decode(expandedCharCodes);
 }
 
 /** @internal */
@@ -8006,6 +8096,7 @@ export function getLeftmostExpression(node: Expression, stopAtCallExpressions: b
 
 /** @internal */
 export interface ObjectAllocator {
+    getNodeArrayConstructor(): new <T extends Node>(items: readonly T[], hasTrailingComma?: boolean) => NodeArray<T>;
     getNodeConstructor(): new (kind: SyntaxKind, pos: number, end: number) => Node;
     getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos: number, end: number) => Token<TKind>;
     getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
@@ -8017,7 +8108,7 @@ export interface ObjectAllocator {
     getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 }
 
-function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
+const SymbolConstructor = function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     this.flags = flags;
     this.escapedName = name;
     this.declarations = undefined;
@@ -8032,7 +8123,7 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     this.isReferenced = undefined;
     this.isAssigned = undefined;
     (this as any).links = undefined; // used by TransientSymbol
-}
+};
 
 function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
     this.flags = flags;
@@ -8090,14 +8181,61 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
     this.skipTrivia = skipTrivia || (pos => pos);
 }
 
+/**
+ * Emulates the prior behavior of `createNodeArray` to convert an existing array into a `NodeArray<T>` while also fixing
+ * the prototype. The resulting array becoms the `this` of any derived class.
+ */
+const ArrayAdopter = function <T>(elements: T[]) { // eslint-disable-line local/only-arrow-functions -- arrow functions aren't constructable.
+    if (elements !== emptyArray) {
+        Object.setPrototypeOf(elements, new.target.prototype);
+        return elements;
+    }
+    return Reflect.construct(Array, [0], new.target.prototype);
+} as typeof Array & (new <T>(elements: T[]) => T[]);
+
+Object.setPrototypeOf(ArrayAdopter, Array);
+Object.setPrototypeOf(ArrayAdopter.prototype, Array.prototype);
+
+declare class NodeArrayImpl<T extends Node> extends Array<T> {
+    hasTrailingComma: boolean;
+    transformFlags: TransformFlags;
+    pos: number;
+    end: number;
+    constructor(elements: readonly T[] | NodeArray<T>, hasTrailingComma?: boolean);
+}
+
+const NodeArray = class <T extends Node> extends ArrayAdopter<T> implements MutableNodeArray<T> {
+    declare hasTrailingComma: boolean;
+    declare transformFlags: TransformFlags;
+    declare pos: number;
+    declare end: number;
+
+    constructor(elements: readonly T[] | NodeArray<T>, hasTrailingComma?: boolean) {
+        const length = elements.length;
+        super(length >= 1 && length <= 4 ? elements.slice() : elements as T[]);
+        this.pos = -1;
+        this.end = -1;
+        this.hasTrailingComma = !!hasTrailingComma;
+        this.transformFlags = TransformFlags.None;
+        Debug.attachNodeArrayDebugInfo(this);
+    }
+
+    static {
+        Object.defineProperty(this, Symbol.species, { configurable: true, value: Array });
+    }
+
+} as typeof NodeArrayImpl;
+
+
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
+    getNodeArrayConstructor: () => NodeArray as any,
     getNodeConstructor: () => Node as any,
     getTokenConstructor: () => Token as any,
     getIdentifierConstructor: () => Identifier as any,
     getPrivateIdentifierConstructor: () => Node as any,
     getSourceFileConstructor: () => Node as any,
-    getSymbolConstructor: () => Symbol as any,
+    getSymbolConstructor: () => SymbolConstructor as any,
     getTypeConstructor: () => Type as any,
     getSignatureConstructor: () => Signature as any,
     getSourceMapSourceConstructor: () => SourceMapSource as any,
@@ -8416,32 +8554,47 @@ function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
     return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
 }
 
+function forceSetExternalModuleIndicator(file: SourceFile) {
+    file.externalModuleIndicator = isFileProbablyExternalModule(file) || !file.isDeclarationFile || undefined;
+}
+
+function legacySetExternalModuleIndicator(file: SourceFile) {
+    file.externalModuleIndicator = isFileProbablyExternalModule(file);
+}
+
+function autoSetExternalModuleIndicatorNonJsx(file: SourceFile) {
+    file.externalModuleIndicator = isFileProbablyExternalModule(file) || isFileForcedToBeModuleByFormat(file);
+}
+
+function autoSetExternalModuleIndicatorJsx(file: SourceFile) {
+    file.externalModuleIndicator = isFileProbablyExternalModule(file) || isFileModuleFromUsingJSXTag(file) || isFileForcedToBeModuleByFormat(file);
+}
+
+/** @internal */
+export function isSetExternalModuleIndicatorCallbackFromOptions(cb: (file: SourceFile) => void) {
+    return cb === forceSetExternalModuleIndicator ||
+        cb === legacySetExternalModuleIndicator ||
+        cb === autoSetExternalModuleIndicatorNonJsx ||
+        cb === autoSetExternalModuleIndicatorJsx;
+}
+
 /** @internal */
 export function getSetExternalModuleIndicator(options: CompilerOptions): (file: SourceFile) => void {
-    // TODO: Should this callback be cached?
     switch (getEmitModuleDetectionKind(options)) {
         case ModuleDetectionKind.Force:
             // All non-declaration files are modules, declaration files still do the usual isFileProbablyExternalModule
-            return (file: SourceFile) => {
-                file.externalModuleIndicator = isFileProbablyExternalModule(file) || !file.isDeclarationFile || undefined;
-            };
+            return forceSetExternalModuleIndicator;
         case ModuleDetectionKind.Legacy:
             // Files are modules if they have imports, exports, or import.meta
-            return (file: SourceFile) => {
-                file.externalModuleIndicator = isFileProbablyExternalModule(file);
-            };
+            return legacySetExternalModuleIndicator;
         case ModuleDetectionKind.Auto:
             // If module is nodenext or node16, all esm format files are modules
             // If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
             // otherwise, the presence of import or export statments (or import.meta) implies module-ness
-            const checks: ((file: SourceFile) => Node | true | undefined)[] = [isFileProbablyExternalModule];
             if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
-                checks.push(isFileModuleFromUsingJSXTag);
+                return autoSetExternalModuleIndicatorJsx;
             }
-            checks.push(isFileForcedToBeModuleByFormat);
-            const combined = or(...checks);
-            const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file));
-            return callback;
+            return autoSetExternalModuleIndicatorNonJsx;
     }
 }
 
@@ -8702,6 +8855,11 @@ export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?
 /** @internal */
 export function getJSXRuntimeImport(base: string | undefined, options: CompilerOptions) {
     return base ? `${base}/${options.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}` : undefined;
+}
+
+/** @internal */
+export function getMaxCpuCount(options: CompilerOptions | BuildOptions): number {
+    return options.maxCpuCount ?? 1;
 }
 
 /** @internal */
@@ -9843,7 +10001,13 @@ export function setParent<T extends Node>(child: T | undefined, parent: T["paren
 /** @internal */
 export function setParent<T extends Node>(child: T | undefined, parent: T["parent"] | undefined): T | undefined {
     if (child && parent) {
-        (child as Mutable<T>).parent = parent;
+        try {
+            (child as Mutable<T>).parent = parent;
+        }
+        catch (e) {
+            e.message = Debug.format(e.message, child);
+            throw e;
+        }
     }
     return child;
 }
@@ -10342,4 +10506,16 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
         return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
     }
     return Debug.fail();
+}
+
+/**
+ * Tests whether the provided string can be parsed as a number.
+ * @param s The string to test.
+ * @param roundTripOnly Indicates the resulting number matches the input when converted back to a string.
+ * @internal
+ */
+export function isValidNumberString(s: string, roundTripOnly: boolean): boolean {
+    if (s === "") return false;
+    const n = +s;
+    return isFinite(n) && (!roundTripOnly || "" + n === s);
 }

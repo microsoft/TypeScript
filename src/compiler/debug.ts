@@ -93,6 +93,8 @@ import {
     VarianceFlags,
     zipWith,
 } from "./_namespaces/ts";
+import { isShareableNonPrimitive } from "./sharing/structs/shareable";
+import { Tag } from "./sharing/structs/taggedStruct";
 
 /** @internal */
 export enum LogLevel {
@@ -106,6 +108,7 @@ export enum LogLevel {
 /** @internal */
 export interface LoggingHost {
     log(level: LogLevel, s: string): void;
+    format?(...args: readonly unknown[]): string;
 }
 
 /** @internal */
@@ -123,31 +126,41 @@ export namespace Debug {
         return currentLogLevel <= level;
     }
 
-    function logMessage(level: LogLevel, s: string): void {
+    function logMessage(level: LogLevel, ...args: unknown[]): void {
         if (loggingHost && shouldLog(level)) {
+            const s = loggingHost.format?.(...args) ?? args.join(" ");
             loggingHost.log(level, s);
         }
     }
 
-    export function log(s: string): void {
-        logMessage(LogLevel.Info, s);
+    export function format(...args: unknown[]) {
+        const text = loggingHost?.format?.(...args);
+        if (text !== undefined) {
+            return text;
+        }
+        args = args.map(arg => isShareableNonPrimitive(arg) ? "[object SharedStruct]" : arg);
+        return args.join(" ");
+    }
+
+    export function log(...args: unknown[]): void {
+        logMessage(LogLevel.Info, ...args);
     }
 
     export namespace log {
-        export function error(s: string): void {
-            logMessage(LogLevel.Error, s);
+        export function error(...args: unknown[]): void {
+            logMessage(LogLevel.Error, ...args);
         }
 
-        export function warn(s: string): void {
-            logMessage(LogLevel.Warning, s);
+        export function warn(...args: unknown[]): void {
+            logMessage(LogLevel.Warning, ...args);
         }
 
-        export function log(s: string): void {
-            logMessage(LogLevel.Info, s);
+        export function log(...args: unknown[]): void {
+            logMessage(LogLevel.Info, ...args);
         }
 
-        export function trace(s: string): void {
-            logMessage(LogLevel.Verbose, s);
+        export function trace(...args: unknown[]): void {
+            logMessage(LogLevel.Verbose, ...args);
         }
     }
 
@@ -192,13 +205,18 @@ export namespace Debug {
         return true;
     }
 
+    export function captureStackTrace<T extends object>(e: T, stackCrawlMark: AnyFunction) {
+        if ((Error as any).captureStackTrace) {
+            (Error as any).captureStackTrace(e, stackCrawlMark || fail);
+        }
+        return e;
+    }
+
     export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
         // eslint-disable-next-line no-debugger
         debugger;
         const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
-        if ((Error as any).captureStackTrace) {
-            (Error as any).captureStackTrace(e, stackCrawlMark || fail);
-        }
+        captureStackTrace(e, stackCrawlMark ?? fail);
         throw e;
     }
 
@@ -433,6 +451,10 @@ export namespace Debug {
         return sorted;
     }
 
+    export function formatTag(tag: Tag | undefined): string {
+        return formatEnum(tag, (ts as any).Tag, /*isFlags*/ false);
+    }
+
     export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
         return formatEnum(kind, (ts as any).SyntaxKind, /*isFlags*/ false);
     }
@@ -548,7 +570,7 @@ export namespace Debug {
         }
     }
 
-    let nodeArrayProto: NodeArray<Node> | undefined;
+    const weakNodeArrayPrototype = new WeakMap<object, NodeArray<any>>();
 
     function attachNodeArrayDebugInfoWorker(array: NodeArray<Node>) {
         if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line local/no-in-operator
@@ -574,8 +596,11 @@ export namespace Debug {
             if (typeof Object.setPrototypeOf === "function") {
                 // if we're in es2015, attach the method to a shared prototype for `NodeArray`
                 // so the method doesn't show up in the watch window.
+                const prototype = Object.getPrototypeOf(array);
+                let nodeArrayProto = weakNodeArrayPrototype.get(prototype);
                 if (!nodeArrayProto) {
-                    nodeArrayProto = Object.create(Array.prototype) as NodeArray<Node>;
+                    nodeArrayProto = Object.create(prototype) as NodeArray<Node>;
+                    weakNodeArrayPrototype.set(prototype, nodeArrayProto);
                     attachNodeArrayDebugInfoWorker(nodeArrayProto);
                 }
                 Object.setPrototypeOf(array, nodeArrayProto);

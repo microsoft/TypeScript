@@ -475,6 +475,9 @@ import {
     WithStatement,
     YieldExpression,
 } from "../_namespaces/ts";
+import { SharedNodeBase } from "../sharing/sharedNode";
+import { SharedNodeArray } from "../sharing/sharedNodeArray";
+import { isShareableNonPrimitive } from "../sharing/structs/shareable";
 
 let nextAutoGenerateId = 0;
 
@@ -903,7 +906,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createJsxText,
         updateJsxText,
         createJsxOpeningFragment,
-        createJsxJsxClosingFragment,
+        createJsxJsxClosingFragment: createJsxClosingFragment,
+        createJsxClosingFragment,
         updateJsxFragment,
         createJsxAttribute,
         updateJsxAttribute,
@@ -1053,12 +1057,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             // This *was* a `NodeArray`, but the `hasTrailingComma` option differs. Recreate the
             // array with the same elements, text range, and transform flags but with the updated
             // value for `hasTrailingComma`
-            const array = elements.slice() as MutableNodeArray<T>;
+            const array = baseFactory.createBaseNodeArray(elements.slice(), hasTrailingComma) as MutableNodeArray<T>;
             array.pos = elements.pos;
             array.end = elements.end;
-            array.hasTrailingComma = hasTrailingComma;
             array.transformFlags = elements.transformFlags;
-            Debug.attachNodeArrayDebugInfo(array);
             return array;
         }
 
@@ -1066,13 +1068,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         // repeatedly calling push(), the list may not have the optimal memory layout. We invoke slice() for
         // small arrays (1 to 4 elements) to give the VM a chance to allocate an optimal representation.
         const length = elements.length;
-        const array = (length >= 1 && length <= 4 ? elements.slice() : elements) as MutableNodeArray<T>;
-        array.pos = -1;
-        array.end = -1;
-        array.hasTrailingComma = !!hasTrailingComma;
-        array.transformFlags = TransformFlags.None;
+        const array = baseFactory.createBaseNodeArray(length >= 1 && length <= 4 ? elements.slice() : elements, !!hasTrailingComma) as MutableNodeArray<T>;
         aggregateChildrenFlags(array);
-        Debug.attachNodeArrayDebugInfo(array);
         return array;
     }
 
@@ -3768,6 +3765,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.transformFlags |=
             propagateChildrenFlags(node.modifiers) |
             propagateChildFlags(node.declarationList);
+
         if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
             node.transformFlags = TransformFlags.ContainsTypeScript;
         }
@@ -5591,7 +5589,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJsxJsxClosingFragment() {
+    function createJsxClosingFragment() {
         const node = createBaseNode<JsxClosingFragment>(SyntaxKind.JsxClosingFragment);
         node.transformFlags |= TransformFlags.ContainsJsx;
         return node;
@@ -5931,35 +5929,37 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             propagateChildrenFlags(node.statements) |
             propagateChildFlags(node.endOfFileToken);
 
-        node.locals = undefined; // initialized by binder (LocalsContainer)
-        node.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        node.endFlowNode = undefined;
+        if (!isShareableNonPrimitive(node)) {
+            node.locals = undefined; // initialized by binder (LocalsContainer)
+            node.nextContainer = undefined; // initialized by binder (LocalsContainer)
+            node.endFlowNode = undefined;
+            node.nodeCount = 0;
+            node.identifierCount = 0;
+            node.symbolCount = 0;
+            node.parseDiagnostics = undefined!;
+            node.bindDiagnostics = undefined!;
+            node.bindSuggestionDiagnostics = undefined;
+            node.lineMap = undefined!;
+            node.externalModuleIndicator = undefined;
+            node.setExternalModuleIndicator = undefined;
+            node.pragmas = undefined!;
+            node.checkJsDirective = undefined;
+            node.referencedFiles = undefined!;
+            node.typeReferenceDirectives = undefined!;
+            node.libReferenceDirectives = undefined!;
+            node.amdDependencies = undefined!;
+            node.commentDirectives = undefined;
+            node.identifiers = undefined!;
+            node.packageJsonLocations = undefined;
+            node.packageJsonScope = undefined;
+            node.imports = undefined!;
+            node.moduleAugmentations = undefined!;
+            node.ambientModuleNames = undefined!;
+            node.resolvedModules = undefined;
+            node.classifiableNames = undefined;
+            node.impliedNodeFormat = undefined;
+        }
 
-        node.nodeCount = 0;
-        node.identifierCount = 0;
-        node.symbolCount = 0;
-        node.parseDiagnostics = undefined!;
-        node.bindDiagnostics = undefined!;
-        node.bindSuggestionDiagnostics = undefined;
-        node.lineMap = undefined!;
-        node.externalModuleIndicator = undefined;
-        node.setExternalModuleIndicator = undefined;
-        node.pragmas = undefined!;
-        node.checkJsDirective = undefined;
-        node.referencedFiles = undefined!;
-        node.typeReferenceDirectives = undefined!;
-        node.libReferenceDirectives = undefined!;
-        node.amdDependencies = undefined!;
-        node.commentDirectives = undefined;
-        node.identifiers = undefined!;
-        node.packageJsonLocations = undefined;
-        node.packageJsonScope = undefined;
-        node.imports = undefined!;
-        node.moduleAugmentations = undefined!;
-        node.ambientModuleNames = undefined!;
-        node.resolvedModules = undefined;
-        node.classifiableNames = undefined;
-        node.impliedNodeFormat = undefined;
         return node;
     }
 
@@ -5998,7 +5998,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
         node.flags |= source.flags & ~NodeFlags.Synthesized;
         for (const p in source) {
-            if (hasProperty(node, p) || !hasProperty(source, p)) {
+            if (hasProperty(node, p) || !hasProperty(source, p) || p === "__tag__" || p === "__hash__" || p === "__shared__" || p === "__sharedCache__") {
                 continue;
             }
             if (p === "emitNode") {
@@ -7182,10 +7182,11 @@ function propagateChildrenFlags(children: NodeArray<Node> | undefined): Transfor
     return children ? children.transformFlags : TransformFlags.None;
 }
 
-function aggregateChildrenFlags(children: MutableNodeArray<Node>) {
+function aggregateChildrenFlags(children: MutableNodeArray<Node> | SharedNodeArray<SharedNodeBase>) {
     let subtreeFlags = TransformFlags.None;
-    for (const child of children) {
-        subtreeFlags |= propagateChildFlags(child);
+    const values = children instanceof SharedNodeArray ? Array.from(children.items) : children;
+    for (const child of values) {
+        subtreeFlags |= propagateChildFlags(child as Node);
     }
     children.transformFlags = subtreeFlags;
 }
@@ -7280,6 +7281,7 @@ const syntheticFactory: BaseNodeFactory = {
     createBasePrivateIdentifierNode: kind => makeSynthetic(baseFactory.createBasePrivateIdentifierNode(kind)),
     createBaseTokenNode: kind => makeSynthetic(baseFactory.createBaseTokenNode(kind)),
     createBaseNode: kind => makeSynthetic(baseFactory.createBaseNode(kind)),
+    createBaseNodeArray: baseFactory.createBaseNodeArray,
 };
 
 export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);

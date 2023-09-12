@@ -2,9 +2,11 @@ import {
     AccessorDeclaration,
     addRange,
     addRelatedInfo,
+    AmdDependency,
     append,
     ArrayBindingElement,
     ArrayBindingPattern,
+    arrayFrom,
     ArrayLiteralExpression,
     ArrayTypeNode,
     ArrowFunction,
@@ -34,6 +36,7 @@ import {
     CaseOrDefaultClause,
     CatchClause,
     CharacterCodes,
+    CheckJsDirective,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
@@ -65,8 +68,11 @@ import {
     Diagnostic,
     DiagnosticArguments,
     DiagnosticMessage,
+    DiagnosticMessageChain,
+    DiagnosticRelatedInformation,
     Diagnostics,
     DiagnosticWithDetachedLocation,
+    DiagnosticWithLocation,
     DoStatement,
     DotDotDotToken,
     ElementAccessExpression,
@@ -88,6 +94,7 @@ import {
     ExternalModuleReference,
     fileExtensionIs,
     fileExtensionIsOneOf,
+    FileReference,
     findIndex,
     firstOrUndefined,
     forEach,
@@ -113,8 +120,10 @@ import {
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
+    hasProperty,
     HeritageClause,
     Identifier,
+    identity,
     idText,
     IfStatement,
     ImportClause,
@@ -238,7 +247,6 @@ import {
     LiteralExpression,
     LiteralLikeNode,
     LiteralTypeNode,
-    map,
     mapDefined,
     MappedTypeNode,
     MemberExpression,
@@ -330,6 +338,7 @@ import {
     setTextRangePos,
     setTextRangePosEnd,
     setTextRangePosWidth,
+    SharedMap,
     ShorthandPropertyAssignment,
     skipTrivia,
     some,
@@ -398,6 +407,11 @@ import {
     YieldExpression,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+import { SharedDiagnostic, SharedDiagnosticMessageChain, SharedDiagnosticRelatedInformation, SharedDiagnosticWithLocation } from "./sharing/sharedDiagnostics";
+import { SharedAmdDependency, SharedCheckJsDirective, SharedCommentDirective, SharedCommentRange, SharedFileReference, SharedNodeBase, SharedPragma, SharedPragmaArguments, SharedPragmaSpan, SharedSourceFile, SharedTextRange } from "./sharing/sharedNode";
+import { SharedNodeArray } from "./sharing/sharedNodeArray";
+import { isShareableNonPrimitive } from "./sharing/structs/shareable";
+import { Tag, TaggedStruct } from "./sharing/structs/taggedStruct";
 
 const enum SignatureFlags {
     None = 0,
@@ -414,6 +428,7 @@ const enum SpeculationKind {
     Reparse
 }
 
+let NodeArrayConstructor: new <T extends Node>(elements: readonly T[], hasTrailingComma?: boolean) => NodeArray<T>;
 let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 let IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Node;
@@ -431,6 +446,7 @@ export const parseBaseNodeFactory: BaseNodeFactory = {
     createBasePrivateIdentifierNode: kind => new (PrivateIdentifierConstructor || (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(kind, -1, -1),
     createBaseTokenNode: kind => new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, -1, -1),
     createBaseNode: kind => new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, -1, -1),
+    createBaseNodeArray: (elements, hasTrailingComma?) => new (NodeArrayConstructor || (NodeArrayConstructor = objectAllocator.getNodeArrayConstructor()))(elements, hasTrailingComma),
 };
 
 /** @internal */
@@ -1265,16 +1281,17 @@ export function forEachChildRecursively<T>(rootNode: Node, cbNode: (node: Node, 
     while (queue.length !== 0) {
         const current = queue.pop()!;
         const parent = parents.pop()!;
-        if (isArray(current)) {
+        if (isArray(current) || current instanceof SharedNodeArray) {
+            const currentArray = current instanceof SharedNodeArray ? arrayFrom(SharedNodeArray.values(current)) as unknown as NodeArray<Node> : current;
             if (cbNodes) {
-                const res = cbNodes(current, parent);
+                const res = cbNodes(currentArray, parent);
                 if (res) {
                     if (res === "skip") continue;
                     return res;
                 }
             }
-            for (let i = current.length - 1; i >= 0; --i) {
-                queue.push(current[i]);
+            for (let i = currentArray.length - 1; i >= 0; --i) {
+                queue.push(currentArray[i]);
                 parents.push(parent);
             }
         }
@@ -1327,6 +1344,9 @@ function setExternalModuleIndicator(sourceFile: SourceFile) {
     sourceFile.externalModuleIndicator = isFileProbablyExternalModule(sourceFile);
 }
 
+export function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
+/** @internal */
+export function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
 export function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
     tracing?.push(tracing.Phase.Parse, "createSourceFile", { path: fileName }, /*separateBeginAndEnd*/ true);
     performance.mark("beforeParse");
@@ -1424,6 +1444,7 @@ namespace Parser {
     var disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
     // capture constructors in 'initializeState' to avoid null checks
+    let NodeArrayConstructor: new <T extends Node>(elements: readonly T[], hasTrailingComma?: boolean) => NodeArray<T>;
     var NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     var TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     var IdentifierConstructor: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier;
@@ -1442,7 +1463,8 @@ namespace Parser {
         createBaseIdentifierNode: kind => countNode(new IdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
         createBasePrivateIdentifierNode: kind => countNode(new PrivateIdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
         createBaseTokenNode: kind => countNode(new TokenConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0))
+        createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0)),
+        createBaseNodeArray: (elements, hasTrailingComma?) => new NodeArrayConstructor(elements, hasTrailingComma),
     };
 
     var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
@@ -1702,6 +1724,7 @@ namespace Parser {
     }
 
     function initializeState(_fileName: string, _sourceText: string, _languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, _scriptKind: ScriptKind) {
+        NodeArrayConstructor = objectAllocator.getNodeArrayConstructor();
         NodeConstructor = objectAllocator.getNodeConstructor();
         TokenConstructor = objectAllocator.getTokenConstructor();
         IdentifierConstructor = objectAllocator.getIdentifierConstructor();
@@ -1765,6 +1788,69 @@ namespace Parser {
         topLevel = true;
     }
 
+    function shareCommentDirective(directive: CommentDirective): SharedCommentDirective {
+        const sharedRange = new SharedTextRange(directive.range.pos, directive.range.end);
+        const sharedDirective = new SharedCommentDirective(sharedRange, directive.type);
+        return sharedDirective;
+    }
+
+    function shareDiagnosticMessageChain(messageChain: DiagnosticMessageChain): SharedDiagnosticMessageChain {
+        return new SharedDiagnosticMessageChain(
+            messageChain.messageText,
+            messageChain.category,
+            messageChain.code,
+            shareArray(messageChain.next, shareDiagnosticMessageChain)
+        );
+    }
+
+    function shareDiagnosticRelatedInformation(related: Diagnostic | DiagnosticRelatedInformation): SharedDiagnostic | SharedDiagnosticRelatedInformation {
+        if (hasProperty(related, "reportsUnnecessary") ||
+            hasProperty(related, "reportsDeprecated") ||
+            hasProperty(related, "source") ||
+            hasProperty(related, "relatedInformation") ||
+            hasProperty(related, "skippedOn")) {
+            return shareDiagnostic(related);
+        }
+        Debug.assert(related.file === undefined || isShareableNonPrimitive(related.file));
+        return new SharedDiagnosticRelatedInformation(
+            related.category,
+            related.code,
+            related.file as unknown as SharedSourceFile | undefined,
+            related.start,
+            related.length,
+            typeof related.messageText === "string" ? related.messageText : shareDiagnosticMessageChain(related.messageText)
+        );
+    }
+
+    function shareDiagnostic(diagnostic: DiagnosticWithLocation): SharedDiagnosticWithLocation;
+    function shareDiagnostic(diagnostic: Diagnostic): SharedDiagnostic;
+    function shareDiagnostic(diagnostic: Diagnostic): SharedDiagnostic {
+        Debug.assert(diagnostic.file === undefined || isShareableNonPrimitive(diagnostic.file));
+        const sharedDiagnostic = new SharedDiagnostic(
+            diagnostic.category,
+            diagnostic.code,
+            diagnostic.file as unknown as SharedSourceFile | undefined,
+            diagnostic.start,
+            diagnostic.length,
+            typeof diagnostic.messageText === "string" ? diagnostic.messageText : shareDiagnosticMessageChain(diagnostic.messageText)
+        );
+
+        sharedDiagnostic.reportsUnnecessary = diagnostic.reportsUnnecessary === undefined ? undefined : !!diagnostic.reportsUnnecessary;
+        sharedDiagnostic.reportsDeprecated = diagnostic.reportsDeprecated === undefined ? undefined : !!diagnostic.reportsDeprecated;
+        sharedDiagnostic.source = diagnostic.source;
+        sharedDiagnostic.relatedInformation = shareArray(diagnostic.relatedInformation, shareDiagnosticRelatedInformation);
+        sharedDiagnostic.skippedOn = diagnostic.skippedOn;
+        return sharedDiagnostic;
+    }
+
+    function shareMap<K, V, KS extends Shareable, VS extends Shareable>(map: ReadonlyMap<K, V>, shareKey: (key: K) => KS, shareValue: (value: V) => VS) {
+        const sharedMap = new SharedMap<KS, VS>(map.size);
+        for (const [key, value] of map) {
+            SharedMap.set(sharedMap, shareKey(key), shareValue(value));
+        }
+        return sharedMap;
+    }
+
     function parseSourceFileWorker(languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind, setExternalModuleIndicator: (file: SourceFile) => void): SourceFile {
         const isDeclarationFile = isDeclarationFileName(fileName);
         if (isDeclarationFile) {
@@ -1787,13 +1873,23 @@ namespace Parser {
         processCommentPragmas(sourceFile as {} as PragmaContext, sourceText);
         processPragmasIntoFields(sourceFile as {} as PragmaContext, reportPragmaDiagnostic);
 
-        sourceFile.commentDirectives = scanner.getCommentDirectives();
         sourceFile.nodeCount = nodeCount;
         sourceFile.identifierCount = identifierCount;
-        sourceFile.identifiers = identifiers;
-        sourceFile.parseDiagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
-        if (jsDocDiagnostics) {
-            sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
+        if (isShareableNonPrimitive(sourceFile)) {
+            sourceFile.identifiers = shareMap(identifiers, identity, identity) as unknown as Map<string, string>;
+            sourceFile.commentDirectives = shareArray(scanner.getCommentDirectives(), shareCommentDirective) as unknown as CommentDirective[];
+            sourceFile.parseDiagnostics = shareArray(attachFileToDiagnostics(parseDiagnostics, sourceFile), shareDiagnostic) as unknown as DiagnosticWithLocation[];
+            if (jsDocDiagnostics) {
+                sourceFile.jsDocDiagnostics = shareArray(attachFileToDiagnostics(jsDocDiagnostics, sourceFile), shareDiagnostic) as unknown as DiagnosticWithLocation[];
+            }
+        }
+        else {
+            sourceFile.identifiers = identifiers;
+            sourceFile.commentDirectives = scanner.getCommentDirectives();
+            sourceFile.parseDiagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
+            if (jsDocDiagnostics) {
+                sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
+            }
         }
 
         if (setParentNodes) {
@@ -1815,7 +1911,14 @@ namespace Parser {
 
         Debug.assert(!node.jsDoc); // Should only be called once per node
         const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
-        if (jsDoc.length) node.jsDoc = jsDoc;
+        if (jsDoc.length) {
+            if (node instanceof SharedNodeBase) {
+                node.jsDoc = shareArray(jsDoc, n => n as unknown as SharedNodeBase) as unknown as JSDoc[];
+            }
+            else {
+                node.jsDoc = jsDoc;
+            }
+        }
         if (hasDeprecatedTag) {
             hasDeprecatedTag = false;
             (node as Mutable<T>).flags |= NodeFlags.Deprecated;
@@ -1965,7 +2068,7 @@ namespace Parser {
 
         function setFields(sourceFile: SourceFile) {
             sourceFile.text = sourceText;
-            sourceFile.bindDiagnostics = [];
+            sourceFile.bindDiagnostics = isShareableNonPrimitive(sourceFile) ? undefined! : [];
             sourceFile.bindSuggestionDiagnostics = undefined;
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = fileName;
@@ -1974,7 +2077,9 @@ namespace Parser {
             sourceFile.scriptKind = scriptKind;
 
             setExternalModuleIndicator(sourceFile);
-            sourceFile.setExternalModuleIndicator = setExternalModuleIndicator;
+            if (!isShareableNonPrimitive(sourceFile)) {
+                sourceFile.setExternalModuleIndicator = setExternalModuleIndicator;
+            }
         }
     }
 
@@ -7366,14 +7471,17 @@ namespace Parser {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
         const modifiers = parseModifiers(/*allowDecorators*/ true);
-        const isAmbient = some(modifiers, isDeclareModifier);
+        const modifiersArray =
+            modifiers instanceof SharedNodeArray ? arrayFrom(SharedNodeArray.values(modifiers) as IterableIterator<Modifier>) :
+            modifiers;
+        const isAmbient = some(modifiersArray, isDeclareModifier);
         if (isAmbient) {
             const node = tryReuseAmbientDeclaration(pos);
             if (node) {
                 return node;
             }
 
-            for (const m of modifiers!) {
+            for (const m of modifiersArray!) {
                 (m as Mutable<Node>).flags |= NodeFlags.Ambient;
             }
             return doInsideOfContext(NodeFlags.Ambient, () => parseDeclarationWorker(pos, hasJSDoc, modifiers));
@@ -9797,7 +9905,7 @@ namespace IncrementalParser {
         const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, sourceFile.scriptKind, sourceFile.setExternalModuleIndicator);
         result.commentDirectives = getNewCommentDirectives(
             sourceFile.commentDirectives,
-            result.commentDirectives,
+            result.commentDirectives?.slice(),
             changeRange.span.start,
             textSpanEnd(changeRange.span),
             delta,
@@ -9810,7 +9918,7 @@ namespace IncrementalParser {
     }
 
     function getNewCommentDirectives(
-        oldDirectives: CommentDirective[] | undefined,
+        oldDirectives: readonly CommentDirective[] | undefined,
         newDirectives: CommentDirective[] | undefined,
         changeStart: number,
         changeRangeOldEnd: number,
@@ -10374,41 +10482,131 @@ export function processCommentPragmas(context: PragmaContext, sourceText: string
         extractPragmas(pragmas, range, comment);
     }
 
-    context.pragmas = new Map() as PragmaMap;
+    const map = new Map() as PragmaMap;
     for (const pragma of pragmas) {
-        if (context.pragmas.has(pragma.name)) {
-            const currentValue = context.pragmas.get(pragma.name);
+        if (map.has(pragma.name)) {
+            const currentValue = map.get(pragma.name);
             if (currentValue instanceof Array) {
                 currentValue.push(pragma.args);
             }
             else {
-                context.pragmas.set(pragma.name, [currentValue, pragma.args]);
+                map.set(pragma.name, [currentValue, pragma.args]);
             }
             continue;
         }
-        context.pragmas.set(pragma.name, pragma.args);
+        map.set(pragma.name, pragma.args);
+    }
+
+    if (isShareableNonPrimitive(context)) {
+        const sharedMap = new SharedMap<string, SharedArray<SharedPragma> | SharedPragma>();
+        for (const [key, value] of map) {
+            if (isArray(value)) {
+                SharedMap.set(sharedMap, key, shareArray(value, sharePragma));
+            }
+            else {
+                SharedMap.set(sharedMap, key, sharePragma(value));
+            }
+        }
+        context.pragmas = sharedMap as unknown as PragmaMap;
+    }
+    else {
+        context.pragmas = map as PragmaMap;
     }
 }
+
+function sharePragmaValue<T extends string | { pos: number, end: number, value: string } | undefined>(span: T): T extends string ? string : T extends object ? SharedPragmaSpan : undefined;
+function sharePragmaValue<T extends string | { pos: number, end: number, value: string } | undefined>(span: T): SharedPragmaSpan | string | undefined {
+    if (typeof span === "string" || span === undefined) {
+        return span;
+    }
+    return new SharedPragmaSpan(span.pos, span.end, span.value);
+}
+
+function sharePragmaArguments(args: PragmaPseudoMapEntry["args"]["arguments"]) {
+    const sharedArgs = new SharedPragmaArguments();
+    if ("types" in args) sharedArgs.types = sharePragmaValue(args.types);
+    if ("lib" in args) sharedArgs.lib = sharePragmaValue(args.lib);
+    if ("path" in args) sharedArgs.path = sharePragmaValue(args.path);
+    if ("no-default-lib" in args) sharedArgs["no-default-lib"] = sharePragmaValue(args["no-default-lib"]);
+    if ("resolution-mode" in args) sharedArgs["resolution-mode"] = sharePragmaValue(args["resolution-mode"]);
+    if ("name" in args) sharedArgs.name = sharePragmaValue(args.name);
+    if ("factory" in args) sharedArgs.factory = sharePragmaValue(args.factory);
+    return sharedArgs;
+}
+
+function shareCommentRange(range: CommentRange) {
+    const sharedRange = new SharedCommentRange();
+    sharedRange.kind = range.kind;
+    sharedRange.pos = range.pos;
+    sharedRange.end = range.end;
+    sharedRange.hasTrailingNewLine = range.hasTrailingNewLine;
+    return sharedRange;
+}
+
+function sharePragma(pragma: PragmaPseudoMapEntry["args"]) {
+    return new SharedPragma(
+        sharePragmaArguments(pragma.arguments),
+        shareCommentRange(pragma.range)
+    );
+}
+
+function shareArray<T, U extends TaggedStruct<Tag>>(array: T[], shareElement: (value: T) => U): SharedArray<U>;
+function shareArray<T, U extends TaggedStruct<Tag>>(array: T[] | undefined, shareElement: (value: T) => U): SharedArray<U> | undefined;
+function shareArray<T, U extends TaggedStruct<Tag>>(array: T[] | undefined, shareElement: (value: T) => U): SharedArray<U> | undefined {
+    if (array) {
+        const sharedArray = new SharedArray<U>(array.length);
+        for (let i = 0; i < array.length; i++) {
+            sharedArray[i] = shareElement(array[i]);
+        }
+        return sharedArray;
+    }
+}
+
 
 /** @internal */
 export type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
 
+function shareFileReference(ref: FileReference) {
+    return new SharedFileReference(ref.pos, ref.end, ref.fileName, ref.resolutionMode);
+}
+
+function shareAmdDependency(dep: AmdDependency) {
+    return new SharedAmdDependency(dep.path, dep.name);
+}
+
+function createFileReference(pos: number, end: number, fileName: string, resolutionMode?: ResolutionMode): FileReference {
+    return { pos, end, fileName, ...(resolutionMode !== undefined ? { resolutionMode } : {}) };
+}
+
+function createAmdDependency(path: string, name?: string): AmdDependency {
+    return { path, name };
+}
+
+function createCheckJsDirective(pos: number, end: number, enabled: boolean) {
+    return { pos, end, enabled };
+}
+
 /** @internal */
 export function processPragmasIntoFields(context: PragmaContext, reportDiagnostic: PragmaDiagnosticReporter): void {
-    context.checkJsDirective = undefined;
-    context.referencedFiles = [];
-    context.typeReferenceDirectives = [];
-    context.libReferenceDirectives = [];
-    context.amdDependencies = [];
-    context.hasNoDefaultLib = false;
-    context.pragmas!.forEach((entryOrList, key) => { // TODO: GH#18217
+    const referencedFiles: FileReference[] = [];
+    const typeReferenceDirectives: FileReference[] = [];
+    const libReferenceDirectives: FileReference[] = [];
+    const amdDependencies: AmdDependency[] = [];
+    let checkJsDirective: CheckJsDirective | undefined;
+    let pragmas;
+    if (isShareableNonPrimitive(context)) {
+        const contextPragmas = context.pragmas as unknown as SharedMap<string, SharedArray<SharedPragma> | SharedPragma>;
+        pragmas = SharedMap.entries(contextPragmas);
+    }
+    else {
+        pragmas = context.pragmas!.entries();
+    }
+    
+    for (const [key, entryOrList] of pragmas) {
         // TODO: The below should be strongly type-guarded and not need casts/explicit annotations, since entryOrList is related to
         // key and key is constrained to a union; but it's not (see GH#21483 for at least partial fix) :(
         switch (key) {
             case "reference": {
-                const referencedFiles = context.referencedFiles;
-                const typeReferenceDirectives = context.typeReferenceDirectives;
-                const libReferenceDirectives = context.libReferenceDirectives;
                 forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
                     const { types, lib, path, ["resolution-mode"]: res } = arg.arguments;
                     if (arg.arguments["no-default-lib"]) {
@@ -10416,13 +10614,13 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                     }
                     else if (types) {
                         const parsed = parseResolutionMode(res, types.pos, types.end, reportDiagnostic);
-                        typeReferenceDirectives.push({ pos: types.pos, end: types.end, fileName: types.value, ...(parsed ? { resolutionMode: parsed } : {}) });
+                        typeReferenceDirectives.push(createFileReference(types.pos, types.end, types.value, parsed));
                     }
                     else if (lib) {
-                        libReferenceDirectives.push({ pos: lib.pos, end: lib.end, fileName: lib.value });
+                        libReferenceDirectives.push(createFileReference(lib.pos, lib.end, lib.value));
                     }
                     else if (path) {
-                        referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value });
+                        referencedFiles.push(createFileReference(path.pos, path.end, path.value));
                     }
                     else {
                         reportDiagnostic(arg.range.pos, arg.range.end - arg.range.pos, Diagnostics.Invalid_reference_directive_syntax);
@@ -10431,9 +10629,9 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 break;
             }
             case "amd-dependency": {
-                context.amdDependencies = map(
-                    toArray(entryOrList) as PragmaPseudoMap["amd-dependency"][],
-                    x => ({ name: x.arguments.name, path: x.arguments.path }));
+                for (const x of toArray(entryOrList) as PragmaPseudoMap["amd-dependency"][]) {
+                    amdDependencies.push(createAmdDependency(x.arguments.path, x.arguments.name));
+                }
                 break;
             }
             case "amd-module": {
@@ -10455,12 +10653,8 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
             case "ts-check": {
                 // _last_ of either nocheck or check in a file is the "winner"
                 forEach(toArray(entryOrList), entry => {
-                    if (!context.checkJsDirective || entry.range.pos > context.checkJsDirective.pos) {
-                        context.checkJsDirective = {
-                            enabled: key === "ts-check",
-                            end: entry.range.end,
-                            pos: entry.range.pos
-                        };
+                    if (!checkJsDirective || entry.range.pos > checkJsDirective.pos) {
+                        checkJsDirective = createCheckJsDirective(entry.range.pos, entry.range.end, key === "ts-check");
                     }
                 });
                 break;
@@ -10472,7 +10666,24 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 return; // Accessed directly
             default: Debug.fail("Unhandled pragma kind"); // Can this be made into an assertNever in the future?
         }
-    });
+    }
+
+    if (isShareableNonPrimitive(context)) {
+        if (checkJsDirective) {
+            context.checkJsDirective = new SharedCheckJsDirective(checkJsDirective.pos, checkJsDirective.end, checkJsDirective.enabled);
+        }
+        context.referencedFiles = shareArray(referencedFiles, shareFileReference) as unknown as FileReference[];
+        context.typeReferenceDirectives = shareArray(typeReferenceDirectives, shareFileReference) as unknown as FileReference[];
+        context.libReferenceDirectives = shareArray(libReferenceDirectives, shareFileReference) as unknown as FileReference[];
+        context.amdDependencies = shareArray(amdDependencies, shareAmdDependency) as unknown as AmdDependency[];
+    }
+    else {
+        context.checkJsDirective = checkJsDirective;
+        context.referencedFiles = referencedFiles;
+        context.typeReferenceDirectives = typeReferenceDirectives;
+        context.libReferenceDirectives = libReferenceDirectives;
+        context.amdDependencies = amdDependencies;
+    }
 }
 
 const namedArgRegExCache = new Map<string, RegExp>();

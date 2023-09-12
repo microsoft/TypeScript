@@ -506,6 +506,18 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
         defaultValueDescription: Diagnostics.Platform_specific
     },
+    {
+        name: "maxCpuCount",
+        type: "number",
+        category: Diagnostics.Command_line_Options,
+        isCommandLineOnly: false,
+        description: Diagnostics.Sets_the_maximum_number_of_worker_threads_to_use_during_build,
+        defaultValueDescription: Diagnostics.Platform_specific,
+        defaultIfValueMissing: () => sys.cpuCount?.(),
+        extraValidation: value => typeof value === "number" && value <= 0 ?
+            [Diagnostics.Option_maxCpuCount_must_be_set_to_1_or_greater] :
+            undefined
+    }
 ];
 
 /** @internal */
@@ -1882,16 +1894,26 @@ function parseOptionValue(
     }
     else {
         // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-        if (!args[i] && opt.type !== "boolean") {
+        if (!args[i] && opt.type !== "boolean" && !(opt.type === "number" && opt.defaultIfValueMissing)) {
             errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
         }
 
         if (args[i] !== "null") {
             switch (opt.type) {
-                case "number":
-                    options[opt.name] = validateJsonOptionValue(opt, parseInt(args[i]), errors);
-                    i++;
+                case "number": {
+                    let value: number | undefined;
+                    if (args[i]) {
+                        value = parseInt(args[i]);
+                    }
+                    if ((isNullOrUndefined(value) || isNaN(value) || !isFinite(value)) && opt.defaultIfValueMissing) {
+                        value = opt.defaultIfValueMissing();
+                    }
+                    else {
+                        i++;
+                    }
+                    options[opt.name] = validateJsonOptionValue(opt, value, errors);
                     break;
+                }
                 case "boolean":
                     // boolean flag has optional value true, false, others
                     const optValue = args[i];

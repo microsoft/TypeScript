@@ -1420,7 +1420,9 @@ export interface System {
     realpath?(path: string): string;
     /** @internal */ getEnvironmentVariable(name: string): string;
     /** @internal */ tryEnableSourceMapsForHost?(): void;
+    /** @internal */ tryEnableSharedStructs?(): void;
     /** @internal */ debugMode?: boolean;
+    /** @internal */ cpuCount?(): number;
     setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     clearTimeout?(timeoutId: any): void;
     clearScreen?(): void;
@@ -1433,6 +1435,8 @@ export interface System {
     // For testing
     /** @internal */ now?(): Date;
     /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
+
+    /** @internal */ stringSeed?: number;
 }
 
 export interface FileWatcher {
@@ -1454,7 +1458,8 @@ export let sys: System = (() => {
         const nativePattern = /^native |^\([^)]+\)$|^(internal[\\/]|[a-zA-Z0-9_\s]+(\.js)?$)/;
         const _fs: typeof import("fs") = require("fs");
         const _path: typeof import("path") = require("path");
-        const _os = require("os");
+        const _os: typeof import("os") = require("os");
+        const _cp: typeof import("child_process") = require("child_process");
         // crypto can be absent on reduced node installations
         let _crypto: typeof import("crypto") | undefined;
         try {
@@ -1506,9 +1511,16 @@ export let sys: System = (() => {
             inodeWatching: isLinuxOrMacOs,
             sysLog,
         });
+
+        const stringSeedFromEnv = +(process.env.TS_STRING_SEED || NaN);
+        const stringSeed = isFinite(stringSeedFromEnv) && Math.floor(stringSeedFromEnv) === stringSeedFromEnv ?
+            stringSeedFromEnv >>> 0 :
+            Math.floor(Math.random() * 0xffffffff) >>> 0;
+
         const nodeSystem: System = {
             args: process.argv.slice(2),
             newLine: _os.EOL,
+            stringSeed,
             useCaseSensitiveFileNames,
             write(s: string): void {
                 process.stdout.write(s);
@@ -1587,6 +1599,29 @@ export let sys: System = (() => {
                     // Could not enable source maps.
                 }
             },
+            tryEnableSharedStructs() {
+                // If `SharedStructType` is available, or if we've already restarted with options, do nothing.
+                if (typeof SharedStructType === "function" || process.env.TS_RESTARTED_WITH_OPTIONS === "1") {
+                    return;
+                }
+
+                const execArgv = ["--shared-string-table", "--harmony-struct"];
+                // If a call to `node --version` with the provided args results in a non-zero exit status, then
+                // we cannot restart with the provided options.
+                if (_cp.spawnSync(process.execPath, [...process.execArgv, ...execArgv, "--version"]).status) {
+                    return;
+                }
+
+                // Start the process with the provided arguments, exiting with that process's exit code.
+                process.exit(_cp.spawnSync(
+                    process.execPath,
+                    [...process.execArgv, ...execArgv, ...process.argv.slice(1)],
+                    { stdio: "inherit", env: { ...process.env, TS_RESTARTED_WITH_OPTIONS: "1" } },
+                ).status ?? 0);
+            },
+            cpuCount() {
+                return _os.cpus().length;
+            },
             setTimeout,
             clearTimeout,
             clearScreen: () => {
@@ -1611,7 +1646,6 @@ export let sys: System = (() => {
                 }
             }
         };
-        return nodeSystem;
 
         /**
          * `throwIfNoEntry` was added so recently that it's not in the node types.
@@ -1983,6 +2017,8 @@ export let sys: System = (() => {
             hash.update(data);
             return hash.digest("hex");
         }
+
+        return nodeSystem;
     }
 
     let sys: System | undefined;

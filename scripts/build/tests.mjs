@@ -35,6 +35,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     const shards = +cmdLineOptions.shards || undefined;
     const shardId = +cmdLineOptions.shardId || undefined;
     const coverage = cmdLineOptions.coverage;
+    const structs = cmdLineOptions.structs;
     if (!cmdLineOptions.dirty) {
         if (options.watching) {
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
@@ -117,6 +118,12 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     else {
         // run task to load all tests and partition them between workers
         args.push(runJs);
+    }
+
+    if (structs) {
+        args.unshift("--harmony-struct");
+        args.unshift("--shared-string-table");
+        args.unshift("--enable-source-map");
     }
 
     /** @type {number | undefined} */

@@ -80,6 +80,7 @@ import {
     StringLiteralLike,
     sys,
     System,
+    ThreadPool,
     toPath,
     toPath as ts_toPath,
     updateErrorForNoInputFiles,
@@ -92,6 +93,7 @@ import {
     WatchType,
     WatchTypeRegistry,
     WildcardDirectoryWatcher,
+    WorkerThreadsHost,
 } from "./_namespaces/ts";
 
 export interface ReadBuildProgramHost {
@@ -118,8 +120,11 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
+export function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
+/** @internal */
+export function createIncrementalCompilerHost(options: CompilerOptions, system?: System, workerThreads?: WorkerThreadsHost, threadPool?: ThreadPool): CompilerHost;
+export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, workerThreads?: WorkerThreadsHost, threadPool?: ThreadPool): CompilerHost {
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system, workerThreads, threadPool);
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
@@ -164,6 +169,8 @@ export interface WatchHost {
     clearTimeout?(timeoutId: any): void;
 }
 export interface ProgramHost<T extends BuilderProgram> {
+    /** @internal */ workerThreads: WorkerThreadsHost | undefined;
+    /** @internal */ threadPool: ThreadPool | undefined;
     /**
      * Used to create the program when need for program creation or recreation detected
      */

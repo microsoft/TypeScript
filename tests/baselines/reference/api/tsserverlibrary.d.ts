@@ -7218,6 +7218,7 @@ declare namespace ts {
         lib?: string[];
         locale?: string;
         mapRoot?: string;
+        maxCpuCount?: number;
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
@@ -7494,6 +7495,7 @@ declare namespace ts {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
     }
     interface CompilerHost extends ModuleResolutionHost {
+        requestSourceFile?(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, shouldCreateNewSourceFile?: boolean): void;
         getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getCancellationToken?(): CancellationToken;
@@ -9874,6 +9876,7 @@ declare namespace ts {
         emitDeclarationOnly?: boolean;
         sourceMap?: boolean;
         inlineSourceMap?: boolean;
+        maxCpuCount?: number;
         traceResolution?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }

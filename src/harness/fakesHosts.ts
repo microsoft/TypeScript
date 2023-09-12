@@ -554,6 +554,10 @@ export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version:
 }
 
 export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
+    /** @internal */ declare workerThreads: ts.WorkerThreadsHost | undefined;
+    /** @internal */ declare threadPool: ts.ThreadPool | undefined;
+    /** @internal */ declare membrane: ts.Membrane | undefined;
+
     createProgram: ts.CreateProgram<ts.BuilderProgram>;
 
     private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
