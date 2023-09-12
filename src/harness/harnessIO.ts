@@ -271,13 +271,13 @@ export namespace Compiler {
 
         if (!libFileNameSourceFileMap) {
             libFileNameSourceFileMap = new Map(Object.entries({
-                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, { languageVersion: ts.ScriptTarget.Latest }), // TODO(jakebailey): pass skipJSDocParsing
+                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, { languageVersion: ts.ScriptTarget.Latest }),
             }));
         }
 
         let sourceFile = libFileNameSourceFileMap.get(fileName);
         if (!sourceFile) {
-            libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, { languageVersion: ts.ScriptTarget.Latest })); // TODO(jakebailey): pass skipJSDocParsing
+            libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, { languageVersion: ts.ScriptTarget.Latest }));
         }
         return sourceFile;
     }
@@ -351,8 +351,10 @@ export namespace Compiler {
                 if (value === undefined) {
                     throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
                 }
-                if (name === "typeScriptVersion") {
-                    continue;
+                switch (name.toLowerCase()) {
+                    case "typescriptversion":
+                    case "skipjsdocparsing":
+                        continue;
                 }
                 const option = getCommandLineOption(name);
                 if (option) {
