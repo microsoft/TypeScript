@@ -7344,7 +7344,6 @@ export interface CommandLineOptionBase {
     isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
     isCommandLineOnly?: boolean;
     showInSimplifiedHelpView?: boolean;
-    hiddenInAllViews?: boolean;
     category?: DiagnosticMessage;
     strictFlag?: true;                                      // true if the option is one of the flag under strict
     affectsSourceFile?: true;                               // true if we should recreate SourceFiles after this option changes
