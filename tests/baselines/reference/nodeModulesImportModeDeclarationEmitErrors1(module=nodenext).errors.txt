@@ -1,10 +1,10 @@
-/index.ts(2,45): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+/index.ts(2,45): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 /index.ts(2,45): error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
 /index.ts(2,73): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(4,10): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
-/index.ts(4,39): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+/index.ts(4,39): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 /index.ts(4,39): error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
-/index.ts(6,76): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+/index.ts(6,76): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 /index.ts(6,76): error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
 
 
@@ -12,7 +12,7 @@
     // incorrect mode
     import type { RequireInterface } from "pkg" assert { "resolution-mode": "foobar" };
                                                 ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
                                                                             ~~~~~~~~
@@ -22,13 +22,13 @@
              ~~~~~~~~~~~~~~~
 !!! error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
                                           ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
     // not exclusively type-only
     import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" assert { "resolution-mode": "require" };
                                                                                ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2836: Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.
     

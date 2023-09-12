@@ -45058,7 +45058,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkImportAttributes(declaration: ImportDeclaration | ExportDeclaration) {
         if (declaration.assertClause) {
-            grammarErrorOnFirstToken(declaration.assertClause, Diagnostics.The_assert_keyword_in_import_attributes_is_deprecated_and_it_has_been_replaced_by_the_with_keyword);
+            grammarErrorOnFirstToken(declaration.assertClause, Diagnostics.The_assert_keyword_in_import_attributes_is_deprecated_and_has_been_replaced_by_the_with_keyword);
         }
         const node = declaration.attributes || declaration.assertClause;
         if (node) {

@@ -1,50 +1,50 @@
-mod.mts(1,37): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+mod.mts(1,37): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 mod.mts(1,52): error TS2837: Import assertion values must be string literal expressions.
-mod.mts(3,37): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+mod.mts(3,37): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 mod.mts(3,52): error TS2837: Import assertion values must be string literal expressions.
-mod.mts(5,37): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+mod.mts(5,37): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 mod.mts(5,52): error TS2837: Import assertion values must be string literal expressions.
-mod.mts(7,37): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+mod.mts(7,37): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 mod.mts(7,52): error TS2837: Import assertion values must be string literal expressions.
-mod.mts(9,37): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+mod.mts(9,37): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 mod.mts(9,52): error TS2837: Import assertion values must be string literal expressions.
-mod.mts(11,37): error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+mod.mts(11,37): error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
 mod.mts(11,66): error TS2837: Import assertion values must be string literal expressions.
 
 
 ==== mod.mts (12 errors) ====
     import * as thing1 from "./mod.mjs" assert {field: 0};
                                         ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                        ~
 !!! error TS2837: Import assertion values must be string literal expressions.
     
     import * as thing2 from "./mod.mjs" assert {field: `a`};
                                         ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                        ~~~
 !!! error TS2837: Import assertion values must be string literal expressions.
     
     import * as thing3 from "./mod.mjs" assert {field: /a/g};
                                         ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                        ~~~~
 !!! error TS2837: Import assertion values must be string literal expressions.
     
     import * as thing4 from "./mod.mjs" assert {field: ["a"]};
                                         ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                        ~~~~~
 !!! error TS2837: Import assertion values must be string literal expressions.
     
     import * as thing5 from "./mod.mjs" assert {field: { a: 0 }};
                                         ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                        ~~~~~~~~
 !!! error TS2837: Import assertion values must be string literal expressions.
     
     import * as thing6 from "./mod.mjs" assert {type: "json", field: 0..toString()}
                                         ~~~~~~
-!!! error TS1008: The 'assert' keyword in import attributes is deprecated and it has been replaced by the 'with' keyword.
+!!! error TS1008: The 'assert' keyword in import attributes is deprecated and has been replaced by the 'with' keyword.
                                                                      ~~~~~~~~~~~~~
 !!! error TS2837: Import assertion values must be string literal expressions.
