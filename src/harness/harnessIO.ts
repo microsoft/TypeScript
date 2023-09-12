@@ -243,7 +243,7 @@ export namespace Compiler {
     export function createSourceFileAndAssertInvariants(
         fileName: string,
         sourceText: string,
-        languageVersion: ts.CreateSourceFileOptions,
+        languageVersion: ts.ScriptTarget,
     ) {
         // We'll only assert invariants outside of light mode.
         const shouldAssertInvariants = !lightMode;
@@ -271,13 +271,13 @@ export namespace Compiler {
 
         if (!libFileNameSourceFileMap) {
             libFileNameSourceFileMap = new Map(Object.entries({
-                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, { languageVersion: ts.ScriptTarget.Latest }),
+                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest),
             }));
         }
 
         let sourceFile = libFileNameSourceFileMap.get(fileName);
         if (!sourceFile) {
-            libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, { languageVersion: ts.ScriptTarget.Latest }));
+            libFileNameSourceFileMap.set(fileName, sourceFile = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName)!, ts.ScriptTarget.Latest));
         }
         return sourceFile;
     }
@@ -351,10 +351,8 @@ export namespace Compiler {
                 if (value === undefined) {
                     throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
                 }
-                switch (name.toLowerCase()) {
-                    case "typescriptversion":
-                    case "skipjsdocparsing":
-                        continue;
+                if (name === "typeScriptVersion") {
+                    continue;
                 }
                 const option = getCommandLineOption(name);
                 if (option) {
