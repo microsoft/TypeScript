@@ -1,8 +1,6 @@
 --tsBuildInfoFile build.tsbuildinfo tests
 buildOptions::
-{
- "skipJSDocParsing": true
-}
+{}
 WatchOptions::
 
 Projects::

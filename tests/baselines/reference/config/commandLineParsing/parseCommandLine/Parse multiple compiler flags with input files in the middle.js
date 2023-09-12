@@ -1,7 +1,6 @@
 --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
 CompilerOptions::
 {
- "skipJSDocParsing": true,
  "module": 1,
  "target": 1,
  "lib": [

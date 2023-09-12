@@ -1,7 +1,6 @@
 --noImplicitAny t 0.ts
 CompilerOptions::
 {
- "skipJSDocParsing": true,
  "noImplicitAny": true
 }
 WatchOptions::

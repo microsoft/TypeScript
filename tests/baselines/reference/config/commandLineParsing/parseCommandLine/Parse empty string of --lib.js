@@ -1,7 +1,6 @@
 0.ts --lib 
 CompilerOptions::
 {
- "skipJSDocParsing": true,
  "lib": []
 }
 WatchOptions::

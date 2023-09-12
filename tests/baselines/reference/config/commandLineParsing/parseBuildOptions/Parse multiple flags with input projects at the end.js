@@ -1,7 +1,6 @@
 --force --verbose src tests
 buildOptions::
 {
- "skipJSDocParsing": true,
  "force": true,
  "verbose": true
 }

@@ -1,8 +1,6 @@
 --watchDirectory FixedPollingInterval 0.ts
 CompilerOptions::
-{
- "skipJSDocParsing": true
-}
+{}
 WatchOptions::
 {
  "watchDirectory": 1

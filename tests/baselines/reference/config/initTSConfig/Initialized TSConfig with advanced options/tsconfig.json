@@ -107,6 +107,6 @@
     "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
 
     /* Output Formatting */
-    "noErrorTruncation": true,                           /* Disable truncating types in error messages. */
+    "noErrorTruncation": true                            /* Disable truncating types in error messages. */
   }
 }

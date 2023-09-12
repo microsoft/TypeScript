@@ -34,7 +34,7 @@ Output::
 
 
 Program root files: ["/users/user/projects/myproject/src/index.ts"]
-Program options: {"composite":true,"removeComments":true,"skipJSDocParsing":true,"project":"/users/user/projects/myproject/src","extendedDiagnostics":true,"configFilePath":"/users/user/projects/myproject/src/tsconfig.json"}
+Program options: {"composite":true,"removeComments":true,"project":"/users/user/projects/myproject/src","extendedDiagnostics":true,"configFilePath":"/users/user/projects/myproject/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

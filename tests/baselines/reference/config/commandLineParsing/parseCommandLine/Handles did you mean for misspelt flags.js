@@ -1,8 +1,6 @@
 --declarations --allowTS
 CompilerOptions::
-{
- "skipJSDocParsing": true
-}
+{}
 WatchOptions::
 
 FileNames::

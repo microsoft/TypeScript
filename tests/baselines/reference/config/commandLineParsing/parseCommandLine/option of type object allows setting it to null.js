@@ -1,8 +1,6 @@
 --paths null 0.ts
 CompilerOptions::
-{
- "skipJSDocParsing": true
-}
+{}
 WatchOptions::
 
 FileNames::

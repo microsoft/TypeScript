@@ -1,8 +1,6 @@
 0.ts --rootDirs
 CompilerOptions::
-{
- "skipJSDocParsing": true
-}
+{}
 WatchOptions::
 
 FileNames::

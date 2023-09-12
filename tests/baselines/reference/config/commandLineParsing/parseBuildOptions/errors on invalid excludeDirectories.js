@@ -1,8 +1,6 @@
 --excludeDirectories **/../*
 buildOptions::
-{
- "skipJSDocParsing": true
-}
+{}
 WatchOptions::
 {
  "excludeDirectories": []

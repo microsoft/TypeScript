@@ -1,7 +1,6 @@
 --clean --verbose
 buildOptions::
 {
- "skipJSDocParsing": true,
  "clean": true,
  "verbose": true
 }

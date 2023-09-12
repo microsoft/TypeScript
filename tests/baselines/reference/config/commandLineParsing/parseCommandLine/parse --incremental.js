@@ -1,7 +1,6 @@
 --incremental 0.ts
 CompilerOptions::
 {
- "skipJSDocParsing": true,
  "incremental": true
 }
 WatchOptions::

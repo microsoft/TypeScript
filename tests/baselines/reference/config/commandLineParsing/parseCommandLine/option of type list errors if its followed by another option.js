@@ -1,7 +1,6 @@
 0.ts --strictNullChecks --rootDirs
 CompilerOptions::
 {
- "skipJSDocParsing": true,
  "strictNullChecks": true
 }
 WatchOptions::
