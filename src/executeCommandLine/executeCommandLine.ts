@@ -790,6 +790,9 @@ function reportWatchModeWithoutSysSupport(sys: System, reportDiagnostic: Diagnos
     return false;
 }
 
+// This could be inlined everywhere, but this is convenient for debugging and patching.
+const skipJSDocParsing = true;
+
 function performBuild(
     sys: System,
     cb: ExecuteCommandLineCallbacks,
@@ -840,7 +843,7 @@ function performBuild(
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createWatchStatusReporter(sys, buildOptions),
         );
-        buildHost.skipJSDocParsing = true;
+        buildHost.skipJSDocParsing = skipJSDocParsing;
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
         const onWatchStatusChange = buildHost.onWatchStatusChange;
@@ -870,7 +873,7 @@ function performBuild(
         createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
         createReportErrorSummary(sys, buildOptions),
     );
-    buildHost.skipJSDocParsing = true;
+    buildHost.skipJSDocParsing = skipJSDocParsing;
     const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
     updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
     const builder = createSolutionBuilder(buildHost, projects, buildOptions);
@@ -978,7 +981,7 @@ function updateWatchCompilationHost(
     cb: ExecuteCommandLineCallbacks,
     watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
 ) {
-    watchCompilerHost.skipJSDocParsing = true;
+    watchCompilerHost.skipJSDocParsing = skipJSDocParsing;
     updateCreateProgram(sys, watchCompilerHost, /*isBuildMode*/ false);
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
     watchCompilerHost.afterProgramCreate = builderProgram => {
