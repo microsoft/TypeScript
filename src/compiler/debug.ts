@@ -633,7 +633,7 @@ export namespace Debug {
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
             __tsDebuggerDisplay: {
                 value(this: Type) {
-                    const typeHeader = this.flags & TypeFlags.Intrinsic ? `IntrinsicType ${(this as IntrinsicType).intrinsicName}${(this as IntrinsicType).debugIntrinsicName ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""}` :
+                    const typeHeader = this.flags & TypeFlags.Intrinsic ? `IntrinsicType${(this as IntrinsicType).intrinsicName}${(this as IntrinsicType).debugIntrinsicName ? ` (${(this as IntrinsicType).debugIntrinsicName})` : ""}` :
                         this.flags & TypeFlags.Nullable ? "NullableType" :
                         this.flags & TypeFlags.StringOrNumberLiteral ? `LiteralType ${JSON.stringify((this as LiteralType).value)}` :
                         this.flags & TypeFlags.BigIntLiteral ? `LiteralType ${(this as BigIntLiteralType).value.negative ? "-" : ""}${(this as BigIntLiteralType).value.base10Value}n` :
