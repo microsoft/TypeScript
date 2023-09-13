@@ -160,7 +160,7 @@ function sanitizeLog(s: string): string {
     s = s.replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`);
     s = s.replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`);
     s = s.replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`);
-    s = s.replace(/"exportMapKey":\s*"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`));
+    s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
     return s;
 }
 
