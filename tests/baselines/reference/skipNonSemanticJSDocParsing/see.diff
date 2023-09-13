@@ -1,12 +1,12 @@
 ===================================================================
 --- withJSDoc	With JSDoc
 +++ withoutJSDoc	Without JSDoc
-@@ -220,6 +220,6 @@
+@@ -307,6 +307,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],
      "identifiers": {},
--    "jsdocSkipped": false
-+    "jsdocSkipped": true
+-    "skipNonSemanticJSDoc": false
++    "skipNonSemanticJSDoc": true
  }
 \ No newline at end of file

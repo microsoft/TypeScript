@@ -211,4 +211,4 @@ import "./unittests/tsserver/watchEnvironment";
 import "./unittests/debugDeprecation";
 import "./unittests/tsserver/inconsistentErrorInEditor";
 import "./unittests/tsserver/getMoveToRefactoringFileSuggestions";
-import "./unittests/skipJSDocParsing";
+import "./unittests/skipNonSemanticJSDocParsing";

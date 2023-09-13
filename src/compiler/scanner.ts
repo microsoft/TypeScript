@@ -115,7 +115,7 @@ export interface Scanner {
     // of invoking the callback is returned from this function.
     tryScan<T>(callback: () => T): T;
     /** @internal */
-    setSkipJSDoc(skip: boolean): void;
+    setSkipNonSemanticJSDoc(skip: boolean): void;
 }
 
 /** @internal */
@@ -1008,7 +1008,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     var commentDirectives: CommentDirective[] | undefined;
     var inJSDocType = 0;
 
-    var skipJSDoc = false;
+    var skipNonSemanticJSDoc = false;
 
     setText(text, start, length);
 
@@ -1061,7 +1061,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         tryScan,
         lookAhead,
         scanRange,
-        setSkipJSDoc,
+        setSkipNonSemanticJSDoc,
     };
     /* eslint-enable no-var */
 
@@ -2002,7 +2002,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             }
                         }
 
-                        if (isJSDoc && (!skipJSDoc || semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos)))) {
+                        if (isJSDoc && (!skipNonSemanticJSDoc || semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos)))) {
                             tokenFlags |= TokenFlags.PrecedingJSDocComment;
                         }
 
@@ -2787,8 +2787,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         languageVariant = variant;
     }
 
-    function setSkipJSDoc(skip: boolean) {
-        skipJSDoc = skip;
+    function setSkipNonSemanticJSDoc(skip: boolean) {
+        skipNonSemanticJSDoc = skip;
     }
 
     function resetTokenState(position: number) {
