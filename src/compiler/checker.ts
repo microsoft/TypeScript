@@ -12737,7 +12737,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // or if we have another early-bound symbol declaration with the same name and
                 // conflicting flags.
                 const earlySymbol = earlySymbols && earlySymbols.get(memberName);
-                if (lateSymbol.flags & getExcludedSymbolFlags(symbolFlags) || earlySymbol) {
+                // Duplicate property declarations of classes are checked in checkClassForDuplicateDeclarations.
+                if (!(parent.flags & SymbolFlags.Class) && (lateSymbol.flags & getExcludedSymbolFlags(symbolFlags) || earlySymbol)) {
                     // If we have an existing early-bound member, combine its declarations so that we can
                     // report an error at each declaration.
                     const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
@@ -12883,7 +12884,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const baseTypes = getBaseTypes(source);
         if (baseTypes.length) {
             if (source.symbol && members === getMembersOfSymbol(source.symbol)) {
-                members = createSymbolTable(source.declaredProperties);
+                const symbolTable = createSymbolTable();
+                // copy all symbols (except type parameters), including the ones with internal names like `InternalSymbolName.Index`
+                for (const symbol of members.values()) {
+                    if (!(symbol.flags & SymbolFlags.TypeParameter)) {
+                        symbolTable.set(symbol.escapedName, symbol);
+                    }
+                }
+                members = symbolTable;
             }
             setStructuredTypeMembers(type, members, callSignatures, constructSignatures, indexInfos);
             const thisArgument = lastOrUndefined(typeArguments);
@@ -14394,7 +14402,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (writeTypes || writeType !== type) {
                 writeTypes = append(!writeTypes ? propTypes.slice() : writeTypes, writeType);
             }
-            else if (type !== firstType) {
+            if (type !== firstType) {
                 checkFlags |= CheckFlags.HasNonUniformType;
             }
             if (isLiteralType(type) || isPatternLiteralType(type)) {
@@ -16396,10 +16404,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // [...X[]] is equivalent to just X[]
             return readonly ? globalReadonlyArrayType : globalArrayType;
         }
-        const memberIds = mapDefined(namedMemberDeclarations, node => node ? getNodeId(node) : undefined);
         const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join() +
             (readonly ? "R" : "") +
-            (memberIds.length ? "," + memberIds.join(",") : "");
+            (some(namedMemberDeclarations, node => !!node) ? "," + map(namedMemberDeclarations, node => node ? getNodeId(node) : "_").join(",") : "");
         let type = tupleTypes.get(key);
         if (!type) {
             tupleTypes.set(key, type = createTupleTargetType(elementFlags, readonly, namedMemberDeclarations));
@@ -19103,10 +19110,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function instantiateSymbol(symbol: Symbol, mapper: TypeMapper): Symbol {
         const links = getSymbolLinks(symbol);
+        // If the type of the symbol is already resolved, and if that type could not possibly
+        // be affected by instantiation, simply return the symbol itself.
         if (links.type && !couldContainTypeVariables(links.type)) {
-            // If the type of the symbol is already resolved, and if that type could not possibly
-            // be affected by instantiation, simply return the symbol itself.
-            return symbol;
+            if (!(symbol.flags & SymbolFlags.SetAccessor)) {
+                return symbol;
+            }
+            // If we're a setter, check writeType.
+            if (links.writeType && !couldContainTypeVariables(links.writeType)) {
+                return symbol;
+            }
         }
         if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
             // If symbol being instantiated is itself a instantiation, fetch the original target and combine the
@@ -23482,10 +23495,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // unique AST node.
                 return (type as TypeReference).node!;
             }
-            if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
-                // We track all object types that have an associated symbol (representing the origin of the type), but
-                // exclude the static side of classes from this check since it shares its symbol with the instance side.
-                return type.symbol;
+            if (type.symbol) {
+                // We track object types that have a symbol by that symbol (representing the origin of the type).
+                if (getObjectFlags(type) & ObjectFlags.Mapped) {
+                    // When a homomorphic mapped type is applied to a type with a symbol, we use the symbol of that
+                    // type as the recursion identity. This is a better strategy than using the symbol of the mapped
+                    // type, which doesn't work well for recursive mapped types.
+                    type = getMappedTargetWithSymbol(type);
+                }
+                if (!(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
+                    // We exclude the static side of a class since it shares its symbol with the instance side.
+                    return type.symbol;
+                }
             }
             if (isTupleType(type)) {
                 return type.target;
@@ -23507,6 +23528,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as ConditionalType).root;
         }
         return type;
+    }
+
+    function getMappedTargetWithSymbol(type: Type) {
+        let target = type;
+        while ((getObjectFlags(target) & ObjectFlags.InstantiatedMapped) === ObjectFlags.InstantiatedMapped && isMappedTypeWithKeyofConstraintDeclaration(target as MappedType)) {
+            target = getModifiersTypeFromMappedType(target as MappedType);
+        }
+        return target.symbol ? target : type;
     }
 
     function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -32128,7 +32157,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return isErrorType(apparentType) ? errorType : apparentType;
             }
-            prop = getPropertyOfType(apparentType, right.escapedText, /*skipObjectFunctionPropertyAugment*/ false, /*includeTypeOnlyMembers*/ node.kind === SyntaxKind.QualifiedName);
+            prop = getPropertyOfType(apparentType, right.escapedText, /*skipObjectFunctionPropertyAugment*/ isConstEnumObjectType(apparentType), /*includeTypeOnlyMembers*/ node.kind === SyntaxKind.QualifiedName);
         }
         // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
         // `Foo` is also not referenced in `enum FooCopy { Bar = Foo.Bar }`, because the enum member value gets inlined
@@ -35605,13 +35634,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const len = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
         for (let i = 0; i < len; i++) {
             const declaration = signature.parameters[i].valueDeclaration as ParameterDeclaration;
-            if (declaration.type) {
-                const typeNode = getEffectiveTypeAnnotationNode(declaration);
-                if (typeNode) {
-                    const source = addOptionality(getTypeFromTypeNode(typeNode), /*isProperty*/ false, isOptionalDeclaration(declaration));
-                    const target = getTypeAtPosition(context, i);
-                    inferTypes(inferenceContext.inferences, source, target);
-                }
+            const typeNode = getEffectiveTypeAnnotationNode(declaration);
+            if (typeNode) {
+                const source = addOptionality(getTypeFromTypeNode(typeNode), /*isProperty*/ false, isOptionalDeclaration(declaration));
+                const target = getTypeAtPosition(context, i);
+                inferTypes(inferenceContext.inferences, source, target);
             }
         }
     }
@@ -38964,7 +38991,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     isStaticMember ? staticNames :
                     instanceNames;
 
-                const memberName = name && getPropertyNameForPropertyNameNode(name);
+                const memberName = name && getEffectivePropertyNameForPropertyNameNode(name);
                 if (memberName) {
                     switch (member.kind) {
                         case SyntaxKind.GetAccessor:
@@ -39033,7 +39060,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const memberNameNode = member.name;
             const isStaticMember = isStatic(member);
             if (isStaticMember && memberNameNode) {
-                const memberName = getPropertyNameForPropertyNameNode(memberNameNode);
+                const memberName = getEffectivePropertyNameForPropertyNameNode(memberNameNode);
                 switch (memberName) {
                     case "name":
                     case "length":

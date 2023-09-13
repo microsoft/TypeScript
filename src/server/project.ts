@@ -663,7 +663,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     getScriptKind(fileName: string) {
-        const info = this.getOrCreateScriptInfoAndAttachToProject(fileName);
+        const info = this.projectService.getScriptInfoForPath(this.toPath(fileName));
         return (info && info.scriptKind)!; // TODO: GH#18217
     }
 
