@@ -5693,7 +5693,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkIntrinsicName(name: string, debug: string | undefined) {
         const key = `${name},${debug ?? ""}`;
         if (seenIntrinsicNames.has(key)) {
-            throw new Error(`Duplicate intrinsic type name: ${name}${debug ? ` (${debug})` : ""}`);
+            Debug.fail(`Duplicate intrinsic type name ${name}${debug ? ` (${debug})` : ""}; you may need to pass a name to createIntrinsicType.`);
         }
         seenIntrinsicNames.add(key);
     }
