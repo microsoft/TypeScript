@@ -2008,9 +2008,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
                         if (isJSDoc) {
                             const shouldParseJSDoc = jsDocParsingKind === JSDocParsingKind.SkipAll ? false
-                                : jsDocParsingKind === JSDocParsingKind.KeepSemanticOnly ?
-                                    scriptKind === ScriptKind.TS || scriptKind === ScriptKind.TSX ? semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos))
-                                    : true
+                                : jsDocParsingKind === JSDocParsingKind.KeepSemanticOnly ? (scriptKind !== ScriptKind.TS && scriptKind !== ScriptKind.TSX) || semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos))
                                 : true;
                             if (shouldParseJSDoc) {
                                 tokenFlags |= TokenFlags.PrecedingJSDocComment;
