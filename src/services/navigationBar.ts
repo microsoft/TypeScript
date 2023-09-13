@@ -315,8 +315,7 @@ function hasNavigationBarName(node: Declaration) {
 
     if (isComputedPropertyName(name)) {
         const expression = name.expression;
-        return (isPropertyAccessExpression(expression) && isIdentifier(expression.expression) && idText(expression.expression) === "Symbol")
-            || isEntityNameExpression(expression) || isNumericLiteral(expression) || isStringOrNumericLiteralLike(expression);
+        return isEntityNameExpression(expression) || isNumericLiteral(expression) || isStringOrNumericLiteralLike(expression);
     }
     return !!name;
 }
