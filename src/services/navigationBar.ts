@@ -49,7 +49,6 @@ import {
     getTextOfNode,
     hasJSDocNodes,
     Identifier,
-    idText,
     ImportClause,
     InterfaceDeclaration,
     InternalSymbolName,
