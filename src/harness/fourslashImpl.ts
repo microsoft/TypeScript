@@ -2427,7 +2427,7 @@ export class TestState {
             baselineFile,
             annotations + "\n\n" + stringify(result, (key, value) => {
                 return key === "exportMapKey"
-                    ? value.replace(/\|[0-9]+/g, "|*")
+                    ? value.replace(/ \d+ /g, " * ")
                     : value;
             }),
         );
