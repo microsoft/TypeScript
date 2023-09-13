@@ -26125,7 +26125,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function hasMatchingArgument(expression: CallExpression | NewExpression, reference: Node) {
         if (expression.arguments) {
             for (const argument of expression.arguments) {
-                if (isOrContainsMatchingReference(reference, argument)) {
+                if (isOrContainsMatchingReference(reference, argument) || optionalChainContainsReference(argument, reference)) {
                     return true;
                 }
             }
@@ -28091,8 +28091,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return getNarrowedType(type, predicate.type, assumeTrue, /*checkDerived*/ false);
                     }
                     if (
-                        strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
-                        !(hasTypeFacts(predicate.type, TypeFacts.EQUndefined))
+                        strictNullChecks && optionalChainContainsReference(predicateArgument, reference) &&
+                        (
+                            assumeTrue && !(hasTypeFacts(predicate.type, TypeFacts.EQUndefined)) ||
+                            !assumeTrue && everyType(predicate.type, isNullableType)
+                        )
                     ) {
                         type = getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                     }
