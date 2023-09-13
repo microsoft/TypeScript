@@ -1921,6 +1921,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var blockedStringType = createIntrinsicType(TypeFlags.Any, "any");
     var errorType = createIntrinsicType(TypeFlags.Any, "error");
     var unresolvedType = createIntrinsicType(TypeFlags.Any, "unresolved");
+    var erasedType = createIntrinsicType(TypeFlags.Any, "erased");
     var nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType);
     var intrinsicMarkerType = createIntrinsicType(TypeFlags.Any, "intrinsic");
     var unknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
@@ -16622,6 +16623,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
+        if (type === erasedType) {
+            return includes;
+        }
         const flags = type.flags;
         // We ignore 'never' types in unions
         if (!(flags & TypeFlags.Never)) {
@@ -16959,6 +16963,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function addTypeToIntersection(typeSet: Map<string, Type>, includes: TypeFlags, type: Type) {
+        if (type === erasedType) {
+            return includes;
+        }
         const flags = type.flags;
         if (flags & TypeFlags.Intersection) {
             return addTypesToIntersection(typeSet, includes, (type as IntersectionType).types);
@@ -19041,7 +19048,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createTypeEraser(sources: readonly TypeParameter[]): TypeMapper {
-        return createTypeMapper(sources, /*targets*/ undefined);
+        return createTypeMapper(sources, sources.map(() => erasedType));
     }
 
     /**

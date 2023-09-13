@@ -371,3 +371,21 @@ let OuterC = class C<out T> {
     }
 }
 
+// https://github.com/microsoft/TypeScript/issues/53210#issuecomment-1468551245
+type F1_53210<out A> = <X>(v: X & A) => unknown;
+>F1_53210 : F1_53210<A>
+>v : X & A
+
+type F2_53210<out A> = <X>(v1: X, v2: A) => unknown;
+>F2_53210 : F2_53210<A>
+>v1 : X
+>v2 : A
+
+type F3_53210<out A> = <X>(v2: A) => X;
+>F3_53210 : F3_53210<A>
+>v2 : A
+
+type F4_53210<out A> = <X>(v: X | A) => unknown;
+>F4_53210 : F4_53210<A>
+>v : A | X
+

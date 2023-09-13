@@ -64,9 +64,21 @@ varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ t
           Types of property '_storedEvent' are incompatible.
             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
               Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
+varianceAnnotations.ts(177,15): error TS2636: Type 'F1_53210<sub-A>' is not assignable to type 'F1_53210<super-A>' as implied by variance annotation.
+  Types of parameters 'v' and 'v' are incompatible.
+    Type 'super-A' is not assignable to type 'sub-A'.
+varianceAnnotations.ts(178,15): error TS2636: Type 'F2_53210<sub-A>' is not assignable to type 'F2_53210<super-A>' as implied by variance annotation.
+  Types of parameters 'v2' and 'v2' are incompatible.
+    Type 'super-A' is not assignable to type 'sub-A'.
+varianceAnnotations.ts(179,15): error TS2636: Type 'F3_53210<sub-A>' is not assignable to type 'F3_53210<super-A>' as implied by variance annotation.
+  Types of parameters 'v2' and 'v2' are incompatible.
+    Type 'super-A' is not assignable to type 'sub-A'.
+varianceAnnotations.ts(180,15): error TS2636: Type 'F4_53210<sub-A>' is not assignable to type 'F4_53210<super-A>' as implied by variance annotation.
+  Types of parameters 'v' and 'v' are incompatible.
+    Type 'super-A' is not assignable to type 'sub-A'.
 
 
-==== varianceAnnotations.ts (31 errors) ====
+==== varianceAnnotations.ts (35 errors) ====
     type Covariant<out T> = {
         x: T;
     }
@@ -339,3 +351,24 @@ varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ t
         }
     }
     
+    // https://github.com/microsoft/TypeScript/issues/53210#issuecomment-1468551245
+    type F1_53210<out A> = <X>(v: X & A) => unknown;
+                  ~~~~~
+!!! error TS2636: Type 'F1_53210<sub-A>' is not assignable to type 'F1_53210<super-A>' as implied by variance annotation.
+!!! error TS2636:   Types of parameters 'v' and 'v' are incompatible.
+!!! error TS2636:     Type 'super-A' is not assignable to type 'sub-A'.
+    type F2_53210<out A> = <X>(v1: X, v2: A) => unknown;
+                  ~~~~~
+!!! error TS2636: Type 'F2_53210<sub-A>' is not assignable to type 'F2_53210<super-A>' as implied by variance annotation.
+!!! error TS2636:   Types of parameters 'v2' and 'v2' are incompatible.
+!!! error TS2636:     Type 'super-A' is not assignable to type 'sub-A'.
+    type F3_53210<out A> = <X>(v2: A) => X;
+                  ~~~~~
+!!! error TS2636: Type 'F3_53210<sub-A>' is not assignable to type 'F3_53210<super-A>' as implied by variance annotation.
+!!! error TS2636:   Types of parameters 'v2' and 'v2' are incompatible.
+!!! error TS2636:     Type 'super-A' is not assignable to type 'sub-A'.
+    type F4_53210<out A> = <X>(v: X | A) => unknown;
+                  ~~~~~
+!!! error TS2636: Type 'F4_53210<sub-A>' is not assignable to type 'F4_53210<super-A>' as implied by variance annotation.
+!!! error TS2636:   Types of parameters 'v' and 'v' are incompatible.
+!!! error TS2636:     Type 'super-A' is not assignable to type 'sub-A'.

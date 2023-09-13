@@ -482,3 +482,37 @@ let OuterC = class C<out T> {
     }
 }
 
+// https://github.com/microsoft/TypeScript/issues/53210#issuecomment-1468551245
+type F1_53210<out A> = <X>(v: X & A) => unknown;
+>F1_53210 : Symbol(F1_53210, Decl(varianceAnnotations.ts, 173, 1))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 176, 14))
+>X : Symbol(X, Decl(varianceAnnotations.ts, 176, 24))
+>v : Symbol(v, Decl(varianceAnnotations.ts, 176, 27))
+>X : Symbol(X, Decl(varianceAnnotations.ts, 176, 24))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 176, 14))
+
+type F2_53210<out A> = <X>(v1: X, v2: A) => unknown;
+>F2_53210 : Symbol(F2_53210, Decl(varianceAnnotations.ts, 176, 48))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 177, 14))
+>X : Symbol(X, Decl(varianceAnnotations.ts, 177, 24))
+>v1 : Symbol(v1, Decl(varianceAnnotations.ts, 177, 27))
+>X : Symbol(X, Decl(varianceAnnotations.ts, 177, 24))
+>v2 : Symbol(v2, Decl(varianceAnnotations.ts, 177, 33))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 177, 14))
+
+type F3_53210<out A> = <X>(v2: A) => X;
+>F3_53210 : Symbol(F3_53210, Decl(varianceAnnotations.ts, 177, 52))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 178, 14))
+>X : Symbol(X, Decl(varianceAnnotations.ts, 178, 24))
+>v2 : Symbol(v2, Decl(varianceAnnotations.ts, 178, 27))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 178, 14))
+>X : Symbol(X, Decl(varianceAnnotations.ts, 178, 24))
+
+type F4_53210<out A> = <X>(v: X | A) => unknown;
+>F4_53210 : Symbol(F4_53210, Decl(varianceAnnotations.ts, 178, 39))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 179, 14))
+>X : Symbol(X, Decl(varianceAnnotations.ts, 179, 24))
+>v : Symbol(v, Decl(varianceAnnotations.ts, 179, 27))
+>X : Symbol(X, Decl(varianceAnnotations.ts, 179, 24))
+>A : Symbol(A, Decl(varianceAnnotations.ts, 179, 14))
+
