@@ -124,7 +124,6 @@ import {
     some,
     SourceFile,
     startsWith,
-    stringContains,
     SymbolDisplayPart,
     SyntaxKind,
     TextChange,
@@ -1875,14 +1874,24 @@ export class Session<TMessage = string> implements EventSender {
             return {
                 ...hint,
                 position: scriptInfo.positionToLineOffset(position),
-                displayParts: displayParts?.map(({ text, span, file }) => ({
-                    text,
-                    span: span && {
-                        start: scriptInfo.positionToLineOffset(span.start),
-                        end: scriptInfo.positionToLineOffset(span.start + span.length),
-                        file: file!,
-                    },
-                })),
+                displayParts: displayParts?.map(({ text, span, file }) => {
+                    if (span) {
+                        Debug.assertIsDefined(file, "Target file should be defined together with its span.");
+                        const scriptInfo = this.projectService.getScriptInfo(file)!;
+
+                        return {
+                            text,
+                            span: {
+                                start: scriptInfo.positionToLineOffset(span.start),
+                                end: scriptInfo.positionToLineOffset(span.start + span.length),
+                                file,
+                            },
+                        };
+                    }
+                    else {
+                        return { text };
+                    }
+                }),
             };
         });
     }
@@ -2604,6 +2613,7 @@ export class Session<TMessage = string> implements EventSender {
             const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
             return [{ project, navigateToItems: project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file) }];
         }
+        const preferences = this.getHostPreferences();
 
         const outputs: ProjectNavigateToItems[] = [];
 
@@ -2637,7 +2647,13 @@ export class Session<TMessage = string> implements EventSender {
 
         // Mutates `outputs`
         function addItemsForProject(project: Project) {
-            const projectItems = project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject());
+            const projectItems = project.getLanguageService().getNavigateToItems(
+                searchValue,
+                maxResultCount,
+                /*fileName*/ undefined,
+                /*excludeDts*/ project.isNonTsProject(),
+                /*excludeLibFiles*/ preferences.excludeLibrarySymbolsInNavTo,
+            );
             const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !getMappedLocationForProject(documentSpanLocation(item), project));
             if (unseenItems.length) {
                 outputs.push({ project, navigateToItems: unseenItems });
@@ -2950,7 +2966,7 @@ export class Session<TMessage = string> implements EventSender {
         }
 
         // No need to analyze lib.d.ts
-        const fileNamesInProject = fileNames!.filter(value => !stringContains(value, "lib.d.ts")); // TODO: GH#18217
+        const fileNamesInProject = fileNames!.filter(value => !value.includes("lib.d.ts")); // TODO: GH#18217
         if (fileNamesInProject.length === 0) {
             return;
         }

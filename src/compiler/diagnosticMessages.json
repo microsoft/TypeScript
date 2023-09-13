@@ -5294,7 +5294,7 @@
         "category": "Error",
         "code": 6258
     },
-      "Found 1 error in {0}": {
+    "Found 1 error in {0}": {
         "category": "Message",
         "code": 6259
     },
@@ -6276,9 +6276,9 @@
         "category": "Message",
         "code": 6930
     },
-    "List of file name suffixes to search when resolving a module." : {
-      "category": "Error",
-      "code": 6931
+    "List of file name suffixes to search when resolving a module.": {
+        "category": "Error",
+        "code": 6931
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

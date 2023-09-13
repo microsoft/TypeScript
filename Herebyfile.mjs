@@ -4,7 +4,6 @@ import {
 } from "@esfx/canceltoken";
 import chalk from "chalk";
 import chokidar from "chokidar";
-import del from "del";
 import esbuild from "esbuild";
 import {
     EventEmitter,
@@ -39,6 +38,7 @@ import {
     memoize,
     needsUpdate,
     readJson,
+    rimraf,
 } from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
@@ -105,7 +105,10 @@ const cleanDiagnostics = task({
     name: "clean-diagnostics",
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     hiddenFromTaskList: true,
-    run: () => del([diagnosticInformationMapTs, diagnosticMessagesGeneratedJson]),
+    run: async () => {
+        await rimraf(diagnosticInformationMapTs);
+        await rimraf(diagnosticMessagesGeneratedJson);
+    },
 });
 
 // Localize diagnostics
@@ -809,7 +812,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
             const out = localPathToRefPath(p).replace(/\.delete$/, "");
-            await fs.promises.rm(out);
+            await rimraf(out);
         }
     };
 }
@@ -873,7 +876,7 @@ export const lkg = task({
 export const cleanBuilt = task({
     name: "clean-built",
     hiddenFromTaskList: true,
-    run: () => del("built"),
+    run: () => fs.promises.rm("built", { recursive: true, force: true }),
 });
 
 export const clean = task({

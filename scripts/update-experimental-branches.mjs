@@ -88,7 +88,7 @@ async function main() {
         const mergeTree = runSequence([
             ["git", ["merge-tree", mergeBase.trim(), branch, "experimental"]],
         ]);
-        if (mergeTree.indexOf(`===${"="}===`) >= 0) { // 7 equals is the center of the merge conflict marker
+        if (mergeTree.includes(`===${"="}===`)) { // 7 equals is the center of the merge conflict marker
             throw new Error(`Merge conflict detected involving PR ${branch} with other experiment`);
         }
         // Merge (always producing a merge commit)

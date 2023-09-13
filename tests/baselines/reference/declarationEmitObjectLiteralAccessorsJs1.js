@@ -71,7 +71,7 @@ export const obj2: {
     set x(a: number);
 };
 export namespace obj3 {
-    let x_1: string;
+    const x_1: string;
     export { x_1 as x };
 }
 export namespace obj4 {
