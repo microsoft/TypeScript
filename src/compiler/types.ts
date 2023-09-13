@@ -6119,6 +6119,7 @@ export interface Type {
 // Intrinsic types (TypeFlags.Intrinsic)
 export interface IntrinsicType extends Type {
     intrinsicName: string; // Name of intrinsic type
+    debugIntrinsicName: string | undefined;
     objectFlags: ObjectFlags;
 }
 
