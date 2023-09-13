@@ -127,7 +127,7 @@ export interface CacheableExportInfoMapHost {
     getGlobalTypingsCacheLocation(): string | undefined;
 }
 
-export type ExportMapInfoKey = string & { __exportInfoKey: void };
+export type ExportMapInfoKey = string & { __exportInfoKey: void; };
 /** @internal */
 export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): ExportInfoMap {
     let exportInfoId = 1;
