@@ -37,6 +37,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /                                                                                        |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /                                                                                        |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /                                                                                        |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /                                                                                        |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /                                                                                        |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /                                                                                        |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /                                                                                        |
@@ -75,6 +76,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -113,6 +115,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -151,6 +154,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -189,6 +193,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -227,6 +232,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -265,6 +271,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -303,6 +310,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -341,6 +349,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -379,6 +388,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -417,6 +427,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -455,6 +466,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -493,6 +505,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -531,6 +544,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -569,6 +583,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -607,6 +622,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -645,6 +661,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -683,6 +700,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -721,6 +739,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -759,6 +778,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -797,6 +817,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -835,6 +856,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -873,6 +895,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -911,6 +934,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -949,6 +973,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -987,6 +1012,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1025,6 +1051,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1063,6 +1090,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1101,6 +1129,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1139,6 +1168,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1177,6 +1207,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1215,6 +1246,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home                                                                                    |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home                                                                                    |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home                                                                                    |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1253,6 +1285,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username                                                                           |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username                                                                           |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username                                                                           |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1291,6 +1324,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot                                                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot                                                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot                                                              |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1329,6 +1363,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1                                                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1                                                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1                                                      |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1367,6 +1402,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2                                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2                                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2                                              |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1405,6 +1441,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3                                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3                                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3                                      |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1443,6 +1480,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1481,6 +1519,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1519,6 +1558,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces                                                                              |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces                                                                              |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces                                                                              |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces                                                                              |
@@ -1557,6 +1597,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot                                                                 |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot                                                                 |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot                                                                 |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot                                                                 |
@@ -1595,6 +1636,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1                                                         |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1                                                         |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1                                                         |
@@ -1633,6 +1675,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2                                                 |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2                                                 |
@@ -1671,6 +1714,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3                                         |
@@ -1709,6 +1753,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
@@ -1747,6 +1792,7 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | /home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| /workspaces/folderAtRoot/node_modules/@types                                             | /workspaces/folderAtRoot/node_modules                                                    |
 | /workspaces/folderAtRoot/folder1/node_modules/@types                                     | /workspaces/folderAtRoot/folder1/node_modules                                            |
 | /workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | /workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
 | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | /workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
