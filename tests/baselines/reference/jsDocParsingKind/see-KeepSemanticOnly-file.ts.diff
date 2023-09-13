@@ -1,0 +1,12 @@
+===================================================================
+--- default
++++ KeepSemanticOnly
+@@ -307,6 +307,6 @@
+     "typeReferenceDirectives": [],
+     "libReferenceDirectives": [],
+     "amdDependencies": [],
+     "identifiers": {},
+-    "jsDocParsingKind": 0
++    "jsDocParsingKind": 1
+ }
+\ No newline at end of file

@@ -209,6 +209,7 @@ import {
     isStringLiteral,
     isStringLiteralLike,
     isTraceEnabled,
+    JSDocParsingKind,
     JsonSourceFile,
     JsxEmit,
     length,
@@ -402,7 +403,7 @@ export function createGetSourceFile(
     readFile: ProgramHost<any>["readFile"],
     getCompilerOptions: () => CompilerOptions,
     setParentNodes: boolean | undefined,
-    skipNonSemanticJSDocParsing: boolean | undefined,
+    jsDocParsingKind: JSDocParsingKind | undefined,
 ): CompilerHost["getSourceFile"] {
     return (fileName, languageVersionOrOptions, onError) => {
         let text: string | undefined;
@@ -418,7 +419,7 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, skipNonSemanticJSDocParsing) : undefined;
+        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, jsDocParsingKind) : undefined;
     };
 }
 
@@ -459,7 +460,7 @@ export function createWriteFileMeasuringIO(
 export function createCompilerHostWorker(
     options: CompilerOptions,
     setParentNodes?: boolean,
-    skipNonSemanticJSDocParsing?: boolean,
+    jsDocParsingKind?: JSDocParsingKind,
     system: System = sys,
 ): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
@@ -482,7 +483,7 @@ export function createCompilerHostWorker(
     const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
-        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, skipNonSemanticJSDocParsing),
+        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, jsDocParsingKind),
         getDefaultLibLocation,
         getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
         writeFile: createWriteFileMeasuringIO(

@@ -8607,6 +8607,11 @@ declare namespace ts {
         IndexSignatureParameters = 8848,
         JSDocComment = 33,
     }
+    enum JSDocParsingKind {
+        KeepAll = 0,
+        KeepSemanticOnly = 1,
+        SkipAll = 2,
+    }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
@@ -8768,6 +8773,8 @@ declare namespace ts {
         setOnError(onError: ErrorCallback | undefined): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
+        setScriptKind(scriptKind: ScriptKind): void;
+        setJSDocParsingKind(kind: JSDocParsingKind): void;
         /** @deprecated use {@link resetTokenState} */
         setTextPos(textPos: number): void;
         resetTokenState(pos: number): void;
@@ -9413,7 +9420,7 @@ declare namespace ts {
      * that they appear in the source code. The language service depends on this property to locate nodes by position.
      */
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
-    function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
+    function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes?: boolean, scriptKind?: ScriptKind, jsDocParsingKind?: JSDocParsingKind): SourceFile;
     function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName | undefined;
     /**
      * Parse json text into SyntaxTree and return node and parse errors if any
@@ -9930,7 +9937,7 @@ declare namespace ts {
         emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
     function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
-    function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
+    function createIncrementalCompilerHost(options: CompilerOptions, system?: System, jsDocParsingKind?: JSDocParsingKind): CompilerHost;
     function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram }: IncrementalProgramOptions<T>): T;
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
@@ -10027,6 +10034,8 @@ declare namespace ts {
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
         getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+        /** Kind of JSDoc parsing to use. */
+        jsDocParsingKind?: JSDocParsingKind;
     }
     interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** Instead of using output d.ts file from project reference, use its source file */

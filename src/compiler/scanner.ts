@@ -12,6 +12,7 @@ import {
     DiagnosticMessage,
     Diagnostics,
     identity,
+    JSDocParsingKind,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
@@ -21,6 +22,7 @@ import {
     parsePseudoBigInt,
     positionIsSynthesized,
     PunctuationOrKeywordSyntaxKind,
+    ScriptKind,
     ScriptTarget,
     SourceFileLike,
     SyntaxKind,
@@ -95,6 +97,8 @@ export interface Scanner {
     setOnError(onError: ErrorCallback | undefined): void;
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
+    setScriptKind(scriptKind: ScriptKind): void;
+    setJSDocParsingKind(kind: JSDocParsingKind): void;
     /** @deprecated use {@link resetTokenState} */
     setTextPos(textPos: number): void;
     resetTokenState(pos: number): void;
@@ -114,8 +118,6 @@ export interface Scanner {
     // callback returns something truthy, then the scanner state is not rolled back.  The result
     // of invoking the callback is returned from this function.
     tryScan<T>(callback: () => T): T;
-    /** @internal */
-    setSkipNonSemanticJSDoc(skip: boolean): void;
 }
 
 /** @internal */
@@ -1008,7 +1010,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     var commentDirectives: CommentDirective[] | undefined;
     var inJSDocType = 0;
 
-    var skipNonSemanticJSDoc = false;
+    var scriptKind = ScriptKind.Unknown;
+    var jsDocParsingKind = JSDocParsingKind.KeepAll;
 
     setText(text, start, length);
 
@@ -1054,6 +1057,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         setText,
         setScriptTarget,
         setLanguageVariant,
+        setScriptKind,
+        setJSDocParsingKind,
         setOnError,
         resetTokenState,
         setTextPos: resetTokenState,
@@ -1061,7 +1066,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         tryScan,
         lookAhead,
         scanRange,
-        setSkipNonSemanticJSDoc,
     };
     /* eslint-enable no-var */
 
@@ -2002,8 +2006,15 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             }
                         }
 
-                        if (isJSDoc && (!skipNonSemanticJSDoc || semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos)))) {
-                            tokenFlags |= TokenFlags.PrecedingJSDocComment;
+                        if (isJSDoc) {
+                            const shouldParseJSDoc = jsDocParsingKind === JSDocParsingKind.SkipAll ? false
+                                : jsDocParsingKind === JSDocParsingKind.KeepSemanticOnly ?
+                                    scriptKind === ScriptKind.TS || scriptKind === ScriptKind.TSX ? semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos))
+                                    : true
+                                : true;
+                            if (shouldParseJSDoc) {
+                                tokenFlags |= TokenFlags.PrecedingJSDocComment;
+                            }
                         }
 
                         commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
@@ -2787,8 +2798,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         languageVariant = variant;
     }
 
-    function setSkipNonSemanticJSDoc(skip: boolean) {
-        skipNonSemanticJSDoc = skip;
+    function setScriptKind(kind: ScriptKind) {
+        scriptKind = kind;
+    }
+
+    function setJSDocParsingKind(kind: JSDocParsingKind) {
+        jsDocParsingKind = kind;
     }
 
     function resetTokenState(position: number) {

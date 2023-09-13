@@ -1,12 +1,12 @@
 ===================================================================
---- withJSDoc	With JSDoc
-+++ withoutJSDoc	Without JSDoc
+--- default
++++ KeepSemanticOnly
 @@ -220,6 +220,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],
      "identifiers": {},
--    "skipNonSemanticJSDoc": false
-+    "skipNonSemanticJSDoc": true
+-    "jsDocParsingKind": 0
++    "jsDocParsingKind": 1
  }
 \ No newline at end of file

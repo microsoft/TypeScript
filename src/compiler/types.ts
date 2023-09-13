@@ -4298,7 +4298,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
 
-    /** @internal */ skipNonSemanticJSDoc?: boolean;
+    /** @internal */ jsDocParsingKind?: JSDocParsingKind;
 }
 
 /** @internal */
@@ -9849,6 +9849,12 @@ export const commentPragmas = {
         kind: PragmaKindFlags.MultiLine,
     },
 } as const;
+
+export const enum JSDocParsingKind {
+    KeepAll = 0,
+    KeepSemanticOnly = 1,
+    SkipAll = 2,
+}
 
 /** @internal */
 export type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends { captureSpan: true; } ? { value: string; pos: number; end: number; } : string;
