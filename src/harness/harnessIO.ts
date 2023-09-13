@@ -243,7 +243,7 @@ export namespace Compiler {
     export function createSourceFileAndAssertInvariants(
         fileName: string,
         sourceText: string,
-        languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions
+        languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions,
     ) {
         // We'll only assert invariants outside of light mode.
         const shouldAssertInvariants = !lightMode;
