@@ -14,72 +14,20 @@
     },
     "test-categories": {
         "enum-issues": [
-            "collisionCodeGenEnumWithEnumMemberConflict",
-            "constEnumDeclarations",
+            "ambientConstLiterals",
             "constEnumErrors",
             "constEnums",
-            "constantEnumAssert",
-            "declFileEnums",
-            "ambientEnum1",
-            "enumAssignmentCompat5",
             "enumBasics2",
             "enumBasics3",
-            "enumLiteralAssignableToEnumInsideUnion",
-            "enumNumbering1",
-            "enumPropertyAccessBeforeInitalisation",
-            "enumWithComputedMember",
-            "enumWithExport",
-            "enumWithParenthesizedInitializer1",
-            "enumWithoutInitializerAfterComputedMember",
-            "exactSpellingSuggestion",
             "forwardRefInEnum",
-            "initializersInAmbientEnums",
             "isolatedModulesGlobalNamespacesAndEnums",
             "mergedDeclarations2",
             "mergedEnumDeclarationCodeGen",
-            "preserveConstEnums",
-            "underscoreEscapedNameInEnum",
-            "ambientEnumDeclaration1",
-            "constEnum1",
-            "constEnum2",
-            "constEnumPropertyAccess1",
-            "constEnumPropertyAccess2",
-            "constEnumPropertyAccess3",
-            "enumBasics",
-            "enumClassification",
-            "enumConstantMemberWithString",
-            "enumConstantMemberWithStringEmitDeclaration",
-            "enumConstantMemberWithTemplateLiterals",
-            "enumConstantMemberWithTemplateLiteralsEmitDeclaration",
             "enumConstantMembers",
             "enumErrors",
             "enumExportMergingES6",
-            "enumMerging",
-            "enumMergingErrors",
-            "parserRealSource10",
-            "parserRealSource14",
-            "parserRealSource2",
-            "parserRealSource3",
-            "parserEnum1",
-            "parserEnum2",
-            "parserEnumDeclaration6",
-            "templateLiteralTypes4",
-            "numericEnumMappedType",
-            "equalityWithEnumTypes",
-            "computedEnumTypeWidening",
-            "strictModeOctalLiterals",
             "verbatimModuleSyntaxConstEnumUsage",
-            "ambientConstLiterals",
-        ],
-        "computed-enum-values-non-const": [
-            // Some enum member values will need to be inlined when we can't compute them
-            "methodContainingLocalFunction",
-            "mixedTypeEnumComparison"
-        ],
-        "expando-not-detected": [
-            "declarationEmitExpandoWithGenericConstraint",
-            "expandoFunctionExpressionsWithDynamicNames",
-            "propertyAssignmentUseParentType1",
+            "templateLiteralTypes4",
         ],
         "code-fixer-issues" : [
             // Only one fix is applied per line, fix need to be applied to both another issue (params, default exports) and return type
@@ -235,6 +183,7 @@
             "this_inside-enum-should-not-be-allowed", // strange things in enum initializers
             "ambientErrors", // Has errors from ambient declarations on enums
             "arrowFunctionContexts", // Function assigned to enum member
+            "wellKnownSymbolExpando", // Expando function with well known symbols error in TS, but generate teh expando function namepsace, DTE does not. 
         ],
         "with-isolated-declaration-errors/9008": [
             "declarationEmitHasTypesRefOnNamespaceUse",
@@ -305,6 +254,7 @@
         ],        
         // Needs TS Fix
         // Reported as https://github.com/microsoft/TypeScript/issues/55654
+        // Fix available
         "binding-patterns": [
             "declarationsAndAssignments",
             "excessPropertyCheckWithSpread",
@@ -390,10 +340,6 @@
             "nodeModulesImportTypeModeDeclarationEmit1", // resolution-mode in assert from type assertion is preserved
             "declarationEmitPrefersPathKindBasedOnBundling2", // Import path has .. in it. A similar type written by hand would not.
             "computedPropertiesNarrowed",
-        ],
-        "bug-binding-pattern-inference": [
-            "destructuringWithLiteralInitializers",
-            "parameterInitializersBackwardReferencing"
         ],
         "bug-preserve-comments": [
             "commentsOnObjectLiteral4"

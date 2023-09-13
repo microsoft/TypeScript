@@ -1,17 +1,61 @@
-import { __String, AccessorDeclaration, BindingPattern, CompilerOptions, ComputedPropertyName, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, Expression, factory, findAncestor, FunctionDeclaration, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, getParseTreeNode, Identifier, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isArrowFunction, isBigIntLiteral, isBinaryExpression, isBindingElement, isElementAccessExpression, isEnumMember, isExpressionStatement, isFunctionDeclaration, isFunctionExpression, isFunctionLike, isGetAccessor, isGetAccessorDeclaration, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSetAccessorDeclaration, isSourceFile, isStringLiteralLike, isTemplateExpression, isVariableDeclaration, isVariableStatement, LiteralExpression, ModifierFlags, NamespaceImport, Node, NodeArray, NodeFlags, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertySignature, ResolutionMode,SourceFile, Statement, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
+import { __String, AccessorDeclaration, BindingPattern, CompilerOptions, ComputedPropertyName, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, Expression, factory, findAncestor, FunctionDeclaration, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, getParseTreeNode, Identifier, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isArrowFunction, isBigIntLiteral, isBinaryExpression, isBindingElement, isElementAccessExpression, isEnumDeclaration, isEnumMember, isExpressionStatement, isFunctionDeclaration, isFunctionExpression, isFunctionLike, isGetAccessor, isGetAccessorDeclaration, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSetAccessorDeclaration, isSourceFile, isStringLiteralLike, isTemplateExpression, isVariableDeclaration, isVariableStatement, ModifierFlags, NamespaceImport, Node, NodeArray, NodeFlags, NoSubstitutionTemplateLiteral, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertyName, PropertySignature, ResolutionMode,SourceFile, Statement, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
 
 import { Debug } from "./debug";
 import { BasicSymbol, bindSourceFile, NodeLinks } from "./emit-binder";
 import { appendIfUnique, emptyArray, every, filter, hasProperty } from "./lang-utils";
 import { IsolatedEmitResolver, LateBoundDeclaration, LateVisibilityPaintedStatement, SymbolAccessibility, SymbolVisibilityResult } from "./types";
-import { AnyImportSyntax, getFirstIdentifier, getMemberKey, hasDynamicName, hasEffectiveModifier, hasSyntacticModifier, isAmbientDeclaration,isBindingPattern, isEntityNameExpression, isExternalModuleAugmentation, isInJSFile, isLateVisibilityPaintedStatement, isPartOfTypeNode, isThisIdentifier, nodeIsPresent, skipParentheses } from "./utils";
+import { AnyImportSyntax, getFirstIdentifier, getMemberKey, hasDynamicName, hasEffectiveModifier, hasSyntacticModifier, isAmbientDeclaration,isBindingPattern, isEntityNameExpression, isExternalModuleAugmentation, isInJSFile, isLateVisibilityPaintedStatement, isPartOfTypeNode, isThisIdentifier, MemberKey, nodeIsPresent, skipParentheses } from "./utils";
+import { makeEvaluator } from "./evaluator";
 
 
+const knownFunctionMembers = new Set([
+    "I:apply",
+    "I:call",
+    "I:bind",
+    "I:toString",
+    "I:prototype",
+    "I:length",
+])
 export function createEmitResolver(file: SourceFile, options: CompilerOptions, packageModuleType: ResolutionMode): IsolatedEmitResolver {
 
-    const { getNodeLinks, resolveName } = bindSourceFile(file, options, packageModuleType);
+    const { getNodeLinks, resolveMemberKey, resolveName } = bindSourceFile(file, options, packageModuleType);
 
-
+    function getEnumValueFromName(name: PropertyName | NoSubstitutionTemplateLiteral, location: EnumDeclaration) {
+        const enumKey = getMemberKey(name);
+        if(!enumKey) return undefined;
+        const enumMemberSymbol = resolveMemberKey(location, enumKey, SymbolFlags.Value);
+        const enumMemberDeclaration = enumMemberSymbol?.declarations[0];
+        if(enumMemberDeclaration && isEnumMember(enumMemberDeclaration)) {
+            return getNodeLinks(enumMemberDeclaration).enumValue;
+        }
+        return undefined;
+    }
+    const evaluate = makeEvaluator({
+        evaluateElementAccessExpression(expr, location) {
+            // We only resolve names in the current enum declaration
+            if(!location || !isEnumDeclaration(location)) return undefined;
+            if(isIdentifier(expr.expression)
+                && expr.expression.escapedText === location.name.escapedText
+                && isStringLiteralLike(expr.argumentExpression)) {
+                return getEnumValueFromName(expr.argumentExpression, location);
+            }
+            return undefined;
+        },
+        evaluateEntityNameExpression(expr, location) {
+            // We only resolve names in the current enum declaration
+            if(!location || !isEnumDeclaration(location)) return undefined;
+            if(isIdentifier(expr)) {
+                return getEnumValueFromName(expr, location);
+            }
+            if(isPropertyAccessExpression(expr)
+                && isIdentifier(expr.expression)
+                && expr.expression.escapedText === location.name.escapedText) {
+                return getEnumValueFromName(expr.name, location);
+            }
+            return undefined;
+        },
+        onNumericLiteral() { },
+    })
     function isLiteralValue(node: Expression): boolean {
         if(isLiteralExpression(node)) return true;
 
@@ -73,7 +117,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     function getExpandoMembers(declaration: FunctionDeclaration | VariableDeclaration, functionName: Identifier) {
         const scope = getParentScope(declaration);
         if(!scope) return undefined;
-        const members = new Set<string>();
+        const members = new Set<MemberKey>();
         for (const statement of scope.statements) {
             // Looking for name functionName.member = init;
             if (!isExpressionStatement(statement)) continue;
@@ -82,7 +126,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             if(assignment.operatorToken.kind !== SyntaxKind.EqualsToken) continue;
 
             const isPropertyAccess = isPropertyAccessExpression(assignment.left);
-            if(isPropertyAccess || isElementAccessExpression(assignment.left)
+            if((isPropertyAccess || isElementAccessExpression(assignment.left))
                 && isIdentifier(assignment.left.expression)
                 && assignment.left.expression.escapedText === functionName.escapedText) {
 
@@ -95,7 +139,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
                     name = factory.createComputedPropertyName(argumentExpression);
                 }
                 const key = getMemberKey(name)
-                if(!key) {
+                if(!key || knownFunctionMembers.has(key)) {
                     continue;
                 }
                 members.add(key);
@@ -107,9 +151,22 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     function getDefinedMembers(declaration: FunctionDeclaration | VariableDeclaration, functionName: Identifier) {
         const scope = getParentScope(declaration);
         if(!scope) return undefined;
+        const cls = resolveName(scope, functionName.escapedText, SymbolFlags.Class);
+        
         const namespace = resolveName(scope, functionName.escapedText, SymbolFlags.Namespace)
-        return namespace?.exports
+
+        if(!cls?.exports) {
+            return namespace?.exports;
+        }
+        if(!namespace?.exports) {
+            return cls.exports;
+        }
+        return new Set([
+            ...(namespace.exports.keys() ?? []),
+            ...(cls.exports.keys() ?? [])
+        ]);
     }
+
 
     // Do a best effort to find expando functions 
     function isExpandoFunction(node: FunctionDeclaration | VariableDeclaration){
@@ -144,7 +201,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
 
         // Some assigned members are not in the defined the namespaces
         // computed members are ignored, since they don't name it to declarations anyway
-        if([...expandoMembers.keys()].some(n => !n.startsWith("C:") && !definedMembers.has(n.substring(2) as __String))) {
+        if([...expandoMembers.keys()].some(n => !definedMembers.has(n))) {
             return true;
         }
         return false;
@@ -156,7 +213,7 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         isLiteralComputedName,
         getAllAccessorDeclarations(declaration) {
             const parentLinks = getNodeLinks(declaration.parent);
-            const key = getMemberKey(declaration.name) as __String;
+            const key = getMemberKey(declaration.name);
             const members = hasSyntacticModifier(declaration, ModifierFlags.Static) ?
                 parentLinks.symbol?.exports :
                 parentLinks.symbol?.members
@@ -170,42 +227,21 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             }
         },
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined {
-            function getLiteralValue(value: LiteralExpression) {
-                if(isStringLiteralLike(value)) {
-                    return value.text
-                }
-                if(isNumericLiteral(value)) {
-                    return +value.text
-                }
-                return undefined;
-            }
-            function getEnumMemberInitializerValue(node: EnumMember) {
-                if(isLiteralConstDeclaration(node)) {
-                    const initializer = node.initializer;
-                    if(!initializer) return undefined;
-                    if(isLiteralExpression(initializer)) {
-                        return getLiteralValue(initializer);
-                    }
-                    
-                    if(isPrefixUnaryExpression(initializer) && isNumericLiteral(initializer.operand)) {
-                        if(initializer.operator === SyntaxKind.MinusToken) {
-                            const value = getLiteralValue(initializer.operand);
-                            return value && -value;
-                        }
-                        if(initializer.operator === SyntaxKind.PlusToken) {
-                            return getLiteralValue(initializer.operand)
-                        }
-                    }
-                }
-            }
             function updateEnumValues(node: EnumDeclaration) {
                 let prevEnumValueLinks: NodeLinks | undefined;  
                 const isDeclaration = isAmbientDeclaration(node) && !hasSyntacticModifier(node, ModifierFlags.Const);
                 for(const enumValue of node.members) {
                     const links = getNodeLinks(enumValue);
-                    const value = getEnumMemberInitializerValue(enumValue);
-                    if(isDeclaration || value !== undefined || enumValue.initializer) {
-                        links.enumValue = value;
+                    if(enumValue.initializer) {
+                        const value = enumValue.initializer && evaluate(enumValue.initializer, node);
+                        if(value !== undefined) {
+                            links.enumValue = value;
+                        } else {
+                            links.enumValue = undefined;
+                        }
+                    }
+                    else if(isDeclaration) {
+                        links.enumValue = undefined;
                     }
                     else if(prevEnumValueLinks === undefined) {
                         links.enumValue = 0;

@@ -167,7 +167,7 @@ async function main() {
                     );
                 }
             }
-            if (allTests.length > 5) {
+            if (allTests.length > 5 && parsedArgs.keepHistory) {
                 writeResults(file.replace("/$now/", historical), resultText);
             }
             writeResults(file, resultText);

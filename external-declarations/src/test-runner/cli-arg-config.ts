@@ -17,6 +17,7 @@ export const testRunnerCLIConfiguration = parserConfiguration({
     configFile: ArgType.String(),
     category: ArgType.String(),
     forceIsolatedDeclarations: ArgType.Boolean(),
+    keepHistory: ArgType.Boolean(),
 });
 
 
