@@ -294,13 +294,13 @@ import {
     skipTrivia,
     skipTypeChecking,
     some,
+    sort,
     sortAndDeduplicateDiagnostics,
     SortedReadonlyArray,
     SourceFile,
     sourceFileAffectingCompilerOptions,
     sourceFileMayBeEmitted,
     SourceOfProjectReferenceRedirect,
-    stableSort,
     startsWith,
     Statement,
     StringLiteral,
@@ -1786,7 +1786,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         missingFilePaths = arrayFrom(mapDefinedIterator(filesByName.entries(), ([path, file]) => file === undefined ? path as Path : undefined));
-        files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
+        files = sort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
         processingDefaultLibFiles = undefined;
         processingOtherFiles = undefined;
     }

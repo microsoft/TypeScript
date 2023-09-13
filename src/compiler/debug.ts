@@ -77,8 +77,8 @@ import {
     SignatureCheckMode,
     SignatureFlags,
     SnippetKind,
+    sort,
     SortedReadonlyArray,
-    stableSort,
     Symbol,
     SymbolFlags,
     symbolName,
@@ -435,7 +435,7 @@ export namespace Debug {
             }
         }
 
-        const sorted = stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+        const sorted = sort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
         enumMemberCache.set(enumObject, sorted);
         return sorted;
     }

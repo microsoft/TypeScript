@@ -323,12 +323,12 @@ import {
     skipOuterExpressions,
     skipParentheses,
     some,
+    sort,
     SortKind,
     SourceFile,
     SourceFileLike,
     SourceMapper,
     SpreadElement,
-    stableSort,
     startsWith,
     StringLiteral,
     StringLiteralLike,
@@ -2620,7 +2620,7 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
     let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
     const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
-    const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
+    const sortedNewImports = isArray(imports) ? sort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }

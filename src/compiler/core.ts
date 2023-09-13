@@ -1122,17 +1122,6 @@ export function* arrayReverseIterator<T>(array: readonly T[]) {
     }
 }
 
-/**
- * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
- *
- * @internal
- */
-export function stableSort<T>(array: readonly T[], comparer: Comparer<T>): SortedReadonlyArray<T> {
-    const indices = indicesOf(array);
-    stableSortIndices(array, indices, comparer);
-    return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
-}
-
 /** @internal */
 export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: number, end: number) {
     while (pos < end) {

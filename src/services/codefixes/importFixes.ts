@@ -126,7 +126,6 @@ import {
     sort,
     SortKind,
     SourceFile,
-    stableSort,
     startsWith,
     StringLiteral,
     stripQuotes,
@@ -1471,7 +1470,7 @@ function doAddExistingFix(
         }
 
         const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, ignoreCaseForSorting);
-        const newSpecifiers = stableSort(
+        const newSpecifiers = sort(
             namedImports.map(namedImport =>
                 factory.createImportSpecifier(
                     (!clause.isTypeOnly || promoteFromTypeOnly) && needsTypeOnly(namedImport),

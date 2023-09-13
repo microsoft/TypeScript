@@ -397,6 +397,7 @@ import {
     SnippetElement,
     SnippetKind,
     some,
+    sort,
     SourceFile,
     SourceFilePrologueDirective,
     SourceFilePrologueInfo,
@@ -405,7 +406,6 @@ import {
     SourceMapSource,
     SpreadAssignment,
     SpreadElement,
-    stableSort,
     Statement,
     StringLiteral,
     supportedJSExtensionsFlat,
@@ -2412,7 +2412,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function getSortedEmitHelpers(node: Node) {
         const helpers = getEmitHelpers(node);
-        return helpers && stableSort(helpers, compareEmitHelpers);
+        return helpers && sort(helpers, compareEmitHelpers);
     }
 
     //
