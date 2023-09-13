@@ -47760,11 +47760,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: ResolutionMode) {
             if (fileToDirective.has(file.path)) return;
             fileToDirective.set(file.path, [key, mode]);
-            for (const { fileName, resolutionMode } of file.referencedFiles) {
+            for (const { fileName } of file.referencedFiles) {
                 const resolvedFile = resolveTripleslashReference(fileName, file.fileName);
                 const referencedFile = host.getSourceFile(resolvedFile);
                 if (referencedFile) {
-                    addReferencedFilesToTypeDirective(referencedFile, key, resolutionMode || file.impliedNodeFormat);
+                    // The resolution mode of the file reference doesn't actually matter here -
+                    // all we're recording is the fact that the file entered the compilation
+                    // transitively via a type reference directive of {key} with mode {mode}.
+                    addReferencedFilesToTypeDirective(referencedFile, key, mode || file.impliedNodeFormat);
                 }
             }
         }
