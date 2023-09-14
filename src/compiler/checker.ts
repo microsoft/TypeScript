@@ -2721,7 +2721,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (symbol.flags & SymbolFlags.Alias) {
                     // Do not take target symbol meaning into account in isolated declaration mode since we don't have access to info from other files.
-                    if(compilerOptions.isolatedDeclarations) {
+                    if (compilerOptions.isolatedDeclarations) {
                         return symbol;
                     }
                     const targetFlags = getSymbolFlags(symbol);
@@ -47172,14 +47172,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!declaration) {
             return false;
         }
-        if(isVariableDeclaration(declaration)){
-            if(declaration.type) {
+        if (isVariableDeclaration(declaration)) {
+            if (declaration.type) {
                 return false;
             }
-            if(!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
+            if (!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
                 return false;
             }
-            
         }
         const symbol = getSymbolOfDeclaration(declaration);
         if (!symbol || !(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
@@ -47461,20 +47460,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isPrimitiveLiteralValue(node: Expression): boolean {
-        if(isNumericLiteral(node) || isBigIntLiteral(node) || isStringLiteralLike(node)) return true;
+        if (isNumericLiteral(node) || isBigIntLiteral(node) || isStringLiteralLike(node)) return true;
 
-        if(node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) return true;
+        if (node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) return true;
 
-        if(isPrefixUnaryExpression(node)) {
+        if (isPrefixUnaryExpression(node)) {
             const operand = node.operand;
-            if(node.operator === SyntaxKind.MinusToken) {
+            if (node.operator === SyntaxKind.MinusToken) {
                 return isNumericLiteral(operand) || isBigIntLiteral(operand);
             }
-            if(node.operator === SyntaxKind.PlusToken) {
+            if (node.operator === SyntaxKind.PlusToken) {
                 return isNumericLiteral(operand);
             }
         }
-        if(isTemplateExpression(node)) {
+        if (isTemplateExpression(node)) {
             return node.templateSpans.every(t => isPrimitiveLiteralValue(t.expression));
         }
         return false;
@@ -47483,7 +47482,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || (isVariableDeclaration(node) && isVarConstLike(node)) || isEnumMember(node)) {
             if (compilerOptions.isolatedDeclarations) {
-                return !!node.initializer && isPrimitiveLiteralValue(node.initializer);
+                return !!node.initializer && !node.type && isPrimitiveLiteralValue(node.initializer);
             }
             return isFreshLiteralType(getTypeOfSymbol(getSymbolOfDeclaration(node)));
         }
@@ -47491,25 +47490,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
     function isLiteralComputedName(node: ComputedPropertyName) {
         const expression = node.expression;
-        if(isPrimitiveLiteralValue(expression)) {
+        if (isPrimitiveLiteralValue(expression)) {
             return true;
         }
         const type = getTypeOfExpression(expression);
-        if(!isTypeUsableAsPropertyName(type)) {
+        if (!isTypeUsableAsPropertyName(type)) {
             return false;
         }
 
         // Only identifiers of the for A.B.C can be used
-        if(!isEntityNameExpression(expression)) {
+        if (!isEntityNameExpression(expression)) {
             return false;
         }
         const symbol = getSymbolAtLocation(expression);
-        if(!symbol) {
+        if (!symbol) {
             return false;
         }
         // Ensure not type narrowing
         const declaredType = getTypeOfSymbol(symbol);
-        return declaredType === type
+        return declaredType === type;
     }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {

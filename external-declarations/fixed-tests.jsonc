@@ -4,10 +4,9 @@
             9007, // Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit
             9008, // Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit
             9009, // Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function
+            9010, // Reference directives are not supported in isolated declaration mode.
         ], 
         "with-unreliable-errors": [
-            2314, // Generic type '{0}' requires {1} type argument(s)
-            1166, // A_computed_property_name_in_a_class_property_declaration_must_have_a_simple_literal_type_or_a_unique_symbol_type
             2784, // 'get' and 'set' accessors cannot declare 'this' parameters.
             1162, // An object member cannot be declared optional.
         ]
@@ -101,7 +100,9 @@
             // Parser errors 
             "parserSkippedTokens16",
             // Symbol const not annotated
-            "declarationEmitPrivateNameCausesError"
+            "declarationEmitPrivateNameCausesError",
+            // Crashes
+            "parseInvalidNonNullableTypes"
         ],
         "not-fixed-with-unreliable-errors": [
             "classMemberWithMissingIdentifier",
@@ -180,10 +181,7 @@
             "decoratorMetadataWithImportDeclarationNameCollision7", // Import does not have the accessed member. TS removes the import as unused. A DTE will keep it as it is syntactically used.
             "classExtendingNonConstructor", // Not reported as isolated declaration error, but the extends clause is invalid.
             "nodeModulesImportTypeModeDeclarationEmitErrors1", // Invalid import asserts
-            "this_inside-enum-should-not-be-allowed", // strange things in enum initializers
-            "ambientErrors", // Has errors from ambient declarations on enums
-            "arrowFunctionContexts", // Function assigned to enum member
-            "wellKnownSymbolExpando", // Expando function with well known symbols error in TS, but generate teh expando function namepsace, DTE does not. 
+            "wellKnownSymbolExpando", // Expando function with well known symbols error in TS, but generate the expando function namepsace, DTE does not. 
         ],
         "with-isolated-declaration-errors/9008": [
             "declarationEmitHasTypesRefOnNamespaceUse",
@@ -205,29 +203,22 @@
             "contextualReturnTypeOfIIFE2", // Nested expando functions. Can in principle be detected, but are not yet implemented
             // Computed property errors a DTE can't detect 
             "complicatedPrivacy",
+            "computedPropertyNames12_ES5",
+            "computedPropertyNames12_ES6",
+            "computedPropertyNames13_ES5",
+            "computedPropertyNames13_ES6",
             "declarationEmitMappedTypeTemplateTypeofSymbol",
             "declarationEmitReadonlyComputedProperty",
-            "propertyAssignment",
+            "ES5For-ofTypeCheck10",
             "ES5SymbolProperty2",
             "ES5SymbolProperty3",
             "ES5SymbolProperty4",
             "ES5SymbolProperty5",
             "ES5SymbolProperty6",
             "ES5SymbolProperty7",
-            "computedPropertyNames13_ES5",
-            "computedPropertyNames13_ES6",
+            "indexWithoutParamType2",
             "MemberFunctionDeclaration3_es6",
-            "superSymbolIndexedAccess1",
-            "superSymbolIndexedAccess3",
-            "superSymbolIndexedAccess4",
-            "superSymbolIndexedAccess5",
-            "superSymbolIndexedAccess6",
-            "parserES5ComputedPropertyName11",
-            "parserES5ComputedPropertyName8",
-            "parserES5SymbolProperty3",
-            "parserES5SymbolProperty7",
-            "parserES5SymbolProperty8",
-            "parserES5SymbolProperty9",
+            "parserComputedPropertyName10",
             "parserComputedPropertyName11",
             "parserComputedPropertyName12",
             "parserComputedPropertyName13",
@@ -235,13 +226,43 @@
             "parserComputedPropertyName15",
             "parserComputedPropertyName18",
             "parserComputedPropertyName19",
+            "parserComputedPropertyName22",
             "parserComputedPropertyName23",
+            "parserComputedPropertyName25",
+            "parserComputedPropertyName27",
+            "parserComputedPropertyName28",
+            "parserComputedPropertyName29",
+            "parserComputedPropertyName31",
             "parserComputedPropertyName32",
+            "parserComputedPropertyName33",
+            "parserComputedPropertyName36",
             "parserComputedPropertyName38",
             "parserComputedPropertyName39",
-            "ES5For-ofTypeCheck10",
+            "parserComputedPropertyName7",
+            "parserComputedPropertyName8",
+            "parserComputedPropertyName9",
+            "parserES5ComputedPropertyName1",
+            "parserES5ComputedPropertyName10",
+            "parserES5ComputedPropertyName11",
+            "parserES5ComputedPropertyName7",
+            "parserES5ComputedPropertyName8",
+            "parserES5ComputedPropertyName9",
+            "parserES5SymbolProperty3",
+            "parserES5SymbolProperty4",
+            "parserES5SymbolProperty5",
+            "parserES5SymbolProperty6",
+            "parserES5SymbolProperty7",
+            "parserES5SymbolProperty8",
+            "parserES5SymbolProperty9",
+            "propertyAssignment",
+            "superSymbolIndexedAccess1",
+            "superSymbolIndexedAccess3",
+            "superSymbolIndexedAccess4",
+            "superSymbolIndexedAccess5",
+            "superSymbolIndexedAccess6",
+            "declarationEmitForModuleImportingModuleAugmentationRetainsImport" // Import augments and must be kept
         ],
-        "possible-ts-bugs": [
+        "ts-bugs": [
              // Type parameter renamed
              // Reported as https://github.com/microsoft/TypeScript/issues/55653
             "objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts",
@@ -251,11 +272,11 @@
             "conditionalTypesSimplifyWhenTrivial", 
             // https://github.com/microsoft/TypeScript/issues/55571 
             "reExportAliasMakesInstantiated"
-        ],        
+        ],
         // Needs TS Fix
         // Reported as https://github.com/microsoft/TypeScript/issues/55654
         // Fix available
-        "binding-patterns": [
+        "ts-bug/binding-patterns": [
             "declarationsAndAssignments",
             "excessPropertyCheckWithSpread",
             "destructuringParameterDeclaration1ES5",
@@ -265,8 +286,6 @@
             "sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues",
             "sourceMapValidationDestructuringParameterObjectBindingPattern",
             "sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues",
-            "declarationEmitBindingPatterns",
-            "declarationEmitDuplicateParameterDestructuring",
             "declarationEmitKeywordDestructuring",
             "paramterDestrcuturingDeclaration",
             "renamingDestructuredPropertyInFunctionType",
@@ -341,47 +360,6 @@
             "declarationEmitPrefersPathKindBasedOnBundling2", // Import path has .. in it. A similar type written by hand would not.
             "computedPropertiesNarrowed",
         ],
-        "bug-preserve-comments": [
-            "commentsOnObjectLiteral4"
-        ],
-        "need-to-discuss": [
-            // Technically the emit is correct. We just can't remove an import because we can't be sure if the symbol in the import is used.
-            // In this case the import is a value, and the $ is used as a type and comes from the type reference directive
-            "typeReferenceDirectives5",
-            "typeReferenceDirectives13",
-            // We always keep reference directives
-            "declarationFilesWithTypeReferences4",
-            "moduleResolutionWithSymlinks_preserveSymlinks",
-            "moduleResolutionWithSymlinks_referenceTypes",
-            "tripleSlashTypesReferenceWithMissingExports",
-            "tripleSlashTypesReferenceWithMissingExports",
-            "typeReferenceDirectives10",
-            "typeReferenceDirectives3",
-            "typeReferenceDirectives4",
-            "typeReferenceDirectives7",
-            "nodeModulesTripleSlashReferenceModeOverride1",
-            "nodeModulesTripleSlashReferenceModeOverride2",
-            "nodeModulesTripleSlashReferenceModeOverride3",
-            "nodeModulesTripleSlashReferenceModeOverride4",
-            "nodeModulesTripleSlashReferenceModeOverride5",
-            "nodeModulesTripleSlashReferenceModeOverrideModeError",
-            "nodeModulesTripleSlashReferenceModeOverrideOldResolutionError",
-            "library-reference-1",
-            "library-reference-10",
-            "library-reference-11",
-            "library-reference-12",
-            "library-reference-2",
-            "library-reference-3",
-            "library-reference-4",
-            "library-reference-5",
-            "library-reference-6",
-            "library-reference-7",
-            "library-reference-8",
-            "library-reference-scoped-packages",
-            "typingsLookup1",
-            "typingsLookup3",
-            "declarationEmitForModuleImportingModuleAugmentationRetainsImport", //Import required by augmentation issues
-        ]
     }
 }
 

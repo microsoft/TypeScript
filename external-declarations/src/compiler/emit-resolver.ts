@@ -1,12 +1,118 @@
-import { __String, AccessorDeclaration, BindingPattern, CompilerOptions, ComputedPropertyName, Declaration, DeclarationName, ElementAccessExpression, EntityNameOrEntityNameExpression, EnumDeclaration, EnumMember, Expression, factory, findAncestor, FunctionDeclaration, FunctionLikeDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, getNameOfDeclaration, getParseTreeNode, Identifier, ImportClause, ImportEqualsDeclaration, ImportSpecifier, isArrowFunction, isBigIntLiteral, isBinaryExpression, isBindingElement, isElementAccessExpression, isEnumDeclaration, isEnumMember, isExpressionStatement, isFunctionDeclaration, isFunctionExpression, isFunctionLike, isGetAccessor, isGetAccessorDeclaration, isIdentifier, isLiteralExpression, isNumericLiteral, isParameterPropertyDeclaration, isPrefixUnaryExpression, isPropertyAccessExpression, isSetAccessor, isSetAccessorDeclaration, isSourceFile, isStringLiteralLike, isTemplateExpression, isVariableDeclaration, isVariableStatement, ModifierFlags, NamespaceImport, Node, NodeArray, NodeFlags, NoSubstitutionTemplateLiteral, ParameterDeclaration, PropertyAccessExpression, PropertyDeclaration, PropertyName, PropertySignature, ResolutionMode,SourceFile, Statement, SymbolFlags, SyntaxKind, VariableDeclaration, VariableDeclarationList } from "typescript";
+import {
+    __String,
+    AccessorDeclaration,
+    BindingPattern,
+    CompilerOptions,
+    ComputedPropertyName,
+    Declaration,
+    DeclarationName,
+    ElementAccessExpression,
+    EntityNameOrEntityNameExpression,
+    EnumDeclaration,
+    EnumMember,
+    Expression,
+    factory,
+    findAncestor,
+    FunctionDeclaration,
+    FunctionLikeDeclaration,
+    getCombinedModifierFlags,
+    getCombinedNodeFlags,
+    getNameOfDeclaration,
+    getParseTreeNode,
+    Identifier,
+    ImportClause,
+    ImportEqualsDeclaration,
+    ImportSpecifier,
+    isAccessor,
+    isArrowFunction,
+    isBigIntLiteral,
+    isBinaryExpression,
+    isBindingElement,
+    isElementAccessExpression,
+    isEnumDeclaration,
+    isEnumMember,
+    isExpressionStatement,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isFunctionLike,
+    isGetAccessor,
+    isGetAccessorDeclaration,
+    isIdentifier,
+    isNumericLiteral,
+    isParameterPropertyDeclaration,
+    isPrefixUnaryExpression,
+    isPropertyAccessExpression,
+    isSetAccessor,
+    isSetAccessorDeclaration,
+    isSourceFile,
+    isStringLiteralLike,
+    isTemplateExpression,
+    isVariableDeclaration,
+    isVariableStatement,
+    ModifierFlags,
+    NamespaceImport,
+    Node,
+    NodeArray,
+    NodeFlags,
+    NoSubstitutionTemplateLiteral,
+    ParameterDeclaration,
+    PropertyAccessExpression,
+    PropertyDeclaration,
+    PropertyName,
+    PropertySignature,
+    ResolutionMode,
+    SourceFile,
+    Statement,
+    SymbolFlags,
+    SyntaxKind,
+    VariableDeclaration,
+    VariableDeclarationList,
+} from "typescript";
 
-import { Debug } from "./debug";
-import { BasicSymbol, bindSourceFile, NodeLinks } from "./emit-binder";
-import { appendIfUnique, emptyArray, every, filter, hasProperty } from "./lang-utils";
-import { IsolatedEmitResolver, LateBoundDeclaration, LateVisibilityPaintedStatement, SymbolAccessibility, SymbolVisibilityResult } from "./types";
-import { AnyImportSyntax, getFirstIdentifier, getMemberKey, hasDynamicName, hasEffectiveModifier, hasSyntacticModifier, isAmbientDeclaration,isBindingPattern, isEntityNameExpression, isExternalModuleAugmentation, isInJSFile, isLateVisibilityPaintedStatement, isPartOfTypeNode, isThisIdentifier, MemberKey, nodeIsPresent, skipParentheses } from "./utils";
-import { makeEvaluator } from "./evaluator";
-
+import {
+    Debug,
+} from "./debug";
+import {
+    BasicSymbol,
+    bindSourceFile,
+    NodeLinks,
+} from "./emit-binder";
+import {
+    makeEvaluator,
+} from "./evaluator";
+import {
+    appendIfUnique,
+    emptyArray,
+    every,
+    filter,
+    hasProperty,
+} from "./lang-utils";
+import {
+    IsolatedEmitResolver,
+    LateBoundDeclaration,
+    LateVisibilityPaintedStatement,
+    SymbolAccessibility,
+    SymbolVisibilityResult,
+} from "./types";
+import {
+    AnyImportSyntax,
+    getFirstIdentifier,
+    getMemberKey,
+    hasDynamicName,
+    hasEffectiveModifier,
+    hasSyntacticModifier,
+    isAmbientDeclaration,
+    isBindingPattern,
+    isEntityNameExpression,
+    isExternalModuleAugmentation,
+    isInJSFile,
+    isLateVisibilityPaintedStatement,
+    isPartOfTypeNode,
+    isThisIdentifier,
+    MemberKey,
+    nodeIsPresent,
+    skipParentheses,
+} from "./utils";
 
 const knownFunctionMembers = new Set([
     "I:apply",
@@ -15,17 +121,16 @@ const knownFunctionMembers = new Set([
     "I:toString",
     "I:prototype",
     "I:length",
-])
+]);
 export function createEmitResolver(file: SourceFile, options: CompilerOptions, packageModuleType: ResolutionMode): IsolatedEmitResolver {
-
     const { getNodeLinks, resolveMemberKey, resolveName } = bindSourceFile(file, options, packageModuleType);
 
     function getEnumValueFromName(name: PropertyName | NoSubstitutionTemplateLiteral, location: EnumDeclaration) {
         const enumKey = getMemberKey(name);
-        if(!enumKey) return undefined;
+        if (!enumKey) return undefined;
         const enumMemberSymbol = resolveMemberKey(location, enumKey, SymbolFlags.Value);
         const enumMemberDeclaration = enumMemberSymbol?.declarations[0];
-        if(enumMemberDeclaration && isEnumMember(enumMemberDeclaration)) {
+        if (enumMemberDeclaration && isEnumMember(enumMemberDeclaration)) {
             return getNodeLinks(enumMemberDeclaration).enumValue;
         }
         return undefined;
@@ -33,71 +138,74 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     const evaluate = makeEvaluator({
         evaluateElementAccessExpression(expr, location) {
             // We only resolve names in the current enum declaration
-            if(!location || !isEnumDeclaration(location)) return undefined;
-            if(isIdentifier(expr.expression)
+            if (!location || !isEnumDeclaration(location)) return undefined;
+            if (
+                isIdentifier(expr.expression)
                 && expr.expression.escapedText === location.name.escapedText
-                && isStringLiteralLike(expr.argumentExpression)) {
+                && isStringLiteralLike(expr.argumentExpression)
+            ) {
                 return getEnumValueFromName(expr.argumentExpression, location);
             }
             return undefined;
         },
         evaluateEntityNameExpression(expr, location) {
             // We only resolve names in the current enum declaration
-            if(!location || !isEnumDeclaration(location)) return undefined;
-            if(isIdentifier(expr)) {
+            if (!location || !isEnumDeclaration(location)) return undefined;
+            if (isIdentifier(expr)) {
                 return getEnumValueFromName(expr, location);
             }
-            if(isPropertyAccessExpression(expr)
+            if (
+                isPropertyAccessExpression(expr)
                 && isIdentifier(expr.expression)
-                && expr.expression.escapedText === location.name.escapedText) {
+                && expr.expression.escapedText === location.name.escapedText
+            ) {
                 return getEnumValueFromName(expr.name, location);
             }
             return undefined;
         },
-        onNumericLiteral() { },
-    })
-    function isLiteralValue(node: Expression): boolean {
-        if(isLiteralExpression(node)) return true;
+        onNumericLiteral() {},
+    });
+    function isPrimitiveLiteralValue(node: Expression): boolean {
+        if (isNumericLiteral(node) || isBigIntLiteral(node) || isStringLiteralLike(node)) return true;
 
-        if(node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) return true;
+        if (node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) return true;
 
-        if(isPrefixUnaryExpression(node)) {
+        if (isPrefixUnaryExpression(node)) {
             const operand = node.operand;
-            if(node.operator === SyntaxKind.MinusToken) {
+            if (node.operator === SyntaxKind.MinusToken) {
                 return isNumericLiteral(operand) || isBigIntLiteral(operand);
             }
-            if(node.operator === SyntaxKind.PlusToken) {
+            if (node.operator === SyntaxKind.PlusToken) {
                 return isNumericLiteral(operand);
             }
         }
-        if(isTemplateExpression(node)) {
-            return node.templateSpans.every(t => isLiteralValue(t.expression));
+        if (isTemplateExpression(node)) {
+            return node.templateSpans.every(t => isPrimitiveLiteralValue(t.expression));
         }
         return false;
     }
-    function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration | EnumMember): boolean {
+    function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
         if (isDeclarationReadonly(node) || (isVariableDeclaration(node) && isVarConst(node)) || isEnumMember(node)) {
-            if(!(isEnumMember(node) || !node.type)) return false;
-            if(!(hasProperty(node, "initializer") && !!node.initializer)) return false;
+            if (!(isEnumMember(node) || !node.type)) return false;
+            if (!(hasProperty(node, "initializer") && !!node.initializer)) return false;
 
             const initializer = node.initializer;
-            return isLiteralValue(initializer);
+            return isPrimitiveLiteralValue(initializer);
             // Original TS version
             // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
         }
         return false;
     }
 
-
     function isLiteralComputedName(node: ComputedPropertyName) {
         // Best effort implementation. We can't know for sure  if node is valid as a computed name
         // - it might be a narrowed symbol
         // - the type might not be appropriate as a computed property name.
         const expression = node.expression;
-        if(isLiteralValue(expression)) {
+        if (isPrimitiveLiteralValue(expression)) {
             return true;
         }
-        if(!isEntityNameExpression(expression)) {
+        if (!isEntityNameExpression(expression)) {
             return false;
         }
         return true;
@@ -108,38 +216,39 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         if (!(name.kind === SyntaxKind.ComputedPropertyName || name.kind === SyntaxKind.ElementAccessExpression)) {
             return false;
         }
-        let expr= isElementAccessExpression(name) ? skipParentheses(name.argumentExpression) : name.expression;
-        while(isPropertyAccessExpression(expr)) {
+        let expr = isElementAccessExpression(name) ? skipParentheses(name.argumentExpression) : name.expression;
+        while (isPropertyAccessExpression(expr)) {
             expr = expr.expression;
         }
         return isIdentifier(expr);
     }
     function getExpandoMembers(declaration: FunctionDeclaration | VariableDeclaration, functionName: Identifier) {
         const scope = getParentScope(declaration);
-        if(!scope) return undefined;
+        if (!scope) return undefined;
         const members = new Set<MemberKey>();
         for (const statement of scope.statements) {
             // Looking for name functionName.member = init;
             if (!isExpressionStatement(statement)) continue;
             if (!isBinaryExpression(statement.expression)) continue;
             const assignment = statement.expression;
-            if(assignment.operatorToken.kind !== SyntaxKind.EqualsToken) continue;
+            if (assignment.operatorToken.kind !== SyntaxKind.EqualsToken) continue;
 
             const isPropertyAccess = isPropertyAccessExpression(assignment.left);
-            if((isPropertyAccess || isElementAccessExpression(assignment.left))
+            if (
+                (isPropertyAccess || isElementAccessExpression(assignment.left))
                 && isIdentifier(assignment.left.expression)
-                && assignment.left.expression.escapedText === functionName.escapedText) {
-
+                && assignment.left.expression.escapedText === functionName.escapedText
+            ) {
                 let name;
-                if(isPropertyAccess) {
+                if (isPropertyAccess) {
                     name = assignment.left.name;
                 }
                 else {
                     const argumentExpression = assignment.left.argumentExpression;
                     name = factory.createComputedPropertyName(argumentExpression);
                 }
-                const key = getMemberKey(name)
-                if(!key || knownFunctionMembers.has(key)) {
+                const key = getMemberKey(name);
+                if (!key || knownFunctionMembers.has(key)) {
                     continue;
                 }
                 members.add(key);
@@ -150,58 +259,56 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
 
     function getDefinedMembers(declaration: FunctionDeclaration | VariableDeclaration, functionName: Identifier) {
         const scope = getParentScope(declaration);
-        if(!scope) return undefined;
+        if (!scope) return undefined;
         const cls = resolveName(scope, functionName.escapedText, SymbolFlags.Class);
-        
-        const namespace = resolveName(scope, functionName.escapedText, SymbolFlags.Namespace)
 
-        if(!cls?.exports) {
+        const namespace = resolveName(scope, functionName.escapedText, SymbolFlags.Namespace);
+
+        if (!cls?.exports) {
             return namespace?.exports;
         }
-        if(!namespace?.exports) {
+        if (!namespace?.exports) {
             return cls.exports;
         }
         return new Set([
             ...(namespace.exports.keys() ?? []),
-            ...(cls.exports.keys() ?? [])
+            ...(cls.exports.keys() ?? []),
         ]);
     }
 
-
-    // Do a best effort to find expando functions 
-    function isExpandoFunction(node: FunctionDeclaration | VariableDeclaration){
+    // Do a best effort to find expando functions
+    function isExpandoFunction(node: FunctionDeclaration | VariableDeclaration) {
         const declaration = getParseTreeNode(node, (n): n is FunctionDeclaration | VariableDeclaration => isFunctionDeclaration(n) || isVariableDeclaration(n));
         if (!declaration) {
             return false;
         }
-        if(isVariableDeclaration(declaration)){
-            if(declaration.type) {
+        if (isVariableDeclaration(declaration)) {
+            if (declaration.type) {
                 return false;
             }
-            if(!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
+            if (!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
                 return false;
             }
-            
         }
 
         const functionName = node.name;
-        if(!functionName || !isIdentifier(functionName)) return false;
+        if (!functionName || !isIdentifier(functionName)) return false;
 
         const expandoMembers = getExpandoMembers(declaration, functionName);
-        if(!expandoMembers || expandoMembers.size === 0) return false;
+        if (!expandoMembers || expandoMembers.size === 0) return false;
 
-        if(isVariableDeclaration(declaration) && expandoMembers.size) {
-            return true
+        if (isVariableDeclaration(declaration) && expandoMembers.size) {
+            return true;
         }
         const definedMembers = getDefinedMembers(declaration, functionName);
-        // No namespace definitions, and it has assignments => is Expando function 
-        if(!definedMembers) {
-            return true
+        // No namespace definitions, and it has assignments => is Expando function
+        if (!definedMembers) {
+            return true;
         }
 
         // Some assigned members are not in the defined the namespaces
         // computed members are ignored, since they don't name it to declarations anyway
-        if([...expandoMembers.keys()].some(n => !definedMembers.has(n))) {
+        if ([...expandoMembers.keys()].some(n => !definedMembers.has(n))) {
             return true;
         }
         return false;
@@ -216,58 +323,57 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             const key = getMemberKey(declaration.name);
             const members = hasSyntacticModifier(declaration, ModifierFlags.Static) ?
                 parentLinks.symbol?.exports :
-                parentLinks.symbol?.members
+                parentLinks.symbol?.members;
             const symbol = key && members?.get(key);
-            const declarations = symbol?.declarations ?? [declaration];
+            const declaredAccessors = symbol?.declarations.filter(isAccessor);
+            const declarations = declaredAccessors?.length ? declaredAccessors : [declaration];
             return {
                 firstAccessor: declarations[0] as AccessorDeclaration,
                 secondAccessor: declarations[1] as AccessorDeclaration,
                 getAccessor: declarations.find(isGetAccessorDeclaration),
-                setAccessor: declarations.find(isSetAccessorDeclaration)
-            }
+                setAccessor: declarations.find(isSetAccessorDeclaration),
+            };
         },
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined {
             function updateEnumValues(node: EnumDeclaration) {
-                let prevEnumValueLinks: NodeLinks | undefined;  
+                let prevEnumValueLinks: NodeLinks | undefined;
                 const isDeclaration = isAmbientDeclaration(node) && !hasSyntacticModifier(node, ModifierFlags.Const);
-                for(const enumValue of node.members) {
+                for (const enumValue of node.members) {
                     const links = getNodeLinks(enumValue);
-                    if(enumValue.initializer) {
+                    if (enumValue.initializer) {
                         const value = enumValue.initializer && evaluate(enumValue.initializer, node);
-                        if(value !== undefined) {
+                        if (value !== undefined) {
                             links.enumValue = value;
-                        } else {
+                        }
+                        else {
                             links.enumValue = undefined;
                         }
                     }
-                    else if(isDeclaration) {
+                    else if (isDeclaration) {
                         links.enumValue = undefined;
                     }
-                    else if(prevEnumValueLinks === undefined) {
+                    else if (prevEnumValueLinks === undefined) {
                         links.enumValue = 0;
                     }
-                    else if(typeof prevEnumValueLinks.enumValue === "number") {
+                    else if (typeof prevEnumValueLinks.enumValue === "number") {
                         links.enumValue = prevEnumValueLinks.enumValue + 1;
                     }
                     prevEnumValueLinks = links;
                 }
             }
 
-
-            if(isEnumMember(node)) {
+            if (isEnumMember(node)) {
                 const links = getNodeLinks(node);
-                if(!hasProperty(links, 'enumValue')) {
-                    updateEnumValues(node.parent)
+                if (!hasProperty(links, "enumValue")) {
+                    updateEnumValues(node.parent);
                 }
                 return links.enumValue;
-                
             }
-
         },
         createLiteralConstValue(node) {
-            if(hasProperty(node, "initializer") && node.initializer) {
+            if (hasProperty(node, "initializer") && node.initializer) {
                 const initializer = node.initializer;
-                if(isStringLiteralLike(initializer)) {
+                if (isStringLiteralLike(initializer)) {
                     return factory.createStringLiteral(initializer.text);
                 }
                 return node.initializer;
@@ -283,8 +389,8 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         },
         isImplementationOfOverload(node) {
             function getSignaturesOfSymbol(symbol: BasicSymbol | undefined): Node[] {
-                if(!symbol) return emptyArray;
-                if(symbol.signatureDeclarations) return symbol.signatureDeclarations;
+                if (!symbol) return emptyArray;
+                if (symbol.signatureDeclarations) return symbol.signatureDeclarations;
 
                 if (!symbol || !symbol.declarations) return (symbol.signatureDeclarations = emptyArray);
                 const result: Node[] = symbol.signatureDeclarations = [];
@@ -314,7 +420,6 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
                 return result;
             }
 
-
             if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
                 if (isGetAccessor(node) || isSetAccessor(node)) return false; // Get or set accessors can never be overload implementations, but can have up to 2 signatures
                 const symbol = node.symbol;
@@ -339,12 +444,12 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             const signature = parameter.parent;
             const paramIndex = signature.parameters.indexOf(parameter);
             Debug.assert(paramIndex !== -1);
-            if(parameter.questionToken) return true;
-            if(parameter.dotDotDotToken) return !!parameter.initializer;
+            if (parameter.questionToken) return true;
+            if (parameter.dotDotDotToken) return !!parameter.initializer;
 
-            for(let i = paramIndex; i< signature.parameters.length; i++) {
+            for (let i = paramIndex; i < signature.parameters.length; i++) {
                 const p = signature.parameters[i];
-                if(!p.questionToken && !p.initializer && !p.dotDotDotToken) {
+                if (!p.questionToken && !p.initializer && !p.dotDotDotToken) {
                     return false;
                 }
             }
@@ -362,7 +467,6 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             return false;
         },
     };
-
 
     function isDeclarationReadonly(declaration: Declaration): boolean {
         return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration, declaration.parent));
@@ -395,8 +499,10 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
                 case SyntaxKind.BindingElement:
                     return isDeclarationVisible(node.parent.parent);
                 case SyntaxKind.VariableDeclaration:
-                    if (isBindingPattern((node as VariableDeclaration).name) &&
-                        !((node as VariableDeclaration).name as BindingPattern).elements.length) {
+                    if (
+                        isBindingPattern((node as VariableDeclaration).name) &&
+                        !((node as VariableDeclaration).name as BindingPattern).elements.length
+                    ) {
                         // If the binding pattern is empty, this variable declaration is not visible
                         return false;
                     }
@@ -414,8 +520,10 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
                     }
                     const parent = getDeclarationContainer(node);
                     // If the node is not exported or it is not ambient module element (except import declaration)
-                    if (!(getCombinedModifierFlags(node as Declaration) & ModifierFlags.Export) &&
-                        !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && isAmbientDeclaration(parent))) {
+                    if (
+                        !(getCombinedModifierFlags(node as Declaration) & ModifierFlags.Export) &&
+                        !(node.kind !== SyntaxKind.ImportEqualsDeclaration && parent.kind !== SyntaxKind.SourceFile && isAmbientDeclaration(parent))
+                    ) {
                         return isGlobalSourceFile(parent);
                     }
                     // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
@@ -491,28 +599,36 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
                 // because these kind of aliases can be used to name types in declaration file
 
                 const anyImportSyntax = getAnyImportSyntax(declaration);
-                if (anyImportSyntax &&
+                if (
+                    anyImportSyntax &&
                     !hasSyntacticModifier(anyImportSyntax, ModifierFlags.Export) && // import clause without export
-                    isDeclarationVisible(anyImportSyntax.parent)) {
+                    isDeclarationVisible(anyImportSyntax.parent)
+                ) {
                     return addVisibleAlias(declaration, anyImportSyntax);
                 }
-                else if (isVariableDeclaration(declaration) && isVariableStatement(declaration.parent.parent) &&
+                else if (
+                    isVariableDeclaration(declaration) && isVariableStatement(declaration.parent.parent) &&
                     !hasSyntacticModifier(declaration.parent.parent, ModifierFlags.Export) && // unexported variable statement
-                    isDeclarationVisible(declaration.parent.parent.parent)) {
+                    isDeclarationVisible(declaration.parent.parent.parent)
+                ) {
                     return addVisibleAlias(declaration, declaration.parent.parent);
                 }
-                else if (isLateVisibilityPaintedStatement(declaration) // unexported top-level statement
+                else if (
+                    isLateVisibilityPaintedStatement(declaration) // unexported top-level statement
                     && !hasSyntacticModifier(declaration, ModifierFlags.Export)
-                    && isDeclarationVisible(declaration.parent)) {
+                    && isDeclarationVisible(declaration.parent)
+                ) {
                     return addVisibleAlias(declaration, declaration);
                 }
                 else if (isBindingElement(declaration)) {
-                    if (symbol.flags & SymbolFlags.Alias && isInJSFile(declaration) && declaration.parent?.parent // exported import-like top-level JS require statement
+                    if (
+                        symbol.flags & SymbolFlags.Alias && isInJSFile(declaration) && declaration.parent?.parent // exported import-like top-level JS require statement
                         && isVariableDeclaration(declaration.parent.parent)
                         && declaration.parent.parent.parent?.parent && isVariableStatement(declaration.parent.parent.parent.parent)
                         && !hasSyntacticModifier(declaration.parent.parent.parent.parent, ModifierFlags.Export)
                         && declaration.parent.parent.parent.parent.parent // check if the thing containing the variable statement is visible (ie, the file)
-                        && isDeclarationVisible(declaration.parent.parent.parent.parent.parent)) {
+                        && isDeclarationVisible(declaration.parent.parent.parent.parent.parent)
+                    ) {
                         return addVisibleAlias(declaration, declaration.parent.parent.parent.parent);
                     }
                     else if (symbol.flags & SymbolFlags.BlockScopedVariable) {
@@ -549,14 +665,18 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
     function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
         // get symbol of the first identifier of the entityName
         let meaning: SymbolFlags;
-        if (entityName.parent.kind === SyntaxKind.TypeQuery ||
+        if (
+            entityName.parent.kind === SyntaxKind.TypeQuery ||
             entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isPartOfTypeNode(entityName.parent) ||
-            entityName.parent.kind === SyntaxKind.ComputedPropertyName) {
+            entityName.parent.kind === SyntaxKind.ComputedPropertyName
+        ) {
             // Typeof value
             meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
         }
-        else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression ||
-            entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
+        else if (
+            entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression ||
+            entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration
+        ) {
             // Left identifier from type reference or TypeAlias
             // Entity name of the import declaration
             meaning = SymbolFlags.Namespace;
@@ -570,7 +690,8 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
         if (symbol && symbol.flags & SymbolFlags.TypeParameter && meaning & SymbolFlags.Type) {
             return { accessibility: SymbolAccessibility.Accessible };
         }
-        if (!symbol && isThisIdentifier(firstIdentifier)
+        if (
+            !symbol && isThisIdentifier(firstIdentifier)
             // TODO: isolatedDeclarations: Just assume this is accessible
             // && isSymbolAccessible(getSymbolOfNode(getThisContainer(firstIdentifier, /*includeArrowFunctions*/ false)), firstIdentifier, meaning, /*computeAliases*/ false).accessibility === SymbolAccessibility.Accessible
         ) {
@@ -586,11 +707,10 @@ export function createEmitResolver(file: SourceFile, options: CompilerOptions, p
             // We just do this to mark accessible imports
             accessibility: SymbolAccessibility.Accessible,
             errorSymbolName: firstIdentifier.text,
-            errorNode: firstIdentifier
+            errorNode: firstIdentifier,
         };
     }
 }
-
 
 function getRootDeclaration(node: Node): Node {
     while (node.kind === SyntaxKind.BindingElement) {
@@ -641,12 +761,15 @@ function isFunctionExpressionOrArrowFunction(node: Expression) {
     return isFunctionExpression(node) || isArrowFunction(node);
 }
 
-function getParentScope(declaration: VariableDeclaration | FunctionDeclaration): undefined | Node & {
-    statements: NodeArray<Statement>
-} {
+function getParentScope(declaration: VariableDeclaration | FunctionDeclaration):
+    | undefined
+    | Node & {
+        statements: NodeArray<Statement>;
+    }
+{
     let scope: Node = declaration;
-    while(scope) {
-        if(hasProperty(scope, "statements")) {
+    while (scope) {
+        if (hasProperty(scope, "statements")) {
             return (scope as any);
         }
         scope = scope.parent;

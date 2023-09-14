@@ -1,4 +1,8 @@
 import {
+    getCommentRange,
+    setCommentRange,
+} from "../../_namespaces/ts";
+import {
     Debug,
 } from "../../debug";
 import {
@@ -345,6 +349,7 @@ export function createLocalInferenceResolver({
                     name: PropertyName;
                     location: number;
                 }>();
+                let replaceWithInvalid = false;
                 for (let propIndex = 0, length = objectLiteral.properties.length; propIndex < length; propIndex++) {
                     const prop = objectLiteral.properties[propIndex];
 
@@ -362,6 +367,7 @@ export function createLocalInferenceResolver({
                     if (isComputedPropertyName(prop.name)) {
                         if (!resolver.isLiteralComputedName(prop.name)) {
                             reportIsolatedDeclarationError(node);
+                            replaceWithInvalid = true;
                             continue;
                         }
                         if (isEntityNameExpression(prop.name.expression)) {
@@ -449,6 +455,12 @@ export function createLocalInferenceResolver({
                     }
 
                     if (newProp) {
+                        const commentRange = getCommentRange(prop);
+                        setCommentRange(newProp, {
+                            pos: commentRange.pos,
+                            end: newProp.name.end,
+                        });
+
                         if (nameKey) {
                             if (existingMember !== undefined && !isMethodDeclaration(prop)) {
                                 properties[existingMember.location] = newProp;
@@ -467,7 +479,7 @@ export function createLocalInferenceResolver({
                     }
                 }
 
-                const typeNode: TypeNode = factory.createTypeLiteralNode(properties);
+                const typeNode: TypeNode = replaceWithInvalid ? makeInvalidType() : factory.createTypeLiteralNode(properties);
                 return regular(typeNode, objectLiteral, inheritedObjectTypeFlags);
             }
         }
