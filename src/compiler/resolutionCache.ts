@@ -226,7 +226,7 @@ export function removeIgnoredPath(path: Path): Path | undefined {
 function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathComponents>, length: number) {
     // Ignore "/", "c:/"
     if (length <= 1) return 1;
-    let userCheckIndex = 1;
+    let indexAfterOsRoot = 1;
     let isDosStyle = pathComponents[0].search(/[a-zA-Z]:/) === 0;
     if (
         pathComponents[0] !== directorySeparator &&
@@ -235,20 +235,25 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
     ) {
         // ignore "//vda1cs4850/c$/folderAtRoot"
         if (length === 2) return 2;
-        userCheckIndex = 2;
+        indexAfterOsRoot = 2;
         isDosStyle = true;
     }
 
     if (
         isDosStyle &&
-        !pathComponents[userCheckIndex].match(/^users$/i)
+        !pathComponents[indexAfterOsRoot].match(/^users$/i)
     ) {
         // Paths like c:/notUsers
-        return userCheckIndex;
+        return indexAfterOsRoot;
+    }
+
+    if (pathComponents[indexAfterOsRoot].match(/^workspaces$/i)) {
+        // Paths like: /workspaces as codespaces hoist the repos in /workspaces so we have to exempt these from "2" level from root rule
+        return indexAfterOsRoot + 1;
     }
 
     // Paths like: c:/users/username or /home/username
-    return userCheckIndex + 2;
+    return indexAfterOsRoot + 2;
 }
 
 /**
