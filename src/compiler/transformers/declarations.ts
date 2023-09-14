@@ -888,7 +888,9 @@ export function transformDeclarations(context: TransformationContext) {
                     return elem;
                 }
                 const usedAlias = aliases!.get(getOriginalNode(elem));
-                if (usedAlias) {
+                // If alias is used and property name was removed by filterBindingPatternInitializersAndRenamings
+                // The alias can be preserved if it is a non contextual keyword.
+                if (usedAlias && !elem.propertyName) {
                     return factory.updateBindingElement(
                         elem,
                         elem.dotDotDotToken,

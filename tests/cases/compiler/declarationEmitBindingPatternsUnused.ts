@@ -21,6 +21,10 @@ function referencedInSignarture({ name: alias }: Named): typeof alias {
     return alias;
 }
 
+function referencedInSignartureKeyword({ function: alias }: { function: string }): typeof alias {
+    return null!;
+}
+
 function referencedInInferredType({ name: alias }: Named) {
     type Named2 = { name: typeof alias }
     return null! as Named2

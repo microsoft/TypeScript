@@ -20,6 +20,10 @@ function referencedInSignarture({ name: alias }: Named): typeof alias {
     return alias;
 }
 
+function referencedInSignartureKeyword({ function: alias }: { function: string }): typeof alias {
+    return null!;
+}
+
 function referencedInInferredType({ name: alias }: Named) {
     type Named2 = { name: typeof alias }
     return null! as Named2
@@ -122,6 +126,9 @@ function referencedInCode({ name: alias }) {
 function referencedInSignarture({ name: alias }) {
     return alias;
 }
+function referencedInSignartureKeyword({ function: alias }) {
+    return null;
+}
 function referencedInInferredType({ name: alias }) {
     return null;
 }
@@ -191,6 +198,9 @@ declare function notReferencedNestedAlias({ p: { name } }: {
 declare function notReferencedArrayAlias([a, b, { name }]: Named[]): void;
 declare function referencedInCode({ name }: Named): string;
 declare function referencedInSignarture({ name: alias }: Named): typeof alias;
+declare function referencedInSignartureKeyword({ function: alias }: {
+    function: string;
+}): typeof alias;
 declare function referencedInInferredType({ name: alias }: Named): {
     name: typeof alias;
 };

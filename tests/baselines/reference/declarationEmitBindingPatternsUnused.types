@@ -47,6 +47,17 @@ function referencedInSignarture({ name: alias }: Named): typeof alias {
 >alias : string
 }
 
+function referencedInSignartureKeyword({ function: alias }: { function: string }): typeof alias {
+>referencedInSignartureKeyword : ({ function: alias }: {    function: string;}) => typeof alias
+>function : any
+>alias : string
+>function : string
+>alias : string
+
+    return null!;
+>null! : null
+}
+
 function referencedInInferredType({ name: alias }: Named) {
 >referencedInInferredType : ({ name: alias }: Named) => { name: typeof alias; }
 >name : any

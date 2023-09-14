@@ -1,9 +1,9 @@
-declarationEmitBindingPatternsUnused.ts(81,35): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
-declarationEmitBindingPatternsUnused.ts(85,41): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
-declarationEmitBindingPatternsUnused.ts(91,11): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
-declarationEmitBindingPatternsUnused.ts(92,15): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
-declarationEmitBindingPatternsUnused.ts(93,16): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
-declarationEmitBindingPatternsUnused.ts(94,12): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(85,35): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(89,41): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(95,11): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(96,15): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(97,16): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(98,12): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
 
 
 ==== declarationEmitBindingPatternsUnused.ts (6 errors) ====
@@ -24,6 +24,10 @@ declarationEmitBindingPatternsUnused.ts(94,12): error TS2842: 'alias' is an unus
     
     function referencedInSignarture({ name: alias }: Named): typeof alias {
         return alias;
+    }
+    
+    function referencedInSignartureKeyword({ function: alias }: { function: string }): typeof alias {
+        return null!;
     }
     
     function referencedInInferredType({ name: alias }: Named) {
