@@ -248,7 +248,7 @@ function perceivedOsRootLengthForWatching(pathComponents: Readonly<PathPathCompo
     }
 
     if (pathComponents[indexAfterOsRoot].match(/^workspaces$/i)) {
-        // Paths like: /workspaces
+        // Paths like: /workspaces as codespaces hoist the repos in /workspaces so we have to exempt these from "2" level from root rule
         return indexAfterOsRoot + 1;
     }
 
