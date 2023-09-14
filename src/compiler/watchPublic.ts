@@ -118,8 +118,11 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
+export function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
+/** @internal */
+export function createIncrementalCompilerHost(options: CompilerOptions, system?: System, skipNonSemanticJSDocParsing?: boolean): CompilerHost;
+export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, skipNonSemanticJSDocParsing?: boolean): CompilerHost {
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, skipNonSemanticJSDocParsing, system);
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
@@ -254,6 +257,13 @@ export interface ProgramHost<T extends BuilderProgram> {
      * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+
+    /**
+     * True if it's safe for the parser to skip parsing non-semantic JSDoc tags.
+     *
+     * @internal
+     */
+    skipNonSemanticJSDocParsing?: boolean;
 }
 /**
  * Internal interface used to wire emit through same host

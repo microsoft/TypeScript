@@ -62,6 +62,7 @@ import {
     CommentDirectivesMap,
     CommentDirectiveType,
     CommentRange,
+    comparePaths,
     compareStringsCaseSensitive,
     compareValues,
     Comparison,
@@ -162,6 +163,7 @@ import {
     GetCanonicalFileName,
     getCombinedModifierFlags,
     getCombinedNodeFlags,
+    getCommonSourceDirectory,
     getContainerFlags,
     getDirectoryPath,
     getJSDocAugmentsTag,
@@ -493,7 +495,6 @@ import {
     startsWith,
     startsWithUseStrict,
     Statement,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     StringLiteralType,
@@ -523,8 +524,6 @@ import {
     tracing,
     TransformFlags,
     TransientSymbol,
-    trimString,
-    trimStringStart,
     TriviaSyntaxKind,
     tryCast,
     tryRemovePrefix,
@@ -802,7 +801,7 @@ export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeChec
             /*details*/ undefined,
             Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
             node10Result,
-            node10Result.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
+            node10Result.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
         )
         : host.typesPackageExists(packageName)
         ? chainDiagnosticMessages(
@@ -1232,7 +1231,7 @@ export function getTextOfNodeFromSourceText(sourceText: string, node: Node, incl
 
     if (isJSDocTypeExpressionOrChild(node)) {
         // strip space + asterisk at line start
-        text = text.split(/\r\n|\n|\r/).map(line => trimStringStart(line.replace(/^\s*\*/, ""))).join("\n");
+        text = text.split(/\r\n|\n|\r/).map(line => line.replace(/^\s*\*/, "").trimStart()).join("\n");
     }
 
     return text;
@@ -5986,7 +5985,7 @@ function isQuoteOrBacktick(charCode: number) {
 /** @internal */
 export function isIntrinsicJsxName(name: __String | string) {
     const ch = (name as string).charCodeAt(0);
-    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains(name as string, "-");
+    return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || (name as string).includes("-");
 }
 
 const indentStrings: string[] = ["", "    "];
@@ -6231,7 +6230,7 @@ export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameReso
     const specifier = getExternalModuleName(declaration);
     if (
         specifier && isStringLiteralLike(specifier) && !pathIsRelative(specifier.text) &&
-        getCanonicalAbsolutePath(host, file.path).indexOf(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory()))) === -1
+        !getCanonicalAbsolutePath(host, file.path).includes(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory())))
     ) {
         return undefined;
     }
@@ -6366,13 +6365,31 @@ export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFi
  */
 export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileMayBeEmittedHost, forceDtsEmit?: boolean) {
     const options = host.getCompilerOptions();
-    return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) &&
-        !sourceFile.isDeclarationFile &&
-        !host.isSourceFileFromExternalLibrary(sourceFile) &&
-        (forceDtsEmit || (
-            !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
-            !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)
-        ));
+    // Js files are emitted only if option is enabled
+    if (options.noEmitForJsFiles && isSourceFileJS(sourceFile)) return false;
+    // Declaration files are not emitted
+    if (sourceFile.isDeclarationFile) return false;
+    // Source file from node_modules are not emitted
+    if (host.isSourceFileFromExternalLibrary(sourceFile)) return false;
+    // forcing dts emit => file needs to be emitted
+    if (forceDtsEmit) return true;
+    // Check other conditions for file emit
+    // Source files from referenced projects are not emitted
+    if (host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return false;
+    // Any non json file should be emitted
+    if (!isJsonSourceFile(sourceFile)) return true;
+    if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
+    // Emit json file if outFile is specified
+    if (outFile(options)) return true;
+    // Json file is not emitted if outDir is not specified
+    if (!options.outDir) return false;
+    // Otherwise if rootDir or composite config file, we know common sourceDir and can check if file would be emitted in same location
+    if (options.rootDir || (options.composite && options.configFilePath)) {
+        const commonDir = getNormalizedAbsolutePath(getCommonSourceDirectory(options, () => [], host.getCurrentDirectory(), host.getCanonicalFileName), host.getCurrentDirectory());
+        const outputPath = getSourceFilePathInNewDirWorker(sourceFile.fileName, options.outDir, host.getCurrentDirectory(), commonDir, host.getCanonicalFileName);
+        if (comparePaths(sourceFile.fileName, outputPath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) return false;
+    }
+    return true;
 }
 
 /** @internal */
@@ -6824,7 +6841,7 @@ export function writeCommentRange(text: string, lineMap: readonly number[], writ
 
 function writeTrimmedCurrentLine(text: string, commentEnd: number, writer: EmitTextWriter, newLine: string, pos: number, nextLineStart: number) {
     const end = Math.min(commentEnd, nextLineStart - 1);
-    const currentLineText = trimString(text.substring(pos, end));
+    const currentLineText = text.substring(pos, end).trim();
     if (currentLineText) {
         // trimmed forward and ending spaces text
         writer.writeComment(currentLineText);
@@ -7237,8 +7254,8 @@ export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
 
 /** @internal */
 export function isRightSideOfAccessExpression(node: Node) {
-    return isPropertyAccessExpression(node.parent) && node.parent.name === node
-        || isElementAccessExpression(node.parent) && node.parent.argumentExpression === node;
+    return !!node.parent && (isPropertyAccessExpression(node.parent) && node.parent.name === node
+        || isElementAccessExpression(node.parent) && node.parent.argumentExpression === node);
 }
 
 /** @internal */
@@ -9330,7 +9347,7 @@ export function getSupportedExtensions(options?: CompilerOptions, extraFileExten
     const flatBuiltins = flatten(builtins);
     const extensions = [
         ...builtins,
-        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && flatBuiltins.indexOf(x.extension as Extension) === -1 ? [x.extension] : undefined),
+        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && !flatBuiltins.includes(x.extension as Extension) ? [x.extension] : undefined),
     ];
 
     return extensions;
@@ -10047,7 +10064,7 @@ export function expressionResultIsUnused(node: Expression): boolean {
 
 /** @internal */
 export function containsIgnoredPath(path: string) {
-    return some(ignoredPaths, p => stringContains(path, p));
+    return some(ignoredPaths, p => path.includes(p));
 }
 
 /** @internal */
@@ -10429,6 +10446,11 @@ export function getPropertyNameFromType(type: StringLiteralType | NumberLiteralT
         return escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value);
     }
     return Debug.fail();
+}
+
+/** @internal */
+export function isExpandoPropertyDeclaration(declaration: Declaration | undefined): declaration is PropertyAccessExpression | ElementAccessExpression | BinaryExpression {
+    return !!declaration && (isPropertyAccessExpression(declaration) || isElementAccessExpression(declaration) || isBinaryExpression(declaration));
 }
 
 /** @internal */

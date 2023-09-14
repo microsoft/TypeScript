@@ -252,7 +252,6 @@ import {
     packageIdToPackageName,
     packageIdToString,
     PackageJsonInfoCache,
-    padLeft,
     ParameterDeclaration,
     ParseConfigFileHost,
     ParsedCommandLine,
@@ -306,7 +305,6 @@ import {
     stableSort,
     startsWith,
     Statement,
-    stringContains,
     StringLiteral,
     StringLiteralLike,
     StructureIsReused,
@@ -321,7 +319,6 @@ import {
     toPath as ts_toPath,
     trace,
     tracing,
-    trimStringEnd,
     TsConfigSourceFile,
     TypeChecker,
     typeDirectiveIsEqualTo,
@@ -407,6 +404,7 @@ export function createGetSourceFile(
     readFile: ProgramHost<any>["readFile"],
     getCompilerOptions: () => CompilerOptions,
     setParentNodes: boolean | undefined,
+    skipNonSemanticJSDocParsing: boolean | undefined,
 ): CompilerHost["getSourceFile"] {
     return (fileName, languageVersionOrOptions, onError) => {
         let text: string | undefined;
@@ -422,7 +420,7 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes) : undefined;
+        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, skipNonSemanticJSDocParsing) : undefined;
     };
 }
 
@@ -460,7 +458,12 @@ export function createWriteFileMeasuringIO(
 }
 
 /** @internal */
-export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system: System = sys): CompilerHost {
+export function createCompilerHostWorker(
+    options: CompilerOptions,
+    setParentNodes?: boolean,
+    skipNonSemanticJSDocParsing?: boolean,
+    system: System = sys,
+): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
     const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
     function directoryExists(directoryPath: string): boolean {
@@ -481,7 +484,7 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
     const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
-        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes),
+        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, skipNonSemanticJSDocParsing),
         getDefaultLibLocation,
         getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
         writeFile: createWriteFileMeasuringIO(
@@ -725,22 +728,22 @@ function formatCodeSpan(file: SourceFile, start: number, length: number, indent:
         // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
         // so we'll skip ahead to the second-to-last line.
         if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-            context += indent + formatColorAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
+            context += indent + formatColorAndReset(ellipsis.padStart(gutterWidth), gutterStyleSequence) + gutterSeparator + host.getNewLine();
             i = lastLine - 1;
         }
 
         const lineStart = getPositionOfLineAndCharacter(file, i, 0);
         const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
         let lineContent = file.text.slice(lineStart, lineEnd);
-        lineContent = trimStringEnd(lineContent); // trim from end
+        lineContent = lineContent.trimEnd(); // trim from end
         lineContent = lineContent.replace(/\t/g, " "); // convert tabs to single spaces
 
         // Output the gutter and the actual contents of the line.
-        context += indent + formatColorAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+        context += indent + formatColorAndReset((i + 1 + "").padStart(gutterWidth), gutterStyleSequence) + gutterSeparator;
         context += lineContent + host.getNewLine();
 
         // Output the gutter and the error span for the line using tildes.
-        context += indent + formatColorAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+        context += indent + formatColorAndReset("".padStart(gutterWidth), gutterStyleSequence) + gutterSeparator;
         context += squiggleColor;
         if (i === firstLine) {
             // If we're on the last line, then limit it to the last character of the last line.
@@ -2028,7 +2031,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // but the resolved real path may be the .d.ts from project reference
         // Note:: Currently we try the real path only if the
         // file is from node_modules to avoid having to run real path on all file paths
-        if (!host.realpath || !options.preserveSymlinks || !stringContains(file.originalFileName, nodeModulesPathPart)) return undefined;
+        if (!host.realpath || !options.preserveSymlinks || !file.originalFileName.includes(nodeModulesPathPart)) return undefined;
         const realDeclarationPath = toPath(host.realpath(file.originalFileName));
         return realDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationPath);
     }
@@ -3577,7 +3580,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 host.realpath &&
                 options.preserveSymlinks &&
                 isDeclarationFileName(fileName) &&
-                stringContains(fileName, nodeModulesPathPart)
+                fileName.includes(nodeModulesPathPart)
             ) {
                 const realPath = toPath(host.realpath(fileName));
                 if (realPath !== path) source = getSourceOfProjectReferenceRedirect(realPath);
@@ -5102,7 +5105,7 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
         if (!host.getResolvedProjectReferences() || containsIgnoredPath(directory)) return;
 
         // Because we already watch node_modules, handle symlinks in there
-        if (!originalRealpath || !stringContains(directory, nodeModulesPathPart)) return;
+        if (!originalRealpath || !directory.includes(nodeModulesPathPart)) return;
         const symlinkCache = host.getSymlinkCache();
         const directoryPath = ensureTrailingDirectorySeparator(host.toPath(directory));
         if (symlinkCache.getSymlinkedDirectories()?.has(directoryPath)) return;
@@ -5136,7 +5139,7 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
         const symlinkedDirectories = symlinkCache.getSymlinkedDirectories();
         if (!symlinkedDirectories) return false;
         const fileOrDirectoryPath = host.toPath(fileOrDirectory);
-        if (!stringContains(fileOrDirectoryPath, nodeModulesPathPart)) return false;
+        if (!fileOrDirectoryPath.includes(nodeModulesPathPart)) return false;
         if (isFile && symlinkCache.getSymlinkedFiles()?.has(fileOrDirectoryPath)) return true;
 
         // If it contains node_modules check if its one of the symlinked path we know of

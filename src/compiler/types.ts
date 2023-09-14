@@ -4333,6 +4333,8 @@ export interface SourceFile extends Declaration, LocalsContainer {
 
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
+
+    /** @internal */ skipNonSemanticJSDoc?: boolean;
 }
 
 /** @internal */
@@ -6155,6 +6157,7 @@ export interface Type {
 // Intrinsic types (TypeFlags.Intrinsic)
 export interface IntrinsicType extends Type {
     intrinsicName: string; // Name of intrinsic type
+    debugIntrinsicName: string | undefined;
     objectFlags: ObjectFlags;
 }
 
@@ -6240,6 +6243,8 @@ export const enum ObjectFlags {
     RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
     /** @internal */
     PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
+    /** @internal */
+    InstantiatedMapped = Mapped | Instantiated,
     // Object flags that uniquely identify the kind of ObjectType
     /** @internal */
     ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
@@ -8121,6 +8126,9 @@ export interface SourceFileMayBeEmittedHost {
     isSourceFileFromExternalLibrary(file: SourceFile): boolean;
     getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    getCurrentDirectory(): string;
+    getCanonicalFileName: GetCanonicalFileName;
+    useCaseSensitiveFileNames(): boolean;
 }
 
 /** @internal */
@@ -9978,6 +9986,7 @@ export interface UserPreferences {
     readonly organizeImportsNumericCollation?: boolean;
     readonly organizeImportsAccentCollation?: boolean;
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+    readonly excludeLibrarySymbolsInNavTo?: boolean;
 }
 
 /** Represents a bigint literal value without requiring bigint support */

@@ -1,0 +1,177 @@
+//// [tests/cases/compiler/deeplyNestedMappedTypes.ts] ////
+
+=== deeplyNestedMappedTypes.ts ===
+// Simplified repro from #55535
+
+type Id<T> = { [K in keyof T]: Id<T[K]> };
+>Id : Symbol(Id, Decl(deeplyNestedMappedTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedMappedTypes.ts, 2, 8))
+>K : Symbol(K, Decl(deeplyNestedMappedTypes.ts, 2, 16))
+>T : Symbol(T, Decl(deeplyNestedMappedTypes.ts, 2, 8))
+>Id : Symbol(Id, Decl(deeplyNestedMappedTypes.ts, 0, 0))
+>T : Symbol(T, Decl(deeplyNestedMappedTypes.ts, 2, 8))
+>K : Symbol(K, Decl(deeplyNestedMappedTypes.ts, 2, 16))
+
+type Foo1 = Id<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
+>Foo1 : Symbol(Foo1, Decl(deeplyNestedMappedTypes.ts, 2, 42))
+>Id : Symbol(Id, Decl(deeplyNestedMappedTypes.ts, 0, 0))
+>x : Symbol(x, Decl(deeplyNestedMappedTypes.ts, 4, 16))
+>y : Symbol(y, Decl(deeplyNestedMappedTypes.ts, 4, 21))
+>z : Symbol(z, Decl(deeplyNestedMappedTypes.ts, 4, 26))
+>a : Symbol(a, Decl(deeplyNestedMappedTypes.ts, 4, 31))
+>b : Symbol(b, Decl(deeplyNestedMappedTypes.ts, 4, 36))
+>c : Symbol(c, Decl(deeplyNestedMappedTypes.ts, 4, 41))
+
+type Foo2 = Id<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
+>Foo2 : Symbol(Foo2, Decl(deeplyNestedMappedTypes.ts, 4, 65))
+>Id : Symbol(Id, Decl(deeplyNestedMappedTypes.ts, 0, 0))
+>x : Symbol(x, Decl(deeplyNestedMappedTypes.ts, 5, 16))
+>y : Symbol(y, Decl(deeplyNestedMappedTypes.ts, 5, 21))
+>z : Symbol(z, Decl(deeplyNestedMappedTypes.ts, 5, 26))
+>a : Symbol(a, Decl(deeplyNestedMappedTypes.ts, 5, 31))
+>b : Symbol(b, Decl(deeplyNestedMappedTypes.ts, 5, 36))
+>c : Symbol(c, Decl(deeplyNestedMappedTypes.ts, 5, 41))
+
+declare const foo1: Foo1;
+>foo1 : Symbol(foo1, Decl(deeplyNestedMappedTypes.ts, 7, 13))
+>Foo1 : Symbol(Foo1, Decl(deeplyNestedMappedTypes.ts, 2, 42))
+
+const foo2: Foo2 = foo1;  // Error expected
+>foo2 : Symbol(foo2, Decl(deeplyNestedMappedTypes.ts, 8, 5))
+>Foo2 : Symbol(Foo2, Decl(deeplyNestedMappedTypes.ts, 4, 65))
+>foo1 : Symbol(foo1, Decl(deeplyNestedMappedTypes.ts, 7, 13))
+
+type Id2<T> = { [K in keyof T]: Id2<Id2<T[K]>> };
+>Id2 : Symbol(Id2, Decl(deeplyNestedMappedTypes.ts, 8, 24))
+>T : Symbol(T, Decl(deeplyNestedMappedTypes.ts, 10, 9))
+>K : Symbol(K, Decl(deeplyNestedMappedTypes.ts, 10, 17))
+>T : Symbol(T, Decl(deeplyNestedMappedTypes.ts, 10, 9))
+>Id2 : Symbol(Id2, Decl(deeplyNestedMappedTypes.ts, 8, 24))
+>Id2 : Symbol(Id2, Decl(deeplyNestedMappedTypes.ts, 8, 24))
+>T : Symbol(T, Decl(deeplyNestedMappedTypes.ts, 10, 9))
+>K : Symbol(K, Decl(deeplyNestedMappedTypes.ts, 10, 17))
+
+type Foo3 = Id2<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
+>Foo3 : Symbol(Foo3, Decl(deeplyNestedMappedTypes.ts, 10, 49))
+>Id2 : Symbol(Id2, Decl(deeplyNestedMappedTypes.ts, 8, 24))
+>x : Symbol(x, Decl(deeplyNestedMappedTypes.ts, 12, 17))
+>y : Symbol(y, Decl(deeplyNestedMappedTypes.ts, 12, 22))
+>z : Symbol(z, Decl(deeplyNestedMappedTypes.ts, 12, 27))
+>a : Symbol(a, Decl(deeplyNestedMappedTypes.ts, 12, 32))
+>b : Symbol(b, Decl(deeplyNestedMappedTypes.ts, 12, 37))
+>c : Symbol(c, Decl(deeplyNestedMappedTypes.ts, 12, 42))
+
+type Foo4 = Id2<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
+>Foo4 : Symbol(Foo4, Decl(deeplyNestedMappedTypes.ts, 12, 66))
+>Id2 : Symbol(Id2, Decl(deeplyNestedMappedTypes.ts, 8, 24))
+>x : Symbol(x, Decl(deeplyNestedMappedTypes.ts, 13, 17))
+>y : Symbol(y, Decl(deeplyNestedMappedTypes.ts, 13, 22))
+>z : Symbol(z, Decl(deeplyNestedMappedTypes.ts, 13, 27))
+>a : Symbol(a, Decl(deeplyNestedMappedTypes.ts, 13, 32))
+>b : Symbol(b, Decl(deeplyNestedMappedTypes.ts, 13, 37))
+>c : Symbol(c, Decl(deeplyNestedMappedTypes.ts, 13, 42))
+
+declare const foo3: Foo3;
+>foo3 : Symbol(foo3, Decl(deeplyNestedMappedTypes.ts, 15, 13))
+>Foo3 : Symbol(Foo3, Decl(deeplyNestedMappedTypes.ts, 10, 49))
+
+const foo4: Foo4 = foo3;  // Error expected
+>foo4 : Symbol(foo4, Decl(deeplyNestedMappedTypes.ts, 16, 5))
+>Foo4 : Symbol(Foo4, Decl(deeplyNestedMappedTypes.ts, 12, 66))
+>foo3 : Symbol(foo3, Decl(deeplyNestedMappedTypes.ts, 15, 13))
+
+// Repro from issue linked in #55535
+
+type RequiredDeep<T> = { [K in keyof T]-?: RequiredDeep<T[K]> };
+>RequiredDeep : Symbol(RequiredDeep, Decl(deeplyNestedMappedTypes.ts, 16, 24))
+>T : Symbol(T, Decl(deeplyNestedMappedTypes.ts, 20, 18))
+>K : Symbol(K, Decl(deeplyNestedMappedTypes.ts, 20, 26))
+>T : Symbol(T, Decl(deeplyNestedMappedTypes.ts, 20, 18))
+>RequiredDeep : Symbol(RequiredDeep, Decl(deeplyNestedMappedTypes.ts, 16, 24))
+>T : Symbol(T, Decl(deeplyNestedMappedTypes.ts, 20, 18))
+>K : Symbol(K, Decl(deeplyNestedMappedTypes.ts, 20, 26))
+
+type A = { a?: { b: { c: 1 | { d: 2000 } }}}
+>A : Symbol(A, Decl(deeplyNestedMappedTypes.ts, 20, 64))
+>a : Symbol(a, Decl(deeplyNestedMappedTypes.ts, 22, 10))
+>b : Symbol(b, Decl(deeplyNestedMappedTypes.ts, 22, 16))
+>c : Symbol(c, Decl(deeplyNestedMappedTypes.ts, 22, 21))
+>d : Symbol(d, Decl(deeplyNestedMappedTypes.ts, 22, 30))
+
+type B = { a?: { b: { c: { d: { e: { f: { g: 2 }}}}, x: 1000 }}}
+>B : Symbol(B, Decl(deeplyNestedMappedTypes.ts, 22, 44))
+>a : Symbol(a, Decl(deeplyNestedMappedTypes.ts, 23, 10))
+>b : Symbol(b, Decl(deeplyNestedMappedTypes.ts, 23, 16))
+>c : Symbol(c, Decl(deeplyNestedMappedTypes.ts, 23, 21))
+>d : Symbol(d, Decl(deeplyNestedMappedTypes.ts, 23, 26))
+>e : Symbol(e, Decl(deeplyNestedMappedTypes.ts, 23, 31))
+>f : Symbol(f, Decl(deeplyNestedMappedTypes.ts, 23, 36))
+>g : Symbol(g, Decl(deeplyNestedMappedTypes.ts, 23, 41))
+>x : Symbol(x, Decl(deeplyNestedMappedTypes.ts, 23, 52))
+
+type C = RequiredDeep<A>;
+>C : Symbol(C, Decl(deeplyNestedMappedTypes.ts, 23, 64))
+>RequiredDeep : Symbol(RequiredDeep, Decl(deeplyNestedMappedTypes.ts, 16, 24))
+>A : Symbol(A, Decl(deeplyNestedMappedTypes.ts, 20, 64))
+
+type D = RequiredDeep<B>;
+>D : Symbol(D, Decl(deeplyNestedMappedTypes.ts, 25, 25))
+>RequiredDeep : Symbol(RequiredDeep, Decl(deeplyNestedMappedTypes.ts, 16, 24))
+>B : Symbol(B, Decl(deeplyNestedMappedTypes.ts, 22, 44))
+
+type Test1 = [C, D] extends [D, C] ? true : false;  // false
+>Test1 : Symbol(Test1, Decl(deeplyNestedMappedTypes.ts, 26, 25))
+>C : Symbol(C, Decl(deeplyNestedMappedTypes.ts, 23, 64))
+>D : Symbol(D, Decl(deeplyNestedMappedTypes.ts, 25, 25))
+>D : Symbol(D, Decl(deeplyNestedMappedTypes.ts, 25, 25))
+>C : Symbol(C, Decl(deeplyNestedMappedTypes.ts, 23, 64))
+
+type Test2 = C extends D ? true : false;  // false
+>Test2 : Symbol(Test2, Decl(deeplyNestedMappedTypes.ts, 28, 50))
+>C : Symbol(C, Decl(deeplyNestedMappedTypes.ts, 23, 64))
+>D : Symbol(D, Decl(deeplyNestedMappedTypes.ts, 25, 25))
+
+type Test3 = D extends C ? true : false;  // false
+>Test3 : Symbol(Test3, Decl(deeplyNestedMappedTypes.ts, 29, 40))
+>D : Symbol(D, Decl(deeplyNestedMappedTypes.ts, 25, 25))
+>C : Symbol(C, Decl(deeplyNestedMappedTypes.ts, 23, 64))
+
+// Simplified repro from #54246
+
+// Except for the final non-recursive Record<K, V>, object types produced by NestedRecord all have the same symbol
+// and thus are considered deeply nested after three levels of nesting. Ideally we'd detect that recursion in this
+// type always terminates, but we're unaware of a general algorithm that accomplishes this.
+
+type NestedRecord<K extends string, V> = K extends `${infer K0}.${infer KR}` ? { [P in K0]: NestedRecord<KR, V> } : Record<K, V>;
+>NestedRecord : Symbol(NestedRecord, Decl(deeplyNestedMappedTypes.ts, 30, 40))
+>K : Symbol(K, Decl(deeplyNestedMappedTypes.ts, 38, 18))
+>V : Symbol(V, Decl(deeplyNestedMappedTypes.ts, 38, 35))
+>K : Symbol(K, Decl(deeplyNestedMappedTypes.ts, 38, 18))
+>K0 : Symbol(K0, Decl(deeplyNestedMappedTypes.ts, 38, 59))
+>KR : Symbol(KR, Decl(deeplyNestedMappedTypes.ts, 38, 71))
+>P : Symbol(P, Decl(deeplyNestedMappedTypes.ts, 38, 82))
+>K0 : Symbol(K0, Decl(deeplyNestedMappedTypes.ts, 38, 59))
+>NestedRecord : Symbol(NestedRecord, Decl(deeplyNestedMappedTypes.ts, 30, 40))
+>KR : Symbol(KR, Decl(deeplyNestedMappedTypes.ts, 38, 71))
+>V : Symbol(V, Decl(deeplyNestedMappedTypes.ts, 38, 35))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(deeplyNestedMappedTypes.ts, 38, 18))
+>V : Symbol(V, Decl(deeplyNestedMappedTypes.ts, 38, 35))
+
+type Bar1 = NestedRecord<"x.y.z.a.b.c", number>;
+>Bar1 : Symbol(Bar1, Decl(deeplyNestedMappedTypes.ts, 38, 129))
+>NestedRecord : Symbol(NestedRecord, Decl(deeplyNestedMappedTypes.ts, 30, 40))
+
+type Bar2 = NestedRecord<"x.y.z.a.b.c", string>;
+>Bar2 : Symbol(Bar2, Decl(deeplyNestedMappedTypes.ts, 40, 48))
+>NestedRecord : Symbol(NestedRecord, Decl(deeplyNestedMappedTypes.ts, 30, 40))
+
+declare const bar1: Bar1;
+>bar1 : Symbol(bar1, Decl(deeplyNestedMappedTypes.ts, 43, 13))
+>Bar1 : Symbol(Bar1, Decl(deeplyNestedMappedTypes.ts, 38, 129))
+
+const bar2: Bar2 = bar1;  // Error expected
+>bar2 : Symbol(bar2, Decl(deeplyNestedMappedTypes.ts, 44, 5))
+>Bar2 : Symbol(Bar2, Decl(deeplyNestedMappedTypes.ts, 40, 48))
+>bar1 : Symbol(bar1, Decl(deeplyNestedMappedTypes.ts, 43, 13))
+

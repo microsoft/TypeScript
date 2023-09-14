@@ -96,15 +96,15 @@ import {
     isAnyImportSyntax,
     isArray,
     isArrayBindingElement,
-    isBinaryExpression,
     isBindingElement,
     isBindingPattern,
     isClassDeclaration,
     isClassElement,
+    isComputedPropertyName,
     isDeclaration,
-    isElementAccessExpression,
     isEntityName,
     isEntityNameExpression,
+    isExpandoPropertyDeclaration,
     isExportAssignment,
     isExportDeclaration,
     isExpressionWithTypeArguments,
@@ -133,7 +133,6 @@ import {
     isModuleDeclaration,
     isOmittedExpression,
     isPrivateIdentifier,
-    isPropertyAccessExpression,
     isPropertySignature,
     isSemicolonClassElement,
     isSetAccessorDeclaration,
@@ -202,7 +201,6 @@ import {
     SourceFile,
     startsWith,
     Statement,
-    stringContains,
     StringLiteral,
     Symbol,
     SymbolAccessibility,
@@ -241,7 +239,7 @@ export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver
 
 function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
     const comment = currentSourceFile.text.substring(range.pos, range.end);
-    return stringContains(comment, "@internal");
+    return comment.includes("@internal");
 }
 
 /** @internal */
@@ -694,6 +692,9 @@ export function transformDeclarations(context: TransformationContext) {
         function visitBindingElement(elem: ArrayBindingElement): ArrayBindingElement {
             if (elem.kind === SyntaxKind.OmittedExpression) {
                 return elem;
+            }
+            if (elem.propertyName && isComputedPropertyName(elem.propertyName) && isEntityNameExpression(elem.propertyName.expression)) {
+                checkEntityNameVisibility(elem.propertyName.expression, enclosingDeclaration);
             }
             if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced && !isIdentifierANonContextualKeyword(elem.propertyName)) {
                 // Unnecessary property renaming is forbidden in types, so remove renaming
@@ -1531,7 +1532,7 @@ export function transformDeclarations(context: TransformationContext) {
                     fakespace.symbol = props[0].parent!;
                     const exportMappings: [Identifier, string][] = [];
                     let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                        if (!p.valueDeclaration || !(isPropertyAccessExpression(p.valueDeclaration) || isElementAccessExpression(p.valueDeclaration) || isBinaryExpression(p.valueDeclaration))) {
+                        if (!isExpandoPropertyDeclaration(p.valueDeclaration)) {
                             return undefined;
                         }
                         const nameStr = unescapeLeadingUnderscores(p.escapedName);
