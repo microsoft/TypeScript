@@ -643,7 +643,6 @@ import {
     isNamespaceExportDeclaration,
     isNamespaceReexportDeclaration,
     isNewExpression,
-    isNightly,
     isNodeDescendantOf,
     isNonNullAccess,
     isNullishCoalesce,
@@ -7905,7 +7904,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 factory.createStringLiteral("import"),
                             ),
                         ])));
-                        context.tracker.reportImportTypeNodeResolutionModeOverride?.();
                     }
                 }
                 if (!specifier) {
@@ -7929,7 +7927,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     factory.createStringLiteral(swappedMode === ModuleKind.ESNext ? "import" : "require"),
                                 ),
                             ])));
-                            context.tracker.reportImportTypeNodeResolutionModeOverride?.();
                         }
                     }
 
@@ -39600,26 +39597,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.assertions || node.attributes) {
             const override = getResolutionModeOverride(node.assertions?.assertClause || node.attributes?.attributes, grammarErrorOnNode);
             const errorNode = node.assertions?.assertClause || node.attributes?.attributes;
-            if (override && errorNode) {
-                if (!isNightly()) {
-                    grammarErrorOnNode(
-                        errorNode,
-                        node.assertions?.assertClause
-                            ? Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next
-                            : Diagnostics.resolution_mode_attributes_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next,
-                    );
-                }
-                if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
-                    grammarErrorOnNode(
-                        errorNode,
-                        node.assertions?.assertClause
-                            ? Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext
-                            : Diagnostics.resolution_mode_attribute_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
-                    );
-                }
+            if (override && errorNode && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
+                grammarErrorOnNode(
+                    errorNode,
+                    node.assertions?.assertClause
+                        ? Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext
+                        : Diagnostics.resolution_mode_attribute_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
+                );
             }
         }
-
         checkTypeReferenceOrImport(node);
     }
 
@@ -45065,15 +45051,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const validForTypeAttributes = isExclusivelyTypeOnlyImportOrExport(declaration);
             const override = getResolutionModeOverride(node, validForTypeAttributes ? grammarErrorOnNode : undefined);
             if (validForTypeAttributes && override) {
-                if (!isNightly()) {
-                    grammarErrorOnNode(
-                        node,
-                        declaration.attributes
-                            ? Diagnostics.resolution_mode_attributes_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next
-                            : Diagnostics.resolution_mode_assertions_are_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next,
-                    );
-                }
-
                 if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
                     return grammarErrorOnNode(
                         node,
@@ -50106,13 +50083,6 @@ class SymbolTrackerImpl implements SymbolTracker {
         if (this.inner?.reportNonSerializableProperty) {
             this.onDiagnosticReported();
             this.inner.reportNonSerializableProperty(propertyName);
-        }
-    }
-
-    reportImportTypeNodeResolutionModeOverride(): void {
-        if (this.inner?.reportImportTypeNodeResolutionModeOverride) {
-            this.onDiagnosticReported();
-            this.inner.reportImportTypeNodeResolutionModeOverride();
         }
     }
 

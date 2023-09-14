@@ -4132,14 +4132,6 @@
         "category": "Error",
         "code": 4124
     },
-    "'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
-        "category": "Error",
-        "code": 4125
-    },
-    "'resolution-mode' attributes are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
-        "category": "Error",
-        "code": 4126
-    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

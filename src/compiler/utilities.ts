@@ -556,7 +556,6 @@ import {
     VariableDeclarationList,
     VariableLikeDeclaration,
     VariableStatement,
-    version,
     WhileStatement,
     WithStatement,
     WrappedExpression,
@@ -6004,11 +6003,6 @@ export function getIndentString(level: number) {
 /** @internal */
 export function getIndentSize() {
     return indentStrings[1].length;
-}
-
-/** @internal */
-export function isNightly() {
-    return stringContains(version, "-dev") || stringContains(version, "-insiders");
 }
 
 /** @internal */

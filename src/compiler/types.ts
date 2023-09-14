@@ -9673,7 +9673,6 @@ export interface SymbolTracker {
     trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
-    reportImportTypeNodeResolutionModeOverride?(): void;
 }
 
 export interface TextSpan {
