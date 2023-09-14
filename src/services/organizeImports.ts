@@ -67,6 +67,9 @@ import {
     UserPreferences,
 } from "./_namespaces/ts";
 
+// todo: change to "last", keeping inline for testing purposes
+// const DEFAULT_TYPE_ORDER_PREFERENCE = undefined;
+
 /**
  * Organize imports by:
  *   1) Removing unused imports
@@ -734,11 +737,40 @@ export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly 
         || preferences.organizeImportsTypeOrder === "first" && !arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s2.isTypeOnly, s1.isTypeOnly))) {
         return SortKind.None;
     }
-
     const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
     const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
+
+    if (preferences.organizeImportsTypeOrder === "first" || preferences.organizeImportsTypeOrder === "last") {
+        const { regularImports, typeImports } = getCategorizedSpecifiers(specifiers);
+        const regularCaseSensitivity = regularImports.length
+            ? detectSortCaseSensitivity(regularImports, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive)
+            : undefined;
+        const typeCaseSensitivity = typeImports.length
+            ? detectSortCaseSensitivity(typeImports, specifier => specifier.name.text ?? "", collateCaseSensitive, collateCaseInsensitive)
+            : undefined;
+        if (regularCaseSensitivity === undefined) {
+            return typeCaseSensitivity ?? SortKind.None;
+        }
+        if (typeCaseSensitivity === undefined) {
+            return regularCaseSensitivity;
+        }
+        if (regularCaseSensitivity === SortKind.None || typeCaseSensitivity === SortKind.None) {
+            return SortKind.None;
+        }
+        return typeCaseSensitivity & regularCaseSensitivity;
+    }
+
     return detectSortCaseSensitivity(specifiers, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive);
 }, new ImportSpecifierSortingCache());
+
+function getCategorizedSpecifiers(specifiers: readonly ImportSpecifier[]) {
+    // assumes type imports are at the end
+    const firstType = specifiers.findIndex(s => s.isTypeOnly);
+    return {
+        regularImports: specifiers.slice(0, firstType),
+        typeImports: specifiers.slice(firstType),
+    }
+}
 
 /** @internal */
 export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyImportOrRequireStatement[], newImport: AnyImportOrRequireStatement, comparer: Comparer<string>) {
@@ -747,8 +779,8 @@ export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyIm
 }
 
 /** @internal */
-export function getImportSpecifierInsertionIndex(sortedImports: readonly ImportSpecifier[], newImport: ImportSpecifier, comparer: Comparer<string>) {
-    const index = binarySearch(sortedImports, newImport, identity, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer));
+export function getImportSpecifierInsertionIndex(sortedImports: readonly ImportSpecifier[], newImport: ImportSpecifier, comparer: Comparer<string>, preferences: UserPreferences) {
+    const index = binarySearch(sortedImports, newImport, identity, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, comparer, preferences));
     return index < 0 ? ~index : index;
 }
 

@@ -25,7 +25,7 @@ console.log(A, D);`],
 );
 
 verify.importFixAtPosition([
-`import { A, D, type C, type B } from './foo';
+`import { A, D, type B, type C } from './foo';
 const b: B | C;
 console.log(A, D);`],
     /*errorCode*/ undefined,
