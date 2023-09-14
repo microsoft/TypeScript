@@ -97,9 +97,6 @@ jobs:
           check-latest: true
       - run: npm ci
 
-      - name: Adding playwright
-        run: npm install --no-save --no-package-lock playwright
-
       - name: Installing browsers
         run: npx playwright install --with-deps
 
