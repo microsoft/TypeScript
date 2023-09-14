@@ -3635,10 +3635,6 @@
         "category": "Error",
         "code": 2840
     },
-    "The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
-        "category": "Error",
-        "code": 2841
-    },
     "'{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?": {
         "category": "Error",
         "code": 2842
