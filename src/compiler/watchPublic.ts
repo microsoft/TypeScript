@@ -257,7 +257,7 @@ export interface ProgramHost<T extends BuilderProgram> {
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
     /** Kind of JSDoc parsing to use. */
-    jsDocParsingKind?: JSDocParsingKind;
+    getJSDocParsingKind?(): JSDocParsingKind | undefined;
 }
 /**
  * Internal interface used to wire emit through same host

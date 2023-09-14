@@ -746,7 +746,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
             (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
             getCompilerOptions,
             /*setParentNodes*/ undefined,
-            host.jsDocParsingKind,
+            host.getJSDocParsingKind,
         ),
         getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
         getDefaultLibFileName: options => host.getDefaultLibFileName(options),

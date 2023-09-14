@@ -189,6 +189,7 @@ import {
     JSDoc,
     JsDoc,
     JSDocContainer,
+    JSDocParsingKind,
     JSDocTagInfo,
     JsonSourceFile,
     JsxAttributes,
@@ -1362,7 +1363,7 @@ class SyntaxTreeCache {
                 ),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings()),
             };
-            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind);
+            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind, this.host.getJSDocParsingKind?.());
         }
         else if (this.currentFileVersion !== version) {
             // This is the same file, just a newer version. Incrementally parse the file.
@@ -1387,8 +1388,16 @@ function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnap
     sourceFile.scriptSnapshot = scriptSnapshot;
 }
 
-export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
-    const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind);
+export function createLanguageServiceSourceFile(
+    fileName: string,
+    scriptSnapshot: IScriptSnapshot,
+    scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions,
+    version: string,
+    setNodeParents: boolean,
+    scriptKind?: ScriptKind,
+    jsDocParsingKind?: JSDocParsingKind,
+): SourceFile {
+    const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind, jsDocParsingKind);
     setSourceFileFields(sourceFile, scriptSnapshot, version);
     return sourceFile;
 }
@@ -1450,7 +1459,7 @@ export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSn
         setExternalModuleIndicator: sourceFile.setExternalModuleIndicator,
     };
     // Otherwise, just create a new source file.
-    return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind);
+    return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind, sourceFile.jsDocParsingKind);
 }
 
 const NoopCancellationToken: CancellationToken = {

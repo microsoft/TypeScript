@@ -71,6 +71,7 @@ import {
     isNodeModulesDirectory,
     isRootedDiskPath,
     isString,
+    JSDocParsingKind,
     LanguageServiceMode,
     length,
     map,
@@ -591,6 +592,7 @@ export interface ProjectServiceOptions {
     serverMode?: LanguageServiceMode;
     session: Session<unknown> | undefined;
     /** @internal */ incrementalVerifier?: (service: ProjectService) => void;
+    jsDocParsingKind?: JSDocParsingKind;
 }
 
 interface OriginalFileInfo {
@@ -998,6 +1000,9 @@ export class ProjectService {
 
     /** @internal */ verifyDocumentRegistry = noop;
 
+    /** @internal */
+    private readonly jsDocParsingKind: JSDocParsingKind | undefined;
+
     constructor(opts: ProjectServiceOptions) {
         this.host = opts.host;
         this.logger = opts.logger;
@@ -1013,6 +1018,7 @@ export class ProjectService {
         this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
         this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
         this.session = opts.session;
+        this.jsDocParsingKind = opts.jsDocParsingKind;
 
         if (opts.serverMode !== undefined) {
             this.serverMode = opts.serverMode;
@@ -4572,6 +4578,10 @@ export class ProjectService {
     /** @internal */
     getIncompleteCompletionsCache() {
         return this.incompleteCompletionsCache ||= createIncompleteCompletionsCache();
+    }
+
+    getJSDocParsingKind() {
+        return this.jsDocParsingKind;
     }
 }
 
