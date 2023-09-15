@@ -8213,16 +8213,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
             const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
             const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
-            const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote, stringNamed);
+            const isMethod = !!(symbol.flags & SymbolFlags.Method);
+            const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote, stringNamed, isMethod);
             if (fromNameType) {
                 return fromNameType;
             }
             const rawName = unescapeLeadingUnderscores(symbol.escapedName);
-            return createPropertyNameNodeForIdentifierOrLiteral(rawName, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed);
+            return createPropertyNameNodeForIdentifierOrLiteral(rawName, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed, isMethod);
         }
 
         // See getNameForSymbolFromNameType for a stringy equivalent
-        function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext, singleQuote?: boolean, stringNamed?: boolean) {
+        function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext, singleQuote: boolean, stringNamed: boolean, isMethod: boolean) {
             const nameType = getSymbolLinks(symbol).nameType;
             if (nameType) {
                 if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
@@ -8233,7 +8234,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (isNumericLiteralName(name) && startsWith(name, "-")) {
                         return factory.createComputedPropertyName(factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(+name))));
                     }
-                    return createPropertyNameNodeForIdentifierOrLiteral(name, getEmitScriptTarget(compilerOptions));
+                    return createPropertyNameNodeForIdentifierOrLiteral(name, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed, isMethod);
                 }
                 if (nameType.flags & TypeFlags.UniqueESSymbol) {
                     return factory.createComputedPropertyName(symbolToExpression((nameType as UniqueESSymbolType).symbol, context, SymbolFlags.Value));

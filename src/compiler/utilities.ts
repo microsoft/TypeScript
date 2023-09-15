@@ -10216,9 +10216,10 @@ export function isNumericLiteralName(name: string | __String) {
 }
 
 /** @internal */
-export function createPropertyNameNodeForIdentifierOrLiteral(name: string, target: ScriptTarget, singleQuote?: boolean, stringNamed?: boolean) {
-    return isIdentifierText(name, target) ? factory.createIdentifier(name) :
-        !stringNamed && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
+export function createPropertyNameNodeForIdentifierOrLiteral(name: string, target: ScriptTarget, singleQuote: boolean, stringNamed: boolean, isMethod: boolean) {
+    const isMethodNamedNew = isMethod && name === "new";
+    return !isMethodNamedNew && isIdentifierText(name, target) ? factory.createIdentifier(name) :
+        !stringNamed && !isMethodNamedNew && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
         factory.createStringLiteral(name, !!singleQuote);
 }
 
