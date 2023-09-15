@@ -32,11 +32,11 @@ const tsconfig: File = {
 };
 const packageJson: File = {
     path: "/package.json",
-    content: `{ "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }`
+    content: `{ "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }`,
 };
 const indexTs: File = {
     path: "/index.ts",
-    content: ""
+    content: "",
 };
 
 describe("unittests:: tsserver:: autoImportProvider", () => {
@@ -46,7 +46,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             angularFormsPackageJson,
             tsconfig,
             { path: packageJson.path, content: `{ "dependencies": {} }` },
-            indexTs
+            indexTs,
         ]);
         openFilesForSession([indexTs], session);
         assert.isUndefined(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
@@ -59,7 +59,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             angularFormsPackageJson,
             tsconfig,
             packageJson,
-            { path: indexTs.path, content: "import '@angular/forms';" }
+            { path: indexTs.path, content: "import '@angular/forms';" },
         ]);
         openFilesForSession([indexTs], session);
         assert.isUndefined(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
@@ -77,10 +77,12 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         ]);
 
         openFilesForSession([angularFormsDts], session);
-        assert.isUndefined(projectService
-            .getDefaultProjectForFile(angularFormsDts.path as ts.server.NormalizedPath, /*ensureProject*/ true)!
-            .getLanguageService()
-            .getAutoImportProvider());
+        assert.isUndefined(
+            projectService
+                .getDefaultProjectForFile(angularFormsDts.path as ts.server.NormalizedPath, /*ensureProject*/ true)!
+                .getLanguageService()
+                .getAutoImportProvider(),
+        );
         baselineTsserverLogs("autoImportProvider", "projects already inside node_modules", session);
     });
 
@@ -102,7 +104,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             angularFormsPackageJson,
             tsconfig,
             { path: "/package.json", content: "{}" },
-            indexTs
+            indexTs,
         ]);
 
         openFilesForSession([indexTs], session);
@@ -119,7 +121,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             angularFormsPackageJson,
             tsconfig,
             packageJson,
-            indexTs
+            indexTs,
         ]);
 
         openFilesForSession([indexTs], session);
@@ -129,7 +131,8 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         updateFile(indexTs.path, "console.log(0)");
         assert.strictEqual(
             projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider(),
-            autoImportProvider);
+            autoImportProvider,
+        );
         baselineTsserverLogs("autoImportProvider", "Reuses autoImportProvider when program structure is unchanged", session);
     });
 
@@ -139,7 +142,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             angularFormsPackageJson,
             tsconfig,
             packageJson,
-            indexTs
+            indexTs,
         ]);
 
         openFilesForSession([indexTs], session);
@@ -159,7 +162,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             angularFormsDts,
             angularFormsPackageJson,
             tsconfig,
-            indexTs
+            indexTs,
         ]);
 
         // Create configured project only, ensure !projectService.pendingEnsureProjectForOpenFiles
@@ -184,7 +187,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             angularCorePackageJson,
             tsconfig,
             packageJson,
-            indexTs
+            indexTs,
         ]);
 
         openFilesForSession([indexTs], session);
@@ -212,7 +215,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             angularCorePackageJson,
             tsconfig,
             packageJson,
-            indexTs
+            indexTs,
         ]);
 
         openFilesForSession([indexTs, angularFormsDts], session);
@@ -233,7 +236,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
             angularFormsPackageJson,
             tsconfig,
             { path: packageJson.path, content: "{" },
-            indexTs
+            indexTs,
         ]);
 
         openFilesForSession([indexTs], session);
@@ -245,10 +248,10 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
     });
 
     it("Does not create an auto import provider if there are too many dependencies", () => {
-        const createPackage = (i: number): File[] => ([
+        const createPackage = (i: number): File[] => [
             { path: `/node_modules/package${i}/package.json`, content: `{ "name": "package${i}" }` },
-            { path: `/node_modules/package${i}/index.d.ts`, content: `` }
-        ]);
+            { path: `/node_modules/package${i}/index.d.ts`, content: `` },
+        ];
 
         const packages = [];
         for (let i = 0; i < 11; i++) {
@@ -321,7 +324,7 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
             // packages/b
             { path: "/packages/b/package.json", content: packageJson.content },
             { path: "/packages/b/tsconfig.json", content: `{ "compilerOptions": { "composite": true } }` },
-            { path: "/packages/b/index.ts", content: `export class B {}` }
+            { path: "/packages/b/index.ts", content: `export class B {}` },
         ];
 
         const { projectService, session, findAllReferences } = setup(files);
@@ -344,7 +347,7 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
             // packages/b
             { path: "/packages/a/node_modules/b/package.json", content: `{ "types": "dist/index.d.ts" }` },
             { path: "/packages/a/node_modules/b/tsconfig.json", content: `{ "compilerOptions": { "composite": true, "outDir": "dist" } }` },
-            { path: "/packages/a/node_modules/b/index.ts", content: `export class B {}` }
+            { path: "/packages/a/node_modules/b/index.ts", content: `export class B {}` },
         ];
 
         const { projectService, session } = setup(files);
@@ -358,7 +361,7 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
         for (const option of ts.sourceFileAffectingCompilerOptions) {
             assert(
                 !ts.hasProperty(ts.server.AutoImportProviderProject.compilerOptionsOverrides, option.name),
-                `'${option.name}' may cause AutoImportProviderProject not to share source files with main program`
+                `'${option.name}' may cause AutoImportProviderProject not to share source files with main program`,
             );
         }
     });
@@ -384,9 +387,9 @@ function setup(files: File[]) {
             arguments: {
                 openFiles: [{
                     fileName: path,
-                    content: newText
-                }]
-            }
+                    content: newText,
+                }],
+            },
         });
     }
 
@@ -397,8 +400,8 @@ function setup(files: File[]) {
             arguments: {
                 file,
                 line,
-                offset
-            }
+                offset,
+            },
         });
     }
 
@@ -413,7 +416,7 @@ function setup(files: File[]) {
             arguments: {
                 ...requestLocation,
                 includeExternalModuleExports: true,
-            }
+            },
         });
     }
 }

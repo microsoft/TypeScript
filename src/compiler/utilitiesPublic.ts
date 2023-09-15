@@ -311,7 +311,7 @@ export function getDefaultLibFileName(options: CompilerOptions): string {
         case ScriptTarget.ES2016:
             return "lib.es2016.full.d.ts";
         case ScriptTarget.ES2015:
-            return "lib.es6.d.ts";  // We don't use lib.es2015.full.d.ts due to breaking change.
+            return "lib.es6.d.ts"; // We don't use lib.es2015.full.d.ts due to breaking change.
         default:
             return "lib.d.ts";
     }
@@ -539,7 +539,7 @@ export function getTypeParameterOwner(d: Declaration): Declaration | undefined {
     }
 }
 
-export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
+export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration; name: Identifier; };
 
 export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
     return isParameter(node) && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
@@ -621,8 +621,9 @@ export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "
  */
 export function validateLocaleAndSetLanguage(
     locale: string,
-    sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
-    errors?: Diagnostic[]) {
+    sys: { getExecutingFilePath(): string; resolvePath(path: string): string; fileExists(fileName: string): boolean; readFile(fileName: string): string | undefined; },
+    errors?: Diagnostic[],
+) {
     const lowerCaseLocale = locale.toLowerCase();
     const matchResult = /^([a-z]+)([_-]([a-z]+))?$/.exec(lowerCaseLocale);
 
@@ -871,7 +872,7 @@ export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier 
 }
 
 /** @internal */
-export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName } {
+export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName; } {
     return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
 }
 
@@ -1003,8 +1004,7 @@ export function getJSDocParameterTagsNoCache(param: ParameterDeclaration): reado
 
 function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
     const name = param.name.escapedText;
-    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag =>
-        isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
+    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag => isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
 }
 
 /**
@@ -1330,7 +1330,7 @@ export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
  *
  * @internal
  */
-export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot } {
+export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot; } {
     return isOptionalChainRoot(node.parent) && node.parent.expression === node;
 }
 
@@ -1801,13 +1801,11 @@ export function isAssignmentPattern(node: Node): node is AssignmentPattern {
         || kind === SyntaxKind.ObjectLiteralExpression;
 }
 
-
 export function isArrayBindingElement(node: Node): node is ArrayBindingElement {
     const kind = node.kind;
     return kind === SyntaxKind.BindingElement
         || kind === SyntaxKind.OmittedExpression;
 }
-
 
 /**
  * Determines whether the BindingOrAssignmentElement is a BindingElement-like declaration

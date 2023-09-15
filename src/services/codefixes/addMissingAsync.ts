@@ -40,7 +40,7 @@ const fixId = "addMissingAsync";
 const errorCodes = [
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
-    Diagnostics.Type_0_is_not_comparable_to_type_1.code
+    Diagnostics.Type_0_is_not_comparable_to_type_1.code,
 ];
 
 registerCodeFix({
@@ -89,11 +89,13 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
     fixedDeclarations?.add(getNodeId(insertionSite));
     const cloneWithModifier = factory.updateModifiers(
         getSynthesizedDeepClone(insertionSite, /*includeTrivia*/ true),
-        factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)));
+        factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)),
+    );
     changeTracker.replaceNode(
         sourceFile,
         insertionSite,
-        cloneWithModifier);
+        cloneWithModifier,
+    );
 }
 
 function getFixableErrorSpanDeclaration(sourceFile: SourceFile, span: TextSpan | undefined): FixableDeclaration | undefined {

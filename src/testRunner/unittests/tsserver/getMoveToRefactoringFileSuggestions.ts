@@ -3,11 +3,11 @@ import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
-    openFilesForSession
+    openFilesForSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
-    File
+    File,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: getMoveToRefactoringFileSuggestions", () => {
@@ -17,22 +17,22 @@ describe("unittests:: tsserver:: getMoveToRefactoringFileSuggestions", () => {
             content: `interface ka {
                 name: string;
             }
-            `
+            `,
         };
         const file2: File = { path: "/project/b/file2.ts", content: "" };
         const file3: File = { path: "/project/d/e/file3.ts", content: "" };
         const file4: File = {
             path: "/project/a/file4.ts",
             content: `import { value } from "../node_modules/@types/node/someFile.d.ts";
-import { value1 } from "../node_modules/.cache/someFile.d.ts";`
+import { value1 } from "../node_modules/.cache/someFile.d.ts";`,
         };
         const nodeModulesFile1: File = {
             path: "project/node_modules/@types/node/someFile.d.ts",
-            content: `export const value = 0;`
+            content: `export const value = 0;`,
         };
         const nodeModulesFile2: File = {
             path: "project/node_modules/.cache/someFile.d.ts",
-            content: `export const value1 = 0;`
+            content: `export const value1 = 0;`,
         };
         const tsconfig: File = {
             path: "/project/tsconfig.json",
@@ -43,7 +43,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
             command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
-            arguments: { file: file1.path, line: 1, offset: 11 }
+            arguments: { file: file1.path, line: 1, offset: 11 },
         });
         baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "works for suggesting a list of files, excluding node_modules within a project", session);
     });
@@ -53,7 +53,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`
             content: `interface ka {
                 name: string;
             }
-            `
+            `,
         };
         const file2: File = { path: "/file2.tsx", content: "" };
         const file3: File = { path: "/file3.mts", content: "" };
@@ -69,14 +69,14 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`
 
         session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
             command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
-            arguments: { file: file1.path, line: 1, offset: 11 }
+            arguments: { file: file1.path, line: 1, offset: 11 },
         });
         baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "suggests only .ts file for a .ts filepath", session);
     });
     it("suggests only .js file for a .js filepath", () => {
         const file1: File = {
             path: "/file1.js",
-            content: `class C {}`
+            content: `class C {}`,
         };
         const file2: File = { path: "/file2.js", content: "" };
         const file3: File = { path: "/file3.mts", content: "" };
@@ -90,14 +90,14 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`
 
         session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
             command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
-            arguments: { file: file1.path, line: 1, offset: 7 }
+            arguments: { file: file1.path, line: 1, offset: 7 },
         });
         baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "suggests only .js file for a .js filepath", session);
     });
     it("skips lib.d.ts files", () => {
         const file1: File = {
             path: "/file1.d.ts",
-            content: `class C {}`
+            content: `class C {}`,
         };
         const file2: File = { path: "/a/lib.d.ts", content: "" };
         const file3: File = { path: "/a/file3.d.ts", content: "" };
@@ -110,7 +110,7 @@ import { value1 } from "../node_modules/.cache/someFile.d.ts";`
 
         session.executeCommandSeq<ts.server.protocol.GetMoveToRefactoringFileSuggestionsRequest>({
             command: ts.server.protocol.CommandTypes.GetMoveToRefactoringFileSuggestions,
-            arguments: { file: file1.path, line: 1, offset: 7 }
+            arguments: { file: file1.path, line: 1, offset: 7 },
         });
         baselineTsserverLogs("getMoveToRefactoringFileSuggestions", "skips lib.d.ts files", session);
     });
