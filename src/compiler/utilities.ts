@@ -564,7 +564,7 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export const resolvingEmptyArray: never[] = [];
+export const resolvingEmptyArray: never[] = Object.freeze([]) as never[];
 
 /** @internal */
 export const externalHelpersModuleNameText = "tslib";

@@ -13,11 +13,27 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export const emptyArray: never[] = [] as never[];
+export const emptyArray: never[] = Object.freeze([]) as never[];
 /** @internal */
-export const emptyMap: ReadonlyMap<never, never> = new Map<never, never>();
+export const emptyMap: ReadonlyMap<never, never> = createReadonlyMap();
 /** @internal */
-export const emptySet: ReadonlySet<never> = new Set<never>();
+export const emptySet: ReadonlySet<never> = createReadonlySet();
+
+function createReadonlyMap<K, V>(): ReadonlyMap<K, V> {
+    const map: ReadonlyMap<K, V> & Partial<Map<K, V>> = new Map();
+    map.clear = notImplemented;
+    map.delete = notImplemented;
+    map.set = notImplemented;
+    return Object.freeze(map);
+}
+
+function createReadonlySet<T>(): ReadonlySet<T> {
+    const set: ReadonlySet<T> & Partial<Set<T>> = new Set();
+    set.add = notImplemented;
+    set.clear = notImplemented;
+    set.delete = notImplemented;
+    return Object.freeze(set);
+}
 
 /** @internal */
 export function length(array: readonly any[] | undefined): number {

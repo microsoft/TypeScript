@@ -19,7 +19,7 @@ export enum LogLevel {
     verbose,
 }
 
-export const emptyArray: SortedReadonlyArray<never> = createSortedArray<never>();
+export const emptyArray: SortedReadonlyArray<never> = Object.freeze(createSortedArray<never>());
 
 export interface Logger {
     close(): void;
