@@ -29,7 +29,6 @@ jobs:
           - '20'
           - '18'
           - '16'
-          - '14'
         bundle:
           - 'true'
         include:
