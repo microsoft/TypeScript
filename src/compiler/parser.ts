@@ -1325,14 +1325,7 @@ function setExternalModuleIndicator(sourceFile: SourceFile) {
     sourceFile.externalModuleIndicator = isFileProbablyExternalModule(sourceFile);
 }
 
-export function createSourceFile(
-    fileName: string,
-    sourceText: string,
-    languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions,
-    setParentNodes = false,
-    scriptKind?: ScriptKind,
-    jsDocParsingMode?: JSDocParsingMode,
-): SourceFile {
+export function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes = false, scriptKind?: ScriptKind, jsDocParsingMode?: JSDocParsingMode): SourceFile {
     tracing?.push(tracing.Phase.Parse, "createSourceFile", { path: fileName }, /*separateBeginAndEnd*/ true);
     performance.mark("beforeParse");
     let result: SourceFile;
