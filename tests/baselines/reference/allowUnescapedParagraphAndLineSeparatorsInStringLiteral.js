@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts] ////
+
 //// [allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts]
 // Strings containing unescaped line / paragraph separators
 // Using both single quotes, double quotes and template literals
