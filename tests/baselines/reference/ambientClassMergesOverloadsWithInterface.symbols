@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientClassMergesOverloadsWithInterface.ts ===
+//// [tests/cases/compiler/ambientClassMergesOverloadsWithInterface.ts] ////
+
+=== ambientClassMergesOverloadsWithInterface.ts ===
 declare class C {
 >C : Symbol(C, Decl(ambientClassMergesOverloadsWithInterface.ts, 0, 0), Decl(ambientClassMergesOverloadsWithInterface.ts, 3, 1))
 

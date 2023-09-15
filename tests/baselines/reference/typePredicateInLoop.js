@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateInLoop.ts] ////
+
 //// [typePredicateInLoop.ts]
 // Repro from #12101
 
@@ -24,7 +26,7 @@ export function y(arg: Type): void {
 //// [typePredicateInLoop.js]
 "use strict";
 // Repro from #12101
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 var guard = function (arg) { return arg.type === 1; };
 var otherFunc = function (arg1, arg2) { };

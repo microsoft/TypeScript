@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bindingPatternInParameter01.ts ===
+//// [tests/cases/compiler/bindingPatternInParameter01.ts] ////
+
+=== bindingPatternInParameter01.ts ===
 const nestedArray = [[[1, 2]], [[3, 4]]];
 >nestedArray : Symbol(nestedArray, Decl(bindingPatternInParameter01.ts, 0, 5))
 

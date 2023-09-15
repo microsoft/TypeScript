@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/initializationOrdering1.ts] ////
+
+=== initializationOrdering1.ts ===
+class Helper {
+>Helper : Symbol(Helper, Decl(initializationOrdering1.ts, 0, 0))
+
+    create(): boolean {
+>create : Symbol(Helper.create, Decl(initializationOrdering1.ts, 0, 14))
+
+        return true
+    }
+}
+
+export class Broken {
+>Broken : Symbol(Broken, Decl(initializationOrdering1.ts, 4, 1))
+
+    constructor(readonly facade: Helper) {
+>facade : Symbol(Broken.facade, Decl(initializationOrdering1.ts, 7, 16))
+>Helper : Symbol(Helper, Decl(initializationOrdering1.ts, 0, 0))
+
+        console.log(this.bug)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.bug : Symbol(Broken.bug, Decl(initializationOrdering1.ts, 9, 5))
+>this : Symbol(Broken, Decl(initializationOrdering1.ts, 4, 1))
+>bug : Symbol(Broken.bug, Decl(initializationOrdering1.ts, 9, 5))
+    }
+    bug = this.facade.create()
+>bug : Symbol(Broken.bug, Decl(initializationOrdering1.ts, 9, 5))
+>this.facade.create : Symbol(Helper.create, Decl(initializationOrdering1.ts, 0, 14))
+>this.facade : Symbol(Broken.facade, Decl(initializationOrdering1.ts, 7, 16))
+>this : Symbol(Broken, Decl(initializationOrdering1.ts, 4, 1))
+>facade : Symbol(Broken.facade, Decl(initializationOrdering1.ts, 7, 16))
+>create : Symbol(Helper.create, Decl(initializationOrdering1.ts, 0, 14))
+
+}
+
+new Broken(new Helper)
+>Broken : Symbol(Broken, Decl(initializationOrdering1.ts, 4, 1))
+>Helper : Symbol(Helper, Decl(initializationOrdering1.ts, 0, 0))
+

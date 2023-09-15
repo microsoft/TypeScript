@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classBody/classWithEmptyBody.ts] ////
+
 //// [classWithEmptyBody.ts]
 class C {
 }

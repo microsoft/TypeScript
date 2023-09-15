@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts(12,25): error TS2302: Static members cannot reference class type parameters.
+staticIndexers.ts(12,25): error TS2302: Static members cannot reference class type parameters.
 
 
-==== tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts (1 errors) ====
+==== staticIndexers.ts (1 errors) ====
     // static indexers not allowed
     
     class C {

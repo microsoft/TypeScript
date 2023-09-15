@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericConstraint1.ts ===
+//// [tests/cases/compiler/genericConstraint1.ts] ////
+
+=== genericConstraint1.ts ===
 class C<T> {
 >C : Symbol(C, Decl(genericConstraint1.ts, 0, 0))
 >T : Symbol(T, Decl(genericConstraint1.ts, 0, 8))

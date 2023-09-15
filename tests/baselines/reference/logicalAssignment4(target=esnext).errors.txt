@@ -1,8 +1,8 @@
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts(39,13): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts(45,13): error TS2532: Object is possibly 'undefined'.
+logicalAssignment4.ts(39,13): error TS18048: 'defaultValue' is possibly 'undefined'.
+logicalAssignment4.ts(45,13): error TS18048: 'defaultValue' is possibly 'undefined'.
 
 
-==== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts (2 errors) ====
+==== logicalAssignment4.ts (2 errors) ====
     function foo1(results: number[] | undefined) {
         (results ||= []).push(100);
     }
@@ -43,7 +43,7 @@ tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts(45,13): e
                 thing.name;
                 defaultValue.name;
                 ~~~~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'defaultValue' is possibly 'undefined'.
             }
         }
         else {
@@ -51,7 +51,7 @@ tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts(45,13): e
                 thing.name;
                 defaultValue.name;
                 ~~~~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'defaultValue' is possibly 'undefined'.
             }
         }
     }

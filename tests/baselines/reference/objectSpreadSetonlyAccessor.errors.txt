@@ -1,10 +1,10 @@
-tests/cases/conformance/types/spread/objectSpreadSetonlyAccessor.ts(2,34): error TS2783: 'foo' is specified more than once, so this usage will be overwritten.
+objectSpreadSetonlyAccessor.ts(2,34): error TS2783: 'foo' is specified more than once, so this usage will be overwritten.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadSetonlyAccessor.ts (1 errors) ====
+==== objectSpreadSetonlyAccessor.ts (1 errors) ====
     const o1: { foo: number, bar: undefined } = { foo: 1, ... { set bar(_v: number) { } } }
     const o2: { foo: undefined } = { foo: 1, ... { set foo(_v: number) { } } }
                                      ~~~~~~
 !!! error TS2783: 'foo' is specified more than once, so this usage will be overwritten.
-!!! related TS2785 tests/cases/conformance/types/spread/objectSpreadSetonlyAccessor.ts:2:42: This spread always overwrites this property.
+!!! related TS2785 objectSpreadSetonlyAccessor.ts:2:42: This spread always overwrites this property.
     

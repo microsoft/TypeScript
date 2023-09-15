@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/thisInTypeQuery.ts] ////
+
+=== thisInTypeQuery.ts ===
+// Repros from #52672
+
+function assert(condition: unknown): asserts condition {
+>assert : Symbol(assert, Decl(thisInTypeQuery.ts, 0, 0))
+>condition : Symbol(condition, Decl(thisInTypeQuery.ts, 2, 16))
+>condition : Symbol(condition, Decl(thisInTypeQuery.ts, 2, 16))
+
+    if (!condition) {
+>condition : Symbol(condition, Decl(thisInTypeQuery.ts, 2, 16))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(thisInTypeQuery.ts, 6, 1))
+
+    private map = {
+>map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
+
+        my_key: 'example_value'
+>my_key : Symbol(my_key, Decl(thisInTypeQuery.ts, 9, 19))
+
+    };
+
+    runTypeFails() {
+>runTypeFails : Symbol(MyClass.runTypeFails, Decl(thisInTypeQuery.ts, 11, 6))
+
+        const params = null as any as { a: { key: string } } | null;
+>params : Symbol(params, Decl(thisInTypeQuery.ts, 14, 13))
+>a : Symbol(a, Decl(thisInTypeQuery.ts, 14, 39))
+>key : Symbol(key, Decl(thisInTypeQuery.ts, 14, 44))
+
+        assert(params);
+>assert : Symbol(assert, Decl(thisInTypeQuery.ts, 0, 0))
+>params : Symbol(params, Decl(thisInTypeQuery.ts, 14, 13))
+
+        type Key = keyof typeof this.map;
+>Key : Symbol(Key, Decl(thisInTypeQuery.ts, 15, 23))
+>this.map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
+>this : Symbol(MyClass, Decl(thisInTypeQuery.ts, 6, 1))
+>map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
+
+        this.map[params.a.key as Key];
+>this.map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
+>this : Symbol(MyClass, Decl(thisInTypeQuery.ts, 6, 1))
+>map : Symbol(MyClass.map, Decl(thisInTypeQuery.ts, 8, 15))
+>params.a.key : Symbol(key, Decl(thisInTypeQuery.ts, 14, 44))
+>params.a : Symbol(a, Decl(thisInTypeQuery.ts, 14, 39))
+>params : Symbol(params, Decl(thisInTypeQuery.ts, 14, 13))
+>a : Symbol(a, Decl(thisInTypeQuery.ts, 14, 39))
+>key : Symbol(key, Decl(thisInTypeQuery.ts, 14, 44))
+>Key : Symbol(Key, Decl(thisInTypeQuery.ts, 15, 23))
+    }
+}
+
+class C {
+>C : Symbol(C, Decl(thisInTypeQuery.ts, 19, 1))
+
+  foo() {
+>foo : Symbol(C.foo, Decl(thisInTypeQuery.ts, 21, 9))
+
+    const x = !!true;
+>x : Symbol(x, Decl(thisInTypeQuery.ts, 23, 9))
+
+    if (x) {
+>x : Symbol(x, Decl(thisInTypeQuery.ts, 23, 9))
+
+      type T0 = typeof this;
+>T0 : Symbol(T0, Decl(thisInTypeQuery.ts, 24, 12))
+>this : Symbol(C, Decl(thisInTypeQuery.ts, 19, 1))
+    }
+  }
+}
+

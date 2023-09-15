@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesOptionalParams.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithGenericCallSignaturesOptionalParams.ts] ////
+
+=== objectTypesIdentityWithGenericCallSignaturesOptionalParams.ts ===
 // Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
 // parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
 // optional or rest) and types, and identical return types.
@@ -10,7 +12,6 @@ class A {
 >foo : <T>(x: T, y?: T) => T
 >x : T
 >y : T
->null : null
 }
 
 class B<T> {
@@ -20,7 +21,6 @@ class B<T> {
 >foo : (x: T, y?: T) => T
 >x : T
 >y : T
->null : null
 }
 
 class C<T> {
@@ -30,7 +30,6 @@ class C<T> {
 >foo : (x: T, y?: T) => T
 >x : T
 >y : T
->null : null
 }
 
 interface I<T> {

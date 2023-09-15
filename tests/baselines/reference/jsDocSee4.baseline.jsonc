@@ -1,0 +1,91 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/jsDocSee4.ts ===
+// <|class [|A|] {
+//     foo () { }
+// }|>
+// declare const a: A;
+// /**
+//  * @see {/*GOTO DEF POS*/A#foo}
+//  */
+// const t1 = 1
+// /**
+// --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "A",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/jsDocSee4.ts ===
+// class A {
+//     foo () { }
+// }
+// <|declare const [|a|]: A;|>
+// /**
+//  * @see {A#foo}
+//  */
+// const t1 = 1
+// /**
+//  * @see {/*GOTO DEF POS*/a.foo()}
+//  */
+// const t2 = 1
+// /**
+// --- (line: 14) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "a",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/jsDocSee4.ts ===
+// class A {
+//     foo () { }
+// }
+// <|declare const [|a|]: A;|>
+// /**
+//  * @see {A#foo}
+//  */
+// const t1 = 1
+// /**
+//  * @see {a.foo()}
+//  */
+// const t2 = 1
+// /**
+//  * @see {@link /*GOTO DEF POS*/a.foo()}
+//  */
+// const t3 = 1
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "a",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

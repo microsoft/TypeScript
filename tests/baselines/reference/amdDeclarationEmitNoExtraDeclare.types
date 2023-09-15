@@ -1,6 +1,8 @@
-=== tests/cases/compiler/Class.ts ===
+//// [tests/cases/compiler/amdDeclarationEmitNoExtraDeclare.ts] ////
+
+=== Class.ts ===
 import { Configurable } from "./Configurable"
->Configurable : <T extends import("tests/cases/compiler/Configurable").Constructor<{}>>(base: T) => T
+>Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
 
 export class HiddenClass {}
 >HiddenClass : HiddenClass
@@ -8,10 +10,10 @@ export class HiddenClass {}
 export class ActualClass extends Configurable(HiddenClass) {}
 >ActualClass : ActualClass
 >Configurable(HiddenClass) : HiddenClass
->Configurable : <T extends import("tests/cases/compiler/Configurable").Constructor<{}>>(base: T) => T
+>Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
 >HiddenClass : typeof HiddenClass
 
-=== tests/cases/compiler/Configurable.ts ===
+=== Configurable.ts ===
 export type Constructor<T> = {
 >Constructor : Constructor<T>
 

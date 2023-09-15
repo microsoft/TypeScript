@@ -27,6 +27,14 @@ class Foo {
 •• 
 
 
+            {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }
+
+
   bar(a, b) {
       if (a === b) {
           return true;
@@ -87,6 +95,14 @@ class Foo {
       }
       return false;↲
 •• 
+
+
+            {
+      if (a === b) {
+          return true;
+      }
+      return false;
+  }
 
 
   bar(a, b) {

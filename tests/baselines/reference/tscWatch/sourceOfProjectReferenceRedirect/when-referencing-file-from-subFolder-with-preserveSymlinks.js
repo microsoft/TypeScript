@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -66,48 +67,49 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/b/src/bar/foo.ts (used version)
 /user/username/projects/myproject/packages/a/src/test.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/A/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/B/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/a/src/test.ts:
-  {"fileName":"/user/username/projects/myproject/packages/A/src/test.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/src/foo.ts:
-  {"fileName":"/user/username/projects/myproject/packages/B/src/foo.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/src/bar/foo.ts:
-  {"fileName":"/user/username/projects/myproject/packages/B/src/bar/foo.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/a/node_modules:
-  {"fileName":"/user/username/projects/myproject/packages/A/node_modules","pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules:
-  {"fileName":"/user/username/projects/myproject/packages/node_modules","pollingInterval":500}
-/user/username/projects/myproject/packages/b/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/B/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/packages/A/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/packages/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/a/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/packages/a/src/test.ts: *new*
+  {}
+/user/username/projects/myproject/packages/a/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/packages/b/package.json: *new*
+  {}
+/user/username/projects/myproject/packages/b/src/bar/foo.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/src/foo.ts: *new*
+  {}
+/user/username/projects/myproject/packages/b/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/packages/b/src:
-  {"directoryName":"/user/username/projects/myproject/packages/b/src"}
-/user/username/projects/myproject/packages/a/src:
-  {"directoryName":"/user/username/projects/myproject/packages/A/src"}
-  {"directoryName":"/user/username/projects/myproject/packages/a/src"}
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+/user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/packages/a/src: *new*
+  {}
+/user/username/projects/myproject/packages/b/src: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/packages/A/lib/test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("b/lib/foo");
 var foo_2 = require("b/lib/bar/foo");
 (0, foo_1.foo)();
@@ -119,7 +121,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"latestChangedDtsFile":"./lib/test.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"latestChangedDtsFile":"./lib/test.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -138,6 +140,10 @@ export {};
     ],
     "fileInfos": {
       "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -151,10 +157,20 @@ export {};
         "signature": "1045484683-export function bar() { }"
       },
       "./src/test.ts": {
+        "original": {
+          "version": "14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n",
         "signature": "-3531856636-export {};\n"
       }
     },
+    "root": [
+      [
+        4,
+        "./src/test.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "./lib",
@@ -176,6 +192,6 @@ export {};
     "latestChangedDtsFile": "./lib/test.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1003
+  "size": 1014
 }
 

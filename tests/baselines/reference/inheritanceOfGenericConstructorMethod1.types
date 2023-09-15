@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritanceOfGenericConstructorMethod1.ts ===
+//// [tests/cases/compiler/inheritanceOfGenericConstructorMethod1.ts] ////
+
+=== inheritanceOfGenericConstructorMethod1.ts ===
 class A<T> { }
 >A : A<T>
 

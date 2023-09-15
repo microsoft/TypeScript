@@ -1,3 +1,4 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // const x: /*FIND ALL REFS*/[|any|] = 0;
 // const any = 2;
@@ -5,62 +6,38 @@
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
-// function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/b.ts ===
 // const z: [|any|] = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "any",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 42,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // const x: /*FIND ALL REFS*/[|any|] = 0;
+  // const any = 2;
+  // const y: any = any;
+  // function f(b: boolean): boolean;
+  // --- (line: 5) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "any",
+    "displayParts": [
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // const x: [|any|] = 0;
 // const any = 2;
@@ -68,62 +45,40 @@
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
-// function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 7) skipped ---
 
 // === /tests/cases/fourslash/b.ts ===
 // const z: [|any|] = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "any",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 42,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // const x: [|any|] = 0;
+  // const any = 2;
+  // const y: /*FIND ALL REFS*/any = any;
+  // function f(b: boolean): boolean;
+  // type T = never; type U = never;
+  // function n(x: number): number;
+  // --- (line: 7) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "any",
+    "displayParts": [
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // const x: any = 0;
 // const any = 2;
@@ -132,50 +87,38 @@
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 8) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "boolean",
-      "textSpan": {
-        "start": 67,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "boolean",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 77,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // const x: any = 0;
+  // const any = 2;
+  // const y: any = any;
+  // function f(b: /*FIND ALL REFS*/[|boolean|]): boolean;
+  // type T = never; type U = never;
+  // function n(x: number): number;
+  // function o(x: object): object;
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "boolean",
+    "displayParts": [
+     {
+      "text": "boolean",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // const x: any = 0;
 // const any = 2;
@@ -184,50 +127,38 @@
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
-// function s(x: string): string;
-// function sy(s: symbol): symbol;
-// function v(v: void): void;
+// --- (line: 8) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "boolean",
-      "textSpan": {
-        "start": 67,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "boolean",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 67,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 77,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // const x: any = 0;
+  // const any = 2;
+  // const y: any = any;
+  // function f(b: [|boolean|]): /*FIND ALL REFS*/boolean;
+  // type T = never; type U = never;
+  // function n(x: number): number;
+  // function o(x: object): object;
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "boolean",
+    "displayParts": [
+     {
+      "text": "boolean",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // const x: any = 0;
 // const any = 2;
@@ -240,46 +171,38 @@
 // function sy(s: symbol): symbol;
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "never",
-      "textSpan": {
-        "start": 95,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "never",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 111,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // const x: any = 0;
+  // const any = 2;
+  // const y: any = any;
+  // function f(b: boolean): boolean;
+  // type T = /*FIND ALL REFS*/[|never|]; type U = never;
+  // function n(x: number): number;
+  // function o(x: object): object;
+  // function s(x: string): string;
+  // function sy(s: symbol): symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "never",
+    "displayParts": [
+     {
+      "text": "never",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // const x: any = 0;
 // const any = 2;
@@ -292,46 +215,38 @@
 // function sy(s: symbol): symbol;
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "never",
-      "textSpan": {
-        "start": 95,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "never",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 95,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 111,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // const x: any = 0;
+  // const any = 2;
+  // const y: any = any;
+  // function f(b: boolean): boolean;
+  // type T = [|never|]; type U = /*FIND ALL REFS*/never;
+  // function n(x: number): number;
+  // function o(x: object): object;
+  // function s(x: string): string;
+  // function sy(s: symbol): symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "never",
+    "displayParts": [
+     {
+      "text": "never",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // const x: any = 0;
 // const any = 2;
@@ -344,46 +259,38 @@
 // function sy(s: symbol): symbol;
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "number",
-      "textSpan": {
-        "start": 132,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 132,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 141,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // const x: any = 0;
+  // const any = 2;
+  // const y: any = any;
+  // function f(b: boolean): boolean;
+  // type T = never; type U = never;
+  // function n(x: /*FIND ALL REFS*/[|number|]): number;
+  // function o(x: object): object;
+  // function s(x: string): string;
+  // function sy(s: symbol): symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "number",
+    "displayParts": [
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // const x: any = 0;
 // const any = 2;
@@ -396,50 +303,40 @@
 // function sy(s: symbol): symbol;
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "number",
-      "textSpan": {
-        "start": 132,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 132,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 141,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // const x: any = 0;
+  // const any = 2;
+  // const y: any = any;
+  // function f(b: boolean): boolean;
+  // type T = never; type U = never;
+  // function n(x: [|number|]): /*FIND ALL REFS*/number;
+  // function o(x: object): object;
+  // function s(x: string): string;
+  // function sy(s: symbol): symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "number",
+    "displayParts": [
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
+// --- (line: 3) skipped ---
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
@@ -448,50 +345,38 @@
 // function sy(s: symbol): symbol;
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "object",
-      "textSpan": {
-        "start": 163,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "object",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 172,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // --- (line: 3) skipped ---
+  // function f(b: boolean): boolean;
+  // type T = never; type U = never;
+  // function n(x: number): number;
+  // function o(x: /*FIND ALL REFS*/[|object|]): object;
+  // function s(x: string): string;
+  // function sy(s: symbol): symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "object",
+    "displayParts": [
+     {
+      "text": "object",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
+// --- (line: 3) skipped ---
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
@@ -500,51 +385,38 @@
 // function sy(s: symbol): symbol;
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "object",
-      "textSpan": {
-        "start": 163,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "object",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 163,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 172,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // --- (line: 3) skipped ---
+  // function f(b: boolean): boolean;
+  // type T = never; type U = never;
+  // function n(x: number): number;
+  // function o(x: [|object|]): /*FIND ALL REFS*/object;
+  // function s(x: string): string;
+  // function sy(s: symbol): symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "object",
+    "displayParts": [
+     {
+      "text": "object",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
+// --- (line: 4) skipped ---
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
@@ -552,51 +424,37 @@
 // function sy(s: symbol): symbol;
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "string",
-      "textSpan": {
-        "start": 194,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 194,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 203,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // --- (line: 4) skipped ---
+  // type T = never; type U = never;
+  // function n(x: number): number;
+  // function o(x: object): object;
+  // function s(x: /*FIND ALL REFS*/[|string|]): string;
+  // function sy(s: symbol): symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "string",
+    "displayParts": [
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
+// --- (line: 4) skipped ---
 // type T = never; type U = never;
 // function n(x: number): number;
 // function o(x: object): object;
@@ -604,254 +462,175 @@
 // function sy(s: symbol): symbol;
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "string",
-      "textSpan": {
-        "start": 194,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 194,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 203,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // --- (line: 4) skipped ---
+  // type T = never; type U = never;
+  // function n(x: number): number;
+  // function o(x: object): object;
+  // function s(x: [|string|]): /*FIND ALL REFS*/string;
+  // function sy(s: symbol): symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "string",
+    "displayParts": [
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
+// --- (line: 5) skipped ---
 // function n(x: number): number;
 // function o(x: object): object;
 // function s(x: string): string;
 // function sy(s: /*FIND ALL REFS*/[|symbol|]): [|symbol|];
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "symbol",
-      "textSpan": {
-        "start": 226,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "symbol",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 235,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // --- (line: 5) skipped ---
+  // function n(x: number): number;
+  // function o(x: object): object;
+  // function s(x: string): string;
+  // function sy(s: /*FIND ALL REFS*/[|symbol|]): symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "symbol",
+    "displayParts": [
+     {
+      "text": "symbol",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
+// --- (line: 5) skipped ---
 // function n(x: number): number;
 // function o(x: object): object;
 // function s(x: string): string;
 // function sy(s: [|symbol|]): /*FIND ALL REFS*/[|symbol|];
 // function v(v: void): void;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "symbol",
-      "textSpan": {
-        "start": 226,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "symbol",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 226,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 235,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // --- (line: 5) skipped ---
+  // function n(x: number): number;
+  // function o(x: object): object;
+  // function s(x: string): string;
+  // function sy(s: [|symbol|]): /*FIND ALL REFS*/symbol;
+  // function v(v: void): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "symbol",
+    "displayParts": [
+     {
+      "text": "symbol",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
-// function n(x: number): number;
+// --- (line: 6) skipped ---
 // function o(x: object): object;
 // function s(x: string): string;
 // function sy(s: symbol): symbol;
 // function v(v: /*FIND ALL REFS*/[|void|]): [|void|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "void",
-      "textSpan": {
-        "start": 257,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 257,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 264,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // --- (line: 6) skipped ---
+  // function o(x: object): object;
+  // function s(x: string): string;
+  // function sy(s: symbol): symbol;
+  // function v(v: /*FIND ALL REFS*/[|void|]): void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "void",
+    "displayParts": [
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// const x: any = 0;
-// const any = 2;
-// const y: any = any;
-// function f(b: boolean): boolean;
-// type T = never; type U = never;
-// function n(x: number): number;
+// --- (line: 6) skipped ---
 // function o(x: object): object;
 // function s(x: string): string;
 // function sy(s: symbol): symbol;
 // function v(v: [|void|]): /*FIND ALL REFS*/[|void|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "void",
-      "textSpan": {
-        "start": 257,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 257,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 264,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // --- (line: 6) skipped ---
+  // function o(x: object): object;
+  // function s(x: string): string;
+  // function sy(s: symbol): symbol;
+  // function v(v: [|void|]): /*FIND ALL REFS*/void;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "void",
+    "displayParts": [
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // const x: [|any|] = 0;
 // const any = 2;
@@ -859,58 +638,322 @@
 // function f(b: boolean): boolean;
 // type T = never; type U = never;
 // function n(x: number): number;
+// --- (line: 7) skipped ---
+
+// === /tests/cases/fourslash/b.ts ===
+// const z: /*FIND ALL REFS*/[|any|] = 0;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // const x: [|any|] = 0;
+  // const any = 2;
+  // const y: any = any;
+  // function f(b: boolean): boolean;
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "keyword",
+    "name": "any",
+    "displayParts": [
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// const x: /*HIGHLIGHTS*/[|{| kind: "reference" |}any|] = 0;
+// const any = 2;
+// const y: [|{| kind: "reference" |}any|] = any;
+// function f(b: boolean): boolean;
+// type T = never; type U = never;
+// function n(x: number): number;
+// --- (line: 7) skipped ---
+
+// === /tests/cases/fourslash/b.ts ===
+// const z: [|{| kind: "reference" |}any|] = 0;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// const x: [|{| kind: "reference" |}any|] = 0;
+// const any = 2;
+// const y: /*HIGHLIGHTS*/[|{| kind: "reference" |}any|] = any;
+// function f(b: boolean): boolean;
+// type T = never; type U = never;
+// function n(x: number): number;
+// --- (line: 7) skipped ---
+
+// === /tests/cases/fourslash/b.ts ===
+// const z: [|{| kind: "reference" |}any|] = 0;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// const x: any = 0;
+// const any = 2;
+// const y: any = any;
+// function f(b: /*HIGHLIGHTS*/[|{| kind: "reference" |}boolean|]): [|{| kind: "reference" |}boolean|];
+// type T = never; type U = never;
+// function n(x: number): number;
+// function o(x: object): object;
+// --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// const x: any = 0;
+// const any = 2;
+// const y: any = any;
+// function f(b: [|{| kind: "reference" |}boolean|]): /*HIGHLIGHTS*/[|{| kind: "reference" |}boolean|];
+// type T = never; type U = never;
+// function n(x: number): number;
+// function o(x: object): object;
+// --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// const x: any = 0;
+// const any = 2;
+// const y: any = any;
+// function f(b: boolean): boolean;
+// type T = /*HIGHLIGHTS*/[|{| kind: "reference" |}never|]; type U = [|{| kind: "reference" |}never|];
+// function n(x: number): number;
 // function o(x: object): object;
 // function s(x: string): string;
 // function sy(s: symbol): symbol;
 // function v(v: void): void;
 
-// === /tests/cases/fourslash/b.ts ===
-// const z: /*FIND ALL REFS*/[|any|] = 0;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "keyword",
-      "name": "any",
-      "textSpan": {
-        "start": 9,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 42,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// const x: any = 0;
+// const any = 2;
+// const y: any = any;
+// function f(b: boolean): boolean;
+// type T = [|{| kind: "reference" |}never|]; type U = /*HIGHLIGHTS*/[|{| kind: "reference" |}never|];
+// function n(x: number): number;
+// function o(x: object): object;
+// function s(x: string): string;
+// function sy(s: symbol): symbol;
+// function v(v: void): void;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// const x: any = 0;
+// const any = 2;
+// const y: any = any;
+// function f(b: boolean): boolean;
+// type T = never; type U = never;
+// function n(x: /*HIGHLIGHTS*/[|{| kind: "reference" |}number|]): [|{| kind: "reference" |}number|];
+// function o(x: object): object;
+// function s(x: string): string;
+// function sy(s: symbol): symbol;
+// function v(v: void): void;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// const x: any = 0;
+// const any = 2;
+// const y: any = any;
+// function f(b: boolean): boolean;
+// type T = never; type U = never;
+// function n(x: [|{| kind: "reference" |}number|]): /*HIGHLIGHTS*/[|{| kind: "reference" |}number|];
+// function o(x: object): object;
+// function s(x: string): string;
+// function sy(s: symbol): symbol;
+// function v(v: void): void;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// --- (line: 3) skipped ---
+// function f(b: boolean): boolean;
+// type T = never; type U = never;
+// function n(x: number): number;
+// function o(x: /*HIGHLIGHTS*/[|{| kind: "reference" |}object|]): [|{| kind: "reference" |}object|];
+// function s(x: string): string;
+// function sy(s: symbol): symbol;
+// function v(v: void): void;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// --- (line: 3) skipped ---
+// function f(b: boolean): boolean;
+// type T = never; type U = never;
+// function n(x: number): number;
+// function o(x: [|{| kind: "reference" |}object|]): /*HIGHLIGHTS*/[|{| kind: "reference" |}object|];
+// function s(x: string): string;
+// function sy(s: symbol): symbol;
+// function v(v: void): void;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// --- (line: 4) skipped ---
+// type T = never; type U = never;
+// function n(x: number): number;
+// function o(x: object): object;
+// function s(x: /*HIGHLIGHTS*/[|{| kind: "reference" |}string|]): [|{| kind: "reference" |}string|];
+// function sy(s: symbol): symbol;
+// function v(v: void): void;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// --- (line: 4) skipped ---
+// type T = never; type U = never;
+// function n(x: number): number;
+// function o(x: object): object;
+// function s(x: [|{| kind: "reference" |}string|]): /*HIGHLIGHTS*/[|{| kind: "reference" |}string|];
+// function sy(s: symbol): symbol;
+// function v(v: void): void;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// --- (line: 5) skipped ---
+// function n(x: number): number;
+// function o(x: object): object;
+// function s(x: string): string;
+// function sy(s: /*HIGHLIGHTS*/[|{| kind: "reference" |}symbol|]): [|{| kind: "reference" |}symbol|];
+// function v(v: void): void;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// --- (line: 5) skipped ---
+// function n(x: number): number;
+// function o(x: object): object;
+// function s(x: string): string;
+// function sy(s: [|{| kind: "reference" |}symbol|]): /*HIGHLIGHTS*/[|{| kind: "reference" |}symbol|];
+// function v(v: void): void;
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// --- (line: 6) skipped ---
+// function o(x: object): object;
+// function s(x: string): string;
+// function sy(s: symbol): symbol;
+// function v(v: /*HIGHLIGHTS*/[|{| kind: "reference" |}void|]): [|{| kind: "reference" |}void|];
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// --- (line: 6) skipped ---
+// function o(x: object): object;
+// function s(x: string): string;
+// function sy(s: symbol): symbol;
+// function v(v: [|{| kind: "reference" |}void|]): /*HIGHLIGHTS*/[|{| kind: "reference" |}void|];
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   a.ts
+//   b.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// const x: [|{| kind: "reference" |}any|] = 0;
+// const any = 2;
+// const y: [|{| kind: "reference" |}any|] = any;
+// function f(b: boolean): boolean;
+// type T = never; type U = never;
+// function n(x: number): number;
+// --- (line: 7) skipped ---
+
+// === /tests/cases/fourslash/b.ts ===
+// const z: /*HIGHLIGHTS*/[|{| kind: "reference" |}any|] = 0;

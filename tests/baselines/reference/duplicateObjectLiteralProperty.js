@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateObjectLiteralProperty.ts] ////
+
 //// [duplicateObjectLiteralProperty.ts]
 var x = {
     a: 1,

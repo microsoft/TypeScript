@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts] ////
+
+=== genericCallWithFunctionTypedArguments5.ts ===
 // Generic call with parameter of object type with member of function type of n args passed object whose associated member is call signature with n+1 args
 
 function foo<T, U>(arg: { cb: (t: T) => U }) {
@@ -12,7 +14,6 @@ function foo<T, U>(arg: { cb: (t: T) => U }) {
 >arg.cb : (t: T) => U
 >arg : { cb: (t: T) => U; }
 >cb : (t: T) => U
->null : null
 }
 
 var arg = { cb: <T>(x: T) => '' };
@@ -64,8 +65,6 @@ function foo2<T, U>(arg: { cb: (t: T, t2: T) => U }) {
 >arg.cb : (t: T, t2: T) => U
 >arg : { cb: (t: T, t2: T) => U; }
 >cb : (t: T, t2: T) => U
->null : null
->null : null
 }
 
 // fewer args ok

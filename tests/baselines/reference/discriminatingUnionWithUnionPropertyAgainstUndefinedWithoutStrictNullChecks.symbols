@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts] ////
+
+=== discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts ===
+// strictNullChecks: false
+
+// repro #49643
+
+interface A {}
+>A : Symbol(A, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 0, 0))
+
+interface B {}
+>B : Symbol(B, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 4, 14))
+
+declare let opts:
+>opts : Symbol(opts, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 11))
+
+   | { objectRef?: undefined; getObjectRef: () => any }
+>objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 6))
+>getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 29))
+
+   | { objectRef: A | B; getObjectRef?: undefined };
+>objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 6))
+>A : Symbol(A, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 0, 0))
+>B : Symbol(B, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 4, 14))
+>getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 24))
+
+opts.objectRef || opts.getObjectRef();
+>opts.objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 6), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 6))
+>opts : Symbol(opts, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 11))
+>objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 6), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 6))
+>opts.getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 29), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 24))
+>opts : Symbol(opts, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 11))
+>getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 8, 29), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 9, 24))
+
+// repro #49643 issuecomment-1174455723
+
+interface X {
+>X : Symbol(X, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 11, 38))
+
+    foo: string;
+>foo : Symbol(X.foo, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 15, 13))
+}
+
+interface Y {
+>Y : Symbol(Y, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 17, 1))
+
+    baz: number;
+>baz : Symbol(Y.baz, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 19, 13))
+}
+
+interface A2 {
+>A2 : Symbol(A2, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 21, 1))
+
+    result: unknown;
+>result : Symbol(A2.result, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 23, 14))
+
+    error: undefined;
+>error : Symbol(A2.error, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 24, 20))
+}
+
+interface B2 {
+>B2 : Symbol(B2, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 26, 1))
+
+    error: X | Y;
+>error : Symbol(B2.error, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 28, 14))
+>X : Symbol(X, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 11, 38))
+>Y : Symbol(Y, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 17, 1))
+}
+
+const testMethod = (m: A2 | B2) => {
+>testMethod : Symbol(testMethod, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 32, 5))
+>m : Symbol(m, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 32, 20))
+>A2 : Symbol(A2, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 21, 1))
+>B2 : Symbol(B2, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 26, 1))
+
+    if (m.error) {
+>m.error : Symbol(error, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 24, 20), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 28, 14))
+>m : Symbol(m, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 32, 20))
+>error : Symbol(error, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 24, 20), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 28, 14))
+
+        m; // should be A2 | B2
+>m : Symbol(m, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 32, 20))
+
+    } else {
+        m; // should be A2 | B2
+>m : Symbol(m, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 32, 20))
+    }
+}
+
+

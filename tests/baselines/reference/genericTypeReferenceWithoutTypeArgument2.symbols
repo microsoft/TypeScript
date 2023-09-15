@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts] ////
+
+=== genericTypeReferenceWithoutTypeArgument2.ts ===
 // it is an error to use a generic type without type arguments
 // all of these are errors 
 
@@ -61,7 +63,6 @@ var g = function f(x: I): I { var y: I; return y; }
 
 class D extends I {
 >D : Symbol(D, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 17, 51))
->I : Symbol(I, Decl(genericTypeReferenceWithoutTypeArgument2.ts, 0, 0))
 }
 
 interface U extends I {}

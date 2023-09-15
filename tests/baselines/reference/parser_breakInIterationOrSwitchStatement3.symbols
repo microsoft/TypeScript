@@ -1,5 +1,7 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakInIterationOrSwitchStatement3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakInIterationOrSwitchStatement3.ts] ////
+
+=== parser_breakInIterationOrSwitchStatement3.ts ===
+
 for (;;) {
-No type information for this code.  break;
-No type information for this code.}
-No type information for this code.
+  break;
+}

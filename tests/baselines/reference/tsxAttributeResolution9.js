@@ -29,7 +29,7 @@ export class MyComponent {
 //// [file.jsx]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.MyComponent = void 0;
     var MyComponent = /** @class */ (function () {
         function MyComponent() {

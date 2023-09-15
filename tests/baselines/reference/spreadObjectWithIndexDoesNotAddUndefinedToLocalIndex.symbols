@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadObjectWithIndexDoesNotAddUndefinedToLocalIndex.ts ===
+//// [tests/cases/compiler/spreadObjectWithIndexDoesNotAddUndefinedToLocalIndex.ts] ////
+
+=== spreadObjectWithIndexDoesNotAddUndefinedToLocalIndex.ts ===
 declare const m: { [k: string]: string };
 >m : Symbol(m, Decl(spreadObjectWithIndexDoesNotAddUndefinedToLocalIndex.ts, 0, 13))
 >k : Symbol(k, Decl(spreadObjectWithIndexDoesNotAddUndefinedToLocalIndex.ts, 0, 20))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/intrinsics.ts ===
+//// [tests/cases/compiler/intrinsics.ts] ////
+
+=== intrinsics.ts ===
 var hasOwnProperty: hasOwnProperty; // Error
 >hasOwnProperty : Symbol(hasOwnProperty, Decl(intrinsics.ts, 0, 3))
 >hasOwnProperty : Symbol(hasOwnProperty)

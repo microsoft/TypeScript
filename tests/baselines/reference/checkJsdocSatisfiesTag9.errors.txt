@@ -1,0 +1,20 @@
+/a.js(11,26): error TS2353: Object literal may only specify known properties, and 'd' does not exist in type 'Color'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @typedef {Object} Color
+     * @property {number} r
+     * @property {number} g
+     * @property {number} b
+     */
+    
+    // All of these should be Colors, but I only use some of them here.
+    export const Palette = /** @satisfies {Record<string, Color>} */ ({
+        white: { r: 255, g: 255, b: 255 },
+        black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'
+                             ~
+!!! error TS2353: Object literal may only specify known properties, and 'd' does not exist in type 'Color'.
+        blue: { r: 0, g: 0, b: 255 },
+    });
+    

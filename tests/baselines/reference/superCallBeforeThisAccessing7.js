@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing7.ts] ////
+
 //// [superCallBeforeThisAccessing7.ts]
 class Base {
     constructor(c) { }
@@ -39,7 +41,7 @@ var D = /** @class */ (function (_super) {
     function D() {
         var _this = this;
         var x = {
-            j: _this._t
+            j: _this._t,
         };
         _this = _super.call(this, undefined) || this;
         return _this;

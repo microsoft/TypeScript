@@ -9,7 +9,7 @@ emittedFile:/app/bin/index.js
 sourceFile:index.ts
 -------------------------------------------------------------------
 >>>"use strict";
->>>exports.__esModule = true;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>/// <reference path="../types/bar.d.ts"/>
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

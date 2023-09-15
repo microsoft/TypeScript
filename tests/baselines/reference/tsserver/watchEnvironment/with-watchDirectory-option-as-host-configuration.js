@@ -1,15 +1,72 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"command":"configure","arguments":{"watchOptions":{"watchDirectory":"UseFsEvents"}},"seq":1,"type":"request"}
-Host watch options changed to {"watchDirectory":0}, it will be take effect for next watches.
-response:
-    {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
-response:{"responseRequired":false}
-request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/b/commonFile1.ts","projectRootPath":"/a/b"}}
-Search path: /a/b
-For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
-Creating configuration project /a/b/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 {"watchDirectory":0} Project: /a/b/tsconfig.json WatchType: Config file
-Config: /a/b/tsconfig.json : {
+currentDirectory:: / useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/a/b/commonFile2.ts]
+let y = 1
+
+//// [/a/b/tsconfig.json]
+{}
+
+//// [/a/b/commonFile1.ts]
+let x = 1
+
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "watchOptions": {
+          "watchDirectory": "UseFsEvents"
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Host watch options changed to {"watchDirectory":0}, it will be take effect for next watches.
+Info seq  [hh:mm:ss:mss] response:
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "configure",
+     "request_seq": 1,
+     "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts",
+        "projectRootPath": "/a/b"
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Search path: /a/b
+Info seq  [hh:mm:ss:mss] For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 {"watchDirectory":0} Project: /a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /a/b/tsconfig.json : {
  "rootNames": [
   "/a/b/commonFile1.ts",
   "/a/b/commonFile2.ts"
@@ -18,50 +75,46 @@ Config: /a/b/tsconfig.json : {
   "configFilePath": "/a/b/tsconfig.json"
  }
 }
-DirectoryWatcher:: Added:: WatchInfo: /a/b 1 {"watchDirectory":0} Config: /a/b/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 {"watchDirectory":0} Config: /a/b/tsconfig.json WatchType: Wild card directory
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 500 {"watchDirectory":0} WatchType: Closed Script info
-Starting updateGraphWorker: Project: /a/b/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 {"watchDirectory":0} WatchType: Closed Script info
-DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 {"watchDirectory":0} Project: /a/b/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 {"watchDirectory":0} Project: /a/b/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/a/b/tsconfig.json' (Configured)
-	Files (3)
-	/a/lib/lib.d.ts
-	/a/b/commonFile1.ts
-	/a/b/commonFile2.ts
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 {"watchDirectory":0} Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 {"watchDirectory":0} Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 500 {"watchDirectory":0} WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 {"watchDirectory":0} WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/a/b/commonFile1.ts SVC-1-0 "let x = 1"
+	/a/b/commonFile2.ts Text-1 "let y = 1"
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	commonFile1.ts
 	  Matched by default include pattern '**/*'
 	commonFile2.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Project '/a/b/tsconfig.json' (Configured)
-	Files (3)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
-		Projects: /a/b/tsconfig.json
-response:{"responseRequired":false}
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
 
 FsWatches::
-/a/b:
-  {"directoryName":"/a/b"}
-
-FsWatchesRecursive::
+/a/b: *new*
+  {}
+/a/b/commonfile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}

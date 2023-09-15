@@ -14,12 +14,12 @@ x.a;
 //// [declFileExportAssignmentOfGenericInterface_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [declFileExportAssignmentOfGenericInterface_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
     exports.x.a;
 });

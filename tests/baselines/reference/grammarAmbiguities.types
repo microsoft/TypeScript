@@ -1,13 +1,13 @@
-=== tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts] ////
+
+=== grammarAmbiguities.ts ===
 function f(n: any) { return null; }
 >f : (n: any) => any
 >n : any
->null : null
 
 function g<A, B>(x: any) { return null; }
 >g : <A, B>(x: any) => any
 >x : any
->null : null
 
 interface A { }
 interface B { }

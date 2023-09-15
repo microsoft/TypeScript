@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingUnionToUnion.ts] ////
+
 //// [narrowingUnionToUnion.ts]
 type Falsy = false | 0 | 0n | '' | null | undefined;
 
@@ -211,6 +213,20 @@ function f1x(obj: (string | number)[] | null) {
     obj;  // string[] | null
 }
 
+// Repro from #55425
+
+type MyDiscriminatedUnion = { type: 'A', aProp: number } | { type: 'B', bProp: string };
+
+declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
+
+declare const working: unknown;
+declare const broken: Record<string, any> | undefined;
+declare const workingAgain: Record<string, any> | undefined | unknown;
+
+isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
+isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
+isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp;
+
 
 //// [narrowingUnionToUnion.js]
 "use strict";
@@ -368,10 +384,13 @@ function f1x(obj) {
     assertRelationIsNullOrStringArray(obj);
     obj; // string[] | null
 }
+isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
+isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
+isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp;
 
 
 //// [narrowingUnionToUnion.d.ts]
-declare type Falsy = false | 0 | 0n | '' | null | undefined;
+type Falsy = false | 0 | 0n | '' | null | undefined;
 declare function isFalsy(value: unknown): value is Falsy;
 declare function fx1(x: string | number | undefined): void;
 declare function fx2<T>(x: T | undefined): void;
@@ -411,7 +430,7 @@ declare function isMaybeZero(value: number | null | undefined): value is 0 | nul
 declare function isEmptyArray<T>(value: T[]): value is [];
 declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
 declare const TEST_CASES: (((value: string) => void) | ((value: number) => void) | ((value: string[]) => void))[];
-declare type EmptyString = '' | null | undefined;
+type EmptyString = '' | null | undefined;
 declare function isEmpty(value: string | EmptyString): value is EmptyString;
 declare let test: string | null | undefined;
 declare function assert<T>(value: any): asserts value is T;
@@ -421,3 +440,14 @@ declare function check2(x: unknown): x is ("hello" | 0);
 declare function test3(x: unknown): void;
 declare function assertRelationIsNullOrStringArray(v: (string | number)[] | null): asserts v is string[] | null;
 declare function f1x(obj: (string | number)[] | null): void;
+type MyDiscriminatedUnion = {
+    type: 'A';
+    aProp: number;
+} | {
+    type: 'B';
+    bProp: string;
+};
+declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
+declare const working: unknown;
+declare const broken: Record<string, any> | undefined;
+declare const workingAgain: Record<string, any> | undefined | unknown;

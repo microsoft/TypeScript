@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgumentsInFunctionExpressions.ts ===
+//// [tests/cases/compiler/typeArgumentsInFunctionExpressions.ts] ////
+
+=== typeArgumentsInFunctionExpressions.ts ===
 var obj = function f<T>(a: T) { // should not error
 >obj : Symbol(obj, Decl(typeArgumentsInFunctionExpressions.ts, 0, 3))
 >f : Symbol(f, Decl(typeArgumentsInFunctionExpressions.ts, 0, 9))

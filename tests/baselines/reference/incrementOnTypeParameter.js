@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incrementOnTypeParameter.ts] ////
+
 //// [incrementOnTypeParameter.ts]
 class C<T> {
     a: T;

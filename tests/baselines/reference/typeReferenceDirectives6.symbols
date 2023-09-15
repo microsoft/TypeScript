@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeReferenceDirectives6.ts] ////
+
 === /app.ts ===
 /// <reference path="./ref.d.ts"/>
 /// <reference types="lib"/>

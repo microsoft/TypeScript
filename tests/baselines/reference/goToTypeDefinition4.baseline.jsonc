@@ -1,0 +1,37 @@
+// === goToType ===
+// === /tests/cases/fourslash/bar.ts ===
+// import { T } from "./foo";
+// let x: /*GOTO TYPE*/T;
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|export type [|{| defId: 0 |}T|] = string;|>
+// <|export const [|{| defId: 1 |}T|] = "";|>
+
+// === /tests/cases/fourslash/bar.ts ===
+// import { T } from "./foo";
+// let x: /*GOTO DEF*/[|T|];
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "const",
+    "name": "T",
+    "containerName": "\"/tests/cases/fourslash/foo\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   },
+   {
+    "defId": 1,
+    "kind": "const",
+    "name": "T",
+    "containerName": "\"/tests/cases/fourslash/foo\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

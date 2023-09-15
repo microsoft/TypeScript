@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/subclassWithPolymorphicThisIsAssignable.ts] ////
+
 //// [subclassWithPolymorphicThisIsAssignable.ts]
 /* taken from mongoose.Document */
 interface Document {
@@ -19,7 +21,7 @@ export class Example<Z extends CustomDocument> {
 
 //// [subclassWithPolymorphicThisIsAssignable.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Example = void 0;
 var Example = /** @class */ (function () {
     function Example() {

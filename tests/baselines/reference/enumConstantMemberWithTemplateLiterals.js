@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts] ////
+
 //// [enumConstantMemberWithTemplateLiterals.ts]
 enum T1 {
     a = `1`
@@ -73,10 +75,10 @@ var T5;
     T5["b"] = "12";
     T5["c"] = "123";
     T5[T5["d"] = 1] = "d";
-    T5[T5["e"] = 0] = "e";
-    T5[T5["f"] = 0] = "f";
-    T5[T5["g"] = 0] = "g";
-    T5[T5["h"] = 0] = "h";
+    T5[T5["e"] = "1" - "1"] = "e";
+    T5["f"] = "11";
+    T5["g"] = "123";
+    T5[T5["h"] = "1".length] = "h";
 })(T5 || (T5 = {}));
 var T6;
 (function (T6) {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsBooleanType.ts ===
+//// [tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsBooleanType.ts] ////
+
+=== conditionalOperatorConditionIsBooleanType.ts ===
 //Cond ? Expr1 : Expr2,  Cond is of boolean type, Expr1 and Expr2 have the same type
 var condBoolean: boolean;
 >condBoolean : boolean
@@ -135,7 +137,6 @@ typeof "123" == "string" ? exprBoolean1 : exprBoolean2;
 null === undefined ? exprString1 : exprString2;
 >null === undefined ? exprString1 : exprString2 : string
 >null === undefined : boolean
->null : null
 >undefined : undefined
 >exprString1 : string
 >exprString2 : string
@@ -151,7 +152,6 @@ true || false ? exprIsObject1 : exprIsObject2;
 null === undefined ? exprString1 : exprBoolean1; // union
 >null === undefined ? exprString1 : exprBoolean1 : string | boolean
 >null === undefined : boolean
->null : null
 >undefined : undefined
 >exprString1 : string
 >exprBoolean1 : boolean
@@ -279,7 +279,6 @@ var resultIsString3 = null === undefined ? exprString1 : exprString2;
 >resultIsString3 : string
 >null === undefined ? exprString1 : exprString2 : string
 >null === undefined : boolean
->null : null
 >undefined : undefined
 >exprString1 : string
 >exprString2 : string

@@ -1,11 +1,13 @@
-=== tests/cases/compiler/assignment.ts ===
+//// [tests/cases/compiler/exportAssignmentImportMergeNoCrash.ts] ////
+
+=== assignment.ts ===
 export default {
     foo: 12
 >foo : Symbol(foo, Decl(assignment.ts, 0, 16))
 
 };
 
-=== tests/cases/compiler/user.ts ===
+=== user.ts ===
 import Obj from "./assignment";
 >Obj : Symbol(Obj, Decl(user.ts, 0, 6), Decl(user.ts, 2, 12))
 

@@ -41,7 +41,7 @@ export import { aaaa as bbbb } from "./server";
 
 //// [server.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.aaaa = exports.z2 = exports.z1 = exports.x1 = exports.a1 = exports.m = exports.x = exports.a = void 0;
 exports.a = 10;
 exports.x = exports.a;
@@ -53,7 +53,7 @@ exports.z2 = 10;
 exports.aaaa = 10;
 //// [client.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.z2 = exports.z111 = exports.xxxx = void 0;
 var server_1 = require("./server");
 exports.xxxx = server_1.a;

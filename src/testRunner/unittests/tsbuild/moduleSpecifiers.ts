@@ -1,10 +1,24 @@
-namespace ts {
-    // https://github.com/microsoft/TypeScript/issues/31696
-    describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
-        verifyTsc({
-            scenario: "moduleSpecifiers",
-            subScenario: `synthesized module specifiers resolve correctly`,
-            fs: () => loadProjectFromFiles({
+import * as Utils from "../../_namespaces/Utils";
+import {
+    symbolLibContent,
+} from "../helpers/contents";
+import {
+    verifyTsc,
+} from "../helpers/tsc";
+import {
+    loadProjectFromFiles,
+} from "../helpers/vfs";
+import {
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch";
+
+// https://github.com/microsoft/TypeScript/issues/31696
+describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
+    verifyTsc({
+        scenario: "moduleSpecifiers",
+        subScenario: `synthesized module specifiers resolve correctly`,
+        fs: () =>
+            loadProjectFromFiles({
                 "/src/solution/common/nominal.ts": Utils.dedent`
                     export declare type Nominal<T, Name extends string> = T & {
                         [Symbol.species]: Name;
@@ -83,18 +97,19 @@ namespace ts {
                         { "path": "./solution" }
                     ],
                     "include": []
-                }`
+                }`,
             }, symbolLibContent),
-            commandLineArgs: ["-b", "/src", "--verbose"]
-        });
+        commandLineArgs: ["-b", "/src", "--verbose"],
     });
+});
 
-    // https://github.com/microsoft/TypeScript/issues/44434 but with `module: node16`, some `exports` maps blocking direct access, and no `baseUrl`
-    describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers across referenced projects resolve correctly", () => {
-        verifyTsc({
-            scenario: "moduleSpecifiers",
-            subScenario: `synthesized module specifiers across projects resolve correctly`,
-            fs: () => loadProjectFromFiles({
+// https://github.com/microsoft/TypeScript/issues/44434 but with `module: node16`, some `exports` maps blocking direct access, and no `baseUrl`
+describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers across referenced projects resolve correctly", () => {
+    verifyTsc({
+        scenario: "moduleSpecifiers",
+        subScenario: `synthesized module specifiers across projects resolve correctly`,
+        fs: () =>
+            loadProjectFromFiles({
                 "/src/src-types/index.ts": Utils.dedent`
                     export * from './dogconfig.js';`,
                 "/src/src-types/dogconfig.ts": Utils.dedent`
@@ -177,12 +192,11 @@ namespace ts {
                         ]
                     }`,
             }, ""),
-            modifyFs: fs => {
-                fs.writeFileSync("/lib/lib.es2022.full.d.ts", tscWatch.libFile.content);
-                fs.symlinkSync("/src", "/src/src-types/node_modules");
-                fs.symlinkSync("/src", "/src/src-dogs/node_modules");
-            },
-            commandLineArgs: ["-b", "src/src-types", "src/src-dogs", "--verbose"]
-        });
+        modifyFs: fs => {
+            fs.writeFileSync("/lib/lib.es2022.full.d.ts", libFile.content);
+            fs.symlinkSync("/src", "/src/src-types/node_modules");
+            fs.symlinkSync("/src", "/src/src-dogs/node_modules");
+        },
+        commandLineArgs: ["-b", "src/src-types", "src/src-dogs", "--verbose"],
     });
-}
+});

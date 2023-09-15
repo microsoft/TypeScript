@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts] ////
+
 //// [varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.ts]
 type Either<L, A> = Left<L, A> | Right<L, A>;
 
@@ -83,7 +85,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyServer = void 0;
 var Left = /** @class */ (function () {
     function Left(value) {

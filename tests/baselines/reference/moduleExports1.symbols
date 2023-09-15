@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleExports1.ts ===
+//// [tests/cases/compiler/moduleExports1.ts] ////
+
+=== moduleExports1.ts ===
 export module TypeScript.Strasse.Street {
 >TypeScript : Symbol(TypeScript, Decl(moduleExports1.ts, 0, 0))
 >Strasse : Symbol(Strasse, Decl(moduleExports1.ts, 0, 25))

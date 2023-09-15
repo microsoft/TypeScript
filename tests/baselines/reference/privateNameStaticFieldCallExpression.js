@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldCallExpression.ts] ////
+
 //// [privateNameStaticFieldCallExpression.ts]
 class A {
     static #fieldFunc = function () { this.x = 10; };
@@ -34,18 +36,18 @@ class A {
     test() {
         var _b;
         var _c;
-        __classPrivateFieldGet(A, _a, "f", _A_fieldFunc).call(A);
-        (_b = __classPrivateFieldGet(A, _a, "f", _A_fieldFunc)) === null || _b === void 0 ? void 0 : _b.call(A);
-        const func = __classPrivateFieldGet(A, _a, "f", _A_fieldFunc);
+        __classPrivateFieldGet(_a, _a, "f", _A_fieldFunc).call(_a);
+        (_b = __classPrivateFieldGet(_a, _a, "f", _A_fieldFunc)) === null || _b === void 0 ? void 0 : _b.call(_a);
+        const func = __classPrivateFieldGet(_a, _a, "f", _A_fieldFunc);
         func();
-        new (__classPrivateFieldGet(A, _a, "f", _A_fieldFunc))();
+        new (__classPrivateFieldGet(_a, _a, "f", _A_fieldFunc))();
         const arr = [1, 2];
-        __classPrivateFieldGet(A, _a, "f", _A_fieldFunc2).call(A, 0, ...arr, 3);
-        const b = new (__classPrivateFieldGet(A, _a, "f", _A_fieldFunc2))(0, ...arr, 3);
-        const str = __classPrivateFieldGet(A, _a, "f", _A_fieldFunc2).bind(A) `head${1}middle${2}tail`;
+        __classPrivateFieldGet(_a, _a, "f", _A_fieldFunc2).call(_a, 0, ...arr, 3);
+        const b = new (__classPrivateFieldGet(_a, _a, "f", _A_fieldFunc2))(0, ...arr, 3);
+        const str = __classPrivateFieldGet(_a, _a, "f", _A_fieldFunc2).bind(_a) `head${1}middle${2}tail`;
         __classPrivateFieldGet((_c = this.getClass()), _a, "f", _A_fieldFunc2).bind(_c) `test${1}and${2}`;
     }
-    getClass() { return A; }
+    getClass() { return _a; }
 }
 _a = A;
 _A_fieldFunc = { value: function () { this.x = 10; } };

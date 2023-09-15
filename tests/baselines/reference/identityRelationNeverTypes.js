@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/identityRelationNeverTypes.ts] ////
+
 //// [identityRelationNeverTypes.ts]
 // Repro from #47996
 
@@ -29,7 +31,7 @@ function f1(state) {
 
 
 //// [identityRelationNeverTypes.d.ts]
-declare type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
+type Equals<A, B> = (<T>() => T extends B ? 1 : 0) extends (<T>() => T extends A ? 1 : 0) ? true : false;
 declare class State<TContext> {
     _context: TContext;
     _value: string;

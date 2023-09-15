@@ -1,0 +1,80 @@
+parseInvalidNullableTypes.ts(1,30): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'string | null' is not assignable to type 'string'.
+    Type 'null' is not assignable to type 'string'.
+parseInvalidNullableTypes.ts(1,30): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+parseInvalidNullableTypes.ts(5,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+parseInvalidNullableTypes.ts(6,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
+parseInvalidNullableTypes.ts(8,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+parseInvalidNullableTypes.ts(9,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
+parseInvalidNullableTypes.ts(11,25): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+parseInvalidNullableTypes.ts(12,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
+parseInvalidNullableTypes.ts(15,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+parseInvalidNullableTypes.ts(16,10): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
+parseInvalidNullableTypes.ts(18,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+parseInvalidNullableTypes.ts(19,10): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
+parseInvalidNullableTypes.ts(21,8): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'unknown'?
+parseInvalidNullableTypes.ts(22,8): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'never'?
+parseInvalidNullableTypes.ts(23,8): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'void'?
+parseInvalidNullableTypes.ts(24,8): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'undefined'?
+
+
+==== parseInvalidNullableTypes.ts (16 errors) ====
+    function f1(a: string): a is ?string {
+                                 ~~~~~~~
+!!! error TS2677: A type predicate's type must be assignable to its parameter's type.
+!!! error TS2677:   Type 'string | null' is not assignable to type 'string'.
+!!! error TS2677:     Type 'null' is not assignable to type 'string'.
+                                 ~~~~~~~
+!!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+        return true;
+    }
+    
+    function f2(a: string?) {}
+                   ~~~~~~~
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
+    function f3(a: number?) {}
+                   ~~~~~~~
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
+    
+    function f4(a: ?string) {}
+                   ~~~~~~~
+!!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+    function f5(a: ?number) {}
+                   ~~~~~~~
+!!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
+    
+    function f6(a: string): ?string {
+                            ~~~~~~~
+!!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
+        return true;
+        ~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
+    }
+    
+    const a = 1 as any?;
+                   ~~~~
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+    const b: number? = 1;
+             ~~~~~~~
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
+    
+    const c = 1 as ?any;
+                   ~~~~
+!!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+    const d: ?number = 1;
+             ~~~~~~~
+!!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
+    
+    let e: unknown?;
+           ~~~~~~~~
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'unknown'?
+    let f: never?;
+           ~~~~~~
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'never'?
+    let g: void?;
+           ~~~~~
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'void'?
+    let h: undefined?;
+           ~~~~~~~~~~
+!!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'undefined'?
+    

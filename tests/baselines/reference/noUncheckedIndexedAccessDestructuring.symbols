@@ -1,4 +1,6 @@
-=== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts ===
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts] ////
+
+=== noUncheckedIndexedAccessDestructuring.ts ===
 declare const strArray: string[];
 >strArray : Symbol(strArray, Decl(noUncheckedIndexedAccessDestructuring.ts, 0, 13))
 
@@ -116,46 +118,76 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
 
+{
+    const { x, ...q } = numMapPoint;
+>x : Symbol(x, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 11))
+>q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 14))
+>numMapPoint : Symbol(numMapPoint, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 13))
+
+    x.
+>x.    toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 11))
+
+    toFixed(); // Should OK
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    q.
+>q.    y.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>q.    y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 39))
+>q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 14))
+
+    y.toFixed(); // Should OK
+>y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 39))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+    q.
+>q.    z.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 14))
+
+    z.toFixed(); // Should error
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+}
+
 
 declare let target_string: string;
->target_string : Symbol(target_string, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 11))
+>target_string : Symbol(target_string, Decl(noUncheckedIndexedAccessDestructuring.ts, 56, 11))
 
 declare let target_string_undef: string | undefined;
->target_string_undef : Symbol(target_string_undef, Decl(noUncheckedIndexedAccessDestructuring.ts, 45, 11))
+>target_string_undef : Symbol(target_string_undef, Decl(noUncheckedIndexedAccessDestructuring.ts, 57, 11))
 
 declare let target_string_arr: string[];
->target_string_arr : Symbol(target_string_arr, Decl(noUncheckedIndexedAccessDestructuring.ts, 46, 11))
+>target_string_arr : Symbol(target_string_arr, Decl(noUncheckedIndexedAccessDestructuring.ts, 58, 11))
 
 // Assignment forms
 [target_string] = strArray; // Should error
->target_string : Symbol(target_string, Decl(noUncheckedIndexedAccessDestructuring.ts, 44, 11))
+>target_string : Symbol(target_string, Decl(noUncheckedIndexedAccessDestructuring.ts, 56, 11))
 >strArray : Symbol(strArray, Decl(noUncheckedIndexedAccessDestructuring.ts, 0, 13))
 
 [target_string_undef] = strArray;  // Should OK
->target_string_undef : Symbol(target_string_undef, Decl(noUncheckedIndexedAccessDestructuring.ts, 45, 11))
+>target_string_undef : Symbol(target_string_undef, Decl(noUncheckedIndexedAccessDestructuring.ts, 57, 11))
 >strArray : Symbol(strArray, Decl(noUncheckedIndexedAccessDestructuring.ts, 0, 13))
 
 [,,, ...target_string_arr] = strArray; // Should OK
->target_string_arr : Symbol(target_string_arr, Decl(noUncheckedIndexedAccessDestructuring.ts, 46, 11))
+>target_string_arr : Symbol(target_string_arr, Decl(noUncheckedIndexedAccessDestructuring.ts, 58, 11))
 >strArray : Symbol(strArray, Decl(noUncheckedIndexedAccessDestructuring.ts, 0, 13))
 
 {
     let x: number, y: number, z: number | undefined;
->x : Symbol(x, Decl(noUncheckedIndexedAccessDestructuring.ts, 54, 7))
->y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 54, 18))
->z : Symbol(z, Decl(noUncheckedIndexedAccessDestructuring.ts, 54, 29))
+>x : Symbol(x, Decl(noUncheckedIndexedAccessDestructuring.ts, 66, 7))
+>y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 66, 18))
+>z : Symbol(z, Decl(noUncheckedIndexedAccessDestructuring.ts, 66, 29))
 
     ({ x, y, z } = numMapPoint); // Should OK
->x : Symbol(x, Decl(noUncheckedIndexedAccessDestructuring.ts, 55, 6))
->y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 55, 9))
->z : Symbol(z, Decl(noUncheckedIndexedAccessDestructuring.ts, 55, 12))
+>x : Symbol(x, Decl(noUncheckedIndexedAccessDestructuring.ts, 67, 6))
+>y : Symbol(y, Decl(noUncheckedIndexedAccessDestructuring.ts, 67, 9))
+>z : Symbol(z, Decl(noUncheckedIndexedAccessDestructuring.ts, 67, 12))
 >numMapPoint : Symbol(numMapPoint, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 13))
 
     let q: number;
->q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 57, 7))
+>q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 69, 7))
 
     ({ q } = numMapPoint); // Should error
->q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 58, 6))
+>q : Symbol(q, Decl(noUncheckedIndexedAccessDestructuring.ts, 70, 6))
 >numMapPoint : Symbol(numMapPoint, Decl(noUncheckedIndexedAccessDestructuring.ts, 28, 13))
 }
 

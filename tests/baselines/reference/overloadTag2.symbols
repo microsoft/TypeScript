@@ -1,0 +1,63 @@
+//// [tests/cases/conformance/jsdoc/overloadTag2.ts] ////
+
+=== overloadTag2.js ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
+
+    #a = true ? 1 : "1"
+>#a : Symbol(Foo.#a, Decl(overloadTag2.js, 0, 18))
+
+    #b
+>#b : Symbol(Foo.#b, Decl(overloadTag2.js, 1, 23))
+
+    /**
+     * Should not have an implicit any error, because constructor's return type is always implicit
+     * @constructor
+     * @overload
+     * @param {string} a
+     * @param {number} b
+     */
+    /**
+     * @constructor
+     * @overload
+     * @param {number} a
+     */
+    /**
+     * @constructor
+     * @overload
+     * @param {string} a
+     *//**
+     * @constructor
+     * @param {number | string} a
+     */
+    constructor(a, b) {
+>a : Symbol(a, Decl(overloadTag2.js, 24, 16))
+>b : Symbol(b, Decl(overloadTag2.js, 24, 18))
+
+        this.#a = a
+>this.#a : Symbol(Foo.#a, Decl(overloadTag2.js, 0, 18))
+>this : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
+>a : Symbol(a, Decl(overloadTag2.js, 24, 16))
+
+        this.#b = b
+>this.#b : Symbol(Foo.#b, Decl(overloadTag2.js, 1, 23))
+>this : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
+>b : Symbol(b, Decl(overloadTag2.js, 24, 18))
+    }
+}
+var a = new Foo()
+>a : Symbol(a, Decl(overloadTag2.js, 29, 3))
+>Foo : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
+
+var b = new Foo('str')
+>b : Symbol(b, Decl(overloadTag2.js, 30, 3))
+>Foo : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
+
+var c = new Foo(2)
+>c : Symbol(c, Decl(overloadTag2.js, 31, 3))
+>Foo : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
+
+var d = new Foo('str', 2)
+>d : Symbol(d, Decl(overloadTag2.js, 32, 3))
+>Foo : Symbol(Foo, Decl(overloadTag2.js, 0, 0))
+

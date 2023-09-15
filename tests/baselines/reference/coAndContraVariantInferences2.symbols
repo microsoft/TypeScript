@@ -1,0 +1,404 @@
+//// [tests/cases/compiler/coAndContraVariantInferences2.ts] ////
+
+=== coAndContraVariantInferences2.ts ===
+interface A { a: string }
+>A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
+>a : Symbol(A.a, Decl(coAndContraVariantInferences2.ts, 0, 13))
+
+interface B extends A { b: string }
+>B : Symbol(B, Decl(coAndContraVariantInferences2.ts, 0, 25))
+>A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
+>b : Symbol(B.b, Decl(coAndContraVariantInferences2.ts, 1, 23))
+
+interface C extends A { c: string }
+>C : Symbol(C, Decl(coAndContraVariantInferences2.ts, 1, 35))
+>A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
+>c : Symbol(C.c, Decl(coAndContraVariantInferences2.ts, 2, 23))
+
+declare function cast<T, U extends T>(x: T, test: (x: T) => x is U): U;
+>cast : Symbol(cast, Decl(coAndContraVariantInferences2.ts, 2, 35))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 4, 22))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 4, 24))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 4, 22))
+>x : Symbol(x, Decl(coAndContraVariantInferences2.ts, 4, 38))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 4, 22))
+>test : Symbol(test, Decl(coAndContraVariantInferences2.ts, 4, 43))
+>x : Symbol(x, Decl(coAndContraVariantInferences2.ts, 4, 51))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 4, 22))
+>x : Symbol(x, Decl(coAndContraVariantInferences2.ts, 4, 51))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 4, 24))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 4, 24))
+
+declare function isC(x: A): x is C;
+>isC : Symbol(isC, Decl(coAndContraVariantInferences2.ts, 4, 71))
+>x : Symbol(x, Decl(coAndContraVariantInferences2.ts, 6, 21))
+>A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
+>x : Symbol(x, Decl(coAndContraVariantInferences2.ts, 6, 21))
+>C : Symbol(C, Decl(coAndContraVariantInferences2.ts, 1, 35))
+
+function f1(a: A, b: B) {
+>f1 : Symbol(f1, Decl(coAndContraVariantInferences2.ts, 6, 35))
+>a : Symbol(a, Decl(coAndContraVariantInferences2.ts, 8, 12))
+>A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
+>b : Symbol(b, Decl(coAndContraVariantInferences2.ts, 8, 17))
+>B : Symbol(B, Decl(coAndContraVariantInferences2.ts, 0, 25))
+
+    const x1 = cast(a, isC);  // cast<A, C>
+>x1 : Symbol(x1, Decl(coAndContraVariantInferences2.ts, 9, 9))
+>cast : Symbol(cast, Decl(coAndContraVariantInferences2.ts, 2, 35))
+>a : Symbol(a, Decl(coAndContraVariantInferences2.ts, 8, 12))
+>isC : Symbol(isC, Decl(coAndContraVariantInferences2.ts, 4, 71))
+
+    const x2 = cast(b, isC);  // cast<A, C>
+>x2 : Symbol(x2, Decl(coAndContraVariantInferences2.ts, 10, 9))
+>cast : Symbol(cast, Decl(coAndContraVariantInferences2.ts, 2, 35))
+>b : Symbol(b, Decl(coAndContraVariantInferences2.ts, 8, 17))
+>isC : Symbol(isC, Decl(coAndContraVariantInferences2.ts, 4, 71))
+}
+
+declare function useA(a: A): void;
+>useA : Symbol(useA, Decl(coAndContraVariantInferences2.ts, 11, 1))
+>a : Symbol(a, Decl(coAndContraVariantInferences2.ts, 13, 22))
+>A : Symbol(A, Decl(coAndContraVariantInferences2.ts, 0, 0))
+
+declare function consume<T, U extends T>(t: T, u: U, f: (x: T) => void): void;
+>consume : Symbol(consume, Decl(coAndContraVariantInferences2.ts, 13, 34))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 15, 25))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 15, 27))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 15, 25))
+>t : Symbol(t, Decl(coAndContraVariantInferences2.ts, 15, 41))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 15, 25))
+>u : Symbol(u, Decl(coAndContraVariantInferences2.ts, 15, 46))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 15, 27))
+>f : Symbol(f, Decl(coAndContraVariantInferences2.ts, 15, 52))
+>x : Symbol(x, Decl(coAndContraVariantInferences2.ts, 15, 57))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 15, 25))
+
+function f2(b: B, c: C) {
+>f2 : Symbol(f2, Decl(coAndContraVariantInferences2.ts, 15, 78))
+>b : Symbol(b, Decl(coAndContraVariantInferences2.ts, 17, 12))
+>B : Symbol(B, Decl(coAndContraVariantInferences2.ts, 0, 25))
+>c : Symbol(c, Decl(coAndContraVariantInferences2.ts, 17, 17))
+>C : Symbol(C, Decl(coAndContraVariantInferences2.ts, 1, 35))
+
+    consume(b, c, useA);  // consume<A, C>
+>consume : Symbol(consume, Decl(coAndContraVariantInferences2.ts, 13, 34))
+>b : Symbol(b, Decl(coAndContraVariantInferences2.ts, 17, 12))
+>c : Symbol(c, Decl(coAndContraVariantInferences2.ts, 17, 17))
+>useA : Symbol(useA, Decl(coAndContraVariantInferences2.ts, 11, 1))
+
+    consume(c, b, useA);  // consume<A, B>
+>consume : Symbol(consume, Decl(coAndContraVariantInferences2.ts, 13, 34))
+>c : Symbol(c, Decl(coAndContraVariantInferences2.ts, 17, 17))
+>b : Symbol(b, Decl(coAndContraVariantInferences2.ts, 17, 12))
+>useA : Symbol(useA, Decl(coAndContraVariantInferences2.ts, 11, 1))
+
+    consume(b, b, useA);  // consume<B, B>
+>consume : Symbol(consume, Decl(coAndContraVariantInferences2.ts, 13, 34))
+>b : Symbol(b, Decl(coAndContraVariantInferences2.ts, 17, 12))
+>b : Symbol(b, Decl(coAndContraVariantInferences2.ts, 17, 12))
+>useA : Symbol(useA, Decl(coAndContraVariantInferences2.ts, 11, 1))
+
+    consume(c, c, useA);  // consume<C, C>
+>consume : Symbol(consume, Decl(coAndContraVariantInferences2.ts, 13, 34))
+>c : Symbol(c, Decl(coAndContraVariantInferences2.ts, 17, 17))
+>c : Symbol(c, Decl(coAndContraVariantInferences2.ts, 17, 17))
+>useA : Symbol(useA, Decl(coAndContraVariantInferences2.ts, 11, 1))
+}
+
+declare function every<T, U extends T>(array: readonly T[], f: (x: T) => x is U): array is readonly U[];
+>every : Symbol(every, Decl(coAndContraVariantInferences2.ts, 22, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 24, 23))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 24, 25))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 24, 23))
+>array : Symbol(array, Decl(coAndContraVariantInferences2.ts, 24, 39))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 24, 23))
+>f : Symbol(f, Decl(coAndContraVariantInferences2.ts, 24, 59))
+>x : Symbol(x, Decl(coAndContraVariantInferences2.ts, 24, 64))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 24, 23))
+>x : Symbol(x, Decl(coAndContraVariantInferences2.ts, 24, 64))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 24, 25))
+>array : Symbol(array, Decl(coAndContraVariantInferences2.ts, 24, 39))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 24, 25))
+
+function f3(arr: readonly B[] | readonly C[]) {
+>f3 : Symbol(f3, Decl(coAndContraVariantInferences2.ts, 24, 104))
+>arr : Symbol(arr, Decl(coAndContraVariantInferences2.ts, 26, 12))
+>B : Symbol(B, Decl(coAndContraVariantInferences2.ts, 0, 25))
+>C : Symbol(C, Decl(coAndContraVariantInferences2.ts, 1, 35))
+
+    if (every(arr, isC)) {
+>every : Symbol(every, Decl(coAndContraVariantInferences2.ts, 22, 1))
+>arr : Symbol(arr, Decl(coAndContraVariantInferences2.ts, 26, 12))
+>isC : Symbol(isC, Decl(coAndContraVariantInferences2.ts, 4, 71))
+
+        arr; // readonly C[]
+>arr : Symbol(arr, Decl(coAndContraVariantInferences2.ts, 26, 12))
+    }
+    else {
+        arr; // readonly B[]
+>arr : Symbol(arr, Decl(coAndContraVariantInferences2.ts, 26, 12))
+    }
+}
+
+// Repro from #52111
+
+enum SyntaxKind {
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+
+    Block,
+>Block : Symbol(SyntaxKind.Block, Decl(coAndContraVariantInferences2.ts, 37, 17))
+
+    Identifier,
+>Identifier : Symbol(SyntaxKind.Identifier, Decl(coAndContraVariantInferences2.ts, 38, 10))
+
+    CaseClause,
+>CaseClause : Symbol(SyntaxKind.CaseClause, Decl(coAndContraVariantInferences2.ts, 39, 15))
+
+    FunctionExpression,
+>FunctionExpression : Symbol(SyntaxKind.FunctionExpression, Decl(coAndContraVariantInferences2.ts, 40, 15))
+
+    FunctionDeclaration,
+>FunctionDeclaration : Symbol(SyntaxKind.FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 41, 23))
+}
+
+interface Node { kind: SyntaxKind; }
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>kind : Symbol(Node.kind, Decl(coAndContraVariantInferences2.ts, 45, 16))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+
+interface Expression extends Node { _expressionBrand: any; }
+>Expression : Symbol(Expression, Decl(coAndContraVariantInferences2.ts, 45, 36))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>_expressionBrand : Symbol(Expression._expressionBrand, Decl(coAndContraVariantInferences2.ts, 46, 35))
+
+interface Declaration extends Node { _declarationBrand: any; }
+>Declaration : Symbol(Declaration, Decl(coAndContraVariantInferences2.ts, 46, 60))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>_declarationBrand : Symbol(Declaration._declarationBrand, Decl(coAndContraVariantInferences2.ts, 47, 36))
+
+interface Block extends Node { kind: SyntaxKind.Block; }
+>Block : Symbol(Block, Decl(coAndContraVariantInferences2.ts, 47, 62))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>kind : Symbol(Block.kind, Decl(coAndContraVariantInferences2.ts, 48, 30))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+>Block : Symbol(SyntaxKind.Block, Decl(coAndContraVariantInferences2.ts, 37, 17))
+
+interface Identifier extends Expression, Declaration { kind: SyntaxKind.Identifier; }
+>Identifier : Symbol(Identifier, Decl(coAndContraVariantInferences2.ts, 48, 56))
+>Expression : Symbol(Expression, Decl(coAndContraVariantInferences2.ts, 45, 36))
+>Declaration : Symbol(Declaration, Decl(coAndContraVariantInferences2.ts, 46, 60))
+>kind : Symbol(Identifier.kind, Decl(coAndContraVariantInferences2.ts, 49, 54))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+>Identifier : Symbol(SyntaxKind.Identifier, Decl(coAndContraVariantInferences2.ts, 38, 10))
+
+interface CaseClause extends Node { kind: SyntaxKind.CaseClause; }
+>CaseClause : Symbol(CaseClause, Decl(coAndContraVariantInferences2.ts, 49, 85))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>kind : Symbol(CaseClause.kind, Decl(coAndContraVariantInferences2.ts, 50, 35))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+>CaseClause : Symbol(SyntaxKind.CaseClause, Decl(coAndContraVariantInferences2.ts, 39, 15))
+
+interface FunctionDeclaration extends Declaration { kind: SyntaxKind.FunctionDeclaration; }
+>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 50, 66))
+>Declaration : Symbol(Declaration, Decl(coAndContraVariantInferences2.ts, 46, 60))
+>kind : Symbol(FunctionDeclaration.kind, Decl(coAndContraVariantInferences2.ts, 51, 51))
+>SyntaxKind : Symbol(SyntaxKind, Decl(coAndContraVariantInferences2.ts, 33, 1))
+>FunctionDeclaration : Symbol(SyntaxKind.FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 41, 23))
+
+type HasLocals = Block | FunctionDeclaration;
+>HasLocals : Symbol(HasLocals, Decl(coAndContraVariantInferences2.ts, 51, 91))
+>Block : Symbol(Block, Decl(coAndContraVariantInferences2.ts, 47, 62))
+>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 50, 66))
+
+declare function canHaveLocals(node: Node): node is HasLocals;
+>canHaveLocals : Symbol(canHaveLocals, Decl(coAndContraVariantInferences2.ts, 53, 45))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 54, 31))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 54, 31))
+>HasLocals : Symbol(HasLocals, Decl(coAndContraVariantInferences2.ts, 51, 91))
+
+declare function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U;
+>assertNode : Symbol(assertNode, Decl(coAndContraVariantInferences2.ts, 54, 62), Decl(coAndContraVariantInferences2.ts, 56, 127))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 56, 28))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 56, 43))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 56, 28))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 56, 57))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 56, 28))
+>test : Symbol(test, Decl(coAndContraVariantInferences2.ts, 56, 77))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 56, 85))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 56, 28))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 56, 85))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 56, 43))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 56, 57))
+>U : Symbol(U, Decl(coAndContraVariantInferences2.ts, 56, 43))
+
+declare function assertNode(node: Node | undefined, test: ((node: Node) => boolean) | undefined): void;
+>assertNode : Symbol(assertNode, Decl(coAndContraVariantInferences2.ts, 54, 62), Decl(coAndContraVariantInferences2.ts, 56, 127))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 57, 28))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>test : Symbol(test, Decl(coAndContraVariantInferences2.ts, 57, 51))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 57, 60))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+
+function foo(node: FunctionDeclaration | CaseClause) {
+>foo : Symbol(foo, Decl(coAndContraVariantInferences2.ts, 57, 103))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 59, 13))
+>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 50, 66))
+>CaseClause : Symbol(CaseClause, Decl(coAndContraVariantInferences2.ts, 49, 85))
+
+    assertNode(node, canHaveLocals);  // assertNode<Node, HasLocals>
+>assertNode : Symbol(assertNode, Decl(coAndContraVariantInferences2.ts, 54, 62), Decl(coAndContraVariantInferences2.ts, 56, 127))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 59, 13))
+>canHaveLocals : Symbol(canHaveLocals, Decl(coAndContraVariantInferences2.ts, 53, 45))
+
+    node;  // FunctionDeclaration
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 59, 13))
+}
+
+declare function isExpression(node: Node): node is Expression;
+>isExpression : Symbol(isExpression, Decl(coAndContraVariantInferences2.ts, 62, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 64, 30))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 64, 30))
+>Expression : Symbol(Expression, Decl(coAndContraVariantInferences2.ts, 45, 36))
+
+declare function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut;
+>tryCast : Symbol(tryCast, Decl(coAndContraVariantInferences2.ts, 64, 62))
+>TOut : Symbol(TOut, Decl(coAndContraVariantInferences2.ts, 66, 25))
+>TIn : Symbol(TIn, Decl(coAndContraVariantInferences2.ts, 66, 42))
+>TIn : Symbol(TIn, Decl(coAndContraVariantInferences2.ts, 66, 42))
+>value : Symbol(value, Decl(coAndContraVariantInferences2.ts, 66, 54))
+>TIn : Symbol(TIn, Decl(coAndContraVariantInferences2.ts, 66, 42))
+>test : Symbol(test, Decl(coAndContraVariantInferences2.ts, 66, 77))
+>value : Symbol(value, Decl(coAndContraVariantInferences2.ts, 66, 85))
+>TIn : Symbol(TIn, Decl(coAndContraVariantInferences2.ts, 66, 42))
+>value : Symbol(value, Decl(coAndContraVariantInferences2.ts, 66, 85))
+>TOut : Symbol(TOut, Decl(coAndContraVariantInferences2.ts, 66, 25))
+>TOut : Symbol(TOut, Decl(coAndContraVariantInferences2.ts, 66, 25))
+
+function bar(node: Identifier | FunctionDeclaration) {
+>bar : Symbol(bar, Decl(coAndContraVariantInferences2.ts, 66, 121))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 68, 13))
+>Identifier : Symbol(Identifier, Decl(coAndContraVariantInferences2.ts, 48, 56))
+>FunctionDeclaration : Symbol(FunctionDeclaration, Decl(coAndContraVariantInferences2.ts, 50, 66))
+
+    const a = tryCast(node, isExpression);  // tryCast<Expression, Node>
+>a : Symbol(a, Decl(coAndContraVariantInferences2.ts, 69, 9))
+>tryCast : Symbol(tryCast, Decl(coAndContraVariantInferences2.ts, 64, 62))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 68, 13))
+>isExpression : Symbol(isExpression, Decl(coAndContraVariantInferences2.ts, 62, 1))
+}
+
+// Repro from #49924
+
+const enum SyntaxKind1 {
+>SyntaxKind1 : Symbol(SyntaxKind1, Decl(coAndContraVariantInferences2.ts, 70, 1))
+
+    ClassExpression,
+>ClassExpression : Symbol(SyntaxKind1.ClassExpression, Decl(coAndContraVariantInferences2.ts, 74, 24))
+
+    ClassStatement,
+>ClassStatement : Symbol(SyntaxKind1.ClassStatement, Decl(coAndContraVariantInferences2.ts, 75, 20))
+}
+
+interface Node1 {
+>Node1 : Symbol(Node1, Decl(coAndContraVariantInferences2.ts, 77, 1))
+
+    kind: SyntaxKind1;
+>kind : Symbol(Node1.kind, Decl(coAndContraVariantInferences2.ts, 79, 17))
+>SyntaxKind1 : Symbol(SyntaxKind1, Decl(coAndContraVariantInferences2.ts, 70, 1))
+}
+
+interface Statement1 extends Node1 {
+>Statement1 : Symbol(Statement1, Decl(coAndContraVariantInferences2.ts, 81, 1))
+>Node1 : Symbol(Node1, Decl(coAndContraVariantInferences2.ts, 77, 1))
+
+    _statementBrand: any;
+>_statementBrand : Symbol(Statement1._statementBrand, Decl(coAndContraVariantInferences2.ts, 83, 36))
+}
+
+interface ClassExpression1 extends Node1 {
+>ClassExpression1 : Symbol(ClassExpression1, Decl(coAndContraVariantInferences2.ts, 85, 1))
+>Node1 : Symbol(Node1, Decl(coAndContraVariantInferences2.ts, 77, 1))
+
+    kind: SyntaxKind1.ClassExpression;
+>kind : Symbol(ClassExpression1.kind, Decl(coAndContraVariantInferences2.ts, 87, 42))
+>SyntaxKind1 : Symbol(SyntaxKind1, Decl(coAndContraVariantInferences2.ts, 70, 1))
+>ClassExpression : Symbol(SyntaxKind1.ClassExpression, Decl(coAndContraVariantInferences2.ts, 74, 24))
+}
+
+interface ClassStatement1 extends Statement1 {
+>ClassStatement1 : Symbol(ClassStatement1, Decl(coAndContraVariantInferences2.ts, 89, 1))
+>Statement1 : Symbol(Statement1, Decl(coAndContraVariantInferences2.ts, 81, 1))
+
+    kind: SyntaxKind1.ClassStatement;
+>kind : Symbol(ClassStatement1.kind, Decl(coAndContraVariantInferences2.ts, 91, 46))
+>SyntaxKind1 : Symbol(SyntaxKind1, Decl(coAndContraVariantInferences2.ts, 70, 1))
+>ClassStatement : Symbol(SyntaxKind1.ClassStatement, Decl(coAndContraVariantInferences2.ts, 75, 20))
+}
+
+type ClassLike1 = ClassExpression1 | ClassStatement1;
+>ClassLike1 : Symbol(ClassLike1, Decl(coAndContraVariantInferences2.ts, 93, 1))
+>ClassExpression1 : Symbol(ClassExpression1, Decl(coAndContraVariantInferences2.ts, 85, 1))
+>ClassStatement1 : Symbol(ClassStatement1, Decl(coAndContraVariantInferences2.ts, 89, 1))
+
+declare function isClassLike(node: Node1): node is ClassLike1;
+>isClassLike : Symbol(isClassLike, Decl(coAndContraVariantInferences2.ts, 95, 53))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 97, 29))
+>Node1 : Symbol(Node1, Decl(coAndContraVariantInferences2.ts, 77, 1))
+>node : Symbol(node, Decl(coAndContraVariantInferences2.ts, 97, 29))
+>ClassLike1 : Symbol(ClassLike1, Decl(coAndContraVariantInferences2.ts, 93, 1))
+
+declare const statement: Statement1 | undefined;
+>statement : Symbol(statement, Decl(coAndContraVariantInferences2.ts, 99, 13))
+>Statement1 : Symbol(Statement1, Decl(coAndContraVariantInferences2.ts, 81, 1))
+
+const maybeClassStatement = tryCast(statement, isClassLike);  // ClassLike1
+>maybeClassStatement : Symbol(maybeClassStatement, Decl(coAndContraVariantInferences2.ts, 101, 5))
+>tryCast : Symbol(tryCast, Decl(coAndContraVariantInferences2.ts, 64, 62))
+>statement : Symbol(statement, Decl(coAndContraVariantInferences2.ts, 99, 13))
+>isClassLike : Symbol(isClassLike, Decl(coAndContraVariantInferences2.ts, 95, 53))
+
+// Repro from #49924
+
+interface TypeNode extends Node {
+>TypeNode : Symbol(TypeNode, Decl(coAndContraVariantInferences2.ts, 101, 60))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+
+    typeInfo: string;
+>typeInfo : Symbol(TypeNode.typeInfo, Decl(coAndContraVariantInferences2.ts, 105, 33))
+}
+
+interface NodeArray<T extends Node> extends Array<T> {
+>NodeArray : Symbol(NodeArray, Decl(coAndContraVariantInferences2.ts, 107, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 109, 20))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 109, 20))
+
+    someProp: string;
+>someProp : Symbol(NodeArray.someProp, Decl(coAndContraVariantInferences2.ts, 109, 54))
+}
+
+declare function isNodeArray<T extends Node>(array: readonly T[]): array is NodeArray<T>;
+>isNodeArray : Symbol(isNodeArray, Decl(coAndContraVariantInferences2.ts, 111, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 113, 29))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(coAndContraVariantInferences2.ts, 43, 1))
+>array : Symbol(array, Decl(coAndContraVariantInferences2.ts, 113, 45))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 113, 29))
+>array : Symbol(array, Decl(coAndContraVariantInferences2.ts, 113, 45))
+>NodeArray : Symbol(NodeArray, Decl(coAndContraVariantInferences2.ts, 107, 1))
+>T : Symbol(T, Decl(coAndContraVariantInferences2.ts, 113, 29))
+
+declare const types: readonly TypeNode[];
+>types : Symbol(types, Decl(coAndContraVariantInferences2.ts, 115, 13))
+>TypeNode : Symbol(TypeNode, Decl(coAndContraVariantInferences2.ts, 101, 60))
+
+const x = tryCast(types, isNodeArray);  // NodeAray<TypeNode>
+>x : Symbol(x, Decl(coAndContraVariantInferences2.ts, 117, 5))
+>tryCast : Symbol(tryCast, Decl(coAndContraVariantInferences2.ts, 64, 62))
+>types : Symbol(types, Decl(coAndContraVariantInferences2.ts, 115, 13))
+>isNodeArray : Symbol(isNodeArray, Decl(coAndContraVariantInferences2.ts, 111, 1))
+

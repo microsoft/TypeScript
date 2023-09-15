@@ -1,4 +1,6 @@
-=== tests/cases/compiler/customAsyncIterator.ts ===
+//// [tests/cases/compiler/customAsyncIterator.ts] ////
+
+=== customAsyncIterator.ts ===
 // GH: https://github.com/microsoft/TypeScript/issues/33239
 class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> {
 >ConstantIterator : ConstantIterator<T>
@@ -13,7 +15,6 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
         if (value != null) {
 >value != null : boolean
 >value : T
->null : null
 
             throw new Error("ConstantIterator.prototype.next may not take any values");
 >new Error("ConstantIterator.prototype.next may not take any values") : Error

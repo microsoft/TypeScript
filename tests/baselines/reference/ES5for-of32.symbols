@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5for-of32.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5for-of32.ts] ////
+
+=== ES5for-of32.ts ===
 var array = [1,2,3];
 >array : Symbol(array, Decl(ES5for-of32.ts, 0, 3))
 

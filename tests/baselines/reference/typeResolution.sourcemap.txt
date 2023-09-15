@@ -5,12 +5,12 @@ sourceRoot:
 sources: typeResolution.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/typeResolution.js
+emittedFile:typeResolution.js
 sourceFile:typeResolution.ts
 -------------------------------------------------------------------
 >>>define(["require", "exports"], function (require, exports) {
 >>>    "use strict";
->>>    exports.__esModule = true;
+>>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.TopLevelModule1 = void 0;
 >>>    var TopLevelModule1;
 1 >^^^^
@@ -2624,7 +2624,7 @@ sourceFile:typeResolution.ts
 5 >                            ^^^^^
 6 >                                 ^^^^^^^^^^^^^^^^^
 7 >                                                  ^^^^^^^^
-8 >                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                                                          ^^^^^^^^^^^^^^^^^^^->
 1->
   >    
 2 >        }
@@ -2643,134 +2643,128 @@ sourceFile:typeResolution.ts
 6 >Emitted(151, 51) Source(97, 29) + SourceIndex(0)
 7 >Emitted(151, 59) Source(99, 6) + SourceIndex(0)
 ---
->>>    })(TopLevelModule1 = exports.TopLevelModule1 || (exports.TopLevelModule1 = {}));
+>>>    })(TopLevelModule1 || (exports.TopLevelModule1 = TopLevelModule1 = {}));
 1->^^^^
 2 >    ^
 3 >     ^^
 4 >       ^^^^^^^^^^^^^^^
-5 >                      ^^^
-6 >                         ^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                ^^^^^
-8 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                            ^^^^^^^^
+5 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                     ^^^^^^^^^^^^^^^
+7 >                                                                    ^^^^^^^^
 1->
   >
 2 >    }
 3 >     
 4 >       TopLevelModule1
 5 >                      
-6 >                         TopLevelModule1
-7 >                                                
-8 >                                                     TopLevelModule1
-9 >                                                                             {
-  >                                                                                export module SubModule1 {
-  >                                                                                    export module SubSubModule1 {
-  >                                                                                        export class ClassA {
-  >                                                                                            public AisIn1_1_1() {
-  >                                                                                                // Try all qualified names of this type
-  >                                                                                                var a1: ClassA; a1.AisIn1_1_1();
-  >                                                                                                var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
-  >                                                                                                var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
-  >                                                                                                var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
-  >                                                                                                
-  >                                                                                                // Two variants of qualifying a peer type
-  >                                                                                                var b1: ClassB; b1.BisIn1_1_1();
-  >                                                                                                var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
-  >                                                                                                
-  >                                                                                                // Type only accessible from the root
-  >                                                                                                var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
-  >                                                                                                
-  >                                                                                                // Interface reference
-  >                                                                                                var d1: InterfaceX; d1.XisIn1_1_1();
-  >                                                                                                var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
-  >                                                                                            }
-  >                                                                                        }
-  >                                                                                        export class ClassB {
-  >                                                                                            public BisIn1_1_1() {
-  >                                                                                                /** Exactly the same as above in AisIn1_1_1 **/
-  >                                                                                                
-  >                                                                                                // Try all qualified names of this type
-  >                                                                                                var a1: ClassA; a1.AisIn1_1_1();
-  >                                                                                                var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
-  >                                                                                                var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
-  >                                                                                                var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
-  >                                                                                                
-  >                                                                                                // Two variants of qualifying a peer type
-  >                                                                                                var b1: ClassB; b1.BisIn1_1_1();
-  >                                                                                                var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
-  >                                                                                                
-  >                                                                                                // Type only accessible from the root
-  >                                                                                                var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
-  >                                                                                                var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
-  >                                                                                                
-  >                                                                                                // Interface reference
-  >                                                                                                var d1: InterfaceX; d1.XisIn1_1_1();
-  >                                                                                                var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
-  >                                                                                            }
-  >                                                                                        }
-  >                                                                                        export interface InterfaceX { XisIn1_1_1(); }
-  >                                                                                        class NonExportedClassQ {
-  >                                                                                            constructor() {
-  >                                                                                                function QQ() {
-  >                                                                                                    /* Sampling of stuff from AisIn1_1_1 */
-  >                                                                                                    var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
-  >                                                                                                    var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
-  >                                                                                                    var d1: InterfaceX; d1.XisIn1_1_1();
-  >                                                                                                    var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
-  >                                                                                                }
-  >                                                                                            }
-  >                                                                                        }
-  >                                                                                    }
-  >                                                                                    
-  >                                                                                    // Should have no effect on S1.SS1.ClassA above because it is not exported
-  >                                                                                    class ClassA {
-  >                                                                                        constructor() {
-  >                                                                                            function AA() {
-  >                                                                                                var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
-  >                                                                                                var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
-  >                                                                                                var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
-  >                                                                                                
-  >                                                                                                // Interface reference
-  >                                                                                                var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
-  >                                                                                            }
-  >                                                                                        }
+6 >                                                     TopLevelModule1
+7 >                                                                     {
+  >                                                                        export module SubModule1 {
+  >                                                                            export module SubSubModule1 {
+  >                                                                                export class ClassA {
+  >                                                                                    public AisIn1_1_1() {
+  >                                                                                        // Try all qualified names of this type
+  >                                                                                        var a1: ClassA; a1.AisIn1_1_1();
+  >                                                                                        var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
+  >                                                                                        var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
+  >                                                                                        var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
+  >                                                                                        
+  >                                                                                        // Two variants of qualifying a peer type
+  >                                                                                        var b1: ClassB; b1.BisIn1_1_1();
+  >                                                                                        var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
+  >                                                                                        
+  >                                                                                        // Type only accessible from the root
+  >                                                                                        var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
+  >                                                                                        
+  >                                                                                        // Interface reference
+  >                                                                                        var d1: InterfaceX; d1.XisIn1_1_1();
+  >                                                                                        var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
   >                                                                                    }
   >                                                                                }
-  >                                                                            
-  >                                                                                export module SubModule2 {
-  >                                                                                    export module SubSubModule2 {
-  >                                                                                        // No code here since these are the mirror of the above calls
-  >                                                                                        export class ClassA { public AisIn1_2_2() { } }
-  >                                                                                        export class ClassB { public BisIn1_2_2() { } }
-  >                                                                                        export class ClassC { public CisIn1_2_2() { } }
-  >                                                                                        export interface InterfaceY { YisIn1_2_2(); }
-  >                                                                                        interface NonExportedInterfaceQ { }
+  >                                                                                export class ClassB {
+  >                                                                                    public BisIn1_1_1() {
+  >                                                                                        /** Exactly the same as above in AisIn1_1_1 **/
+  >                                                                                        
+  >                                                                                        // Try all qualified names of this type
+  >                                                                                        var a1: ClassA; a1.AisIn1_1_1();
+  >                                                                                        var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
+  >                                                                                        var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
+  >                                                                                        var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
+  >                                                                                        
+  >                                                                                        // Two variants of qualifying a peer type
+  >                                                                                        var b1: ClassB; b1.BisIn1_1_1();
+  >                                                                                        var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
+  >                                                                                        
+  >                                                                                        // Type only accessible from the root
+  >                                                                                        var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
+  >                                                                                        var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
+  >                                                                                        
+  >                                                                                        // Interface reference
+  >                                                                                        var d1: InterfaceX; d1.XisIn1_1_1();
+  >                                                                                        var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
   >                                                                                    }
-  >                                                                                    
-  >                                                                                    export interface InterfaceY { YisIn1_2(); }
   >                                                                                }
-  >                                                                                
-  >                                                                                class ClassA {
-  >                                                                                    public AisIn1() { }
-  >                                                                                }
-  >                                                                            
-  >                                                                                interface InterfaceY {
-  >                                                                                    YisIn1();
-  >                                                                                }
-  >                                                                                
-  >                                                                                module NotExportedModule {
-  >                                                                                    export class ClassA { }
+  >                                                                                export interface InterfaceX { XisIn1_1_1(); }
+  >                                                                                class NonExportedClassQ {
+  >                                                                                    constructor() {
+  >                                                                                        function QQ() {
+  >                                                                                            /* Sampling of stuff from AisIn1_1_1 */
+  >                                                                                            var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
+  >                                                                                            var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
+  >                                                                                            var d1: InterfaceX; d1.XisIn1_1_1();
+  >                                                                                            var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
+  >                                                                                        }
+  >                                                                                    }
   >                                                                                }
   >                                                                            }
+  >                                                                            
+  >                                                                            // Should have no effect on S1.SS1.ClassA above because it is not exported
+  >                                                                            class ClassA {
+  >                                                                                constructor() {
+  >                                                                                    function AA() {
+  >                                                                                        var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
+  >                                                                                        var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
+  >                                                                                        var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
+  >                                                                                        
+  >                                                                                        // Interface reference
+  >                                                                                        var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
+  >                                                                                    }
+  >                                                                                }
+  >                                                                            }
+  >                                                                        }
+  >                                                                    
+  >                                                                        export module SubModule2 {
+  >                                                                            export module SubSubModule2 {
+  >                                                                                // No code here since these are the mirror of the above calls
+  >                                                                                export class ClassA { public AisIn1_2_2() { } }
+  >                                                                                export class ClassB { public BisIn1_2_2() { } }
+  >                                                                                export class ClassC { public CisIn1_2_2() { } }
+  >                                                                                export interface InterfaceY { YisIn1_2_2(); }
+  >                                                                                interface NonExportedInterfaceQ { }
+  >                                                                            }
+  >                                                                            
+  >                                                                            export interface InterfaceY { YisIn1_2(); }
+  >                                                                        }
+  >                                                                        
+  >                                                                        class ClassA {
+  >                                                                            public AisIn1() { }
+  >                                                                        }
+  >                                                                    
+  >                                                                        interface InterfaceY {
+  >                                                                            YisIn1();
+  >                                                                        }
+  >                                                                        
+  >                                                                        module NotExportedModule {
+  >                                                                            export class ClassA { }
+  >                                                                        }
+  >                                                                    }
 1->Emitted(152, 5) Source(100, 1) + SourceIndex(0)
 2 >Emitted(152, 6) Source(100, 2) + SourceIndex(0)
 3 >Emitted(152, 8) Source(1, 15) + SourceIndex(0)
 4 >Emitted(152, 23) Source(1, 30) + SourceIndex(0)
-5 >Emitted(152, 26) Source(1, 15) + SourceIndex(0)
-6 >Emitted(152, 49) Source(1, 30) + SourceIndex(0)
-7 >Emitted(152, 54) Source(1, 15) + SourceIndex(0)
-8 >Emitted(152, 77) Source(1, 30) + SourceIndex(0)
-9 >Emitted(152, 85) Source(100, 2) + SourceIndex(0)
+5 >Emitted(152, 54) Source(1, 15) + SourceIndex(0)
+6 >Emitted(152, 69) Source(1, 30) + SourceIndex(0)
+7 >Emitted(152, 77) Source(100, 2) + SourceIndex(0)
 ---
 >>>    var TopLevelModule2;
 1 >^^^^

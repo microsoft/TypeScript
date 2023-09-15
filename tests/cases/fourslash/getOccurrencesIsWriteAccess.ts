@@ -18,8 +18,4 @@
 ////[|{| "isWriteAccess": true |}x|] += 1;
 ////[|{| "isWriteAccess": true |}x|] <<= 1;
 
-goTo.rangeStart(test.ranges()[0]);
-
-for (const range of test.ranges()) {
-    verify.occurrencesAtPositionContains(range, range.marker.data.isWriteAccess);
-}
+verify.baselineDocumentHighlights(test.ranges()[0]);

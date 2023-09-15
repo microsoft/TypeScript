@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOnObjectLiteral5.ts] ////
+
 //// [commentsOnObjectLiteral5.ts]
 const a = {
     p0: 0, // Comment 0

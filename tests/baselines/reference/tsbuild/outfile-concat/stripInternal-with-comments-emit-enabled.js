@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -109,6 +110,7 @@ class C {
 //// [/src/second/tsconfig.json]
 {
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true,
     "removeComments": false,
@@ -132,6 +134,7 @@ c.doSomething();
 //// [/src/third/tsconfig.json]
 {
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true,
     "removeComments": false,
@@ -222,7 +225,7 @@ declare namespace internalOther.something {
     }
 }
 import internalImport = internalNamespace.someClass;
-declare type internalType = internalC;
+type internalType = internalC;
 declare const internalConst = 10;
 declare enum internalEnum {
     a = 0,
@@ -235,7 +238,7 @@ declare class C {
 //# sourceMappingURL=second-output.d.ts.map
 
 //// [/src/2/second-output.d.ts.map]
-{"version":3,"file":"second-output.d.ts","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACN,IAAI,CAAC,IACM,MAAM,CADK;IACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;CACvC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,aAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd"}
+{"version":3,"file":"second-output.d.ts","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACN,IAAI,CAAC,IACM,MAAM,CADK;IACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;CACvC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,KAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd"}
 
 //// [/src/2/second-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -264,7 +267,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -288,7 +291,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -318,7 +321,7 @@ sourceFile:../second/second_part1.ts
 3 >        ^^
 4 >          ^^^^^^
 5 >                ^
-6 >                 ^^^->
+6 >                 ^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ 
@@ -335,7 +338,7 @@ sourceFile:../second/second_part1.ts
 >>>    method(): void;
 1->^^^^
 2 >    ^^^^^^
-3 >          ^^^^^^^^^^^->
+3 >          ^^^^^^^^^^->
 1->
   >    /*@internal*/ 
 2 >    method
@@ -349,7 +352,7 @@ sourceFile:../second/second_part1.ts
 4 >         ^^^^
 5 >             ^^^^^^
 6 >                   ^
-7 >                    ^^^^->
+7 >                    ^^^->
 1->() { }
   >    /*@internal*/ 
 2 >    get 
@@ -391,7 +394,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(11, 2) Source(19, 2) + SourceIndex(0)
@@ -425,7 +428,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^->
 1 > { }
 1 >Emitted(14, 6) Source(21, 37) + SourceIndex(0)
 ---
@@ -434,7 +437,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^^^^^^^^^
 3 >             ^^^
 4 >                ^^^^^^^^^
-5 >                         ^^^^^->
+5 >                         ^^^^->
 1->
   >    /*@internal*/ 
 2 >    export function 
@@ -478,7 +481,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(19, 6) Source(23, 71) + SourceIndex(0)
 ---
@@ -521,7 +524,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>    }
 1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(23, 6) Source(24, 85) + SourceIndex(0)
 ---
@@ -610,7 +613,7 @@ sourceFile:../second/second_part1.ts
 1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^
-4 >             ^^->
+4 >             ^->
 1 > { 
 2 >        a
 3 >         
@@ -622,7 +625,6 @@ sourceFile:../second/second_part1.ts
 1->^^^^^^^^
 2 >        ^
 3 >         ^^^^
-4 >             ^->
 1->, 
 2 >        b
 3 >         
@@ -631,13 +633,13 @@ sourceFile:../second/second_part1.ts
 3 >Emitted(29, 14) Source(28, 50) + SourceIndex(0)
 ---
 >>>        c = 2
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^
-1->, 
+1 >, 
 2 >        c
 3 >         
-1->Emitted(30, 9) Source(28, 52) + SourceIndex(0)
+1 >Emitted(30, 9) Source(28, 52) + SourceIndex(0)
 2 >Emitted(30, 10) Source(28, 53) + SourceIndex(0)
 3 >Emitted(30, 14) Source(28, 53) + SourceIndex(0)
 ---
@@ -648,7 +650,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(32, 2) Source(29, 2) + SourceIndex(0)
@@ -667,7 +669,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > {}
 1 >Emitted(34, 2) Source(30, 33) + SourceIndex(0)
 ---
@@ -676,7 +678,6 @@ sourceFile:../second/second_part1.ts
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^^^^^^^^^^^
 4 >                            ^^^^^^^^^
-5 >                                     ^->
 1->
   >/*@internal*/ 
 2 >function 
@@ -688,16 +689,16 @@ sourceFile:../second/second_part1.ts
 4 >Emitted(35, 38) Source(31, 40) + SourceIndex(0)
 ---
 >>>declare namespace internalNamespace {
-1->
+1 >
 2 >^^^^^^^^^^^^^^^^^^
 3 >                  ^^^^^^^^^^^^^^^^^
 4 >                                   ^
-1->
+1 >
   >/*@internal*/ 
 2 >namespace 
 3 >                  internalNamespace
 4 >                                    
-1->Emitted(36, 1) Source(32, 15) + SourceIndex(0)
+1 >Emitted(36, 1) Source(32, 15) + SourceIndex(0)
 2 >Emitted(36, 19) Source(32, 25) + SourceIndex(0)
 3 >Emitted(36, 36) Source(32, 42) + SourceIndex(0)
 4 >Emitted(36, 37) Source(32, 43) + SourceIndex(0)
@@ -720,7 +721,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(39, 2) Source(32, 72) + SourceIndex(0)
 ---
@@ -763,7 +764,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(43, 2) Source(33, 78) + SourceIndex(0)
 ---
@@ -794,42 +795,43 @@ sourceFile:../second/second_part1.ts
 7 >Emitted(44, 52) Source(34, 66) + SourceIndex(0)
 8 >Emitted(44, 53) Source(34, 67) + SourceIndex(0)
 ---
->>>declare type internalType = internalC;
+>>>type internalType = internalC;
 1 >
-2 >^^^^^^^^^^^^^
-3 >             ^^^^^^^^^^^^
-4 >                         ^^^
-5 >                            ^^^^^^^^^
-6 >                                     ^
+2 >^^^^^
+3 >     ^^^^^^^^^^^^
+4 >                 ^^^
+5 >                    ^^^^^^^^^
+6 >                             ^
+7 >                              ^^^->
 1 >
   >/*@internal*/ 
 2 >type 
-3 >             internalType
-4 >                          = 
-5 >                            internalC
-6 >                                     ;
+3 >     internalType
+4 >                  = 
+5 >                    internalC
+6 >                             ;
 1 >Emitted(45, 1) Source(35, 15) + SourceIndex(0)
-2 >Emitted(45, 14) Source(35, 20) + SourceIndex(0)
-3 >Emitted(45, 26) Source(35, 32) + SourceIndex(0)
-4 >Emitted(45, 29) Source(35, 35) + SourceIndex(0)
-5 >Emitted(45, 38) Source(35, 44) + SourceIndex(0)
-6 >Emitted(45, 39) Source(35, 45) + SourceIndex(0)
+2 >Emitted(45, 6) Source(35, 20) + SourceIndex(0)
+3 >Emitted(45, 18) Source(35, 32) + SourceIndex(0)
+4 >Emitted(45, 21) Source(35, 35) + SourceIndex(0)
+5 >Emitted(45, 30) Source(35, 44) + SourceIndex(0)
+6 >Emitted(45, 31) Source(35, 45) + SourceIndex(0)
 ---
 >>>declare const internalConst = 10;
-1 >
+1->
 2 >^^^^^^^^
 3 >        ^^^^^^
 4 >              ^^^^^^^^^^^^^
 5 >                           ^^^^^
 6 >                                ^
-1 >
+1->
   >/*@internal*/ 
 2 >
 3 >        const 
 4 >              internalConst
 5 >                            = 10
 6 >                                ;
-1 >Emitted(46, 1) Source(36, 15) + SourceIndex(0)
+1->Emitted(46, 1) Source(36, 15) + SourceIndex(0)
 2 >Emitted(46, 9) Source(36, 15) + SourceIndex(0)
 3 >Emitted(46, 15) Source(36, 21) + SourceIndex(0)
 4 >Emitted(46, 28) Source(36, 34) + SourceIndex(0)
@@ -852,7 +854,7 @@ sourceFile:../second/second_part1.ts
 1 >^^^^
 2 >    ^
 3 >     ^^^^
-4 >         ^^->
+4 >         ^->
 1 > { 
 2 >    a
 3 >     
@@ -864,7 +866,6 @@ sourceFile:../second/second_part1.ts
 1->^^^^
 2 >    ^
 3 >     ^^^^
-4 >         ^->
 1->, 
 2 >    b
 3 >     
@@ -873,19 +874,19 @@ sourceFile:../second/second_part1.ts
 3 >Emitted(49, 10) Source(37, 39) + SourceIndex(0)
 ---
 >>>    c = 2
-1->^^^^
+1 >^^^^
 2 >    ^
 3 >     ^^^^
-1->, 
+1 >, 
 2 >    c
 3 >     
-1->Emitted(50, 5) Source(37, 41) + SourceIndex(0)
+1 >Emitted(50, 5) Source(37, 41) + SourceIndex(0)
 2 >Emitted(50, 6) Source(37, 42) + SourceIndex(0)
 3 >Emitted(50, 10) Source(37, 42) + SourceIndex(0)
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 > }
 1 >Emitted(51, 2) Source(37, 44) + SourceIndex(0)
 ---
@@ -897,7 +898,7 @@ sourceFile:../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1->
 2 >class 
 3 >              C
@@ -1049,7 +1050,7 @@ sourceFile:../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1 >namespace N {
   >    // Comment text
   >}
@@ -1073,7 +1074,7 @@ sourceFile:../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -1085,7 +1086,7 @@ sourceFile:../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -1124,7 +1125,7 @@ sourceFile:../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -1136,7 +1137,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -1156,7 +1157,7 @@ sourceFile:../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
@@ -1181,7 +1182,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>var normalC = /** @class */ (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -1202,7 +1203,7 @@ sourceFile:../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >    }
 1 >Emitted(10, 5) Source(14, 35) + SourceIndex(0)
@@ -1237,7 +1238,7 @@ sourceFile:../second/second_part1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
 3 >                          ^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                ^^^^^^^->
+4 >                                                ^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >    get 
@@ -1303,7 +1304,7 @@ sourceFile:../second/second_part1.ts
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
-2 >       ^^^^^^^^^^^^^->
+2 >       ^^^^^^^^^^^^->
 1 >
 1 >Emitted(17, 8) Source(17, 41) + SourceIndex(0)
 ---
@@ -1322,7 +1323,7 @@ sourceFile:../second/second_part1.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^->
+5 >     ^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -1343,7 +1344,7 @@ sourceFile:../second/second_part1.ts
 2 >^^^^
 3 >    ^^^^^^^
 4 >           ^
-5 >            ^^^^^^^^^^->
+5 >            ^^^^^^^^^->
 1->
   >
 2 >namespace 
@@ -1367,7 +1368,7 @@ sourceFile:../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^
-4 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >namespace 
 3 >           normalN
@@ -1379,7 +1380,7 @@ sourceFile:../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^
-4 >                  ^^^^^->
+4 >                  ^^^^->
 1-> {
   >    
 2 >    /*@internal*/
@@ -1390,14 +1391,14 @@ sourceFile:../second/second_part1.ts
 ---
 >>>        function C() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(23, 9) Source(21, 19) + SourceIndex(0)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^->
+3 >         ^^^^^^^^->
 1->export class C { 
 2 >        }
 1->Emitted(24, 9) Source(21, 36) + SourceIndex(0)
@@ -1416,7 +1417,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^->
+5 >         ^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -1431,7 +1432,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^^^^^^^^^
 3 >             ^^^^
 4 >                 ^
-5 >                  ^^^^^^^^^^^^^^^^^^^->
+5 >                  ^^^^^^^^^^^^^^^^^^->
 1->
 2 >    C
 3 >              { }
@@ -1470,7 +1471,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^->
+5 >                      ^^^^^^^^^^^^^^->
 1 >
 2 >    foo
 3 >               () {}
@@ -1505,7 +1506,7 @@ sourceFile:../second/second_part1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^->
 1 >
 2 >    export namespace 
 3 >               someNamespace
@@ -1515,20 +1516,20 @@ sourceFile:../second/second_part1.ts
 ---
 >>>        var C = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(32, 9) Source(23, 52) + SourceIndex(0)
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(33, 13) Source(23, 52) + SourceIndex(0)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^->
+3 >             ^^^^^^^^->
 1->export class C {
 2 >            }
 1->Emitted(34, 13) Source(23, 68) + SourceIndex(0)
@@ -1547,7 +1548,7 @@ sourceFile:../second/second_part1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -1562,7 +1563,7 @@ sourceFile:../second/second_part1.ts
 2 >        ^^^^^^^^^^^^^^^
 3 >                       ^^^^
 4 >                           ^
-5 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        C
 3 >                        {}
@@ -1638,7 +1639,7 @@ sourceFile:../second/second_part1.ts
 2 >        ^^^^
 3 >            ^^^^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^->
+5 >                      ^^^^^^^^^->
 1 >.
 2 >        
 3 >            something
@@ -1652,7 +1653,7 @@ sourceFile:../second/second_part1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   something
@@ -1662,20 +1663,20 @@ sourceFile:../second/second_part1.ts
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(43, 13) Source(24, 58) + SourceIndex(0)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(44, 17) Source(24, 58) + SourceIndex(0)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
 1->Emitted(45, 17) Source(24, 82) + SourceIndex(0)
@@ -1694,7 +1695,7 @@ sourceFile:../second/second_part1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -1709,7 +1710,7 @@ sourceFile:../second/second_part1.ts
 2 >            ^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            someClass
 3 >                                {}
@@ -1854,7 +1855,7 @@ sourceFile:../second/second_part1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export enum 
 3 >               internalEnum
@@ -1866,7 +1867,6 @@ sourceFile:../second/second_part1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
 1-> { 
 2 >        a
 3 >                                                 
@@ -1875,26 +1875,25 @@ sourceFile:../second/second_part1.ts
 3 >Emitted(55, 51) Source(28, 47) + SourceIndex(0)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
-1->, 
+1 >, 
 2 >        b
 3 >                                                 
-1->Emitted(56, 9) Source(28, 49) + SourceIndex(0)
+1 >Emitted(56, 9) Source(28, 49) + SourceIndex(0)
 2 >Emitted(56, 50) Source(28, 50) + SourceIndex(0)
 3 >Emitted(56, 51) Source(28, 50) + SourceIndex(0)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >        c
 3 >                                                 
-1->Emitted(57, 9) Source(28, 52) + SourceIndex(0)
+1 >Emitted(57, 9) Source(28, 52) + SourceIndex(0)
 2 >Emitted(57, 50) Source(28, 53) + SourceIndex(0)
 3 >Emitted(57, 51) Source(28, 53) + SourceIndex(0)
 ---
@@ -1935,7 +1934,7 @@ sourceFile:../second/second_part1.ts
 5 >          ^^^^^
 6 >               ^^^^^^^
 7 >                      ^^^^^^^^
-8 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -1965,7 +1964,7 @@ sourceFile:../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^->
 1->
   >
 2 >/*@internal*/
@@ -1976,14 +1975,14 @@ sourceFile:../second/second_part1.ts
 ---
 >>>    function internalC() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(61, 5) Source(30, 15) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^->
 1->class internalC {
 2 >    }
 1->Emitted(62, 5) Source(30, 32) + SourceIndex(0)
@@ -2002,7 +2001,7 @@ sourceFile:../second/second_part1.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -2061,7 +2060,7 @@ sourceFile:../second/second_part1.ts
 1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >namespace 
 3 >           internalNamespace
@@ -2071,20 +2070,20 @@ sourceFile:../second/second_part1.ts
 ---
 >>>    var someClass = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(68, 5) Source(32, 45) + SourceIndex(0)
 ---
 >>>        function someClass() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(69, 9) Source(32, 45) + SourceIndex(0)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >        }
 1->Emitted(70, 9) Source(32, 69) + SourceIndex(0)
@@ -2103,7 +2102,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -2118,7 +2117,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^->
+5 >                                            ^^^^^^->
 1->
 2 >    someClass
 3 >                                {}
@@ -2188,7 +2187,7 @@ sourceFile:../second/second_part1.ts
 2 >    ^^^^
 3 >        ^^^^^^^^^
 4 >                 ^
-5 >                  ^^^^^^^^^^->
+5 >                  ^^^^^^^^^->
 1 >.
 2 >    
 3 >        something
@@ -2202,7 +2201,7 @@ sourceFile:../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^
-4 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    
 3 >               something
@@ -2212,20 +2211,20 @@ sourceFile:../second/second_part1.ts
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(79, 9) Source(33, 51) + SourceIndex(0)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(80, 13) Source(33, 51) + SourceIndex(0)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^->
+3 >             ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
 1->Emitted(81, 13) Source(33, 75) + SourceIndex(0)
@@ -2244,7 +2243,7 @@ sourceFile:../second/second_part1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -2259,7 +2258,7 @@ sourceFile:../second/second_part1.ts
 2 >        ^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^^^^^^^^^^
 4 >                                       ^
-5 >                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        someClass
 3 >                            {}
@@ -2306,7 +2305,7 @@ sourceFile:../second/second_part1.ts
 5 >                ^^^^^
 6 >                     ^^^^^^^^^^^^^
 7 >                                  ^^^^^^^^
-8 >                                          ^^^^^^^^^^^^^^^^^^^^^^->
+8 >                                          ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -2405,7 +2404,7 @@ sourceFile:../second/second_part1.ts
 1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^^^^^^
-4 >                       ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                       ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >enum 
 3 >           internalEnum
@@ -2417,7 +2416,6 @@ sourceFile:../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^
-4 >                                              ^->
 1-> { 
 2 >    a
 3 >                                             
@@ -2426,25 +2424,24 @@ sourceFile:../second/second_part1.ts
 3 >Emitted(91, 47) Source(37, 36) + SourceIndex(0)
 ---
 >>>    internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^
-4 >                                              ^->
-1->, 
+1 >, 
 2 >    b
 3 >                                             
-1->Emitted(92, 5) Source(37, 38) + SourceIndex(0)
+1 >Emitted(92, 5) Source(37, 38) + SourceIndex(0)
 2 >Emitted(92, 46) Source(37, 39) + SourceIndex(0)
 3 >Emitted(92, 47) Source(37, 39) + SourceIndex(0)
 ---
 >>>    internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^
-1->, 
+1 >, 
 2 >    c
 3 >                                             
-1->Emitted(93, 5) Source(37, 41) + SourceIndex(0)
+1 >Emitted(93, 5) Source(37, 41) + SourceIndex(0)
 2 >Emitted(93, 46) Source(37, 42) + SourceIndex(0)
 3 >Emitted(93, 47) Source(37, 42) + SourceIndex(0)
 ---
@@ -2477,20 +2474,20 @@ sourceFile:../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1 >
 1 >Emitted(95, 1) Source(1, 1) + SourceIndex(1)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(96, 5) Source(1, 1) + SourceIndex(1)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -2504,7 +2501,7 @@ sourceFile:../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -2542,7 +2539,7 @@ sourceFile:../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -2580,13 +2577,13 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":3417,"kind":"text"}],"mapHash":"-2464084269-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-136024231077-var N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = /** @class */ (function () {\r\n    /*@internal*/ function normalC() {\r\n    }\r\n    /*@internal*/ normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        /*@internal*/ get: function () { return 10; },\r\n        /*@internal*/ set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    /*@internal*/ var C = /** @class */ (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    /*@internal*/ function foo() { }\r\n    normalN.foo = foo;\r\n    /*@internal*/ var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    /*@internal*/ var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    /*@internal*/ normalN.someImport = someNamespace.C;\r\n    /*@internal*/ normalN.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\n/*@internal*/ var internalC = /** @class */ (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\n/*@internal*/ function internalfoo() { }\r\n/*@internal*/ var internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = /** @class */ (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\n/*@internal*/ var internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\n/*@internal*/ var internalImport = internalNamespace.someClass;\r\n/*@internal*/ var internalConst = 10;\r\n/*@internal*/ var internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = /** @class */ (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":77,"kind":"text"},{"pos":77,"end":182,"kind":"internal"},{"pos":184,"end":216,"kind":"text"},{"pos":216,"end":608,"kind":"internal"},{"pos":610,"end":613,"kind":"text"},{"pos":613,"end":1026,"kind":"internal"},{"pos":1028,"end":1076,"kind":"text"}],"mapHash":"-21406246021-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACN,IAAI,CAAC,IACM,MAAM,CADK;IACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;CACvC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,aAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd\"}","hash":"-9468064165-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    constructor();\r\n    prop: string;\r\n    method(): void;\r\n    get c(): number;\r\n    set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    class C {\r\n    }\r\n    function foo(): void;\r\n    namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import someImport = someNamespace.C;\r\n    type internalType = internalC;\r\n    const internalConst = 10;\r\n    enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare class internalC {\r\n}\r\ndeclare function internalfoo(): void;\r\ndeclare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\ndeclare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\nimport internalImport = internalNamespace.someClass;\r\ndeclare type internalType = internalC;\r\ndeclare const internalConst = 10;\r\ndeclare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["13528403307-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n\nclass normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nnamespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ class internalC {}\n/*@internal*/ function internalfoo() {}\n/*@internal*/ namespace internalNamespace { export class someClass {} }\n/*@internal*/ namespace internalOther.something { export class someClass {} }\n/*@internal*/ import internalImport = internalNamespace.someClass;\n/*@internal*/ type internalType = internalC;\n/*@internal*/ const internalConst = 10;\n/*@internal*/ enum internalEnum { a, b, c }","9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"],"options":{"composite":true,"outFile":"./second-output.js"},"outSignature":"-20504865920-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    constructor();\r\n    prop: string;\r\n    method(): void;\r\n    get c(): number;\r\n    set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    class C {\r\n    }\r\n    function foo(): void;\r\n    namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import someImport = someNamespace.C;\r\n    type internalType = internalC;\r\n    const internalConst = 10;\r\n    enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare class internalC {\r\n}\r\ndeclare function internalfoo(): void;\r\ndeclare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\ndeclare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\nimport internalImport = internalNamespace.someClass;\r\ndeclare type internalType = internalC;\r\ndeclare const internalConst = 10;\r\ndeclare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":3315,"kind":"text"}],"mapHash":"-2464084269-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-11392275315-var N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar normalC = /** @class */ (function () {\n    /*@internal*/ function normalC() {\n    }\n    /*@internal*/ normalC.prototype.method = function () { };\n    Object.defineProperty(normalC.prototype, \"c\", {\n        /*@internal*/ get: function () { return 10; },\n        /*@internal*/ set: function (val) { },\n        enumerable: false,\n        configurable: true\n    });\n    return normalC;\n}());\nvar normalN;\n(function (normalN) {\n    /*@internal*/ var C = /** @class */ (function () {\n        function C() {\n        }\n        return C;\n    }());\n    normalN.C = C;\n    /*@internal*/ function foo() { }\n    normalN.foo = foo;\n    /*@internal*/ var someNamespace;\n    (function (someNamespace) {\n        var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        someNamespace.C = C;\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n    /*@internal*/ var someOther;\n    (function (someOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = someOther.something || (someOther.something = {}));\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\n    /*@internal*/ normalN.someImport = someNamespace.C;\n    /*@internal*/ normalN.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n})(normalN || (normalN = {}));\n/*@internal*/ var internalC = /** @class */ (function () {\n    function internalC() {\n    }\n    return internalC;\n}());\n/*@internal*/ function internalfoo() { }\n/*@internal*/ var internalNamespace;\n(function (internalNamespace) {\n    var someClass = /** @class */ (function () {\n        function someClass() {\n        }\n        return someClass;\n    }());\n    internalNamespace.someClass = someClass;\n})(internalNamespace || (internalNamespace = {}));\n/*@internal*/ var internalOther;\n(function (internalOther) {\n    var something;\n    (function (something) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        something.someClass = someClass;\n    })(something = internalOther.something || (internalOther.something = {}));\n})(internalOther || (internalOther = {}));\n/*@internal*/ var internalImport = internalNamespace.someClass;\n/*@internal*/ var internalConst = 10;\n/*@internal*/ var internalEnum;\n(function (internalEnum) {\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n})(internalEnum || (internalEnum = {}));\nvar C = /** @class */ (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":72,"kind":"text"},{"pos":72,"end":173,"kind":"internal"},{"pos":174,"end":204,"kind":"text"},{"pos":204,"end":578,"kind":"internal"},{"pos":579,"end":581,"kind":"text"},{"pos":581,"end":968,"kind":"internal"},{"pos":969,"end":1014,"kind":"text"}],"mapHash":"-11613291547-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACN,IAAI,CAAC,IACM,MAAM,CADK;IACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;CACvC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,KAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd\"}","hash":"-21418946771-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","13528403307-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n\nclass normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nnamespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ class internalC {}\n/*@internal*/ function internalfoo() {}\n/*@internal*/ namespace internalNamespace { export class someClass {} }\n/*@internal*/ namespace internalOther.something { export class someClass {} }\n/*@internal*/ import internalImport = internalNamespace.someClass;\n/*@internal*/ type internalType = internalC;\n/*@internal*/ const internalConst = 10;\n/*@internal*/ enum internalEnum { a, b, c }","9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./second-output.js","removeComments":false,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-18721653870-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-text: (0-3417)
+text: (0-3315)
 var N;
 (function (N) {
     function f() {
@@ -2694,7 +2691,7 @@ var C = /** @class */ (function () {
 ======================================================================
 File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-text: (0-77)
+text: (0-72)
 declare namespace N {
 }
 declare namespace N {
@@ -2702,19 +2699,19 @@ declare namespace N {
 declare class normalC {
 
 ----------------------------------------------------------------------
-internal: (77-182)
+internal: (72-173)
     constructor();
     prop: string;
     method(): void;
     get c(): number;
     set c(val: number);
 ----------------------------------------------------------------------
-text: (184-216)
+text: (174-204)
 }
 declare namespace normalN {
 
 ----------------------------------------------------------------------
-internal: (216-608)
+internal: (204-578)
     class C {
     }
     function foo(): void;
@@ -2735,11 +2732,11 @@ internal: (216-608)
         c = 2
     }
 ----------------------------------------------------------------------
-text: (610-613)
+text: (579-581)
 }
 
 ----------------------------------------------------------------------
-internal: (613-1026)
+internal: (581-968)
 declare class internalC {
 }
 declare function internalfoo(): void;
@@ -2752,7 +2749,7 @@ declare namespace internalOther.something {
     }
 }
 import internalImport = internalNamespace.someClass;
-declare type internalType = internalC;
+type internalType = internalC;
 declare const internalConst = 10;
 declare enum internalEnum {
     a = 0,
@@ -2760,7 +2757,7 @@ declare enum internalEnum {
     c = 2
 }
 ----------------------------------------------------------------------
-text: (1028-1076)
+text: (969-1014)
 declare class C {
     doSomething(): void;
 }
@@ -2779,73 +2776,92 @@ declare class C {
       "sections": [
         {
           "pos": 0,
-          "end": 3417,
+          "end": 3315,
           "kind": "text"
         }
       ],
-      "hash": "-136024231077-var N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = /** @class */ (function () {\r\n    /*@internal*/ function normalC() {\r\n    }\r\n    /*@internal*/ normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        /*@internal*/ get: function () { return 10; },\r\n        /*@internal*/ set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    /*@internal*/ var C = /** @class */ (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    /*@internal*/ function foo() { }\r\n    normalN.foo = foo;\r\n    /*@internal*/ var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    /*@internal*/ var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    /*@internal*/ normalN.someImport = someNamespace.C;\r\n    /*@internal*/ normalN.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\n/*@internal*/ var internalC = /** @class */ (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\n/*@internal*/ function internalfoo() { }\r\n/*@internal*/ var internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = /** @class */ (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\n/*@internal*/ var internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\n/*@internal*/ var internalImport = internalNamespace.someClass;\r\n/*@internal*/ var internalConst = 10;\r\n/*@internal*/ var internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = /** @class */ (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\n//# sourceMappingURL=second-output.js.map",
+      "hash": "-11392275315-var N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar normalC = /** @class */ (function () {\n    /*@internal*/ function normalC() {\n    }\n    /*@internal*/ normalC.prototype.method = function () { };\n    Object.defineProperty(normalC.prototype, \"c\", {\n        /*@internal*/ get: function () { return 10; },\n        /*@internal*/ set: function (val) { },\n        enumerable: false,\n        configurable: true\n    });\n    return normalC;\n}());\nvar normalN;\n(function (normalN) {\n    /*@internal*/ var C = /** @class */ (function () {\n        function C() {\n        }\n        return C;\n    }());\n    normalN.C = C;\n    /*@internal*/ function foo() { }\n    normalN.foo = foo;\n    /*@internal*/ var someNamespace;\n    (function (someNamespace) {\n        var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        someNamespace.C = C;\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n    /*@internal*/ var someOther;\n    (function (someOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = someOther.something || (someOther.something = {}));\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\n    /*@internal*/ normalN.someImport = someNamespace.C;\n    /*@internal*/ normalN.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n})(normalN || (normalN = {}));\n/*@internal*/ var internalC = /** @class */ (function () {\n    function internalC() {\n    }\n    return internalC;\n}());\n/*@internal*/ function internalfoo() { }\n/*@internal*/ var internalNamespace;\n(function (internalNamespace) {\n    var someClass = /** @class */ (function () {\n        function someClass() {\n        }\n        return someClass;\n    }());\n    internalNamespace.someClass = someClass;\n})(internalNamespace || (internalNamespace = {}));\n/*@internal*/ var internalOther;\n(function (internalOther) {\n    var something;\n    (function (something) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        something.someClass = someClass;\n    })(something = internalOther.something || (internalOther.something = {}));\n})(internalOther || (internalOther = {}));\n/*@internal*/ var internalImport = internalNamespace.someClass;\n/*@internal*/ var internalConst = 10;\n/*@internal*/ var internalEnum;\n(function (internalEnum) {\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n})(internalEnum || (internalEnum = {}));\nvar C = /** @class */ (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\n//# sourceMappingURL=second-output.js.map",
       "mapHash": "-2464084269-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 77,
+          "end": 72,
           "kind": "text"
         },
         {
-          "pos": 77,
-          "end": 182,
+          "pos": 72,
+          "end": 173,
           "kind": "internal"
         },
         {
-          "pos": 184,
-          "end": 216,
+          "pos": 174,
+          "end": 204,
           "kind": "text"
         },
         {
-          "pos": 216,
-          "end": 608,
+          "pos": 204,
+          "end": 578,
           "kind": "internal"
         },
         {
-          "pos": 610,
-          "end": 613,
+          "pos": 579,
+          "end": 581,
           "kind": "text"
         },
         {
-          "pos": 613,
-          "end": 1026,
+          "pos": 581,
+          "end": 968,
           "kind": "internal"
         },
         {
-          "pos": 1028,
-          "end": 1076,
+          "pos": 969,
+          "end": 1014,
           "kind": "text"
         }
       ],
-      "hash": "-9468064165-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    constructor();\r\n    prop: string;\r\n    method(): void;\r\n    get c(): number;\r\n    set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    class C {\r\n    }\r\n    function foo(): void;\r\n    namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import someImport = someNamespace.C;\r\n    type internalType = internalC;\r\n    const internalConst = 10;\r\n    enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare class internalC {\r\n}\r\ndeclare function internalfoo(): void;\r\ndeclare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\ndeclare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\nimport internalImport = internalNamespace.someClass;\r\ndeclare type internalType = internalC;\r\ndeclare const internalConst = 10;\r\ndeclare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n//# sourceMappingURL=second-output.d.ts.map",
-      "mapHash": "-21406246021-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACN,IAAI,CAAC,IACM,MAAM,CADK;IACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;CACvC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,aAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd\"}"
+      "hash": "-21418946771-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n//# sourceMappingURL=second-output.d.ts.map",
+      "mapHash": "-11613291547-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACN,IAAI,CAAC,IACM,MAAM,CADK;IACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;CACvC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,KAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../lib/lib.d.ts",
       "../second/second_part1.ts",
       "../second/second_part2.ts"
     ],
     "fileInfos": {
+      "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../second/second_part1.ts": "13528403307-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\n\nclass normalC {\n    /*@internal*/ constructor() { }\n    /*@internal*/ prop: string;\n    /*@internal*/ method() { }\n    /*@internal*/ get c() { return 10; }\n    /*@internal*/ set c(val: number) { }\n}\nnamespace normalN {\n    /*@internal*/ export class C { }\n    /*@internal*/ export function foo() {}\n    /*@internal*/ export namespace someNamespace { export class C {} }\n    /*@internal*/ export namespace someOther.something { export class someClass {} }\n    /*@internal*/ export import someImport = someNamespace.C;\n    /*@internal*/ export type internalType = internalC;\n    /*@internal*/ export const internalConst = 10;\n    /*@internal*/ export enum internalEnum { a, b, c }\n}\n/*@internal*/ class internalC {}\n/*@internal*/ function internalfoo() {}\n/*@internal*/ namespace internalNamespace { export class someClass {} }\n/*@internal*/ namespace internalOther.something { export class someClass {} }\n/*@internal*/ import internalImport = internalNamespace.someClass;\n/*@internal*/ type internalType = internalC;\n/*@internal*/ const internalConst = 10;\n/*@internal*/ enum internalEnum { a, b, c }",
       "../second/second_part2.ts": "9339262372-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n"
     },
+    "root": [
+      [
+        2,
+        "../second/second_part1.ts"
+      ],
+      [
+        3,
+        "../second/second_part2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./second-output.js"
+      "declaration": true,
+      "declarationMap": true,
+      "outFile": "./second-output.js",
+      "removeComments": false,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-20504865920-declare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n    constructor();\r\n    prop: string;\r\n    method(): void;\r\n    get c(): number;\r\n    set c(val: number);\r\n}\r\ndeclare namespace normalN {\r\n    class C {\r\n    }\r\n    function foo(): void;\r\n    namespace someNamespace {\r\n        class C {\r\n        }\r\n    }\r\n    namespace someOther.something {\r\n        class someClass {\r\n        }\r\n    }\r\n    export import someImport = someNamespace.C;\r\n    type internalType = internalC;\r\n    const internalConst = 10;\r\n    enum internalEnum {\r\n        a = 0,\r\n        b = 1,\r\n        c = 2\r\n    }\r\n}\r\ndeclare class internalC {\r\n}\r\ndeclare function internalfoo(): void;\r\ndeclare namespace internalNamespace {\r\n    class someClass {\r\n    }\r\n}\r\ndeclare namespace internalOther.something {\r\n    class someClass {\r\n    }\r\n}\r\nimport internalImport = internalNamespace.someClass;\r\ndeclare type internalType = internalC;\r\ndeclare const internalConst = 10;\r\ndeclare enum internalEnum {\r\n    a = 0,\r\n    b = 1,\r\n    c = 2\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\n",
+    "outSignature": "-18721653870-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
     "latestChangedDtsFile": "./second-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 11618
+  "size": 11789
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -2904,7 +2920,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
@@ -2964,7 +2980,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
@@ -3048,7 +3064,7 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -3113,7 +3129,7 @@ sourceFile:../first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -3149,13 +3165,13 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}],"mapHash":"-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"-3712641672-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":39,"kind":"internal"},{"pos":41,"end":157,"kind":"text"}],"mapHash":"36580418620-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-7635519924-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":104,"kind":"text"}],"mapHash":"-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"4999315210-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":37,"kind":"internal"},{"pos":38,"end":149,"kind":"text"}],"mapHash":"36580418620-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-7635519924-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":false,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-110)
+text: (0-104)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -3167,12 +3183,12 @@ function f() {
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-internal: (0-39)
+internal: (0-37)
 interface TheFirst {
     none: any;
 }
 ----------------------------------------------------------------------
-text: (41-157)
+text: (38-149)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -3194,50 +3210,71 @@ declare function f(): string;
       "sections": [
         {
           "pos": 0,
-          "end": 110,
+          "end": 104,
           "kind": "text"
         }
       ],
-      "hash": "-3712641672-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "4999315210-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "-22423542495-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 39,
+          "end": 37,
           "kind": "internal"
         },
         {
-          "pos": 41,
-          "end": 157,
+          "pos": 38,
+          "end": 149,
           "kind": "text"
         }
       ],
-      "hash": "-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "36580418620-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../lib/lib.d.ts",
       "../first_part1.ts",
       "../first_part2.ts",
       "../first_part3.ts"
     ],
     "fileInfos": {
+      "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../first_part1.ts": "-7635519924-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\n",
       "../first_part2.ts": "4973778178-console.log(f());\r\n",
       "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../first_part1.ts",
+          "../first_part2.ts",
+          "../first_part3.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./first-output.js"
+      "declarationMap": true,
+      "outFile": "./first-output.js",
+      "removeComments": false,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "outSignature": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2138
+  "size": 2688
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -3331,7 +3368,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(4, 2) Source(9, 2) + SourceIndex(0)
@@ -3376,7 +3413,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -3400,7 +3437,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -3425,7 +3462,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -3452,7 +3489,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >{
   >    /*@internal*/ export class C { }
   >    /*@internal*/ export function foo() {}
@@ -3473,7 +3510,7 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1->
 2 >class 
 3 >              C
@@ -3492,7 +3529,7 @@ sourceFile:../../../second/second_part2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >() {
   >        console.log("something got done");
   >    }
@@ -3686,7 +3723,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -3751,7 +3788,7 @@ sourceFile:../../../first/first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -3777,7 +3814,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^->
+3 > ^^^^^->
 1 >
   >
 2 >}
@@ -3793,7 +3830,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1->namespace N {
   >    // Comment text
   >}
@@ -3817,7 +3854,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -3829,7 +3866,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -3868,7 +3905,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -3880,7 +3917,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -3900,7 +3937,7 @@ sourceFile:../../../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
@@ -3925,7 +3962,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>var normalC = /** @class */ (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -3946,7 +3983,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >    }
 1 >Emitted(16, 5) Source(14, 35) + SourceIndex(3)
@@ -3981,7 +4018,7 @@ sourceFile:../../../second/second_part1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
 3 >                          ^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                ^^^^^^^->
+4 >                                                ^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >    get 
@@ -4047,7 +4084,7 @@ sourceFile:../../../second/second_part1.ts
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
-2 >       ^^^^^^^^^^^^^->
+2 >       ^^^^^^^^^^^^->
 1 >
 1 >Emitted(23, 8) Source(17, 41) + SourceIndex(3)
 ---
@@ -4066,7 +4103,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^->
+5 >     ^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -4087,7 +4124,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^^^^^^^
 4 >           ^
-5 >            ^^^^^^^^^^->
+5 >            ^^^^^^^^^->
 1->
   >
 2 >namespace 
@@ -4111,7 +4148,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^
-4 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >namespace 
 3 >           normalN
@@ -4123,7 +4160,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^
-4 >                  ^^^^^->
+4 >                  ^^^^->
 1-> {
   >    
 2 >    /*@internal*/
@@ -4134,14 +4171,14 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>        function C() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(29, 9) Source(21, 19) + SourceIndex(3)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^->
+3 >         ^^^^^^^^->
 1->export class C { 
 2 >        }
 1->Emitted(30, 9) Source(21, 36) + SourceIndex(3)
@@ -4160,7 +4197,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^->
+5 >         ^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -4175,7 +4212,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^^^^^^^^^
 3 >             ^^^^
 4 >                 ^
-5 >                  ^^^^^^^^^^^^^^^^^^^->
+5 >                  ^^^^^^^^^^^^^^^^^^->
 1->
 2 >    C
 3 >              { }
@@ -4214,7 +4251,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^->
+5 >                      ^^^^^^^^^^^^^^->
 1 >
 2 >    foo
 3 >               () {}
@@ -4249,7 +4286,7 @@ sourceFile:../../../second/second_part1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^->
 1 >
 2 >    export namespace 
 3 >               someNamespace
@@ -4259,20 +4296,20 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>        var C = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(38, 9) Source(23, 52) + SourceIndex(3)
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(39, 13) Source(23, 52) + SourceIndex(3)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^->
+3 >             ^^^^^^^^->
 1->export class C {
 2 >            }
 1->Emitted(40, 13) Source(23, 68) + SourceIndex(3)
@@ -4291,7 +4328,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -4306,7 +4343,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^^^^^^^^^^^^^^^
 3 >                       ^^^^
 4 >                           ^
-5 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        C
 3 >                        {}
@@ -4382,7 +4419,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^^^^
 3 >            ^^^^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^->
+5 >                      ^^^^^^^^^->
 1 >.
 2 >        
 3 >            something
@@ -4396,7 +4433,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   something
@@ -4406,20 +4443,20 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(49, 13) Source(24, 58) + SourceIndex(3)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(50, 17) Source(24, 58) + SourceIndex(3)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
 1->Emitted(51, 17) Source(24, 82) + SourceIndex(3)
@@ -4438,7 +4475,7 @@ sourceFile:../../../second/second_part1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -4453,7 +4490,7 @@ sourceFile:../../../second/second_part1.ts
 2 >            ^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            someClass
 3 >                                {}
@@ -4598,7 +4635,7 @@ sourceFile:../../../second/second_part1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export enum 
 3 >               internalEnum
@@ -4610,7 +4647,6 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
 1-> { 
 2 >        a
 3 >                                                 
@@ -4619,26 +4655,25 @@ sourceFile:../../../second/second_part1.ts
 3 >Emitted(61, 51) Source(28, 47) + SourceIndex(3)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
-1->, 
+1 >, 
 2 >        b
 3 >                                                 
-1->Emitted(62, 9) Source(28, 49) + SourceIndex(3)
+1 >Emitted(62, 9) Source(28, 49) + SourceIndex(3)
 2 >Emitted(62, 50) Source(28, 50) + SourceIndex(3)
 3 >Emitted(62, 51) Source(28, 50) + SourceIndex(3)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >        c
 3 >                                                 
-1->Emitted(63, 9) Source(28, 52) + SourceIndex(3)
+1 >Emitted(63, 9) Source(28, 52) + SourceIndex(3)
 2 >Emitted(63, 50) Source(28, 53) + SourceIndex(3)
 3 >Emitted(63, 51) Source(28, 53) + SourceIndex(3)
 ---
@@ -4679,7 +4714,7 @@ sourceFile:../../../second/second_part1.ts
 5 >          ^^^^^
 6 >               ^^^^^^^
 7 >                      ^^^^^^^^
-8 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -4709,7 +4744,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^->
 1->
   >
 2 >/*@internal*/
@@ -4720,14 +4755,14 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>    function internalC() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(67, 5) Source(30, 15) + SourceIndex(3)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^->
 1->class internalC {
 2 >    }
 1->Emitted(68, 5) Source(30, 32) + SourceIndex(3)
@@ -4746,7 +4781,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -4805,7 +4840,7 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >namespace 
 3 >           internalNamespace
@@ -4815,20 +4850,20 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>    var someClass = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(74, 5) Source(32, 45) + SourceIndex(3)
 ---
 >>>        function someClass() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(75, 9) Source(32, 45) + SourceIndex(3)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >        }
 1->Emitted(76, 9) Source(32, 69) + SourceIndex(3)
@@ -4847,7 +4882,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -4862,7 +4897,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^->
+5 >                                            ^^^^^^->
 1->
 2 >    someClass
 3 >                                {}
@@ -4932,7 +4967,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^^^^
 3 >        ^^^^^^^^^
 4 >                 ^
-5 >                  ^^^^^^^^^^->
+5 >                  ^^^^^^^^^->
 1 >.
 2 >    
 3 >        something
@@ -4946,7 +4981,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^
-4 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    
 3 >               something
@@ -4956,20 +4991,20 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(85, 9) Source(33, 51) + SourceIndex(3)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(86, 13) Source(33, 51) + SourceIndex(3)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^->
+3 >             ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
 1->Emitted(87, 13) Source(33, 75) + SourceIndex(3)
@@ -4988,7 +5023,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -5003,7 +5038,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^^^^^^^^^^
 4 >                                       ^
-5 >                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        someClass
 3 >                            {}
@@ -5050,7 +5085,7 @@ sourceFile:../../../second/second_part1.ts
 5 >                ^^^^^
 6 >                     ^^^^^^^^^^^^^
 7 >                                  ^^^^^^^^
-8 >                                          ^^^^^^^^^^^^^^^^^^^^^^->
+8 >                                          ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -5149,7 +5184,7 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^^^^^^
-4 >                       ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                       ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >enum 
 3 >           internalEnum
@@ -5161,7 +5196,6 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^
-4 >                                              ^->
 1-> { 
 2 >    a
 3 >                                             
@@ -5170,25 +5204,24 @@ sourceFile:../../../second/second_part1.ts
 3 >Emitted(97, 47) Source(37, 36) + SourceIndex(3)
 ---
 >>>    internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^
-4 >                                              ^->
-1->, 
+1 >, 
 2 >    b
 3 >                                             
-1->Emitted(98, 5) Source(37, 38) + SourceIndex(3)
+1 >Emitted(98, 5) Source(37, 38) + SourceIndex(3)
 2 >Emitted(98, 46) Source(37, 39) + SourceIndex(3)
 3 >Emitted(98, 47) Source(37, 39) + SourceIndex(3)
 ---
 >>>    internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^
-1->, 
+1 >, 
 2 >    c
 3 >                                             
-1->Emitted(99, 5) Source(37, 41) + SourceIndex(3)
+1 >Emitted(99, 5) Source(37, 41) + SourceIndex(3)
 2 >Emitted(99, 46) Source(37, 42) + SourceIndex(3)
 3 >Emitted(99, 47) Source(37, 42) + SourceIndex(3)
 ---
@@ -5221,20 +5254,20 @@ sourceFile:../../../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1 >
 1 >Emitted(101, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(102, 5) Source(1, 1) + SourceIndex(4)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -5248,7 +5281,7 @@ sourceFile:../../../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -5286,7 +5319,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -5307,7 +5340,7 @@ sourceFile:../../../second/second_part2.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -5334,7 +5367,6 @@ sourceFile:../../third_part1.ts
 6 >            ^
 7 >             ^^
 8 >               ^
-9 >                ^->
 1->
 2 >var 
 3 >    c
@@ -5353,21 +5385,21 @@ sourceFile:../../third_part1.ts
 8 >Emitted(109, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
-1->
+1 >
 2 >^
 3 > ^
 4 >  ^^^^^^^^^^^
 5 >             ^^
 6 >               ^
 7 >                ^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
   >
 2 >c
 3 > .
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(110, 1) Source(2, 1) + SourceIndex(5)
+1 >Emitted(110, 1) Source(2, 1) + SourceIndex(5)
 2 >Emitted(110, 2) Source(2, 2) + SourceIndex(5)
 3 >Emitted(110, 3) Source(2, 3) + SourceIndex(5)
 4 >Emitted(110, 14) Source(2, 14) + SourceIndex(5)
@@ -5377,15 +5409,15 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":3527,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":110,"end":3527,"kind":"text"}]},{"pos":3527,"end":3563,"kind":"text"}],"mapHash":"139241117891-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"41938302000-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = /** @class */ (function () {\r\n    /*@internal*/ function normalC() {\r\n    }\r\n    /*@internal*/ normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        /*@internal*/ get: function () { return 10; },\r\n        /*@internal*/ set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    /*@internal*/ var C = /** @class */ (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    /*@internal*/ function foo() { }\r\n    normalN.foo = foo;\r\n    /*@internal*/ var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    /*@internal*/ var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    /*@internal*/ normalN.someImport = someNamespace.C;\r\n    /*@internal*/ normalN.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\n/*@internal*/ var internalC = /** @class */ (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\n/*@internal*/ function internalfoo() { }\r\n/*@internal*/ var internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = /** @class */ (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\n/*@internal*/ var internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\n/*@internal*/ var internalImport = internalNamespace.someClass;\r\n/*@internal*/ var internalConst = 10;\r\n/*@internal*/ var internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = /** @class */ (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":116,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":116,"kind":"text"}]},{"pos":116,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":116,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}],"mapHash":"16014976674-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"12393711795-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":104,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":104,"kind":"text"}]},{"pos":104,"end":3419,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":104,"end":3419,"kind":"text"}]},{"pos":3419,"end":3453,"kind":"text"}],"mapHash":"139241117891-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-30933053094-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar normalC = /** @class */ (function () {\n    /*@internal*/ function normalC() {\n    }\n    /*@internal*/ normalC.prototype.method = function () { };\n    Object.defineProperty(normalC.prototype, \"c\", {\n        /*@internal*/ get: function () { return 10; },\n        /*@internal*/ set: function (val) { },\n        enumerable: false,\n        configurable: true\n    });\n    return normalC;\n}());\nvar normalN;\n(function (normalN) {\n    /*@internal*/ var C = /** @class */ (function () {\n        function C() {\n        }\n        return C;\n    }());\n    normalN.C = C;\n    /*@internal*/ function foo() { }\n    normalN.foo = foo;\n    /*@internal*/ var someNamespace;\n    (function (someNamespace) {\n        var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        someNamespace.C = C;\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n    /*@internal*/ var someOther;\n    (function (someOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = someOther.something || (someOther.something = {}));\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\n    /*@internal*/ normalN.someImport = someNamespace.C;\n    /*@internal*/ normalN.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n})(normalN || (normalN = {}));\n/*@internal*/ var internalC = /** @class */ (function () {\n    function internalC() {\n    }\n    return internalC;\n}());\n/*@internal*/ function internalfoo() { }\n/*@internal*/ var internalNamespace;\n(function (internalNamespace) {\n    var someClass = /** @class */ (function () {\n        function someClass() {\n        }\n        return someClass;\n    }());\n    internalNamespace.someClass = someClass;\n})(internalNamespace || (internalNamespace = {}));\n/*@internal*/ var internalOther;\n(function (internalOther) {\n    var something;\n    (function (something) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        something.someClass = someClass;\n    })(something = internalOther.something || (internalOther.something = {}));\n})(internalOther || (internalOther = {}));\n/*@internal*/ var internalImport = internalNamespace.someClass;\n/*@internal*/ var internalConst = 10;\n/*@internal*/ var internalEnum;\n(function (internalEnum) {\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n})(internalEnum || (internalEnum = {}));\nvar C = /** @class */ (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":111,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":111,"kind":"text"}]},{"pos":111,"end":260,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":111,"end":260,"kind":"text"}]},{"pos":260,"end":278,"kind":"text"}],"mapHash":"16014976674-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-51018023562-declare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","-18721653870-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n","10470273651-var c = new C();\r\nc.doSomething();\r\n"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./third-output.js","removeComments":false,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"-46239946948-declare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-110):: ../../../first/bin/first-output.js texts:: 1
+prepend: (0-104):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-110)
+text: (0-104)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -5394,9 +5426,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (110-3527):: ../../../2/second-output.js texts:: 1
+prepend: (104-3419):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (110-3527)
+text: (104-3419)
 var N;
 (function (N) {
     function f() {
@@ -5501,7 +5533,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3527-3563)
+text: (3419-3453)
 var c = new C();
 c.doSomething();
 
@@ -5509,9 +5541,9 @@ c.doSomething();
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-116):: ../../../first/bin/first-output.d.ts texts:: 1
+prepend: (0-111):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-116)
+text: (0-111)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -5519,9 +5551,9 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ----------------------------------------------------------------------
-prepend: (116-276):: ../../../2/second-output.d.ts texts:: 1
+prepend: (111-260):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (116-276)
+text: (111-260)
 declare namespace N {
 }
 declare namespace N {
@@ -5535,7 +5567,7 @@ declare class C {
 }
 
 ----------------------------------------------------------------------
-text: (276-295)
+text: (260-278)
 declare var c: C;
 
 ======================================================================
@@ -5551,93 +5583,113 @@ declare var c: C;
       "sections": [
         {
           "pos": 0,
-          "end": 110,
+          "end": 104,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 110,
+              "end": 104,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 110,
-          "end": 3527,
+          "pos": 104,
+          "end": 3419,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 110,
-              "end": 3527,
+              "pos": 104,
+              "end": 3419,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3527,
-          "end": 3563,
+          "pos": 3419,
+          "end": 3453,
           "kind": "text"
         }
       ],
-      "hash": "41938302000-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = /** @class */ (function () {\r\n    /*@internal*/ function normalC() {\r\n    }\r\n    /*@internal*/ normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        /*@internal*/ get: function () { return 10; },\r\n        /*@internal*/ set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    /*@internal*/ var C = /** @class */ (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    /*@internal*/ function foo() { }\r\n    normalN.foo = foo;\r\n    /*@internal*/ var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    /*@internal*/ var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    /*@internal*/ normalN.someImport = someNamespace.C;\r\n    /*@internal*/ normalN.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\n/*@internal*/ var internalC = /** @class */ (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\n/*@internal*/ function internalfoo() { }\r\n/*@internal*/ var internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = /** @class */ (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\n/*@internal*/ var internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\n/*@internal*/ var internalImport = internalNamespace.someClass;\r\n/*@internal*/ var internalConst = 10;\r\n/*@internal*/ var internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = /** @class */ (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "-30933053094-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar normalC = /** @class */ (function () {\n    /*@internal*/ function normalC() {\n    }\n    /*@internal*/ normalC.prototype.method = function () { };\n    Object.defineProperty(normalC.prototype, \"c\", {\n        /*@internal*/ get: function () { return 10; },\n        /*@internal*/ set: function (val) { },\n        enumerable: false,\n        configurable: true\n    });\n    return normalC;\n}());\nvar normalN;\n(function (normalN) {\n    /*@internal*/ var C = /** @class */ (function () {\n        function C() {\n        }\n        return C;\n    }());\n    normalN.C = C;\n    /*@internal*/ function foo() { }\n    normalN.foo = foo;\n    /*@internal*/ var someNamespace;\n    (function (someNamespace) {\n        var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        someNamespace.C = C;\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n    /*@internal*/ var someOther;\n    (function (someOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = someOther.something || (someOther.something = {}));\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\n    /*@internal*/ normalN.someImport = someNamespace.C;\n    /*@internal*/ normalN.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n})(normalN || (normalN = {}));\n/*@internal*/ var internalC = /** @class */ (function () {\n    function internalC() {\n    }\n    return internalC;\n}());\n/*@internal*/ function internalfoo() { }\n/*@internal*/ var internalNamespace;\n(function (internalNamespace) {\n    var someClass = /** @class */ (function () {\n        function someClass() {\n        }\n        return someClass;\n    }());\n    internalNamespace.someClass = someClass;\n})(internalNamespace || (internalNamespace = {}));\n/*@internal*/ var internalOther;\n(function (internalOther) {\n    var something;\n    (function (something) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        something.someClass = someClass;\n    })(something = internalOther.something || (internalOther.something = {}));\n})(internalOther || (internalOther = {}));\n/*@internal*/ var internalImport = internalNamespace.someClass;\n/*@internal*/ var internalConst = 10;\n/*@internal*/ var internalEnum;\n(function (internalEnum) {\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n})(internalEnum || (internalEnum = {}));\nvar C = /** @class */ (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "139241117891-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AAED;IACI,aAAa,CAAC;IAAgB,CAAC;IAE/B,aAAa,CAAC,wBAAM,GAAN,cAAW,CAAC;IACZ,sBAAI,sBAAC;QAAnB,aAAa,MAAC,cAAU,OAAO,EAAE,CAAC,CAAC,CAAC;QACpC,aAAa,MAAC,UAAM,GAAW,IAAI,CAAC;;;OADA;IAExC,cAAC;AAAD,CAAC,AAND,IAMC;AACD,IAAU,OAAO,CAShB;AATD,WAAU,OAAO;IACb,aAAa,CAAC;QAAA;QAAiB,CAAC;QAAD,QAAC;IAAD,CAAC,AAAlB,IAAkB;IAAL,SAAC,IAAI,CAAA;IAChC,aAAa,CAAC,SAAgB,GAAG,KAAI,CAAC;IAAR,WAAG,MAAK,CAAA;IACtC,aAAa,CAAC,IAAiB,aAAa,CAAsB;IAApD,WAAiB,aAAa;QAAG;YAAA;YAAgB,CAAC;YAAD,QAAC;QAAD,CAAC,AAAjB,IAAiB;QAAJ,eAAC,IAAG,CAAA;IAAC,CAAC,EAAnC,aAAa,GAAb,qBAAa,KAAb,qBAAa,QAAsB;IAClE,aAAa,CAAC,IAAiB,SAAS,CAAwC;IAAlE,WAAiB,SAAS;QAAC,IAAA,SAAS,CAA8B;QAAvC,WAAA,SAAS;YAAG;gBAAA;gBAAwB,CAAC;gBAAD,gBAAC;YAAD,CAAC,AAAzB,IAAyB;YAAZ,mBAAS,YAAG,CAAA;QAAC,CAAC,EAAvC,SAAS,GAAT,mBAAS,KAAT,mBAAS,QAA8B;IAAD,CAAC,EAAjD,SAAS,GAAT,iBAAS,KAAT,iBAAS,QAAwC;IAChF,aAAa,CAAe,kBAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAEzD,aAAa,CAAc,qBAAa,GAAG,EAAE,CAAC;IAC9C,aAAa,CAAC,IAAY,YAAwB;IAApC,WAAY,YAAY;QAAG,yCAAC,CAAA;QAAE,yCAAC,CAAA;QAAE,yCAAC,CAAA;IAAC,CAAC,EAAxB,YAAY,GAAZ,oBAAY,KAAZ,oBAAY,QAAY;AACtD,CAAC,EATS,OAAO,KAAP,OAAO,QAShB;AACD,aAAa,CAAC;IAAA;IAAiB,CAAC;IAAD,gBAAC;AAAD,CAAC,AAAlB,IAAkB;AAChC,aAAa,CAAC,SAAS,WAAW,KAAI,CAAC;AACvC,aAAa,CAAC,IAAU,iBAAiB,CAA8B;AAAzD,WAAU,iBAAiB;IAAG;QAAA;QAAwB,CAAC;QAAD,gBAAC;IAAD,CAAC,AAAzB,IAAyB;IAAZ,2BAAS,YAAG,CAAA;AAAC,CAAC,EAA/C,iBAAiB,KAAjB,iBAAiB,QAA8B;AACvE,aAAa,CAAC,IAAU,aAAa,CAAwC;AAA/D,WAAU,aAAa;IAAC,IAAA,SAAS,CAA8B;IAAvC,WAAA,SAAS;QAAG;YAAA;YAAwB,CAAC;YAAD,gBAAC;QAAD,CAAC,AAAzB,IAAyB;QAAZ,mBAAS,YAAG,CAAA;IAAC,CAAC,EAAvC,SAAS,GAAT,uBAAS,KAAT,uBAAS,QAA8B;AAAD,CAAC,EAArD,aAAa,KAAb,aAAa,QAAwC;AAC7E,aAAa,CAAC,IAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AAElE,aAAa,CAAC,IAAM,aAAa,GAAG,EAAE,CAAC;AACvC,aAAa,CAAC,IAAK,YAAwB;AAA7B,WAAK,YAAY;IAAG,yCAAC,CAAA;IAAE,yCAAC,CAAA;IAAE,yCAAC,CAAA;AAAC,CAAC,EAAxB,YAAY,KAAZ,YAAY,QAAY;ACpC3C;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 116,
+          "end": 111,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 116,
+              "end": 111,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 116,
-          "end": 276,
+          "pos": 111,
+          "end": 260,
           "kind": "prepend",
           "data": "../../../2/second-output.d.ts",
           "texts": [
             {
-              "pos": 116,
-              "end": 276,
+              "pos": 111,
+              "end": 260,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 276,
-          "end": 295,
+          "pos": 260,
+          "end": 278,
           "kind": "text"
         }
       ],
-      "hash": "12393711795-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "hash": "-51018023562-declare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map",
       "mapHash": "16014976674-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../../lib/lib.d.ts",
+      "../../../first/bin/first-output.d.ts",
+      "../../../2/second-output.d.ts",
       "../../third_part1.ts"
     ],
     "fileInfos": {
+      "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "../../../first/bin/first-output.d.ts": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
+      "../../../2/second-output.d.ts": "-18721653870-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
       "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
     },
+    "root": [
+      [
+        4,
+        "../../third_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./third-output.js"
+      "declaration": true,
+      "declarationMap": true,
+      "outFile": "./third-output.js",
+      "removeComments": false,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "stripInternal": true,
+      "target": 1
     },
-    "outSignature": "20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "outSignature": "-46239946948-declare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 8799
+  "size": 10478
 }
 
 
@@ -5739,7 +5791,6 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -5764,7 +5815,7 @@ sourceFile:../first_PART1.ts
 8 >Emitted(2, 16) Source(11, 16) + SourceIndex(0)
 ---
 >>>console.log(s);
-1->
+1 >
 2 >^^^^^^^
 3 >       ^
 4 >        ^^^
@@ -5772,8 +5823,8 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
-1->
+9 >               ^^->
+1 >
   >
 2 >console
 3 >       .
@@ -5782,7 +5833,7 @@ sourceFile:../first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1->Emitted(3, 1) Source(12, 1) + SourceIndex(0)
+1 >Emitted(3, 1) Source(12, 1) + SourceIndex(0)
 2 >Emitted(3, 8) Source(12, 8) + SourceIndex(0)
 3 >Emitted(3, 9) Source(12, 9) + SourceIndex(0)
 4 >Emitted(3, 12) Source(12, 12) + SourceIndex(0)
@@ -5832,7 +5883,7 @@ sourceFile:../first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -5868,13 +5919,13 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"text"}],"mapHash":"-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"18946534449-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":39,"kind":"internal"},{"pos":41,"end":157,"kind":"text"}],"mapHash":"36580418620-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-8483255506-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":120,"kind":"text"}],"mapHash":"-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"-20052626506-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":37,"kind":"internal"},{"pos":38,"end":149,"kind":"text"}],"mapHash":"36580418620-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-8483255506-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":false,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-127)
+text: (0-120)
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -5887,12 +5938,12 @@ function f() {
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-internal: (0-39)
+internal: (0-37)
 interface TheFirst {
     none: any;
 }
 ----------------------------------------------------------------------
-text: (41-157)
+text: (38-149)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -5914,50 +5965,71 @@ declare function f(): string;
       "sections": [
         {
           "pos": 0,
-          "end": 127,
+          "end": 120,
           "kind": "text"
         }
       ],
-      "hash": "18946534449-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "-20052626506-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 39,
+          "end": 37,
           "kind": "internal"
         },
         {
-          "pos": 41,
-          "end": 157,
+          "pos": 38,
+          "end": 149,
           "kind": "text"
         }
       ],
-      "hash": "-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "36580418620-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAc,UAAU,QAAQ;IAC5B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../lib/lib.d.ts",
       "../first_part1.ts",
       "../first_part2.ts",
       "../first_part3.ts"
     ],
     "fileInfos": {
+      "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../first_part1.ts": "-8483255506-/*@internal*/ interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);",
       "../first_part2.ts": "4973778178-console.log(f());\r\n",
       "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../first_part1.ts",
+          "../first_part2.ts",
+          "../first_part3.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./first-output.js"
+      "declarationMap": true,
+      "outFile": "./first-output.js",
+      "removeComments": false,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "outSignature": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2211
+  "size": 2761
 }
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -6121,7 +6193,6 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -6146,7 +6217,7 @@ sourceFile:../../../first/first_PART1.ts
 8 >Emitted(2, 16) Source(11, 16) + SourceIndex(0)
 ---
 >>>console.log(s);
-1->
+1 >
 2 >^^^^^^^
 3 >       ^
 4 >        ^^^
@@ -6154,8 +6225,8 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
-1->
+9 >               ^^->
+1 >
   >
 2 >console
 3 >       .
@@ -6164,7 +6235,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1->Emitted(3, 1) Source(12, 1) + SourceIndex(0)
+1 >Emitted(3, 1) Source(12, 1) + SourceIndex(0)
 2 >Emitted(3, 8) Source(12, 8) + SourceIndex(0)
 3 >Emitted(3, 9) Source(12, 9) + SourceIndex(0)
 4 >Emitted(3, 12) Source(12, 12) + SourceIndex(0)
@@ -6214,7 +6285,7 @@ sourceFile:../../../first/first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -6240,7 +6311,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^->
+3 > ^^^^^->
 1 >
   >
 2 >}
@@ -6256,7 +6327,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^->
+5 >      ^^^^^^^^^->
 1->namespace N {
   >    // Comment text
   >}
@@ -6280,7 +6351,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^^^^^^->
+4 >            ^^^^^^->
 1->
 2 >namespace 
 3 >           N
@@ -6292,7 +6363,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^^^^^^->
 1-> {
   >    
 2 >    function 
@@ -6331,7 +6402,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^->
+3 >     ^^^->
 1 >
   >    
 2 >    }
@@ -6343,7 +6414,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^->
+5 >        ^^^^^^^^^^->
 1->
   >
   >    
@@ -6363,7 +6434,7 @@ sourceFile:../../../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
@@ -6388,7 +6459,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>var normalC = /** @class */ (function () {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -6409,7 +6480,7 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >    }
 1 >Emitted(17, 5) Source(14, 35) + SourceIndex(3)
@@ -6444,7 +6515,7 @@ sourceFile:../../../second/second_part1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
 3 >                          ^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                ^^^^^^^->
+4 >                                                ^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >    get 
@@ -6510,7 +6581,7 @@ sourceFile:../../../second/second_part1.ts
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
-2 >       ^^^^^^^^^^^^^->
+2 >       ^^^^^^^^^^^^->
 1 >
 1 >Emitted(24, 8) Source(17, 41) + SourceIndex(3)
 ---
@@ -6529,7 +6600,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^->
+5 >     ^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -6550,7 +6621,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^
 3 >    ^^^^^^^
 4 >           ^
-5 >            ^^^^^^^^^^->
+5 >            ^^^^^^^^^->
 1->
   >
 2 >namespace 
@@ -6574,7 +6645,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^
-4 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >namespace 
 3 >           normalN
@@ -6586,7 +6657,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^
 3 >                 ^
-4 >                  ^^^^^->
+4 >                  ^^^^->
 1-> {
   >    
 2 >    /*@internal*/
@@ -6597,14 +6668,14 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>        function C() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(30, 9) Source(21, 19) + SourceIndex(3)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^->
+3 >         ^^^^^^^^->
 1->export class C { 
 2 >        }
 1->Emitted(31, 9) Source(21, 36) + SourceIndex(3)
@@ -6623,7 +6694,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^->
+5 >         ^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -6638,7 +6709,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^^^^^^^^^
 3 >             ^^^^
 4 >                 ^
-5 >                  ^^^^^^^^^^^^^^^^^^^->
+5 >                  ^^^^^^^^^^^^^^^^^^->
 1->
 2 >    C
 3 >              { }
@@ -6677,7 +6748,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^^^^^^->
+5 >                      ^^^^^^^^^^^^^^->
 1 >
 2 >    foo
 3 >               () {}
@@ -6712,7 +6783,7 @@ sourceFile:../../../second/second_part1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^->
 1 >
 2 >    export namespace 
 3 >               someNamespace
@@ -6722,20 +6793,20 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>        var C = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(39, 9) Source(23, 52) + SourceIndex(3)
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(40, 13) Source(23, 52) + SourceIndex(3)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^->
+3 >             ^^^^^^^^->
 1->export class C {
 2 >            }
 1->Emitted(41, 13) Source(23, 68) + SourceIndex(3)
@@ -6754,7 +6825,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -6769,7 +6840,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^^^^^^^^^^^^^^^
 3 >                       ^^^^
 4 >                           ^
-5 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        C
 3 >                        {}
@@ -6845,7 +6916,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^^^^
 3 >            ^^^^^^^^^
 4 >                     ^
-5 >                      ^^^^^^^^^^->
+5 >                      ^^^^^^^^^->
 1 >.
 2 >        
 3 >            something
@@ -6859,7 +6930,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   something
@@ -6869,20 +6940,20 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(50, 13) Source(24, 58) + SourceIndex(3)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^->
+2 >                ^->
 1->
 1->Emitted(51, 17) Source(24, 58) + SourceIndex(3)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
 1->Emitted(52, 17) Source(24, 82) + SourceIndex(3)
@@ -6901,7 +6972,7 @@ sourceFile:../../../second/second_part1.ts
 2 >            ^
 3 >             
 4 >             ^^^^
-5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            }
 3 >             
@@ -6916,7 +6987,7 @@ sourceFile:../../../second/second_part1.ts
 2 >            ^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            someClass
 3 >                                {}
@@ -7061,7 +7132,7 @@ sourceFile:../../../second/second_part1.ts
 1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    export enum 
 3 >               internalEnum
@@ -7073,7 +7144,6 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
 1-> { 
 2 >        a
 3 >                                                 
@@ -7082,26 +7152,25 @@ sourceFile:../../../second/second_part1.ts
 3 >Emitted(62, 51) Source(28, 47) + SourceIndex(3)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^->
-1->, 
+1 >, 
 2 >        b
 3 >                                                 
-1->Emitted(63, 9) Source(28, 49) + SourceIndex(3)
+1 >Emitted(63, 9) Source(28, 49) + SourceIndex(3)
 2 >Emitted(63, 50) Source(28, 50) + SourceIndex(3)
 3 >Emitted(63, 51) Source(28, 50) + SourceIndex(3)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
-4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->, 
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >, 
 2 >        c
 3 >                                                 
-1->Emitted(64, 9) Source(28, 52) + SourceIndex(3)
+1 >Emitted(64, 9) Source(28, 52) + SourceIndex(3)
 2 >Emitted(64, 50) Source(28, 53) + SourceIndex(3)
 3 >Emitted(64, 51) Source(28, 53) + SourceIndex(3)
 ---
@@ -7142,7 +7211,7 @@ sourceFile:../../../second/second_part1.ts
 5 >          ^^^^^
 6 >               ^^^^^^^
 7 >                      ^^^^^^^^
-8 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+8 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -7172,7 +7241,7 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >^^^^^^^^^^^^^
 3 >             ^
-4 >              ^^^^^^^^^^^^^->
+4 >              ^^^^^^^^^^^^->
 1->
   >
 2 >/*@internal*/
@@ -7183,14 +7252,14 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>    function internalC() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(68, 5) Source(30, 15) + SourceIndex(3)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^->
 1->class internalC {
 2 >    }
 1->Emitted(69, 5) Source(30, 32) + SourceIndex(3)
@@ -7209,7 +7278,7 @@ sourceFile:../../../second/second_part1.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -7268,7 +7337,7 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >namespace 
 3 >           internalNamespace
@@ -7278,20 +7347,20 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>    var someClass = /** @class */ (function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(75, 5) Source(32, 45) + SourceIndex(3)
 ---
 >>>        function someClass() {
 1->^^^^^^^^
-2 >        ^^->
+2 >        ^->
 1->
 1->Emitted(76, 9) Source(32, 45) + SourceIndex(3)
 ---
 >>>        }
 1->^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >        }
 1->Emitted(77, 9) Source(32, 69) + SourceIndex(3)
@@ -7310,7 +7379,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^
 3 >     
 4 >     ^^^^
-5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 3 >     
@@ -7325,7 +7394,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^->
+5 >                                            ^^^^^^->
 1->
 2 >    someClass
 3 >                                {}
@@ -7395,7 +7464,7 @@ sourceFile:../../../second/second_part1.ts
 2 >    ^^^^
 3 >        ^^^^^^^^^
 4 >                 ^
-5 >                  ^^^^^^^^^^->
+5 >                  ^^^^^^^^^->
 1 >.
 2 >    
 3 >        something
@@ -7409,7 +7478,7 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^^^
-4 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    
 3 >               something
@@ -7419,20 +7488,20 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
 1->Emitted(86, 9) Source(33, 51) + SourceIndex(3)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
-2 >            ^^->
+2 >            ^->
 1->
 1->Emitted(87, 13) Source(33, 51) + SourceIndex(3)
 ---
 >>>            }
 1->^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^->
+3 >             ^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
 1->Emitted(88, 13) Source(33, 75) + SourceIndex(3)
@@ -7451,7 +7520,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^
 3 >         
 4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >        }
 3 >         
@@ -7466,7 +7535,7 @@ sourceFile:../../../second/second_part1.ts
 2 >        ^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^^^^^^^^^^
 4 >                                       ^
-5 >                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        someClass
 3 >                            {}
@@ -7513,7 +7582,7 @@ sourceFile:../../../second/second_part1.ts
 5 >                ^^^^^
 6 >                     ^^^^^^^^^^^^^
 7 >                                  ^^^^^^^^
-8 >                                          ^^^^^^^^^^^^^^^^^^^^^^->
+8 >                                          ^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -7612,7 +7681,7 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^^^^^^^^^
-4 >                       ^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                       ^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >enum 
 3 >           internalEnum
@@ -7624,7 +7693,6 @@ sourceFile:../../../second/second_part1.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^
-4 >                                              ^->
 1-> { 
 2 >    a
 3 >                                             
@@ -7633,25 +7701,24 @@ sourceFile:../../../second/second_part1.ts
 3 >Emitted(98, 47) Source(37, 36) + SourceIndex(3)
 ---
 >>>    internalEnum[internalEnum["b"] = 1] = "b";
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^
-4 >                                              ^->
-1->, 
+1 >, 
 2 >    b
 3 >                                             
-1->Emitted(99, 5) Source(37, 38) + SourceIndex(3)
+1 >Emitted(99, 5) Source(37, 38) + SourceIndex(3)
 2 >Emitted(99, 46) Source(37, 39) + SourceIndex(3)
 3 >Emitted(99, 47) Source(37, 39) + SourceIndex(3)
 ---
 >>>    internalEnum[internalEnum["c"] = 2] = "c";
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^
-1->, 
+1 >, 
 2 >    c
 3 >                                             
-1->Emitted(100, 5) Source(37, 41) + SourceIndex(3)
+1 >Emitted(100, 5) Source(37, 41) + SourceIndex(3)
 2 >Emitted(100, 46) Source(37, 42) + SourceIndex(3)
 3 >Emitted(100, 47) Source(37, 42) + SourceIndex(3)
 ---
@@ -7684,20 +7751,20 @@ sourceFile:../../../second/second_part2.ts
 -------------------------------------------------------------------
 >>>var C = /** @class */ (function () {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^->
 1 >
 1 >Emitted(102, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
-2 >    ^^->
+2 >    ^->
 1->
 1->Emitted(103, 5) Source(1, 1) + SourceIndex(4)
 ---
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class C {
   >    doSomething() {
   >        console.log("something got done");
@@ -7711,7 +7778,7 @@ sourceFile:../../../second/second_part2.ts
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 3 >                           ^^^
-4 >                              ^^^^^^^^^^^^^->
+4 >                              ^^^^^^^^^^^^->
 1->
 2 >    doSomething
 3 >                           
@@ -7749,7 +7816,7 @@ sourceFile:../../../second/second_part2.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^->
+3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
@@ -7770,7 +7837,7 @@ sourceFile:../../../second/second_part2.ts
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -7797,7 +7864,6 @@ sourceFile:../../third_part1.ts
 6 >            ^
 7 >             ^^
 8 >               ^
-9 >                ^->
 1->
 2 >var 
 3 >    c
@@ -7816,21 +7882,21 @@ sourceFile:../../third_part1.ts
 8 >Emitted(110, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
-1->
+1 >
 2 >^
 3 > ^
 4 >  ^^^^^^^^^^^
 5 >             ^^
 6 >               ^
 7 >                ^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
   >
 2 >c
 3 > .
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(111, 1) Source(2, 1) + SourceIndex(5)
+1 >Emitted(111, 1) Source(2, 1) + SourceIndex(5)
 2 >Emitted(111, 2) Source(2, 2) + SourceIndex(5)
 3 >Emitted(111, 3) Source(2, 3) + SourceIndex(5)
 4 >Emitted(111, 14) Source(2, 14) + SourceIndex(5)
@@ -7840,15 +7906,15 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":127,"kind":"text"}]},{"pos":127,"end":3544,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":127,"end":3544,"kind":"text"}]},{"pos":3544,"end":3580,"kind":"text"}],"mapHash":"92086003575-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-58627043959-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = /** @class */ (function () {\r\n    /*@internal*/ function normalC() {\r\n    }\r\n    /*@internal*/ normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        /*@internal*/ get: function () { return 10; },\r\n        /*@internal*/ set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    /*@internal*/ var C = /** @class */ (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    /*@internal*/ function foo() { }\r\n    normalN.foo = foo;\r\n    /*@internal*/ var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    /*@internal*/ var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    /*@internal*/ normalN.someImport = someNamespace.C;\r\n    /*@internal*/ normalN.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\n/*@internal*/ var internalC = /** @class */ (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\n/*@internal*/ function internalfoo() { }\r\n/*@internal*/ var internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = /** @class */ (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\n/*@internal*/ var internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\n/*@internal*/ var internalImport = internalNamespace.someClass;\r\n/*@internal*/ var internalConst = 10;\r\n/*@internal*/ var internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = /** @class */ (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":116,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":116,"kind":"text"}]},{"pos":116,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":116,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}],"mapHash":"16014976674-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"12393711795-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":120,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":120,"kind":"text"}]},{"pos":120,"end":3435,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":120,"end":3435,"kind":"text"}]},{"pos":3435,"end":3469,"kind":"text"}],"mapHash":"92086003575-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"14154918278-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar normalC = /** @class */ (function () {\n    /*@internal*/ function normalC() {\n    }\n    /*@internal*/ normalC.prototype.method = function () { };\n    Object.defineProperty(normalC.prototype, \"c\", {\n        /*@internal*/ get: function () { return 10; },\n        /*@internal*/ set: function (val) { },\n        enumerable: false,\n        configurable: true\n    });\n    return normalC;\n}());\nvar normalN;\n(function (normalN) {\n    /*@internal*/ var C = /** @class */ (function () {\n        function C() {\n        }\n        return C;\n    }());\n    normalN.C = C;\n    /*@internal*/ function foo() { }\n    normalN.foo = foo;\n    /*@internal*/ var someNamespace;\n    (function (someNamespace) {\n        var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        someNamespace.C = C;\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n    /*@internal*/ var someOther;\n    (function (someOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = someOther.something || (someOther.something = {}));\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\n    /*@internal*/ normalN.someImport = someNamespace.C;\n    /*@internal*/ normalN.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n})(normalN || (normalN = {}));\n/*@internal*/ var internalC = /** @class */ (function () {\n    function internalC() {\n    }\n    return internalC;\n}());\n/*@internal*/ function internalfoo() { }\n/*@internal*/ var internalNamespace;\n(function (internalNamespace) {\n    var someClass = /** @class */ (function () {\n        function someClass() {\n        }\n        return someClass;\n    }());\n    internalNamespace.someClass = someClass;\n})(internalNamespace || (internalNamespace = {}));\n/*@internal*/ var internalOther;\n(function (internalOther) {\n    var something;\n    (function (something) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        something.someClass = someClass;\n    })(something = internalOther.something || (internalOther.something = {}));\n})(internalOther || (internalOther = {}));\n/*@internal*/ var internalImport = internalNamespace.someClass;\n/*@internal*/ var internalConst = 10;\n/*@internal*/ var internalEnum;\n(function (internalEnum) {\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n})(internalEnum || (internalEnum = {}));\nvar C = /** @class */ (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":111,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":111,"kind":"text"}]},{"pos":111,"end":260,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":111,"end":260,"kind":"text"}]},{"pos":260,"end":278,"kind":"text"}],"mapHash":"16014976674-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-51018023562-declare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","-18721653870-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n","10470273651-var c = new C();\r\nc.doSomething();\r\n"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./third-output.js","removeComments":false,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"-46239946948-declare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-127):: ../../../first/bin/first-output.js texts:: 1
+prepend: (0-120):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-127)
+text: (0-120)
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -7858,9 +7924,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (127-3544):: ../../../2/second-output.js texts:: 1
+prepend: (120-3435):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (127-3544)
+text: (120-3435)
 var N;
 (function (N) {
     function f() {
@@ -7965,7 +8031,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3544-3580)
+text: (3435-3469)
 var c = new C();
 c.doSomething();
 
@@ -7973,9 +8039,9 @@ c.doSomething();
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-116):: ../../../first/bin/first-output.d.ts texts:: 1
+prepend: (0-111):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-116)
+text: (0-111)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -7983,9 +8049,9 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ----------------------------------------------------------------------
-prepend: (116-276):: ../../../2/second-output.d.ts texts:: 1
+prepend: (111-260):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (116-276)
+text: (111-260)
 declare namespace N {
 }
 declare namespace N {
@@ -7999,7 +8065,7 @@ declare class C {
 }
 
 ----------------------------------------------------------------------
-text: (276-295)
+text: (260-278)
 declare var c: C;
 
 ======================================================================
@@ -8015,93 +8081,113 @@ declare var c: C;
       "sections": [
         {
           "pos": 0,
-          "end": 127,
+          "end": 120,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 127,
+              "end": 120,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 127,
-          "end": 3544,
+          "pos": 120,
+          "end": 3435,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 127,
-              "end": 3544,
+              "pos": 120,
+              "end": 3435,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3544,
-          "end": 3580,
+          "pos": 3435,
+          "end": 3469,
           "kind": "text"
         }
       ],
-      "hash": "-58627043959-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = /** @class */ (function () {\r\n    /*@internal*/ function normalC() {\r\n    }\r\n    /*@internal*/ normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        /*@internal*/ get: function () { return 10; },\r\n        /*@internal*/ set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    /*@internal*/ var C = /** @class */ (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    /*@internal*/ function foo() { }\r\n    normalN.foo = foo;\r\n    /*@internal*/ var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    /*@internal*/ var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    /*@internal*/ normalN.someImport = someNamespace.C;\r\n    /*@internal*/ normalN.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\n/*@internal*/ var internalC = /** @class */ (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\n/*@internal*/ function internalfoo() { }\r\n/*@internal*/ var internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = /** @class */ (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\n/*@internal*/ var internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\n/*@internal*/ var internalImport = internalNamespace.someClass;\r\n/*@internal*/ var internalConst = 10;\r\n/*@internal*/ var internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = /** @class */ (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "14154918278-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar normalC = /** @class */ (function () {\n    /*@internal*/ function normalC() {\n    }\n    /*@internal*/ normalC.prototype.method = function () { };\n    Object.defineProperty(normalC.prototype, \"c\", {\n        /*@internal*/ get: function () { return 10; },\n        /*@internal*/ set: function (val) { },\n        enumerable: false,\n        configurable: true\n    });\n    return normalC;\n}());\nvar normalN;\n(function (normalN) {\n    /*@internal*/ var C = /** @class */ (function () {\n        function C() {\n        }\n        return C;\n    }());\n    normalN.C = C;\n    /*@internal*/ function foo() { }\n    normalN.foo = foo;\n    /*@internal*/ var someNamespace;\n    (function (someNamespace) {\n        var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        someNamespace.C = C;\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n    /*@internal*/ var someOther;\n    (function (someOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = someOther.something || (someOther.something = {}));\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\n    /*@internal*/ normalN.someImport = someNamespace.C;\n    /*@internal*/ normalN.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n})(normalN || (normalN = {}));\n/*@internal*/ var internalC = /** @class */ (function () {\n    function internalC() {\n    }\n    return internalC;\n}());\n/*@internal*/ function internalfoo() { }\n/*@internal*/ var internalNamespace;\n(function (internalNamespace) {\n    var someClass = /** @class */ (function () {\n        function someClass() {\n        }\n        return someClass;\n    }());\n    internalNamespace.someClass = someClass;\n})(internalNamespace || (internalNamespace = {}));\n/*@internal*/ var internalOther;\n(function (internalOther) {\n    var something;\n    (function (something) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        something.someClass = someClass;\n    })(something = internalOther.something || (internalOther.something = {}));\n})(internalOther || (internalOther = {}));\n/*@internal*/ var internalImport = internalNamespace.someClass;\n/*@internal*/ var internalConst = 10;\n/*@internal*/ var internalEnum;\n(function (internalEnum) {\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n})(internalEnum || (internalEnum = {}));\nvar C = /** @class */ (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "92086003575-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 116,
+          "end": 111,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 116,
+              "end": 111,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 116,
-          "end": 276,
+          "pos": 111,
+          "end": 260,
           "kind": "prepend",
           "data": "../../../2/second-output.d.ts",
           "texts": [
             {
-              "pos": 116,
-              "end": 276,
+              "pos": 111,
+              "end": 260,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 276,
-          "end": 295,
+          "pos": 260,
+          "end": 278,
           "kind": "text"
         }
       ],
-      "hash": "12393711795-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "hash": "-51018023562-declare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map",
       "mapHash": "16014976674-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../../lib/lib.d.ts",
+      "../../../first/bin/first-output.d.ts",
+      "../../../2/second-output.d.ts",
       "../../third_part1.ts"
     ],
     "fileInfos": {
+      "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "../../../first/bin/first-output.d.ts": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
+      "../../../2/second-output.d.ts": "-18721653870-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
       "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
     },
+    "root": [
+      [
+        4,
+        "../../third_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./third-output.js"
+      "declaration": true,
+      "declarationMap": true,
+      "outFile": "./third-output.js",
+      "removeComments": false,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "stripInternal": true,
+      "target": 1
     },
-    "outSignature": "20880580153-declare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "outSignature": "-46239946948-declare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 8858
+  "size": 10533
 }
 
 
@@ -8189,7 +8275,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
@@ -8249,7 +8335,7 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
@@ -8323,7 +8409,6 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -8348,7 +8433,7 @@ sourceFile:../first_PART1.ts
 8 >Emitted(2, 16) Source(11, 16) + SourceIndex(0)
 ---
 >>>console.log(s);
-1->
+1 >
 2 >^^^^^^^
 3 >       ^
 4 >        ^^^
@@ -8356,8 +8441,8 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
-1->
+9 >               ^^->
+1 >
   >
 2 >console
 3 >       .
@@ -8366,7 +8451,7 @@ sourceFile:../first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1->Emitted(3, 1) Source(12, 1) + SourceIndex(0)
+1 >Emitted(3, 1) Source(12, 1) + SourceIndex(0)
 2 >Emitted(3, 8) Source(12, 8) + SourceIndex(0)
 3 >Emitted(3, 9) Source(12, 9) + SourceIndex(0)
 4 >Emitted(3, 12) Source(12, 12) + SourceIndex(0)
@@ -8416,7 +8501,7 @@ sourceFile:../first_part3.ts
 1 >
 2 >^^^^^^^^^
 3 >         ^
-4 >          ^^^^^^^^^^^^^^^^^^^->
+4 >          ^^^^^^^^^^^^^^^^^^->
 1 >
 2 >function 
 3 >         f
@@ -8452,13 +8537,13 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"text"}],"mapHash":"-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"18946534449-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":157,"kind":"text"}],"mapHash":"28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["-16950965473-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":120,"kind":"text"}],"mapHash":"-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}","hash":"-20052626506-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":149,"kind":"text"}],"mapHash":"28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}","hash":"-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16950965473-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);","4973778178-console.log(f());\r\n","6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outFile":"./first-output.js","removeComments":false,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-127)
+text: (0-120)
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -8471,7 +8556,7 @@ function f() {
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-157)
+text: (0-149)
 interface TheFirst {
     none: any;
 }
@@ -8496,45 +8581,66 @@ declare function f(): string;
       "sections": [
         {
           "pos": 0,
-          "end": 127,
+          "end": 120,
           "kind": "text"
         }
       ],
-      "hash": "18946534449-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "-20052626506-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "-2702861355-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 157,
+          "end": 149,
           "kind": "text"
         }
       ],
-      "hash": "-23350520794-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "-14898761250-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "28957120071-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../lib/lib.d.ts",
       "../first_part1.ts",
       "../first_part2.ts",
       "../first_part3.ts"
     ],
     "fileInfos": {
+      "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../first_part1.ts": "-16950965473-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nconsole.log(s);",
       "../first_part2.ts": "4973778178-console.log(f());\r\n",
       "../first_part3.ts": "6202806249-function f() {\r\n    return \"JS does hoists\";\r\n}"
     },
+    "root": [
+      [
+        [
+          2,
+          4
+        ],
+        [
+          "../first_part1.ts",
+          "../first_part2.ts",
+          "../first_part3.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./first-output.js"
+      "declarationMap": true,
+      "outFile": "./first-output.js",
+      "removeComments": false,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "target": 1
     },
-    "outSignature": "-16746818465-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\n",
+    "outSignature": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2159
+  "size": 2709
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -8605,7 +8711,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
@@ -8665,7 +8771,7 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
@@ -8710,7 +8816,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    // Comment text
   >}
@@ -8734,7 +8840,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -8759,7 +8865,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > {
   >    /*@internal*/ constructor() { }
   >    /*@internal*/ prop: string;
@@ -8786,7 +8892,7 @@ sourceFile:../../../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >{
   >    /*@internal*/ export class C { }
   >    /*@internal*/ export function foo() {}
@@ -8807,7 +8913,7 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^
-4 >               ^^^^^^^^^^->
+4 >               ^^^^^^^^^->
 1->
 2 >class 
 3 >              C
@@ -8826,7 +8932,7 @@ sourceFile:../../../second/second_part2.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^->
 1 >() {
   >        console.log("something got done");
   >    }
@@ -8861,15 +8967,15 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":127,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":127,"kind":"text"}]},{"pos":127,"end":3544,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":127,"end":3544,"kind":"text"}]},{"pos":3544,"end":3580,"kind":"text"}],"mapHash":"92086003575-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"-58627043959-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = /** @class */ (function () {\r\n    /*@internal*/ function normalC() {\r\n    }\r\n    /*@internal*/ normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        /*@internal*/ get: function () { return 10; },\r\n        /*@internal*/ set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    /*@internal*/ var C = /** @class */ (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    /*@internal*/ function foo() { }\r\n    normalN.foo = foo;\r\n    /*@internal*/ var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    /*@internal*/ var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    /*@internal*/ normalN.someImport = someNamespace.C;\r\n    /*@internal*/ normalN.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\n/*@internal*/ var internalC = /** @class */ (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\n/*@internal*/ function internalfoo() { }\r\n/*@internal*/ var internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = /** @class */ (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\n/*@internal*/ var internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\n/*@internal*/ var internalImport = internalNamespace.someClass;\r\n/*@internal*/ var internalConst = 10;\r\n/*@internal*/ var internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = /** @class */ (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":157,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":157,"kind":"text"}]},{"pos":157,"end":317,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":157,"end":317,"kind":"text"}]},{"pos":317,"end":336,"kind":"text"}],"mapHash":"-6546370592-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-17624507241-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["10470273651-var c = new C();\r\nc.doSomething();\r\n"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"-3274754787-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":120,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":120,"kind":"text"}]},{"pos":120,"end":3435,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":120,"end":3435,"kind":"text"}]},{"pos":3435,"end":3469,"kind":"text"}],"mapHash":"92086003575-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"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\"}","hash":"14154918278-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar normalC = /** @class */ (function () {\n    /*@internal*/ function normalC() {\n    }\n    /*@internal*/ normalC.prototype.method = function () { };\n    Object.defineProperty(normalC.prototype, \"c\", {\n        /*@internal*/ get: function () { return 10; },\n        /*@internal*/ set: function (val) { },\n        enumerable: false,\n        configurable: true\n    });\n    return normalC;\n}());\nvar normalN;\n(function (normalN) {\n    /*@internal*/ var C = /** @class */ (function () {\n        function C() {\n        }\n        return C;\n    }());\n    normalN.C = C;\n    /*@internal*/ function foo() { }\n    normalN.foo = foo;\n    /*@internal*/ var someNamespace;\n    (function (someNamespace) {\n        var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        someNamespace.C = C;\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n    /*@internal*/ var someOther;\n    (function (someOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = someOther.something || (someOther.something = {}));\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\n    /*@internal*/ normalN.someImport = someNamespace.C;\n    /*@internal*/ normalN.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n})(normalN || (normalN = {}));\n/*@internal*/ var internalC = /** @class */ (function () {\n    function internalC() {\n    }\n    return internalC;\n}());\n/*@internal*/ function internalfoo() { }\n/*@internal*/ var internalNamespace;\n(function (internalNamespace) {\n    var someClass = /** @class */ (function () {\n        function someClass() {\n        }\n        return someClass;\n    }());\n    internalNamespace.someClass = someClass;\n})(internalNamespace || (internalNamespace = {}));\n/*@internal*/ var internalOther;\n(function (internalOther) {\n    var something;\n    (function (something) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        something.someClass = someClass;\n    })(something = internalOther.something || (internalOther.something = {}));\n})(internalOther || (internalOther = {}));\n/*@internal*/ var internalImport = internalNamespace.someClass;\n/*@internal*/ var internalConst = 10;\n/*@internal*/ var internalEnum;\n(function (internalEnum) {\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n})(internalEnum || (internalEnum = {}));\nvar C = /** @class */ (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":149,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":149,"kind":"text"}]},{"pos":149,"end":298,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":149,"end":298,"kind":"text"}]},{"pos":298,"end":316,"kind":"text"}],"mapHash":"-6546370592-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}","hash":"-3909930061-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n","-18721653870-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n","10470273651-var c = new C();\r\nc.doSomething();\r\n"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./third-output.js","removeComments":false,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"stripInternal":true,"target":1},"outSignature":"5840619833-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-127):: ../../../first/bin/first-output.js texts:: 1
+prepend: (0-120):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-127)
+text: (0-120)
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -8879,9 +8985,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (127-3544):: ../../../2/second-output.js texts:: 1
+prepend: (120-3435):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (127-3544)
+text: (120-3435)
 var N;
 (function (N) {
     function f() {
@@ -8986,7 +9092,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3544-3580)
+text: (3435-3469)
 var c = new C();
 c.doSomething();
 
@@ -8994,9 +9100,9 @@ c.doSomething();
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-157):: ../../../first/bin/first-output.d.ts texts:: 1
+prepend: (0-149):: ../../../first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-157)
+text: (0-149)
 interface TheFirst {
     none: any;
 }
@@ -9007,9 +9113,9 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ----------------------------------------------------------------------
-prepend: (157-317):: ../../../2/second-output.d.ts texts:: 1
+prepend: (149-298):: ../../../2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (157-317)
+text: (149-298)
 declare namespace N {
 }
 declare namespace N {
@@ -9023,7 +9129,7 @@ declare class C {
 }
 
 ----------------------------------------------------------------------
-text: (317-336)
+text: (298-316)
 declare var c: C;
 
 ======================================================================
@@ -9039,92 +9145,112 @@ declare var c: C;
       "sections": [
         {
           "pos": 0,
-          "end": 127,
+          "end": 120,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 127,
+              "end": 120,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 127,
-          "end": 3544,
+          "pos": 120,
+          "end": 3435,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 127,
-              "end": 3544,
+              "pos": 120,
+              "end": 3435,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3544,
-          "end": 3580,
+          "pos": 3435,
+          "end": 3469,
           "kind": "text"
         }
       ],
-      "hash": "-58627043959-var s = \"Hello, world\";\r\nconsole.log(s);\r\nconsole.log(s);\r\nconsole.log(f());\r\nfunction f() {\r\n    return \"JS does hoists\";\r\n}\r\nvar N;\r\n(function (N) {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n    f();\r\n})(N || (N = {}));\r\nvar normalC = /** @class */ (function () {\r\n    /*@internal*/ function normalC() {\r\n    }\r\n    /*@internal*/ normalC.prototype.method = function () { };\r\n    Object.defineProperty(normalC.prototype, \"c\", {\r\n        /*@internal*/ get: function () { return 10; },\r\n        /*@internal*/ set: function (val) { },\r\n        enumerable: false,\r\n        configurable: true\r\n    });\r\n    return normalC;\r\n}());\r\nvar normalN;\r\n(function (normalN) {\r\n    /*@internal*/ var C = /** @class */ (function () {\r\n        function C() {\r\n        }\r\n        return C;\r\n    }());\r\n    normalN.C = C;\r\n    /*@internal*/ function foo() { }\r\n    normalN.foo = foo;\r\n    /*@internal*/ var someNamespace;\r\n    (function (someNamespace) {\r\n        var C = /** @class */ (function () {\r\n            function C() {\r\n            }\r\n            return C;\r\n        }());\r\n        someNamespace.C = C;\r\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\r\n    /*@internal*/ var someOther;\r\n    (function (someOther) {\r\n        var something;\r\n        (function (something) {\r\n            var someClass = /** @class */ (function () {\r\n                function someClass() {\r\n                }\r\n                return someClass;\r\n            }());\r\n            something.someClass = someClass;\r\n        })(something = someOther.something || (someOther.something = {}));\r\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\r\n    /*@internal*/ normalN.someImport = someNamespace.C;\r\n    /*@internal*/ normalN.internalConst = 10;\r\n    /*@internal*/ var internalEnum;\r\n    (function (internalEnum) {\r\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\r\n})(normalN || (normalN = {}));\r\n/*@internal*/ var internalC = /** @class */ (function () {\r\n    function internalC() {\r\n    }\r\n    return internalC;\r\n}());\r\n/*@internal*/ function internalfoo() { }\r\n/*@internal*/ var internalNamespace;\r\n(function (internalNamespace) {\r\n    var someClass = /** @class */ (function () {\r\n        function someClass() {\r\n        }\r\n        return someClass;\r\n    }());\r\n    internalNamespace.someClass = someClass;\r\n})(internalNamespace || (internalNamespace = {}));\r\n/*@internal*/ var internalOther;\r\n(function (internalOther) {\r\n    var something;\r\n    (function (something) {\r\n        var someClass = /** @class */ (function () {\r\n            function someClass() {\r\n            }\r\n            return someClass;\r\n        }());\r\n        something.someClass = someClass;\r\n    })(something = internalOther.something || (internalOther.something = {}));\r\n})(internalOther || (internalOther = {}));\r\n/*@internal*/ var internalImport = internalNamespace.someClass;\r\n/*@internal*/ var internalConst = 10;\r\n/*@internal*/ var internalEnum;\r\n(function (internalEnum) {\r\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\r\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\r\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\r\n})(internalEnum || (internalEnum = {}));\r\nvar C = /** @class */ (function () {\r\n    function C() {\r\n    }\r\n    C.prototype.doSomething = function () {\r\n        console.log(\"something got done\");\r\n    };\r\n    return C;\r\n}());\r\nvar c = new C();\r\nc.doSomething();\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "14154918278-var s = \"Hello, world\";\nconsole.log(s);\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nvar normalC = /** @class */ (function () {\n    /*@internal*/ function normalC() {\n    }\n    /*@internal*/ normalC.prototype.method = function () { };\n    Object.defineProperty(normalC.prototype, \"c\", {\n        /*@internal*/ get: function () { return 10; },\n        /*@internal*/ set: function (val) { },\n        enumerable: false,\n        configurable: true\n    });\n    return normalC;\n}());\nvar normalN;\n(function (normalN) {\n    /*@internal*/ var C = /** @class */ (function () {\n        function C() {\n        }\n        return C;\n    }());\n    normalN.C = C;\n    /*@internal*/ function foo() { }\n    normalN.foo = foo;\n    /*@internal*/ var someNamespace;\n    (function (someNamespace) {\n        var C = /** @class */ (function () {\n            function C() {\n            }\n            return C;\n        }());\n        someNamespace.C = C;\n    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));\n    /*@internal*/ var someOther;\n    (function (someOther) {\n        var something;\n        (function (something) {\n            var someClass = /** @class */ (function () {\n                function someClass() {\n                }\n                return someClass;\n            }());\n            something.someClass = someClass;\n        })(something = someOther.something || (someOther.something = {}));\n    })(someOther = normalN.someOther || (normalN.someOther = {}));\n    /*@internal*/ normalN.someImport = someNamespace.C;\n    /*@internal*/ normalN.internalConst = 10;\n    /*@internal*/ var internalEnum;\n    (function (internalEnum) {\n        internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n        internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n        internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));\n})(normalN || (normalN = {}));\n/*@internal*/ var internalC = /** @class */ (function () {\n    function internalC() {\n    }\n    return internalC;\n}());\n/*@internal*/ function internalfoo() { }\n/*@internal*/ var internalNamespace;\n(function (internalNamespace) {\n    var someClass = /** @class */ (function () {\n        function someClass() {\n        }\n        return someClass;\n    }());\n    internalNamespace.someClass = someClass;\n})(internalNamespace || (internalNamespace = {}));\n/*@internal*/ var internalOther;\n(function (internalOther) {\n    var something;\n    (function (something) {\n        var someClass = /** @class */ (function () {\n            function someClass() {\n            }\n            return someClass;\n        }());\n        something.someClass = someClass;\n    })(something = internalOther.something || (internalOther.something = {}));\n})(internalOther || (internalOther = {}));\n/*@internal*/ var internalImport = internalNamespace.someClass;\n/*@internal*/ var internalConst = 10;\n/*@internal*/ var internalEnum;\n(function (internalEnum) {\n    internalEnum[internalEnum[\"a\"] = 0] = \"a\";\n    internalEnum[internalEnum[\"b\"] = 1] = \"b\";\n    internalEnum[internalEnum[\"c\"] = 2] = \"c\";\n})(internalEnum || (internalEnum = {}));\nvar C = /** @class */ (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nvar c = new C();\nc.doSomething();\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "92086003575-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AAED;IACI,aAAa,CAAC;IAAgB,CAAC;IAE/B,aAAa,CAAC,wBAAM,GAAN,cAAW,CAAC;IACZ,sBAAI,sBAAC;QAAnB,aAAa,MAAC,cAAU,OAAO,EAAE,CAAC,CAAC,CAAC;QACpC,aAAa,MAAC,UAAM,GAAW,IAAI,CAAC;;;OADA;IAExC,cAAC;AAAD,CAAC,AAND,IAMC;AACD,IAAU,OAAO,CAShB;AATD,WAAU,OAAO;IACb,aAAa,CAAC;QAAA;QAAiB,CAAC;QAAD,QAAC;IAAD,CAAC,AAAlB,IAAkB;IAAL,SAAC,IAAI,CAAA;IAChC,aAAa,CAAC,SAAgB,GAAG,KAAI,CAAC;IAAR,WAAG,MAAK,CAAA;IACtC,aAAa,CAAC,IAAiB,aAAa,CAAsB;IAApD,WAAiB,aAAa;QAAG;YAAA;YAAgB,CAAC;YAAD,QAAC;QAAD,CAAC,AAAjB,IAAiB;QAAJ,eAAC,IAAG,CAAA;IAAC,CAAC,EAAnC,aAAa,GAAb,qBAAa,KAAb,qBAAa,QAAsB;IAClE,aAAa,CAAC,IAAiB,SAAS,CAAwC;IAAlE,WAAiB,SAAS;QAAC,IAAA,SAAS,CAA8B;QAAvC,WAAA,SAAS;YAAG;gBAAA;gBAAwB,CAAC;gBAAD,gBAAC;YAAD,CAAC,AAAzB,IAAyB;YAAZ,mBAAS,YAAG,CAAA;QAAC,CAAC,EAAvC,SAAS,GAAT,mBAAS,KAAT,mBAAS,QAA8B;IAAD,CAAC,EAAjD,SAAS,GAAT,iBAAS,KAAT,iBAAS,QAAwC;IAChF,aAAa,CAAe,kBAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAEzD,aAAa,CAAc,qBAAa,GAAG,EAAE,CAAC;IAC9C,aAAa,CAAC,IAAY,YAAwB;IAApC,WAAY,YAAY;QAAG,yCAAC,CAAA;QAAE,yCAAC,CAAA;QAAE,yCAAC,CAAA;IAAC,CAAC,EAAxB,YAAY,GAAZ,oBAAY,KAAZ,oBAAY,QAAY;AACtD,CAAC,EATS,OAAO,KAAP,OAAO,QAShB;AACD,aAAa,CAAC;IAAA;IAAiB,CAAC;IAAD,gBAAC;AAAD,CAAC,AAAlB,IAAkB;AAChC,aAAa,CAAC,SAAS,WAAW,KAAI,CAAC;AACvC,aAAa,CAAC,IAAU,iBAAiB,CAA8B;AAAzD,WAAU,iBAAiB;IAAG;QAAA;QAAwB,CAAC;QAAD,gBAAC;IAAD,CAAC,AAAzB,IAAyB;IAAZ,2BAAS,YAAG,CAAA;AAAC,CAAC,EAA/C,iBAAiB,KAAjB,iBAAiB,QAA8B;AACvE,aAAa,CAAC,IAAU,aAAa,CAAwC;AAA/D,WAAU,aAAa;IAAC,IAAA,SAAS,CAA8B;IAAvC,WAAA,SAAS;QAAG;YAAA;YAAwB,CAAC;YAAD,gBAAC;QAAD,CAAC,AAAzB,IAAyB;QAAZ,mBAAS,YAAG,CAAA;IAAC,CAAC,EAAvC,SAAS,GAAT,uBAAS,KAAT,uBAAS,QAA8B;AAAD,CAAC,EAArD,aAAa,KAAb,aAAa,QAAwC;AAC7E,aAAa,CAAC,IAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AAElE,aAAa,CAAC,IAAM,aAAa,GAAG,EAAE,CAAC;AACvC,aAAa,CAAC,IAAK,YAAwB;AAA7B,WAAK,YAAY;IAAG,yCAAC,CAAA;IAAE,yCAAC,CAAA;IAAE,yCAAC,CAAA;AAAC,CAAC,EAAxB,YAAY,KAAZ,YAAY,QAAY;ACpC3C;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC\"}"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 157,
+          "end": 149,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 157,
+              "end": 149,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 157,
-          "end": 317,
+          "pos": 149,
+          "end": 298,
           "kind": "prepend",
           "data": "../../../2/second-output.d.ts",
           "texts": [
             {
-              "pos": 157,
-              "end": 317,
+              "pos": 149,
+              "end": 298,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 317,
-          "end": 336,
+          "pos": 298,
+          "end": 316,
           "kind": "text"
         }
       ],
-      "hash": "-17624507241-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n//# sourceMappingURL=third-output.d.ts.map",
+      "hash": "-3909930061-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n//# sourceMappingURL=third-output.d.ts.map",
       "mapHash": "-6546370592-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../../lib/lib.d.ts",
+      "../../../first/bin/first-output.d.ts",
+      "../../../2/second-output.d.ts",
       "../../third_part1.ts"
     ],
     "fileInfos": {
+      "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "../../../first/bin/first-output.d.ts": "-15957783529-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\n",
+      "../../../2/second-output.d.ts": "-18721653870-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n    constructor();\n    prop: string;\n    method(): void;\n    get c(): number;\n    set c(val: number);\n}\ndeclare namespace normalN {\n    class C {\n    }\n    function foo(): void;\n    namespace someNamespace {\n        class C {\n        }\n    }\n    namespace someOther.something {\n        class someClass {\n        }\n    }\n    export import someImport = someNamespace.C;\n    type internalType = internalC;\n    const internalConst = 10;\n    enum internalEnum {\n        a = 0,\n        b = 1,\n        c = 2\n    }\n}\ndeclare class internalC {\n}\ndeclare function internalfoo(): void;\ndeclare namespace internalNamespace {\n    class someClass {\n    }\n}\ndeclare namespace internalOther.something {\n    class someClass {\n    }\n}\nimport internalImport = internalNamespace.someClass;\ntype internalType = internalC;\ndeclare const internalConst = 10;\ndeclare enum internalEnum {\n    a = 0,\n    b = 1,\n    c = 2\n}\ndeclare class C {\n    doSomething(): void;\n}\n",
       "../../third_part1.ts": "10470273651-var c = new C();\r\nc.doSomething();\r\n"
     },
+    "root": [
+      [
+        4,
+        "../../third_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./third-output.js"
+      "declaration": true,
+      "declarationMap": true,
+      "outFile": "./third-output.js",
+      "removeComments": false,
+      "skipDefaultLibCheck": true,
+      "sourceMap": true,
+      "strict": false,
+      "stripInternal": true,
+      "target": 1
     },
-    "outSignature": "-3274754787-interface TheFirst {\r\n    none: any;\r\n}\r\ndeclare const s = \"Hello, world\";\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\ndeclare function f(): string;\r\ndeclare namespace N {\r\n}\r\ndeclare namespace N {\r\n}\r\ndeclare class normalC {\r\n}\r\ndeclare namespace normalN {\r\n}\r\ndeclare class C {\r\n    doSomething(): void;\r\n}\r\ndeclare var c: C;\r\n",
+    "outSignature": "5840619833-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function f(): string;\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare class normalC {\n}\ndeclare namespace normalN {\n}\ndeclare class C {\n    doSomething(): void;\n}\ndeclare var c: C;\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 8998
+  "size": 10657
 }
 

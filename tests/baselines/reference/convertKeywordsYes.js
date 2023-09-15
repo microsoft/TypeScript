@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/convertKeywordsYes.ts] ////
+
 //// [convertKeywordsYes.ts]
 // reserved ES5 future in strict mode
 
@@ -344,43 +346,43 @@ var bigObject = {
     string: 0,
     get: 0,
     yield: 0,
-    "break": 0,
-    "case": 0,
-    "catch": 0,
-    "class": 0,
-    "continue": 0,
-    "const": 0,
-    "debugger": 0,
+    break: 0,
+    case: 0,
+    catch: 0,
+    class: 0,
+    continue: 0,
+    const: 0,
+    debugger: 0,
     declare: 0,
-    "default": 0,
-    "delete": 0,
-    "do": 0,
-    "else": 0,
-    "enum": 0,
-    "export": 0,
-    "extends": 0,
-    "false": 0,
-    "finally": 0,
-    "for": 0,
-    "function": 0,
-    "if": 0,
-    "import": 0,
-    "in": 0,
-    "instanceof": 0,
-    "new": 0,
-    "null": 0,
-    "return": 0,
-    "super": 0,
-    "switch": 0,
-    "this": 0,
-    "throw": 0,
-    "true": 0,
-    "try": 0,
-    "typeof": 0,
-    "var": 0,
-    "void": 0,
-    "while": 0,
-    "with": 0
+    default: 0,
+    delete: 0,
+    do: 0,
+    else: 0,
+    enum: 0,
+    export: 0,
+    extends: 0,
+    false: 0,
+    finally: 0,
+    for: 0,
+    function: 0,
+    if: 0,
+    import: 0,
+    in: 0,
+    instanceof: 0,
+    new: 0,
+    null: 0,
+    return: 0,
+    super: 0,
+    switch: 0,
+    this: 0,
+    throw: 0,
+    true: 0,
+    try: 0,
+    typeof: 0,
+    var: 0,
+    void: 0,
+    while: 0,
+    with: 0,
 };
 var bigClass = /** @class */ (function () {
     function bigClass() {
@@ -401,43 +403,43 @@ var bigClass = /** @class */ (function () {
         this.string = 0;
         this.get = 0;
         this.yield = 0;
-        this["break"] = 0;
-        this["case"] = 0;
-        this["catch"] = 0;
-        this["class"] = 0;
-        this["continue"] = 0;
-        this["const"] = 0;
-        this["debugger"] = 0;
+        this.break = 0;
+        this.case = 0;
+        this.catch = 0;
+        this.class = 0;
+        this.continue = 0;
+        this.const = 0;
+        this.debugger = 0;
         this.declare = 0;
-        this["default"] = 0;
-        this["delete"] = 0;
-        this["do"] = 0;
-        this["else"] = 0;
-        this["enum"] = 0;
-        this["export"] = 0;
-        this["extends"] = 0;
-        this["false"] = 0;
-        this["finally"] = 0;
-        this["for"] = 0;
-        this["function"] = 0;
-        this["if"] = 0;
-        this["import"] = 0;
-        this["in"] = 0;
-        this["instanceof"] = 0;
-        this["new"] = 0;
-        this["null"] = 0;
-        this["return"] = 0;
-        this["super"] = 0;
-        this["switch"] = 0;
-        this["this"] = 0;
-        this["throw"] = 0;
-        this["true"] = 0;
-        this["try"] = 0;
-        this["typeof"] = 0;
-        this["var"] = 0;
-        this["void"] = 0;
-        this["while"] = 0;
-        this["with"] = 0;
+        this.default = 0;
+        this.delete = 0;
+        this.do = 0;
+        this.else = 0;
+        this.enum = 0;
+        this.export = 0;
+        this.extends = 0;
+        this.false = 0;
+        this.finally = 0;
+        this.for = 0;
+        this.function = 0;
+        this.if = 0;
+        this.import = 0;
+        this.in = 0;
+        this.instanceof = 0;
+        this.new = 0;
+        this.null = 0;
+        this.return = 0;
+        this.super = 0;
+        this.switch = 0;
+        this.this = 0;
+        this.throw = 0;
+        this.true = 0;
+        this.try = 0;
+        this.typeof = 0;
+        this.var = 0;
+        this.void = 0;
+        this.while = 0;
+        this.with = 0;
     }
     return bigClass;
 }());

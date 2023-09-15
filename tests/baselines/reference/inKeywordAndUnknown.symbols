@@ -1,0 +1,130 @@
+//// [tests/cases/compiler/inKeywordAndUnknown.ts] ////
+
+=== inKeywordAndUnknown.ts ===
+// Repro from #50531
+
+function f(x: {}, y: unknown) {
+>f : Symbol(f, Decl(inKeywordAndUnknown.ts, 0, 0))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 2, 11))
+>y : Symbol(y, Decl(inKeywordAndUnknown.ts, 2, 17))
+
+    if (!("a" in x)) {
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 2, 11))
+
+        return;
+    }
+    x;  // {}
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 2, 11))
+
+    if (!y) {
+>y : Symbol(y, Decl(inKeywordAndUnknown.ts, 2, 17))
+
+        return;
+    }
+    y;  // {}
+>y : Symbol(y, Decl(inKeywordAndUnknown.ts, 2, 17))
+
+    if (!("a" in y)) {
+>y : Symbol(y, Decl(inKeywordAndUnknown.ts, 2, 17))
+
+        return;
+    }
+    y;  // {}
+>y : Symbol(y, Decl(inKeywordAndUnknown.ts, 2, 17))
+}
+
+// Repro from #51007
+
+function isHTMLTable(table: unknown): boolean {
+>isHTMLTable : Symbol(isHTMLTable, Decl(inKeywordAndUnknown.ts, 15, 1))
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 19, 21))
+
+    return !!table && table instanceof Object && 'html' in table;
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 19, 21))
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 19, 21))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 19, 21))
+}
+
+function f1(x: unknown) {
+>f1 : Symbol(f1, Decl(inKeywordAndUnknown.ts, 21, 1))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 23, 12))
+
+    return x && x instanceof Object && 'a' in x;
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 23, 12))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 23, 12))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 23, 12))
+}
+
+function f2<T>(x: T) {
+>f2 : Symbol(f2, Decl(inKeywordAndUnknown.ts, 25, 1))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 27, 12))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 27, 15))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 27, 12))
+
+    return x && x instanceof Object && 'a' in x;
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 27, 15))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 27, 15))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 27, 15))
+}
+
+function f3(x: {}) {
+>f3 : Symbol(f3, Decl(inKeywordAndUnknown.ts, 29, 1))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 31, 12))
+
+    return x instanceof Object && 'a' in x;
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 31, 12))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 31, 12))
+}
+
+function f4<T extends {}>(x: T) {
+>f4 : Symbol(f4, Decl(inKeywordAndUnknown.ts, 33, 1))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 35, 12))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 35, 26))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 35, 12))
+
+    return x instanceof Object && 'a' in x;
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 35, 26))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 35, 26))
+}
+
+function f5<T>(x: T & {}) {
+>f5 : Symbol(f5, Decl(inKeywordAndUnknown.ts, 37, 1))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 39, 12))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 39, 15))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 39, 12))
+
+    return x instanceof Object && 'a' in x;
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 39, 15))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 39, 15))
+}
+
+function f6<T extends {}>(x: T & {}) {
+>f6 : Symbol(f6, Decl(inKeywordAndUnknown.ts, 41, 1))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 43, 12))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 43, 26))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 43, 12))
+
+    return x instanceof Object && 'a' in x;
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 43, 26))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 43, 26))
+}
+
+function f7<T extends object>(x: T & {}) {
+>f7 : Symbol(f7, Decl(inKeywordAndUnknown.ts, 45, 1))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 47, 12))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 47, 30))
+>T : Symbol(T, Decl(inKeywordAndUnknown.ts, 47, 12))
+
+    return x instanceof Object && 'a' in x;
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 47, 30))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inKeywordAndUnknown.ts, 47, 30))
+}
+

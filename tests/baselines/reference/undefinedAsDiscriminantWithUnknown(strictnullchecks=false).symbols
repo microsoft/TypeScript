@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/undefinedAsDiscriminantWithUnknown.ts] ////
+
+=== undefinedAsDiscriminantWithUnknown.ts ===
+type S = 
+>S : Symbol(S, Decl(undefinedAsDiscriminantWithUnknown.ts, 0, 0))
+
+| { type: 'string', value: string } 
+>type : Symbol(type, Decl(undefinedAsDiscriminantWithUnknown.ts, 1, 3))
+>value : Symbol(value, Decl(undefinedAsDiscriminantWithUnknown.ts, 1, 19))
+
+| { type: 'number', value: number } 
+>type : Symbol(type, Decl(undefinedAsDiscriminantWithUnknown.ts, 2, 3))
+>value : Symbol(value, Decl(undefinedAsDiscriminantWithUnknown.ts, 2, 19))
+
+| { type: 'unknown', value: unknown }
+>type : Symbol(type, Decl(undefinedAsDiscriminantWithUnknown.ts, 3, 3))
+>value : Symbol(value, Decl(undefinedAsDiscriminantWithUnknown.ts, 3, 20))
+
+| { value: undefined };
+>value : Symbol(value, Decl(undefinedAsDiscriminantWithUnknown.ts, 4, 3))
+
+declare var s: S
+>s : Symbol(s, Decl(undefinedAsDiscriminantWithUnknown.ts, 6, 11))
+>S : Symbol(S, Decl(undefinedAsDiscriminantWithUnknown.ts, 0, 0))
+
+if (s.value !== undefined) {
+>s.value : Symbol(value, Decl(undefinedAsDiscriminantWithUnknown.ts, 1, 19), Decl(undefinedAsDiscriminantWithUnknown.ts, 2, 19), Decl(undefinedAsDiscriminantWithUnknown.ts, 3, 20), Decl(undefinedAsDiscriminantWithUnknown.ts, 4, 3))
+>s : Symbol(s, Decl(undefinedAsDiscriminantWithUnknown.ts, 6, 11))
+>value : Symbol(value, Decl(undefinedAsDiscriminantWithUnknown.ts, 1, 19), Decl(undefinedAsDiscriminantWithUnknown.ts, 2, 19), Decl(undefinedAsDiscriminantWithUnknown.ts, 3, 20), Decl(undefinedAsDiscriminantWithUnknown.ts, 4, 3))
+>undefined : Symbol(undefined)
+
+  s;
+>s : Symbol(s, Decl(undefinedAsDiscriminantWithUnknown.ts, 6, 11))
+}
+else {
+  s;
+>s : Symbol(s, Decl(undefinedAsDiscriminantWithUnknown.ts, 6, 11))
+}

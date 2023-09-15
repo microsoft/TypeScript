@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classDeclarationBlockScoping1.ts] ////
+
 //// [classDeclarationBlockScoping1.ts]
 class C {
 }

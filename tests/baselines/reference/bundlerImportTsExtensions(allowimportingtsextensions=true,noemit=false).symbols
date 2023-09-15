@@ -1,0 +1,68 @@
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerImportTsExtensions.ts] ////
+
+=== /project/a.ts ===
+
+export {};
+
+=== /project/b.ts ===
+
+export {};
+
+=== /project/b.js ===
+
+export {};
+
+=== /project/b.d.ts ===
+
+export {};
+
+=== /project/c.ts ===
+
+export {};
+
+=== /project/c.tsx ===
+
+export {};
+
+=== /project/d/index.ts ===
+
+export {};
+
+=== /project/e.ts ===
+
+export {};
+
+=== /project/e.txt.ts ===
+
+export {};
+
+=== /project/main.ts ===
+
+import {} from "./a";
+import {} from "./a.js";
+import {} from "./a.ts";
+
+import {} from "./b";
+import {} from "./b.js";
+import {} from "./b.ts";
+import {} from "./b.d.ts";
+import type {} from "./b.d.ts";
+
+import {} from "./c.ts";
+import {} from "./c.tsx";
+
+import {} from "./d";
+import {} from "./d/index";
+import {} from "./d/index.ts";
+
+// These should not resolve, but preventing them has
+// relatively little utility compared to the cost of
+// the filesystem hits.
+import {} from "./e";
+import {} from "./e.txt";
+
+=== /project/types.d.ts ===
+
+import {} from "./a.ts";
+import {} from "./a.d.ts";
+import type {} from "./a.d.ts";

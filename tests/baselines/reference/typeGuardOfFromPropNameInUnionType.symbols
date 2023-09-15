@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFromPropNameInUnionType.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFromPropNameInUnionType.ts] ////
+
+=== typeGuardOfFromPropNameInUnionType.ts ===
 class A { a: string; }
 >A : Symbol(A, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 0))
 >a : Symbol(A.a, Decl(typeGuardOfFromPropNameInUnionType.ts, 0, 9))
@@ -306,16 +308,22 @@ function f(i: Indexed) {
 >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
 
         return i.a;
+>i.a : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
 >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+>a : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
     }
     else if ("b" in i) {
 >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
 
         return i.b;
+>i.b : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
 >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+>b : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
     }
     return "c" in i && i.c;
 >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+>i.c : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
 >i : Symbol(i, Decl(typeGuardOfFromPropNameInUnionType.ts, 96, 11))
+>c : Symbol(Indexed.__index, Decl(typeGuardOfFromPropNameInUnionType.ts, 92, 19))
 }
 

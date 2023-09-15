@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceIncompatibleWithBaseIndexer.ts] ////
+
+=== derivedInterfaceIncompatibleWithBaseIndexer.ts ===
 interface Base {
 >Base : Symbol(Base, Decl(derivedInterfaceIncompatibleWithBaseIndexer.ts, 0, 0))
 

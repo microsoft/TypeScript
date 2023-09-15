@@ -1,4 +1,6 @@
-=== tests/cases/compiler/strictOptionalProperties1.ts ===
+//// [tests/cases/compiler/strictOptionalProperties1.ts] ////
+
+=== strictOptionalProperties1.ts ===
 function f1(obj: { a?: string, b?: string | undefined }) {
 >f1 : Symbol(f1, Decl(strictOptionalProperties1.ts, 0, 0))
 >obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 0, 12))

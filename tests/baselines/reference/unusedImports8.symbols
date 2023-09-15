@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/unusedImports8.ts] ////
+
+=== file1.ts ===
 export class Calculator {
 >Calculator : Symbol(Calculator, Decl(file1.ts, 0, 0))
 
@@ -16,7 +18,7 @@ export function test2() {
 
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import {Calculator as calc, test as t1, test2 as t2} from "./file1"
 >Calculator : Symbol(calc, Decl(file1.ts, 0, 0))
 >calc : Symbol(calc, Decl(file2.ts, 0, 8))

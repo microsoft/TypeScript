@@ -1,10 +1,45 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/a/index.ts"}}
-Search path: /a
-For info: /a/index.ts :: Config file name: /a/tsconfig.json
-Creating configuration project /a/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
-Config: /a/tsconfig.json : {
+currentDirectory:: / useCaseSensitiveFileNames: false
+Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Before request
+//// [/a/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true
+    }
+}
+
+//// [/a/index.ts]
+export const abcdef = 1;
+
+//// [/b/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../a" }
+    ]
+}
+
+//// [/b/index.ts]
+import a = require("../a");
+export const ghijkl = a.abcdef;
+
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/index.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Search path: /a
+Info seq  [hh:mm:ss:mss] For info: /a/index.ts :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /a/tsconfig.json : {
  "rootNames": [
   "/a/index.ts"
  ],
@@ -13,39 +48,63 @@ Config: /a/tsconfig.json : {
   "configFilePath": "/a/tsconfig.json"
  }
 }
-DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /a/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/a/tsconfig.json' (Configured)
-	Files (1)
-	/a/index.ts
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/a/index.ts SVC-1-0 "export const abcdef = 1;"
 
 
 	index.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Search path: /a
-For info: /a/tsconfig.json :: No config files found.
-Project '/a/tsconfig.json' (Configured)
-	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Search path: /a
+Info seq  [hh:mm:ss:mss] For info: /a/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
------------------------------------------------
-Open files: 
-	FileName: /a/index.ts ProjectRootPath: undefined
-		Projects: /a/tsconfig.json
-response:{"responseRequired":false}
-request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/b/index.ts"}}
-Search path: /b
-For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Creating configuration project /b/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /b/tsconfig.json 2000 undefined Project: /b/tsconfig.json WatchType: Config file
-Config: /b/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a: *new*
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/b/index.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Search path: /b
+Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/tsconfig.json 2000 undefined Project: /b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /b/tsconfig.json : {
  "rootNames": [
   "/b/index.ts"
  ],
@@ -60,18 +119,15 @@ Config: /b/tsconfig.json : {
   }
  ]
 }
-DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /b/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
-DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b/node_modules/@types 1 undefined Project: /b/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/b/tsconfig.json' (Configured)
-	Files (2)
-	/a/index.ts
-	/b/index.ts
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/a/index.ts SVC-1-0 "export const abcdef = 1;"
+	/b/index.ts SVC-1-0 "import a = require(\"../a\");\nexport const ghijkl = a.abcdef;"
 
 
 	../a/index.ts
@@ -79,22 +135,76 @@ Project '/b/tsconfig.json' (Configured)
 	index.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Search path: /b
-For info: /b/tsconfig.json :: No config files found.
-Project '/a/tsconfig.json' (Configured)
-	Files (1)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Search path: /b
+Info seq  [hh:mm:ss:mss] For info: /b/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
------------------------------------------------
-Project '/b/tsconfig.json' (Configured)
-	Files (2)
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: /a/index.ts ProjectRootPath: undefined
-		Projects: /a/tsconfig.json,/b/tsconfig.json
-	FileName: /b/index.ts ProjectRootPath: undefined
-		Projects: /b/tsconfig.json
-response:{"responseRequired":false}
-request:{"seq":0,"type":"request","command":"navto","arguments":{"searchValue":"abcdef","file":"/a/index.ts"}}
-response:{"response":[{"name":"abcdef","kind":"const","kindModifiers":"export","isCaseSensitive":true,"matchKind":"exact","file":"/a/index.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":24}}],"responseRequired":true}
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json,/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /b/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/tsconfig.json:
+  {}
+/b/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a:
+  {}
+/b: *new*
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "navto",
+      "arguments": {
+        "searchValue": "abcdef",
+        "file": "/a/index.ts"
+      },
+      "seq": 3,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": [
+        {
+          "name": "abcdef",
+          "kind": "const",
+          "kindModifiers": "export",
+          "isCaseSensitive": true,
+          "matchKind": "exact",
+          "file": "/a/index.ts",
+          "start": {
+            "line": 1,
+            "offset": 14
+          },
+          "end": {
+            "line": 1,
+            "offset": 24
+          }
+        }
+      ],
+      "responseRequired": true
+    }
+After request

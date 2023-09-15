@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/mixinAccessModifiers.ts ===
+//// [tests/cases/conformance/classes/mixinAccessModifiers.ts] ////
+
+=== mixinAccessModifiers.ts ===
 type Constructable = new (...args: any[]) => object;
 >Constructable : new (...args: any[]) => object
 >args : any[]

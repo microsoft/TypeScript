@@ -1,38 +1,38 @@
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(23,12): error TS2365: Operator '<' cannot be applied to types 'A1' and 'B1'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(24,12): error TS2365: Operator '<' cannot be applied to types 'A2' and 'B2'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(26,12): error TS2365: Operator '<' cannot be applied to types 'B1' and 'A1'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(27,12): error TS2365: Operator '<' cannot be applied to types 'B2' and 'A2'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(30,12): error TS2365: Operator '>' cannot be applied to types 'A1' and 'B1'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(31,12): error TS2365: Operator '>' cannot be applied to types 'A2' and 'B2'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(33,12): error TS2365: Operator '>' cannot be applied to types 'B1' and 'A1'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(34,12): error TS2365: Operator '>' cannot be applied to types 'B2' and 'A2'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(37,12): error TS2365: Operator '<=' cannot be applied to types 'A1' and 'B1'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(38,12): error TS2365: Operator '<=' cannot be applied to types 'A2' and 'B2'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(40,12): error TS2365: Operator '<=' cannot be applied to types 'B1' and 'A1'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(41,12): error TS2365: Operator '<=' cannot be applied to types 'B2' and 'A2'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(44,12): error TS2365: Operator '>=' cannot be applied to types 'A1' and 'B1'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(45,12): error TS2365: Operator '>=' cannot be applied to types 'A2' and 'B2'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(47,12): error TS2365: Operator '>=' cannot be applied to types 'B1' and 'A1'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(48,12): error TS2365: Operator '>=' cannot be applied to types 'B2' and 'A2'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(51,12): error TS2367: This condition will always return 'false' since the types 'A1' and 'B1' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(52,12): error TS2367: This condition will always return 'false' since the types 'A2' and 'B2' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(54,12): error TS2367: This condition will always return 'false' since the types 'B1' and 'A1' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(55,12): error TS2367: This condition will always return 'false' since the types 'B2' and 'A2' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(58,12): error TS2367: This condition will always return 'true' since the types 'A1' and 'B1' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(59,12): error TS2367: This condition will always return 'true' since the types 'A2' and 'B2' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(61,12): error TS2367: This condition will always return 'true' since the types 'B1' and 'A1' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(62,12): error TS2367: This condition will always return 'true' since the types 'B2' and 'A2' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(65,12): error TS2367: This condition will always return 'false' since the types 'A1' and 'B1' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(66,12): error TS2367: This condition will always return 'false' since the types 'A2' and 'B2' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(68,12): error TS2367: This condition will always return 'false' since the types 'B1' and 'A1' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(69,12): error TS2367: This condition will always return 'false' since the types 'B2' and 'A2' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(72,12): error TS2367: This condition will always return 'true' since the types 'A1' and 'B1' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(73,12): error TS2367: This condition will always return 'true' since the types 'A2' and 'B2' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(75,12): error TS2367: This condition will always return 'true' since the types 'B1' and 'A1' have no overlap.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(76,12): error TS2367: This condition will always return 'true' since the types 'B2' and 'A2' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(23,12): error TS2365: Operator '<' cannot be applied to types 'A1' and 'B1'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(24,12): error TS2365: Operator '<' cannot be applied to types 'A2' and 'B2'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(26,12): error TS2365: Operator '<' cannot be applied to types 'B1' and 'A1'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(27,12): error TS2365: Operator '<' cannot be applied to types 'B2' and 'A2'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(30,12): error TS2365: Operator '>' cannot be applied to types 'A1' and 'B1'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(31,12): error TS2365: Operator '>' cannot be applied to types 'A2' and 'B2'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(33,12): error TS2365: Operator '>' cannot be applied to types 'B1' and 'A1'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(34,12): error TS2365: Operator '>' cannot be applied to types 'B2' and 'A2'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(37,12): error TS2365: Operator '<=' cannot be applied to types 'A1' and 'B1'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(38,12): error TS2365: Operator '<=' cannot be applied to types 'A2' and 'B2'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(40,12): error TS2365: Operator '<=' cannot be applied to types 'B1' and 'A1'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(41,12): error TS2365: Operator '<=' cannot be applied to types 'B2' and 'A2'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(44,12): error TS2365: Operator '>=' cannot be applied to types 'A1' and 'B1'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(45,12): error TS2365: Operator '>=' cannot be applied to types 'A2' and 'B2'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(47,12): error TS2365: Operator '>=' cannot be applied to types 'B1' and 'A1'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(48,12): error TS2365: Operator '>=' cannot be applied to types 'B2' and 'A2'.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(51,12): error TS2367: This comparison appears to be unintentional because the types 'A1' and 'B1' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(52,12): error TS2367: This comparison appears to be unintentional because the types 'A2' and 'B2' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(54,12): error TS2367: This comparison appears to be unintentional because the types 'B1' and 'A1' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(55,12): error TS2367: This comparison appears to be unintentional because the types 'B2' and 'A2' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(58,12): error TS2367: This comparison appears to be unintentional because the types 'A1' and 'B1' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(59,12): error TS2367: This comparison appears to be unintentional because the types 'A2' and 'B2' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(61,12): error TS2367: This comparison appears to be unintentional because the types 'B1' and 'A1' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(62,12): error TS2367: This comparison appears to be unintentional because the types 'B2' and 'A2' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(65,12): error TS2367: This comparison appears to be unintentional because the types 'A1' and 'B1' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(66,12): error TS2367: This comparison appears to be unintentional because the types 'A2' and 'B2' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(68,12): error TS2367: This comparison appears to be unintentional because the types 'B1' and 'A1' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(69,12): error TS2367: This comparison appears to be unintentional because the types 'B2' and 'A2' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(72,12): error TS2367: This comparison appears to be unintentional because the types 'A1' and 'B1' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(73,12): error TS2367: This comparison appears to be unintentional because the types 'A2' and 'B2' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(75,12): error TS2367: This comparison appears to be unintentional because the types 'B1' and 'A1' have no overlap.
+comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(76,12): error TS2367: This comparison appears to be unintentional because the types 'B2' and 'A2' have no overlap.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts (32 errors) ====
+==== comparisonOperatorWithNoRelationshipObjectsOnProperty.ts (32 errors) ====
     class A1 {
         public a: number;
     }
@@ -117,59 +117,59 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     // operator ==
     var r5a1 = a1 == b1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'A1' and 'B1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'A1' and 'B1' have no overlap.
     var r5a2 = a2 == b2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'A2' and 'B2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'A2' and 'B2' have no overlap.
     
     var r5b1 = b1 == a1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'B1' and 'A1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B1' and 'A1' have no overlap.
     var r5b2 = b2 == a2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'B2' and 'A2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B2' and 'A2' have no overlap.
     
     // operator !=
     var r6a1 = a1 != b1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'A1' and 'B1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'A1' and 'B1' have no overlap.
     var r6a2 = a2 != b2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'A2' and 'B2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'A2' and 'B2' have no overlap.
     
     var r6b1 = b1 != a1;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'B1' and 'A1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B1' and 'A1' have no overlap.
     var r6b2 = b2 != a2;
                ~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'B2' and 'A2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B2' and 'A2' have no overlap.
     
     // operator ===
     var r7a1 = a1 === b1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'A1' and 'B1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'A1' and 'B1' have no overlap.
     var r7a2 = a2 === b2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'A2' and 'B2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'A2' and 'B2' have no overlap.
     
     var r7b1 = b1 === a1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'B1' and 'A1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B1' and 'A1' have no overlap.
     var r7b2 = b2 === a2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'B2' and 'A2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B2' and 'A2' have no overlap.
     
     // operator !==
     var r8a1 = a1 !== b1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'A1' and 'B1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'A1' and 'B1' have no overlap.
     var r8a2 = a2 !== b2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'A2' and 'B2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'A2' and 'B2' have no overlap.
     
     var r8b1 = b1 !== a1;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'B1' and 'A1' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B1' and 'A1' have no overlap.
     var r8b2 = b2 !== a2;
                ~~~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'B2' and 'A2' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'B2' and 'A2' have no overlap.

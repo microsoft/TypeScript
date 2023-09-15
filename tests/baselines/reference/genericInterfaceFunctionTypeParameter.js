@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericInterfaceFunctionTypeParameter.ts] ////
+
 //// [genericInterfaceFunctionTypeParameter.ts]
 export interface IFoo<A> { }
 export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
@@ -10,7 +12,7 @@ export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
 //// [genericInterfaceFunctionTypeParameter.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = void 0;
     function foo(fn) {
         foo(fn); // Invocation is necessary to repro (!)

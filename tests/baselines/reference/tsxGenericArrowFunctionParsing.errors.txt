@@ -1,9 +1,9 @@
-tests/cases/conformance/jsx/file.tsx(8,17): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
-tests/cases/conformance/jsx/file.tsx(20,32): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
-tests/cases/conformance/jsx/file.tsx(24,25): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+file.tsx(8,17): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+file.tsx(20,32): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+file.tsx(24,25): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== file.tsx (3 errors) ====
     declare module JSX {
     	interface Element { isElement; }
     }

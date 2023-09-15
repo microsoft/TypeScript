@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts ===
+//// [tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts] ////
+
+=== unparenthesizedConstructorTypeInUnionOrIntersection.ts ===
 type U1 = string | new () => void;
 >U1 : string | (new () => void)
 
@@ -39,7 +41,6 @@ type I3 = & new () => boolean
 
 type I4 = & new () => boolean & null;
 >I4 : new () => boolean & null
->null : null
 
 type I5 = string & new (any: any, any2: any) => any & any;
 >I5 : string & (new (any: any, any2: any) => any & any)

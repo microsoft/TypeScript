@@ -1,2 +1,2 @@
 #!/bin/sh
-npm run gulp -- generate-diagnostics
+npm run npx hereby -- generate-diagnostics

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
@@ -67,35 +68,31 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
-
 FsWatches::
+/a/b/file1consumer1.ts: *new*
+  {}
+/a/b/file1consumer2.ts: *new*
+  {}
+/a/b/globalfile3.ts: *new*
+  {}
+/a/b/modulefile1.ts: *new*
+  {}
+/a/b/modulefile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 FsWatchesRecursive::
-/a/b:
-  {"directoryName":"/a/b"}
+/a/b: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
@@ -104,14 +101,14 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 
 
 //// [/a/b/file1Consumer2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var z = 10;
 
 
@@ -120,7 +117,7 @@ var z = 10;
 
 //// [/a/b/moduleFile2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo4 = void 0;
 exports.Foo4 = 10;
 
@@ -134,6 +131,9 @@ export var T: number;export function Foo() { };
 
 //// [/a/b/file1Consumer2.ts] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
@@ -160,33 +160,33 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (computed .d.ts)
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
-
 FsWatches::
+/a/b/file1consumer1.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/file1consumer2.ts:
+  {}
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.T = void 0;
 function Foo() { }
 exports.Foo = Foo;

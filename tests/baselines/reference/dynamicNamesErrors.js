@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicNamesErrors.ts] ////
+
 //// [dynamicNamesErrors.ts]
 const c0 = "1";
 const c1 = 1;
@@ -109,7 +111,7 @@ export declare class ClassMemberVisibility {
     get [z](): number;
     set [w](value: number);
 }
-export declare type ObjectTypeVisibility = {
+export type ObjectTypeVisibility = {
     [x]: number;
     [y](): number;
 };

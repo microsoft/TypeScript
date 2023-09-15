@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild.tsx] ////
+
 //// [jsxEmptyExpressionNotCountedAsChild.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from 'react'
@@ -19,7 +21,7 @@ const element = (
 
 //// [jsxEmptyExpressionNotCountedAsChild.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var React = require("react");
 function Wrapper(props) {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingByDiscriminantInLoop.ts ===
+//// [tests/cases/compiler/narrowingByDiscriminantInLoop.ts] ////
+
+=== narrowingByDiscriminantInLoop.ts ===
 // Repro from #9977
 
 type IDLMemberTypes = OperationMemberType | ConstantMemberType;

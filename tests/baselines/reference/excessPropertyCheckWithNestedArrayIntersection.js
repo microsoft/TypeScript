@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckWithNestedArrayIntersection.ts] ////
+
 //// [excessPropertyCheckWithNestedArrayIntersection.ts]
 interface ValueOnlyFields {
     fields: Array<{
@@ -28,7 +30,7 @@ var repro = {
     dataType: {
         fields: [{
                 key: 'bla', // should be OK: Not excess
-                value: null
-            }]
+                value: null,
+            }],
     }
 };

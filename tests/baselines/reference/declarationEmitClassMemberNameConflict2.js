@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitClassMemberNameConflict2.ts] ////
+
 //// [declarationEmitClassMemberNameConflict2.ts]
 const Bar = 'bar';
 

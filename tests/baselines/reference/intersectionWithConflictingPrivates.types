@@ -1,4 +1,6 @@
-=== tests/cases/compiler/intersectionWithConflictingPrivates.ts ===
+//// [tests/cases/compiler/intersectionWithConflictingPrivates.ts] ////
+
+=== intersectionWithConflictingPrivates.ts ===
 class A { private x: unknown; y?: string; }
 >A : A
 >x : unknown
@@ -144,9 +146,9 @@ class Foo {
 
     return Promise.resolve(undefined);
 >Promise.resolve(undefined) : Promise<undefined>
->Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >undefined : undefined
   }
 }

@@ -1,0 +1,165 @@
+//// [tests/cases/compiler/importedAliasedConditionalTypeInstantiation.ts] ////
+
+=== node_modules/aws-lambda/index.d.ts ===
+export type Handler<TEvent = any, TResult = any> = (
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 0))
+>TEvent : Symbol(TEvent, Decl(index.d.ts, 0, 20))
+>TResult : Symbol(TResult, Decl(index.d.ts, 0, 33))
+
+    event: TEvent,
+>event : Symbol(event, Decl(index.d.ts, 0, 52))
+>TEvent : Symbol(TEvent, Decl(index.d.ts, 0, 20))
+
+    context: {},
+>context : Symbol(context, Decl(index.d.ts, 1, 18))
+
+    callback: Callback<TResult>,
+>callback : Symbol(callback, Decl(index.d.ts, 2, 16))
+>Callback : Symbol(Callback, Decl(index.d.ts, 4, 29))
+>TResult : Symbol(TResult, Decl(index.d.ts, 0, 33))
+
+) => void | Promise<TResult>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>TResult : Symbol(TResult, Decl(index.d.ts, 0, 33))
+
+export type Callback<TResult = any> = (error?: Error | string | null, result?: TResult) => void;
+>Callback : Symbol(Callback, Decl(index.d.ts, 4, 29))
+>TResult : Symbol(TResult, Decl(index.d.ts, 6, 21))
+>error : Symbol(error, Decl(index.d.ts, 6, 39))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(index.d.ts, 6, 69))
+>TResult : Symbol(TResult, Decl(index.d.ts, 6, 21))
+
+=== node_modules/lambda-tester/index.d.ts ===
+import { Handler, Callback } from 'aws-lambda';
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+>Callback : Symbol(Callback, Decl(index.d.ts, 0, 17))
+
+declare namespace lambdaTester {
+>lambdaTester : Symbol(lambdaTester, Decl(index.d.ts, 23, 1), Decl(index.d.ts, 0, 47))
+
+    type HandlerEvent<T extends Handler> = T extends Handler<infer TEvent> ? TEvent : never;
+>HandlerEvent : Symbol(HandlerEvent, Decl(index.d.ts, 1, 32))
+>T : Symbol(T, Decl(index.d.ts, 2, 22))
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+>T : Symbol(T, Decl(index.d.ts, 2, 22))
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+>TEvent : Symbol(TEvent, Decl(index.d.ts, 2, 66))
+>TEvent : Symbol(TEvent, Decl(index.d.ts, 2, 66))
+
+    type HandlerResult<T extends Handler> = T extends Handler<any, infer TResult> ? TResult : never;
+>HandlerResult : Symbol(HandlerResult, Decl(index.d.ts, 2, 92))
+>T : Symbol(T, Decl(index.d.ts, 3, 23))
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+>T : Symbol(T, Decl(index.d.ts, 3, 23))
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+>TResult : Symbol(TResult, Decl(index.d.ts, 3, 72))
+>TResult : Symbol(TResult, Decl(index.d.ts, 3, 72))
+
+    type HandlerError<T extends Handler> = T extends Handler<any, infer TResult>
+>HandlerError : Symbol(HandlerError, Decl(index.d.ts, 3, 100))
+>T : Symbol(T, Decl(index.d.ts, 4, 22))
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+>T : Symbol(T, Decl(index.d.ts, 4, 22))
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+>TResult : Symbol(TResult, Decl(index.d.ts, 4, 71))
+
+        ? NonNullable<Parameters<Callback<TResult>>['0']>
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Callback : Symbol(Callback, Decl(index.d.ts, 0, 17))
+>TResult : Symbol(TResult, Decl(index.d.ts, 4, 71))
+
+        : never;
+
+    interface VerifierFn<S> {
+>VerifierFn : Symbol(VerifierFn, Decl(index.d.ts, 6, 16))
+>S : Symbol(S, Decl(index.d.ts, 8, 25))
+
+        (result: S, additional?: any): void | Promise<void>;
+>result : Symbol(result, Decl(index.d.ts, 9, 9))
+>S : Symbol(S, Decl(index.d.ts, 8, 25))
+>additional : Symbol(additional, Decl(index.d.ts, 9, 19))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+        (result: S, additional?: any, done?: () => {}): void;
+>result : Symbol(result, Decl(index.d.ts, 10, 9))
+>S : Symbol(S, Decl(index.d.ts, 8, 25))
+>additional : Symbol(additional, Decl(index.d.ts, 10, 19))
+>done : Symbol(done, Decl(index.d.ts, 10, 37))
+    }
+    type Verifier<S> = S extends HandlerError<Handler>
+>Verifier : Symbol(Verifier, Decl(index.d.ts, 11, 5))
+>S : Symbol(S, Decl(index.d.ts, 12, 18))
+>S : Symbol(S, Decl(index.d.ts, 12, 18))
+>HandlerError : Symbol(HandlerError, Decl(index.d.ts, 3, 100))
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+
+        ? S extends string
+>S : Symbol(S, Decl(index.d.ts, 12, 18))
+
+            ? VerifierFn<string>
+>VerifierFn : Symbol(VerifierFn, Decl(index.d.ts, 6, 16))
+
+            : S extends Error
+>S : Symbol(S, Decl(index.d.ts, 12, 18))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+            ? VerifierFn<Error>
+>VerifierFn : Symbol(VerifierFn, Decl(index.d.ts, 6, 16))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+            : never
+        : VerifierFn<S>;
+>VerifierFn : Symbol(VerifierFn, Decl(index.d.ts, 6, 16))
+>S : Symbol(S, Decl(index.d.ts, 12, 18))
+
+    class LambdaTester<T extends Handler> {
+>LambdaTester : Symbol(LambdaTester, Decl(index.d.ts, 18, 24))
+>T : Symbol(T, Decl(index.d.ts, 20, 23))
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+
+        event(event: HandlerEvent<T>): this;
+>event : Symbol(LambdaTester.event, Decl(index.d.ts, 20, 43))
+>event : Symbol(event, Decl(index.d.ts, 21, 14))
+>HandlerEvent : Symbol(HandlerEvent, Decl(index.d.ts, 1, 32))
+>T : Symbol(T, Decl(index.d.ts, 20, 23))
+    }
+}
+
+declare function lambdaTester<T extends Handler>(handler: T): lambdaTester.LambdaTester<T>;
+>lambdaTester : Symbol(lambdaTester, Decl(index.d.ts, 23, 1), Decl(index.d.ts, 0, 47))
+>T : Symbol(T, Decl(index.d.ts, 25, 30))
+>Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
+>handler : Symbol(handler, Decl(index.d.ts, 25, 49))
+>T : Symbol(T, Decl(index.d.ts, 25, 30))
+>lambdaTester : Symbol(lambdaTester, Decl(index.d.ts, 23, 1), Decl(index.d.ts, 0, 47))
+>LambdaTester : Symbol(lambdaTester.LambdaTester, Decl(index.d.ts, 18, 24))
+>T : Symbol(T, Decl(index.d.ts, 25, 30))
+
+export = lambdaTester;
+>lambdaTester : Symbol(lambdaTester, Decl(index.d.ts, 23, 1), Decl(index.d.ts, 0, 47))
+
+=== index.ts ===
+import * as lambdaTester from 'lambda-tester';
+>lambdaTester : Symbol(lambdaTester, Decl(index.ts, 0, 6))
+
+import { Handler } from 'aws-lambda';
+>Handler : Symbol(Handler, Decl(index.ts, 1, 8))
+
+type Actual = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler>>;
+>Actual : Symbol(Actual, Decl(index.ts, 1, 37))
+>lambdaTester : Symbol(lambdaTester, Decl(index.ts, 0, 6))
+>Verifier : Symbol(lambdaTester.Verifier, Decl(index.d.ts, 11, 5))
+>lambdaTester : Symbol(lambdaTester, Decl(index.ts, 0, 6))
+>HandlerResult : Symbol(lambdaTester.HandlerResult, Decl(index.d.ts, 2, 92))
+>Handler : Symbol(Handler, Decl(index.ts, 1, 8))
+
+type Expected = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler<any, any>>>;
+>Expected : Symbol(Expected, Decl(index.ts, 3, 73))
+>lambdaTester : Symbol(lambdaTester, Decl(index.ts, 0, 6))
+>Verifier : Symbol(lambdaTester.Verifier, Decl(index.d.ts, 11, 5))
+>lambdaTester : Symbol(lambdaTester, Decl(index.ts, 0, 6))
+>HandlerResult : Symbol(lambdaTester.HandlerResult, Decl(index.d.ts, 2, 92))
+>Handler : Symbol(Handler, Decl(index.ts, 1, 8))
+

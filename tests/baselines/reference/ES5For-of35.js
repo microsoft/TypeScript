@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of35.ts] ////
+
 //// [ES5For-of35.ts]
 for (const {x: a = 0, y: b = 1} of [2, 3]) {
     a;
@@ -27,7 +29,7 @@ try {
 catch (e_1_1) { e_1 = { error: e_1_1 }; }
 finally {
     try {
-        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
     }
     finally { if (e_1) throw e_1.error; }
 }

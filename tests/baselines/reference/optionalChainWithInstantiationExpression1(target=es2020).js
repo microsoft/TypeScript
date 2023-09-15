@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalChainWithInstantiationExpression1.ts] ////
+
 //// [optionalChainWithInstantiationExpression1.ts]
 declare namespace A {
     export class b<T> {
@@ -16,5 +18,5 @@ a?.b.d
 
 
 //// [optionalChainWithInstantiationExpression1.js]
-a?.b.d;
+(a?.b).d;
 a?.b.d;

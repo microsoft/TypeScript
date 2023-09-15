@@ -19,24 +19,24 @@ export default { test };
 
 //// [types.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function fn(sliceIndex) {
     return null;
 }
-exports["default"] = { fn: fn };
+exports.default = { fn: fn };
 //// [reexport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("./types");
-exports["default"] = { test: types_1["default"] };
+exports.default = { test: types_1.default };
 
 
 //// [types.d.ts]
-declare type Fns = Record<string, (...params: unknown[]) => unknown>;
-declare type Map<T extends Fns> = {
+type Fns = Record<string, (...params: unknown[]) => unknown>;
+type Map<T extends Fns> = {
     [K in keyof T]: T[K];
 };
-declare type AllArg<T extends Fns> = {
+type AllArg<T extends Fns> = {
     [K in keyof T]: Parameters<T[K]>;
 };
 declare function fn<T extends {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeTagOnFunctionReferencesGeneric.ts] ////
+
 //// [typeTagOnFunctionReferencesGeneric.js]
 /**
  * @typedef {<T>(m : T) => T} IFn
@@ -21,7 +23,7 @@ inJsArrow(2); // no error gets linted as expected
 /**
  * @typedef {<T>(m : T) => T} IFn
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.inJs = void 0;
 /**@type {IFn}*/
 function inJs(l) {
@@ -37,9 +39,5 @@ inJsArrow(2); // no error gets linted as expected
 
 
 //// [typeTagOnFunctionReferencesGeneric.d.ts]
-/**
- * @typedef {<T>(m : T) => T} IFn
- */
-/**@type {IFn}*/
-export function inJs<T>(l: T): T;
+export function inJs<T>(m: T): T;
 export type IFn = <T>(m: T) => T;

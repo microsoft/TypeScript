@@ -1,32 +1,34 @@
-=== tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfLambdaFunction.ts ===
+//// [tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfLambdaFunction.ts] ////
+
+=== doNotEmitDetachedCommentsAtStartOfLambdaFunction.ts ===
+
 () => {
-No type information for this code.    // Single line comment
-No type information for this code.
-No type information for this code.    return 0;
-No type information for this code.}
-No type information for this code.
-No type information for this code.() => {
-No type information for this code.    /*
-No type information for this code.        multi-line comment
-No type information for this code.    */
-No type information for this code.
-No type information for this code.    return 0;
-No type information for this code.}
-No type information for this code.
-No type information for this code.() => {
-No type information for this code.    // Single line comment with more than one blank line
-No type information for this code.
-No type information for this code.
-No type information for this code.    return 0;
-No type information for this code.}
-No type information for this code.
-No type information for this code.() => {
-No type information for this code.    /*
-No type information for this code.        multi-line comment with more than one blank line
-No type information for this code.    */
-No type information for this code.
-No type information for this code.
-No type information for this code.    return 0;
-No type information for this code.}
-No type information for this code.
-No type information for this code.
+    // Single line comment
+
+    return 0;
+}
+
+() => {
+    /*
+        multi-line comment
+    */
+
+    return 0;
+}
+
+() => {
+    // Single line comment with more than one blank line
+
+
+    return 0;
+}
+
+() => {
+    /*
+        multi-line comment with more than one blank line
+    */
+
+
+    return 0;
+}
+

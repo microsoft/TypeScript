@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/octalIntegerLiteralError.ts] ////
+
 //// [octalIntegerLiteralError.ts]
 // error
 var oct1 = 0O13334823;
@@ -19,5 +21,5 @@ var oct2 = 1817;
 var obj1 = {
     19230: "hi",
     19230: "Hello",
-    "19230": "world"
+    "19230": "world",
 };

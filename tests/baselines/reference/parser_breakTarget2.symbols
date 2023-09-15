@@ -1,6 +1,8 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget2.ts] ////
+
+=== parser_breakTarget2.ts ===
+
 target:
-No type information for this code.while (true) {
-No type information for this code.  break target;
-No type information for this code.}
-No type information for this code.
+while (true) {
+  break target;
+}

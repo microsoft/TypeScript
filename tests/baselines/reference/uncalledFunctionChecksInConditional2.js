@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
+
 //// [uncalledFunctionChecksInConditional2.ts]
 {
   const perf = window.performance
@@ -19,6 +21,17 @@
     perf &&
     perf.mark &&
     perf.measure || !!true
+  ) {
+    perf.mark("");
+  }
+
+  // With ??
+  if (
+    (
+      perf &&
+      perf.mark &&
+      perf.measure
+    ) ?? !!true
   ) {
     perf.mark("");
   }
@@ -50,6 +63,7 @@ declare let inBrowser: boolean;
 
 
 //// [uncalledFunctionChecksInConditional2.js]
+var _a;
 {
     var perf = window.performance;
     // Simplified
@@ -65,6 +79,12 @@ declare let inBrowser: boolean;
     if (perf &&
         perf.mark &&
         perf.measure || !!true) {
+        perf.mark("");
+    }
+    // With ??
+    if ((_a = (perf &&
+        perf.mark &&
+        perf.measure)) !== null && _a !== void 0 ? _a : !!true) {
         perf.mark("");
     }
 }
