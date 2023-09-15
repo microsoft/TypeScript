@@ -663,7 +663,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     getScriptKind(fileName: string) {
-        const info = this.getOrCreateScriptInfoAndAttachToProject(fileName);
+        const info = this.projectService.getScriptInfoForPath(this.toPath(fileName));
         return (info && info.scriptKind)!; // TODO: GH#18217
     }
 
@@ -1503,7 +1503,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     protected removeExistingTypings(include: string[]): string[] {
         const existing = getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
-        return include.filter(i => existing.indexOf(i) < 0);
+        return include.filter(i => !existing.includes(i));
     }
 
     private updateGraphWorker() {

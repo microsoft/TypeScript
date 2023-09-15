@@ -1526,6 +1526,7 @@ export class ProjectService {
                         useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
                         writeLog: s => this.logger.info(s),
                         toPath: s => this.toPath(s),
+                        getScriptKind: configuredProjectForConfig ? (fileName => configuredProjectForConfig.getScriptKind(fileName)) : undefined,
                     })
                 ) return;
 
@@ -4093,7 +4094,7 @@ export class ProjectService {
                         for (const type of rule.types) {
                             // Best-effort de-duping here - doesn't need to be unduplicated but
                             // we don't want the list to become a 400-element array of just 'kendo'
-                            if (typeAcqInclude.indexOf(type) < 0) {
+                            if (!typeAcqInclude.includes(type)) {
                                 typeAcqInclude.push(type);
                             }
                         }
@@ -4118,7 +4119,7 @@ export class ProjectService {
                                 }).join("");
                             });
 
-                            if (excludeRules.indexOf(processedRule) === -1) {
+                            if (!excludeRules.includes(processedRule)) {
                                 excludeRules.push(processedRule);
                             }
                         }
@@ -4126,7 +4127,7 @@ export class ProjectService {
                     else {
                         // If not rules listed, add the default rule to exclude the matched file
                         const escaped = ProjectService.escapeFilenameForRegex(root);
-                        if (excludeRules.indexOf(escaped) < 0) {
+                        if (!excludeRules.includes(escaped)) {
                             excludeRules.push(escaped);
                         }
                     }
@@ -4155,7 +4156,7 @@ export class ProjectService {
                             exclude = true;
                             // ... but *include* it in the list of types to acquire
                             // Same best-effort dedupe as above
-                            if (typeAcqInclude.indexOf(typeName) < 0) {
+                            if (!typeAcqInclude.includes(typeName)) {
                                 typeAcqInclude.push(typeName);
                             }
                         }
