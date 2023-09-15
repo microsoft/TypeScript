@@ -1362,7 +1362,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 start = pos;
                 continue;
             }
-            if (isLineBreak(ch) && !jsxAttributeString) {
+
+            if ((ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn) && !jsxAttributeString) {
                 result += text.substring(start, pos);
                 tokenFlags |= TokenFlags.Unterminated;
                 error(Diagnostics.Unterminated_string_literal);
