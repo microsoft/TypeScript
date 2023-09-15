@@ -12069,7 +12069,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * The base constructor of a class can resolve to
      * * undefinedType if the class has no extends clause,
-     * * unknownType if an error occurred during resolution of the extends expression,
+     * * errorType if an error occurred during resolution of the extends expression,
      * * nullType if the extends expression is the null value,
      * * anyType if the extends expression has type any, or
      * * an object type with at least one construct signature.
@@ -28817,7 +28817,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Otherwise, return false
      * @param classDecl a class declaration to check if it extends null
      */
-    function classDeclarationExtendsNull(classDecl: ClassDeclaration): boolean {
+    function classDeclarationExtendsNull(classDecl: ClassLikeDeclaration): boolean {
         const classSymbol = getSymbolOfDeclaration(classDecl);
         const classInstanceType = getDeclaredTypeOfSymbol(classSymbol) as InterfaceType;
         const baseConstructorType = getBaseConstructorTypeOfClass(classInstanceType);
@@ -29225,6 +29225,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!getClassExtendsHeritageElement(classLikeDeclaration)) {
             error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
             return errorType;
+        }
+
+        if (classDeclarationExtendsNull(classLikeDeclaration)) {
+            return isCallExpression ? errorType : nullWideningType;
         }
 
         const classType = getDeclaredTypeOfSymbol(getSymbolOfDeclaration(classLikeDeclaration)) as InterfaceType;
@@ -39277,7 +39281,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // TS 1.0 spec (April 2014): 8.3.2
             // Constructors of classes with no extends clause may not contain super calls, whereas
             // constructors of derived classes must contain at least one super call somewhere in their function body.
-            const containingClassDecl = node.parent as ClassDeclaration;
+            const containingClassDecl = node.parent;
             if (getClassExtendsHeritageElement(containingClassDecl)) {
                 captureLexicalThis(node.parent, containingClassDecl);
                 const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
@@ -39293,7 +39297,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     //   or the containing class declares instance member variables with initializers.
 
                     const superCallShouldBeRootLevel = !emitStandardClassFields &&
-                        (some((node.parent as ClassDeclaration).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
+                        (some(node.parent.members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
                             some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier)));
 
                     if (superCallShouldBeRootLevel) {
