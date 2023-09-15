@@ -71,7 +71,7 @@ import {
     isDeclarationFileName,
     isExternalModuleNameRelative,
     isInsideNodeModules,
-    JSDocParsingKind,
+    JSDocParsingMode,
     JsTyping,
     LanguageService,
     LanguageServiceHost,
@@ -508,7 +508,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
 
     /** @internal */
-    readonly getJSDocParsingKind?: () => JSDocParsingKind | undefined;
+    readonly getJSDocParsingMode?: () => JSDocParsingMode | undefined;
 
     /** @internal */
     constructor(
@@ -528,7 +528,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.directoryStructureHost = directoryStructureHost;
         this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory);
         this.getCanonicalFileName = this.projectService.toCanonicalFileName;
-        this.getJSDocParsingKind = maybeBind(this.projectService, this.projectService.getJSDocParsingKind);
+        this.getJSDocParsingMode = maybeBind(this.projectService, this.projectService.getJSDocParsingMode);
 
         this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
         if (!this.compilerOptions) {

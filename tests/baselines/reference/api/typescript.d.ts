@@ -3616,7 +3616,7 @@ declare namespace ts {
             typesMapLocation?: string;
             serverMode?: LanguageServiceMode;
             session: Session<unknown> | undefined;
-            jsDocParsingKind?: JSDocParsingKind;
+            jsDocParsingMode?: JSDocParsingMode;
         }
         interface WatchOptionsAndErrors {
             watchOptions: WatchOptions;
@@ -3854,7 +3854,7 @@ declare namespace ts {
             private enableRequestedPluginsWorker;
             private enableRequestedPluginsForProjectAsync;
             configurePlugin(args: protocol.ConfigurePluginRequestArguments): void;
-            getJSDocParsingKind(): JSDocParsingKind | undefined;
+            getJSDocParsingMode(): JSDocParsingMode | undefined;
         }
         function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string;
         interface ServerCancellationToken extends HostCancellationToken {
@@ -8609,7 +8609,7 @@ declare namespace ts {
         IndexSignatureParameters = 8848,
         JSDocComment = 33,
     }
-    enum JSDocParsingKind {
+    enum JSDocParsingMode {
         KeepAll = 0,
         KeepSemanticOnly = 1,
         SkipAll = 2,
@@ -8776,7 +8776,7 @@ declare namespace ts {
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
         setScriptKind(scriptKind: ScriptKind): void;
-        setJSDocParsingKind(kind: JSDocParsingKind): void;
+        setJSDocParsingMode(kind: JSDocParsingMode): void;
         /** @deprecated use {@link resetTokenState} */
         setTextPos(textPos: number): void;
         resetTokenState(pos: number): void;
@@ -9422,7 +9422,7 @@ declare namespace ts {
      * that they appear in the source code. The language service depends on this property to locate nodes by position.
      */
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
-    function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes?: boolean, scriptKind?: ScriptKind, jsDocParsingKind?: JSDocParsingKind): SourceFile;
+    function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes?: boolean, scriptKind?: ScriptKind, jsDocParsingMode?: JSDocParsingMode): SourceFile;
     function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName | undefined;
     /**
      * Parse json text into SyntaxTree and return node and parse errors if any
@@ -9939,7 +9939,7 @@ declare namespace ts {
         emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
     function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
-    function createIncrementalCompilerHost(options: CompilerOptions, system?: System, jsDocParsingKind?: JSDocParsingKind): CompilerHost;
+    function createIncrementalCompilerHost(options: CompilerOptions, system?: System, jsDocParsingMode?: JSDocParsingMode): CompilerHost;
     function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram }: IncrementalProgramOptions<T>): T;
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
@@ -10037,7 +10037,7 @@ declare namespace ts {
          */
         getModuleResolutionCache?(): ModuleResolutionCache | undefined;
         /** Kind of JSDoc parsing to use. */
-        getJSDocParsingKind?(): JSDocParsingKind | undefined;
+        getJSDocParsingMode?(): JSDocParsingMode | undefined;
     }
     interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** Instead of using output d.ts file from project reference, use its source file */
@@ -10288,7 +10288,7 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-        getJSDocParsingKind?(): JSDocParsingKind | undefined;
+        getJSDocParsingMode?(): JSDocParsingMode | undefined;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;
@@ -11494,7 +11494,7 @@ declare namespace ts {
     function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined): string;
     function getDefaultCompilerOptions(): CompilerOptions;
     function getSupportedCodeFixes(): readonly string[];
-    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions, version: string, setNodeParents: boolean, scriptKind?: ScriptKind, jsDocParsingKind?: JSDocParsingKind): SourceFile;
+    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions, version: string, setNodeParents: boolean, scriptKind?: ScriptKind, jsDocParsingMode?: JSDocParsingMode): SourceFile;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile;
     function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode): LanguageService;
     /**

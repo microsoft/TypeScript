@@ -248,13 +248,12 @@
          "length": 1,
          "pos": 0,
          "end": 109,
-@@ -307,7 +71,6 @@
+@@ -307,6 +71,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],
      "identifiers": {},
--    "jsDocParsingKind": 0,
--    "jsDocDiagnostics": []
-+    "jsDocParsingKind": 2
+-    "jsDocParsingMode": 0
++    "jsDocParsingMode": 2
  }
 \ No newline at end of file

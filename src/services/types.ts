@@ -14,7 +14,7 @@ import {
     GetEffectiveTypeRootsHost,
     HasChangedAutomaticTypeDirectiveNames,
     HasInvalidatedResolutions,
-    JSDocParsingKind,
+    JSDocParsingMode,
     LineAndCharacter,
     MinimalResolutionCacheHost,
     ModuleResolutionCache,
@@ -429,7 +429,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
 
-    getJSDocParsingKind?(): JSDocParsingKind | undefined;
+    getJSDocParsingMode?(): JSDocParsingMode | undefined;
 }
 
 /** @internal */

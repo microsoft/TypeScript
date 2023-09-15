@@ -189,7 +189,7 @@ import {
     JSDoc,
     JsDoc,
     JSDocContainer,
-    JSDocParsingKind,
+    JSDocParsingMode,
     JSDocTagInfo,
     JsonSourceFile,
     JsxAttributes,
@@ -1363,7 +1363,7 @@ class SyntaxTreeCache {
                 ),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings()),
             };
-            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind, this.host.getJSDocParsingKind?.());
+            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind, this.host.getJSDocParsingMode?.());
         }
         else if (this.currentFileVersion !== version) {
             // This is the same file, just a newer version. Incrementally parse the file.
@@ -1395,9 +1395,9 @@ export function createLanguageServiceSourceFile(
     version: string,
     setNodeParents: boolean,
     scriptKind?: ScriptKind,
-    jsDocParsingKind?: JSDocParsingKind,
+    jsDocParsingMode?: JSDocParsingMode,
 ): SourceFile {
-    const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind, jsDocParsingKind);
+    const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind, jsDocParsingMode);
     setSourceFileFields(sourceFile, scriptSnapshot, version);
     return sourceFile;
 }
@@ -1459,7 +1459,7 @@ export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSn
         setExternalModuleIndicator: sourceFile.setExternalModuleIndicator,
     };
     // Otherwise, just create a new source file.
-    return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind, sourceFile.jsDocParsingKind);
+    return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind, sourceFile.jsDocParsingMode);
 }
 
 const NoopCancellationToken: CancellationToken = {

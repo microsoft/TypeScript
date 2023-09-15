@@ -112,13 +112,12 @@
          "3": {
              "kind": "ExpressionStatement",
              "pos": 135,
-@@ -237,7 +166,6 @@
+@@ -237,6 +166,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],
      "identifiers": {},
--    "jsDocParsingKind": 0,
--    "jsDocDiagnostics": []
-+    "jsDocParsingKind": 2
+-    "jsDocParsingMode": 0
++    "jsDocParsingMode": 2
  }
 \ No newline at end of file

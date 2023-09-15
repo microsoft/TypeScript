@@ -61,7 +61,7 @@
      "libReferenceDirectives": [],
      "amdDependencies": [],
      "identifiers": {},
--    "jsDocParsingKind": 0
-+    "jsDocParsingKind": 2
+-    "jsDocParsingMode": 0
++    "jsDocParsingMode": 2
  }
 \ No newline at end of file

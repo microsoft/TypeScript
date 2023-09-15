@@ -12,7 +12,7 @@ import {
     DiagnosticMessage,
     Diagnostics,
     identity,
-    JSDocParsingKind,
+    JSDocParsingMode,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
@@ -98,7 +98,7 @@ export interface Scanner {
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
     setScriptKind(scriptKind: ScriptKind): void;
-    setJSDocParsingKind(kind: JSDocParsingKind): void;
+    setJSDocParsingMode(kind: JSDocParsingMode): void;
     /** @deprecated use {@link resetTokenState} */
     setTextPos(textPos: number): void;
     resetTokenState(pos: number): void;
@@ -1011,7 +1011,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     var inJSDocType = 0;
 
     var scriptKind = ScriptKind.Unknown;
-    var jsDocParsingKind = JSDocParsingKind.KeepAll;
+    var jsDocParsingMode = JSDocParsingMode.KeepAll;
 
     setText(text, start, length);
 
@@ -1058,7 +1058,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         setScriptTarget,
         setLanguageVariant,
         setScriptKind,
-        setJSDocParsingKind,
+        setJSDocParsingMode,
         setOnError,
         resetTokenState,
         setTextPos: resetTokenState,
@@ -2008,8 +2008,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
 
                         if (isJSDoc) {
-                            const shouldParseJSDoc = jsDocParsingKind === JSDocParsingKind.SkipAll ? false
-                                : jsDocParsingKind === JSDocParsingKind.KeepSemanticOnly ? (scriptKind !== ScriptKind.TS && scriptKind !== ScriptKind.TSX) || semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos))
+                            const shouldParseJSDoc = jsDocParsingMode === JSDocParsingMode.SkipAll ? false
+                                : jsDocParsingMode === JSDocParsingMode.KeepSemanticOnly ? (scriptKind !== ScriptKind.TS && scriptKind !== ScriptKind.TSX) || semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos))
                                 : true;
                             if (shouldParseJSDoc) {
                                 tokenFlags |= TokenFlags.PrecedingJSDocComment;
@@ -2801,8 +2801,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         scriptKind = kind;
     }
 
-    function setJSDocParsingKind(kind: JSDocParsingKind) {
-        jsDocParsingKind = kind;
+    function setJSDocParsingMode(kind: JSDocParsingMode) {
+        jsDocParsingMode = kind;
     }
 
     function resetTokenState(position: number) {

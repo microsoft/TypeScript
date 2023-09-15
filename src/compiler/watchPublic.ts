@@ -53,7 +53,7 @@ import {
     isArray,
     isIgnoredFileFromWildCardWatching,
     isProgramUptoDate,
-    JSDocParsingKind,
+    JSDocParsingMode,
     MapLike,
     maybeBind,
     ModuleResolutionCache,
@@ -119,8 +119,8 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, jsDocParsingKind?: JSDocParsingKind): CompilerHost {
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, jsDocParsingKind, system);
+export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, jsDocParsingMode?: JSDocParsingMode): CompilerHost {
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, jsDocParsingMode, system);
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
@@ -257,7 +257,7 @@ export interface ProgramHost<T extends BuilderProgram> {
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
     /** Kind of JSDoc parsing to use. */
-    getJSDocParsingKind?(): JSDocParsingKind | undefined;
+    getJSDocParsingMode?(): JSDocParsingMode | undefined;
 }
 /**
  * Internal interface used to wire emit through same host

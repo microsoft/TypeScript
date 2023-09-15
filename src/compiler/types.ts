@@ -4298,7 +4298,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
 
-    /** @internal */ jsDocParsingKind?: JSDocParsingKind;
+    /** @internal */ jsDocParsingMode?: JSDocParsingMode;
 }
 
 /** @internal */
@@ -9850,7 +9850,7 @@ export const commentPragmas = {
     },
 } as const;
 
-export const enum JSDocParsingKind {
+export const enum JSDocParsingMode {
     KeepAll = 0,
     KeepSemanticOnly = 1,
     SkipAll = 2,

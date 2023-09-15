@@ -2,31 +2,31 @@ import * as Harness from "../_namespaces/Harness";
 import * as ts from "../_namespaces/ts";
 import * as Utils from "../_namespaces/Utils";
 
-describe("unittests:: jsDocParsingKind", () => {
+describe("unittests:: skipJSDocParsing", () => {
     const Diff = require("diff");
 
     const kinds = [
-        ts.JSDocParsingKind.KeepAll,
-        ts.JSDocParsingKind.KeepSemanticOnly,
-        ts.JSDocParsingKind.SkipAll,
+        ts.JSDocParsingMode.KeepAll,
+        ts.JSDocParsingMode.KeepSemanticOnly,
+        ts.JSDocParsingMode.SkipAll,
     ];
     const filenames = [
         "file.ts",
         "file.js",
     ];
     function diffSourceFiles(name: string, content: string) {
-        for (const jsDocParsingKind of kinds) {
-            const kindName = ts.Debug.formatEnum(jsDocParsingKind, (ts as any).JSDocParsingKind);
+        for (const jsDocParsingMode of kinds) {
+            const kindName = ts.Debug.formatEnum(jsDocParsingMode, (ts as any).JSDocParsingMode);
             for (const filename of filenames) {
                 const testName = `${name}-${kindName}-${filename}`;
                 it(testName, () => {
                     const sourceFile = ts.createSourceFile(filename, content, ts.ScriptTarget.ESNext, /*setParentNodes*/ undefined, /*scriptKind*/ undefined);
                     assert.isTrue(sourceFile && sourceFile.parseDiagnostics.length === 0, "no errors issued");
-                    const sourceFileSkipped = ts.createSourceFile(filename, content, ts.ScriptTarget.ESNext, /*setParentNodes*/ undefined, /*scriptKind*/ undefined, jsDocParsingKind);
+                    const sourceFileSkipped = ts.createSourceFile(filename, content, ts.ScriptTarget.ESNext, /*setParentNodes*/ undefined, /*scriptKind*/ undefined, jsDocParsingMode);
                     assert.isTrue(sourceFileSkipped && sourceFileSkipped.parseDiagnostics.length === 0, "no errors issued");
 
                     const patch = Diff.createTwoFilesPatch("default", kindName, Utils.sourceFileToJSON(sourceFile), Utils.sourceFileToJSON(sourceFileSkipped));
-                    Harness.Baseline.runBaseline("jsDocParsingKind/" + testName + ".diff", patch);
+                    Harness.Baseline.runBaseline("skipJSDocParsing/" + testName + ".diff", patch);
                 });
             }
         }
