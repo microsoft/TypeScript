@@ -830,7 +830,7 @@ export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
  *
  * @internal
  */
-export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined, jsDocParsingMode: JSDocParsingMode | undefined): ProgramHost<T> {
+export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
     const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
     return {
         useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
@@ -852,16 +852,15 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
         createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
         storeFilesChangingSignatureDuringEmit: system.storeFilesChangingSignatureDuringEmit,
         now: maybeBind(system, system.now),
-        jsDocParsingMode,
     };
 }
 
 /**
  * Creates the watch compiler host that can be extended with config file or root file names and options host
  */
-function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, jsDocParsingMode?: JSDocParsingMode): WatchCompilerHost<T> {
+function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
     const write = (s: string) => system.write(s + system.newLine);
-    const result = createProgramHost(system, createProgram, jsDocParsingMode) as WatchCompilerHost<T>;
+    const result = createProgramHost(system, createProgram) as WatchCompilerHost<T>;
     copyProperties(result, createWatchHost(system, reportWatchStatus));
     result.afterProgramCreate = builderProgram => {
         const compilerOptions = builderProgram.getCompilerOptions();
@@ -897,7 +896,6 @@ export interface CreateWatchCompilerHostInput<T extends BuilderProgram> {
     createProgram?: CreateProgram<T>;
     reportDiagnostic?: DiagnosticReporter;
     reportWatchStatus?: WatchStatusReporter;
-    jsDocParsingMode?: JSDocParsingMode;
 }
 
 /** @internal */
@@ -919,12 +917,11 @@ export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = E
     extraFileExtensions,
     system,
     createProgram,
-    jsDocParsingMode,
     reportDiagnostic,
     reportWatchStatus,
 }: CreateWatchCompilerHostOfConfigFileInput<T>): WatchCompilerHostOfConfigFile<T> {
     const diagnosticReporter = reportDiagnostic || createDiagnosticReporter(system);
-    const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus, jsDocParsingMode) as WatchCompilerHostOfConfigFile<T>;
+    const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, diagnosticReporter, diagnostic);
     host.configFileName = configFileName;
     host.optionsToExtend = optionsToExtend;
@@ -952,11 +949,10 @@ export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends Build
     projectReferences,
     system,
     createProgram,
-    jsDocParsingMode,
     reportDiagnostic,
     reportWatchStatus,
 }: CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
-    const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus, jsDocParsingMode) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
+    const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
     host.rootFiles = rootFiles;
     host.options = options;
     host.watchOptions = watchOptions;

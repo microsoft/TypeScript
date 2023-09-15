@@ -842,8 +842,8 @@ function performBuild(
             reportDiagnostic,
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createWatchStatusReporter(sys, buildOptions),
-            jsDocParsingMode,
         );
+        buildHost.jsDocParsingMode = jsDocParsingMode;
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
         const onWatchStatusChange = buildHost.onWatchStatusChange;
@@ -872,8 +872,8 @@ function performBuild(
         reportDiagnostic,
         createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
         createReportErrorSummary(sys, buildOptions),
-        jsDocParsingMode,
     );
+    buildHost.jsDocParsingMode = jsDocParsingMode;
     const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
     updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
     const builder = createSolutionBuilder(buildHost, projects, buildOptions);
@@ -1009,13 +1009,13 @@ function createWatchOfConfigFile(
         optionsToExtend,
         watchOptionsToExtend,
         system,
-        jsDocParsingMode,
         reportDiagnostic,
         reportWatchStatus: createWatchStatusReporter(system, configParseResult.options),
     });
     updateWatchCompilationHost(system, cb, watchCompilerHost);
     watchCompilerHost.configFileParsingResult = configParseResult;
     watchCompilerHost.extendedConfigCache = extendedConfigCache;
+    watchCompilerHost.jsDocParsingMode = jsDocParsingMode;
     return createWatchProgram(watchCompilerHost);
 }
 
@@ -1032,11 +1032,11 @@ function createWatchOfFilesAndCompilerOptions(
         options,
         watchOptions,
         system,
-        jsDocParsingMode,
         reportDiagnostic,
         reportWatchStatus: createWatchStatusReporter(system, options),
     });
     updateWatchCompilationHost(system, cb, watchCompilerHost);
+    watchCompilerHost.jsDocParsingMode = jsDocParsingMode;
     return createWatchProgram(watchCompilerHost);
 }
 

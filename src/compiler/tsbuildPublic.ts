@@ -74,7 +74,6 @@ import {
     isIgnoredFileFromWildCardWatching,
     isIncrementalCompilation,
     isString,
-    JSDocParsingMode,
     listFiles,
     loadWithModeAwareCache,
     map,
@@ -303,8 +302,8 @@ export function createBuilderStatusReporter(system: System, pretty?: boolean): D
     };
 }
 
-function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, jsDocParsingMode?: JSDocParsingMode) {
-    const host = createProgramHost(system, createProgram, jsDocParsingMode) as SolutionBuilderHostBase<T>;
+function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
+    const host = createProgramHost(system, createProgram) as SolutionBuilderHostBase<T>;
     host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : returnUndefined;
     host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
     host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
@@ -314,14 +313,14 @@ function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System,
     return host;
 }
 
-export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary, jsDocParsingMode?: JSDocParsingMode) {
-    const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus, jsDocParsingMode) as SolutionBuilderHost<T>;
+export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
+    const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<T>;
     host.reportErrorSummary = reportErrorSummary;
     return host;
 }
 
-export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, jsDocParsingMode?: JSDocParsingMode) {
-    const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus, jsDocParsingMode) as SolutionBuilderWithWatchHost<T>;
+export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
+    const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<T>;
     const watchHost = createWatchHost(system, reportWatchStatus);
     copyProperties(host, watchHost);
     return host;
