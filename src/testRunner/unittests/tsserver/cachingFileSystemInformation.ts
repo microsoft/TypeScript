@@ -62,8 +62,11 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         }
 
         function logCacheEntry(logger: Logger, callback: CalledMaps) {
-            const result = Array.from<[string, (true | CalledWithFiveArgs)[]], { key: string; count: number; }>(calledMaps[callback].entries(), ([key, arr]) => ({ key, count: arr.length }));
-            logger.info(`${callback}:: ${JSON.stringify(result)}`);
+            const result = Array.from<[string, (true | CalledWithFiveArgs)[]], { key: string; count: number; }>(
+                calledMaps[callback].entries(),
+                ([key, arr]) => ({ key, count: arr.length }),
+            ).sort((a, b) => ts.compareStringsCaseSensitive(a.key, b.key)).map(a => `${a.key}: ${JSON.stringify(a.count)}`).join("\n");
+            logger.info(`${callback}::\n${result}`);
             calledMaps[callback].clear();
         }
 

@@ -185,11 +185,16 @@ FsWatchesRecursive::
 /Users/someuser/work/applications/frontend/src:
   {}
 
-Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":2}]
-Info seq  [hh:mm:ss:mss] directoryExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
-Info seq  [hh:mm:ss:mss] getDirectories:: []
-Info seq  [hh:mm:ss:mss] readFile:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
-Info seq  [hh:mm:ss:mss] readDirectory:: []
+Info seq  [hh:mm:ss:mss] fileExists::
+/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts: 2
+Info seq  [hh:mm:ss:mss] directoryExists::
+/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts: 1
+Info seq  [hh:mm:ss:mss] getDirectories::
+
+Info seq  [hh:mm:ss:mss] readFile::
+/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts: 1
+Info seq  [hh:mm:ss:mss] readDirectory::
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Search path: /Users/someuser/work/applications/frontend/src/app/utils
 Info seq  [hh:mm:ss:mss] For info: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: Config file name: /Users/someuser/work/applications/frontend/tsconfig.json
@@ -202,8 +207,12 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Users/someuser/work/applications/frontend/s
 Info seq  [hh:mm:ss:mss] 		Projects: /Users/someuser/work/applications/frontend/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /Users/someuser/work/applications/frontend/tsconfig.json
-Info seq  [hh:mm:ss:mss] fileExists:: []
-Info seq  [hh:mm:ss:mss] directoryExists:: []
-Info seq  [hh:mm:ss:mss] getDirectories:: []
-Info seq  [hh:mm:ss:mss] readFile:: []
-Info seq  [hh:mm:ss:mss] readDirectory:: []
+Info seq  [hh:mm:ss:mss] fileExists::
+
+Info seq  [hh:mm:ss:mss] directoryExists::
+
+Info seq  [hh:mm:ss:mss] getDirectories::
+
+Info seq  [hh:mm:ss:mss] readFile::
+
+Info seq  [hh:mm:ss:mss] readDirectory::

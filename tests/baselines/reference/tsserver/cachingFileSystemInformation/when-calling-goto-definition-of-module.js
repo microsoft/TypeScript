@@ -136,11 +136,16 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Info seq  [hh:mm:ss:mss] fileExists:: []
-Info seq  [hh:mm:ss:mss] directoryExists:: []
-Info seq  [hh:mm:ss:mss] getDirectories:: []
-Info seq  [hh:mm:ss:mss] readFile:: []
-Info seq  [hh:mm:ss:mss] readDirectory:: []
+Info seq  [hh:mm:ss:mss] fileExists::
+
+Info seq  [hh:mm:ss:mss] directoryExists::
+
+Info seq  [hh:mm:ss:mss] getDirectories::
+
+Info seq  [hh:mm:ss:mss] readFile::
+
+Info seq  [hh:mm:ss:mss] readDirectory::
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -188,8 +193,13 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info seq  [hh:mm:ss:mss] fileExists:: [{"key":"/a/b/models/tsconfig.json","count":1},{"key":"/a/b/models/jsconfig.json","count":1}]
-Info seq  [hh:mm:ss:mss] directoryExists:: []
-Info seq  [hh:mm:ss:mss] getDirectories:: []
-Info seq  [hh:mm:ss:mss] readFile:: []
-Info seq  [hh:mm:ss:mss] readDirectory:: []
+Info seq  [hh:mm:ss:mss] fileExists::
+/a/b/models/jsconfig.json: 1
+/a/b/models/tsconfig.json: 1
+Info seq  [hh:mm:ss:mss] directoryExists::
+
+Info seq  [hh:mm:ss:mss] getDirectories::
+
+Info seq  [hh:mm:ss:mss] readFile::
+
+Info seq  [hh:mm:ss:mss] readDirectory::
