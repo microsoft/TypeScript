@@ -449,7 +449,13 @@ Info seq  [hh:mm:ss:mss] event:
      "body": {
       "triggerFile": "/home/src/projects/project/index.mts",
       "configFile": "/home/src/projects/project/tsconfig.json",
-      "diagnostics": []
+      "diagnostics": [
+       {
+        "text": "Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.",
+        "code": 5110,
+        "category": "error"
+       }
+      ]
      }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
