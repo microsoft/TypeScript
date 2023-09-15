@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/commentsOnObjectLiteral5.ts] ////
+
+=== commentsOnObjectLiteral5.ts ===
+const a = {
+>a : Symbol(a, Decl(commentsOnObjectLiteral5.ts, 0, 5))
+
+    p0: 0, // Comment 0
+>p0 : Symbol(p0, Decl(commentsOnObjectLiteral5.ts, 0, 11))
+
+    p1: 0, /* Comment 1
+>p1 : Symbol(p1, Decl(commentsOnObjectLiteral5.ts, 1, 10))
+
+    A multiline comment. */
+    p2: 0, // Comment 2
+>p2 : Symbol(p2, Decl(commentsOnObjectLiteral5.ts, 2, 10))
+
+};
+
