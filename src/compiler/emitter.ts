@@ -2628,12 +2628,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function emitMethodSignature(node: MethodSignature) {
         pushNameGenerationScope(node);
         emitModifierList(node, node.modifiers);
-        if (node.name.kind === SyntaxKind.Identifier && node.name.escapedText === "new") {
-            emit(factory.createStringLiteralFromNode(node.name));
-        }
-        else {
-            emit(node.name);
-        }
+        emit(node.name);
         emit(node.questionToken);
         emitTypeParameters(node, node.typeParameters);
         emitParameters(node, node.parameters);
