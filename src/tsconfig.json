@@ -16,6 +16,6 @@
         { "path": "./typescript" },
         { "path": "./typingsInstaller" },
         { "path": "./typingsInstallerCore" },
-        { "path": "./watchGuard" },
+        { "path": "./watchGuard" }
     ]
 }

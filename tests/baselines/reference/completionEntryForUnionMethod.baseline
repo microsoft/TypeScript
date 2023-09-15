@@ -6,25 +6,25 @@
 // | (method) Array<T>.concat(...items: ConcatArray<string | number>[]): (string | number)[] (+1 overload)
 // | (method) Array<T>.every<S>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[] (+1 overload)
 // | (method) Array<T>.filter<S>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): S[] (+1 overload)
-// | (method) Array<T>.forEach(callbackfn: ((value: string, index: number, array: string[]) => void) & ((value: number, index: number, array: number[]) => void), thisArg: any): void
-// | (method) Array<T>.indexOf(searchElement: never, fromIndex: number): number
+// | (method) Array<T>.forEach(callbackfn: ((value: string, index: number, array: string[]) => void) & ((value: number, index: number, array: number[]) => void), thisArg?: any): void
+// | (method) Array<T>.indexOf(searchElement: never, fromIndex?: number): number
 // | (method) Array<T>.join(separator?: string): string
-// | (method) Array<T>.lastIndexOf(searchElement: never, fromIndex: number): number
+// | (method) Array<T>.lastIndexOf(searchElement: never, fromIndex?: number): number
 // | (property) Array<T>.length: number
-// | (method) Array<T>.map<unknown>(callbackfn: ((value: string, index: number, array: string[]) => unknown) & ((value: number, index: number, array: number[]) => unknown), thisArg: any): unknown[]
+// | (method) Array<T>.map<unknown>(callbackfn: ((value: string, index: number, array: string[]) => unknown) & ((value: number, index: number, array: number[]) => unknown), thisArg?: any): unknown[]
 // | (method) Array<T>.pop(): string | number
-// | (method) Array<T>.push(items: never[]): number
+// | (method) Array<T>.push(...items: never[]): number
 // | (method) Array<T>.reduce(callbackfn: (previousValue: string | number, currentValue: string | number, currentIndex: number, array: (string | number)[]) => string | number): string | number (+2 overloads)
 // | (method) Array<T>.reduceRight(callbackfn: (previousValue: string | number, currentValue: string | number, currentIndex: number, array: (string | number)[]) => string | number): string | number (+2 overloads)
 // | (method) Array<T>.reverse(): string[] | number[]
 // | (method) Array<T>.shift(): string | number
 // | (method) Array<T>.slice(start?: number, end?: number): string[] | number[]
-// | (method) Array<T>.some(predicate: ((value: string, index: number, array: string[]) => unknown) & ((value: number, index: number, array: number[]) => unknown), thisArg: any): boolean
-// | (method) Array<T>.sort(compareFn: ((a: string, b: string) => number) & ((a: number, b: number) => number)): string[] | number[]
+// | (method) Array<T>.some(predicate: ((value: string, index: number, array: string[]) => unknown) & ((value: number, index: number, array: number[]) => unknown), thisArg?: any): boolean
+// | (method) Array<T>.sort(compareFn?: ((a: string, b: string) => number) & ((a: number, b: number) => number)): string[] | number[]
 // | (method) Array<T>.splice(start: number, deleteCount?: number): string[] | number[] (+2 overloads)
 // | (method) Array<T>.toLocaleString(): string
 // | (method) Array<T>.toString(): string
-// | (method) Array<T>.unshift(items: never[]): number
+// | (method) Array<T>.unshift(...items: never[]): number
 // | ----------------------------------------------------------------------
 
 [
@@ -1264,6 +1264,10 @@
               "kind": "parameterName"
             },
             {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
               "text": ":",
               "kind": "punctuation"
             },
@@ -1412,6 +1416,10 @@
             {
               "text": "fromIndex",
               "kind": "parameterName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
             },
             {
               "text": ":",
@@ -1675,6 +1683,10 @@
             {
               "text": "fromIndex",
               "kind": "parameterName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
             },
             {
               "text": ":",
@@ -2121,6 +2133,10 @@
               "kind": "parameterName"
             },
             {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
               "text": ":",
               "kind": "punctuation"
             },
@@ -2338,6 +2354,10 @@
             },
             {
               "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
               "kind": "punctuation"
             },
             {
@@ -3804,6 +3824,10 @@
               "kind": "parameterName"
             },
             {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
               "text": ":",
               "kind": "punctuation"
             },
@@ -3928,6 +3952,10 @@
             {
               "text": "compareFn",
               "kind": "parameterName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
             },
             {
               "text": ":",
@@ -4587,6 +4615,10 @@
             },
             {
               "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
               "kind": "punctuation"
             },
             {

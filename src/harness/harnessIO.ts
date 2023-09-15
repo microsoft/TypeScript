@@ -243,13 +243,13 @@ export namespace Compiler {
     export function createSourceFileAndAssertInvariants(
         fileName: string,
         sourceText: string,
-        languageVersion: ts.ScriptTarget,
+        languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions,
     ) {
         // We'll only assert invariants outside of light mode.
         const shouldAssertInvariants = !lightMode;
 
         // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
-        const result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ shouldAssertInvariants);
+        const result = ts.createSourceFile(fileName, sourceText, languageVersionOrOptions, /*setParentNodes:*/ shouldAssertInvariants);
 
         if (shouldAssertInvariants) {
             Utils.assertInvariants(result, /*parent:*/ undefined);

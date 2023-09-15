@@ -404,6 +404,37 @@ const bot = new Client();
 bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
 bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
 
+// Destructuring tuple types with different arities
+
+function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
+    if (y === 2) {
+        x;  // 1
+    }
+    if (y === 4) {
+        x;  // 3
+    }
+    if (y === undefined) {
+        x;  // 5
+    }
+    if (x === 1) {
+        y;  // 2
+    }
+    if (x === 3) {
+        y;  // 4
+    }
+    if (x === 5) {
+        y;  // undefined
+    }
+}
+
+// Repro from #55661
+
+function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
+    if (y === undefined) {
+        const shouldNotBeOk: never = x;  // Error
+    }
+}
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
@@ -707,6 +738,33 @@ const fa3 = (guard, value) => {
 const bot = new Client();
 bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`));
 bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`));
+// Destructuring tuple types with different arities
+function fz1([x, y]) {
+    if (y === 2) {
+        x; // 1
+    }
+    if (y === 4) {
+        x; // 3
+    }
+    if (y === undefined) {
+        x; // 5
+    }
+    if (x === 1) {
+        y; // 2
+    }
+    if (x === 3) {
+        y; // 4
+    }
+    if (x === 5) {
+        y; // undefined
+    }
+}
+// Repro from #55661
+function tooNarrow([x, y]) {
+    if (y === undefined) {
+        const shouldNotBeOk = x; // Error
+    }
+}
 
 
 //// [dependentDestructuredVariables.d.ts]
@@ -855,3 +913,5 @@ declare class Client {
     on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
 }
 declare const bot: Client;
+declare function fz1([x, y]: [1, 2] | [3, 4] | [5]): void;
+declare function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]): void;

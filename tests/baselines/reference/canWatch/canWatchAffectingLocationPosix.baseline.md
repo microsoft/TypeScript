@@ -45,4 +45,11 @@ Determines if package.json that was found during module resolution and change in
 | /home/username/folderAtRoot/folder1/folder2/folder3/package.json                  | true                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/package.json          | true                      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json  | true                      |
+| /workspaces/package.json                                                          | false                     |
+| /workspaces/folderAtRoot/package.json                                             | true                      |
+| /workspaces/folderAtRoot/folder1/package.json                                     | true                      |
+| /workspaces/folderAtRoot/folder1/folder2/package.json                             | true                      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/package.json                     | true                      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/package.json             | true                      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/package.json     | true                      |
 

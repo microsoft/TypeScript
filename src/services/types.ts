@@ -9,6 +9,7 @@ import {
     DocumentPositionMapper,
     EmitOutput,
     ExportInfoMap,
+    ExportMapInfoKey,
     FileReference,
     GetEffectiveTypeRootsHost,
     HasChangedAutomaticTypeDirectiveNames,
@@ -594,7 +595,7 @@ export interface LanguageService {
     getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
     getFileReferences(fileName: string): ReferenceEntry[];
 
-    getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
+    getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean, excludeLibFiles?: boolean): NavigateToItem[];
     getNavigationBarItems(fileName: string): NavigationBarItem[];
     getNavigationTree(fileName: string): NavigationTree;
 
@@ -1390,7 +1391,7 @@ export interface CompletionEntryDataAutoImport {
      * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
      */
     exportName: string;
-    exportMapKey?: string;
+    exportMapKey?: ExportMapInfoKey;
     moduleSpecifier?: string;
     /** The file name declaring the export's module symbol, if it was an external module */
     fileName?: string;
@@ -1401,7 +1402,7 @@ export interface CompletionEntryDataAutoImport {
 }
 
 export interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-    exportMapKey: string;
+    exportMapKey: ExportMapInfoKey;
 }
 
 export interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {

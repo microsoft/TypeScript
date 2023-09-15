@@ -49,7 +49,7 @@ c.foo(1);
 var b = {
     foo: function (x) {
         if (x === void 0) { x = 1; }
-    },
+    }, // error
     foo: function (x) {
         if (x === void 0) { x = 1; }
     },

@@ -23,7 +23,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"resolveJsonModule":true,"composite":true},"include":["./src/*.ts"]}
+{"compilerOptions":{"resolveJsonModule":true,"composite":true,"outDir":"dist"},"include":["./src/*.ts"]}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -56,6 +56,7 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json
  "options": {
   "resolveJsonModule": true,
   "composite": true,
+  "outDir": "/user/username/projects/myproject/dist",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
  }
 }
@@ -120,7 +121,8 @@ Info seq  [hh:mm:ss:mss] event:
        },
        "compilerOptions": {
         "resolveJsonModule": true,
-        "composite": true
+        "composite": true,
+        "outDir": ""
        },
        "typeAcquisition": {
         "enable": false,

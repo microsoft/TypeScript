@@ -5,15 +5,7 @@ import {
 import {
     join,
 } from "path";
-
-let playwright;
-try {
-    // @ts-ignore-error
-    playwright = await import("playwright");
-}
-catch (error) {
-    throw new Error("Playwright is expected to be installed manually before running this script");
-}
+import playwright from "playwright";
 
 // Turning this on will leave the Chromium browser open, giving you the
 // chance to open up the web inspector.

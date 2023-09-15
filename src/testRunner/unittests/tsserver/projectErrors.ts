@@ -711,6 +711,7 @@ console.log(blabla);`,
                 compilerOptions: {
                     resolveJsonModule: true,
                     composite: true,
+                    outDir: "dist",
                 },
                 include,
             }),

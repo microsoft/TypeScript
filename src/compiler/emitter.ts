@@ -5122,6 +5122,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                         shouldDecreaseIndentAfterEmit = true;
                     }
 
+                    if (shouldEmitInterveningComments && format & ListFormat.DelimitersMask && !positionIsSynthesized(child.pos)) {
+                        const commentRange = getCommentRange(child);
+                        emitTrailingCommentsOfPosition(commentRange.pos, /*prefixSpace*/ !!(format & ListFormat.SpaceBetweenSiblings), /*forceNoNewline*/ true);
+                    }
+
                     writeLine(separatingLineTerminatorCount);
                     shouldEmitInterveningComments = false;
                 }

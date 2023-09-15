@@ -1,0 +1,67 @@
+//// [tests/cases/conformance/es2019/allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts] ////
+
+=== allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts ===
+// Strings containing unescaped line / paragraph separators
+// Using both single quotes, double quotes and template literals
+
+var stringContainingUnescapedLineSeparator1 = "
+>stringContainingUnescapedLineSeparator1 : Symbol(stringContainingUnescapedLineSeparator1, Decl(allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts, 3, 3))
+
+STRING_CONTENT
+";
+var stringContainingUnescapedParagraphSeparator1 = "
+>stringContainingUnescapedParagraphSeparator1 : Symbol(stringContainingUnescapedParagraphSeparator1, Decl(allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts, 6, 3))
+
+STRING_CONTENT
+";
+
+
+var stringContainingUnescapedLineSeparator2 = '
+>stringContainingUnescapedLineSeparator2 : Symbol(stringContainingUnescapedLineSeparator2, Decl(allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts, 11, 3))
+
+STRING_CONTENT
+';
+var stringContainingUnescapedParagraphSeparator2 = '
+>stringContainingUnescapedParagraphSeparator2 : Symbol(stringContainingUnescapedParagraphSeparator2, Decl(allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts, 14, 3))
+
+STRING_CONTENT
+';
+
+
+var stringContainingUnescapedLineSeparator3 = `
+>stringContainingUnescapedLineSeparator3 : Symbol(stringContainingUnescapedLineSeparator3, Decl(allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts, 19, 3))
+
+STRING_CONTENT
+`;
+var stringContainingUnescapedParagraphSeparator3 = `
+>stringContainingUnescapedParagraphSeparator3 : Symbol(stringContainingUnescapedParagraphSeparator3, Decl(allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts, 22, 3))
+
+STRING_CONTENT
+`;
+
+// Array of unescaped line / paragraph separators
+
+var arr = [
+>arr : Symbol(arr, Decl(allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts, 28, 3))
+
+    "
+
+STRING_CONTENT
+
+",
+    "
+
+
+STRING_CONTENT
+
+
+",
+    "STRING_CONTENT
+",
+    "
+STRING_CONTENT",
+    `\
+`,
+    '
+'
+];

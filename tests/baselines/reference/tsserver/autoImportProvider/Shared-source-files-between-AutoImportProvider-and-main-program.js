@@ -558,7 +558,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/node_modules/@types/node/index",
             "data": {
               "exportName": "Stats",
-              "exportMapKey": "Stats|*|",
+              "exportMapKey": "5 * Stats ",
               "fileName": "/node_modules/@types/node/index.d.ts"
             }
           },
@@ -572,7 +572,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "Volume",
-              "exportMapKey": "Volume|*|",
+              "exportMapKey": "6 * Volume ",
               "fileName": "/node_modules/memfs/lib/index.d.ts",
               "isPackageJsonImport": true
             }

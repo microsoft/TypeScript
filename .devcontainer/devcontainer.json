@@ -18,7 +18,8 @@
                 }
             },
             "extensions": [
-                "dbaeumer.vscode-eslint"
+                "dbaeumer.vscode-eslint",
+                "dprint.dprint"
             ]
         }
     },

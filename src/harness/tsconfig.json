@@ -2,7 +2,9 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "types": [
-            "node", "mocha", "chai"
+            "node",
+            "mocha",
+            "chai"
         ]
     },
     "references": [
@@ -11,7 +13,7 @@
         { "path": "../jsTyping" },
         { "path": "../server" },
         { "path": "../typingsInstallerCore" },
-        { "path": "../deprecatedCompat" },
+        { "path": "../deprecatedCompat" }
     ],
 
     "include": ["**/*"]

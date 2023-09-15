@@ -24,6 +24,7 @@ import {
     emptyArray,
     every,
     ExportKind,
+    ExportMapInfoKey,
     factory,
     first,
     firstDefined,
@@ -515,7 +516,7 @@ interface FixAddToExistingImportInfo {
 export function getImportCompletionAction(
     targetSymbol: Symbol,
     moduleSymbol: Symbol,
-    exportMapKey: string | undefined,
+    exportMapKey: ExportMapInfoKey | undefined,
     sourceFile: SourceFile,
     symbolName: string,
     isJsxTagName: boolean,

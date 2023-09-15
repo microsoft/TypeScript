@@ -737,7 +737,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/src/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
@@ -806,7 +806,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "moduleSpecifier": "./a",
               "fileName": "/src/a.ts"
             }
@@ -839,7 +839,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "observable",
-              "exportMapKey": "observable|*|",
+              "exportMapKey": "10 * observable ",
               "moduleSpecifier": "mobx",
               "fileName": "/node_modules/mobx/index.d.ts",
               "isPackageJsonImport": true

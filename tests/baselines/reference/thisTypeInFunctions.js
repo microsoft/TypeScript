@@ -254,7 +254,7 @@ function implicitThis(n) {
 }
 var impl = {
     a: 12,
-    explicitVoid2: function () { return _this.a; },
+    explicitVoid2: function () { return _this.a; }, // ok, this: any because it refers to some outer object (window?)
     explicitVoid1: function () { return 12; },
     explicitStructural: function () {
         return this.a;

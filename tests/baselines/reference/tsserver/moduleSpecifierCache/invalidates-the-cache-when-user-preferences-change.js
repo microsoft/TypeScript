@@ -737,7 +737,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/src/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
@@ -1230,7 +1230,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/src/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
@@ -1720,7 +1720,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/src/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }

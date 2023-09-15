@@ -361,7 +361,7 @@
         "passport": "passport",
         "passport-local": "passport-local",
         "path": "pathjs",
-        "pdfkit":"pdfkit",
+        "pdfkit": "pdfkit",
         "peer": "peerjs",
         "peg": "pegjs",
         "photoswipe": "photoswipe",

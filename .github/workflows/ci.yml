@@ -76,15 +76,12 @@ jobs:
           check-latest: true
       - run: npm ci
 
-      # TODO: The cache fails when copied between GHA runners. See:
-      # https://github.com/dprint/dprint/issues/734
-      # https://github.com/dprint/dprint/issues/735
-      # - uses: actions/cache@v3
-      #   with:
-      #     path: ~/.cache/dprint
-      #     key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-dprint-
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/dprint
+          key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
+          restore-keys: |
+            ${{ runner.os }}-dprint-
 
       - name: Check formatting
         run: npx dprint check
@@ -100,8 +97,8 @@ jobs:
           check-latest: true
       - run: npm ci
 
-      - name: Adding playwright
-        run: npm install --no-save --no-package-lock playwright
+      - name: Installing browsers
+        run: npx playwright install --with-deps
 
       - name: Validate the browser can import TypeScript
         run: npx hereby test-browser-integration

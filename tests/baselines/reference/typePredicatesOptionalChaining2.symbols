@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/typePredicatesOptionalChaining2.ts] ////
+
+=== typePredicatesOptionalChaining2.ts ===
+type Person = { name: string; }
+>Person : Symbol(Person, Decl(typePredicatesOptionalChaining2.ts, 0, 0))
+>name : Symbol(name, Decl(typePredicatesOptionalChaining2.ts, 0, 15))
+
+const getName1 = (person?: Person): string => {
+>getName1 : Symbol(getName1, Decl(typePredicatesOptionalChaining2.ts, 2, 5))
+>person : Symbol(person, Decl(typePredicatesOptionalChaining2.ts, 2, 18))
+>Person : Symbol(Person, Decl(typePredicatesOptionalChaining2.ts, 0, 0))
+
+  return typeof person?.name === 'string' ? person?.name : '';
+>person?.name : Symbol(name, Decl(typePredicatesOptionalChaining2.ts, 0, 15))
+>person : Symbol(person, Decl(typePredicatesOptionalChaining2.ts, 2, 18))
+>name : Symbol(name, Decl(typePredicatesOptionalChaining2.ts, 0, 15))
+>person?.name : Symbol(name, Decl(typePredicatesOptionalChaining2.ts, 0, 15))
+>person : Symbol(person, Decl(typePredicatesOptionalChaining2.ts, 2, 18))
+>name : Symbol(name, Decl(typePredicatesOptionalChaining2.ts, 0, 15))
+
+};
+
+const isString = (value: any): value is string => {
+>isString : Symbol(isString, Decl(typePredicatesOptionalChaining2.ts, 6, 5))
+>value : Symbol(value, Decl(typePredicatesOptionalChaining2.ts, 6, 18))
+>value : Symbol(value, Decl(typePredicatesOptionalChaining2.ts, 6, 18))
+
+  return typeof value === 'string';
+>value : Symbol(value, Decl(typePredicatesOptionalChaining2.ts, 6, 18))
+
+};
+
+const getName2 = (person?: Person): string => {
+>getName2 : Symbol(getName2, Decl(typePredicatesOptionalChaining2.ts, 10, 5))
+>person : Symbol(person, Decl(typePredicatesOptionalChaining2.ts, 10, 18))
+>Person : Symbol(Person, Decl(typePredicatesOptionalChaining2.ts, 0, 0))
+
+  return isString(person?.name) ? person?.name : '';
+>isString : Symbol(isString, Decl(typePredicatesOptionalChaining2.ts, 6, 5))
+>person?.name : Symbol(name, Decl(typePredicatesOptionalChaining2.ts, 0, 15))
+>person : Symbol(person, Decl(typePredicatesOptionalChaining2.ts, 10, 18))
+>name : Symbol(name, Decl(typePredicatesOptionalChaining2.ts, 0, 15))
+>person?.name : Symbol(name, Decl(typePredicatesOptionalChaining2.ts, 0, 15))
+>person : Symbol(person, Decl(typePredicatesOptionalChaining2.ts, 10, 18))
+>name : Symbol(name, Decl(typePredicatesOptionalChaining2.ts, 0, 15))
+
+};
+

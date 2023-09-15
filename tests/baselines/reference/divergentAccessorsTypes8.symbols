@@ -1,0 +1,345 @@
+//// [tests/cases/compiler/divergentAccessorsTypes8.ts] ////
+
+=== divergentAccessorsTypes8.ts ===
+export {}
+
+interface Serializer {
+>Serializer : Symbol(Serializer, Decl(divergentAccessorsTypes8.ts, 0, 9))
+
+  set value(v: string | number | boolean);
+>value : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+>v : Symbol(v, Decl(divergentAccessorsTypes8.ts, 3, 12))
+
+  get value(): string;
+>value : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+}
+declare let box: Serializer;
+>box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+>Serializer : Symbol(Serializer, Decl(divergentAccessorsTypes8.ts, 0, 9))
+
+const v = box['value']
+>v : Symbol(v, Decl(divergentAccessorsTypes8.ts, 7, 5))
+>box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+>'value' : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+
+box['value'] = true;
+>box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+>'value' : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+
+box['value'] = 42;
+>box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+>'value' : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+
+box['value'] = "hello";
+>box : Symbol(box, Decl(divergentAccessorsTypes8.ts, 6, 11))
+>'value' : Symbol(Serializer.value, Decl(divergentAccessorsTypes8.ts, 2, 22), Decl(divergentAccessorsTypes8.ts, 3, 42))
+
+interface Element {
+>Element : Symbol(Element, Decl(divergentAccessorsTypes8.ts, 10, 23))
+
+    get style(): CSSStyleDeclaration;
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    set style(cssText: string);
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+>cssText : Symbol(cssText, Decl(divergentAccessorsTypes8.ts, 14, 14))
+}
+
+declare const element: Element;
+>element : Symbol(element, Decl(divergentAccessorsTypes8.ts, 17, 13))
+>Element : Symbol(Element, Decl(divergentAccessorsTypes8.ts, 10, 23))
+
+element['style'] = "color: red";
+>element : Symbol(element, Decl(divergentAccessorsTypes8.ts, 17, 13))
+>'style' : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+
+element['style'] = element.style;
+>element : Symbol(element, Decl(divergentAccessorsTypes8.ts, 17, 13))
+>'style' : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+>element.style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+>element : Symbol(element, Decl(divergentAccessorsTypes8.ts, 17, 13))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes8.ts, 12, 19), Decl(divergentAccessorsTypes8.ts, 13, 37))
+
+class One {
+>One : Symbol(One, Decl(divergentAccessorsTypes8.ts, 19, 33))
+
+  get prop1(): string {
+>prop1 : Symbol(One.prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3))
+
+    return "";
+  }
+  set prop1(s: string | number) {}
+>prop1 : Symbol(One.prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 25, 12))
+
+  get prop2(): string {
+>prop2 : Symbol(One.prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3))
+
+    return "";
+  }
+  set prop2(s: string | number) {}
+>prop2 : Symbol(One.prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 30, 12))
+
+  prop3: number = 42;
+>prop3 : Symbol(One.prop3, Decl(divergentAccessorsTypes8.ts, 30, 34))
+
+  get prop4(): string {
+>prop4 : Symbol(One.prop4, Decl(divergentAccessorsTypes8.ts, 32, 21), Decl(divergentAccessorsTypes8.ts, 36, 3))
+
+    return "";
+  }
+  set prop4(s: string | number) {}
+>prop4 : Symbol(One.prop4, Decl(divergentAccessorsTypes8.ts, 32, 21), Decl(divergentAccessorsTypes8.ts, 36, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 37, 12))
+}
+
+class Two {
+>Two : Symbol(Two, Decl(divergentAccessorsTypes8.ts, 38, 1))
+
+  get prop1(): string {
+>prop1 : Symbol(Two.prop1, Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
+
+    return "";
+  }
+  set prop1(s: string | number) {}
+>prop1 : Symbol(Two.prop1, Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 44, 12))
+
+  get prop2(): string {
+>prop2 : Symbol(Two.prop2, Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
+
+    return "";
+  }
+  set prop2(s: string) {}
+>prop2 : Symbol(Two.prop2, Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 49, 12))
+
+  get prop3(): string {
+>prop3 : Symbol(Two.prop3, Decl(divergentAccessorsTypes8.ts, 49, 25), Decl(divergentAccessorsTypes8.ts, 53, 3))
+
+    return "";
+  }
+  set prop3(s: string | boolean) {}
+>prop3 : Symbol(Two.prop3, Decl(divergentAccessorsTypes8.ts, 49, 25), Decl(divergentAccessorsTypes8.ts, 53, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 54, 12))
+
+  get prop4(): string {
+>prop4 : Symbol(Two.prop4, Decl(divergentAccessorsTypes8.ts, 54, 35), Decl(divergentAccessorsTypes8.ts, 58, 3))
+
+    return "";
+  }
+  set prop4(s: string | boolean) {}
+>prop4 : Symbol(Two.prop4, Decl(divergentAccessorsTypes8.ts, 54, 35), Decl(divergentAccessorsTypes8.ts, 58, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 59, 12))
+}
+
+declare const u1: One | Two;
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>One : Symbol(One, Decl(divergentAccessorsTypes8.ts, 19, 33))
+>Two : Symbol(Two, Decl(divergentAccessorsTypes8.ts, 38, 1))
+
+u1['prop1'] = 42;
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop1' : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3), Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
+
+u1['prop1'] = "hello";
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop1' : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3), Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
+
+u1['prop2'] = 42;
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop2' : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3), Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
+
+u1['prop2'] = "hello";
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop2' : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3), Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
+
+u1['prop3'] = 42;
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop3' : Symbol(prop3, Decl(divergentAccessorsTypes8.ts, 30, 34), Decl(divergentAccessorsTypes8.ts, 49, 25), Decl(divergentAccessorsTypes8.ts, 53, 3))
+
+u1['prop3'] = "hello";
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop3' : Symbol(prop3, Decl(divergentAccessorsTypes8.ts, 30, 34), Decl(divergentAccessorsTypes8.ts, 49, 25), Decl(divergentAccessorsTypes8.ts, 53, 3))
+
+u1['prop3'] = true;
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop3' : Symbol(prop3, Decl(divergentAccessorsTypes8.ts, 30, 34), Decl(divergentAccessorsTypes8.ts, 49, 25), Decl(divergentAccessorsTypes8.ts, 53, 3))
+
+u1['prop4'] = 42;
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop4' : Symbol(prop4, Decl(divergentAccessorsTypes8.ts, 32, 21), Decl(divergentAccessorsTypes8.ts, 36, 3), Decl(divergentAccessorsTypes8.ts, 54, 35), Decl(divergentAccessorsTypes8.ts, 58, 3))
+
+u1['prop4'] = "hello";
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop4' : Symbol(prop4, Decl(divergentAccessorsTypes8.ts, 32, 21), Decl(divergentAccessorsTypes8.ts, 36, 3), Decl(divergentAccessorsTypes8.ts, 54, 35), Decl(divergentAccessorsTypes8.ts, 58, 3))
+
+u1['prop4'] = true;
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes8.ts, 62, 13))
+>'prop4' : Symbol(prop4, Decl(divergentAccessorsTypes8.ts, 32, 21), Decl(divergentAccessorsTypes8.ts, 36, 3), Decl(divergentAccessorsTypes8.ts, 54, 35), Decl(divergentAccessorsTypes8.ts, 58, 3))
+
+declare const i: One & Two;
+>i : Symbol(i, Decl(divergentAccessorsTypes8.ts, 78, 13))
+>One : Symbol(One, Decl(divergentAccessorsTypes8.ts, 19, 33))
+>Two : Symbol(Two, Decl(divergentAccessorsTypes8.ts, 38, 1))
+
+const iv1 = i['prop1'];
+>iv1 : Symbol(iv1, Decl(divergentAccessorsTypes8.ts, 80, 5))
+>i : Symbol(i, Decl(divergentAccessorsTypes8.ts, 78, 13))
+>'prop1' : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3), Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
+
+i['prop1'] = 42;
+>i : Symbol(i, Decl(divergentAccessorsTypes8.ts, 78, 13))
+>'prop1' : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3), Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
+
+i['prop1'] = "hello";
+>i : Symbol(i, Decl(divergentAccessorsTypes8.ts, 78, 13))
+>'prop1' : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 21, 11), Decl(divergentAccessorsTypes8.ts, 24, 3), Decl(divergentAccessorsTypes8.ts, 40, 11), Decl(divergentAccessorsTypes8.ts, 43, 3))
+
+const iv2 = i['prop2'];
+>iv2 : Symbol(iv2, Decl(divergentAccessorsTypes8.ts, 84, 5))
+>i : Symbol(i, Decl(divergentAccessorsTypes8.ts, 78, 13))
+>'prop2' : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3), Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
+
+i['prop2'] = 42;
+>i : Symbol(i, Decl(divergentAccessorsTypes8.ts, 78, 13))
+>'prop2' : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3), Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
+
+i['prop2'] = "hello";
+>i : Symbol(i, Decl(divergentAccessorsTypes8.ts, 78, 13))
+>'prop2' : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 25, 34), Decl(divergentAccessorsTypes8.ts, 29, 3), Decl(divergentAccessorsTypes8.ts, 44, 34), Decl(divergentAccessorsTypes8.ts, 48, 3))
+
+class Three {
+>Three : Symbol(Three, Decl(divergentAccessorsTypes8.ts, 86, 21))
+
+  get prop1(): string {
+>prop1 : Symbol(Three.prop1, Decl(divergentAccessorsTypes8.ts, 88, 13), Decl(divergentAccessorsTypes8.ts, 91, 3))
+
+    return "";
+  }
+  set prop1(s: string | number) {}
+>prop1 : Symbol(Three.prop1, Decl(divergentAccessorsTypes8.ts, 88, 13), Decl(divergentAccessorsTypes8.ts, 91, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 92, 12))
+
+  prop2: number = 42;
+>prop2 : Symbol(Three.prop2, Decl(divergentAccessorsTypes8.ts, 92, 34))
+}
+
+class Four {
+>Four : Symbol(Four, Decl(divergentAccessorsTypes8.ts, 95, 1))
+
+  get prop1(): "hello" {
+>prop1 : Symbol(Four.prop1, Decl(divergentAccessorsTypes8.ts, 97, 12), Decl(divergentAccessorsTypes8.ts, 100, 3))
+
+    return "hello";
+  }
+  set prop1(s: "hello" | number) {}
+>prop1 : Symbol(Four.prop1, Decl(divergentAccessorsTypes8.ts, 97, 12), Decl(divergentAccessorsTypes8.ts, 100, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 101, 12))
+
+  get prop2(): string {
+>prop2 : Symbol(Four.prop2, Decl(divergentAccessorsTypes8.ts, 101, 35), Decl(divergentAccessorsTypes8.ts, 105, 3))
+
+    return "";
+  }
+  set prop2(s: string | 42) {}
+>prop2 : Symbol(Four.prop2, Decl(divergentAccessorsTypes8.ts, 101, 35), Decl(divergentAccessorsTypes8.ts, 105, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 106, 12))
+}
+
+class Five {
+>Five : Symbol(Five, Decl(divergentAccessorsTypes8.ts, 107, 1))
+
+  get prop1(): "hello" {
+>prop1 : Symbol(Five.prop1, Decl(divergentAccessorsTypes8.ts, 109, 12), Decl(divergentAccessorsTypes8.ts, 112, 3))
+
+    return "hello";
+  }
+  set prop1(s: "hello" | boolean) {}
+>prop1 : Symbol(Five.prop1, Decl(divergentAccessorsTypes8.ts, 109, 12), Decl(divergentAccessorsTypes8.ts, 112, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 113, 12))
+
+  get prop2(): string {
+>prop2 : Symbol(Five.prop2, Decl(divergentAccessorsTypes8.ts, 113, 36), Decl(divergentAccessorsTypes8.ts, 117, 3))
+
+    return "";
+  }
+  set prop2(s: string | number | boolean) {}
+>prop2 : Symbol(Five.prop2, Decl(divergentAccessorsTypes8.ts, 113, 36), Decl(divergentAccessorsTypes8.ts, 117, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 118, 12))
+}
+
+declare const i2: Three & Four & Five;
+>i2 : Symbol(i2, Decl(divergentAccessorsTypes8.ts, 121, 13))
+>Three : Symbol(Three, Decl(divergentAccessorsTypes8.ts, 86, 21))
+>Four : Symbol(Four, Decl(divergentAccessorsTypes8.ts, 95, 1))
+>Five : Symbol(Five, Decl(divergentAccessorsTypes8.ts, 107, 1))
+
+i2['prop1'] = 42;
+>i2 : Symbol(i2, Decl(divergentAccessorsTypes8.ts, 121, 13))
+>'prop1' : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 88, 13), Decl(divergentAccessorsTypes8.ts, 91, 3), Decl(divergentAccessorsTypes8.ts, 97, 12), Decl(divergentAccessorsTypes8.ts, 100, 3), Decl(divergentAccessorsTypes8.ts, 109, 12) ... and 1 more)
+
+i2['prop1'] = "hello";
+>i2 : Symbol(i2, Decl(divergentAccessorsTypes8.ts, 121, 13))
+>'prop1' : Symbol(prop1, Decl(divergentAccessorsTypes8.ts, 88, 13), Decl(divergentAccessorsTypes8.ts, 91, 3), Decl(divergentAccessorsTypes8.ts, 97, 12), Decl(divergentAccessorsTypes8.ts, 100, 3), Decl(divergentAccessorsTypes8.ts, 109, 12) ... and 1 more)
+
+i2['prop2'] = 42;
+>i2 : Symbol(i2, Decl(divergentAccessorsTypes8.ts, 121, 13))
+>'prop2' : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 92, 34), Decl(divergentAccessorsTypes8.ts, 101, 35), Decl(divergentAccessorsTypes8.ts, 105, 3), Decl(divergentAccessorsTypes8.ts, 113, 36), Decl(divergentAccessorsTypes8.ts, 117, 3))
+
+i2['prop2'] = "hello";
+>i2 : Symbol(i2, Decl(divergentAccessorsTypes8.ts, 121, 13))
+>'prop2' : Symbol(prop2, Decl(divergentAccessorsTypes8.ts, 92, 34), Decl(divergentAccessorsTypes8.ts, 101, 35), Decl(divergentAccessorsTypes8.ts, 105, 3), Decl(divergentAccessorsTypes8.ts, 113, 36), Decl(divergentAccessorsTypes8.ts, 117, 3))
+
+class Six {
+>Six : Symbol(Six, Decl(divergentAccessorsTypes8.ts, 127, 22))
+
+  get prop1(): boolean | number {
+>prop1 : Symbol(Six.prop1, Decl(divergentAccessorsTypes8.ts, 129, 11), Decl(divergentAccessorsTypes8.ts, 132, 3))
+
+    return 42;
+  }
+  set prop1(s: boolean | string) {}
+>prop1 : Symbol(Six.prop1, Decl(divergentAccessorsTypes8.ts, 129, 11), Decl(divergentAccessorsTypes8.ts, 132, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 133, 12))
+
+  get prop2(): bigint | number {
+>prop2 : Symbol(Six.prop2, Decl(divergentAccessorsTypes8.ts, 133, 35), Decl(divergentAccessorsTypes8.ts, 137, 3))
+
+    return 10;
+  }
+  set prop2(s: boolean | null) {}
+>prop2 : Symbol(Six.prop2, Decl(divergentAccessorsTypes8.ts, 133, 35), Decl(divergentAccessorsTypes8.ts, 137, 3))
+>s : Symbol(s, Decl(divergentAccessorsTypes8.ts, 138, 12))
+}
+
+declare const s1: Six
+>s1 : Symbol(s1, Decl(divergentAccessorsTypes8.ts, 141, 13))
+>Six : Symbol(Six, Decl(divergentAccessorsTypes8.ts, 127, 22))
+
+declare const k1: 'prop1' | 'prop2'
+>k1 : Symbol(k1, Decl(divergentAccessorsTypes8.ts, 142, 13))
+
+const sv1 = s1[k1]
+>sv1 : Symbol(sv1, Decl(divergentAccessorsTypes8.ts, 144, 5))
+>s1 : Symbol(s1, Decl(divergentAccessorsTypes8.ts, 141, 13))
+>k1 : Symbol(k1, Decl(divergentAccessorsTypes8.ts, 142, 13))
+
+s1[k1] = 42
+>s1 : Symbol(s1, Decl(divergentAccessorsTypes8.ts, 141, 13))
+>k1 : Symbol(k1, Decl(divergentAccessorsTypes8.ts, 142, 13))
+
+s1[k1] = true
+>s1 : Symbol(s1, Decl(divergentAccessorsTypes8.ts, 141, 13))
+>k1 : Symbol(k1, Decl(divergentAccessorsTypes8.ts, 142, 13))
+
+s1[k1] = ''
+>s1 : Symbol(s1, Decl(divergentAccessorsTypes8.ts, 141, 13))
+>k1 : Symbol(k1, Decl(divergentAccessorsTypes8.ts, 142, 13))
+
+s1[k1] = null
+>s1 : Symbol(s1, Decl(divergentAccessorsTypes8.ts, 141, 13))
+>k1 : Symbol(k1, Decl(divergentAccessorsTypes8.ts, 142, 13))
+

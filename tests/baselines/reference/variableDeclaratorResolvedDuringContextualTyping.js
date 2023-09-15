@@ -153,7 +153,7 @@ var FileService = /** @class */ (function () {
             data: "someData"
         }).then(function (response) {
             var result = {
-                stat: _this.jsonToStat(newFilePath, "someString"),
+                stat: _this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
                 isNew: response.status === 201
             };
             return WinJS.TPromise.as(result);
