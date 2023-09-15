@@ -376,7 +376,7 @@ export class CompilerHost implements ts.CompilerHost {
             }
         }
 
-        const parsed = ts.createSourceFile(fileName, content, languageVersionOrOptions, this.jsDocParsingMode, this._setParentNodes || this.shouldAssertInvariants);
+        const parsed = ts.createSourceFile(fileName, content, languageVersionOrOptions, this._setParentNodes || this.shouldAssertInvariants, /*scriptKind*/ undefined, this.jsDocParsingMode);
         if (this.shouldAssertInvariants) {
             Utils.assertInvariants(parsed, /*parent*/ undefined);
         }

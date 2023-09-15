@@ -35,7 +35,6 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             options: { module: ts.ModuleKind.AMD },
             cb,
             watchOptions: undefined,
-            jsDocParsingMode: undefined,
         });
         const originalFileExists = host.fileExists;
         const watch = ts.createWatchProgram(host);
@@ -122,7 +121,6 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             options: { module: ts.ModuleKind.AMD },
             cb,
             watchOptions: undefined,
-            jsDocParsingMode: undefined,
         });
         const originalFileExists = host.fileExists;
         let fileExistsCalledForBar = false;
@@ -181,7 +179,6 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             options: { module: ts.ModuleKind.AMD },
             cb,
             watchOptions: undefined,
-            jsDocParsingMode: undefined,
         });
         const originalFileExists = host.fileExists;
         let fileExistsCalledForBar = false;

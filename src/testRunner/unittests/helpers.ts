@@ -96,7 +96,7 @@ export class SourceText implements ts.IScriptSnapshot {
 }
 
 function createSourceFileWithText(fileName: string, sourceText: SourceText, target: ts.ScriptTarget) {
-    const file = ts.createSourceFile(fileName, sourceText.getFullText(), target, /*jsDocParsingMode*/ undefined) as SourceFileWithText;
+    const file = ts.createSourceFile(fileName, sourceText.getFullText(), target) as SourceFileWithText;
     file.sourceText = sourceText;
     file.version = "" + sourceText.getVersion();
     return file;

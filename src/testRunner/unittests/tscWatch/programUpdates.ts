@@ -629,7 +629,6 @@ export class A {
             options: { allowNonTsExtensions: true },
             cb,
             watchOptions: undefined,
-            jsDocParsingMode: undefined,
         });
         ts.createWatchProgram(host);
         baseline.push(`${sys.getExecutingFilePath()} --w ${file2.path} ${file3.path}`);
@@ -650,7 +649,6 @@ export class A {
             options: { allowNonTsExtensions: true },
             cb: cb2,
             watchOptions: undefined,
-            jsDocParsingMode: undefined,
         }));
         watchBaseline({
             baseline,
@@ -1211,7 +1209,6 @@ declare const eval: any`,
             options: { allowNonTsExtensions: true },
             cb,
             watchOptions: undefined,
-            jsDocParsingMode: undefined,
         }));
         runWatchBaseline({
             scenario,

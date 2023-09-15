@@ -859,7 +859,7 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
 /**
  * Creates the watch compiler host that can be extended with config file or root file names and options host
  */
-function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, jsDocParsingMode: JSDocParsingMode | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
+function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, jsDocParsingMode?: JSDocParsingMode): WatchCompilerHost<T> {
     const write = (s: string) => system.write(s + system.newLine);
     const result = createProgramHost(system, createProgram, jsDocParsingMode) as WatchCompilerHost<T>;
     copyProperties(result, createWatchHost(system, reportWatchStatus));
@@ -895,9 +895,9 @@ function reportUnrecoverableDiagnostic(system: System, reportDiagnostic: Diagnos
 export interface CreateWatchCompilerHostInput<T extends BuilderProgram> {
     system: System;
     createProgram?: CreateProgram<T>;
-    jsDocParsingMode: JSDocParsingMode | undefined;
     reportDiagnostic?: DiagnosticReporter;
     reportWatchStatus?: WatchStatusReporter;
+    jsDocParsingMode?: JSDocParsingMode;
 }
 
 /** @internal */
@@ -924,7 +924,7 @@ export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = E
     reportWatchStatus,
 }: CreateWatchCompilerHostOfConfigFileInput<T>): WatchCompilerHostOfConfigFile<T> {
     const diagnosticReporter = reportDiagnostic || createDiagnosticReporter(system);
-    const host = createWatchCompilerHost(system, createProgram, jsDocParsingMode, diagnosticReporter, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
+    const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus, jsDocParsingMode) as WatchCompilerHostOfConfigFile<T>;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, diagnosticReporter, diagnostic);
     host.configFileName = configFileName;
     host.optionsToExtend = optionsToExtend;
@@ -956,7 +956,7 @@ export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends Build
     reportDiagnostic,
     reportWatchStatus,
 }: CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
-    const host = createWatchCompilerHost(system, createProgram, jsDocParsingMode, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
+    const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus, jsDocParsingMode) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
     host.rootFiles = rootFiles;
     host.options = options;
     host.watchOptions = watchOptions;
@@ -980,7 +980,7 @@ export interface IncrementalCompilationOptions {
 /** @internal */
 export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
     const system = input.system || sys;
-    const host = input.host || (input.host = createIncrementalCompilerHost(input.options, input.jsDocParsingMode, system));
+    const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system, input.jsDocParsingMode));
     const builderProgram = createIncrementalProgram(input);
     const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
         builderProgram,

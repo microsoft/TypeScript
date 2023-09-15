@@ -249,7 +249,7 @@ export namespace Compiler {
         const shouldAssertInvariants = !lightMode;
 
         // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
-        const result = ts.createSourceFile(fileName, sourceText, languageVersionOrOptions, /*jsDocParsingMode*/ undefined, /*setParentNodes:*/ shouldAssertInvariants);
+        const result = ts.createSourceFile(fileName, sourceText, languageVersionOrOptions, /*setParentNodes:*/ shouldAssertInvariants);
 
         if (shouldAssertInvariants) {
             Utils.assertInvariants(result, /*parent:*/ undefined);
@@ -923,7 +923,7 @@ export namespace Compiler {
                 jsCode += "\r\n";
             }
             if (!result.diagnostics.length && !ts.endsWith(file.file, ts.Extension.Json)) {
-                const fileParseResult = ts.createSourceFile(file.file, file.text, ts.getEmitScriptTarget(options), /*jsDocParsingMode*/ undefined, /*setParentNodes*/ false, ts.endsWith(file.file, "x") ? ts.ScriptKind.JSX : ts.ScriptKind.JS);
+                const fileParseResult = ts.createSourceFile(file.file, file.text, ts.getEmitScriptTarget(options), /*setParentNodes*/ false, ts.endsWith(file.file, "x") ? ts.ScriptKind.JSX : ts.ScriptKind.JS);
                 if (ts.length(fileParseResult.parseDiagnostics)) {
                     jsCode += getErrorBaseline([file.asTestFile()], fileParseResult.parseDiagnostics);
                     return;

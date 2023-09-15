@@ -310,7 +310,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
 
         if (!entry) {
             // Have never seen this file with these settings.  Create a new source file for it.
-            const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, sourceFileOptions, version, /*setNodeParents*/ false, jsDocParsingMode, scriptKind);
+            const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, sourceFileOptions, version, /*setNodeParents*/ false, scriptKind, jsDocParsingMode);
             if (externalCache) {
                 externalCache.setDocument(keyWithMode, path, sourceFile);
             }

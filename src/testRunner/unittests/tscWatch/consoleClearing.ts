@@ -55,7 +55,6 @@ describe("unittests:: tsc-watch:: console clearing", () => {
                 system: baseline.sys,
                 cb: baseline.cb,
                 configFileName: configFile.path,
-                jsDocParsingMode: undefined,
             }));
             // Initially console is cleared if --preserveOutput is not provided since the config file is yet to be parsed
             runWatchBaseline({

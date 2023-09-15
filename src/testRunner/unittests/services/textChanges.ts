@@ -30,7 +30,7 @@ describe("unittests:: services:: textChanges", () => {
     // validate that positions that were recovered from the printed text actually match positions that will be created if the same text is parsed.
     function verifyPositions(node: ts.Node, text: string): void {
         const nodeList = flattenNodes(node);
-        const sourceFile = ts.createSourceFile("f.ts", text, ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined);
+        const sourceFile = ts.createSourceFile("f.ts", text, ts.ScriptTarget.ES2015);
         const parsedNodeList = flattenNodes(sourceFile.statements[0]);
         ts.zipWith(nodeList, parsedNodeList, (left, right) => {
             ts.Debug.assert(left.pos === right.pos);
@@ -51,7 +51,7 @@ describe("unittests:: services:: textChanges", () => {
 
     function runSingleFileTest(caption: string, placeOpenBraceOnNewLineForFunctions: boolean, text: string, validateNodes: boolean, testBlock: (sourceFile: ts.SourceFile, changeTracker: ts.textChanges.ChangeTracker) => void) {
         it(caption, () => {
-            const sourceFile = ts.createSourceFile("source.ts", text, ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true);
+            const sourceFile = ts.createSourceFile("source.ts", text, ts.ScriptTarget.ES2015, /*setParentNodes*/ true);
             const rulesProvider = getRuleProvider(placeOpenBraceOnNewLineForFunctions);
             const changeTracker = new ts.textChanges.ChangeTracker(newLineCharacter, rulesProvider);
             testBlock(sourceFile, changeTracker);

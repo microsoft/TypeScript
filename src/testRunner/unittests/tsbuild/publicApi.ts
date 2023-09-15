@@ -64,7 +64,6 @@ export function f22() { } // trailing`,
         const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
         const buildHost = ts.createSolutionBuilderHost(
             sys,
-            /*jsDocParsingMode*/ undefined,
             /*createProgram*/ undefined,
             ts.createDiagnosticReporter(sys, /*pretty*/ true),
             ts.createBuilderStatusReporter(sys, /*pretty*/ true),

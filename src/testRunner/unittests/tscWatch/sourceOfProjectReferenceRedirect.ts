@@ -38,7 +38,6 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             configFileName: config,
             system: sys,
             cb,
-            jsDocParsingMode: undefined,
         });
         host.useSourceOfProjectReferenceRedirect = ts.returnTrue;
         const watch = ts.createWatchProgram(host);

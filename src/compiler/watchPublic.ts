@@ -119,8 +119,8 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, jsDocParsingMode: JSDocParsingMode | undefined, system = sys): CompilerHost {
-    const host = createCompilerHostWorker(options, jsDocParsingMode, /*setParentNodes*/ undefined, system);
+export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, jsDocParsingMode?: JSDocParsingMode): CompilerHost {
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system, jsDocParsingMode);
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
@@ -145,7 +145,7 @@ export function createIncrementalProgram<T extends BuilderProgram = EmitAndSeman
     host,
     createProgram,
 }: IncrementalProgramOptions<T>): T {
-    host = host || createIncrementalCompilerHost(options, /*jsDocParsingMode*/ undefined);
+    host = host || createIncrementalCompilerHost(options);
     createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
     const oldProgram = readBuilderProgram(options, host) as any as T;
     return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
@@ -256,8 +256,7 @@ export interface ProgramHost<T extends BuilderProgram> {
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
-    /** Kind of JSDoc parsing to use. */
-    jsDocParsingMode: JSDocParsingMode | undefined;
+    jsDocParsingMode?: JSDocParsingMode;
 }
 /**
  * Internal interface used to wire emit through same host
@@ -361,9 +360,9 @@ export interface WatchOfFilesAndCompilerOptions<T> extends Watch<T> {
 /**
  * Create the watch compiler host for either configFile or fileNames and its options
  */
-export function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, jsDocParsingMode: JSDocParsingMode | undefined, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): WatchCompilerHostOfConfigFile<T>;
-export function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, jsDocParsingMode: JSDocParsingMode | undefined, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: readonly ProjectReference[], watchOptions?: WatchOptions): WatchCompilerHostOfFilesAndCompilerOptions<T>;
-export function createWatchCompilerHost<T extends BuilderProgram>(rootFilesOrConfigFileName: string | string[], options: CompilerOptions | undefined, system: System, jsDocParsingMode: JSDocParsingMode | undefined, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferencesOrWatchOptionsToExtend?: readonly ProjectReference[] | WatchOptions, watchOptionsOrExtraFileExtensions?: WatchOptions | readonly FileExtensionInfo[]): WatchCompilerHostOfFilesAndCompilerOptions<T> | WatchCompilerHostOfConfigFile<T> {
+export function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[], jsDocParsingMode?: JSDocParsingMode): WatchCompilerHostOfConfigFile<T>;
+export function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: readonly ProjectReference[], watchOptions?: WatchOptions, jsDocParsingMode?: JSDocParsingMode): WatchCompilerHostOfFilesAndCompilerOptions<T>;
+export function createWatchCompilerHost<T extends BuilderProgram>(rootFilesOrConfigFileName: string | string[], options: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferencesOrWatchOptionsToExtend?: readonly ProjectReference[] | WatchOptions, watchOptionsOrExtraFileExtensions?: WatchOptions | readonly FileExtensionInfo[], jsDocParsingMode?: JSDocParsingMode): WatchCompilerHostOfFilesAndCompilerOptions<T> | WatchCompilerHostOfConfigFile<T> {
     if (isArray(rootFilesOrConfigFileName)) {
         return createWatchCompilerHostOfFilesAndCompilerOptions({
             rootFiles: rootFilesOrConfigFileName,

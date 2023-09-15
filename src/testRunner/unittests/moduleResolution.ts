@@ -390,7 +390,7 @@ describe("unittests:: moduleResolution:: Relative imports", () => {
                 getSourceFile: (fileName: string, languageVersion: ts.ScriptTarget) => {
                     const path = ts.normalizePath(ts.combinePaths(currentDirectory, fileName));
                     const file = files.get(path);
-                    return file ? ts.createSourceFile(fileName, file, languageVersion, /*jsDocParsingMode*/ undefined) : undefined;
+                    return file ? ts.createSourceFile(fileName, file, languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: ts.notImplemented,
@@ -497,13 +497,13 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
                 getSourceFile: (fileName: string, languageVersion: ts.ScriptTarget) => {
                     if (fileName === "lib.d.ts") {
                         if (!library) {
-                            library = ts.createSourceFile("lib.d.ts", "", ts.ScriptTarget.ES5, /*jsDocParsingMode*/ undefined);
+                            library = ts.createSourceFile("lib.d.ts", "", ts.ScriptTarget.ES5);
                         }
                         return library;
                     }
                     const path = getCanonicalFileName(ts.normalizePath(ts.combinePaths(currentDirectory, fileName)));
                     const file = files.get(path);
-                    return file ? ts.createSourceFile(fileName, file, languageVersion, /*jsDocParsingMode*/ undefined) : undefined;
+                    return file ? ts.createSourceFile(fileName, file, languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: ts.notImplemented,
@@ -1033,7 +1033,7 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
         files.forEach(file => baselines.push(`//// [${file.name}]\n${file.content || ""}`, ""));
 
         const names = ts.map(files, f => f.name);
-        const sourceFiles = ts.arrayToMap(ts.map(files, f => ts.createSourceFile(f.name, f.content, ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined)), f => f.fileName);
+        const sourceFiles = ts.arrayToMap(ts.map(files, f => ts.createSourceFile(f.name, f.content, ts.ScriptTarget.ES2015)), f => f.fileName);
         const compilerHost: ts.CompilerHost = {
             fileExists: fileName => sourceFiles.has(fileName),
             getSourceFile: fileName => sourceFiles.get(fileName),
@@ -1072,7 +1072,7 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
                     export function foo(): Stat;
                 }`,
         };
-        const file = ts.createSourceFile(f.name, f.content, ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined);
+        const file = ts.createSourceFile(f.name, f.content, ts.ScriptTarget.ES2015);
         const compilerHost: ts.CompilerHost = {
             fileExists: fileName => fileName === file.fileName,
             getSourceFile: fileName => fileName === file.fileName ? file : undefined,
@@ -1101,7 +1101,7 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
                     export function foo(): Stat;
                 }`,
         };
-        const file = ts.createSourceFile(f.name, f.content, ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined);
+        const file = ts.createSourceFile(f.name, f.content, ts.ScriptTarget.ES2015);
         const compilerHost: ts.CompilerHost = {
             fileExists: fileName => fileName === file.fileName,
             getSourceFile: fileName => fileName === file.fileName ? file : undefined,

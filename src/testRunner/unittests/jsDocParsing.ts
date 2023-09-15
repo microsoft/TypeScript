@@ -486,7 +486,7 @@ oh.no
     });
     describe("getFirstToken", () => {
         it("gets jsdoc", () => {
-            const root = ts.createSourceFile("foo.ts", "/** comment */var a = true;", ts.ScriptTarget.ES5, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true);
+            const root = ts.createSourceFile("foo.ts", "/** comment */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
             assert.isDefined(root);
             assert.equal(root.kind, ts.SyntaxKind.SourceFile);
             const first = root.getFirstToken();
@@ -496,7 +496,7 @@ oh.no
     });
     describe("getLastToken", () => {
         it("gets jsdoc", () => {
-            const root = ts.createSourceFile("foo.ts", "var a = true;/** comment */", ts.ScriptTarget.ES5, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true);
+            const root = ts.createSourceFile("foo.ts", "var a = true;/** comment */", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
             assert.isDefined(root);
             const last = root.getLastToken();
             assert.isDefined(last);
@@ -505,7 +505,7 @@ oh.no
     });
     describe("getStart", () => {
         it("runs when node with JSDoc but no parent pointers", () => {
-            const root = ts.createSourceFile("foo.ts", "/** */var a = true;", ts.ScriptTarget.ES5, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ false);
+            const root = ts.createSourceFile("foo.ts", "/** */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ false);
             root.statements[0].getStart(root, /*includeJsDocComment*/ true);
         });
     });

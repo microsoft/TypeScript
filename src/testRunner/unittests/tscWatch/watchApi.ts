@@ -50,7 +50,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             configFileName: config.path,
             system: sys,
             cb,
-            jsDocParsingMode: undefined,
         });
         const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, config.path);
         host.resolveModuleNames = (moduleNames, containingFile) =>
@@ -92,7 +91,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                     configFileName: `/user/username/projects/myproject/tsconfig.json`,
                     system: sys,
                     cb,
-                    jsDocParsingMode: undefined,
                 });
                 host.resolveModuleNames = (moduleNames, containingFile, _reusedNames, _redirectedReference, options) => moduleNames.map(m => ts.resolveModuleName(m, containingFile, options, host).resolvedModule);
                 // Invalidate resolutions only when ts file is created
@@ -156,7 +154,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to wat
             configFileName: config.path,
             system: sys,
             cb,
-            jsDocParsingMode: undefined,
         });
         const existing = host.onWatchStatusChange!;
         let watchedErrorCount;
@@ -194,7 +191,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement s
             configFileName: config.path,
             system: sys,
             cb,
-            jsDocParsingMode: undefined,
         });
         host.setTimeout = undefined;
         host.clearTimeout = undefined;
@@ -243,7 +239,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost can add extraFileExt
             extraFileExtensions: [{ extension: ".vue", isMixedContent: true, scriptKind: ts.ScriptKind.Deferred }],
             system: sys,
             cb,
-            jsDocParsingMode: undefined,
         });
         const watch = ts.createWatchProgram(host);
         runWatchBaseline({
@@ -302,7 +297,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             createProgram,
             system: sys,
             cb,
-            jsDocParsingMode: undefined,
         });
         const watch = ts.createWatchProgram(host);
         watchBaseline({
@@ -364,7 +358,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             createProgram: ts.createSemanticDiagnosticsBuilderProgram,
             system: sys,
             cb,
-            jsDocParsingMode: undefined,
         });
         const watch = ts.createWatchProgram(host);
         runWatchBaseline({
@@ -482,7 +475,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             system: sys,
             reportDiagnostic,
             reportWatchStatus,
-            jsDocParsingMode: undefined,
         });
         host.afterProgramCreate = program => {
             const diagnostics = ts.sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
@@ -552,7 +544,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             system,
             configFileName: config2.path,
             optionsToExtend: { extendedDiagnostics: true },
-            jsDocParsingMode: undefined,
         });
         compilerHost.useSourceOfProjectReferenceRedirect = useSourceOfProjectReferenceRedirect;
         const calledGetParsedCommandLine = new Set<string>();
@@ -663,7 +654,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                 system,
                 configFileName: `/user/username/projects/myproject/tsconfig.json`,
                 optionsToExtend: { extendedDiagnostics: true },
-                jsDocParsingMode: undefined,
             });
             const originalEmitProgram = compilerHost.afterProgramCreate;
             compilerHost.afterProgramCreate = myAfterProgramCreate;
@@ -783,7 +773,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when creating program with project 
             options: commandLine.options,
             projectReferences: commandLine.projectReferences,
             watchOptions: commandLine.watchOptions,
-            jsDocParsingMode: undefined,
         });
         const watch = ts.createWatchProgram(compilerHost);
         return { watch, baseline };

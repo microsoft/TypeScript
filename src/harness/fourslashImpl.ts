@@ -2770,7 +2770,6 @@ export class TestState {
             options,
             /*version:*/ "0",
             /*setNodeParents*/ false,
-            /*jsDocParsingMode*/ undefined,
         );
         const referenceSyntaxDiagnostics = referenceSourceFile.parseDiagnostics;
 

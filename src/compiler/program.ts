@@ -395,7 +395,7 @@ export function computeCommonSourceDirectoryOfFilenames(fileNames: readonly stri
 }
 
 export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean, jsDocParsingMode?: JSDocParsingMode): CompilerHost {
-    return createCompilerHostWorker(options, jsDocParsingMode, setParentNodes);
+    return createCompilerHostWorker(options, setParentNodes, /*system*/ undefined, jsDocParsingMode);
 }
 
 /** @internal */
@@ -419,7 +419,7 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, jsDocParsingMode, setParentNodes, /*scriptKind*/ undefined) : undefined;
+        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, jsDocParsingMode) : undefined;
     };
 }
 
@@ -459,9 +459,9 @@ export function createWriteFileMeasuringIO(
 /** @internal */
 export function createCompilerHostWorker(
     options: CompilerOptions,
-    jsDocParsingMode: JSDocParsingMode | undefined,
     setParentNodes?: boolean,
     system: System = sys,
+    jsDocParsingMode?: JSDocParsingMode,
 ): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
     const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);

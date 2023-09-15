@@ -838,11 +838,11 @@ function performBuild(
         if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
         const buildHost = createSolutionBuilderWithWatchHost(
             sys,
-            jsDocParsingMode,
             /*createProgram*/ undefined,
             reportDiagnostic,
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createWatchStatusReporter(sys, buildOptions),
+            jsDocParsingMode,
         );
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
@@ -868,11 +868,11 @@ function performBuild(
 
     const buildHost = createSolutionBuilderHost(
         sys,
-        jsDocParsingMode,
         /*createProgram*/ undefined,
         reportDiagnostic,
         createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
         createReportErrorSummary(sys, buildOptions),
+        jsDocParsingMode,
     );
     const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
     updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
@@ -896,7 +896,7 @@ function performCompilation(
     config: ParsedCommandLine,
 ) {
     const { fileNames, options, projectReferences } = config;
-    const host = createCompilerHostWorker(options, jsDocParsingMode, /*setParentNodes*/ undefined, sys);
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys, jsDocParsingMode);
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -929,7 +929,7 @@ function performIncrementalCompilation(
 ) {
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
-    const host = createIncrementalCompilerHost(options, jsDocParsingMode, sys);
+    const host = createIncrementalCompilerHost(options, sys, jsDocParsingMode);
     const exitStatus = ts_performIncrementalCompilation({
         host,
         system: sys,
