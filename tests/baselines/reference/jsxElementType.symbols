@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxElementType.tsx ===
+//// [tests/cases/compiler/jsxElementType.tsx] ////
+
+=== jsxElementType.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
@@ -289,7 +291,13 @@ declare global {
   }
 }
 
-<a:b a="accepted" b="rejected" />;
+<a:b a="accepted" />;
 >a : Symbol(a, Decl(jsxElementType.tsx, 108, 4))
->b : Symbol(b, Decl(jsxElementType.tsx, 108, 17))
+
+<a:b b="rejected" />;
+>b : Symbol(b, Decl(jsxElementType.tsx, 109, 4))
+
+<a:b a="accepted" b="rejected" />;
+>a : Symbol(a, Decl(jsxElementType.tsx, 110, 4))
+>b : Symbol(b, Decl(jsxElementType.tsx, 110, 17))
 

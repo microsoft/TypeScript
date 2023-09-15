@@ -1,7 +1,7 @@
-tests/cases/compiler/FunctionDeclaration6.ts(3,14): error TS2389: Function implementation name must be 'foo'.
+FunctionDeclaration6.ts(3,14): error TS2389: Function implementation name must be 'foo'.
 
 
-==== tests/cases/compiler/FunctionDeclaration6.ts (1 errors) ====
+==== FunctionDeclaration6.ts (1 errors) ====
     {
         function foo();
         function bar() { }

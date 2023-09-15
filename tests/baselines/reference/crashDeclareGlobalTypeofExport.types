@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bar.d.ts ===
+//// [tests/cases/compiler/crashDeclareGlobalTypeofExport.ts] ////
+
+=== bar.d.ts ===
 import * as foo from './foo'
 >foo : { default: Root; }
 
@@ -16,7 +18,7 @@ declare global {
 >foo : Root
 }
 
-=== tests/cases/compiler/foo.d.ts ===
+=== foo.d.ts ===
 interface Root {
     /**
      * A .default property for ES6 default import compatibility

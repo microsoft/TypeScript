@@ -88,9 +88,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
 /a/b/file1consumer1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

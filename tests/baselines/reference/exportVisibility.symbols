@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportVisibility.ts ===
+//// [tests/cases/compiler/exportVisibility.ts] ////
+
+=== exportVisibility.ts ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(exportVisibility.ts, 0, 0))
 }

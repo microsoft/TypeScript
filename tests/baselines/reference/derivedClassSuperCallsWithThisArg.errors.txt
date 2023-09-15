@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(8,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(14,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperCallsWithThisArg.ts(8,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+derivedClassSuperCallsWithThisArg.ts(14,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts (2 errors) ====
+==== derivedClassSuperCallsWithThisArg.ts (2 errors) ====
     class Base {
         x: string;
         constructor(a) { }

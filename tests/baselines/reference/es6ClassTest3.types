@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ClassTest3.ts ===
+//// [tests/cases/compiler/es6ClassTest3.ts] ////
+
+=== es6ClassTest3.ts ===
 module M {	
 >M : typeof M
 

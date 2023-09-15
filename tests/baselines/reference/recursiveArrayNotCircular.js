@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveArrayNotCircular.ts] ////
+
 //// [recursiveArrayNotCircular.ts]
 type Action<T, P> = P extends void ? { type : T } : { type: T, payload: P }
 

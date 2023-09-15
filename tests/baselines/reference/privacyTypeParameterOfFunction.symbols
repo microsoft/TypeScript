@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyTypeParameterOfFunction.ts ===
+//// [tests/cases/compiler/privacyTypeParameterOfFunction.ts] ////
+
+=== privacyTypeParameterOfFunction.ts ===
 class privateClass {
 >privateClass : Symbol(privateClass, Decl(privacyTypeParameterOfFunction.ts, 0, 0))
 }

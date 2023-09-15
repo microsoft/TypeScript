@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope3.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope3.ts] ////
+
+=== typeParametersAvailableInNestedScope3.ts ===
 function foo<T>(v: T) {
 >foo : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; c: <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }; }
 >v : T

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxElementType.tsx ===
+//// [tests/cases/compiler/jsxElementType.tsx] ////
+
+=== jsxElementType.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
@@ -302,6 +304,18 @@ declare global {
       }
   }
 }
+
+<a:b a="accepted" />;
+><a:b a="accepted" /> : JSX.Element
+>a : any
+>b : any
+>a : string
+
+<a:b b="rejected" />;
+><a:b b="rejected" /> : JSX.Element
+>a : any
+>b : any
+>b : string
 
 <a:b a="accepted" b="rejected" />;
 ><a:b a="accepted" b="rejected" /> : JSX.Element

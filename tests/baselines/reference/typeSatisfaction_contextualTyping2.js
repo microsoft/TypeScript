@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping2.ts] ////
+
 //// [typeSatisfaction_contextualTyping2.ts]
 let obj: { f(s: string): void } & Record<string, unknown> = {
     f(s) { }, // "incorrect" implicit any on 's'

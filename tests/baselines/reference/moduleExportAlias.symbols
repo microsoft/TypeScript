@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.ts ===
+//// [tests/cases/conformance/salsa/moduleExportAlias.ts] ////
+
+=== a.ts ===
 import b = require("./b.js");
 >b : Symbol(b, Decl(a.ts, 0, 0))
 
@@ -103,10 +105,10 @@ b.func20;
 >func20 : Symbol(b.func20, Decl(b.js, 48, 33))
 
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 var exportsAlias = exports;
 >exportsAlias : Symbol(exportsAlias, Decl(b.js, 0, 3))
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 
 exportsAlias.func1 = function () { };
 >exportsAlias.func1 : Symbol(func1, Decl(b.js, 0, 27))
@@ -138,7 +140,7 @@ module.exports.func4 = function () { };
 
 var multipleDeclarationAlias1 = exports = module.exports;
 >multipleDeclarationAlias1 : Symbol(multipleDeclarationAlias1, Decl(b.js, 8, 3))
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 >module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 >module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol(module.exports, Decl(b.js, 0, 0))
@@ -153,7 +155,7 @@ var multipleDeclarationAlias2 = module.exports = exports;
 >module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 >module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol(module.exports, Decl(b.js, 0, 0))
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 
 multipleDeclarationAlias2.func6 = function () { };
 >multipleDeclarationAlias2.func6 : Symbol(func6, Decl(b.js, 11, 57))
@@ -166,7 +168,7 @@ var someOtherVariable;
 var multipleDeclarationAlias3 = someOtherVariable = exports;
 >multipleDeclarationAlias3 : Symbol(multipleDeclarationAlias3, Decl(b.js, 15, 3))
 >someOtherVariable : Symbol(someOtherVariable, Decl(b.js, 14, 3))
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 
 multipleDeclarationAlias3.func7 = function () { };
 >multipleDeclarationAlias3.func7 : Symbol(func7, Decl(b.js, 15, 60))
@@ -190,7 +192,7 @@ var multipleDeclarationAlias5 = module.exports = exports = {};
 >module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 >module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol(module.exports, Decl(b.js, 0, 0))
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 
 multipleDeclarationAlias5.func9 = function () { };
 >multipleDeclarationAlias5.func9 : Symbol(func9, Decl(b.js, 21, 62))
@@ -199,7 +201,7 @@ multipleDeclarationAlias5.func9 = function () { };
 
 var multipleDeclarationAlias6 = exports = module.exports = {};
 >multipleDeclarationAlias6 : Symbol(multipleDeclarationAlias6, Decl(b.js, 24, 3))
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 >module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 >module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol(module.exports, Decl(b.js, 0, 0))
@@ -210,7 +212,7 @@ multipleDeclarationAlias6.func10 = function () { };
 >func10 : Symbol(func10, Decl(b.js, 24, 62))
 
 exports = module.exports = someOtherVariable = {};
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 >module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 >module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol(module.exports, Decl(b.js, 0, 0))
@@ -229,7 +231,7 @@ module.exports.func12 = function () { };
 >func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 
 exports = module.exports = someOtherVariable = {};
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 >module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 >module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol(module.exports, Decl(b.js, 0, 0))
@@ -248,7 +250,7 @@ module.exports.func12 = function () { };
 >func12 : Symbol(func12, Decl(b.js, 28, 33), Decl(b.js, 32, 33))
 
 exports = module.exports = {};
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 >module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 >module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol(module.exports, Decl(b.js, 0, 0))
@@ -266,7 +268,7 @@ module.exports.func14 = function () { };
 >func14 : Symbol(func14, Decl(b.js, 36, 33))
 
 exports = module.exports = {};
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 >module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 >module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol(module.exports, Decl(b.js, 0, 0))
@@ -287,7 +289,7 @@ module.exports = exports = {};
 >module.exports : Symbol(module.exports, Decl(b.js, 0, 0))
 >module : Symbol(module, Decl(b.js, 4, 24))
 >exports : Symbol(module.exports, Decl(b.js, 0, 0))
->exports : Symbol("tests/cases/conformance/salsa/b", Decl(b.js, 0, 0))
+>exports : Symbol("b", Decl(b.js, 0, 0))
 
 exports.func17 = function () { };
 >exports.func17 : Symbol(func17, Decl(b.js, 43, 30))

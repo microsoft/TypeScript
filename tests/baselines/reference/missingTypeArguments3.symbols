@@ -1,4 +1,6 @@
-=== tests/cases/compiler/missingTypeArguments3.ts ===
+//// [tests/cases/compiler/missingTypeArguments3.ts] ////
+
+=== missingTypeArguments3.ts ===
 declare module linq {
 >linq : Symbol(linq, Decl(missingTypeArguments3.ts, 0, 0))
 

@@ -1,22 +1,22 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(13,16): error TS2300: Duplicate identifier 'CC1'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(14,7): error TS2300: Duplicate identifier 'CC1'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(16,7): error TS2300: Duplicate identifier 'CC2'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(17,16): error TS2300: Duplicate identifier 'CC2'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(25,24): error TS2300: Duplicate identifier 'DCC1'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(26,15): error TS2300: Duplicate identifier 'DCC1'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(28,15): error TS2300: Duplicate identifier 'DCC2'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(29,24): error TS2300: Duplicate identifier 'DCC2'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(31,1): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(32,1): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(33,1): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(34,1): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(35,1): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(37,1): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(38,1): error TS2511: Cannot create an instance of an abstract class.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(39,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractMergedDeclaration.ts(13,16): error TS2300: Duplicate identifier 'CC1'.
+classAbstractMergedDeclaration.ts(14,7): error TS2300: Duplicate identifier 'CC1'.
+classAbstractMergedDeclaration.ts(16,7): error TS2300: Duplicate identifier 'CC2'.
+classAbstractMergedDeclaration.ts(17,16): error TS2300: Duplicate identifier 'CC2'.
+classAbstractMergedDeclaration.ts(25,24): error TS2300: Duplicate identifier 'DCC1'.
+classAbstractMergedDeclaration.ts(26,15): error TS2300: Duplicate identifier 'DCC1'.
+classAbstractMergedDeclaration.ts(28,15): error TS2300: Duplicate identifier 'DCC2'.
+classAbstractMergedDeclaration.ts(29,24): error TS2300: Duplicate identifier 'DCC2'.
+classAbstractMergedDeclaration.ts(31,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractMergedDeclaration.ts(32,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractMergedDeclaration.ts(33,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractMergedDeclaration.ts(34,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractMergedDeclaration.ts(35,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractMergedDeclaration.ts(37,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractMergedDeclaration.ts(38,1): error TS2511: Cannot create an instance of an abstract class.
+classAbstractMergedDeclaration.ts(39,1): error TS2511: Cannot create an instance of an abstract class.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts (16 errors) ====
+==== classAbstractMergedDeclaration.ts (16 errors) ====
     abstract class CM {}
     module CM {}
     

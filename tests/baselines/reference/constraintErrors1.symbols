@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constraintErrors1.ts ===
+//// [tests/cases/compiler/constraintErrors1.ts] ////
+
+=== constraintErrors1.ts ===
 function foo5<T extends hm>(test: T) { }
 >foo5 : Symbol(foo5, Decl(constraintErrors1.ts, 0, 0))
 >T : Symbol(T, Decl(constraintErrors1.ts, 0, 14))

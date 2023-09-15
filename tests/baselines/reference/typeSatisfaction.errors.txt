@@ -1,12 +1,10 @@
-tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts(12,20): error TS1360: Type '{ a: number; b: number; }' does not satisfy the expected type 'I1'.
-  Object literal may only specify known properties, and 'b' does not exist in type 'I1'.
-tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts(13,16): error TS1360: Type '{}' does not satisfy the expected type 'I1'.
+typeSatisfaction.ts(12,20): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'I1'.
+typeSatisfaction.ts(13,16): error TS1360: Type '{}' does not satisfy the expected type 'I1'.
   Property 'a' is missing in type '{}' but required in type 'I1'.
-tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts(24,23): error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'A'.
-  Object literal may only specify known properties, and 'b' does not exist in type 'A'.
+typeSatisfaction.ts(24,23): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'A'.
 
 
-==== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts (3 errors) ====
+==== typeSatisfaction.ts (3 errors) ====
     interface I1 {
         a: number;
     }
@@ -20,13 +18,12 @@ tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts(24,23):
     const t1 = { a: 1 } satisfies I1; // Ok
     const t2 = { a: 1, b: 1 } satisfies I1; // Error
                        ~
-!!! error TS1360: Type '{ a: number; b: number; }' does not satisfy the expected type 'I1'.
-!!! error TS1360:   Object literal may only specify known properties, and 'b' does not exist in type 'I1'.
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'I1'.
     const t3 = { } satisfies I1; // Error
                    ~~~~~~~~~
 !!! error TS1360: Type '{}' does not satisfy the expected type 'I1'.
 !!! error TS1360:   Property 'a' is missing in type '{}' but required in type 'I1'.
-!!! related TS2728 tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts:2:5: 'a' is declared here.
+!!! related TS2728 typeSatisfaction.ts:2:5: 'a' is declared here.
     
     const t4: T1 = { a: "a" } satisfies T1; // Ok
     const t5 = (m => m.substring(0)) satisfies T2; // Ok
@@ -39,6 +36,5 @@ tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts(24,23):
     let t7 = { a: 'test' } satisfies A;
     let t8 = { a: 'test', b: 'test' } satisfies A;
                           ~
-!!! error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'A'.
-!!! error TS1360:   Object literal may only specify known properties, and 'b' does not exist in type 'A'.
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'A'.
     

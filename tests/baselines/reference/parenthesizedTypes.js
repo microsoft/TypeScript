@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/parenthesizedTypes.ts] ////
+
 //// [parenthesizedTypes.ts]
 var a: string;
 var a: (string);

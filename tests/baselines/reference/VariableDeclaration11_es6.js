@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/variableDeclarations/VariableDeclaration11_es6.ts] ////
+
 //// [VariableDeclaration11_es6.ts]
 "use strict";
 let

@@ -71,13 +71,13 @@ c:/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/project/tsconfig.json: *new*
+c:/a/lib/lib.d.ts: *new*
   {}
 c:/project/a.ts: *new*
   {}
 c:/project/b.ts: *new*
   {}
-c:/a/lib/lib.d.ts: *new*
+c:/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

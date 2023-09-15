@@ -30,17 +30,20 @@
 ////    </>
 ////);/*e*/
 
+const wordPattern =  "[a-zA-Z0-9:\\-\\._$]*";
+
 const startPos1 = test.markerByName("0").position;
 const endPos1 =  test.markerByName("3").position;
 const linkedCursors1 = {
     ranges: [{ start: startPos1, length: 0 }, { start: endPos1, length: 0 }],
-    // wordPattern : undefined
+    wordPattern,
 };
 
 const startPos2 = test.markerByName("10").position;
 const endPos2 =  test.markerByName("14").position;
 const linkedCursors2 = {
     ranges: [{ start: startPos2, length: 0 }, { start: endPos2, length: 0 }],
+    wordPattern,
 };
 
 verify.linkedEditing({

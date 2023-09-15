@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxElementType.tsx] ////
+
 //// [jsxElementType.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";
@@ -107,6 +109,8 @@ declare global {
   }
 }
 
+<a:b a="accepted" />;
+<a:b b="rejected" />;
 <a:b a="accepted" b="rejected" />;
 
 
@@ -241,4 +245,6 @@ function f1(Component) {
 }
 React.createElement(Unresolved, null);
 React.createElement(Unresolved, { foo: "abc" });
+React.createElement("a:b", { a: "accepted" });
+React.createElement("a:b", { b: "rejected" });
 React.createElement("a:b", { a: "accepted", b: "rejected" });

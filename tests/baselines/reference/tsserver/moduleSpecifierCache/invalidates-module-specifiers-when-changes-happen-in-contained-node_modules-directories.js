@@ -119,7 +119,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json: *new*
+/package.json: *new*
   {}
 /src/ambient.d.ts: *new*
   {}
@@ -129,13 +129,13 @@ FsWatches::
   {}
 /src/c.ts: *new*
   {}
-/package.json: *new*
+/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/src: *new*
-  {}
 /node_modules: *new*
+  {}
+/src: *new*
   {}
 
 Before request
@@ -176,7 +176,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/package.json:
   {}
 /src/ambient.d.ts:
   {}
@@ -184,7 +184,7 @@ FsWatches::
   {}
 /src/c.ts:
   {}
-/package.json:
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -192,9 +192,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/src:
-  {}
 /node_modules:
+  {}
+/src:
   {}
 
 Before request
@@ -237,13 +237,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/tsconfig.json:
+/package.json:
   {}
 /src/ambient.d.ts:
   {}
 /src/b-link.ts:
   {}
-/package.json:
+/tsconfig.json:
   {}
 
 FsWatches *deleted*::
@@ -251,9 +251,9 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/src:
-  {}
 /node_modules:
+  {}
+/src:
   {}
 
 Before request
@@ -273,7 +273,17 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
-    {"seq":0,"type":"response","command":"configure","request_seq":4,"success":true,"performanceData":{"updateGraphDurationMs":*,"createAutoImportProviderProgramDurationMs":*}}
+    {
+     "seq": 0,
+     "type": "response",
+     "command": "configure",
+     "request_seq": 4,
+     "success": true,
+     "performanceData": {
+      "updateGraphDurationMs": *,
+      "createAutoImportProviderProgramDurationMs": *
+     }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -727,7 +737,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/src/a",
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "fileName": "/src/a.ts"
             }
           }
@@ -796,7 +806,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "foo",
-              "exportMapKey": "foo|*|",
+              "exportMapKey": "3 * foo ",
               "moduleSpecifier": "./a",
               "fileName": "/src/a.ts"
             }
@@ -829,7 +839,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "observable",
-              "exportMapKey": "observable|*|",
+              "exportMapKey": "10 * observable ",
               "moduleSpecifier": "mobx",
               "fileName": "/node_modules/mobx/index.d.ts",
               "isPackageJsonImport": true

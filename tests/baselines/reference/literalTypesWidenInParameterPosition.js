@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts] ////
+
 //// [literalTypesWidenInParameterPosition.ts]
 class D {
     readonly noWiden = 1

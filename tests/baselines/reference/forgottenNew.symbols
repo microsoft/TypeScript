@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/forgottenNew.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/forgottenNew.ts] ////
+
+=== forgottenNew.ts ===
 module Tools {
 >Tools : Symbol(Tools, Decl(forgottenNew.ts, 0, 0))
 

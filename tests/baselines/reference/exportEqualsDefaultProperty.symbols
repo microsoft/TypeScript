@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exp.ts ===
+//// [tests/cases/compiler/exportEqualsDefaultProperty.ts] ////
+
+=== exp.ts ===
 var x = {
 >x : Symbol(x, Decl(exp.ts, 0, 3))
 
@@ -13,7 +15,7 @@ var x = {
 export = x
 >x : Symbol(x, Decl(exp.ts, 0, 3))
 
-=== tests/cases/compiler/imp.ts ===
+=== imp.ts ===
 import foo from "./exp";
 >foo : Symbol(foo, Decl(imp.ts, 0, 6))
 

@@ -50,7 +50,15 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/projects/b/b.ts :: Config file
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/b/tsconfig.json 2000 undefined Project: /user/username/projects/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectLoadingStart","body":{"project":"/user/username/projects/b/tsconfig.json","reason":"Creating possible configured project for /user/username/projects/b/b.ts to open"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectLoadingStart",
+     "body": {
+      "project": "/user/username/projects/b/tsconfig.json",
+      "reason": "Creating possible configured project for /user/username/projects/b/b.ts to open"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/b/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/b/b.ts"
@@ -102,11 +110,78 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectLoadingFinish","body":{"project":"/user/username/projects/b/tsconfig.json"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectLoadingFinish",
+     "body": {
+      "project": "/user/username/projects/b/tsconfig.json"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectInfo","body":{"projectId":"20501ec57de369fa110ede8c3db8fe97460676d82a7b594783e32439eba20158","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":52,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectInfo",
+     "body": {
+      "projectId": "20501ec57de369fa110ede8c3db8fe97460676d82a7b594783e32439eba20158",
+      "fileStats": {
+       "js": 0,
+       "jsSize": 0,
+       "jsx": 0,
+       "jsxSize": 0,
+       "ts": 2,
+       "tsSize": 52,
+       "tsx": 0,
+       "tsxSize": 0,
+       "dts": 1,
+       "dtsSize": 334,
+       "deferred": 0,
+       "deferredSize": 0
+      },
+      "compilerOptions": {},
+      "typeAcquisition": {
+       "enable": false,
+       "include": false,
+       "exclude": false
+      },
+      "extends": false,
+      "files": false,
+      "include": false,
+      "exclude": false,
+      "compileOnSave": false,
+      "configFileName": "tsconfig.json",
+      "projectType": "configured",
+      "languageServiceEnabled": true,
+      "version": "FakeVersion"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::configFileDiag","body":{"configFileName":"/user/username/projects/b/tsconfig.json","diagnostics":[{"start":{"line":1,"offset":16},"end":{"line":1,"offset":31},"text":"Referenced project '/user/username/projects/a' must have setting \"composite\": true.","code":6306,"category":"error","fileName":"/user/username/projects/b/tsconfig.json"}],"triggerFile":"/user/username/projects/b/b.ts"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::configFileDiag",
+     "body": {
+      "configFileName": "/user/username/projects/b/tsconfig.json",
+      "diagnostics": [
+       {
+        "start": {
+         "line": 1,
+         "offset": 16
+        },
+        "end": {
+         "line": 1,
+         "offset": 31
+        },
+        "text": "Referenced project '/user/username/projects/a' must have setting \"composite\": true.",
+        "code": 6306,
+        "category": "error",
+        "fileName": "/user/username/projects/b/tsconfig.json"
+       }
+      ],
+      "triggerFile": "/user/username/projects/b/b.ts"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -127,19 +202,19 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/b/tsconfig.json: *new*
-  {}
-/user/username/projects/a/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/a/a.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/a/tsconfig.json: *new*
+  {}
+/user/username/projects/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/b: *new*
-  {}
 /user/username/projects/a: *new*
+  {}
+/user/username/projects/b: *new*
   {}
 
 Before request
@@ -160,7 +235,15 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/a/a.ts :: Config file name: /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectLoadingStart","body":{"project":"/user/username/projects/a/tsconfig.json","reason":"Creating project for original file: /user/username/projects/a/a.ts"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectLoadingStart",
+     "body": {
+      "project": "/user/username/projects/a/tsconfig.json",
+      "reason": "Creating project for original file: /user/username/projects/a/a.ts"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Type roots
@@ -180,9 +263,52 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectLoadingFinish","body":{"project":"/user/username/projects/a/tsconfig.json"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectLoadingFinish",
+     "body": {
+      "project": "/user/username/projects/a/tsconfig.json"
+     }
+    }
 Info seq  [hh:mm:ss:mss] event:
-    {"seq":0,"type":"event","event":"CustomHandler::projectInfo","body":{"projectId":"20a91f8dffe761e39e0ada0a62a3058faad15d4a8c135539aaccd61bb5497dea","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":1,"tsSize":18,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":false,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}
+    {
+     "seq": 0,
+     "type": "event",
+     "event": "CustomHandler::projectInfo",
+     "body": {
+      "projectId": "20a91f8dffe761e39e0ada0a62a3058faad15d4a8c135539aaccd61bb5497dea",
+      "fileStats": {
+       "js": 0,
+       "jsSize": 0,
+       "jsx": 0,
+       "jsxSize": 0,
+       "ts": 1,
+       "tsSize": 18,
+       "tsx": 0,
+       "tsxSize": 0,
+       "dts": 1,
+       "dtsSize": 334,
+       "deferred": 0,
+       "deferredSize": 0
+      },
+      "compilerOptions": {},
+      "typeAcquisition": {
+       "enable": false,
+       "include": false,
+       "exclude": false
+      },
+      "extends": false,
+      "files": false,
+      "include": false,
+      "exclude": false,
+      "compileOnSave": false,
+      "configFileName": "tsconfig.json",
+      "projectType": "configured",
+      "languageServiceEnabled": true,
+      "version": "FakeVersion"
+     }
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/a
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/a/a.ts :: Config file name: /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/a/a.ts position 13 in project /user/username/projects/a/tsconfig.json
@@ -255,25 +381,25 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/a/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/b/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/b/tsconfig.json:
-  {}
-/user/username/projects/a/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/a/a.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/a/tsconfig.json:
+  {}
+/user/username/projects/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/b:
-  {}
 /user/username/projects/a:
+  {}
+/user/username/projects/b:
   {}

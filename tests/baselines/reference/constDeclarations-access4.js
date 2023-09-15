@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-access4.ts] ////
+
 //// [constDeclarations-access4.ts]
 declare module M {
     const x: number;

@@ -212,3 +212,17 @@ function f1x(obj: (string | number)[] | null) {
     assertRelationIsNullOrStringArray(obj);
     obj;  // string[] | null
 }
+
+// Repro from #55425
+
+type MyDiscriminatedUnion = { type: 'A', aProp: number } | { type: 'B', bProp: string };
+
+declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
+
+declare const working: unknown;
+declare const broken: Record<string, any> | undefined;
+declare const workingAgain: Record<string, any> | undefined | unknown;
+
+isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
+isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
+isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp;
