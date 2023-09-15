@@ -71,7 +71,6 @@ import {
     isReferencedFile,
     isReferenceFileLocation,
     isString,
-    JSDocParsingMode,
     last,
     maybeBind,
     memoize,
@@ -971,12 +970,11 @@ export interface IncrementalCompilationOptions {
     reportErrorSummary?: ReportEmitErrorSummary;
     afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
     system?: System;
-    jsDocParsingMode?: JSDocParsingMode;
 }
 /** @internal */
 export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
     const system = input.system || sys;
-    const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system, input.jsDocParsingMode));
+    const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
     const builderProgram = createIncrementalProgram(input);
     const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
         builderProgram,
