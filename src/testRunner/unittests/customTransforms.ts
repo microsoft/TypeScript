@@ -4,7 +4,7 @@ import * as ts from "../_namespaces/ts";
 describe("unittests:: customTransforms", () => {
     function emitsCorrectly(name: string, sources: { file: string; text: string; }[], customTransformers: ts.CustomTransformers, options: ts.CompilerOptions = {}) {
         it(name, () => {
-            const roots = sources.map(source => ts.createSourceFile(source.file, source.text, ts.ScriptTarget.ES2015));
+            const roots = sources.map(source => ts.createSourceFile(source.file, source.text, ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined));
             const fileMap = ts.arrayToMap(roots, file => file.fileName);
             const outputs = new Map<string, string>();
             const host: ts.CompilerHost = {

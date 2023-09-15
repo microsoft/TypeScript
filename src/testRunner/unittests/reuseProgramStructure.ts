@@ -586,6 +586,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
                 options,
                 watchOptions: undefined,
                 system,
+                jsDocParsingMode: undefined,
             })).getCurrentProgram().getProgram();
             verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
         }
@@ -594,6 +595,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfConfigFile({
                 configFileName,
                 system,
+                jsDocParsingMode: undefined,
             })).getCurrentProgram().getProgram();
             const { fileNames, options } = ts.parseConfigFileWithSystem(configFileName, {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, ts.notImplemented)!; // TODO: GH#18217
             verifyProgramIsUptoDate(program, fileNames, options);
@@ -738,6 +740,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
                 options,
                 watchOptions: undefined,
                 system,
+                jsDocParsingMode: undefined,
             })).getCurrentProgram().getProgram();
             verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
         });
@@ -773,6 +776,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
                 options,
                 watchOptions: undefined,
                 system,
+                jsDocParsingMode: undefined,
             })).getCurrentProgram().getProgram();
             verifyProgramIsNotUptoDate(program, duplicate(newRootFiles), duplicate(options));
         });
@@ -798,6 +802,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
                 options,
                 watchOptions: undefined,
                 system,
+                jsDocParsingMode: undefined,
             })).getCurrentProgram().getProgram();
             verifyProgramIsNotUptoDate(program, duplicate(newRootFiles), duplicate(options));
         });

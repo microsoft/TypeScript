@@ -1363,7 +1363,7 @@ class SyntaxTreeCache {
                 ),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings()),
             };
-            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind, this.host.getJSDocParsingMode?.());
+            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, this.host.jsDocParsingMode, scriptKind);
         }
         else if (this.currentFileVersion !== version) {
             // This is the same file, just a newer version. Incrementally parse the file.
@@ -1394,10 +1394,10 @@ export function createLanguageServiceSourceFile(
     scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions,
     version: string,
     setNodeParents: boolean,
+    jsDocParsingMode: JSDocParsingMode | undefined,
     scriptKind?: ScriptKind,
-    jsDocParsingMode?: JSDocParsingMode,
 ): SourceFile {
-    const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind, jsDocParsingMode);
+    const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, jsDocParsingMode, setNodeParents, scriptKind);
     setSourceFileFields(sourceFile, scriptSnapshot, version);
     return sourceFile;
 }
@@ -1459,7 +1459,7 @@ export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSn
         setExternalModuleIndicator: sourceFile.setExternalModuleIndicator,
     };
     // Otherwise, just create a new source file.
-    return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind, sourceFile.jsDocParsingMode);
+    return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.jsDocParsingMode, sourceFile.scriptKind);
 }
 
 const NoopCancellationToken: CancellationToken = {

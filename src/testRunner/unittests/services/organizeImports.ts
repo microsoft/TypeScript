@@ -993,14 +993,14 @@ export * from "lib";
     });
 
     function parseImports(...importStrings: string[]): readonly ts.ImportDeclaration[] {
-        const sourceFile = ts.createSourceFile("a.ts", importStrings.join("\n"), ts.ScriptTarget.ES2015, /*setParentNodes*/ true, ts.ScriptKind.TS);
+        const sourceFile = ts.createSourceFile("a.ts", importStrings.join("\n"), ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true, ts.ScriptKind.TS);
         const imports = ts.filter(sourceFile.statements, ts.isImportDeclaration);
         assert.equal(imports.length, importStrings.length);
         return imports;
     }
 
     function parseExports(...exportStrings: string[]): readonly ts.ExportDeclaration[] {
-        const sourceFile = ts.createSourceFile("a.ts", exportStrings.join("\n"), ts.ScriptTarget.ES2015, /*setParentNodes*/ true, ts.ScriptKind.TS);
+        const sourceFile = ts.createSourceFile("a.ts", exportStrings.join("\n"), ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true, ts.ScriptKind.TS);
         const exports = ts.filter(sourceFile.statements, ts.isExportDeclaration);
         assert.equal(exports.length, exportStrings.length);
         return exports;

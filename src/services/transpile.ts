@@ -20,6 +20,7 @@ import {
     getSetExternalModuleIndicator,
     hasProperty,
     isString,
+    JSDocParsingMode,
     MapLike,
     normalizePath,
     optionDeclarations,
@@ -121,6 +122,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
             impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
             setExternalModuleIndicator: getSetExternalModuleIndicator(options),
         },
+        JSDocParsingMode.SkipAll,
     );
     if (transpileOptions.moduleName) {
         sourceFile.moduleName = transpileOptions.moduleName;

@@ -56,6 +56,7 @@ describe("unittests:: PrinterAPI", () => {
                         function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
                     `,
                     ts.ScriptTarget.ES2015,
+                    /*jsDocParsingMode*/ undefined,
                 );
             });
             printsCorrectly("default", {}, printer => printer.printFile(sourceFile));
@@ -64,18 +65,19 @@ describe("unittests:: PrinterAPI", () => {
 
         // https://github.com/microsoft/TypeScript/issues/14948
         // eslint-disable-next-line no-template-curly-in-string
-        printsCorrectly("templateLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017)));
+        printsCorrectly("templateLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ts.ScriptTarget.ES2017, /*jsDocParsingMode*/ undefined)));
 
         // https://github.com/microsoft/TypeScript/issues/18071
-        printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017)));
+        printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(ts.createSourceFile("source.ts", "let regex = /abc/;", ts.ScriptTarget.ES2017, /*jsDocParsingMode*/ undefined)));
 
         // https://github.com/microsoft/TypeScript/issues/22239
-        printsCorrectly("importStatementRemoveComments", { removeComments: true }, printer => printer.printFile(ts.createSourceFile("source.ts", "import {foo} from 'foo';", ts.ScriptTarget.ESNext)));
+        printsCorrectly("importStatementRemoveComments", { removeComments: true }, printer => printer.printFile(ts.createSourceFile("source.ts", "import {foo} from 'foo';", ts.ScriptTarget.ESNext, /*jsDocParsingMode*/ undefined)));
         printsCorrectly("classHeritageClauses", {}, printer =>
             printer.printFile(ts.createSourceFile(
                 "source.ts",
                 `class A extends B implements C implements D {}`,
                 ts.ScriptTarget.ES2017,
+                /*jsDocParsingMode*/ undefined,
             )));
 
         // https://github.com/microsoft/TypeScript/issues/35093
@@ -88,6 +90,7 @@ describe("unittests:: PrinterAPI", () => {
 
                 let x!: string;`,
                 ts.ScriptTarget.ES2017,
+                /*jsDocParsingMode*/ undefined,
             )));
 
         // https://github.com/microsoft/TypeScript/issues/35054
@@ -96,6 +99,7 @@ describe("unittests:: PrinterAPI", () => {
                 "source.ts",
                 String.raw`<a x='\\"'/>`,
                 ts.ScriptTarget.ESNext,
+                /*jsDocParsingMode*/ undefined,
                 /*setParentNodes*/ undefined,
                 ts.ScriptKind.TSX,
             ));
@@ -147,6 +151,7 @@ describe("unittests:: PrinterAPI", () => {
                         const a = 1;
                     `,
                     ts.ScriptTarget.ES2015,
+                    /*jsDocParsingMode*/ undefined,
                 ),
                 ts.createSourceFile(
                     "b.ts",
@@ -157,6 +162,7 @@ describe("unittests:: PrinterAPI", () => {
                         const b = 2;
                     `,
                     ts.ScriptTarget.ES2015,
+                    /*jsDocParsingMode*/ undefined,
                 ),
             ]);
         });
@@ -182,14 +188,14 @@ describe("unittests:: PrinterAPI", () => {
                         /*initializer*/ undefined,
                     )],
                 ),
-                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined),
             ));
 
         printsCorrectly("namespaceExportDeclaration", {}, printer =>
             printer.printNode(
                 ts.EmitHint.Unspecified,
                 ts.factory.createNamespaceExportDeclaration("B"),
-                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined),
             ));
 
         printsCorrectly("newExpressionWithPropertyAccessOnCallExpression", {}, printer =>
@@ -203,7 +209,7 @@ describe("unittests:: PrinterAPI", () => {
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ undefined,
                 ),
-                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext, /*jsDocParsingMode*/ undefined),
             ));
 
         printsCorrectly("newExpressionOnConditionalExpression", {}, printer =>
@@ -220,7 +226,7 @@ describe("unittests:: PrinterAPI", () => {
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ undefined,
                 ),
-                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ESNext, /*jsDocParsingMode*/ undefined),
             ));
 
         printsCorrectly("emptyGlobalAugmentation", {}, printer =>
@@ -232,7 +238,7 @@ describe("unittests:: PrinterAPI", () => {
                     ts.factory.createModuleBlock(ts.emptyArray),
                     ts.NodeFlags.GlobalAugmentation,
                 ),
-                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined),
             ));
 
         printsCorrectly("emptyGlobalAugmentationWithNoDeclareKeyword", {}, printer =>
@@ -244,7 +250,7 @@ describe("unittests:: PrinterAPI", () => {
                     ts.factory.createModuleBlock(ts.emptyArray),
                     ts.NodeFlags.GlobalAugmentation,
                 ),
-                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined),
             ));
 
         // https://github.com/Microsoft/TypeScript/issues/15971
@@ -276,7 +282,7 @@ describe("unittests:: PrinterAPI", () => {
                         ),
                     ],
                 ),
-                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined),
             ));
 
         // https://github.com/Microsoft/TypeScript/issues/15651
@@ -345,7 +351,7 @@ describe("unittests:: PrinterAPI", () => {
                     ]),
                     ts.EmitFlags.SingleLine,
                 ),
-                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015),
+                ts.createSourceFile("source.ts", "", ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined),
             ));
     });
 });

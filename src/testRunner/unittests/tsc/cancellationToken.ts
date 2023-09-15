@@ -66,7 +66,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                 sys,
                 reportDiagnostic,
             )!;
-            const host = ts.createIncrementalCompilerHost(parsedConfig.options, sys);
+            const host = ts.createIncrementalCompilerHost(parsedConfig.options, /*jsDocParsingMode*/ undefined, sys);
             let programs: CommandLineProgram[] = ts.emptyArray;
             let oldPrograms: CommandLineProgram[] = ts.emptyArray;
             let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram = undefined!;

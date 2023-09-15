@@ -172,7 +172,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                     options: command.options,
                     projectReferences: command.projectReferences,
                     configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(command),
-                    host: ts.createIncrementalCompilerHost(command.options, system),
+                    host: ts.createIncrementalCompilerHost(command.options, /*jsDocParsingMode*/ undefined, system),
                 });
 
                 const state = builderProgram.getState();

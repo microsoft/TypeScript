@@ -16,6 +16,7 @@ import {
     identity,
     IScriptSnapshot,
     isDeclarationFileName,
+    JSDocParsingMode,
     MinimalResolutionCacheHost,
     Path,
     ResolutionMode,
@@ -178,14 +179,14 @@ export function isDocumentRegistryEntry(entry: BucketEntry): entry is DocumentRe
     return !!(entry as DocumentRegistryEntry).sourceFile;
 }
 
-export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry {
-    return createDocumentRegistryInternal(useCaseSensitiveFileNames, currentDirectory);
+export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string, jsDocParsingMode?: JSDocParsingMode): DocumentRegistry {
+    return createDocumentRegistryInternal(useCaseSensitiveFileNames, currentDirectory, jsDocParsingMode);
 }
 
 /** @internal */
 export type DocumentRegistryBucketKeyWithMode = string & { __documentRegistryBucketKeyWithMode: any; };
 /** @internal */
-export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache): DocumentRegistry {
+export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", jsDocParsingMode?: JSDocParsingMode, externalCache?: ExternalDocumentCache): DocumentRegistry {
     // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
     // for those settings.
     const buckets = new Map<DocumentRegistryBucketKeyWithMode, Map<Path, BucketEntry>>();
@@ -309,7 +310,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
 
         if (!entry) {
             // Have never seen this file with these settings.  Create a new source file for it.
-            const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, sourceFileOptions, version, /*setNodeParents*/ false, scriptKind);
+            const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, sourceFileOptions, version, /*setNodeParents*/ false, jsDocParsingMode, scriptKind);
             if (externalCache) {
                 externalCache.setDocument(keyWithMode, path, sourceFile);
             }

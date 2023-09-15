@@ -60,7 +60,7 @@ describe("unittests:: Public APIs:: JSDoc newlines", () => {
 */
 function test() {}`;
 
-        const testSourceFile = ts.createSourceFile(testFilePath, testFileText, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
+        const testSourceFile = ts.createSourceFile(testFilePath, testFileText, ts.ScriptTarget.Latest, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true);
         const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
         const tags = ts.getJSDocTags(funcDec);
         assert.isDefined(tags[0].comment);
@@ -207,7 +207,7 @@ describe("unittests:: Public APIs :: forEachChild of @param comments in JSDoc", 
  */
 var x
 `;
-        const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true);
         const paramTag = sourceFile.getChildren()[0].getChildren()[0].getChildren()[0].getChildren()[0];
         const kids = paramTag.getChildren();
         const seen = new Set<ts.Node>();
@@ -224,7 +224,7 @@ describe("unittests:: Public APIs:: getChild* methods on EndOfFileToken with JSD
         const content = `
 /** jsdoc comment attached to EndOfFileToken */
 `;
-        const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true);
         const endOfFileToken = sourceFile.getChildren()[1];
         assert.equal(endOfFileToken.getChildren().length, 1);
         assert.equal(endOfFileToken.getChildCount(), 1);

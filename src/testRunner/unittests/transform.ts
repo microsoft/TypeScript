@@ -79,7 +79,7 @@ describe("unittests:: TransformAPI", () => {
     }
 
     function transformSourceFile(sourceText: string, transformers: ts.TransformerFactory<ts.SourceFile>[]) {
-        const transformed = ts.transform(ts.createSourceFile("source.ts", sourceText, ts.ScriptTarget.ES2015), transformers);
+        const transformed = ts.transform(ts.createSourceFile("source.ts", sourceText, ts.ScriptTarget.ES2015, /*jsDocParsingMode*/ undefined), transformers);
         const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed }, {
             onEmitNode: transformed.emitNodeWithNotification,
             substituteNode: transformed.substituteNode,
@@ -592,7 +592,7 @@ module MyModule {
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ true);
-        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES3), [transformSourceFile]);
+        const transformed = ts.transform(ts.createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ts.ScriptTarget.ES3, /*jsDocParsingMode*/ undefined), [transformSourceFile]);
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
         const host = new fakes.CompilerHost(fs);

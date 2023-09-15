@@ -394,8 +394,8 @@ export function computeCommonSourceDirectoryOfFilenames(fileNames: readonly stri
     return getPathFromPathComponents(commonPathComponents);
 }
 
-export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
-    return createCompilerHostWorker(options, setParentNodes);
+export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean, jsDocParsingMode?: JSDocParsingMode): CompilerHost {
+    return createCompilerHostWorker(options, jsDocParsingMode, setParentNodes);
 }
 
 /** @internal */
@@ -403,7 +403,7 @@ export function createGetSourceFile(
     readFile: ProgramHost<any>["readFile"],
     getCompilerOptions: () => CompilerOptions,
     setParentNodes: boolean | undefined,
-    getJSDocParsingMode: (() => JSDocParsingMode | undefined) | undefined,
+    jsDocParsingMode: JSDocParsingMode | undefined,
 ): CompilerHost["getSourceFile"] {
     return (fileName, languageVersionOrOptions, onError) => {
         let text: string | undefined;
@@ -419,7 +419,7 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, getJSDocParsingMode?.()) : undefined;
+        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, jsDocParsingMode, setParentNodes, /*scriptKind*/ undefined) : undefined;
     };
 }
 
@@ -459,8 +459,8 @@ export function createWriteFileMeasuringIO(
 /** @internal */
 export function createCompilerHostWorker(
     options: CompilerOptions,
+    jsDocParsingMode: JSDocParsingMode | undefined,
     setParentNodes?: boolean,
-    jsDocParsingMode?: JSDocParsingMode,
     system: System = sys,
 ): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
@@ -483,7 +483,7 @@ export function createCompilerHostWorker(
     const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
-        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, () => jsDocParsingMode),
+        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, jsDocParsingMode),
         getDefaultLibLocation,
         getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
         writeFile: createWriteFileMeasuringIO(

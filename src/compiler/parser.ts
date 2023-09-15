@@ -1329,9 +1329,9 @@ export function createSourceFile(
     fileName: string,
     sourceText: string,
     languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions,
+    jsDocParsingMode: JSDocParsingMode | undefined,
     setParentNodes = false,
     scriptKind?: ScriptKind,
-    jsDocParsingMode?: JSDocParsingMode,
 ): SourceFile {
     tracing?.push(tracing.Phase.Parse, "createSourceFile", { path: fileName }, /*separateBeginAndEnd*/ true);
     performance.mark("beforeParse");

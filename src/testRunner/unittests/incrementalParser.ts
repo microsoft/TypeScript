@@ -17,7 +17,7 @@ function withDelete(text: ts.IScriptSnapshot, start: number, length: number): { 
 }
 
 function createTree(text: ts.IScriptSnapshot, version: string) {
-    return ts.createLanguageServiceSourceFile(/*fileName:*/ "", text, ts.ScriptTarget.Latest, version, /*setNodeParents*/ true);
+    return ts.createLanguageServiceSourceFile(/*fileName:*/ "", text, ts.ScriptTarget.Latest, version, /*setNodeParents*/ true, /*jsDocParsingMode*/ undefined);
 }
 
 function assertSameDiagnostics(file1: ts.SourceFile, file2: ts.SourceFile) {

@@ -6,7 +6,7 @@ import {
 function testExtractRangeFailed(caption: string, s: string, expectedErrors: string[]) {
     return it(caption, () => {
         const t = extractTest(s);
-        const file = ts.createSourceFile("a.ts", t.source, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
+        const file = ts.createSourceFile("a.ts", t.source, ts.ScriptTarget.Latest, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true);
         const selectionRange = t.ranges.get("selection");
         if (!selectionRange) {
             throw new Error(`Test ${s} does not specify selection range`);
@@ -21,7 +21,7 @@ function testExtractRangeFailed(caption: string, s: string, expectedErrors: stri
 function testExtractRange(caption: string, s: string) {
     return it(caption, () => {
         const t = extractTest(s);
-        const f = ts.createSourceFile("a.ts", t.source, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
+        const f = ts.createSourceFile("a.ts", t.source, ts.ScriptTarget.Latest, /*jsDocParsingMode*/ undefined, /*setParentNodes*/ true);
         const selectionRange = t.ranges.get("selection");
         if (!selectionRange) {
             throw new Error(`Test ${s} does not specify selection range`);

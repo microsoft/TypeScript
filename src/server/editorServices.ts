@@ -1000,8 +1000,7 @@ export class ProjectService {
 
     /** @internal */ verifyDocumentRegistry = noop;
 
-    /** @internal */
-    private readonly jsDocParsingMode: JSDocParsingMode | undefined;
+    readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
     constructor(opts: ProjectServiceOptions) {
         this.host = opts.host;
@@ -1055,7 +1054,7 @@ export class ProjectService {
             extraFileExtensions: [],
         };
 
-        this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this);
+        this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this.jsDocParsingMode, this);
         const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
             this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
         const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
@@ -4578,10 +4577,6 @@ export class ProjectService {
     /** @internal */
     getIncompleteCompletionsCache() {
         return this.incompleteCompletionsCache ||= createIncompleteCompletionsCache();
-    }
-
-    getJSDocParsingMode() {
-        return this.jsDocParsingMode;
     }
 }
 

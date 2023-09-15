@@ -12,6 +12,7 @@ describe("unittests:: services:: utilities", () => {
   const core = window.Abcd.core;
 })();`,
                 ts.ScriptTarget.ESNext,
+                /*jsDocParsingMode*/ undefined,
                 /*setParentNodes*/ true,
             );
             // can't use ts.getTokenAtPosition because it returns back the wrong token
