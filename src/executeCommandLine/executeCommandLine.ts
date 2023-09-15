@@ -1015,7 +1015,6 @@ function createWatchOfConfigFile(
     updateWatchCompilationHost(system, cb, watchCompilerHost);
     watchCompilerHost.configFileParsingResult = configParseResult;
     watchCompilerHost.extendedConfigCache = extendedConfigCache;
-    watchCompilerHost.jsDocParsingMode = jsDocParsingMode;
     return createWatchProgram(watchCompilerHost);
 }
 
@@ -1036,7 +1035,6 @@ function createWatchOfFilesAndCompilerOptions(
         reportWatchStatus: createWatchStatusReporter(system, options),
     });
     updateWatchCompilationHost(system, cb, watchCompilerHost);
-    watchCompilerHost.jsDocParsingMode = jsDocParsingMode;
     return createWatchProgram(watchCompilerHost);
 }
 
