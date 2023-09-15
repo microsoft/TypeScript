@@ -1112,7 +1112,7 @@ function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: 
  * @internal
  */
 export function sort<T>(array: readonly T[], comparer?: Comparer<T>): SortedReadonlyArray<T> {
-    return (array.length === 0 ? array : array.slice().sort(comparer)) as SortedReadonlyArray<T>;
+    return (array.length === 0 ? emptyArray : array.slice().sort(comparer)) as readonly T[] as SortedReadonlyArray<T>;
 }
 
 /** @internal */
