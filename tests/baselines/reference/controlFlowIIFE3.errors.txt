@@ -1,0 +1,14 @@
+controlFlowIIFE3.ts(2,3): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+
+
+==== controlFlowIIFE3.ts (1 errors) ====
+    class Foo {
+      prop: number; // currently there's an error with strictPropertyInitialization
+      ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+    
+      constructor() {
+        (async () => (this.prop = await 1))();
+      }
+    }
+    

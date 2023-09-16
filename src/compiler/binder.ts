@@ -1002,10 +1002,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const iife = containerFlags & ContainerFlags.IsFunctionExpression &&
                 !(node as FunctionLikeDeclaration).asteriskToken &&
                 getImmediatelyInvokedFunctionExpression(node);
-            const isFloatingAsyncIIFE = iife && hasSyntacticModifier(node, ModifierFlags.Async) && !isAwaited(iife.parent);
+            const isFloatingAsyncIIFE = iife && hasSyntacticModifier(node, ModifierFlags.Async) && !isAwaited(iife);
             const isImmediatelyInvoked = iife || node.kind === SyntaxKind.ClassStaticBlockDeclaration;
-            // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
-            // similarly to break statements that exit to a label just past the statement body.
+            // A non-generator IIFE is considered part of the containing control flow. Return statements in non-async functions and
+            // awaited async functions behave similarly to break statements that exit to a label just past the statement body.
             if (!isImmediatelyInvoked) {
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)) {

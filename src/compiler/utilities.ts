@@ -555,6 +555,7 @@ import {
     VariableLikeDeclaration,
     VariableStatement,
     version,
+    walkUpOuterExpressions,
     WhileStatement,
     WithStatement,
     WrappedExpression,
@@ -3080,11 +3081,8 @@ export function getImmediatelyInvokedFunctionExpression(func: Node): CallExpress
 }
 
 /** @internal */
-export function isAwaited(node: Node): boolean {
-    while(node.kind === SyntaxKind.ParenthesizedExpression) {
-        node = node.parent;
-    }
-    return node.kind === SyntaxKind.AwaitExpression;
+export function isAwaited(node: Expression): boolean {
+    return walkUpOuterExpressions(node, OuterExpressionKinds.Parentheses).kind === SyntaxKind.AwaitExpression;
 }
 
 /** @internal */

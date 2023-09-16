@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/controlFlow/controlFlowIIFE3.ts] ////
+
+=== controlFlowIIFE3.ts ===
+class Foo {
+>Foo : Foo
+
+  prop: number; // currently there's an error with strictPropertyInitialization
+>prop : number
+
+  constructor() {
+    (async () => (this.prop = await 1))();
+>(async () => (this.prop = await 1))() : Promise<number>
+>(async () => (this.prop = await 1)) : () => Promise<number>
+>async () => (this.prop = await 1) : () => Promise<number>
+>(this.prop = await 1) : 1
+>this.prop = await 1 : 1
+>this.prop : number
+>this : this
+>prop : number
+>await 1 : 1
+>1 : 1
+  }
+}
+
