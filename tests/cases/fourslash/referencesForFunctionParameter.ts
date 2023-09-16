@@ -3,9 +3,9 @@
 ////var x;
 ////var n;
 ////
-////function n(x: number, [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}n|]: number|]) {
-////    [|{| "isWriteAccess": true |}n|] = 32;
-////    x = [|n|];
+////function n(x: number, /*1*/n: number) {
+////    /*2*/n = 32;
+////    x = /*3*/n;
 ////}
 
-verify.singleReferenceGroup("(parameter) n: number", "n");
+verify.baselineFindAllReferences('1', '2', '3');

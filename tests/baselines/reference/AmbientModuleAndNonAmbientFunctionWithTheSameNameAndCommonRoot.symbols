@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.d.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/AmbientModuleAndNonAmbientFunctionWithTheSameNameAndCommonRoot.ts] ////
+
+=== module.d.ts ===
 declare module Point {
 >Point : Symbol(Point, Decl(module.d.ts, 0, 0), Decl(function.ts, 0, 0))
 
@@ -8,7 +10,7 @@ declare module Point {
 >y : Symbol(y, Decl(module.d.ts, 1, 35))
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/function.ts ===
+=== function.ts ===
 function Point() {
 >Point : Symbol(Point, Decl(module.d.ts, 0, 0), Decl(function.ts, 0, 0))
 
@@ -17,7 +19,7 @@ function Point() {
 >y : Symbol(y, Decl(function.ts, 1, 18))
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+=== test.ts ===
 var cl: { x: number; y: number; }
 >cl : Symbol(cl, Decl(test.ts, 0, 3), Decl(test.ts, 1, 3), Decl(test.ts, 2, 3))
 >x : Symbol(x, Decl(test.ts, 0, 9))

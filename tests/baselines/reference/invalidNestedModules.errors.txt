@@ -1,9 +1,9 @@
-tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts(1,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
-tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts(17,18): error TS2300: Duplicate identifier 'Point'.
-tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
+invalidNestedModules.ts(1,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+invalidNestedModules.ts(17,18): error TS2300: Duplicate identifier 'Point'.
+invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
 
 
-==== tests/cases/conformance/internalModules/moduleDeclarations/invalidNestedModules.ts (3 errors) ====
+==== invalidNestedModules.ts (3 errors) ====
     module A.B.C {
                ~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.

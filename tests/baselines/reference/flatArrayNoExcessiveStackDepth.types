@@ -1,4 +1,6 @@
-=== tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts ===
+//// [tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts] ////
+
+=== flatArrayNoExcessiveStackDepth.ts ===
 // Repro from #43493
 
 declare const foo: unknown[];
@@ -36,19 +38,19 @@ const repro_43249 = (value: unknown) => {
 >"No" : "No"
     }
     const match = value.match(/anything/) || [];
->match : RegExpMatchArray
->value.match(/anything/) || [] : RegExpMatchArray
+>match : [] | RegExpMatchArray
+>value.match(/anything/) || [] : RegExpMatchArray | []
 >value.match(/anything/) : RegExpMatchArray | null
 >value.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >value : string
 >match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >/anything/ : RegExp
->[] : never[]
+>[] : []
 
     const [, extracted] = match;
 > : undefined
 >extracted : string
->match : RegExpMatchArray
+>match : [] | RegExpMatchArray
 
 };
 

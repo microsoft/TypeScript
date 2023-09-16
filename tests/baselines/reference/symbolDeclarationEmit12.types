@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts] ////
+
+=== symbolDeclarationEmit12.ts ===
 module M {
 >M : typeof M
 
@@ -13,7 +15,7 @@ module M {
 >iterator : unique symbol
 
         [Symbol.toPrimitive](x: I) { }
->[Symbol.toPrimitive] : (x: I) => void
+>[Symbol.toPrimitive] : I
 >Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
 >toPrimitive : unique symbol
@@ -29,7 +31,7 @@ module M {
 >undefined : undefined
         }
         get [Symbol.toPrimitive]() { return undefined; }
->[Symbol.toPrimitive] : any
+>[Symbol.toPrimitive] : I
 >Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
 >toPrimitive : unique symbol

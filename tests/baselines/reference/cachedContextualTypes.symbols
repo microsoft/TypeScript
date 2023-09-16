@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/cachedContextualTypes.ts] ////
+
+=== cachedContextualTypes.ts ===
+// Repro from #52198
+
+declare function createInstance<Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>): R;
+>createInstance : Symbol(createInstance, Decl(cachedContextualTypes.ts, 0, 0))
+>Ctor : Symbol(Ctor, Decl(cachedContextualTypes.ts, 2, 32))
+>args : Symbol(args, Decl(cachedContextualTypes.ts, 2, 50))
+>R : Symbol(R, Decl(cachedContextualTypes.ts, 2, 73))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>Ctor : Symbol(Ctor, Decl(cachedContextualTypes.ts, 2, 32))
+>ctor : Symbol(ctor, Decl(cachedContextualTypes.ts, 2, 104))
+>Ctor : Symbol(Ctor, Decl(cachedContextualTypes.ts, 2, 32))
+>args : Symbol(args, Decl(cachedContextualTypes.ts, 2, 115))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>Ctor : Symbol(Ctor, Decl(cachedContextualTypes.ts, 2, 32))
+>R : Symbol(R, Decl(cachedContextualTypes.ts, 2, 73))
+
+export interface IMenuWorkbenchToolBarOptions {
+>IMenuWorkbenchToolBarOptions : Symbol(IMenuWorkbenchToolBarOptions, Decl(cachedContextualTypes.ts, 2, 157))
+
+    toolbarOptions: {
+>toolbarOptions : Symbol(IMenuWorkbenchToolBarOptions.toolbarOptions, Decl(cachedContextualTypes.ts, 4, 47))
+
+        foo(bar: string): string
+>foo : Symbol(foo, Decl(cachedContextualTypes.ts, 5, 21))
+>bar : Symbol(bar, Decl(cachedContextualTypes.ts, 6, 12))
+
+    };
+}
+
+class MenuWorkbenchToolBar {
+>MenuWorkbenchToolBar : Symbol(MenuWorkbenchToolBar, Decl(cachedContextualTypes.ts, 8, 1))
+
+    constructor(
+        options: IMenuWorkbenchToolBarOptions | undefined,
+>options : Symbol(options, Decl(cachedContextualTypes.ts, 11, 16))
+>IMenuWorkbenchToolBarOptions : Symbol(IMenuWorkbenchToolBarOptions, Decl(cachedContextualTypes.ts, 2, 157))
+
+    ) { }
+}
+
+createInstance(MenuWorkbenchToolBar, {
+>createInstance : Symbol(createInstance, Decl(cachedContextualTypes.ts, 0, 0))
+>MenuWorkbenchToolBar : Symbol(MenuWorkbenchToolBar, Decl(cachedContextualTypes.ts, 8, 1))
+
+    toolbarOptions: {
+>toolbarOptions : Symbol(toolbarOptions, Decl(cachedContextualTypes.ts, 16, 38))
+
+        foo(bar) { return bar; }
+>foo : Symbol(foo, Decl(cachedContextualTypes.ts, 17, 21))
+>bar : Symbol(bar, Decl(cachedContextualTypes.ts, 18, 12))
+>bar : Symbol(bar, Decl(cachedContextualTypes.ts, 18, 12))
+    }
+});
+

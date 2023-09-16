@@ -1,8 +1,8 @@
-tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping2.ts(9,43): error TS2349: This expression is not callable.
+superCallParameterContextualTyping2.ts(9,43): error TS2349: This expression is not callable.
   Type 'Number' has no call signatures.
 
 
-==== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping2.ts (1 errors) ====
+==== superCallParameterContextualTyping2.ts (1 errors) ====
     class A<T1, T2> {
         constructor(private map: (value: T1) => T2) {
     

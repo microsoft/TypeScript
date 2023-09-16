@@ -1,4 +1,6 @@
-=== tests/cases/compiler/module_augmentUninstantiatedModule.ts ===
+//// [tests/cases/compiler/module_augmentUninstantiatedModule.ts] ////
+
+=== module_augmentUninstantiatedModule.ts ===
 declare module "foo" {
 >"foo" : Symbol("foo", Decl(module_augmentUninstantiatedModule.ts, 0, 0))
 

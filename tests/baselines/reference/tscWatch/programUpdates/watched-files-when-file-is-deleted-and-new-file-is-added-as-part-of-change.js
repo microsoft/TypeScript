@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/home/username/project/src/file1.ts]
 var a = 10;
@@ -43,21 +44,21 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /home/username/project/src/file1.ts (used version)
 
-WatchedFiles::
-/home/username/project/tsconfig.json:
-  {"fileName":"/home/username/project/tsconfig.json","pollingInterval":250}
-/home/username/project/src/file1.ts:
-  {"fileName":"/home/username/project/src/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/home/username/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/home/username/project/src/file1.ts: *new*
+  {}
+/home/username/project/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/home/username/project/node_modules/@types:
-  {"directoryName":"/home/username/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/home/username/project:
-  {"directoryName":"/home/username/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/home/username/project: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -74,6 +75,9 @@ var a = 10;
 
 //// [/home/username/project/src/file1.ts] deleted
 
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
@@ -96,21 +100,25 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /home/username/project/src/file2.ts (computed .d.ts)
 
-WatchedFiles::
-/home/username/project/tsconfig.json:
-  {"fileName":"/home/username/project/tsconfig.json","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/home/username/project/src/file2.ts:
-  {"fileName":"/home/username/project/src/file2.ts","pollingInterval":250}
+PolledWatches::
+/home/username/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/home/username/project/src/file2.ts: *new*
+  {}
+/home/username/project/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/home/username/project/src/file1.ts:
+  {}
 
 FsWatchesRecursive::
-/home/username/project/node_modules/@types:
-  {"directoryName":"/home/username/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /home/username/project:
-  {"directoryName":"/home/username/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

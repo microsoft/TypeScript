@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInMethod.ts] ////
+
 //// [noCollisionThisExpressionAndLocalVarInMethod.ts]
 var _this = 2;
 class a {

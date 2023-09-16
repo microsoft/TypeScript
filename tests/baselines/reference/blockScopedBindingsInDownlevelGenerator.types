@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedBindingsInDownlevelGenerator.ts ===
+//// [tests/cases/compiler/blockScopedBindingsInDownlevelGenerator.ts] ////
+
+=== blockScopedBindingsInDownlevelGenerator.ts ===
 function* a() {
 >a : () => Generator<number, void, unknown>
 

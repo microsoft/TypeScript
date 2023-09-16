@@ -19,6 +19,6 @@ define(["require", "exports"], function (require, exports) {
 //// [exportAssignmentFunction_B.js]
 define(["require", "exports", "exportAssignmentFunction_A"], function (require, exports, fooFunc) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var n = fooFunc();
 });

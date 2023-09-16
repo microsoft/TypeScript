@@ -1,6 +1,8 @@
-=== tests/cases/compiler/narrowingTypeofFunction.ts ===
+//// [tests/cases/compiler/narrowingTypeofFunction.ts] ////
+
+=== narrowingTypeofFunction.ts ===
 type Meta = { foo: string }
->Meta : Meta
+>Meta : { foo: string; }
 >foo : string
 
 interface F { (): string }
@@ -35,7 +37,7 @@ function f2<T>(x: (T & F) | T & string) {
 >"function" : "function"
 
         x;
->x : (T & F) | (T & string)
+>x : T & F
     }
     else {
         x;

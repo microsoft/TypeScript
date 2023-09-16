@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.ts] ////
+
+=== sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues.ts ===
 declare var console: {
 >console : { log(msg: any): void; }
 
@@ -7,10 +9,10 @@ declare var console: {
 >msg : any
 }
 type Robot = [number, string, string];
->Robot : Robot
+>Robot : [number, string, string]
 
 type MultiSkilledRobot = [string, [string, string]];
->MultiSkilledRobot : MultiSkilledRobot
+>MultiSkilledRobot : [string, [string, string]]
 
 let robotA: Robot = [1, "mower", "mowing"];
 >robotA : Robot

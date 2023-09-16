@@ -1,12 +1,12 @@
-tests/cases/compiler/enumWithExport.ts(5,7): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
+enumWithExport.ts(5,7): error TS2304: Cannot find name 'y'.
 
 
-==== tests/cases/compiler/enumWithExport.ts (1 errors) ====
+==== enumWithExport.ts (1 errors) ====
     namespace x {
       export let y = 123
     }
     enum x {
       z = y
           ~
-!!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
+!!! error TS2304: Cannot find name 'y'.
     }

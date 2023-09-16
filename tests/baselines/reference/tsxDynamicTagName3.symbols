@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/tsxDynamicTagName3.tsx ===
+//// [tests/cases/conformance/jsx/tsxDynamicTagName3.tsx] ////
+
+=== tsxDynamicTagName3.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(tsxDynamicTagName3.tsx, 0, 0))
 

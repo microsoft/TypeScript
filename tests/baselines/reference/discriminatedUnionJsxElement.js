@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminatedUnionJsxElement.tsx] ////
+
 //// [discriminatedUnionJsxElement.tsx]
 // Repro from #46021
 
@@ -45,7 +47,7 @@ interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLin
     menuItemsVariant?: MenuItemVariant;
 }
 declare function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>): any;
-declare type IListItemData = {
+type IListItemData = {
     variant: ListItemVariant.Avatar;
 } | {
     variant: ListItemVariant.OneLine;

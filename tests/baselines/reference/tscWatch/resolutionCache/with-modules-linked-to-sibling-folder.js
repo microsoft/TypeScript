@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject/main useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -59,38 +60,40 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/linked-package/dist/index.d.ts (used version)
 /user/username/projects/myproject/main/index.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/main/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/main/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/main/index.ts:
-  {"fileName":"/user/username/projects/myproject/main/index.ts","pollingInterval":250}
-/user/username/projects/myproject/linked-package/dist/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/linked-package/dist/index.d.ts","pollingInterval":250}
-/user/username/projects/myproject/linked-package/dist/other.d.ts:
-  {"fileName":"/user/username/projects/myproject/linked-package/dist/other.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/linked-package/package.json:
-  {"fileName":"/user/username/projects/myproject/linked-package/package.json","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/main/@scoped: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/main/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/linked-package/dist/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/linked-package/dist/other.d.ts: *new*
+  {}
+/user/username/projects/myproject/linked-package/package.json: *new*
+  {}
+/user/username/projects/myproject/main/index.ts: *new*
+  {}
+/user/username/projects/myproject/main/tsconfig.json: *new*
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/linked-package:
-  {"directoryName":"/user/username/projects/myproject/linked-package","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/main/@scoped:
-  {"directoryName":"/user/username/projects/myproject/main/@scoped","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/main/node_modules:
-  {"directoryName":"/user/username/projects/myproject/main/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/main/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/main/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/linked-package: *new*
+  {}
+/user/username/projects/myproject/main/node_modules: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/main/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 

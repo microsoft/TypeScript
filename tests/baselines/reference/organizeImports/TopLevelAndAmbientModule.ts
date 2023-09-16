@@ -17,7 +17,6 @@ D();
 
 // ==ORGANIZED==
 
-import "lib";
 import D from "lib";
 
 declare module "mod" {
@@ -26,5 +25,6 @@ declare module "mod" {
     function F(f1: {} = F1, f2: {} = F2) {}
 }
 
+import "lib";
 
 D();

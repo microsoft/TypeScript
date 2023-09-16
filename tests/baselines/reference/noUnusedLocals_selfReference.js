@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_selfReference.ts] ////
+
 //// [noUnusedLocals_selfReference.ts]
 export {}; // Make this a module scope, so these are local variables.
 
@@ -30,7 +32,7 @@ class D { m() { g; } }
 
 //// [noUnusedLocals_selfReference.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function f() {
     f;
     function g() {

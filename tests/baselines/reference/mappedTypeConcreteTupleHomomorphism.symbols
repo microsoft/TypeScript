@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts ===
+//// [tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts] ////
+
+=== mappedTypeConcreteTupleHomomorphism.ts ===
 type TupleOfNumbers = [1, 2]
 >TupleOfNumbers : Symbol(TupleOfNumbers, Decl(mappedTypeConcreteTupleHomomorphism.ts, 0, 0))
 

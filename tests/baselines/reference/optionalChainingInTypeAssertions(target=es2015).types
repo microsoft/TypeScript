@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/optionalChainingInTypeAssertions.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/optionalChainingInTypeAssertions.ts] ////
+
+=== optionalChainingInTypeAssertions.ts ===
 class Foo {
 >Foo : Foo
 
@@ -42,4 +44,41 @@ const foo = new Foo();
 >foo.m : () => void
 >foo : Foo
 >m : () => void
+
+// https://github.com/microsoft/TypeScript/issues/50148
+(foo?.m as any).length;
+>(foo?.m as any).length : any
+>(foo?.m as any) : any
+>foo?.m as any : any
+>foo?.m : () => void
+>foo : Foo
+>m : () => void
+>length : any
+
+(<any>foo?.m).length;
+>(<any>foo?.m).length : any
+>(<any>foo?.m) : any
+><any>foo?.m : any
+>foo?.m : () => void
+>foo : Foo
+>m : () => void
+>length : any
+
+(foo?.["m"] as any).length;
+>(foo?.["m"] as any).length : any
+>(foo?.["m"] as any) : any
+>foo?.["m"] as any : any
+>foo?.["m"] : () => void
+>foo : Foo
+>"m" : "m"
+>length : any
+
+(<any>foo?.["m"]).length;
+>(<any>foo?.["m"]).length : any
+>(<any>foo?.["m"]) : any
+><any>foo?.["m"] : any
+>foo?.["m"] : () => void
+>foo : Foo
+>"m" : "m"
+>length : any
 

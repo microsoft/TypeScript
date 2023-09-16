@@ -1,0 +1,137 @@
+//// [tests/cases/compiler/reducibleIndexedAccessTypes.ts] ////
+
+=== reducibleIndexedAccessTypes.ts ===
+// Repro from 53030
+
+enum Type { A, B, C }
+>Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+>A : Symbol(Type.A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
+>B : Symbol(Type.B, Decl(reducibleIndexedAccessTypes.ts, 2, 14))
+>C : Symbol(Type.C, Decl(reducibleIndexedAccessTypes.ts, 2, 17))
+
+interface PayloadStructure {
+>PayloadStructure : Symbol(PayloadStructure, Decl(reducibleIndexedAccessTypes.ts, 2, 21))
+
+    dataType: Type;
+>dataType : Symbol(PayloadStructure.dataType, Decl(reducibleIndexedAccessTypes.ts, 4, 28))
+>Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+
+    data: unknown;
+>data : Symbol(PayloadStructure.data, Decl(reducibleIndexedAccessTypes.ts, 5, 19))
+}
+
+interface PayloadA extends PayloadStructure {
+>PayloadA : Symbol(PayloadA, Decl(reducibleIndexedAccessTypes.ts, 7, 1))
+>PayloadStructure : Symbol(PayloadStructure, Decl(reducibleIndexedAccessTypes.ts, 2, 21))
+
+    dataType: Type.A;
+>dataType : Symbol(PayloadA.dataType, Decl(reducibleIndexedAccessTypes.ts, 9, 45))
+>Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+>A : Symbol(Type.A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
+
+    data: string;
+>data : Symbol(PayloadA.data, Decl(reducibleIndexedAccessTypes.ts, 10, 21))
+}
+
+interface PayloadB extends PayloadStructure {
+>PayloadB : Symbol(PayloadB, Decl(reducibleIndexedAccessTypes.ts, 12, 1))
+>PayloadStructure : Symbol(PayloadStructure, Decl(reducibleIndexedAccessTypes.ts, 2, 21))
+
+    dataType: Type.B;
+>dataType : Symbol(PayloadB.dataType, Decl(reducibleIndexedAccessTypes.ts, 14, 45))
+>Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+>B : Symbol(Type.B, Decl(reducibleIndexedAccessTypes.ts, 2, 14))
+
+    data: number;
+>data : Symbol(PayloadB.data, Decl(reducibleIndexedAccessTypes.ts, 15, 21))
+}
+
+interface PayloadC extends PayloadStructure {
+>PayloadC : Symbol(PayloadC, Decl(reducibleIndexedAccessTypes.ts, 17, 1))
+>PayloadStructure : Symbol(PayloadStructure, Decl(reducibleIndexedAccessTypes.ts, 2, 21))
+
+    dataType: Type.C;
+>dataType : Symbol(PayloadC.dataType, Decl(reducibleIndexedAccessTypes.ts, 19, 45))
+>Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+>C : Symbol(Type.C, Decl(reducibleIndexedAccessTypes.ts, 2, 17))
+
+    data: {
+>data : Symbol(PayloadC.data, Decl(reducibleIndexedAccessTypes.ts, 20, 21))
+
+        x: number;
+>x : Symbol(x, Decl(reducibleIndexedAccessTypes.ts, 21, 11))
+
+        y: number;
+>y : Symbol(y, Decl(reducibleIndexedAccessTypes.ts, 22, 18))
+
+    };
+}
+
+type Payload = PayloadA | PayloadB | PayloadC
+>Payload : Symbol(Payload, Decl(reducibleIndexedAccessTypes.ts, 25, 1))
+>PayloadA : Symbol(PayloadA, Decl(reducibleIndexedAccessTypes.ts, 7, 1))
+>PayloadB : Symbol(PayloadB, Decl(reducibleIndexedAccessTypes.ts, 12, 1))
+>PayloadC : Symbol(PayloadC, Decl(reducibleIndexedAccessTypes.ts, 17, 1))
+
+type MappedPayload2 = {
+>MappedPayload2 : Symbol(MappedPayload2, Decl(reducibleIndexedAccessTypes.ts, 27, 45))
+
+    [K in Type]?: (data: (Payload & { dataType: K })["data"]) => void
+>K : Symbol(K, Decl(reducibleIndexedAccessTypes.ts, 30, 5))
+>Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+>data : Symbol(data, Decl(reducibleIndexedAccessTypes.ts, 30, 19))
+>Payload : Symbol(Payload, Decl(reducibleIndexedAccessTypes.ts, 25, 1))
+>dataType : Symbol(dataType, Decl(reducibleIndexedAccessTypes.ts, 30, 37))
+>K : Symbol(K, Decl(reducibleIndexedAccessTypes.ts, 30, 5))
+}
+
+const payloads2: MappedPayload2 = {
+>payloads2 : Symbol(payloads2, Decl(reducibleIndexedAccessTypes.ts, 33, 5))
+>MappedPayload2 : Symbol(MappedPayload2, Decl(reducibleIndexedAccessTypes.ts, 27, 45))
+
+    [Type.A]: data => { console.log(data) }
+>[Type.A] : Symbol([Type.A], Decl(reducibleIndexedAccessTypes.ts, 33, 35))
+>Type.A : Symbol(Type.A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
+>Type : Symbol(Type, Decl(reducibleIndexedAccessTypes.ts, 0, 0))
+>A : Symbol(Type.A, Decl(reducibleIndexedAccessTypes.ts, 2, 11))
+>data : Symbol(data, Decl(reducibleIndexedAccessTypes.ts, 34, 13))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>data : Symbol(data, Decl(reducibleIndexedAccessTypes.ts, 34, 13))
+}
+
+// Additional repro from 53030
+
+type GetPayload<P extends Payload, K extends keyof P> = P extends { dataType: K } ? P["data"] : never;
+>GetPayload : Symbol(GetPayload, Decl(reducibleIndexedAccessTypes.ts, 35, 1))
+>P : Symbol(P, Decl(reducibleIndexedAccessTypes.ts, 39, 16))
+>Payload : Symbol(Payload, Decl(reducibleIndexedAccessTypes.ts, 25, 1))
+>K : Symbol(K, Decl(reducibleIndexedAccessTypes.ts, 39, 34))
+>P : Symbol(P, Decl(reducibleIndexedAccessTypes.ts, 39, 16))
+>P : Symbol(P, Decl(reducibleIndexedAccessTypes.ts, 39, 16))
+>dataType : Symbol(dataType, Decl(reducibleIndexedAccessTypes.ts, 39, 67))
+>K : Symbol(K, Decl(reducibleIndexedAccessTypes.ts, 39, 34))
+>P : Symbol(P, Decl(reducibleIndexedAccessTypes.ts, 39, 16))
+
+// Repro from #51161
+
+type AnyOneof = { oneofKind: string; [k: string]: unknown } | { oneofKind: undefined };
+>AnyOneof : Symbol(AnyOneof, Decl(reducibleIndexedAccessTypes.ts, 39, 102))
+>oneofKind : Symbol(oneofKind, Decl(reducibleIndexedAccessTypes.ts, 43, 17))
+>k : Symbol(k, Decl(reducibleIndexedAccessTypes.ts, 43, 38))
+>oneofKind : Symbol(oneofKind, Decl(reducibleIndexedAccessTypes.ts, 43, 63))
+
+type AnyOneofKind<T extends AnyOneof> = T extends { oneofKind: keyof T }
+>AnyOneofKind : Symbol(AnyOneofKind, Decl(reducibleIndexedAccessTypes.ts, 43, 87))
+>T : Symbol(T, Decl(reducibleIndexedAccessTypes.ts, 44, 18))
+>AnyOneof : Symbol(AnyOneof, Decl(reducibleIndexedAccessTypes.ts, 39, 102))
+>T : Symbol(T, Decl(reducibleIndexedAccessTypes.ts, 44, 18))
+>oneofKind : Symbol(oneofKind, Decl(reducibleIndexedAccessTypes.ts, 44, 51))
+>T : Symbol(T, Decl(reducibleIndexedAccessTypes.ts, 44, 18))
+
+    ? T['oneofKind']
+>T : Symbol(T, Decl(reducibleIndexedAccessTypes.ts, 44, 18))
+
+    : never;
+

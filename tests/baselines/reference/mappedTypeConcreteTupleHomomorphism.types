@@ -1,6 +1,8 @@
-=== tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts ===
+//// [tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts] ////
+
+=== mappedTypeConcreteTupleHomomorphism.ts ===
 type TupleOfNumbers = [1, 2]
->TupleOfNumbers : TupleOfNumbers
+>TupleOfNumbers : [1, 2]
 
 type HomomorphicType = {
 >HomomorphicType : ["1", "2"]
@@ -34,7 +36,7 @@ const d: HomomorphicInstantiation = [1, 1, 1]
 >1 : 1
 
 type TupleOfNumbersAndObjects = [1, 2, {}]
->TupleOfNumbersAndObjects : TupleOfNumbersAndObjects
+>TupleOfNumbersAndObjects : [1, 2, {}]
 
 type ShouldErrorOnInterpolation = {
 >ShouldErrorOnInterpolation : ["1", "2", string]
@@ -44,7 +46,7 @@ type ShouldErrorOnInterpolation = {
 
 // repro from #27995
 type Foo = ['a', 'b'];
->Foo : Foo
+>Foo : ["a", "b"]
 
 interface Bar {
     a: string;

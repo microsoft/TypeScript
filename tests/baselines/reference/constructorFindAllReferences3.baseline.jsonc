@@ -1,0 +1,41 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/constructorFindAllReferences3.ts ===
+// export class C {
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}constructor|]() { }|>
+//     public foo() { }
+// }
+// 
+// new [|C|]().foo();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/constructorFindAllReferences3.ts ===
+  // <|export class [|C|] {
+  //     /*FIND ALL REFS*/constructor() { }
+  //     public foo() { }
+  // }|>
+  // 
+  // new C().foo();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class C",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]

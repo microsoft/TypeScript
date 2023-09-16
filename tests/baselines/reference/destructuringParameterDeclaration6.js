@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts] ////
+
 //// [destructuringParameterDeclaration6.ts]
 // A parameter declaration may specify either an identifier or a binding pattern.
 
@@ -27,7 +29,7 @@ b2({ while: 1 });
 "use strict";
 // Error
 function a(_a) {
-    var  = _a["while"];
+    var  = _a.while;
 }
 function a1(_a) {
     var public = _a.public;
@@ -56,13 +58,13 @@ function a7() {
         a[_i] = arguments[_i];
     }
 }
-a({ "while": 1 });
+a({ while: 1 });
 // No Error
 function b1(_a) {
     var x = _a.public;
 }
 function b2(_a) {
-    var y = _a["while"];
+    var y = _a.while;
 }
 b1({ public: 1 });
-b2({ "while": 1 });
+b2({ while: 1 });

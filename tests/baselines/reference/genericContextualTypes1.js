@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes1.ts] ////
+
 //// [genericContextualTypes1.ts]
 type Box<T> = { value: T };
 
@@ -73,7 +75,7 @@ var fn = function (a) { return a; };
 
 
 //// [genericContextualTypes1.d.ts]
-declare type Box<T> = {
+type Box<T> = {
     value: T;
 };
 declare function wrap<A, B>(f: (a: A) => B): (a: A) => B;
@@ -103,5 +105,5 @@ declare const f23: <A>(a: A[]) => Box<A>[];
 declare const f30: (a: string[]) => string[];
 declare const f31: <T extends Box<number>>(a: T[]) => T[];
 declare const f40: <A, B>(b: B, a: A) => [A, B];
-declare type fn = <A>(a: A) => A;
+type fn = <A>(a: A) => A;
 declare const fn: fn;

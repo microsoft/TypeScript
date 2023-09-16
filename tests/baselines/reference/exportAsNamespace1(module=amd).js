@@ -18,7 +18,7 @@ foo.ns.b;
 //// [0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = exports.a = void 0;
     exports.a = 1;
     exports.b = 2;
@@ -26,7 +26,7 @@ define(["require", "exports"], function (require, exports) {
 //// [1.js]
 define(["require", "exports", "./0"], function (require, exports, ns) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.ns = void 0;
     exports.ns = ns;
     ns.a;
@@ -35,7 +35,7 @@ define(["require", "exports", "./0"], function (require, exports, ns) {
 //// [2.js]
 define(["require", "exports", "./1"], function (require, exports, foo) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     foo.ns.a;
     foo.ns.b;
 });

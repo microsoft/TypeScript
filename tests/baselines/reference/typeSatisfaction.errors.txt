@@ -1,0 +1,40 @@
+typeSatisfaction.ts(12,20): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'I1'.
+typeSatisfaction.ts(13,16): error TS1360: Type '{}' does not satisfy the expected type 'I1'.
+  Property 'a' is missing in type '{}' but required in type 'I1'.
+typeSatisfaction.ts(24,23): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'A'.
+
+
+==== typeSatisfaction.ts (3 errors) ====
+    interface I1 {
+        a: number;
+    }
+    
+    type T1 = {
+        a: "a" | "b";
+    }
+    
+    type T2 = (x: string) => void;
+    
+    const t1 = { a: 1 } satisfies I1; // Ok
+    const t2 = { a: 1, b: 1 } satisfies I1; // Error
+                       ~
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'I1'.
+    const t3 = { } satisfies I1; // Error
+                   ~~~~~~~~~
+!!! error TS1360: Type '{}' does not satisfy the expected type 'I1'.
+!!! error TS1360:   Property 'a' is missing in type '{}' but required in type 'I1'.
+!!! related TS2728 typeSatisfaction.ts:2:5: 'a' is declared here.
+    
+    const t4: T1 = { a: "a" } satisfies T1; // Ok
+    const t5 = (m => m.substring(0)) satisfies T2; // Ok
+    
+    const t6 = [1, 2] satisfies [number, number];
+    
+    interface A {
+        a: string
+    }
+    let t7 = { a: 'test' } satisfies A;
+    let t8 = { a: 'test', b: 'test' } satisfies A;
+                          ~
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'A'.
+    

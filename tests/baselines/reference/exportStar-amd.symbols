@@ -1,16 +1,18 @@
-=== tests/cases/conformance/es6/modules/t1.ts ===
+//// [tests/cases/conformance/es6/modules/exportStar-amd.ts] ////
+
+=== t1.ts ===
 export var x = 1;
 >x : Symbol(x, Decl(t1.ts, 0, 10))
 
 export var y = 2;
 >y : Symbol(y, Decl(t1.ts, 1, 10))
 
-=== tests/cases/conformance/es6/modules/t2.ts ===
+=== t2.ts ===
 export default "hello";
 export function foo() { }
 >foo : Symbol(foo, Decl(t2.ts, 0, 23))
 
-=== tests/cases/conformance/es6/modules/t3.ts ===
+=== t3.ts ===
 var x = "x";
 >x : Symbol(x, Decl(t3.ts, 0, 3))
 
@@ -25,12 +27,13 @@ export { x, y, z };
 >y : Symbol(y, Decl(t3.ts, 3, 11))
 >z : Symbol(z, Decl(t3.ts, 3, 14))
 
-=== tests/cases/conformance/es6/modules/t4.ts ===
+=== t4.ts ===
+
 export * from "./t1";
-No type information for this code.export * from "./t2";
-No type information for this code.export * from "./t3";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/es6/modules/main.ts ===
+export * from "./t2";
+export * from "./t3";
+
+=== main.ts ===
 import hello, { x, y, z, foo } from "./t4";
 >hello : Symbol(hello, Decl(main.ts, 0, 6))
 >x : Symbol(x, Decl(main.ts, 0, 15))

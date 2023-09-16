@@ -1,0 +1,109 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/isDefinitionSingleReference.ts ===
+// <|function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}f|]() {}|>
+// [|f|]();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/isDefinitionSingleReference.ts ===
+  // <|function /*FIND ALL REFS*/[|f|]() {}|>
+  // f();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function f(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/isDefinitionSingleReference.ts ===
+// <|function [|{| isWriteAccess: true |}f|]() {}|>
+// /*FIND ALL REFS*/[|f|]();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/isDefinitionSingleReference.ts ===
+  // <|function [|f|]() {}|>
+  // /*FIND ALL REFS*/f();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "function",
+    "name": "function f(): void",
+    "displayParts": [
+     {
+      "text": "function",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "f",
+      "kind": "functionName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

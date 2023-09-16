@@ -1,9 +1,11 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution7.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
 
 type TextProps = { editable: false }
->TextProps : TextProps
+>TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
 >editable : false
 >false : false
 

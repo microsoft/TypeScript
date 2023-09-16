@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts] ////
+
 //// [mappedTypeConcreteTupleHomomorphism.ts]
 type TupleOfNumbers = [1, 2]
 

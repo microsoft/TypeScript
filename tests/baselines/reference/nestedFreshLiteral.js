@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedFreshLiteral.ts] ////
+
 //// [nestedFreshLiteral.ts]
 interface CSSProps  {
   color?: string

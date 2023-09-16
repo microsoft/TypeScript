@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeInference3.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeInference3.ts] ////
+
+=== intersectionTypeInference3.ts ===
 // Repro from #19682
 
 type Nominal<Kind extends string, Type> = Type & {
@@ -13,7 +15,7 @@ type Nominal<Kind extends string, Type> = Type & {
 };
 
 type A = Nominal<'A', string>;
->A : A
+>A : string & { [Symbol.species]: "A"; }
 
 declare const a: Set<A>;
 >a : Set<A>

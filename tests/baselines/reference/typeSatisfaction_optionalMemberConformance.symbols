@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_optionalMemberConformance.ts] ////
+
+=== typeSatisfaction_optionalMemberConformance.ts ===
+type Point2d = { x: number, y: number };
+>Point2d : Symbol(Point2d, Decl(typeSatisfaction_optionalMemberConformance.ts, 0, 0))
+>x : Symbol(x, Decl(typeSatisfaction_optionalMemberConformance.ts, 0, 16))
+>y : Symbol(y, Decl(typeSatisfaction_optionalMemberConformance.ts, 0, 27))
+
+// Undesirable behavior today with type annotation
+const a = { x: 10 } satisfies Partial<Point2d>;
+>a : Symbol(a, Decl(typeSatisfaction_optionalMemberConformance.ts, 2, 5))
+>x : Symbol(x, Decl(typeSatisfaction_optionalMemberConformance.ts, 2, 11))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Point2d : Symbol(Point2d, Decl(typeSatisfaction_optionalMemberConformance.ts, 0, 0))
+
+// Should OK
+console.log(a.x.toFixed());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a.x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.x : Symbol(x, Decl(typeSatisfaction_optionalMemberConformance.ts, 2, 11))
+>a : Symbol(a, Decl(typeSatisfaction_optionalMemberConformance.ts, 2, 5))
+>x : Symbol(x, Decl(typeSatisfaction_optionalMemberConformance.ts, 2, 11))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+// Should error
+let p = a.y;
+>p : Symbol(p, Decl(typeSatisfaction_optionalMemberConformance.ts, 6, 3))
+>a : Symbol(a, Decl(typeSatisfaction_optionalMemberConformance.ts, 2, 5))
+

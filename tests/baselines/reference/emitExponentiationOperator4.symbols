@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts] ////
+
+=== emitExponentiationOperator4.ts ===
 var temp: any;
 >temp : Symbol(temp, Decl(emitExponentiationOperator4.ts, 0, 3))
 

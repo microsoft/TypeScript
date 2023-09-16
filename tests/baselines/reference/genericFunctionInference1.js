@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericFunctionInference1.ts] ////
+
 //// [genericFunctionInference1.ts]
 declare function pipe<A extends any[], B>(ab: (...args: A) => B): (...args: A) => B;
 declare function pipe<A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C;

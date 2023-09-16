@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/output/AnotherDependency/file1.d.ts]
 declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }
@@ -56,25 +57,23 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/a/b/project/tsconfig.json:
-  {"fileName":"/a/b/project/tsconfig.json","pollingInterval":250}
-/a/b/output/anotherdependency/file1.d.ts:
-  {"fileName":"/a/b/output/AnotherDependency/file1.d.ts","pollingInterval":250}
-/a/b/dependencies/file2.d.ts:
-  {"fileName":"/a/b/dependencies/file2.d.ts","pollingInterval":250}
-/a/b/project/src/main.ts:
-  {"fileName":"/a/b/project/src/main.ts","pollingInterval":250}
-/a/b/project/src/main2.ts:
-  {"fileName":"/a/b/project/src/main2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
-
-FsWatchesRecursive::
-/a/b/project/node_modules/@types:
-  {"directoryName":"/a/b/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b/dependencies/file2.d.ts: *new*
+  {}
+/a/b/output/anotherdependency/file1.d.ts: *new*
+  {}
+/a/b/project/src/main.ts: *new*
+  {}
+/a/b/project/src/main2.ts: *new*
+  {}
+/a/b/project/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 exitCode:: ExitStatus.undefined
 

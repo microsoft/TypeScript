@@ -1,10 +1,10 @@
-tests/cases/conformance/async/es6/asyncAwaitIsolatedModules_es6.ts(1,27): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+asyncAwaitIsolatedModules_es6.ts(1,27): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/conformance/async/es6/asyncAwaitIsolatedModules_es6.ts (1 errors) ====
+==== asyncAwaitIsolatedModules_es6.ts (1 errors) ====
     import { MyPromise } from "missing";
                               ~~~~~~~~~
-!!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
     declare var p: Promise<number>;
     declare var mp: MyPromise<number>;

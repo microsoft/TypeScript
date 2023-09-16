@@ -21,11 +21,11 @@ export { Bar }
 
 //// [file.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
-path_1["default"].resolve("", "../");
+path_1.default.resolve("", "../");
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -34,7 +34,7 @@ var Foo = /** @class */ (function () {
 exports.Foo = Foo;
 //// [file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo2 = void 0;
 var tslib_1 = require("tslib");
 var path = tslib_1.__importStar(require("path"));
@@ -47,11 +47,11 @@ var Foo2 = /** @class */ (function () {
 exports.Foo2 = Foo2;
 //// [file3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo3 = void 0;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
-(0, path_1["default"])("", "../");
+(0, path_1.default)("", "../");
 var Foo3 = /** @class */ (function () {
     function Foo3() {
     }
@@ -60,9 +60,9 @@ var Foo3 = /** @class */ (function () {
 exports.Foo3 = Foo3;
 //// [file4.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
 var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importStar(require("path"));
-exports.Bar = path_1.Bar;
-(0, path_1["default"])("", "../");
+Object.defineProperty(exports, "Bar", { enumerable: true, get: function () { return path_1.Bar; } });
+(0, path_1.default)("", "../");

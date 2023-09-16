@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts] ////
+
+=== interfaceWithPropertyOfEveryType.ts ===
 class C { foo: string; }
 >C : C
 >foo : string
@@ -70,7 +72,7 @@ interface Foo {
 
 var a: Foo = {
 >a : Foo
->{    a: 1,    b: '',    c: true,    d: {},    e: null ,    f: [1],    g: {},    h: (x: number) => 1,    i: <T>(x: T) => x,    j: <Foo>null,    k: new C(),    l: f1,    m: M,    n: {},    o: E.A} : { a: number; b: string; c: true; d: {}; e: null; f: number[]; g: {}; h: (x: number) => number; i: <T>(x: T) => T; j: Foo; k: C; l: () => void; m: typeof M; n: {}; o: E.A; }
+>{    a: 1,    b: '',    c: true,    d: {},    e: null ,    f: [1],    g: {},    h: (x: number) => 1,    i: <T>(x: T) => x,    j: <Foo>null,    k: new C(),    l: f1,    m: M,    n: {},    o: E.A} : { a: number; b: string; c: true; d: {}; e: null; f: number[]; g: {}; h: (x: number) => number; i: <T>(x: T) => T; j: Foo; k: C; l: () => void; m: typeof M; n: {}; o: E; }
 
     a: 1,
 >a : number
@@ -90,7 +92,6 @@ var a: Foo = {
 
     e: null ,
 >e : null
->null : null
 
     f: [1],
 >f : number[]
@@ -116,7 +117,6 @@ var a: Foo = {
     j: <Foo>null,
 >j : Foo
 ><Foo>null : Foo
->null : null
 
     k: new C(),
 >k : C
@@ -136,7 +136,7 @@ var a: Foo = {
 >{} : {}
 
     o: E.A
->o : E.A
+>o : E
 >E.A : E
 >E : typeof E
 >A : E

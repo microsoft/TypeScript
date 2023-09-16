@@ -161,3 +161,17 @@ interpret(machine);
 declare const qq: ActionObject<{ type: "PLAY"; value: number }>;
 
 createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq);  // Error
+
+// Repros from #48618
+
+let Anon = class <out T> {
+    foo(): InstanceType<(typeof Anon<T>)> {
+        return this;
+    }
+}
+
+let OuterC = class C<out T> {
+    foo(): C<T> {
+        return this;
+    }
+}

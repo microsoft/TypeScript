@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/specialIntersectionsInMappedTypes.ts] ////
+
+=== specialIntersectionsInMappedTypes.ts ===
+// Repro from #50683
+
+type Alignment = (string & {}) | "left" | "center" | "right";
+>Alignment : Symbol(Alignment, Decl(specialIntersectionsInMappedTypes.ts, 0, 0))
+
+type Alignments = Record<Alignment, string>;
+>Alignments : Symbol(Alignments, Decl(specialIntersectionsInMappedTypes.ts, 2, 61))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Alignment : Symbol(Alignment, Decl(specialIntersectionsInMappedTypes.ts, 0, 0))
+
+const a: Alignments = {
+>a : Symbol(a, Decl(specialIntersectionsInMappedTypes.ts, 5, 5))
+>Alignments : Symbol(Alignments, Decl(specialIntersectionsInMappedTypes.ts, 2, 61))
+
+    left: "align-left",
+>left : Symbol(left, Decl(specialIntersectionsInMappedTypes.ts, 5, 23))
+
+    center: "align-center",
+>center : Symbol(center, Decl(specialIntersectionsInMappedTypes.ts, 6, 23))
+
+    right: "align-right",
+>right : Symbol(right, Decl(specialIntersectionsInMappedTypes.ts, 7, 27))
+
+    other: "align-other",
+>other : Symbol(other, Decl(specialIntersectionsInMappedTypes.ts, 8, 25))
+
+};
+
+a.left.length;
+>a.left.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>a.left : Symbol(left)
+>a : Symbol(a, Decl(specialIntersectionsInMappedTypes.ts, 5, 5))
+>left : Symbol(left)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+a.other.length;  // Error expected here
+>a.other.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(specialIntersectionsInMappedTypes.ts, 5, 5))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+

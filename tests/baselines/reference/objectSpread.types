@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpread.ts ===
+//// [tests/cases/conformance/types/spread/objectSpread.ts] ////
+
+=== objectSpread.ts ===
 let o = { a: 1, b: 'no' }
 >o : { a: number; b: string; }
 >{ a: 1, b: 'no' } : { a: number; b: string; }
@@ -168,7 +170,7 @@ let spreadFunc = { ...(function () { }) };
 >function () { } : () => void
 
 type Header = { head: string, body: string, authToken: string }
->Header : Header
+>Header : { head: string; body: string; authToken: string; }
 >head : string
 >body : string
 >authToken : string

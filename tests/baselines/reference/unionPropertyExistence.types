@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionPropertyExistence.ts ===
+//// [tests/cases/compiler/unionPropertyExistence.ts] ////
+
+=== unionPropertyExistence.ts ===
 interface A {
     inAll: string;
 >inAll : string
@@ -30,10 +32,10 @@ interface C {
 }
 
 type AB = A | B;
->AB : AB
+>AB : A | B
 
 type ABC = C | AB;
->ABC : ABC
+>ABC : C | AB
 
 var ab: AB;
 >ab : AB

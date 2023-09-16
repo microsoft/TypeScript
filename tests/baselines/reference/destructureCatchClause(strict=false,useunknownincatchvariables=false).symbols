@@ -1,0 +1,90 @@
+//// [tests/cases/compiler/destructureCatchClause.ts] ////
+
+=== destructureCatchClause.ts ===
+// These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
+try {} catch ({ x }) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 1, 15))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 1, 15))
+
+try {} catch ([ x ]) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 2, 15))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 2, 15))
+
+try {} catch ({ a: { x } }) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 4, 20))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 4, 20))
+
+try {} catch ({ a: [ x ] }) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 5, 20))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 5, 20))
+
+try {} catch ([{ x }]) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 7, 16))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 7, 16))
+
+try {} catch ([[ x ]]) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 8, 16))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 8, 16))
+
+try {} catch ({ a: { b: { c: { x }} }}) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 10, 30))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 10, 30))
+
+
+try {} catch ({ x }: any) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 13, 15))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 13, 15))
+
+try {} catch ([ x ]: any) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 14, 15))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 14, 15))
+
+try {} catch ({ a: { x } }: any) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 16, 20))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 16, 20))
+
+try {} catch ({ a: [ x ] }: any) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 17, 20))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 17, 20))
+
+try {} catch ([{ x }]: any) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 19, 16))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 19, 16))
+
+try {} catch ([[ x ]]: any) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 20, 16))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 20, 16))
+
+try {} catch ({ a: { b: { c: { x }} }}: any) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 22, 30))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 22, 30))
+
+
+try {} catch ({ x }: unknown) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 25, 15))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 25, 15))
+
+try {} catch ([ x ]: unknown) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 26, 15))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 26, 15))
+
+try {} catch ({ a: { x } }: unknown) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 28, 20))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 28, 20))
+
+try {} catch ({ a: [ x ] }: unknown) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 29, 20))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 29, 20))
+
+try {} catch ([{ x }]: unknown) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 31, 16))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 31, 16))
+
+try {} catch ([[ x ]]: unknown) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 32, 16))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 32, 16))
+
+try {} catch ({ a: { b: { c: { x }} }}: unknown) { x }
+>x : Symbol(x, Decl(destructureCatchClause.ts, 34, 30))
+>x : Symbol(x, Decl(destructureCatchClause.ts, 34, 30))
+

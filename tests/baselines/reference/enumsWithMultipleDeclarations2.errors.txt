@@ -1,7 +1,7 @@
-tests/cases/compiler/enumsWithMultipleDeclarations2.ts(10,3): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+enumsWithMultipleDeclarations2.ts(10,3): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
 
 
-==== tests/cases/compiler/enumsWithMultipleDeclarations2.ts (1 errors) ====
+==== enumsWithMultipleDeclarations2.ts (1 errors) ====
     enum E {
       A
     }

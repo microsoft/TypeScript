@@ -1,4 +1,6 @@
-=== tests/cases/compiler/uncalledFunctionChecksInConditional.ts ===
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional.ts] ////
+
+=== uncalledFunctionChecksInConditional.ts ===
 declare function isFoo(): boolean;
 >isFoo : () => boolean
 
@@ -120,3 +122,13 @@ if (ux || y || uz || isFoo) {
     // error on isFoo
 }
 
+if (x && z) {
+>x && z : false | (() => boolean)
+>x : boolean
+>z : () => boolean
+
+    // no error
+    z();
+>z() : boolean
+>z : () => boolean
+}

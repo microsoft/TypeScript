@@ -1,17 +1,19 @@
-=== tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts] ////
+
+=== intersectionsAndEmptyObjects.ts ===
 // Empty object type literals are removed from intersections types
 // that contain other object types
 
 type A = { a: number };
->A : A
+>A : { a: number; }
 >a : number
 
 type B = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 type C = {};
->C : C
+>C : {}
 
 let x01: A & B;
 >x01 : A & B
@@ -26,10 +28,10 @@ let x04: A & B & C;
 >x04 : A & B
 
 let x05: string & C;
->x05 : string & C
+>x05 : string
 
 let x06: C & string;
->x06 : C & string
+>x06 : string
 
 let x07: C;
 >x07 : C
@@ -61,7 +63,7 @@ let x14: A & B & C & D & E;
 // Repro from #20225
 
 type Dictionary = { [name: string]: string };
->Dictionary : Dictionary
+>Dictionary : { [name: string]: string; }
 >name : string
 
 const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
@@ -177,7 +179,7 @@ type choices<IChoiceList extends {
 };
 
 type IMyChoiceList = {
->IMyChoiceList : IMyChoiceList
+>IMyChoiceList : { car: true; }
 
     car: true
 >car : true
@@ -186,7 +188,7 @@ type IMyChoiceList = {
 };
 
 type IUnknownChoiceList = {};
->IUnknownChoiceList : IUnknownChoiceList
+>IUnknownChoiceList : {}
 
 var defaultChoices: choices<{}>;
 >defaultChoices : { shoes: boolean; food: boolean; }
@@ -209,12 +211,12 @@ var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
 // Repro from #38672
 
 type Foo1 = { x: string } & { [x: number]: Foo1 };
->Foo1 : Foo1
+>Foo1 : { x: string; } & { [x: number]: Foo1; }
 >x : string
 >x : number
 
 type Foo2 = { x: string } & { [K in number]: Foo2 };
->Foo2 : Foo2
+>Foo2 : { x: string; } & { [x: number]: Foo2; }
 >x : string
 
 // Repro from #40239
@@ -226,10 +228,10 @@ declare function mock<M>(_: Promise<M>): {} & M;
 mock(import('./ex'))
 >mock(import('./ex')) : {}
 >mock : <M>(_: Promise<M>) => {} & M
->import('./ex') : Promise<{ default: typeof import("tests/cases/conformance/types/intersection/ex"); }>
+>import('./ex') : Promise<{ default: typeof import("ex"); }>
 >'./ex' : "./ex"
 
-=== tests/cases/conformance/types/intersection/ex.d.ts ===
+=== ex.d.ts ===
+
 export {}
-No type information for this code.
-No type information for this code.
+

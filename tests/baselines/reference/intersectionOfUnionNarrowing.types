@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionOfUnionNarrowing.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionOfUnionNarrowing.ts] ////
+
+=== intersectionOfUnionNarrowing.ts ===
 interface X {
   a?: { aProp: string };
 >a : { aProp: string; } | undefined
@@ -9,7 +11,7 @@ interface X {
 >bProp : string
 }
 type AorB = { a: object; b: undefined } | { a: undefined; b: object };
->AorB : AorB
+>AorB : { a: object; b: undefined; } | { a: undefined; b: object; }
 >a : object
 >b : undefined
 >a : undefined

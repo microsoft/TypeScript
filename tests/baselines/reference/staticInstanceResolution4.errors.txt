@@ -1,7 +1,7 @@
-tests/cases/compiler/staticInstanceResolution4.ts(5,3): error TS2339: Property 'foo' does not exist on type 'typeof A'.
+staticInstanceResolution4.ts(5,3): error TS2339: Property 'foo' does not exist on type 'typeof A'.
 
 
-==== tests/cases/compiler/staticInstanceResolution4.ts (1 errors) ====
+==== staticInstanceResolution4.ts (1 errors) ====
     class A {
        public foo() {}
     }

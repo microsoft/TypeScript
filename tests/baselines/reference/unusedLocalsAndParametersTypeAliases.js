@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsAndParametersTypeAliases.ts] ////
+
 //// [unusedLocalsAndParametersTypeAliases.ts]
 // used in a declaration
 type handler1 = () => void;
@@ -28,7 +30,7 @@ y[0]();
 
 //// [unusedLocalsAndParametersTypeAliases.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var x;
 x();
 var y;

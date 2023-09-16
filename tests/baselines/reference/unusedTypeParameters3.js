@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameters3.ts] ////
+
 //// [unusedTypeParameters3.ts]
 class greeter<typeparameter1, typeparameter2, typeparameter3> {
     private x: typeparameter2;

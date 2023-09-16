@@ -1,6 +1,8 @@
+//// [tests/cases/compiler/jsDeclarationsWithDefaultAsNamespaceLikeMerge.ts] ////
+
 === /helper.d.ts ===
 type Computed = () => any;
->Computed : Computed
+>Computed : () => any
 
 interface Mapper<R> {
     <Key extends string>(map: Key[]): { [K in Key]: R };

@@ -1,9 +1,9 @@
-tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts(22,47): error TS2322: Type 'TupleOfNumbersAndObjects[K]' is not assignable to type 'string | number | bigint | boolean'.
+mappedTypeConcreteTupleHomomorphism.ts(22,47): error TS2322: Type 'TupleOfNumbersAndObjects[K]' is not assignable to type 'string | number | bigint | boolean'.
   Type '{} | 2 | 1' is not assignable to type 'string | number | bigint | boolean'.
     Type '{}' is not assignable to type 'string | number | bigint | boolean'.
 
 
-==== tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts (1 errors) ====
+==== mappedTypeConcreteTupleHomomorphism.ts (1 errors) ====
     type TupleOfNumbers = [1, 2]
     
     type HomomorphicType = {

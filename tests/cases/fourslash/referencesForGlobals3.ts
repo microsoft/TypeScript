@@ -3,11 +3,11 @@
 // Global interface reference.
 
 // @Filename: referencesForGlobals_1.ts
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}globalInterface|] {
+/////*1*/interface /*2*/globalInterface {
 ////     f();
-////}|]
+////}
 
 // @Filename: referencesForGlobals_2.ts
-////var i: [|globalInterface|];
+////var i: /*3*/globalInterface;
 
-verify.singleReferenceGroup("interface globalInterface", "globalInterface");
+verify.baselineFindAllReferences('1', '2', '3');

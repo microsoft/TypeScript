@@ -8,7 +8,7 @@
 //// exports.foo = (a) => {};
 
 
-verify.docCommentTemplateAt("", 8,
+verify.docCommentTemplateAt("", 7,
 `/**
  * 
  * @param {any} a

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/flowControlTypeGuardThenSwitch.ts ===
+//// [tests/cases/compiler/flowControlTypeGuardThenSwitch.ts] ////
+
+=== flowControlTypeGuardThenSwitch.ts ===
 enum Kind {
 >Kind : Kind
 
@@ -33,7 +35,7 @@ interface B extends Base {
 }
 
 type Both = A | B;
->Both : Both
+>Both : A | B
 
 function isBoth(x: Base): x is Both {
 >isBoth : (x: Base) => x is Both

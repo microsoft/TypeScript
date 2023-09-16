@@ -1,6 +1,8 @@
-=== tests/cases/compiler/discriminantElementAccessCheck.ts ===
+//// [tests/cases/compiler/discriminantElementAccessCheck.ts] ////
+
+=== discriminantElementAccessCheck.ts ===
 type U = TypeA | TypeB;
->U : U
+>U : TypeA | TypeB
 
 interface TypeA {
     kind: 'A';

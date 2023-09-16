@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericWithIndexerOfTypeParameterType2.ts] ////
+
 //// [genericWithIndexerOfTypeParameterType2.ts]
 export class Collection<TItem extends CollectionItem> {
     _itemsByKey: { [key: string]: TItem; };
@@ -32,7 +34,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.ListItem = exports.CollectionItem = exports.List = exports.Collection = void 0;
     var Collection = /** @class */ (function () {
         function Collection() {

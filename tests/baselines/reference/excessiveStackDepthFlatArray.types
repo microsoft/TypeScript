@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/excessiveStackDepthFlatArray.ts] ////
+
+=== index.tsx ===
 interface MiddlewareArray<T> extends Array<T> {}
 declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
 >configureStore : (options: {    middleware: MiddlewareArray<any>;}) => void
@@ -30,17 +32,16 @@ declare namespace React {
 >children : ReactNode
   }
   type ReactNode = ReactChild | ReactFragment | boolean | null | undefined;
->ReactNode : ReactNode
->null : null
+>ReactNode : boolean | ReactText | ReactFragment
 
   type ReactText = string | number;
->ReactText : ReactText
+>ReactText : string | number
 
   type ReactChild = ReactText;
 >ReactChild : ReactText
 
   type ReactFragment = {} | ReactNodeArray;
->ReactFragment : ReactFragment
+>ReactFragment : {} | ReactNodeArray
 
   interface ReactNodeArray extends Array<ReactNode> {}
 }

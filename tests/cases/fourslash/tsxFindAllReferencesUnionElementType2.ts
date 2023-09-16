@@ -17,7 +17,7 @@
 ////     private method() { }
 //// }
 
-//// [|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}RCComp|] = RC1 || RC2;|]
-//// [|<[|{| "contextRangeIndex": 2 |}RCComp|] />|]
+//// /*1*/var /*2*/RCComp = RC1 || RC2;
+//// /*3*/</*4*/RCComp />
 
-verify.singleReferenceGroup("var RCComp: typeof RC1", "RCComp");
+verify.baselineFindAllReferences('1', '2', '3', '4');

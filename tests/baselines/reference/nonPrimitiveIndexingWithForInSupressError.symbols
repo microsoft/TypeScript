@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInSupressError.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInSupressError.ts] ////
+
+=== nonPrimitiveIndexingWithForInSupressError.ts ===
 var a: object;
 >a : Symbol(a, Decl(nonPrimitiveIndexingWithForInSupressError.ts, 0, 3))
 

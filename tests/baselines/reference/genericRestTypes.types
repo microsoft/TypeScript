@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericRestTypes.ts ===
+//// [tests/cases/compiler/genericRestTypes.ts] ////
+
+=== genericRestTypes.ts ===
 // Repro from #25793
 
 // Gets the parameters of a function type as a tuple
@@ -10,12 +12,12 @@ type Tail<T extends any[]> = ((...args: T) => any) extends ((head: any, ...tail:
 >tail : U
 
 type MyFunctionType = (foo: number, bar: string) => boolean;
->MyFunctionType : MyFunctionType
+>MyFunctionType : (foo: number, bar: string) => boolean
 >foo : number
 >bar : string
 
 type Explicit = (...args: Tail<Parameters<MyFunctionType>>) => ReturnType<MyFunctionType>; // (bar: string) => boolean
->Explicit : Explicit
+>Explicit : (bar: string) => ReturnType<MyFunctionType>
 >args : [bar: string]
 
 type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parameters<T>>) => ReturnType<T>;
@@ -25,7 +27,7 @@ type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parame
 >args : Tail<Parameters<T>>
 
 type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
->Generic : Generic
+>Generic : (bar: string) => boolean
 
 function assignmentWithComplexRest<T extends any[]>() {
 >assignmentWithComplexRest : <T extends any[]>() => void

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/asyncFunctionsAndStrictNullChecks.ts ===
+//// [tests/cases/compiler/asyncFunctionsAndStrictNullChecks.ts] ////
+
+=== asyncFunctionsAndStrictNullChecks.ts ===
 declare namespace Windows.Foundation {
     interface IPromise<TResult> {
         then<U>(success?: (value: TResult) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>;
@@ -75,7 +77,7 @@ declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;
 >Foundation : any
 
 async function sample2(x?: number) {
->sample2 : (x?: number | undefined) => Promise<void>
+>sample2 : (x?: number) => Promise<void>
 >x : number | undefined
 
     let x1 = await resolve1(x);

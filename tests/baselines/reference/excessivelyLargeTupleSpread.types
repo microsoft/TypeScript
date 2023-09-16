@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessivelyLargeTupleSpread.ts ===
+//// [tests/cases/compiler/excessivelyLargeTupleSpread.ts] ////
+
+=== excessivelyLargeTupleSpread.ts ===
 // #41771
 
 type BuildTuple<L extends number, T extends any[] = [any]> = 
@@ -10,7 +12,7 @@ type A = BuildTuple<3>
 >A : any
 
 type T0 = [any];
->T0 : T0
+>T0 : [any]
 
 type T1 = [...T0, ...T0];
 >T1 : [any, any]

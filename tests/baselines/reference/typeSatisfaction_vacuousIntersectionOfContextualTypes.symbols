@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_vacuousIntersectionOfContextualTypes.ts] ////
+
+=== typeSatisfaction_vacuousIntersectionOfContextualTypes.ts ===
+const a: "baz" = "foo" satisfies "foo" | "bar";
+>a : Symbol(a, Decl(typeSatisfaction_vacuousIntersectionOfContextualTypes.ts, 0, 5))
+
+const b: { xyz: "baz" } = { xyz: "foo" } satisfies { xyz: "foo" | "bar" };
+>b : Symbol(b, Decl(typeSatisfaction_vacuousIntersectionOfContextualTypes.ts, 1, 5))
+>xyz : Symbol(xyz, Decl(typeSatisfaction_vacuousIntersectionOfContextualTypes.ts, 1, 10))
+>xyz : Symbol(xyz, Decl(typeSatisfaction_vacuousIntersectionOfContextualTypes.ts, 1, 27))
+>xyz : Symbol(xyz, Decl(typeSatisfaction_vacuousIntersectionOfContextualTypes.ts, 1, 52))
+

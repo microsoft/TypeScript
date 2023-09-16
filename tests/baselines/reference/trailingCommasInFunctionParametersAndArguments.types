@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts ===
+//// [tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts] ////
+
+=== trailingCommasInFunctionParametersAndArguments.ts ===
 function f1(x,) {}
 >f1 : (x: any) => void
 >x : any
@@ -20,8 +22,8 @@ declare function f25(...args,): void;
 f2(...[],);
 >f2(...[],) : void
 >f2 : (...args: any[]) => void
->...[] : undefined
->[] : undefined[]
+>...[] : never
+>[] : []
 
 // Not confused by overloads
 declare function f3(x, ): number;

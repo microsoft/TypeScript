@@ -1,7 +1,9 @@
-=== tests/cases/compiler/argumentsAsPropertyName.ts ===
+//// [tests/cases/compiler/argumentsAsPropertyName.ts] ////
+
+=== argumentsAsPropertyName.ts ===
 // target: es5
 type MyType = {
->MyType : MyType
+>MyType : { arguments: Array<string>; }
 
     arguments: Array<string>
 >arguments : string[]

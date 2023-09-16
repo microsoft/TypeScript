@@ -1,3 +1,5 @@
-=== tests/cases/conformance/es6/templates/templateStringUnterminated2_ES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringUnterminated2_ES6.ts] ////
+
+=== templateStringUnterminated2_ES6.ts ===
+
 `\`
-No type information for this code.

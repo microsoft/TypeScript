@@ -1,0 +1,11 @@
+fileJs.js(1,25): error TS8010: Type annotations can only be used in TypeScript files.
+
+
+==== fileJs.js (1 errors) ====
+    true ? false ? (param): string => param : null : null // Not legal JS; "Unexpected token ':'" at last colon
+                            ~~~~~~
+!!! error TS8010: Type annotations can only be used in TypeScript files.
+    
+==== fileTs.ts (0 errors) ====
+    true ? false ? (param): string => param : null : null
+    

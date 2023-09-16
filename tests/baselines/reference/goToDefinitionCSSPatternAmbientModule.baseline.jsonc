@@ -1,0 +1,32 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/index.css ===
+// [|{| defId: 0 |}|]html { font-size: 16px; }
+
+// === /tests/cases/fourslash/types.ts ===
+// <|declare module [|{| defId: 1 |}"*.css"|] {
+//   const styles: any;
+//   export = styles;
+// }|>
+
+// === /tests/cases/fourslash/index.ts ===
+// import styles from /*GOTO DEF*/[|"./index.css"|];
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "script",
+    "name": "./index.css",
+    "unverified": true
+   },
+   {
+    "defId": 1,
+    "kind": "module",
+    "name": "\"*.css\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

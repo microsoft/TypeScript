@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypes6.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypes6.ts] ////
+
+=== mappedTypes6.ts ===
 type T00<T> = { [P in keyof T]: T[P] };
 >T00 : T00<T>
 
@@ -278,7 +280,7 @@ function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>) {
 }
 
 type Foo = {
->Foo : Foo
+>Foo : { a: number; b: number | undefined; c?: number | undefined; d?: number | undefined; }
 
     a: number;
 >a : number
@@ -420,7 +422,7 @@ x2 = { a: 1, b: 1, c: 1, d: 1 };
 >1 : 1
 
 type Bar = {
->Bar : Bar
+>Bar : { a: number; readonly b: number; }
 
     a: number;
 >a : number

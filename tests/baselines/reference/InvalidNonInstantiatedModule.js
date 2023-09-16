@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/InvalidNonInstantiatedModule.ts] ////
+
 //// [InvalidNonInstantiatedModule.ts]
 module M {
     export interface Point { x: number; y: number }

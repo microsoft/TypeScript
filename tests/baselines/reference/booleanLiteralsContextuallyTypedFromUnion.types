@@ -1,4 +1,6 @@
-=== tests/cases/compiler/booleanLiteralsContextuallyTypedFromUnion.tsx ===
+//// [tests/cases/compiler/booleanLiteralsContextuallyTypedFromUnion.tsx] ////
+
+=== booleanLiteralsContextuallyTypedFromUnion.tsx ===
 interface A { isIt: true; text: string; }
 >isIt : true
 >true : true
@@ -10,7 +12,7 @@ interface B { isIt: false; value: number; }
 >value : number
 
 type C = A | B;
->C : C
+>C : A | B
 
 const isIt = Math.random() > 0.5;
 >isIt : boolean
@@ -50,7 +52,7 @@ const cc: C = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };
 >123 : 123
 
 type ComponentProps =
->ComponentProps : ComponentProps
+>ComponentProps : { optionalBool: true; mandatoryFn: () => void; } | { optionalBool: false; }
 
     | {
         optionalBool: true;

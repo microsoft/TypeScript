@@ -1,14 +1,14 @@
-=== tests/cases/conformance/controlFlow/controlFlowStringIndex.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowStringIndex.ts] ////
+
+=== controlFlowStringIndex.ts ===
 type A = {
->A : A
+>A : { [index: string]: number | null; other: number | null; }
 
     other: number | null;
 >other : number | null
->null : null
 
     [index: string]: number | null
 >index : string
->null : null
 
 };
 declare const value: A;
@@ -19,7 +19,6 @@ if (value.foo !== null) {
 >value.foo : number | null
 >value : A
 >foo : number | null
->null : null
 
     value.foo.toExponential()
 >value.foo.toExponential() : string

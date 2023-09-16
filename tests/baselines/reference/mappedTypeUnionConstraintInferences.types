@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeUnionConstraintInferences.ts ===
+//// [tests/cases/compiler/mappedTypeUnionConstraintInferences.ts] ////
+
+=== mappedTypeUnionConstraintInferences.ts ===
 export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >Omit : Omit<T, K>
 
@@ -17,7 +19,6 @@ export function doSomething_Actual<T extends {
     const x: { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; } = null as any;
 >x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
 >null as any : any
->null : null
 
     return x;
 >x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedMultipleParameters1InFunctionDeclaration.ts] ////
+
 //// [unusedMultipleParameters1InFunctionDeclaration.ts]
 function greeter(person: string, person2: string) {
     var unused = 20;

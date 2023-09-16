@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functions/contextuallyTypedFunctionExpressionsAndReturnAnnotations.ts ===
+//// [tests/cases/conformance/expressions/functions/contextuallyTypedFunctionExpressionsAndReturnAnnotations.ts] ////
+
+=== contextuallyTypedFunctionExpressionsAndReturnAnnotations.ts ===
 declare function foo(x: (y: string) => (y2: number) => void);
 >foo : (x: (y: string) => (y2: number) => void) => any
 >x : (y: string) => (y2: number) => void
@@ -22,8 +24,6 @@ foo((y): (y2: number) => void => {
 >0 : 0
 
     return null;
->null : null
-
 });
 
 foo((y: string) => {

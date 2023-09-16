@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentStricterConstraints.ts ===
+//// [tests/cases/compiler/assignmentStricterConstraints.ts] ////
+
+=== assignmentStricterConstraints.ts ===
 var f = function <T, S extends T>(x: T, y: S): void {
 >f : <T, S extends T>(x: T, y: S) => void
 >function <T, S extends T>(x: T, y: S): void {    x = y} : <T, S extends T>(x: T, y: S) => void

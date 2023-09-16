@@ -1,11 +1,13 @@
-=== tests/cases/compiler/jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx ===
+//// [tests/cases/compiler/jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx] ////
+
+=== jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx ===
 /// <reference path="react16.d.ts" />
 
 import * as React from 'react'
 >React : typeof React
 
 type Tab = [string, React.ReactNode]  // [tabName, tabContent]
->Tab : Tab
+>Tab : [string, React.ReactNode]
 >React : any
 
 interface Props {

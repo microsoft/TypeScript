@@ -50,7 +50,7 @@ define(["require", "exports"], function (require, exports) {
             return b;
         }());
         multiM.b = b;
-    })(multiM = exports.multiM || (exports.multiM = {}));
+    })(multiM || (exports.multiM = multiM = {}));
     /** thi is multi module 2*/
     (function (multiM) {
         /** class c comment*/
@@ -67,7 +67,7 @@ define(["require", "exports"], function (require, exports) {
             return e;
         }());
         multiM.e = e;
-    })(multiM = exports.multiM || (exports.multiM = {}));
+    })(multiM || (exports.multiM = multiM = {}));
     new multiM.b();
     new multiM.c();
 });
@@ -93,19 +93,19 @@ define(["require", "exports"], function (require, exports) {
             return f;
         }());
         multiM.f = f;
-    })(multiM = exports.multiM || (exports.multiM = {}));
+    })(multiM || (exports.multiM = multiM = {}));
     new multiM.d();
 });
 
 
 //// [commentsMultiModuleMultiFile_0.d.ts]
 /** this is multi declare module*/
-export declare module multiM {
+export declare namespace multiM {
     class b {
     }
 }
 /** thi is multi module 2*/
-export declare module multiM {
+export declare namespace multiM {
     /** class c comment*/
     class c {
     }
@@ -114,7 +114,7 @@ export declare module multiM {
 }
 //// [commentsMultiModuleMultiFile_1.d.ts]
 /** this is multi module 3 comment*/
-export declare module multiM {
+export declare namespace multiM {
     /** class d comment*/
     class d {
     }

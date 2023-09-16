@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instantiatedTypeAliasDisplay.ts] ////
+
 //// [instantiatedTypeAliasDisplay.ts]
 // Repros from #12066
 
@@ -28,7 +30,7 @@ interface X<A> {
 interface Y<B> {
     b: B;
 }
-declare type Z<A, B> = X<A> | Y<B>;
+type Z<A, B> = X<A> | Y<B>;
 declare function f1<A>(): Z<A, number>;
 declare function f2<A, B, C, D, E>(a: A, b: B, c: C, d: D): Z<A, string[]>;
 declare const x1: Z<string, number>;

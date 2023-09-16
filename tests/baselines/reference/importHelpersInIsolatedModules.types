@@ -1,4 +1,6 @@
-=== tests/cases/compiler/external.ts ===
+//// [tests/cases/compiler/importHelpersInIsolatedModules.ts] ////
+
+=== external.ts ===
 export class A { }
 >A : A
 
@@ -22,7 +24,7 @@ class C {
     }
 }
 
-=== tests/cases/compiler/script.ts ===
+=== script.ts ===
 class A { }
 >A : A
 
@@ -46,7 +48,7 @@ class C {
     }
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
 >d : Function

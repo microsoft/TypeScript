@@ -1,0 +1,61 @@
+regexpExecAndMatchTypeUsages.ts(3,5): error TS2532: Object is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(4,5): error TS18048: 'matchResult.index' is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(5,5): error TS18048: 'matchResult.input' is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(6,5): error TS18048: 'matchResult.groups' is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(6,5): error TS2532: Object is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(7,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+regexpExecAndMatchTypeUsages.ts(10,5): error TS2532: Object is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(13,5): error TS18048: 'execResult.groups' is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(13,5): error TS2532: Object is possibly 'undefined'.
+regexpExecAndMatchTypeUsages.ts(14,5): error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+regexpExecAndMatchTypeUsages.ts(20,9): error TS2375: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.
+
+
+==== regexpExecAndMatchTypeUsages.ts (11 errors) ====
+    export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
+        matchResult[0].length;
+        matchResult[999].length;
+        ~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        matchResult.index + 0;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS18048: 'matchResult.index' is possibly 'undefined'.
+        matchResult.input.length;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS18048: 'matchResult.input' is possibly 'undefined'.
+        matchResult.groups["someVariable"].length;
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS18048: 'matchResult.groups' is possibly 'undefined'.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        matchResult.groups = undefined;
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+    
+        execResult[0].length;
+        execResult[999].length;
+        ~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        execResult.index + 0;
+        execResult.input.length;
+        execResult.groups["someVariable"].length;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS18048: 'execResult.groups' is possibly 'undefined'.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        execResult.groups = undefined;
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2412: Type 'undefined' is not assignable to type '{ [key: string]: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+    
+        if (Math.random()) {
+            matchResult = execResult;
+        }
+        else {
+            execResult = matchResult
+            ~~~~~~~~~~
+!!! error TS2375: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.
+        }
+    }
+    

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorWithExpressionLessReturn.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorWithExpressionLessReturn.ts] ////
+
+=== constructorWithExpressionLessReturn.ts ===
 class C {
 >C : Symbol(C, Decl(constructorWithExpressionLessReturn.ts, 0, 0))
 

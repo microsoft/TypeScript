@@ -1,8 +1,7 @@
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember.ts(10,11): error TS2339: Property 'z' does not exist on type 'C'.
-tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember.ts(14,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+typeOfThisInInstanceMember.ts(10,11): error TS2339: Property 'z' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember.ts (2 errors) ====
+==== typeOfThisInInstanceMember.ts (1 errors) ====
     class C {
         x = this;
         foo() {
@@ -19,8 +18,6 @@ tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInIns
         }
     
         get y() {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return this;
         }
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitReturnsWithProtectedBlocks3.ts ===
+//// [tests/cases/compiler/noImplicitReturnsWithProtectedBlocks3.ts] ////
+
+=== noImplicitReturnsWithProtectedBlocks3.ts ===
 declare function log(s: string): void;
 >log : (s: string) => void
 >s : string

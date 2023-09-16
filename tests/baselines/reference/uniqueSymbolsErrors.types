@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts ===
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts] ////
+
+=== uniqueSymbolsErrors.ts ===
 // declarations
 declare const invalidUniqueType: unique number;
 >invalidUniqueType : any
@@ -150,7 +152,7 @@ interface InvalidInterface {
 
 // type literals
 type InvalidTypeLiteral = {
->InvalidTypeLiteral : InvalidTypeLiteral
+>InvalidTypeLiteral : { invalidPropertyType: unique symbol; invalidArgType(arg: unique symbol): void; invalidRestArgType(...args: (unique symbol)[]): void; invalidReturnType(): unique symbol; invalidThisType(this: unique symbol): any; invalidTypePredicate(n: any): n is symbol; invalidTypeParameterConstraint<T extends symbol>(): void; invalidTypeParameterDefault<T = symbol>(): void; }
 
     invalidPropertyType: unique symbol;
 >invalidPropertyType : symbol

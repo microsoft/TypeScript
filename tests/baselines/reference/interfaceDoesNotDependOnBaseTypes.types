@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/interfaceDoesNotDependOnBaseTypes.ts ===
+//// [tests/cases/conformance/types/typeAliases/interfaceDoesNotDependOnBaseTypes.ts] ////
+
+=== interfaceDoesNotDependOnBaseTypes.ts ===
 var x: StringTree;
 >x : StringTree
 
@@ -25,6 +27,6 @@ if (typeof x !== "string") {
 }
 
 type StringTree = string | StringTreeArray;
->StringTree : StringTree
+>StringTree : string | StringTreeArray
 
 interface StringTreeArray extends Array<StringTree> { }

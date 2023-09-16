@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instantiateTypeParameter.ts ===
+//// [tests/cases/compiler/instantiateTypeParameter.ts] ////
+
+=== instantiateTypeParameter.ts ===
 interface Foo<T> {
 >Foo : Symbol(Foo, Decl(instantiateTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(instantiateTypeParameter.ts, 0, 14))

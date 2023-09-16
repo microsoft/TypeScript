@@ -1,7 +1,7 @@
-tests/cases/compiler/propertyAccessibility2.ts(4,11): error TS2341: Property 'x' is private and only accessible within class 'C'.
+propertyAccessibility2.ts(4,11): error TS2341: Property 'x' is private and only accessible within class 'C'.
 
 
-==== tests/cases/compiler/propertyAccessibility2.ts (1 errors) ====
+==== propertyAccessibility2.ts (1 errors) ====
     class C {
       private static x = 1;
     }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceOptionalPropertiesToIndexSignatures.ts] ////
+
 //// [inferenceOptionalPropertiesToIndexSignatures.ts]
 declare function foo<T>(obj: { [x: string]: T }): T;
 

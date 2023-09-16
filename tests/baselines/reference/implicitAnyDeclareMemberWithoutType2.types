@@ -1,11 +1,12 @@
-=== tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts ===
+//// [tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts] ////
+
+=== implicitAnyDeclareMemberWithoutType2.ts ===
 // this should be an error
 class C {
 >C : C
 
     public x = null;// error at "x"
 >x : any
->null : null
 
     public x1: string  // no error
 >x1 : string
