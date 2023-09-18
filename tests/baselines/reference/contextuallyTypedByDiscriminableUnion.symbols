@@ -60,3 +60,21 @@ invoke({
     }
 });
 
+const kind = "a"
+>kind : Symbol(kind, Decl(contextuallyTypedByDiscriminableUnion.ts, 25, 5))
+
+invoke({
+>invoke : Symbol(invoke, Decl(contextuallyTypedByDiscriminableUnion.ts, 6, 2))
+
+    kind,
+>kind : Symbol(kind, Decl(contextuallyTypedByDiscriminableUnion.ts, 26, 8))
+
+    method(a) {
+>method : Symbol(method, Decl(contextuallyTypedByDiscriminableUnion.ts, 27, 9))
+>a : Symbol(a, Decl(contextuallyTypedByDiscriminableUnion.ts, 28, 11))
+
+        return +a;
+>a : Symbol(a, Decl(contextuallyTypedByDiscriminableUnion.ts, 28, 11))
+    }
+})
+

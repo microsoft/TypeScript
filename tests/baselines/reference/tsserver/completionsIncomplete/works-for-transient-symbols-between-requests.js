@@ -1703,7 +1703,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/lib/foo/constants",
             "data": {
               "exportName": "export=",
-              "exportMapKey": "exp|*|",
+              "exportMapKey": "3 * exp ",
               "fileName": "/lib/foo/constants.d.ts"
             }
           },
@@ -1722,7 +1722,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S0_0",
-              "exportMapKey": "S0_0|*|",
+              "exportMapKey": "4 * S0_0 ",
               "moduleSpecifier": "./lib/a_0",
               "fileName": "/lib/a_0.ts"
             }
@@ -1742,7 +1742,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S1_0",
-              "exportMapKey": "S1_0|*|",
+              "exportMapKey": "4 * S1_0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
             }
@@ -1762,7 +1762,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S10_0",
-              "exportMapKey": "S10_0|*|",
+              "exportMapKey": "5 * S10_0 ",
               "moduleSpecifier": "./lib/a_10",
               "fileName": "/lib/a_10.ts"
             }
@@ -1782,7 +1782,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S11_0",
-              "exportMapKey": "S11_0|*|",
+              "exportMapKey": "5 * S11_0 ",
               "moduleSpecifier": "./lib/a_11",
               "fileName": "/lib/a_11.ts"
             }
@@ -1802,7 +1802,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S12_0",
-              "exportMapKey": "S12_0|*|",
+              "exportMapKey": "5 * S12_0 ",
               "moduleSpecifier": "./lib/a_12",
               "fileName": "/lib/a_12.ts"
             }
@@ -1822,7 +1822,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S13_0",
-              "exportMapKey": "S13_0|*|",
+              "exportMapKey": "5 * S13_0 ",
               "moduleSpecifier": "./lib/a_13",
               "fileName": "/lib/a_13.ts"
             }
@@ -1842,7 +1842,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S14_0",
-              "exportMapKey": "S14_0|*|",
+              "exportMapKey": "5 * S14_0 ",
               "moduleSpecifier": "./lib/a_14",
               "fileName": "/lib/a_14.ts"
             }
@@ -1862,7 +1862,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S15_0",
-              "exportMapKey": "S15_0|*|",
+              "exportMapKey": "5 * S15_0 ",
               "moduleSpecifier": "./lib/a_15",
               "fileName": "/lib/a_15.ts"
             }
@@ -1882,7 +1882,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S16_0",
-              "exportMapKey": "S16_0|*|",
+              "exportMapKey": "5 * S16_0 ",
               "moduleSpecifier": "./lib/a_16",
               "fileName": "/lib/a_16.ts"
             }
@@ -1902,7 +1902,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S17_0",
-              "exportMapKey": "S17_0|*|",
+              "exportMapKey": "5 * S17_0 ",
               "moduleSpecifier": "./lib/a_17",
               "fileName": "/lib/a_17.ts"
             }
@@ -1922,7 +1922,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S18_0",
-              "exportMapKey": "S18_0|*|",
+              "exportMapKey": "5 * S18_0 ",
               "moduleSpecifier": "./lib/a_18",
               "fileName": "/lib/a_18.ts"
             }
@@ -1942,7 +1942,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S19_0",
-              "exportMapKey": "S19_0|*|",
+              "exportMapKey": "5 * S19_0 ",
               "moduleSpecifier": "./lib/a_19",
               "fileName": "/lib/a_19.ts"
             }
@@ -1962,7 +1962,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S2_0",
-              "exportMapKey": "S2_0|*|",
+              "exportMapKey": "4 * S2_0 ",
               "moduleSpecifier": "./lib/a_2",
               "fileName": "/lib/a_2.ts"
             }
@@ -1982,7 +1982,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S20_0",
-              "exportMapKey": "S20_0|*|",
+              "exportMapKey": "5 * S20_0 ",
               "moduleSpecifier": "./lib/a_20",
               "fileName": "/lib/a_20.ts"
             }
@@ -2002,7 +2002,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S21_0",
-              "exportMapKey": "S21_0|*|",
+              "exportMapKey": "5 * S21_0 ",
               "moduleSpecifier": "./lib/a_21",
               "fileName": "/lib/a_21.ts"
             }
@@ -2022,7 +2022,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S22_0",
-              "exportMapKey": "S22_0|*|",
+              "exportMapKey": "5 * S22_0 ",
               "moduleSpecifier": "./lib/a_22",
               "fileName": "/lib/a_22.ts"
             }
@@ -2042,7 +2042,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S23_0",
-              "exportMapKey": "S23_0|*|",
+              "exportMapKey": "5 * S23_0 ",
               "moduleSpecifier": "./lib/a_23",
               "fileName": "/lib/a_23.ts"
             }
@@ -2062,7 +2062,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S24_0",
-              "exportMapKey": "S24_0|*|",
+              "exportMapKey": "5 * S24_0 ",
               "moduleSpecifier": "./lib/a_24",
               "fileName": "/lib/a_24.ts"
             }
@@ -2082,7 +2082,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S25_0",
-              "exportMapKey": "S25_0|*|",
+              "exportMapKey": "5 * S25_0 ",
               "moduleSpecifier": "./lib/a_25",
               "fileName": "/lib/a_25.ts"
             }
@@ -2102,7 +2102,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S26_0",
-              "exportMapKey": "S26_0|*|",
+              "exportMapKey": "5 * S26_0 ",
               "moduleSpecifier": "./lib/a_26",
               "fileName": "/lib/a_26.ts"
             }
@@ -2122,7 +2122,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S27_0",
-              "exportMapKey": "S27_0|*|",
+              "exportMapKey": "5 * S27_0 ",
               "moduleSpecifier": "./lib/a_27",
               "fileName": "/lib/a_27.ts"
             }
@@ -2142,7 +2142,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S28_0",
-              "exportMapKey": "S28_0|*|",
+              "exportMapKey": "5 * S28_0 ",
               "moduleSpecifier": "./lib/a_28",
               "fileName": "/lib/a_28.ts"
             }
@@ -2162,7 +2162,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S29_0",
-              "exportMapKey": "S29_0|*|",
+              "exportMapKey": "5 * S29_0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
             }
@@ -2182,7 +2182,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S3_0",
-              "exportMapKey": "S3_0|*|",
+              "exportMapKey": "4 * S3_0 ",
               "moduleSpecifier": "./lib/a_3",
               "fileName": "/lib/a_3.ts"
             }
@@ -2202,7 +2202,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S30_0",
-              "exportMapKey": "S30_0|*|",
+              "exportMapKey": "5 * S30_0 ",
               "moduleSpecifier": "./lib/a_30",
               "fileName": "/lib/a_30.ts"
             }
@@ -2222,7 +2222,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S31_0",
-              "exportMapKey": "S31_0|*|",
+              "exportMapKey": "5 * S31_0 ",
               "moduleSpecifier": "./lib/a_31",
               "fileName": "/lib/a_31.ts"
             }
@@ -2242,7 +2242,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S32_0",
-              "exportMapKey": "S32_0|*|",
+              "exportMapKey": "5 * S32_0 ",
               "moduleSpecifier": "./lib/a_32",
               "fileName": "/lib/a_32.ts"
             }
@@ -2262,7 +2262,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S33_0",
-              "exportMapKey": "S33_0|*|",
+              "exportMapKey": "5 * S33_0 ",
               "moduleSpecifier": "./lib/a_33",
               "fileName": "/lib/a_33.ts"
             }
@@ -2282,7 +2282,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S34_0",
-              "exportMapKey": "S34_0|*|",
+              "exportMapKey": "5 * S34_0 ",
               "moduleSpecifier": "./lib/a_34",
               "fileName": "/lib/a_34.ts"
             }
@@ -2302,7 +2302,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S35_0",
-              "exportMapKey": "S35_0|*|",
+              "exportMapKey": "5 * S35_0 ",
               "moduleSpecifier": "./lib/a_35",
               "fileName": "/lib/a_35.ts"
             }
@@ -2322,7 +2322,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S36_0",
-              "exportMapKey": "S36_0|*|",
+              "exportMapKey": "5 * S36_0 ",
               "moduleSpecifier": "./lib/a_36",
               "fileName": "/lib/a_36.ts"
             }
@@ -2342,7 +2342,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S37_0",
-              "exportMapKey": "S37_0|*|",
+              "exportMapKey": "5 * S37_0 ",
               "moduleSpecifier": "./lib/a_37",
               "fileName": "/lib/a_37.ts"
             }
@@ -2362,7 +2362,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S38_0",
-              "exportMapKey": "S38_0|*|",
+              "exportMapKey": "5 * S38_0 ",
               "moduleSpecifier": "./lib/a_38",
               "fileName": "/lib/a_38.ts"
             }
@@ -2382,7 +2382,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S39_0",
-              "exportMapKey": "S39_0|*|",
+              "exportMapKey": "5 * S39_0 ",
               "moduleSpecifier": "./lib/a_39",
               "fileName": "/lib/a_39.ts"
             }
@@ -2402,7 +2402,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S4_0",
-              "exportMapKey": "S4_0|*|",
+              "exportMapKey": "4 * S4_0 ",
               "moduleSpecifier": "./lib/a_4",
               "fileName": "/lib/a_4.ts"
             }
@@ -2422,7 +2422,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S40_0",
-              "exportMapKey": "S40_0|*|",
+              "exportMapKey": "5 * S40_0 ",
               "moduleSpecifier": "./lib/a_40",
               "fileName": "/lib/a_40.ts"
             }
@@ -2442,7 +2442,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S41_0",
-              "exportMapKey": "S41_0|*|",
+              "exportMapKey": "5 * S41_0 ",
               "moduleSpecifier": "./lib/a_41",
               "fileName": "/lib/a_41.ts"
             }
@@ -2462,7 +2462,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S42_0",
-              "exportMapKey": "S42_0|*|",
+              "exportMapKey": "5 * S42_0 ",
               "moduleSpecifier": "./lib/a_42",
               "fileName": "/lib/a_42.ts"
             }
@@ -2482,7 +2482,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S43_0",
-              "exportMapKey": "S43_0|*|",
+              "exportMapKey": "5 * S43_0 ",
               "moduleSpecifier": "./lib/a_43",
               "fileName": "/lib/a_43.ts"
             }
@@ -2502,7 +2502,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S44_0",
-              "exportMapKey": "S44_0|*|",
+              "exportMapKey": "5 * S44_0 ",
               "moduleSpecifier": "./lib/a_44",
               "fileName": "/lib/a_44.ts"
             }
@@ -2522,7 +2522,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S45_0",
-              "exportMapKey": "S45_0|*|",
+              "exportMapKey": "5 * S45_0 ",
               "moduleSpecifier": "./lib/a_45",
               "fileName": "/lib/a_45.ts"
             }
@@ -2542,7 +2542,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S46_0",
-              "exportMapKey": "S46_0|*|",
+              "exportMapKey": "5 * S46_0 ",
               "moduleSpecifier": "./lib/a_46",
               "fileName": "/lib/a_46.ts"
             }
@@ -2562,7 +2562,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S47_0",
-              "exportMapKey": "S47_0|*|",
+              "exportMapKey": "5 * S47_0 ",
               "moduleSpecifier": "./lib/a_47",
               "fileName": "/lib/a_47.ts"
             }
@@ -2582,7 +2582,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S48_0",
-              "exportMapKey": "S48_0|*|",
+              "exportMapKey": "5 * S48_0 ",
               "moduleSpecifier": "./lib/a_48",
               "fileName": "/lib/a_48.ts"
             }
@@ -2602,7 +2602,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S49_0",
-              "exportMapKey": "S49_0|*|",
+              "exportMapKey": "5 * S49_0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
             }
@@ -2622,7 +2622,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S5_0",
-              "exportMapKey": "S5_0|*|",
+              "exportMapKey": "4 * S5_0 ",
               "moduleSpecifier": "./lib/a_5",
               "fileName": "/lib/a_5.ts"
             }
@@ -2642,7 +2642,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S50_0",
-              "exportMapKey": "S50_0|*|",
+              "exportMapKey": "5 * S50_0 ",
               "moduleSpecifier": "./lib/a_50",
               "fileName": "/lib/a_50.ts"
             }
@@ -2662,7 +2662,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S51_0",
-              "exportMapKey": "S51_0|*|",
+              "exportMapKey": "5 * S51_0 ",
               "moduleSpecifier": "./lib/a_51",
               "fileName": "/lib/a_51.ts"
             }
@@ -2682,7 +2682,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S52_0",
-              "exportMapKey": "S52_0|*|",
+              "exportMapKey": "5 * S52_0 ",
               "moduleSpecifier": "./lib/a_52",
               "fileName": "/lib/a_52.ts"
             }
@@ -2702,7 +2702,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S53_0",
-              "exportMapKey": "S53_0|*|",
+              "exportMapKey": "5 * S53_0 ",
               "moduleSpecifier": "./lib/a_53",
               "fileName": "/lib/a_53.ts"
             }
@@ -2722,7 +2722,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S54_0",
-              "exportMapKey": "S54_0|*|",
+              "exportMapKey": "5 * S54_0 ",
               "moduleSpecifier": "./lib/a_54",
               "fileName": "/lib/a_54.ts"
             }
@@ -2742,7 +2742,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S55_0",
-              "exportMapKey": "S55_0|*|",
+              "exportMapKey": "5 * S55_0 ",
               "moduleSpecifier": "./lib/a_55",
               "fileName": "/lib/a_55.ts"
             }
@@ -2762,7 +2762,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S56_0",
-              "exportMapKey": "S56_0|*|",
+              "exportMapKey": "5 * S56_0 ",
               "moduleSpecifier": "./lib/a_56",
               "fileName": "/lib/a_56.ts"
             }
@@ -2782,7 +2782,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S57_0",
-              "exportMapKey": "S57_0|*|",
+              "exportMapKey": "5 * S57_0 ",
               "moduleSpecifier": "./lib/a_57",
               "fileName": "/lib/a_57.ts"
             }
@@ -2802,7 +2802,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S58_0",
-              "exportMapKey": "S58_0|*|",
+              "exportMapKey": "5 * S58_0 ",
               "moduleSpecifier": "./lib/a_58",
               "fileName": "/lib/a_58.ts"
             }
@@ -2822,7 +2822,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S59_0",
-              "exportMapKey": "S59_0|*|",
+              "exportMapKey": "5 * S59_0 ",
               "moduleSpecifier": "./lib/a_59",
               "fileName": "/lib/a_59.ts"
             }
@@ -2842,7 +2842,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S6_0",
-              "exportMapKey": "S6_0|*|",
+              "exportMapKey": "4 * S6_0 ",
               "moduleSpecifier": "./lib/a_6",
               "fileName": "/lib/a_6.ts"
             }
@@ -2862,7 +2862,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S60_0",
-              "exportMapKey": "S60_0|*|",
+              "exportMapKey": "5 * S60_0 ",
               "moduleSpecifier": "./lib/a_60",
               "fileName": "/lib/a_60.ts"
             }
@@ -2882,7 +2882,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S61_0",
-              "exportMapKey": "S61_0|*|",
+              "exportMapKey": "5 * S61_0 ",
               "moduleSpecifier": "./lib/a_61",
               "fileName": "/lib/a_61.ts"
             }
@@ -2902,7 +2902,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S62_0",
-              "exportMapKey": "S62_0|*|",
+              "exportMapKey": "5 * S62_0 ",
               "moduleSpecifier": "./lib/a_62",
               "fileName": "/lib/a_62.ts"
             }
@@ -2922,7 +2922,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S63_0",
-              "exportMapKey": "S63_0|*|",
+              "exportMapKey": "5 * S63_0 ",
               "moduleSpecifier": "./lib/a_63",
               "fileName": "/lib/a_63.ts"
             }
@@ -2942,7 +2942,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S64_0",
-              "exportMapKey": "S64_0|*|",
+              "exportMapKey": "5 * S64_0 ",
               "moduleSpecifier": "./lib/a_64",
               "fileName": "/lib/a_64.ts"
             }
@@ -2962,7 +2962,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S65_0",
-              "exportMapKey": "S65_0|*|",
+              "exportMapKey": "5 * S65_0 ",
               "moduleSpecifier": "./lib/a_65",
               "fileName": "/lib/a_65.ts"
             }
@@ -2982,7 +2982,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S66_0",
-              "exportMapKey": "S66_0|*|",
+              "exportMapKey": "5 * S66_0 ",
               "moduleSpecifier": "./lib/a_66",
               "fileName": "/lib/a_66.ts"
             }
@@ -3002,7 +3002,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S67_0",
-              "exportMapKey": "S67_0|*|",
+              "exportMapKey": "5 * S67_0 ",
               "moduleSpecifier": "./lib/a_67",
               "fileName": "/lib/a_67.ts"
             }
@@ -3022,7 +3022,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S68_0",
-              "exportMapKey": "S68_0|*|",
+              "exportMapKey": "5 * S68_0 ",
               "moduleSpecifier": "./lib/a_68",
               "fileName": "/lib/a_68.ts"
             }
@@ -3042,7 +3042,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S69_0",
-              "exportMapKey": "S69_0|*|",
+              "exportMapKey": "5 * S69_0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
             }
@@ -3062,7 +3062,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S7_0",
-              "exportMapKey": "S7_0|*|",
+              "exportMapKey": "4 * S7_0 ",
               "moduleSpecifier": "./lib/a_7",
               "fileName": "/lib/a_7.ts"
             }
@@ -3082,7 +3082,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S70_0",
-              "exportMapKey": "S70_0|*|",
+              "exportMapKey": "5 * S70_0 ",
               "moduleSpecifier": "./lib/a_70",
               "fileName": "/lib/a_70.ts"
             }
@@ -3102,7 +3102,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S71_0",
-              "exportMapKey": "S71_0|*|",
+              "exportMapKey": "5 * S71_0 ",
               "moduleSpecifier": "./lib/a_71",
               "fileName": "/lib/a_71.ts"
             }
@@ -3122,7 +3122,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S72_0",
-              "exportMapKey": "S72_0|*|",
+              "exportMapKey": "5 * S72_0 ",
               "moduleSpecifier": "./lib/a_72",
               "fileName": "/lib/a_72.ts"
             }
@@ -3142,7 +3142,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S73_0",
-              "exportMapKey": "S73_0|*|",
+              "exportMapKey": "5 * S73_0 ",
               "moduleSpecifier": "./lib/a_73",
               "fileName": "/lib/a_73.ts"
             }
@@ -3162,7 +3162,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S74_0",
-              "exportMapKey": "S74_0|*|",
+              "exportMapKey": "5 * S74_0 ",
               "moduleSpecifier": "./lib/a_74",
               "fileName": "/lib/a_74.ts"
             }
@@ -3182,7 +3182,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S75_0",
-              "exportMapKey": "S75_0|*|",
+              "exportMapKey": "5 * S75_0 ",
               "moduleSpecifier": "./lib/a_75",
               "fileName": "/lib/a_75.ts"
             }
@@ -3202,7 +3202,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S76_0",
-              "exportMapKey": "S76_0|*|",
+              "exportMapKey": "5 * S76_0 ",
               "moduleSpecifier": "./lib/a_76",
               "fileName": "/lib/a_76.ts"
             }
@@ -3222,7 +3222,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S77_0",
-              "exportMapKey": "S77_0|*|",
+              "exportMapKey": "5 * S77_0 ",
               "moduleSpecifier": "./lib/a_77",
               "fileName": "/lib/a_77.ts"
             }
@@ -3242,7 +3242,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S78_0",
-              "exportMapKey": "S78_0|*|",
+              "exportMapKey": "5 * S78_0 ",
               "moduleSpecifier": "./lib/a_78",
               "fileName": "/lib/a_78.ts"
             }
@@ -3262,7 +3262,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S79_0",
-              "exportMapKey": "S79_0|*|",
+              "exportMapKey": "5 * S79_0 ",
               "moduleSpecifier": "./lib/a_79",
               "fileName": "/lib/a_79.ts"
             }
@@ -3282,7 +3282,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S8_0",
-              "exportMapKey": "S8_0|*|",
+              "exportMapKey": "4 * S8_0 ",
               "moduleSpecifier": "./lib/a_8",
               "fileName": "/lib/a_8.ts"
             }
@@ -3302,7 +3302,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S80_0",
-              "exportMapKey": "S80_0|*|",
+              "exportMapKey": "5 * S80_0 ",
               "moduleSpecifier": "./lib/a_80",
               "fileName": "/lib/a_80.ts"
             }
@@ -3322,7 +3322,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S81_0",
-              "exportMapKey": "S81_0|*|",
+              "exportMapKey": "5 * S81_0 ",
               "moduleSpecifier": "./lib/a_81",
               "fileName": "/lib/a_81.ts"
             }
@@ -3342,7 +3342,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S82_0",
-              "exportMapKey": "S82_0|*|",
+              "exportMapKey": "5 * S82_0 ",
               "moduleSpecifier": "./lib/a_82",
               "fileName": "/lib/a_82.ts"
             }
@@ -3362,7 +3362,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S83_0",
-              "exportMapKey": "S83_0|*|",
+              "exportMapKey": "5 * S83_0 ",
               "moduleSpecifier": "./lib/a_83",
               "fileName": "/lib/a_83.ts"
             }
@@ -3382,7 +3382,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S84_0",
-              "exportMapKey": "S84_0|*|",
+              "exportMapKey": "5 * S84_0 ",
               "moduleSpecifier": "./lib/a_84",
               "fileName": "/lib/a_84.ts"
             }
@@ -3402,7 +3402,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S85_0",
-              "exportMapKey": "S85_0|*|",
+              "exportMapKey": "5 * S85_0 ",
               "moduleSpecifier": "./lib/a_85",
               "fileName": "/lib/a_85.ts"
             }
@@ -3422,7 +3422,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S86_0",
-              "exportMapKey": "S86_0|*|",
+              "exportMapKey": "5 * S86_0 ",
               "moduleSpecifier": "./lib/a_86",
               "fileName": "/lib/a_86.ts"
             }
@@ -3442,7 +3442,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S87_0",
-              "exportMapKey": "S87_0|*|",
+              "exportMapKey": "5 * S87_0 ",
               "moduleSpecifier": "./lib/a_87",
               "fileName": "/lib/a_87.ts"
             }
@@ -3462,7 +3462,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S88_0",
-              "exportMapKey": "S88_0|*|",
+              "exportMapKey": "5 * S88_0 ",
               "moduleSpecifier": "./lib/a_88",
               "fileName": "/lib/a_88.ts"
             }
@@ -3482,7 +3482,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S89_0",
-              "exportMapKey": "S89_0|*|",
+              "exportMapKey": "5 * S89_0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
             }
@@ -3502,7 +3502,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S9_0",
-              "exportMapKey": "S9_0|*|",
+              "exportMapKey": "4 * S9_0 ",
               "moduleSpecifier": "./lib/a_9",
               "fileName": "/lib/a_9.ts"
             }
@@ -3522,7 +3522,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S90_0",
-              "exportMapKey": "S90_0|*|",
+              "exportMapKey": "5 * S90_0 ",
               "moduleSpecifier": "./lib/a_90",
               "fileName": "/lib/a_90.ts"
             }
@@ -3542,7 +3542,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S91_0",
-              "exportMapKey": "S91_0|*|",
+              "exportMapKey": "5 * S91_0 ",
               "moduleSpecifier": "./lib/a_91",
               "fileName": "/lib/a_91.ts"
             }
@@ -3562,7 +3562,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S92_0",
-              "exportMapKey": "S92_0|*|",
+              "exportMapKey": "5 * S92_0 ",
               "moduleSpecifier": "./lib/a_92",
               "fileName": "/lib/a_92.ts"
             }
@@ -3582,7 +3582,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S93_0",
-              "exportMapKey": "S93_0|*|",
+              "exportMapKey": "5 * S93_0 ",
               "moduleSpecifier": "./lib/a_93",
               "fileName": "/lib/a_93.ts"
             }
@@ -3602,7 +3602,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S94_0",
-              "exportMapKey": "S94_0|*|",
+              "exportMapKey": "5 * S94_0 ",
               "moduleSpecifier": "./lib/a_94",
               "fileName": "/lib/a_94.ts"
             }
@@ -3622,7 +3622,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S95_0",
-              "exportMapKey": "S95_0|*|",
+              "exportMapKey": "5 * S95_0 ",
               "moduleSpecifier": "./lib/a_95",
               "fileName": "/lib/a_95.ts"
             }
@@ -3642,7 +3642,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S96_0",
-              "exportMapKey": "S96_0|*|",
+              "exportMapKey": "5 * S96_0 ",
               "moduleSpecifier": "./lib/a_96",
               "fileName": "/lib/a_96.ts"
             }
@@ -3662,7 +3662,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S97_0",
-              "exportMapKey": "S97_0|*|",
+              "exportMapKey": "5 * S97_0 ",
               "moduleSpecifier": "./lib/a_97",
               "fileName": "/lib/a_97.ts"
             }
@@ -3682,7 +3682,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S98_0",
-              "exportMapKey": "S98_0|*|",
+              "exportMapKey": "5 * S98_0 ",
               "moduleSpecifier": "./lib/a_98",
               "fileName": "/lib/a_98.ts"
             }
@@ -3702,7 +3702,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S99_0",
-              "exportMapKey": "S99_0|*|",
+              "exportMapKey": "5 * S99_0 ",
               "moduleSpecifier": "./lib/a_99",
               "fileName": "/lib/a_99.ts"
             }
@@ -3716,7 +3716,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/lib/foo/constants",
             "data": {
               "exportName": "SIGABRT",
-              "exportMapKey": "SIGABRT|*|",
+              "exportMapKey": "7 * SIGABRT ",
               "fileName": "/lib/foo/constants.d.ts"
             }
           },
@@ -3729,7 +3729,7 @@ Info seq  [hh:mm:ss:mss] response:
             "source": "/lib/foo/constants",
             "data": {
               "exportName": "SIGINT",
-              "exportMapKey": "SIGINT|*|",
+              "exportMapKey": "6 * SIGINT ",
               "fileName": "/lib/foo/constants.d.ts"
             }
           }
@@ -4329,7 +4329,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S0_0",
-              "exportMapKey": "S0_0|*|",
+              "exportMapKey": "4 * S0_0 ",
               "moduleSpecifier": "./lib/a_0",
               "fileName": "/lib/a_0.ts"
             }
@@ -4349,7 +4349,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S1_0",
-              "exportMapKey": "S1_0|*|",
+              "exportMapKey": "4 * S1_0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
             }
@@ -4369,7 +4369,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S10_0",
-              "exportMapKey": "S10_0|*|",
+              "exportMapKey": "5 * S10_0 ",
               "moduleSpecifier": "./lib/a_10",
               "fileName": "/lib/a_10.ts"
             }
@@ -4389,7 +4389,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S11_0",
-              "exportMapKey": "S11_0|*|",
+              "exportMapKey": "5 * S11_0 ",
               "moduleSpecifier": "./lib/a_11",
               "fileName": "/lib/a_11.ts"
             }
@@ -4409,7 +4409,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S12_0",
-              "exportMapKey": "S12_0|*|",
+              "exportMapKey": "5 * S12_0 ",
               "moduleSpecifier": "./lib/a_12",
               "fileName": "/lib/a_12.ts"
             }
@@ -4429,7 +4429,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S13_0",
-              "exportMapKey": "S13_0|*|",
+              "exportMapKey": "5 * S13_0 ",
               "moduleSpecifier": "./lib/a_13",
               "fileName": "/lib/a_13.ts"
             }
@@ -4449,7 +4449,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S14_0",
-              "exportMapKey": "S14_0|*|",
+              "exportMapKey": "5 * S14_0 ",
               "moduleSpecifier": "./lib/a_14",
               "fileName": "/lib/a_14.ts"
             }
@@ -4469,7 +4469,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S15_0",
-              "exportMapKey": "S15_0|*|",
+              "exportMapKey": "5 * S15_0 ",
               "moduleSpecifier": "./lib/a_15",
               "fileName": "/lib/a_15.ts"
             }
@@ -4489,7 +4489,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S16_0",
-              "exportMapKey": "S16_0|*|",
+              "exportMapKey": "5 * S16_0 ",
               "moduleSpecifier": "./lib/a_16",
               "fileName": "/lib/a_16.ts"
             }
@@ -4509,7 +4509,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S17_0",
-              "exportMapKey": "S17_0|*|",
+              "exportMapKey": "5 * S17_0 ",
               "moduleSpecifier": "./lib/a_17",
               "fileName": "/lib/a_17.ts"
             }
@@ -4529,7 +4529,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S18_0",
-              "exportMapKey": "S18_0|*|",
+              "exportMapKey": "5 * S18_0 ",
               "moduleSpecifier": "./lib/a_18",
               "fileName": "/lib/a_18.ts"
             }
@@ -4549,7 +4549,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S19_0",
-              "exportMapKey": "S19_0|*|",
+              "exportMapKey": "5 * S19_0 ",
               "moduleSpecifier": "./lib/a_19",
               "fileName": "/lib/a_19.ts"
             }
@@ -4569,7 +4569,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S2_0",
-              "exportMapKey": "S2_0|*|",
+              "exportMapKey": "4 * S2_0 ",
               "moduleSpecifier": "./lib/a_2",
               "fileName": "/lib/a_2.ts"
             }
@@ -4589,7 +4589,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S20_0",
-              "exportMapKey": "S20_0|*|",
+              "exportMapKey": "5 * S20_0 ",
               "moduleSpecifier": "./lib/a_20",
               "fileName": "/lib/a_20.ts"
             }
@@ -4609,7 +4609,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S21_0",
-              "exportMapKey": "S21_0|*|",
+              "exportMapKey": "5 * S21_0 ",
               "moduleSpecifier": "./lib/a_21",
               "fileName": "/lib/a_21.ts"
             }
@@ -4629,7 +4629,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S22_0",
-              "exportMapKey": "S22_0|*|",
+              "exportMapKey": "5 * S22_0 ",
               "moduleSpecifier": "./lib/a_22",
               "fileName": "/lib/a_22.ts"
             }
@@ -4649,7 +4649,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S23_0",
-              "exportMapKey": "S23_0|*|",
+              "exportMapKey": "5 * S23_0 ",
               "moduleSpecifier": "./lib/a_23",
               "fileName": "/lib/a_23.ts"
             }
@@ -4669,7 +4669,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S24_0",
-              "exportMapKey": "S24_0|*|",
+              "exportMapKey": "5 * S24_0 ",
               "moduleSpecifier": "./lib/a_24",
               "fileName": "/lib/a_24.ts"
             }
@@ -4689,7 +4689,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S25_0",
-              "exportMapKey": "S25_0|*|",
+              "exportMapKey": "5 * S25_0 ",
               "moduleSpecifier": "./lib/a_25",
               "fileName": "/lib/a_25.ts"
             }
@@ -4709,7 +4709,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S26_0",
-              "exportMapKey": "S26_0|*|",
+              "exportMapKey": "5 * S26_0 ",
               "moduleSpecifier": "./lib/a_26",
               "fileName": "/lib/a_26.ts"
             }
@@ -4729,7 +4729,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S27_0",
-              "exportMapKey": "S27_0|*|",
+              "exportMapKey": "5 * S27_0 ",
               "moduleSpecifier": "./lib/a_27",
               "fileName": "/lib/a_27.ts"
             }
@@ -4749,7 +4749,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S28_0",
-              "exportMapKey": "S28_0|*|",
+              "exportMapKey": "5 * S28_0 ",
               "moduleSpecifier": "./lib/a_28",
               "fileName": "/lib/a_28.ts"
             }
@@ -4769,7 +4769,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S29_0",
-              "exportMapKey": "S29_0|*|",
+              "exportMapKey": "5 * S29_0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
             }
@@ -4789,7 +4789,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S3_0",
-              "exportMapKey": "S3_0|*|",
+              "exportMapKey": "4 * S3_0 ",
               "moduleSpecifier": "./lib/a_3",
               "fileName": "/lib/a_3.ts"
             }
@@ -4809,7 +4809,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S30_0",
-              "exportMapKey": "S30_0|*|",
+              "exportMapKey": "5 * S30_0 ",
               "moduleSpecifier": "./lib/a_30",
               "fileName": "/lib/a_30.ts"
             }
@@ -4829,7 +4829,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S31_0",
-              "exportMapKey": "S31_0|*|",
+              "exportMapKey": "5 * S31_0 ",
               "moduleSpecifier": "./lib/a_31",
               "fileName": "/lib/a_31.ts"
             }
@@ -4849,7 +4849,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S32_0",
-              "exportMapKey": "S32_0|*|",
+              "exportMapKey": "5 * S32_0 ",
               "moduleSpecifier": "./lib/a_32",
               "fileName": "/lib/a_32.ts"
             }
@@ -4869,7 +4869,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S33_0",
-              "exportMapKey": "S33_0|*|",
+              "exportMapKey": "5 * S33_0 ",
               "moduleSpecifier": "./lib/a_33",
               "fileName": "/lib/a_33.ts"
             }
@@ -4889,7 +4889,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S34_0",
-              "exportMapKey": "S34_0|*|",
+              "exportMapKey": "5 * S34_0 ",
               "moduleSpecifier": "./lib/a_34",
               "fileName": "/lib/a_34.ts"
             }
@@ -4909,7 +4909,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S35_0",
-              "exportMapKey": "S35_0|*|",
+              "exportMapKey": "5 * S35_0 ",
               "moduleSpecifier": "./lib/a_35",
               "fileName": "/lib/a_35.ts"
             }
@@ -4929,7 +4929,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S36_0",
-              "exportMapKey": "S36_0|*|",
+              "exportMapKey": "5 * S36_0 ",
               "moduleSpecifier": "./lib/a_36",
               "fileName": "/lib/a_36.ts"
             }
@@ -4949,7 +4949,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S37_0",
-              "exportMapKey": "S37_0|*|",
+              "exportMapKey": "5 * S37_0 ",
               "moduleSpecifier": "./lib/a_37",
               "fileName": "/lib/a_37.ts"
             }
@@ -4969,7 +4969,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S38_0",
-              "exportMapKey": "S38_0|*|",
+              "exportMapKey": "5 * S38_0 ",
               "moduleSpecifier": "./lib/a_38",
               "fileName": "/lib/a_38.ts"
             }
@@ -4989,7 +4989,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S39_0",
-              "exportMapKey": "S39_0|*|",
+              "exportMapKey": "5 * S39_0 ",
               "moduleSpecifier": "./lib/a_39",
               "fileName": "/lib/a_39.ts"
             }
@@ -5009,7 +5009,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S4_0",
-              "exportMapKey": "S4_0|*|",
+              "exportMapKey": "4 * S4_0 ",
               "moduleSpecifier": "./lib/a_4",
               "fileName": "/lib/a_4.ts"
             }
@@ -5029,7 +5029,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S40_0",
-              "exportMapKey": "S40_0|*|",
+              "exportMapKey": "5 * S40_0 ",
               "moduleSpecifier": "./lib/a_40",
               "fileName": "/lib/a_40.ts"
             }
@@ -5049,7 +5049,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S41_0",
-              "exportMapKey": "S41_0|*|",
+              "exportMapKey": "5 * S41_0 ",
               "moduleSpecifier": "./lib/a_41",
               "fileName": "/lib/a_41.ts"
             }
@@ -5069,7 +5069,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S42_0",
-              "exportMapKey": "S42_0|*|",
+              "exportMapKey": "5 * S42_0 ",
               "moduleSpecifier": "./lib/a_42",
               "fileName": "/lib/a_42.ts"
             }
@@ -5089,7 +5089,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S43_0",
-              "exportMapKey": "S43_0|*|",
+              "exportMapKey": "5 * S43_0 ",
               "moduleSpecifier": "./lib/a_43",
               "fileName": "/lib/a_43.ts"
             }
@@ -5109,7 +5109,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S44_0",
-              "exportMapKey": "S44_0|*|",
+              "exportMapKey": "5 * S44_0 ",
               "moduleSpecifier": "./lib/a_44",
               "fileName": "/lib/a_44.ts"
             }
@@ -5129,7 +5129,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S45_0",
-              "exportMapKey": "S45_0|*|",
+              "exportMapKey": "5 * S45_0 ",
               "moduleSpecifier": "./lib/a_45",
               "fileName": "/lib/a_45.ts"
             }
@@ -5149,7 +5149,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S46_0",
-              "exportMapKey": "S46_0|*|",
+              "exportMapKey": "5 * S46_0 ",
               "moduleSpecifier": "./lib/a_46",
               "fileName": "/lib/a_46.ts"
             }
@@ -5169,7 +5169,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S47_0",
-              "exportMapKey": "S47_0|*|",
+              "exportMapKey": "5 * S47_0 ",
               "moduleSpecifier": "./lib/a_47",
               "fileName": "/lib/a_47.ts"
             }
@@ -5189,7 +5189,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S48_0",
-              "exportMapKey": "S48_0|*|",
+              "exportMapKey": "5 * S48_0 ",
               "moduleSpecifier": "./lib/a_48",
               "fileName": "/lib/a_48.ts"
             }
@@ -5209,7 +5209,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S49_0",
-              "exportMapKey": "S49_0|*|",
+              "exportMapKey": "5 * S49_0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
             }
@@ -5229,7 +5229,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S5_0",
-              "exportMapKey": "S5_0|*|",
+              "exportMapKey": "4 * S5_0 ",
               "moduleSpecifier": "./lib/a_5",
               "fileName": "/lib/a_5.ts"
             }
@@ -5249,7 +5249,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S50_0",
-              "exportMapKey": "S50_0|*|",
+              "exportMapKey": "5 * S50_0 ",
               "moduleSpecifier": "./lib/a_50",
               "fileName": "/lib/a_50.ts"
             }
@@ -5269,7 +5269,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S51_0",
-              "exportMapKey": "S51_0|*|",
+              "exportMapKey": "5 * S51_0 ",
               "moduleSpecifier": "./lib/a_51",
               "fileName": "/lib/a_51.ts"
             }
@@ -5289,7 +5289,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S52_0",
-              "exportMapKey": "S52_0|*|",
+              "exportMapKey": "5 * S52_0 ",
               "moduleSpecifier": "./lib/a_52",
               "fileName": "/lib/a_52.ts"
             }
@@ -5309,7 +5309,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S53_0",
-              "exportMapKey": "S53_0|*|",
+              "exportMapKey": "5 * S53_0 ",
               "moduleSpecifier": "./lib/a_53",
               "fileName": "/lib/a_53.ts"
             }
@@ -5329,7 +5329,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S54_0",
-              "exportMapKey": "S54_0|*|",
+              "exportMapKey": "5 * S54_0 ",
               "moduleSpecifier": "./lib/a_54",
               "fileName": "/lib/a_54.ts"
             }
@@ -5349,7 +5349,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S55_0",
-              "exportMapKey": "S55_0|*|",
+              "exportMapKey": "5 * S55_0 ",
               "moduleSpecifier": "./lib/a_55",
               "fileName": "/lib/a_55.ts"
             }
@@ -5369,7 +5369,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S56_0",
-              "exportMapKey": "S56_0|*|",
+              "exportMapKey": "5 * S56_0 ",
               "moduleSpecifier": "./lib/a_56",
               "fileName": "/lib/a_56.ts"
             }
@@ -5389,7 +5389,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S57_0",
-              "exportMapKey": "S57_0|*|",
+              "exportMapKey": "5 * S57_0 ",
               "moduleSpecifier": "./lib/a_57",
               "fileName": "/lib/a_57.ts"
             }
@@ -5409,7 +5409,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S58_0",
-              "exportMapKey": "S58_0|*|",
+              "exportMapKey": "5 * S58_0 ",
               "moduleSpecifier": "./lib/a_58",
               "fileName": "/lib/a_58.ts"
             }
@@ -5429,7 +5429,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S59_0",
-              "exportMapKey": "S59_0|*|",
+              "exportMapKey": "5 * S59_0 ",
               "moduleSpecifier": "./lib/a_59",
               "fileName": "/lib/a_59.ts"
             }
@@ -5449,7 +5449,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S6_0",
-              "exportMapKey": "S6_0|*|",
+              "exportMapKey": "4 * S6_0 ",
               "moduleSpecifier": "./lib/a_6",
               "fileName": "/lib/a_6.ts"
             }
@@ -5469,7 +5469,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S60_0",
-              "exportMapKey": "S60_0|*|",
+              "exportMapKey": "5 * S60_0 ",
               "moduleSpecifier": "./lib/a_60",
               "fileName": "/lib/a_60.ts"
             }
@@ -5489,7 +5489,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S61_0",
-              "exportMapKey": "S61_0|*|",
+              "exportMapKey": "5 * S61_0 ",
               "moduleSpecifier": "./lib/a_61",
               "fileName": "/lib/a_61.ts"
             }
@@ -5509,7 +5509,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S62_0",
-              "exportMapKey": "S62_0|*|",
+              "exportMapKey": "5 * S62_0 ",
               "moduleSpecifier": "./lib/a_62",
               "fileName": "/lib/a_62.ts"
             }
@@ -5529,7 +5529,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S63_0",
-              "exportMapKey": "S63_0|*|",
+              "exportMapKey": "5 * S63_0 ",
               "moduleSpecifier": "./lib/a_63",
               "fileName": "/lib/a_63.ts"
             }
@@ -5549,7 +5549,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S64_0",
-              "exportMapKey": "S64_0|*|",
+              "exportMapKey": "5 * S64_0 ",
               "moduleSpecifier": "./lib/a_64",
               "fileName": "/lib/a_64.ts"
             }
@@ -5569,7 +5569,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S65_0",
-              "exportMapKey": "S65_0|*|",
+              "exportMapKey": "5 * S65_0 ",
               "moduleSpecifier": "./lib/a_65",
               "fileName": "/lib/a_65.ts"
             }
@@ -5589,7 +5589,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S66_0",
-              "exportMapKey": "S66_0|*|",
+              "exportMapKey": "5 * S66_0 ",
               "moduleSpecifier": "./lib/a_66",
               "fileName": "/lib/a_66.ts"
             }
@@ -5609,7 +5609,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S67_0",
-              "exportMapKey": "S67_0|*|",
+              "exportMapKey": "5 * S67_0 ",
               "moduleSpecifier": "./lib/a_67",
               "fileName": "/lib/a_67.ts"
             }
@@ -5629,7 +5629,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S68_0",
-              "exportMapKey": "S68_0|*|",
+              "exportMapKey": "5 * S68_0 ",
               "moduleSpecifier": "./lib/a_68",
               "fileName": "/lib/a_68.ts"
             }
@@ -5649,7 +5649,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S69_0",
-              "exportMapKey": "S69_0|*|",
+              "exportMapKey": "5 * S69_0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
             }
@@ -5669,7 +5669,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S7_0",
-              "exportMapKey": "S7_0|*|",
+              "exportMapKey": "4 * S7_0 ",
               "moduleSpecifier": "./lib/a_7",
               "fileName": "/lib/a_7.ts"
             }
@@ -5689,7 +5689,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S70_0",
-              "exportMapKey": "S70_0|*|",
+              "exportMapKey": "5 * S70_0 ",
               "moduleSpecifier": "./lib/a_70",
               "fileName": "/lib/a_70.ts"
             }
@@ -5709,7 +5709,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S71_0",
-              "exportMapKey": "S71_0|*|",
+              "exportMapKey": "5 * S71_0 ",
               "moduleSpecifier": "./lib/a_71",
               "fileName": "/lib/a_71.ts"
             }
@@ -5729,7 +5729,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S72_0",
-              "exportMapKey": "S72_0|*|",
+              "exportMapKey": "5 * S72_0 ",
               "moduleSpecifier": "./lib/a_72",
               "fileName": "/lib/a_72.ts"
             }
@@ -5749,7 +5749,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S73_0",
-              "exportMapKey": "S73_0|*|",
+              "exportMapKey": "5 * S73_0 ",
               "moduleSpecifier": "./lib/a_73",
               "fileName": "/lib/a_73.ts"
             }
@@ -5769,7 +5769,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S74_0",
-              "exportMapKey": "S74_0|*|",
+              "exportMapKey": "5 * S74_0 ",
               "moduleSpecifier": "./lib/a_74",
               "fileName": "/lib/a_74.ts"
             }
@@ -5789,7 +5789,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S75_0",
-              "exportMapKey": "S75_0|*|",
+              "exportMapKey": "5 * S75_0 ",
               "moduleSpecifier": "./lib/a_75",
               "fileName": "/lib/a_75.ts"
             }
@@ -5809,7 +5809,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S76_0",
-              "exportMapKey": "S76_0|*|",
+              "exportMapKey": "5 * S76_0 ",
               "moduleSpecifier": "./lib/a_76",
               "fileName": "/lib/a_76.ts"
             }
@@ -5829,7 +5829,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S77_0",
-              "exportMapKey": "S77_0|*|",
+              "exportMapKey": "5 * S77_0 ",
               "moduleSpecifier": "./lib/a_77",
               "fileName": "/lib/a_77.ts"
             }
@@ -5849,7 +5849,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S78_0",
-              "exportMapKey": "S78_0|*|",
+              "exportMapKey": "5 * S78_0 ",
               "moduleSpecifier": "./lib/a_78",
               "fileName": "/lib/a_78.ts"
             }
@@ -5869,7 +5869,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S79_0",
-              "exportMapKey": "S79_0|*|",
+              "exportMapKey": "5 * S79_0 ",
               "moduleSpecifier": "./lib/a_79",
               "fileName": "/lib/a_79.ts"
             }
@@ -5889,7 +5889,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S8_0",
-              "exportMapKey": "S8_0|*|",
+              "exportMapKey": "4 * S8_0 ",
               "moduleSpecifier": "./lib/a_8",
               "fileName": "/lib/a_8.ts"
             }
@@ -5909,7 +5909,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S80_0",
-              "exportMapKey": "S80_0|*|",
+              "exportMapKey": "5 * S80_0 ",
               "moduleSpecifier": "./lib/a_80",
               "fileName": "/lib/a_80.ts"
             }
@@ -5929,7 +5929,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S81_0",
-              "exportMapKey": "S81_0|*|",
+              "exportMapKey": "5 * S81_0 ",
               "moduleSpecifier": "./lib/a_81",
               "fileName": "/lib/a_81.ts"
             }
@@ -5949,7 +5949,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S82_0",
-              "exportMapKey": "S82_0|*|",
+              "exportMapKey": "5 * S82_0 ",
               "moduleSpecifier": "./lib/a_82",
               "fileName": "/lib/a_82.ts"
             }
@@ -5969,7 +5969,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S83_0",
-              "exportMapKey": "S83_0|*|",
+              "exportMapKey": "5 * S83_0 ",
               "moduleSpecifier": "./lib/a_83",
               "fileName": "/lib/a_83.ts"
             }
@@ -5989,7 +5989,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S84_0",
-              "exportMapKey": "S84_0|*|",
+              "exportMapKey": "5 * S84_0 ",
               "moduleSpecifier": "./lib/a_84",
               "fileName": "/lib/a_84.ts"
             }
@@ -6009,7 +6009,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S85_0",
-              "exportMapKey": "S85_0|*|",
+              "exportMapKey": "5 * S85_0 ",
               "moduleSpecifier": "./lib/a_85",
               "fileName": "/lib/a_85.ts"
             }
@@ -6029,7 +6029,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S86_0",
-              "exportMapKey": "S86_0|*|",
+              "exportMapKey": "5 * S86_0 ",
               "moduleSpecifier": "./lib/a_86",
               "fileName": "/lib/a_86.ts"
             }
@@ -6049,7 +6049,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S87_0",
-              "exportMapKey": "S87_0|*|",
+              "exportMapKey": "5 * S87_0 ",
               "moduleSpecifier": "./lib/a_87",
               "fileName": "/lib/a_87.ts"
             }
@@ -6069,7 +6069,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S88_0",
-              "exportMapKey": "S88_0|*|",
+              "exportMapKey": "5 * S88_0 ",
               "moduleSpecifier": "./lib/a_88",
               "fileName": "/lib/a_88.ts"
             }
@@ -6089,7 +6089,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S89_0",
-              "exportMapKey": "S89_0|*|",
+              "exportMapKey": "5 * S89_0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
             }
@@ -6109,7 +6109,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S9_0",
-              "exportMapKey": "S9_0|*|",
+              "exportMapKey": "4 * S9_0 ",
               "moduleSpecifier": "./lib/a_9",
               "fileName": "/lib/a_9.ts"
             }
@@ -6129,7 +6129,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S90_0",
-              "exportMapKey": "S90_0|*|",
+              "exportMapKey": "5 * S90_0 ",
               "moduleSpecifier": "./lib/a_90",
               "fileName": "/lib/a_90.ts"
             }
@@ -6149,7 +6149,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S91_0",
-              "exportMapKey": "S91_0|*|",
+              "exportMapKey": "5 * S91_0 ",
               "moduleSpecifier": "./lib/a_91",
               "fileName": "/lib/a_91.ts"
             }
@@ -6169,7 +6169,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S92_0",
-              "exportMapKey": "S92_0|*|",
+              "exportMapKey": "5 * S92_0 ",
               "moduleSpecifier": "./lib/a_92",
               "fileName": "/lib/a_92.ts"
             }
@@ -6189,7 +6189,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S93_0",
-              "exportMapKey": "S93_0|*|",
+              "exportMapKey": "5 * S93_0 ",
               "moduleSpecifier": "./lib/a_93",
               "fileName": "/lib/a_93.ts"
             }
@@ -6209,7 +6209,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S94_0",
-              "exportMapKey": "S94_0|*|",
+              "exportMapKey": "5 * S94_0 ",
               "moduleSpecifier": "./lib/a_94",
               "fileName": "/lib/a_94.ts"
             }
@@ -6229,7 +6229,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S95_0",
-              "exportMapKey": "S95_0|*|",
+              "exportMapKey": "5 * S95_0 ",
               "moduleSpecifier": "./lib/a_95",
               "fileName": "/lib/a_95.ts"
             }
@@ -6249,7 +6249,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S96_0",
-              "exportMapKey": "S96_0|*|",
+              "exportMapKey": "5 * S96_0 ",
               "moduleSpecifier": "./lib/a_96",
               "fileName": "/lib/a_96.ts"
             }
@@ -6269,7 +6269,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S97_0",
-              "exportMapKey": "S97_0|*|",
+              "exportMapKey": "5 * S97_0 ",
               "moduleSpecifier": "./lib/a_97",
               "fileName": "/lib/a_97.ts"
             }
@@ -6289,7 +6289,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S98_0",
-              "exportMapKey": "S98_0|*|",
+              "exportMapKey": "5 * S98_0 ",
               "moduleSpecifier": "./lib/a_98",
               "fileName": "/lib/a_98.ts"
             }
@@ -6309,7 +6309,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "S99_0",
-              "exportMapKey": "S99_0|*|",
+              "exportMapKey": "5 * S99_0 ",
               "moduleSpecifier": "./lib/a_99",
               "fileName": "/lib/a_99.ts"
             }
@@ -6329,7 +6329,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "SIGABRT",
-              "exportMapKey": "SIGABRT|*|",
+              "exportMapKey": "7 * SIGABRT ",
               "moduleSpecifier": "./lib/foo/constants",
               "fileName": "/lib/foo/constants.d.ts"
             }
@@ -6349,7 +6349,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "SIGINT",
-              "exportMapKey": "SIGINT|*|",
+              "exportMapKey": "6 * SIGINT ",
               "moduleSpecifier": "./lib/foo/constants",
               "fileName": "/lib/foo/constants.d.ts"
             }

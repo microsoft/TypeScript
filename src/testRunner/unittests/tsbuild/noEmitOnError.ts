@@ -3,7 +3,9 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc";
-import { loadProjectFromDisk } from "../helpers/vfs";
+import {
+    loadProjectFromDisk,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild - with noEmitOnError", () => {
     let projFs: vfs.FileSystem;
@@ -23,10 +25,15 @@ describe("unittests:: tsbuild - with noEmitOnError", () => {
             noChangeRun,
             {
                 caption: "Fix error",
-                edit: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+                edit: fs =>
+                    fs.writeFileSync(
+                        "/src/src/main.ts",
+                        `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`, "utf-8"),
+};`,
+                        "utf-8",
+                    ),
             },
             noChangeRun,
         ],
@@ -42,10 +49,15 @@ const a = {
             noChangeRun,
             {
                 caption: "Fix error",
-                edit: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+                edit: fs =>
+                    fs.writeFileSync(
+                        "/src/src/main.ts",
+                        `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`, "utf-8"),
+};`,
+                        "utf-8",
+                    ),
             },
             noChangeRun,
         ],
@@ -56,15 +68,25 @@ const a = {
         scenario: "noEmitOnError",
         subScenario: "semantic errors",
         fs: () => projFs,
-        modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = 10;`, "utf-8"),
+        modifyFs: fs =>
+            fs.writeFileSync(
+                "/src/src/main.ts",
+                `import { A } from "../shared/types/db";
+const a: string = 10;`,
+                "utf-8",
+            ),
         commandLineArgs: ["--b", "/src/tsconfig.json"],
         edits: [
             noChangeRun,
             {
                 caption: "Fix error",
-                edit: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = "hello";`, "utf-8"),
+                edit: fs =>
+                    fs.writeFileSync(
+                        "/src/src/main.ts",
+                        `import { A } from "../shared/types/db";
+const a: string = "hello";`,
+                        "utf-8",
+                    ),
             },
             noChangeRun,
         ],
@@ -75,15 +97,25 @@ const a: string = "hello";`, "utf-8"),
         scenario: "noEmitOnError",
         subScenario: "semantic errors with incremental",
         fs: () => projFs,
-        modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = 10;`, "utf-8"),
+        modifyFs: fs =>
+            fs.writeFileSync(
+                "/src/src/main.ts",
+                `import { A } from "../shared/types/db";
+const a: string = 10;`,
+                "utf-8",
+            ),
         commandLineArgs: ["--b", "/src/tsconfig.json", "--incremental"],
         edits: [
             noChangeRun,
             {
                 caption: "Fix error",
-                edit: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = "hello";`, "utf-8"),
+                edit: fs =>
+                    fs.writeFileSync(
+                        "/src/src/main.ts",
+                        `import { A } from "../shared/types/db";
+const a: string = "hello";`,
+                        "utf-8",
+                    ),
             },
             noChangeRun,
         ],

@@ -153,7 +153,10 @@ export class System implements ts.System {
     }
 
     public setModifiedTime(path: string, time: Date) {
-        this.vfs.utimesSync(path, time, time);
+        try {
+            this.vfs.utimesSync(path, time, time);
+        }
+        catch { /* ignored */ }
     }
 
     public createHash(data: string): string {
@@ -347,7 +350,7 @@ export class CompilerHost implements ts.CompilerHost {
         return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
     }
 
-    public getSourceFile(fileName: string, languageVersion: number): ts.SourceFile | undefined {
+    public getSourceFile(fileName: string, languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions): ts.SourceFile | undefined {
         const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.getCurrentDirectory(), fileName));
         const existing = this._sourceFiles.get(canonicalFileName);
         if (existing) return existing;
@@ -361,7 +364,7 @@ export class CompilerHost implements ts.CompilerHost {
         // reused across multiple tests. In that case, we cache the SourceFile we parse
         // so that it can be reused across multiple tests to avoid the cost of
         // repeatedly parsing the same file over and over (such as lib.d.ts).
-        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
+        const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersionOrOptions=${languageVersionOrOptions !== undefined ? JSON.stringify(languageVersionOrOptions) : undefined},setParentNodes=${this._setParentNodes}]`;
         if (cacheKey) {
             const meta = this.vfs.filemeta(canonicalFileName);
             const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
@@ -371,7 +374,7 @@ export class CompilerHost implements ts.CompilerHost {
             }
         }
 
-        const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
+        const parsed = ts.createSourceFile(fileName, content, languageVersionOrOptions, this._setParentNodes || this.shouldAssertInvariants);
         if (this.shouldAssertInvariants) {
             Utils.assertInvariants(parsed, /*parent*/ undefined);
         }
@@ -386,9 +389,11 @@ export class CompilerHost implements ts.CompilerHost {
             while (fs.shadowRoot) {
                 try {
                     const shadowRootStats = fs.shadowRoot.existsSync(canonicalFileName) ? fs.shadowRoot.statSync(canonicalFileName) : undefined!; // TODO: GH#18217
-                    if (shadowRootStats.dev !== stats.dev ||
+                    if (
+                        shadowRootStats.dev !== stats.dev ||
                         shadowRootStats.ino !== stats.ino ||
-                        shadowRootStats.mtimeMs !== stats.mtimeMs) {
+                        shadowRootStats.mtimeMs !== stats.mtimeMs
+                    ) {
                         break;
                     }
 
@@ -425,7 +430,7 @@ export interface ExpectedDiagnosticRelatedInformation extends ExpectedDiagnostic
 
 export enum DiagnosticKind {
     Error = "Error",
-    Status = "Status"
+    Status = "Status",
 }
 export interface ExpectedErrorDiagnostic extends ExpectedDiagnosticRelatedInformation {
     relatedInformation?: ExpectedDiagnosticRelatedInformation[];
@@ -491,7 +496,7 @@ function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
         expectedErrorDiagnosticToText(errorOrStatus);
 }
 
-function diagnosticMessageChainToText({ messageText, next}: ts.DiagnosticMessageChain, indent = 0) {
+function diagnosticMessageChainToText({ messageText, next }: ts.DiagnosticMessageChain, indent = 0) {
     let text = indentedText(indent, messageText);
     if (next) {
         indent++;
@@ -588,18 +593,26 @@ export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuil
     assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]) {
         const actual = this.diagnostics.slice().map(diagnosticToText);
         const expected = expectedDiagnostics.map(expectedDiagnosticToText);
-        assert.deepEqual(actual, expected, `Diagnostic arrays did not match:
+        assert.deepEqual(
+            actual,
+            expected,
+            `Diagnostic arrays did not match:
 Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
-Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
+Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`,
+        );
     }
 
     assertErrors(...expectedDiagnostics: ExpectedErrorDiagnostic[]) {
         const actual = this.diagnostics.filter(d => d.kind === DiagnosticKind.Error).map(diagnosticToText);
         const expected = expectedDiagnostics.map(expectedDiagnosticToText);
-        assert.deepEqual(actual, expected, `Diagnostics arrays did not match:
+        assert.deepEqual(
+            actual,
+            expected,
+            `Diagnostics arrays did not match:
 Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
 Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}
-Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`);
+Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*replacer*/ undefined, " ")}`,
+        );
     }
 
     printDiagnostics(header = "== Diagnostics ==") {
@@ -614,4 +627,3 @@ Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*
         return this.sys.now();
     }
 }
-
