@@ -9,9 +9,22 @@ type HomomorphicType = {
 
     [K in keyof TupleOfNumbers]: `${TupleOfNumbers[K]}`
 }
-
 const homomorphic: HomomorphicType = ['1', '2']
 >homomorphic : ["1", "2"]
+>['1', '2'] : ["1", "2"]
+>'1' : "1"
+>'2' : "2"
+
+type TupleOfNumbersKeys = keyof TupleOfNumbers
+>TupleOfNumbersKeys : keyof TupleOfNumbers
+
+type HomomorphicType2 = {
+>HomomorphicType2 : ["1", "2"]
+
+    [K in TupleOfNumbersKeys]: `${TupleOfNumbers[K]}`
+}
+const homomorphic2: HomomorphicType2 = ['1', '2']
+>homomorphic2 : ["1", "2"]
 >['1', '2'] : ["1", "2"]
 >'1' : "1"
 >'2' : "2"

@@ -3,8 +3,13 @@ type TupleOfNumbers = [1, 2]
 type HomomorphicType = {
     [K in keyof TupleOfNumbers]: `${TupleOfNumbers[K]}`
 }
-
 const homomorphic: HomomorphicType = ['1', '2']
+
+type TupleOfNumbersKeys = keyof TupleOfNumbers
+type HomomorphicType2 = {
+    [K in TupleOfNumbersKeys]: `${TupleOfNumbers[K]}`
+}
+const homomorphic2: HomomorphicType2 = ['1', '2']
 
 type GenericType<T> = {
     [K in keyof T]: [K, T[K]]
