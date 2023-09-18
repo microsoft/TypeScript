@@ -45992,6 +45992,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ImportKeyword:
             case SyntaxKind.NewKeyword:
                 return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
+            case SyntaxKind.InstanceOfKeyword:
+                if (isBinaryExpression(node.parent)) {
+                    const type = getTypeOfExpression(node.parent.right);
+                    const hasInstanceMethodType = getSymbolHasInstanceMethodOfObjectType(type);
+                    // const hasInstancePropertyName = getPropertyNameForKnownSymbolName("hasInstance");
+                    // const hasInstanceProperty = getPropertyOfObjectType(type, hasInstancePropertyName);
+                    // if (hasInstanceProperty) {
+                    //     const hasInstancePropertyType = getTypeOfSymbol(hasInstanceProperty);
+                    //     if (hasInstancePropertyType && getSignaturesOfType(hasInstancePropertyType, SignatureKind.Call).length !== 0) {
+                    //         return hasInstanceProperty;
+                    //     }
+                    // }
+                    return hasInstanceMethodType?.symbol ?? type.symbol;
+                }
+                return undefined;
             case SyntaxKind.MetaProperty:
                 return checkExpression(node as Expression).symbol;
             case SyntaxKind.JsxNamespacedName:
