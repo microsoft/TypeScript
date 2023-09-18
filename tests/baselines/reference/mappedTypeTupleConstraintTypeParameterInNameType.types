@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/mappedTypeTupleConstraintTypeParameterInNameType.ts] ////
+
+=== mappedTypeTupleConstraintTypeParameterInNameType.ts ===
+// based on https://github.com/microsoft/TypeScript/issues/55762
+
+declare class Decoder<T> {
+>Decoder : Decoder<T>
+
+  decode(arrayBuffer: ArrayBuffer): T;
+>decode : (arrayBuffer: ArrayBuffer) => T
+>arrayBuffer : ArrayBuffer
+}
+
+type ValueTypeOf<T extends Decoder<any>> = T extends Decoder<infer R>
+>ValueTypeOf : ValueTypeOf<T>
+
+  ? R
+  : never;
+
+type StructDescriptor = ReadonlyArray<
+>StructDescriptor : readonly (readonly [key: string, type: Decoder<any>])[]
+
+  readonly [key: string, type: Decoder<any>]
+>;
+
+type StructTypeFor<Descriptor extends StructDescriptor> = {
+>StructTypeFor : StructTypeFor<Descriptor>
+
+  [K in keyof Descriptor as Descriptor[K][0]]: ValueTypeOf<Descriptor[K][1]>;
+};
+
+class StructDecoder<const Descriptor extends StructDescriptor> extends Decoder<
+>StructDecoder : StructDecoder<Descriptor>
+>Decoder : Decoder<StructTypeFor<Descriptor>>
+
+  StructTypeFor<Descriptor>
+> {
+  constructor(descriptor: Descriptor) {
+>descriptor : Descriptor
+
+    super();
+>super() : void
+>super : typeof Decoder
+  }
+}
+
+declare const i32Decoder: Decoder<number>;
+>i32Decoder : Decoder<number>
+
+declare const i64Decoder: Decoder<bigint>;
+>i64Decoder : Decoder<bigint>
+
+const structDecoder = new StructDecoder([
+>structDecoder : StructDecoder<readonly [readonly ["a", Decoder<number>], readonly ["b", Decoder<bigint>]]>
+>new StructDecoder([  ["a", i32Decoder],  ["b", i64Decoder],]) : StructDecoder<readonly [readonly ["a", Decoder<number>], readonly ["b", Decoder<bigint>]]>
+>StructDecoder : typeof StructDecoder
+>[  ["a", i32Decoder],  ["b", i64Decoder],] : [["a", Decoder<number>], ["b", Decoder<bigint>]]
+
+  ["a", i32Decoder],
+>["a", i32Decoder] : ["a", Decoder<number>]
+>"a" : "a"
+>i32Decoder : Decoder<number>
+
+  ["b", i64Decoder],
+>["b", i64Decoder] : ["b", Decoder<bigint>]
+>"b" : "b"
+>i64Decoder : Decoder<bigint>
+
+]);
+
+const struct = structDecoder.decode(new ArrayBuffer(100));
+>struct : StructTypeFor<readonly [readonly ["a", Decoder<number>], readonly ["b", Decoder<bigint>]]>
+>structDecoder.decode(new ArrayBuffer(100)) : StructTypeFor<readonly [readonly ["a", Decoder<number>], readonly ["b", Decoder<bigint>]]>
+>structDecoder.decode : (arrayBuffer: ArrayBuffer) => StructTypeFor<readonly [readonly ["a", Decoder<number>], readonly ["b", Decoder<bigint>]]>
+>structDecoder : StructDecoder<readonly [readonly ["a", Decoder<number>], readonly ["b", Decoder<bigint>]]>
+>decode : (arrayBuffer: ArrayBuffer) => StructTypeFor<readonly [readonly ["a", Decoder<number>], readonly ["b", Decoder<bigint>]]>
+>new ArrayBuffer(100) : ArrayBuffer
+>ArrayBuffer : ArrayBufferConstructor
+>100 : 100
+
+const v: number = struct.a;
+>v : number
+>struct.a : number
+>struct : StructTypeFor<readonly [readonly ["a", Decoder<number>], readonly ["b", Decoder<bigint>]]>
+>a : number
+
+const v2: bigint = struct.b;
+>v2 : bigint
+>struct.b : bigint
+>struct : StructTypeFor<readonly [readonly ["a", Decoder<number>], readonly ["b", Decoder<bigint>]]>
+>b : bigint
+

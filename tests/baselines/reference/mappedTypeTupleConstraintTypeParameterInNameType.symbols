@@ -1,0 +1,113 @@
+//// [tests/cases/compiler/mappedTypeTupleConstraintTypeParameterInNameType.ts] ////
+
+=== mappedTypeTupleConstraintTypeParameterInNameType.ts ===
+// based on https://github.com/microsoft/TypeScript/issues/55762
+
+declare class Decoder<T> {
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 22))
+
+  decode(arrayBuffer: ArrayBuffer): T;
+>decode : Symbol(Decoder.decode, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 26))
+>arrayBuffer : Symbol(arrayBuffer, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 3, 9))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 22))
+}
+
+type ValueTypeOf<T extends Decoder<any>> = T extends Decoder<infer R>
+>ValueTypeOf : Symbol(ValueTypeOf, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 4, 1))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 6, 17))
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 6, 17))
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+>R : Symbol(R, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 6, 66))
+
+  ? R
+>R : Symbol(R, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 6, 66))
+
+  : never;
+
+type StructDescriptor = ReadonlyArray<
+>StructDescriptor : Symbol(StructDescriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 8, 10))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+
+  readonly [key: string, type: Decoder<any>]
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+
+>;
+
+type StructTypeFor<Descriptor extends StructDescriptor> = {
+>StructTypeFor : Symbol(StructTypeFor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 12, 2))
+>Descriptor : Symbol(Descriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 14, 19))
+>StructDescriptor : Symbol(StructDescriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 8, 10))
+
+  [K in keyof Descriptor as Descriptor[K][0]]: ValueTypeOf<Descriptor[K][1]>;
+>K : Symbol(K, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 15, 3))
+>Descriptor : Symbol(Descriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 14, 19))
+>Descriptor : Symbol(Descriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 14, 19))
+>K : Symbol(K, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 15, 3))
+>ValueTypeOf : Symbol(ValueTypeOf, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 4, 1))
+>Descriptor : Symbol(Descriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 14, 19))
+>K : Symbol(K, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 15, 3))
+
+};
+
+class StructDecoder<const Descriptor extends StructDescriptor> extends Decoder<
+>StructDecoder : Symbol(StructDecoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 16, 2))
+>Descriptor : Symbol(Descriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 18, 20))
+>StructDescriptor : Symbol(StructDescriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 8, 10))
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+
+  StructTypeFor<Descriptor>
+>StructTypeFor : Symbol(StructTypeFor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 12, 2))
+>Descriptor : Symbol(Descriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 18, 20))
+
+> {
+  constructor(descriptor: Descriptor) {
+>descriptor : Symbol(descriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 21, 14))
+>Descriptor : Symbol(Descriptor, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 18, 20))
+
+    super();
+>super : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+  }
+}
+
+declare const i32Decoder: Decoder<number>;
+>i32Decoder : Symbol(i32Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 26, 13))
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+
+declare const i64Decoder: Decoder<bigint>;
+>i64Decoder : Symbol(i64Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 27, 13))
+>Decoder : Symbol(Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 0, 0))
+
+const structDecoder = new StructDecoder([
+>structDecoder : Symbol(structDecoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 29, 5))
+>StructDecoder : Symbol(StructDecoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 16, 2))
+
+  ["a", i32Decoder],
+>i32Decoder : Symbol(i32Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 26, 13))
+
+  ["b", i64Decoder],
+>i64Decoder : Symbol(i64Decoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 27, 13))
+
+]);
+
+const struct = structDecoder.decode(new ArrayBuffer(100));
+>struct : Symbol(struct, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 34, 5))
+>structDecoder.decode : Symbol(Decoder.decode, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 26))
+>structDecoder : Symbol(structDecoder, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 29, 5))
+>decode : Symbol(Decoder.decode, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 26))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const v: number = struct.a;
+>v : Symbol(v, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 36, 5))
+>struct.a : Symbol(a)
+>struct : Symbol(struct, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 34, 5))
+>a : Symbol(a)
+
+const v2: bigint = struct.b;
+>v2 : Symbol(v2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 37, 5))
+>struct.b : Symbol(b)
+>struct : Symbol(struct, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 34, 5))
+>b : Symbol(b)
+
