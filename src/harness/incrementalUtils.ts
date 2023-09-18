@@ -85,7 +85,7 @@ function verifyDocumentRegistry(service: ts.server.ProjectService) {
         if (!program) return;
         const key = service.documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
         program.getSourceFiles().forEach(f => {
-            const keyWithMode = service.documentRegistry.getDocumentRegistryBucketKeyWithMode(key, f.impliedNodeFormat);
+            const keyWithMode = service.documentRegistry.getDocumentRegistryBucketKeyWithMode(key, f.impliedNodeFormat, service.jsDocParsingMode);
             let mapForKeyWithMode = stats.get(keyWithMode);
             let result: Map<ts.ScriptKind, number> | undefined;
             if (mapForKeyWithMode === undefined) {

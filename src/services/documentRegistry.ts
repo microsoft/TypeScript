@@ -119,7 +119,7 @@ export interface DocumentRegistry {
 
     getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
     /** @internal */
-    getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode): DocumentRegistryBucketKeyWithMode;
+    getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode, jsDocParsingMode: JSDocParsingMode | undefined): DocumentRegistryBucketKeyWithMode;
     /**
      * Informs the DocumentRegistry that a file is not needed any longer.
      *
@@ -274,7 +274,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             };
         sourceFileOptions.languageVersion = scriptTarget;
         const oldBucketCount = buckets.size;
-        const keyWithMode = getDocumentRegistryBucketKeyWithMode(key, sourceFileOptions.impliedNodeFormat);
+        const keyWithMode = getDocumentRegistryBucketKeyWithMode(key, sourceFileOptions.impliedNodeFormat, jsDocParsingMode);
         const bucket = getOrUpdate(buckets, keyWithMode, () => new Map());
         if (tracing) {
             if (buckets.size > oldBucketCount) {
@@ -367,7 +367,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
     }
 
     function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind, impliedNodeFormat?: ResolutionMode): void {
-        const bucket = Debug.checkDefined(buckets.get(getDocumentRegistryBucketKeyWithMode(key, impliedNodeFormat)));
+        const bucket = Debug.checkDefined(buckets.get(getDocumentRegistryBucketKeyWithMode(key, impliedNodeFormat, jsDocParsingMode)));
         const bucketEntry = bucket.get(path)!;
         const entry = getDocumentRegistryEntry(bucketEntry, scriptKind)!;
         entry.languageServiceRefCount--;
@@ -404,6 +404,6 @@ function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegist
     return getKeyForCompilerOptions(settings, sourceFileAffectingCompilerOptions) as DocumentRegistryBucketKey;
 }
 
-function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode) {
-    return (mode ? `${key}|${mode}` : key) as DocumentRegistryBucketKeyWithMode;
+function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode, jsDocParsingMode: JSDocParsingMode | undefined) {
+    return `${key}|${mode ?? ""}|${jsDocParsingMode ?? ""}` as DocumentRegistryBucketKeyWithMode;
 }
