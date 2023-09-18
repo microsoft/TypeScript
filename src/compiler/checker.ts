@@ -27342,6 +27342,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (expr.kind === SyntaxKind.TypeOfExpression && isMatchingReference(reference, (expr as TypeOfExpression).expression)) {
                 type = narrowTypeBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
             }
+            else if (expr.kind === SyntaxKind.TrueKeyword) {
+                const clause = flow.switchStatement.caseBlock.clauses.find((_, index) => index === flow.clauseStart);
+                const clauseExpression = clause && clause.kind === SyntaxKind.CaseClause ? clause.expression : undefined;
+                if (clauseExpression) {
+                    type = narrowType(type, clauseExpression, /*assumeTrue*/ true);
+                }
+            }
             else {
                 if (strictNullChecks) {
                     if (optionalChainContainsReference(expr, reference)) {
