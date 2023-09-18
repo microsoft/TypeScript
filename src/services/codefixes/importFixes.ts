@@ -124,7 +124,6 @@ import {
     single,
     skipAlias,
     some,
-    sort,
     SortKind,
     SourceFile,
     startsWith,
@@ -137,6 +136,7 @@ import {
     SyntaxKind,
     textChanges,
     toPath,
+    toSorted,
     tryCast,
     tryGetModuleSpecifierFromDeclaration,
     TypeChecker,
@@ -986,7 +986,7 @@ function getFixInfos(context: CodeFixContextBase, errorCode: number, pos: number
 
 function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] {
     const _toPath = (fileName: string) => toPath(fileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host));
-    return sort(fixes, (a, b) =>
+    return toSorted(fixes, (a, b) =>
         compareBooleans(!!a.isJsxNamespaceFix, !!b.isJsxNamespaceFix) ||
         compareValues(a.fix.kind, b.fix.kind) ||
         compareModuleSpecifiers(a.fix, b.fix, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
@@ -1472,7 +1472,7 @@ function doAddExistingFix(
         }
 
         const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, ignoreCaseForSorting);
-        const newSpecifiers = sort(
+        const newSpecifiers = toSorted(
             namedImports.map(namedImport =>
                 factory.createImportSpecifier(
                     (!clause.isTypeOnly || promoteFromTypeOnly) && needsTypeOnly(namedImport),

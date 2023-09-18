@@ -77,12 +77,12 @@ import {
     SignatureCheckMode,
     SignatureFlags,
     SnippetKind,
-    sort,
     SortedReadonlyArray,
     Symbol,
     SymbolFlags,
     symbolName,
     SyntaxKind,
+    toSorted,
     TransformFlags,
     Type,
     TypeFacts,
@@ -435,7 +435,7 @@ export namespace Debug {
             }
         }
 
-        const sorted = sort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+        const sorted = toSorted<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
         enumMemberCache.set(enumObject, sorted);
         return sorted;
     }

@@ -97,13 +97,13 @@ import {
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     some,
-    sort,
     SourceFile,
     startsWith,
     supportedDeclarationExtensions,
     supportedJSExtensionsFlat,
     supportedTSImplementationExtensions,
     toPath,
+    toSorted,
     tryExtractTSExtension,
     tryGetExtensionFromPath,
     tryParsePatterns,
@@ -2611,7 +2611,7 @@ function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleRes
         const target = (lookupTable as { [idx: string]: unknown; })[moduleName];
         return loadModuleFromTargetImportOrExport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
     }
-    const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.includes("*") || endsWith(k, "/")), comparePatternKeys);
+    const expandingKeys = toSorted(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.includes("*") || endsWith(k, "/")), comparePatternKeys);
     for (const potentialTarget of expandingKeys) {
         if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
             const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];

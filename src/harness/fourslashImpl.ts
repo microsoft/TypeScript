@@ -1559,7 +1559,7 @@ export class TestState {
             }
         }
         let pos = 0;
-        const sortedDetails = ts.sort(details, (a, b) => ts.compareValues(a.location, b.location));
+        const sortedDetails = ts.toSorted(details, (a, b) => ts.compareValues(a.location, b.location));
         if (!canDetermineContextIdInline) {
             // Assign contextIds
             sortedDetails.forEach(({ span, type }) => {

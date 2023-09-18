@@ -149,7 +149,6 @@ import {
     SignatureDeclaration,
     singleOrUndefined,
     skipTrivia,
-    sort,
     SourceFile,
     SourceFileLike,
     Statement,
@@ -161,6 +160,7 @@ import {
     textSpanEnd,
     Token,
     tokenToString,
+    toSorted,
     TransformationContext,
     TypeLiteralNode,
     TypeNode,
@@ -1258,7 +1258,7 @@ namespace changesToText {
             const sourceFile = changesInFile[0].sourceFile;
             // order changes by start position
             // If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
-            const normalized = sort(changesInFile, (a, b) => (a.range.pos - b.range.pos) || (a.range.end - b.range.end));
+            const normalized = toSorted(changesInFile, (a, b) => (a.range.pos - b.range.pos) || (a.range.end - b.range.end));
             // verify that change intervals do not overlap, except possibly at end points.
             for (let i = 0; i < normalized.length - 1; i++) {
                 Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () => `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);

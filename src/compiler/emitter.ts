@@ -397,7 +397,6 @@ import {
     SnippetElement,
     SnippetKind,
     some,
-    sort,
     SourceFile,
     SourceFilePrologueDirective,
     SourceFilePrologueInfo,
@@ -425,6 +424,7 @@ import {
     ThrowStatement,
     TokenFlags,
     tokenToString,
+    toSorted,
     tracing,
     TransformationResult,
     transformNodes,
@@ -2412,7 +2412,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function getSortedEmitHelpers(node: Node) {
         const helpers = getEmitHelpers(node);
-        return helpers && sort(helpers, compareEmitHelpers);
+        return helpers && toSorted(helpers, compareEmitHelpers);
     }
 
     //

@@ -294,7 +294,6 @@ import {
     skipTrivia,
     skipTypeChecking,
     some,
-    sort,
     sortAndDeduplicateDiagnostics,
     SortedReadonlyArray,
     SourceFile,
@@ -315,6 +314,7 @@ import {
     toFileNameLowerCase,
     tokenToString,
     toPath as ts_toPath,
+    toSorted,
     trace,
     tracing,
     TsConfigSourceFile,
@@ -1792,7 +1792,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         missingFilePaths = arrayFrom(mapDefinedIterator(filesByName.entries(), ([path, file]) => file === undefined ? path as Path : undefined));
-        files = sort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
+        files = toSorted(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
         processingDefaultLibFiles = undefined;
         processingOtherFiles = undefined;
     }

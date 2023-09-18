@@ -485,7 +485,6 @@ import {
     skipTrivia,
     SnippetKind,
     some,
-    sort,
     SortedArray,
     SourceFile,
     SourceFileLike,
@@ -520,6 +519,7 @@ import {
     TokenFlags,
     tokenToString,
     toPath,
+    toSorted,
     tracing,
     TransformFlags,
     TransientSymbol,
@@ -9198,7 +9198,7 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
         visited.set(canonicalPath, true);
         const { files, directories } = getFileSystemEntries(path);
 
-        for (const current of sort<string>(files, compareStringsCaseSensitive)) {
+        for (const current of toSorted<string>(files, compareStringsCaseSensitive)) {
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
@@ -9221,7 +9221,7 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
             }
         }
 
-        for (const current of sort<string>(directories, compareStringsCaseSensitive)) {
+        for (const current of toSorted<string>(directories, compareStringsCaseSensitive)) {
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (

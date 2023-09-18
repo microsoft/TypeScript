@@ -8,8 +8,8 @@ import {
     notImplemented,
     Path,
     returnFalse,
-    sort,
     SortedReadonlyArray,
+    toSorted,
     TypeAcquisition,
 } from "./_namespaces/ts";
 import {
@@ -145,7 +145,7 @@ export class TypingsCache {
     }
 
     updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
-        const typings = sort(newTypings);
+        const typings = toSorted(newTypings);
         this.perProjectCache.set(projectName, {
             compilerOptions,
             typeAcquisition,

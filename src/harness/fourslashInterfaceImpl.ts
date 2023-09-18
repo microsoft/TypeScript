@@ -1089,7 +1089,7 @@ export namespace Completion {
     ].map(keywordEntry);
 
     export function sorted(entries: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
-        return ts.sort(entries, compareExpectedCompletionEntries);
+        return ts.toSorted(entries, compareExpectedCompletionEntries);
     }
 
     // If you want to use a function like `globalsPlus`, that function needs to sort

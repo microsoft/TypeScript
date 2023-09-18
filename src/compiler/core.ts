@@ -835,7 +835,7 @@ export function sortAndDeduplicate<T>(array: readonly string[]): SortedReadonlyA
 export function sortAndDeduplicate<T>(array: readonly T[], comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
 /** @internal */
 export function sortAndDeduplicate<T>(array: readonly T[], comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
-    return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
+    return deduplicateSorted(toSorted(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
 }
 
 /** @internal */
@@ -1111,7 +1111,7 @@ function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: 
  *
  * @internal
  */
-export function sort<T>(array: readonly T[], comparer?: Comparer<T>): SortedReadonlyArray<T> {
+export function toSorted<T>(array: readonly T[], comparer?: Comparer<T>): SortedReadonlyArray<T> {
     return (array.length === 0 ? emptyArray : array.slice().sort(comparer)) as readonly T[] as SortedReadonlyArray<T>;
 }
 
