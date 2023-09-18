@@ -13484,6 +13484,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return instantiateType(instantiable, createTypeMapper([type.indexType, type.objectType], [getNumberLiteralType(0), createTupleType([replacement])]));
     }
 
+    function getLimitedConstraint(type: ReverseMappedType) {
+        const constraint = getConstraintTypeFromMappedType(type.mappedType);
+        if (!(constraint.flags & TypeFlags.Union)) {
+            return;
+        }
+        const origin = (constraint as UnionType).origin;
+        if (!origin || !(origin.flags & TypeFlags.Intersection)) {
+            return;
+        }
+        const limitedConstraint = getIntersectionType((origin as IntersectionType).types.filter(t => t !== type.constraintType));
+        return limitedConstraint !== neverType ? limitedConstraint : undefined;
+    }
+
     function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
         const indexInfo = getIndexInfoOfType(type.source, stringType);
         const modifiers = getMappedTypeModifiers(type.mappedType);
@@ -13491,7 +13504,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
         const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
+        const limitedConstraint = getLimitedConstraint(type);
         for (const prop of getPropertiesOfType(type.source)) {
+            if (limitedConstraint) {
+                const propertyNameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
+                if (!isTypeAssignableTo(propertyNameType, limitedConstraint)) {
+                    continue;
+                }
+            }
             const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
             const inferredProp = createSymbol(SymbolFlags.Property | prop.flags & optionalMask, prop.escapedName, checkFlags) as ReverseMappedSymbol;
             inferredProp.declarations = prop.declarations;
