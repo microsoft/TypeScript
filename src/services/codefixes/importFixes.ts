@@ -25,6 +25,7 @@ import {
     emptyArray,
     every,
     ExportKind,
+    ExportMapInfoKey,
     factory,
     first,
     firstDefined,
@@ -513,7 +514,7 @@ interface FixAddToExistingImportInfo {
 export function getImportCompletionAction(
     targetSymbol: Symbol,
     moduleSymbol: Symbol,
-    exportMapKey: string | undefined,
+    exportMapKey: ExportMapInfoKey | undefined,
     sourceFile: SourceFile,
     symbolName: string,
     isJsxTagName: boolean,
@@ -1361,15 +1362,16 @@ function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaratio
             if (aliasDeclaration.isTypeOnly) {
                 const sortKind = OrganizeImports.detectImportSpecifierSorting(aliasDeclaration.parent.elements, preferences);
                 if (aliasDeclaration.parent.elements.length > 1 && sortKind) {
-                    changes.delete(sourceFile, aliasDeclaration);
                     const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
                     const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
                     const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, comparer);
-                    changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
+                    if (aliasDeclaration.parent.elements.indexOf(aliasDeclaration) !== insertionIndex) {
+                        changes.delete(sourceFile, aliasDeclaration);
+                        changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
+                        return aliasDeclaration;
+                    }
                 }
-                else {
-                    changes.deleteRange(sourceFile, aliasDeclaration.getFirstToken()!);
-                }
+                changes.deleteRange(sourceFile, aliasDeclaration.getFirstToken()!);
                 return aliasDeclaration;
             }
             else {

@@ -4297,6 +4297,8 @@ export interface SourceFile extends Declaration, LocalsContainer {
 
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
+
+    /** @internal */ skipNonSemanticJSDoc?: boolean;
 }
 
 /** @internal */
@@ -6119,6 +6121,7 @@ export interface Type {
 // Intrinsic types (TypeFlags.Intrinsic)
 export interface IntrinsicType extends Type {
     intrinsicName: string; // Name of intrinsic type
+    debugIntrinsicName: string | undefined;
     objectFlags: ObjectFlags;
 }
 

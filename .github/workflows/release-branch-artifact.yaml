@@ -30,8 +30,8 @@ jobs:
         run: |
           npm ci
           npm test
-      - name: Adding playwright
-        run: npm install --no-save --no-package-lock playwright
+      - name: Installing browsers
+        run: npx playwright install --with-deps
       - name: Validate the browser can import TypeScript
         run: npx hereby test-browser-integration
       - name: LKG, clean, and pack

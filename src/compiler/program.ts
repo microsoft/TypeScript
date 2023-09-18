@@ -402,6 +402,7 @@ export function createGetSourceFile(
     readFile: ProgramHost<any>["readFile"],
     getCompilerOptions: () => CompilerOptions,
     setParentNodes: boolean | undefined,
+    skipNonSemanticJSDocParsing: boolean | undefined,
 ): CompilerHost["getSourceFile"] {
     return (fileName, languageVersionOrOptions, onError) => {
         let text: string | undefined;
@@ -417,7 +418,7 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes) : undefined;
+        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, skipNonSemanticJSDocParsing) : undefined;
     };
 }
 
@@ -455,7 +456,12 @@ export function createWriteFileMeasuringIO(
 }
 
 /** @internal */
-export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system: System = sys): CompilerHost {
+export function createCompilerHostWorker(
+    options: CompilerOptions,
+    setParentNodes?: boolean,
+    skipNonSemanticJSDocParsing?: boolean,
+    system: System = sys,
+): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
     const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
     function directoryExists(directoryPath: string): boolean {
@@ -476,7 +482,7 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
     const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
-        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes),
+        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, skipNonSemanticJSDocParsing),
         getDefaultLibLocation,
         getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
         writeFile: createWriteFileMeasuringIO(
