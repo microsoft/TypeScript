@@ -4277,11 +4277,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ classifiableNames?: ReadonlySet<__String>;
     // Comments containing @ts-* directives, in order.
     /** @internal */ commentDirectives?: CommentDirective[];
-    // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
-    // It is used to resolve module names in the checker.
-    // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-    /** @internal */ resolvedModules?: ModeAwareCache<ResolvedModuleWithFailedLookupLocations>;
-    /** @internal */ resolvedTypeReferenceDirectiveNames?: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     /** @internal */ imports: readonly StringLiteralLike[];
     // Identifier only if `declare global`
     /** @internal */ moduleAugmentations: readonly (StringLiteral | Identifier)[];
@@ -4652,6 +4647,11 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */
     getFilesByNameMap(): Map<string, SourceFile | false | undefined>;
 
+    /** @internal */
+    resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
+    /** @internal */
+    resolvedTypeReferenceDirectiveNames: Map<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
+
     /**
      * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
      * the JavaScript and declaration files will be produced for all the files in this program.
@@ -4867,6 +4867,8 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+
+    resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
 
     readonly redirectTargetsMap: RedirectTargetsMap;
 

@@ -27,8 +27,8 @@ describe("unittests:: Reuse program structure:: General", () => {
         baselines.push(`Program Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
         program.getSourceFiles().forEach(f => {
             baselines.push(`File: ${f.fileName}`, f.text);
-            baselineCache(baselines, "resolvedModules", f.resolvedModules);
-            baselineCache(baselines, "resolvedTypeReferenceDirectiveNames", f.resolvedTypeReferenceDirectiveNames);
+            baselineCache(baselines, "resolvedModules", program.resolvedModules?.get(f.path));
+            baselineCache(baselines, "resolvedTypeReferenceDirectiveNames", program.resolvedTypeReferenceDirectiveNames?.get(f.path));
             baselines.push("");
         });
         host ??= (program as ProgramWithSourceTexts).host;

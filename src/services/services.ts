@@ -212,7 +212,6 @@ import {
     mapOneOrMany,
     maybeBind,
     maybeSetLocalizedDiagnosticMessages,
-    ModeAwareCache,
     ModifierFlags,
     ModuleDeclaration,
     NavigateToItem,
@@ -256,9 +255,7 @@ import {
     RenameInfo,
     RenameInfoOptions,
     RenameLocation,
-    ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
-    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     returnFalse,
     scanner,
     ScriptElementKind,
@@ -1042,8 +1039,6 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public languageVariant!: LanguageVariant;
     public identifiers!: Map<string, string>;
     public nameTable: Map<__String, number> | undefined;
-    public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
-    public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     public imports!: readonly StringLiteralLike[];
     public moduleAugmentations!: StringLiteral[];
     private namedDeclarations: Map<string, Declaration[]> | undefined;

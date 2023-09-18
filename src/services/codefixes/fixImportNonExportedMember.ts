@@ -10,7 +10,6 @@ import {
     findLast,
     firstOrUndefined,
     getIsolatedModules,
-    getResolvedModule,
     getTokenAtPosition,
     Identifier,
     isExportDeclaration,
@@ -120,7 +119,7 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier.text : undefined;
         if (moduleSpecifier === undefined) return undefined;
 
-        const resolvedModule = getResolvedModule(sourceFile, moduleSpecifier, /*mode*/ undefined);
+        const resolvedModule = program.resolvedModules?.get(sourceFile.path)?.get(moduleSpecifier, /*mode*/ undefined)?.resolvedModule;
         if (resolvedModule === undefined) return undefined;
 
         const moduleSourceFile = program.getSourceFile(resolvedModule.resolvedFileName);

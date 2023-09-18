@@ -1009,7 +1009,7 @@ export namespace Core {
             if (!options.implementations && isStringLiteralLike(node)) {
                 if (isModuleSpecifierLike(node)) {
                     const fileIncludeReasons = program.getFileIncludeReasons();
-                    const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedModule?.resolvedFileName;
+                    const referencedFileName = program.resolvedModules?.get(node.getSourceFile().path)?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedModule?.resolvedFileName;
                     const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
                     if (referencedFile) {
                         return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];
@@ -1066,7 +1066,7 @@ export namespace Core {
         for (const ref of references) {
             if (isReferencedFile(ref)) {
                 const referencingFile = program.getSourceFileByPath(ref.file)!;
-                const location = getReferencedFileLocation(program.getSourceFileByPath, ref);
+                const location = getReferencedFileLocation(program, ref);
                 if (isReferenceFileLocation(location)) {
                     entries = append(entries, {
                         kind: EntryKind.Span,

@@ -310,7 +310,7 @@ function getTargetFileImportsAndAddExportInOldFile(
             forEachImportInStatement(oldStatement, i => {
                 // Recomputing module specifier
                 const moduleSpecifier = moduleSpecifierFromImport(i);
-                const resolved = oldFile.resolvedModules?.get(moduleSpecifier.text, getModeForUsageLocation(oldFile, moduleSpecifier));
+                const resolved = program.resolvedModules?.get(oldFile.path)?.get(moduleSpecifier.text, getModeForUsageLocation(oldFile, moduleSpecifier));
                 const fileName = resolved?.resolvedModule?.resolvedFileName;
                 if (fileName && targetSourceFile) {
                     const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), targetSourceFile, targetSourceFile.path, fileName, createModuleSpecifierResolutionHost(program, host));

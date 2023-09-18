@@ -238,8 +238,9 @@ export namespace BuilderState {
         }
 
         // Handle type reference directives
-        if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames.forEach(({ resolvedTypeReferenceDirective }) => {
+        const resolvedTypeReferenceDirectiveNames = program.resolvedTypeReferenceDirectiveNames?.get(sourceFile.path);
+        if (resolvedTypeReferenceDirectiveNames) {
+            resolvedTypeReferenceDirectiveNames.forEach(({ resolvedTypeReferenceDirective }) => {
                 if (!resolvedTypeReferenceDirective) {
                     return;
                 }

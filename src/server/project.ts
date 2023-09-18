@@ -603,7 +603,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
         if (this.program && !this.symlinks.hasProcessedResolutions()) {
             this.symlinks.setSymlinksFromResolutions(
-                this.program.getSourceFiles(),
+                this.program.resolvedModules,
+                this.program.resolvedTypeReferenceDirectiveNames,
                 this.program.getAutomaticTypeDirectiveResolutions(),
             );
         }
@@ -2232,15 +2233,27 @@ function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: 
     const sourceFiles = program.getSourceFiles();
     tracing?.push(tracing.Phase.Session, "getUnresolvedImports", { count: sourceFiles.length });
     const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
-    const result = sortAndDeduplicate(flatMap(sourceFiles, sourceFile => extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules, cachedUnresolvedImportsPerFile)));
+    const result = sortAndDeduplicate(flatMap(sourceFiles, sourceFile =>
+        extractUnresolvedImportsFromSourceFile(
+            program,
+            sourceFile,
+            ambientModules,
+            cachedUnresolvedImportsPerFile,
+        )));
     tracing?.pop();
     return result;
 }
-function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: readonly string[], cachedUnresolvedImportsPerFile: Map<Path, readonly string[]>): readonly string[] {
+function extractUnresolvedImportsFromSourceFile(
+    program: Program,
+    file: SourceFile,
+    ambientModules: readonly string[],
+    cachedUnresolvedImportsPerFile: Map<Path, readonly string[]>,
+): readonly string[] {
     return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
-        if (!file.resolvedModules) return emptyArray;
+        const resolvedModules = program.resolvedModules?.get(file.path);
+        if (!resolvedModules) return emptyArray;
         let unresolvedImports: string[] | undefined;
-        file.resolvedModules.forEach(({ resolvedModule }, name) => {
+        resolvedModules.forEach(({ resolvedModule }, name) => {
             // pick unresolved non-relative names
             if (
                 (!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&

@@ -249,7 +249,7 @@ function getSourceFileToImport(
     else {
         const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
         const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
-            importingSourceFile.resolvedModules?.get(importLiteral.text, mode) :
+            program.resolvedModules?.get(importingSourceFile.path)?.get(importLiteral.text, mode) :
             host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
         return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
     }

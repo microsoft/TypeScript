@@ -442,7 +442,7 @@ export function getMatchedIncludeSpec(program: Program, fileName: string) {
 export function fileIncludeReasonToDiagnostics(program: Program, reason: FileIncludeReason, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain {
     const options = program.getCompilerOptions();
     if (isReferencedFile(reason)) {
-        const referenceLocation = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason);
+        const referenceLocation = getReferencedFileLocation(program, reason);
         const referenceText = isReferenceFileLocation(referenceLocation) ? referenceLocation.file.text.substring(referenceLocation.pos, referenceLocation.end) : `"${referenceLocation.text}"`;
         let message: DiagnosticMessage;
         Debug.assert(isReferenceFileLocation(referenceLocation) || reason.kind === FileIncludeKind.Import, "Only synthetic references are imports");

@@ -342,7 +342,6 @@ import {
     getResolutionDiagnostic,
     getResolutionModeOverrideForClause,
     getResolvedExternalModuleName,
-    getResolvedModule,
     getResolveJsonModule,
     getRestParameterElementType,
     getRootDeclaration,
@@ -4960,7 +4959,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
-        const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode);
+        const resolvedModule = host.resolvedModules?.get(currentSourceFile.path)?.get(moduleReference, mode)?.resolvedModule;
         const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
         const sourceFile = resolvedModule
             && (!resolutionDiagnostic || resolutionDiagnostic === Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set)
