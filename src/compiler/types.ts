@@ -9851,9 +9851,30 @@ export const commentPragmas = {
 } as const;
 
 export const enum JSDocParsingMode {
+    /**
+     * Always parse JSDoc comments and include them in the AST.
+     *
+     * This is the default if no mode is provided.
+     */
     ParseAll,
+    /**
+     * Never parse JSDoc comments, mo matter the file type.
+     */
     ParseNone,
+    /**
+     * Parse only JSDoc comments which are needed to provide correct type errors.
+     *
+     * This will always parse JSDoc in non-TS files, but only parse JSDoc comments
+     * containing `@see` and `@link` in TS files.
+     */
     ParseForTypeErrors,
+    /**
+     * Parse only JSDoc comments which are needed to provide correct type info.
+     *
+     * This will always parse JSDoc in non-TS files, but never in TS files.
+     *
+     * Note: Do not use this mode if you require accurate type errors; use {@link ParseForTypeErrors} instead.
+     */
     ParseForTypeInfo,
 }
 
