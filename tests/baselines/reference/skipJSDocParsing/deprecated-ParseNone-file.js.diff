@@ -119,6 +119,6 @@
      "identifiers": {},
 -    "jsDocParsingMode": 0,
 -    "jsDocDiagnostics": []
-+    "jsDocParsingMode": 3
++    "jsDocParsingMode": 1
  }
 \ No newline at end of file

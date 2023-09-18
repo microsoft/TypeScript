@@ -8611,9 +8611,9 @@ declare namespace ts {
     }
     enum JSDocParsingMode {
         ParseAll = 0,
-        ParseForTypeErrors = 1,
-        ParseForTypeInfo = 2,
-        ParseNone = 3,
+        ParseNone = 1,
+        ParseForTypeErrors = 2,
+        ParseForTypeInfo = 3,
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;

@@ -62,6 +62,6 @@
      "amdDependencies": [],
      "identifiers": {},
 -    "jsDocParsingMode": 0
-+    "jsDocParsingMode": 3
++    "jsDocParsingMode": 1
  }
 \ No newline at end of file
