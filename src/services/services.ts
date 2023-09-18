@@ -1363,7 +1363,8 @@ class SyntaxTreeCache {
                 ),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings()),
             };
-            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind, this.host.jsDocParsingMode);
+            // These files are used to produce syntax-based highlighting, which reads JSDoc, so we must use ParseAll.
+            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind, JSDocParsingMode.ParseAll);
         }
         else if (this.currentFileVersion !== version) {
             // This is the same file, just a newer version. Incrementally parse the file.
