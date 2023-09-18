@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.ts] ////
+
 //// [mappedTypeWithAsClauseAndLateBoundProperty2.ts]
 export const thing = (null as any as { [K in keyof number[] as Exclude<K, "length">]: (number[])[K] });
 
@@ -56,7 +58,7 @@ export declare const thing: {
     };
     findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
     fill: (value: number, start?: number, end?: number) => number[];
-    copyWithin: (target: number, start?: number, end?: number) => number[];
+    copyWithin: (target: number, start: number, end?: number) => number[];
     entries: () => IterableIterator<[number, number]>;
     keys: () => IterableIterator<number>;
     values: () => IterableIterator<number>;
@@ -107,10 +109,10 @@ export declare const thing: {
 //// [DtsFileErrors]
 
 
-tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 
 
-==== tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.d.ts (1 errors) ====
+==== mappedTypeWithAsClauseAndLateBoundProperty2.d.ts (1 errors) ====
     export declare const thing: {
         [x: number]: number;
         toString: () => string;
@@ -162,7 +164,7 @@ tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(24,118): e
         };
         findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
         fill: (value: number, start?: number, end?: number) => number[];
-        copyWithin: (target: number, start?: number, end?: number) => number[];
+        copyWithin: (target: number, start: number, end?: number) => number[];
         entries: () => IterableIterator<[number, number]>;
         keys: () => IterableIterator<number>;
         values: () => IterableIterator<number>;

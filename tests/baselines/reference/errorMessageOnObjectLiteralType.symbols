@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorMessageOnObjectLiteralType.ts ===
+//// [tests/cases/compiler/errorMessageOnObjectLiteralType.ts] ////
+
+=== errorMessageOnObjectLiteralType.ts ===
 var x: {
 >x : Symbol(x, Decl(errorMessageOnObjectLiteralType.ts, 0, 3))
 

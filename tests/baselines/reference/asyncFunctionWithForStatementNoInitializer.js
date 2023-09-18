@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncFunctionWithForStatementNoInitializer.ts] ////
+
 //// [asyncFunctionWithForStatementNoInitializer.ts]
 async function test1() {
     let i = 0

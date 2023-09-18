@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ModuleClassDeclaration.ts ===
+//// [tests/cases/compiler/es6ModuleClassDeclaration.ts] ////
+
+=== es6ModuleClassDeclaration.ts ===
 export class c {
 >c : Symbol(c, Decl(es6ModuleClassDeclaration.ts, 0, 0))
 

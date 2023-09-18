@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/parametersWithNoAnnotationAreAny.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/parametersWithNoAnnotationAreAny.ts] ////
+
+=== parametersWithNoAnnotationAreAny.ts ===
 function foo(x) { return x; }
 >foo : Symbol(foo, Decl(parametersWithNoAnnotationAreAny.ts, 0, 0))
 >x : Symbol(x, Decl(parametersWithNoAnnotationAreAny.ts, 0, 13))

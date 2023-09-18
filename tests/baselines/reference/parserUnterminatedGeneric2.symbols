@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts] ////
+
+=== parserUnterminatedGeneric2.ts ===
 declare module ng {
 >ng : Symbol(ng, Decl(parserUnterminatedGeneric2.ts, 0, 0))
 

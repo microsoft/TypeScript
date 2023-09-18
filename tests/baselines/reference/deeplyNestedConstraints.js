@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deeplyNestedConstraints.ts] ////
+
 //// [deeplyNestedConstraints.ts]
 // Repro from #41931
 

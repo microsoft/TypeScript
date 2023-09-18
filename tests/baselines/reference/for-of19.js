@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of19.ts] ////
+
 //// [for-of19.ts]
 class Foo { }
 class FooIterator {

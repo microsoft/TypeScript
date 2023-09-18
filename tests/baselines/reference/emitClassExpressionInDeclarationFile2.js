@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts] ////
+
 //// [emitClassExpressionInDeclarationFile2.ts]
 export var noPrivates = class {
     static getTags() { }

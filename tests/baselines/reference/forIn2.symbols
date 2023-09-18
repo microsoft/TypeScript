@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forIn2.ts ===
+//// [tests/cases/compiler/forIn2.ts] ////
+
+=== forIn2.ts ===
 for (var i in 1) {
 >i : Symbol(i, Decl(forIn2.ts, 0, 8))
 }

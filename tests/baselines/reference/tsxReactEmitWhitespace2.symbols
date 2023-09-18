@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmitWhitespace2.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
@@ -17,22 +19,22 @@ declare var React: any;
 
 // Emit ' word' in the last string
 <div>word <code>code</code> word</div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->code : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->code : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 // Same here
 <div><code>code</code> word</div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->code : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->code : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 // And here
 <div><code /> word</div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->code : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>code : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 

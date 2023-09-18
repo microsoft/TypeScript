@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports_importsNotUsedAsValues.ts] ////
+
 === /mod.ts ===
 export type A = unknown;
 >A : Symbol(A, Decl(mod.ts, 0, 0))

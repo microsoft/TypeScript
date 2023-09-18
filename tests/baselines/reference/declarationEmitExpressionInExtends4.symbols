@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends4.ts ===
+//// [tests/cases/compiler/declarationEmitExpressionInExtends4.ts] ////
+
+=== declarationEmitExpressionInExtends4.ts ===
 function getSomething() {
 >getSomething : Symbol(getSomething, Decl(declarationEmitExpressionInExtends4.ts, 0, 0))
 

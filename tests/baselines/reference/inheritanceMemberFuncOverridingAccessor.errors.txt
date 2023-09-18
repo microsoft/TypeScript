@@ -1,9 +1,9 @@
-tests/cases/compiler/inheritanceMemberFuncOverridingAccessor.ts(11,5): error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type 'a'.
+inheritanceMemberFuncOverridingAccessor.ts(11,5): error TS2416: Property 'x' in type 'b' is not assignable to the same property in base type 'a'.
   Type '() => string' is not assignable to type 'string'.
-tests/cases/compiler/inheritanceMemberFuncOverridingAccessor.ts(11,5): error TS2426: Class 'a' defines instance member accessor 'x', but extended class 'b' defines it as instance member function.
+inheritanceMemberFuncOverridingAccessor.ts(11,5): error TS2426: Class 'a' defines instance member accessor 'x', but extended class 'b' defines it as instance member function.
 
 
-==== tests/cases/compiler/inheritanceMemberFuncOverridingAccessor.ts (2 errors) ====
+==== inheritanceMemberFuncOverridingAccessor.ts (2 errors) ====
     class a {
         get x() {
             return "20";

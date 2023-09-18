@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/yieldExpressions/generatorOverloads1.ts(2,13): error TS1222: An overload signature cannot be declared as a generator.
-tests/cases/conformance/es6/yieldExpressions/generatorOverloads1.ts(3,13): error TS1222: An overload signature cannot be declared as a generator.
+generatorOverloads1.ts(2,13): error TS1222: An overload signature cannot be declared as a generator.
+generatorOverloads1.ts(3,13): error TS1222: An overload signature cannot be declared as a generator.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorOverloads1.ts (2 errors) ====
+==== generatorOverloads1.ts (2 errors) ====
     module M {
         function* f(s: string): Iterable<any>;
                 ~

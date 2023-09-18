@@ -18,11 +18,11 @@ import {
 describe("unittests:: tsserver:: inlayHints", () => {
     const configFile: File = {
         path: "/a/b/tsconfig.json",
-        content: "{}"
+        content: "{}",
     };
     const app: File = {
         path: "/a/b/app.ts",
-        content: "declare function foo(param: any): void;\nfoo(12);"
+        content: "declare function foo(param: any): void;\nfoo(12);",
     };
 
     it("with updateOpen request does not corrupt documents", () => {
@@ -30,29 +30,29 @@ describe("unittests:: tsserver:: inlayHints", () => {
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
-            arguments: { file: app.path }
+            arguments: { file: app.path },
         });
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
                 preferences: {
-                    includeInlayParameterNameHints: "all"
-                } as ts.UserPreferences
-            }
+                    includeInlayParameterNameHints: "all",
+                } as ts.UserPreferences,
+            },
         });
         verifyInlayHintResponse(session);
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
-                changedFiles: [{ fileName: app.path, textChanges: [{ start: { line: 1, offset: 39 }, end: { line: 1, offset: 39 }, newText: "//" }] }]
-            }
+                changedFiles: [{ fileName: app.path, textChanges: [{ start: { line: 1, offset: 39 }, end: { line: 1, offset: 39 }, newText: "//" }] }],
+            },
         });
         verifyInlayHintResponse(session);
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
             command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
-                changedFiles: [{ fileName: app.path, textChanges: [{ start: { line: 1, offset: 41 }, end: { line: 1, offset: 41 }, newText: "c" }] }]
-            }
+                changedFiles: [{ fileName: app.path, textChanges: [{ start: { line: 1, offset: 41 }, end: { line: 1, offset: 41 }, newText: "c" }] }],
+            },
         });
         verifyInlayHintResponse(session);
         baselineTsserverLogs("inlayHints", "with updateOpen request does not corrupt documents", session);
@@ -64,7 +64,7 @@ describe("unittests:: tsserver:: inlayHints", () => {
                     file: app.path,
                     start: 0,
                     length: app.content.length,
-                }
+                },
             });
         }
     });

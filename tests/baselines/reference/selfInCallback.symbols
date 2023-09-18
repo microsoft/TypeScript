@@ -1,4 +1,6 @@
-=== tests/cases/compiler/selfInCallback.ts ===
+//// [tests/cases/compiler/selfInCallback.ts] ////
+
+=== selfInCallback.ts ===
 class C {
 >C : Symbol(C, Decl(selfInCallback.ts, 0, 0))
 

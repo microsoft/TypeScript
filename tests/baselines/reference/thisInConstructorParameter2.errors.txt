@@ -1,8 +1,8 @@
-tests/cases/compiler/thisInConstructorParameter2.ts(5,28): error TS2333: 'this' cannot be referenced in constructor arguments.
-tests/cases/compiler/thisInConstructorParameter2.ts(5,39): error TS2333: 'this' cannot be referenced in constructor arguments.
+thisInConstructorParameter2.ts(5,28): error TS2333: 'this' cannot be referenced in constructor arguments.
+thisInConstructorParameter2.ts(5,39): error TS2333: 'this' cannot be referenced in constructor arguments.
 
 
-==== tests/cases/compiler/thisInConstructorParameter2.ts (2 errors) ====
+==== thisInConstructorParameter2.ts (2 errors) ====
     class P {
         x = this;
         static y = this;

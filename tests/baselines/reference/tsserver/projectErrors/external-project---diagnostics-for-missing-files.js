@@ -163,9 +163,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /a/b/applib.ts: *new*
+  {}
+/a/lib/lib.d.ts:
   {}
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/app.ts 0:: WatchInfo: /a/b/app.ts 500 undefined Project: /a/b/test.csproj WatchType: Missing file
@@ -182,9 +182,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /a/b/applib.ts:
+  {}
+/a/lib/lib.d.ts:
   {}
 
 Info seq  [hh:mm:ss:mss] request:
@@ -222,9 +222,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 FsWatches::
-/a/lib/lib.d.ts:
+/a/b/app.ts: *new*
   {}
 /a/b/applib.ts:
   {}
-/a/b/app.ts: *new*
+/a/lib/lib.d.ts:
   {}

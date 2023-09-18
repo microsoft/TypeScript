@@ -1,4 +1,6 @@
-=== tests/cases/compiler/identityAndDivergentNormalizedTypes.ts ===
+//// [tests/cases/compiler/identityAndDivergentNormalizedTypes.ts] ////
+
+=== identityAndDivergentNormalizedTypes.ts ===
 // Repros from #53998
 
 type ApiPost =

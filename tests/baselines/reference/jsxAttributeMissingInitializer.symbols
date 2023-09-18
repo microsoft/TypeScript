@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxAttributeMissingInitializer.tsx ===
+//// [tests/cases/compiler/jsxAttributeMissingInitializer.tsx] ////
+
+=== jsxAttributeMissingInitializer.tsx ===
 const x = <div foo= ></div>;
 >x : Symbol(x, Decl(jsxAttributeMissingInitializer.tsx, 0, 5))
 >foo : Symbol(foo, Decl(jsxAttributeMissingInitializer.tsx, 0, 14))

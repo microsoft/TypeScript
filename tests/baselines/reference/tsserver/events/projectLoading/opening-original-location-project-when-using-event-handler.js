@@ -153,7 +153,7 @@ Info seq  [hh:mm:ss:mss] event:
       "configFileName": "tsconfig.json",
       "projectType": "configured",
       "languageServiceEnabled": true,
-      "version": "5.1.0-dev"
+      "version": "FakeVersion"
      }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -202,19 +202,19 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/b/tsconfig.json: *new*
-  {}
-/user/username/projects/a/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/a/a.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/a/tsconfig.json: *new*
+  {}
+/user/username/projects/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/b: *new*
-  {}
 /user/username/projects/a: *new*
+  {}
+/user/username/projects/b: *new*
   {}
 
 Before request
@@ -306,7 +306,7 @@ Info seq  [hh:mm:ss:mss] event:
       "configFileName": "tsconfig.json",
       "projectType": "configured",
       "languageServiceEnabled": true,
-      "version": "5.1.0-dev"
+      "version": "FakeVersion"
      }
     }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/a
@@ -381,25 +381,25 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/user/username/projects/a/node_modules/@types: *new*
+  {"pollingInterval":500}
 /user/username/projects/b/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/b/tsconfig.json:
-  {}
-/user/username/projects/a/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/a/a.ts:
   {}
-/a/lib/lib.d.ts:
+/user/username/projects/a/tsconfig.json:
+  {}
+/user/username/projects/b/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/b:
-  {}
 /user/username/projects/a:
+  {}
+/user/username/projects/b:
   {}

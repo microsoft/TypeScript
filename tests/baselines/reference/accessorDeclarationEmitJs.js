@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorDeclarationEmitJs.ts] ////
+
 //// [a.js]
 export const t1 = {
     p: 'value',
@@ -25,7 +27,7 @@ export const t3 = {
 //// [a.d.ts]
 export namespace t1 {
     let p: string;
-    let getter: string;
+    const getter: string;
 }
 export namespace t2 {
     let v: string;

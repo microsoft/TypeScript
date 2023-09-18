@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInheritedDefaultConstructors.ts ===
+//// [tests/cases/compiler/genericInheritedDefaultConstructors.ts] ////
+
+=== genericInheritedDefaultConstructors.ts ===
 // repro from #8166
 interface Constructor<T> {
 >Constructor : Symbol(Constructor, Decl(genericInheritedDefaultConstructors.ts, 0, 0))

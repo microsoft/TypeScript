@@ -1,9 +1,9 @@
-tests/cases/conformance/decorators/invalid/decoratorOnFunctionExpression.ts(3,13): error TS1109: Expression expected.
-tests/cases/conformance/decorators/invalid/decoratorOnFunctionExpression.ts(3,14): error TS1005: ',' expected.
-tests/cases/conformance/decorators/invalid/decoratorOnFunctionExpression.ts(3,23): error TS1003: Identifier expected.
+decoratorOnFunctionExpression.ts(3,13): error TS1109: Expression expected.
+decoratorOnFunctionExpression.ts(3,14): error TS1005: ',' expected.
+decoratorOnFunctionExpression.ts(3,23): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/decorators/invalid/decoratorOnFunctionExpression.ts (3 errors) ====
+==== decoratorOnFunctionExpression.ts (3 errors) ====
     declare function dec<T>(target: T): T;
     
     var F = @dec function () {

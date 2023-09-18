@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseChaining1.ts ===
+//// [tests/cases/compiler/promiseChaining1.ts] ////
+
+=== promiseChaining1.ts ===
 // same example but with constraints on each type parameter
 class Chain2<T extends { length: number }> {
 >Chain2 : Symbol(Chain2, Decl(promiseChaining1.ts, 0, 0))

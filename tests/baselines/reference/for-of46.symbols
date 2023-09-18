@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of46.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of46.ts] ////
+
+=== for-of46.ts ===
 var k: string, v: boolean;
 >k : Symbol(k, Decl(for-of46.ts, 0, 3))
 >v : Symbol(v, Decl(for-of46.ts, 0, 14))

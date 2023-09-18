@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface03.ts] ////
+
 //// [asiPreventsParsingAsInterface03.ts]
 var interface: number, I: string;
 

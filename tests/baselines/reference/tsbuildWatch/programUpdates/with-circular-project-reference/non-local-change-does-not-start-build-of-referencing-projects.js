@@ -150,19 +150,19 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/tests/index.ts (computed .d.ts during emit)
 
 FsWatches::
-/user/username/projects/sample1/core/tsconfig.json: *new*
-  {}
 /user/username/projects/sample1/core/anothermodule.ts: *new*
   {}
 /user/username/projects/sample1/core/index.ts: *new*
   {}
-/user/username/projects/sample1/logic/tsconfig.json: *new*
+/user/username/projects/sample1/core/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/logic/index.ts: *new*
   {}
-/user/username/projects/sample1/tests/tsconfig.json: *new*
+/user/username/projects/sample1/logic/tsconfig.json: *new*
   {}
 /user/username/projects/sample1/tests/index.ts: *new*
+  {}
+/user/username/projects/sample1/tests/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

@@ -1,9 +1,9 @@
-tests/cases/compiler/unaryOperators1.ts(1,2): error TS2304: Cannot find name 'foo'.
-tests/cases/compiler/unaryOperators1.ts(2,2): error TS2304: Cannot find name 'bar'.
-tests/cases/compiler/unaryOperators1.ts(3,2): error TS2304: Cannot find name 'quux'.
+unaryOperators1.ts(1,2): error TS2304: Cannot find name 'foo'.
+unaryOperators1.ts(2,2): error TS2304: Cannot find name 'bar'.
+unaryOperators1.ts(3,2): error TS2304: Cannot find name 'quux'.
 
 
-==== tests/cases/compiler/unaryOperators1.ts (3 errors) ====
+==== unaryOperators1.ts (3 errors) ====
     +foo;
      ~~~
 !!! error TS2304: Cannot find name 'foo'.

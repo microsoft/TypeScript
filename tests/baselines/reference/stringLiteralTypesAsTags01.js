@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts] ////
+
 //// [stringLiteralTypesAsTags01.ts]
 type Kind = "A" | "B"
 

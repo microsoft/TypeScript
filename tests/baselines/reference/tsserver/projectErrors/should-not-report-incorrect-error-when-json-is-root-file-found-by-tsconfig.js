@@ -23,7 +23,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"resolveJsonModule":true,"composite":true},"include":["./src/*.ts","./src/*.json"]}
+{"compilerOptions":{"resolveJsonModule":true,"composite":true,"outDir":"dist"},"include":["./src/*.ts","./src/*.json"]}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -57,6 +57,7 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json
  "options": {
   "resolveJsonModule": true,
   "composite": true,
+  "outDir": "/user/username/projects/myproject/dist",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
  }
 }
@@ -122,7 +123,8 @@ Info seq  [hh:mm:ss:mss] event:
        },
        "compilerOptions": {
         "resolveJsonModule": true,
-        "composite": true
+        "composite": true,
+        "outDir": ""
        },
        "typeAcquisition": {
         "enable": false,
@@ -137,7 +139,7 @@ Info seq  [hh:mm:ss:mss] event:
        "configFileName": "tsconfig.json",
        "projectType": "configured",
        "languageServiceEnabled": true,
-       "version": "5.1.0-dev"
+       "version": "FakeVersion"
       }
      }
     }
@@ -174,13 +176,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
+/a/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/src: *new*
   {}
 /user/username/projects/myproject/src/blabla.json: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::

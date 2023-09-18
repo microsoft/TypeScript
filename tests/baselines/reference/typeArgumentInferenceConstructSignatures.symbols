@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts] ////
+
+=== typeArgumentInferenceConstructSignatures.ts ===
 // Generic call with no parameters
 interface NoParams {
 >NoParams : Symbol(NoParams, Decl(typeArgumentInferenceConstructSignatures.ts, 0, 0))

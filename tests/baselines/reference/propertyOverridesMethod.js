@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesMethod.ts] ////
+
 //// [propertyOverridesMethod.ts]
 class A {
     m() { }

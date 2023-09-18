@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts ===
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts] ////
+
+=== propertyAccessNumericLiterals.ts ===
 0xffffffff.toString();
 >0xffffffff.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))

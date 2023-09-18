@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ModuleWithModuleGenAmd.ts] ////
+
 //// [es5ModuleWithModuleGenAmd.ts]
 export class A
 {

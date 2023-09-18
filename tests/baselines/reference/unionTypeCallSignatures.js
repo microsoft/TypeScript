@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures.ts] ////
+
 //// [unionTypeCallSignatures.ts]
 var numOrDate: number | Date;
 var strOrBoolean: string | boolean;

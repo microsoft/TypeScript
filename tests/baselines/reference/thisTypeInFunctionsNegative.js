@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts] ////
+
 //// [thisTypeInFunctionsNegative.ts]
 class C {
     n: number;
@@ -225,7 +227,7 @@ let impl = {
     explicitVoid1() {
         return this.a; // error, no 'a' in 'void'
     },
-    explicitVoid2: () => this.a,
+    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object
     explicitStructural: () => 12,
     explicitInterface: () => 12,
     explicitThis() {

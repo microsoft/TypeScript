@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts] ////
+
 //// [inferFromGenericFunctionReturnTypes3.ts]
 // Repros from #5487
 

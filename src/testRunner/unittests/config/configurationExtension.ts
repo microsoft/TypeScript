@@ -2,7 +2,10 @@ import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import { baselineParseConfig, baselineParseConfigHost } from "./helpers";
+import {
+    baselineParseConfig,
+    baselineParseConfigHost,
+} from "./helpers";
 
 function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
     return new vfs.FileSystem(ignoreCase, {
@@ -13,58 +16,58 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     name: "@foo/tsconfig",
                     version: "1.0.0",
                     exports: {
-                        ".": "./src/tsconfig.json"
-                    }
+                        ".": "./src/tsconfig.json",
+                    },
                 }),
                 "dev/node_modules/@foo/tsconfig/src/tsconfig.json": JSON.stringify({
                     compilerOptions: {
                         strict: true,
-                    }
+                    },
                 }),
                 "dev/tsconfig.extendsFoo.json": JSON.stringify({
                     extends: "@foo/tsconfig",
                     files: [
                         "main.ts",
-                    ]
+                    ],
                 }),
                 "dev/node_modules/config-box/package.json": JSON.stringify({
                     name: "config-box",
                     version: "1.0.0",
-                    tsconfig: "./strict.json"
+                    tsconfig: "./strict.json",
                 }),
                 "dev/node_modules/config-box/strict.json": JSON.stringify({
                     compilerOptions: {
                         strict: true,
-                    }
+                    },
                 }),
                 "dev/node_modules/config-box/unstrict.json": JSON.stringify({
                     compilerOptions: {
                         strict: false,
-                    }
+                    },
                 }),
                 "dev/tsconfig.extendsBox.json": JSON.stringify({
                     extends: "config-box",
                     files: [
                         "main.ts",
-                    ]
+                    ],
                 }),
                 "dev/tsconfig.extendsStrict.json": JSON.stringify({
                     extends: "config-box/strict",
                     files: [
                         "main.ts",
-                    ]
+                    ],
                 }),
                 "dev/tsconfig.extendsUnStrict.json": JSON.stringify({
                     extends: "config-box/unstrict",
                     files: [
                         "main.ts",
-                    ]
+                    ],
                 }),
                 "dev/tsconfig.extendsStrictExtension.json": JSON.stringify({
                     extends: "config-box/strict.json",
                     files: [
                         "main.ts",
-                    ]
+                    ],
                 }),
                 "dev/node_modules/config-box-implied/package.json": JSON.stringify({
                     name: "config-box-implied",
@@ -73,131 +76,131 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 "dev/node_modules/config-box-implied/tsconfig.json": JSON.stringify({
                     compilerOptions: {
                         strict: true,
-                    }
+                    },
                 }),
                 "dev/node_modules/config-box-implied/unstrict/tsconfig.json": JSON.stringify({
                     compilerOptions: {
                         strict: false,
-                    }
+                    },
                 }),
                 "dev/tsconfig.extendsBoxImplied.json": JSON.stringify({
                     extends: "config-box-implied",
                     files: [
                         "main.ts",
-                    ]
+                    ],
                 }),
                 "dev/tsconfig.extendsBoxImpliedUnstrict.json": JSON.stringify({
                     extends: "config-box-implied/unstrict",
                     files: [
                         "main.ts",
-                    ]
+                    ],
                 }),
                 "dev/tsconfig.extendsBoxImpliedUnstrictExtension.json": JSON.stringify({
                     extends: "config-box-implied/unstrict/tsconfig",
                     files: [
                         "main.ts",
-                    ]
+                    ],
                 }),
                 "dev/tsconfig.extendsBoxImpliedPath.json": JSON.stringify({
                     extends: "config-box-implied/tsconfig.json",
                     files: [
                         "main.ts",
-                    ]
+                    ],
                 }),
                 "dev/tsconfig.json": JSON.stringify({
                     extends: "./configs/base",
                     files: [
                         "main.ts",
-                        "supplemental.ts"
-                    ]
+                        "supplemental.ts",
+                    ],
                 }),
                 "dev/tsconfig.nostrictnull.json": JSON.stringify({
                     extends: "./tsconfig",
                     compilerOptions: {
-                        strictNullChecks: false
-                    }
+                        strictNullChecks: false,
+                    },
                 }),
                 "dev/configs/base.json": JSON.stringify({
                     compilerOptions: {
                         allowJs: true,
                         noImplicitAny: true,
-                        strictNullChecks: true
-                    }
+                        strictNullChecks: true,
+                    },
                 }),
                 "dev/configs/tests.json": JSON.stringify({
                     compilerOptions: {
                         preserveConstEnums: true,
                         removeComments: false,
-                        sourceMap: true
+                        sourceMap: true,
                     },
                     exclude: [
                         "../tests/baselines",
-                        "../tests/scenarios"
+                        "../tests/scenarios",
                     ],
                     include: [
-                        "../tests/**/*.ts"
-                    ]
+                        "../tests/**/*.ts",
+                    ],
                 }),
                 "dev/circular.json": JSON.stringify({
                     extends: "./circular2",
                     compilerOptions: {
-                        module: "amd"
-                    }
+                        module: "amd",
+                    },
                 }),
                 "dev/circular2.json": JSON.stringify({
                     extends: "./circular",
                     compilerOptions: {
-                        module: "commonjs"
-                    }
+                        module: "commonjs",
+                    },
                 }),
                 "dev/missing.json": JSON.stringify({
                     extends: "./missing2",
                     compilerOptions: {
-                        types: []
-                    }
+                        types: [],
+                    },
                 }),
                 "dev/failure.json": JSON.stringify({
                     extends: "./failure2.json",
                     compilerOptions: {
-                        typeRoots: []
-                    }
+                        typeRoots: [],
+                    },
                 }),
                 "dev/failure2.json": JSON.stringify({
-                    excludes: ["*.js"]
+                    excludes: ["*.js"],
                 }),
                 "dev/configs/first.json": JSON.stringify({
                     extends: "./base",
                     compilerOptions: {
-                        module: "commonjs"
+                        module: "commonjs",
                     },
-                    files: ["../main.ts"]
+                    files: ["../main.ts"],
                 }),
                 "dev/configs/second.json": JSON.stringify({
                     extends: "./base",
                     compilerOptions: {
-                        module: "amd"
+                        module: "amd",
                     },
-                    include: ["../supplemental.*"]
+                    include: ["../supplemental.*"],
                 }),
                 "dev/configs/third.json": JSON.stringify({
                     extends: "./second",
                     compilerOptions: {
-                        module: null // eslint-disable-line no-null/no-null
+                        module: null, // eslint-disable-line no-null/no-null
                     },
-                    include: ["../supplemental.*"]
+                    include: ["../supplemental.*"],
                 }),
                 "dev/configs/fourth.json": JSON.stringify({
                     extends: "./third",
                     compilerOptions: {
-                        module: "system"
+                        module: "system",
                     },
                     include: null, // eslint-disable-line no-null/no-null
-                    files: ["../main.ts"]
+                    files: ["../main.ts"],
                 }),
                 "dev/configs/fifth.json": JSON.stringify({
                     extends: "./fourth",
                     include: ["../tests/utils.ts"],
-                    files: []
+                    files: [],
                 }),
                 "dev/extends.json": JSON.stringify({ extends: 42 }),
                 "dev/extends2.json": JSON.stringify({ extends: "configs/base" }),
@@ -213,30 +216,30 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     compilerOptions: {
                         allowJs: true,
                         noImplicitAny: true,
-                        strictNullChecks: true
-                    }
+                        strictNullChecks: true,
+                    },
                 }),
                 "dev/configs/extendsArraySecond.json": JSON.stringify({
                     compilerOptions: {
-                        module: "amd"
+                        module: "amd",
                     },
-                    include: ["../supplemental.*"]
+                    include: ["../supplemental.*"],
                 }),
                 "dev/configs/extendsArrayThird.json": JSON.stringify({
                     compilerOptions: {
                         module: null, // eslint-disable-line no-null/no-null
-                        noImplicitAny: false
+                        noImplicitAny: false,
                     },
                     extends: "./extendsArrayFirst",
-                    include: ["../supplemental.*"]
+                    include: ["../supplemental.*"],
                 }),
                 "dev/configs/extendsArrayFourth.json": JSON.stringify({
                     compilerOptions: {
                         module: "system",
-                        strictNullChecks: false
+                        strictNullChecks: false,
                     },
                     include: null, // eslint-disable-line no-null/no-null
-                    files: ["../main.ts"]
+                    files: ["../main.ts"],
                 }),
                 "dev/configs/extendsArrayFifth.json": JSON.stringify({
                     extends: ["./extendsArrayFirst", "./extendsArraySecond", "./extendsArrayThird", "./extendsArrayFourth"],
@@ -245,12 +248,12 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 "dev/extendsArrayFails.json": JSON.stringify({
                     extends: ["./missingFile"],
                     compilerOptions: {
-                        types: []
-                    }
+                        types: [],
+                    },
                 }),
                 "dev/extendsArrayFails2.json": JSON.stringify({ extends: [42] }),
-            }
-        }
+            },
+        },
     });
 }
 
@@ -263,7 +266,7 @@ const caseSensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCas
 describe("unittests:: config:: configurationExtension", () => {
     ts.forEach<[string, string, fakes.ParseConfigHost], void>([
         ["under a case insensitive host", caseInsensitiveBasePath, caseInsensitiveHost],
-        ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]
+        ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost],
     ], ([testName, basePath, host]) => {
         const nameAndEntry: [name: string, entry: string][] = [];
         function baselineParsedCommandLine(name: string, entry: string) {
@@ -301,20 +304,21 @@ describe("unittests:: config:: configurationExtension", () => {
         baselineParseConfig({
             scenario: "configurationExtension",
             subScenario: testName,
-            input: () => nameAndEntry.map(([name, entry]) => ({
-                createHost: baseline => {
-                    baseline.push(name);
-                    return host;
-                },
-                jsonText: host.readFile(entry)!,
-                configFileName: entry,
-                baselineParsed: (baseline, parsed) => {
-                    baseline.push("CompilerOptions::");
-                    baseline.push(JSON.stringify(parsed.options, undefined, " "));
-                    baseline.push("FileNames::");
-                    baseline.push(parsed.fileNames.join());
-                },
-            })),
+            input: () =>
+                nameAndEntry.map(([name, entry]) => ({
+                    createHost: baseline => {
+                        baseline.push(name);
+                        return host;
+                    },
+                    jsonText: host.readFile(entry)!,
+                    configFileName: entry,
+                    baselineParsed: (baseline, parsed) => {
+                        baseline.push("CompilerOptions::");
+                        baseline.push(JSON.stringify(parsed.options, undefined, " "));
+                        baseline.push("FileNames::");
+                        baseline.push(parsed.fileNames.join());
+                    },
+                })),
             skipFs: true,
             header: baseline => baselineParseConfigHost(baseline, host),
         });
@@ -324,7 +328,7 @@ describe("unittests:: config:: configurationExtension", () => {
                 const baseline: string[] = [];
                 baselineParseConfigHost(baseline, host);
                 baseline.push(`configFileName:: ${name}`);
-                const sourceFile = ts.readJsonConfigFile(entry, (path) => host.readFile(path));
+                const sourceFile = ts.readJsonConfigFile(entry, path => host.readFile(path));
                 const dir = ts.combinePaths(basePath, "configs");
                 ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, ts.getBaseFileName(entry));
                 baseline.push("ExtendedSourceFiles::", ...sourceFile.extendedSourceFiles!);

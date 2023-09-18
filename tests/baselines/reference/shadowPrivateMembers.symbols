@@ -1,4 +1,6 @@
-=== tests/cases/compiler/shadowPrivateMembers.ts ===
+//// [tests/cases/compiler/shadowPrivateMembers.ts] ////
+
+=== shadowPrivateMembers.ts ===
 class base { private n() {} }
 >base : Symbol(base, Decl(shadowPrivateMembers.ts, 0, 0))
 >n : Symbol(base.n, Decl(shadowPrivateMembers.ts, 0, 12))

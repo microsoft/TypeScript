@@ -1,18 +1,18 @@
-tests/cases/compiler/x.ts(17,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
-tests/cases/compiler/x.ts(17,26): error TS2307: Cannot find module './x0' or its corresponding type declarations.
-tests/cases/compiler/x.ts(18,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
-tests/cases/compiler/x.ts(18,21): error TS2307: Cannot find module './x0' or its corresponding type declarations.
-tests/cases/compiler/x.ts(19,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
-tests/cases/compiler/x.ts(19,19): error TS2307: Cannot find module './x0' or its corresponding type declarations.
-tests/cases/compiler/x.ts(20,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
-tests/cases/compiler/x.ts(20,21): error TS2307: Cannot find module './x0' or its corresponding type declarations.
-tests/cases/compiler/x.ts(24,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
+x.ts(17,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+x.ts(17,26): error TS2307: Cannot find module './x0' or its corresponding type declarations.
+x.ts(18,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+x.ts(18,21): error TS2307: Cannot find module './x0' or its corresponding type declarations.
+x.ts(19,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
+x.ts(19,19): error TS2307: Cannot find module './x0' or its corresponding type declarations.
+x.ts(20,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
+x.ts(20,21): error TS2307: Cannot find module './x0' or its corresponding type declarations.
+x.ts(24,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
 
 
-==== tests/cases/compiler/x0.ts (0 errors) ====
+==== x0.ts (0 errors) ====
     export let a = 1;
     
-==== tests/cases/compiler/x.ts (9 errors) ====
+==== x.ts (9 errors) ====
     namespace N1 {
         export let x = 1;
     }
@@ -58,16 +58,16 @@ tests/cases/compiler/x.ts(24,5): error TS2666: Exports and export assignments ar
     }
     export {}
     
-==== tests/cases/compiler/observable.ts (0 errors) ====
+==== observable.ts (0 errors) ====
     export declare class Observable<T> {
         filter(pred: (e:T) => boolean): Observable<T>;
     }
     export var x = 1;
     
-==== tests/cases/compiler/test.ts (0 errors) ====
+==== test.ts (0 errors) ====
     export let b = 1;
     
-==== tests/cases/compiler/main.ts (0 errors) ====
+==== main.ts (0 errors) ====
     import { Observable } from "./observable"
     import "./x";
     

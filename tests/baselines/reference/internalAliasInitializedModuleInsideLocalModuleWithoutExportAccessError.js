@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts] ////
+
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts]
 export module a {
     export module b {

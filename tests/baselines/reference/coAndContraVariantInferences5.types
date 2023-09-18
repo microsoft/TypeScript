@@ -1,4 +1,6 @@
-=== tests/cases/compiler/coAndContraVariantInferences5.ts ===
+//// [tests/cases/compiler/coAndContraVariantInferences5.ts] ////
+
+=== coAndContraVariantInferences5.ts ===
 type Thing = 'a' | 'b';
 >Thing : "a" | "b"
 

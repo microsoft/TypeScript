@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringInVariableDeclarations1.ts ===
+//// [tests/cases/compiler/destructuringInVariableDeclarations1.ts] ////
+
+=== destructuringInVariableDeclarations1.ts ===
 export let { toString } = 1;
 >toString : (radix?: number) => string
 >1 : 1

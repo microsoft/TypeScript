@@ -1,10 +1,10 @@
-tests/cases/compiler/genericCombinators2.ts(15,43): error TS2345: Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
+genericCombinators2.ts(15,43): error TS2345: Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
   Type 'string' is not assignable to type 'Date'.
-tests/cases/compiler/genericCombinators2.ts(16,43): error TS2345: Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
+genericCombinators2.ts(16,43): error TS2345: Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
   Type 'string' is not assignable to type 'Date'.
 
 
-==== tests/cases/compiler/genericCombinators2.ts (2 errors) ====
+==== genericCombinators2.ts (2 errors) ====
     interface Collection<T, U> {
         length: number;
         add(x: T, y: U): void;

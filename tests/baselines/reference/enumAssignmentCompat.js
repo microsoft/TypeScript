@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat.ts] ////
+
 //// [enumAssignmentCompat.ts]
 module W {
     export class D { }

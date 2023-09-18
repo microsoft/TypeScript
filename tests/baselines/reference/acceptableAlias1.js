@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/acceptableAlias1.ts] ////
+
 //// [acceptableAlias1.ts]
 module M {
     export module N {

@@ -162,7 +162,7 @@ Info seq  [hh:mm:ss:mss] event:
        "configFileName": "tsconfig.json",
        "projectType": "configured",
        "languageServiceEnabled": true,
-       "version": "5.1.0-dev"
+       "version": "FakeVersion"
       }
      }
     }
@@ -191,23 +191,23 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/src/fileb.mts: *new*
-  {}
 /a/lib/lib.es2016.full.d.ts: *new*
   {}
 /user/username/projects/myproject/package.json: *new*
+  {}
+/user/username/projects/myproject/src/fileb.mts: *new*
+  {}
+/user/username/projects/myproject/src/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -581,6 +581,13 @@ Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not ex
 Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
+Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node16'.
+Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types', 'node'.
+Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
+Info seq  [hh:mm:ss:mss] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/fileB.mts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
@@ -626,25 +633,25 @@ After running Timeout callback:: count: 1
 14: checkOne
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/fileb.mts:
-  {}
 /a/lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/user/username/projects/myproject/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -770,13 +777,7 @@ Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/package.jso
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/user/username/projects/myproject/package.json'.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
-Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node16'.
-Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
-Info seq  [hh:mm:ss:mss] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/src/fileB.mts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========
+Info seq  [hh:mm:ss:mss] Reusing resolution of module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'.
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
@@ -822,12 +823,12 @@ After running Timeout callback:: count: 1
 19: checkOne
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
@@ -836,13 +837,13 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/fileb.mts:
-  {}
 /a/lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/user/username/projects/myproject/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::
@@ -1020,25 +1021,25 @@ After running Timeout callback:: count: 1
 24: checkOne
 
 PolledWatches::
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/myproject/src/tsconfig.json:
-  {}
-/user/username/projects/myproject/src/fileb.mts:
-  {}
 /a/lib/lib.es2016.full.d.ts:
   {}
 /user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/user/username/projects/myproject/src/tsconfig.json:
   {}
 
 FsWatchesRecursive::
