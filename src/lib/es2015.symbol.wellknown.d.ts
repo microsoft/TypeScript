@@ -77,7 +77,7 @@ interface Array<T> {
      * when they will be absent when used in a 'with' statement.
      */
     readonly [Symbol.unscopables]: {
-        [K in keyof any[]]?: boolean;
+        [K in keyof any[] as K]?: boolean;
     };
 }
 
@@ -87,7 +87,7 @@ interface ReadonlyArray<T> {
      * when they will be absent when used in a 'with' statement.
      */
     readonly [Symbol.unscopables]: {
-        [K in keyof readonly any[]]?: boolean;
+        [K in keyof readonly any[] as K]?: boolean;
     };
 }
 
