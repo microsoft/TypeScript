@@ -1,6 +1,6 @@
 ===================================================================
 --- default
-+++ SkipAll
++++ ParseForTypeInfo
 @@ -39,245 +39,9 @@
                      "end": 108,
                      "hasTrailingComma": false,

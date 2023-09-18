@@ -1,6 +1,6 @@
 ===================================================================
 --- default
-+++ SkipAll
++++ ParseForTypeInfo
 @@ -8,9 +8,8 @@
          "0": {
              "kind": "FunctionDeclaration",

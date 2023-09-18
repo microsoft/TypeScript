@@ -1,6 +1,6 @@
 ===================================================================
 --- default
-+++ SkipAll
++++ ParseNone
 @@ -8,9 +8,8 @@
          "0": {
              "kind": "FunctionDeclaration",
@@ -112,13 +112,12 @@
          "3": {
              "kind": "ExpressionStatement",
              "pos": 135,
-@@ -237,7 +166,6 @@
+@@ -237,6 +166,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],
      "identifiers": {},
--    "jsDocParsingMode": 0,
--    "jsDocDiagnostics": []
-+    "jsDocParsingMode": 2
+-    "jsDocParsingMode": 0
++    "jsDocParsingMode": 3
  }
 \ No newline at end of file

@@ -1,13 +1,13 @@
 ===================================================================
 --- default
-+++ KeepSemanticOnly
-@@ -307,7 +307,7 @@
++++ ParseForTypeInfo
+@@ -237,7 +237,7 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],
      "identifiers": {},
 -    "jsDocParsingMode": 0,
-+    "jsDocParsingMode": 1,
++    "jsDocParsingMode": 2,
      "jsDocDiagnostics": []
  }
 \ No newline at end of file

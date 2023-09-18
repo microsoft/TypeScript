@@ -124,7 +124,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
         },
         /*setParentNodes*/ undefined,
         /*scriptKind*/ undefined,
-        JSDocParsingMode.SkipAll,
+        JSDocParsingMode.ParseNone,
     );
     if (transpileOptions.moduleName) {
         sourceFile.moduleName = transpileOptions.moduleName;

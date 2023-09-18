@@ -1,6 +1,6 @@
 ===================================================================
 --- default
-+++ SkipAll
++++ ParseNone
 @@ -91,53 +91,9 @@
                  "pos": 69,
                  "end": 69,
@@ -63,6 +63,6 @@
      "identifiers": {},
 -    "jsDocParsingMode": 0,
 -    "jsDocDiagnostics": []
-+    "jsDocParsingMode": 2
++    "jsDocParsingMode": 3
  }
 \ No newline at end of file

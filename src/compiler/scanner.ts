@@ -347,10 +347,7 @@ const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)
  */
 const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
 
-/**
- * Test for whether a comment contains a JSDoc tag needed by the checker when run in tsc.
- */
-const semanticJSDocTagRegEx = /@(?:see|link)/i;
+const jsDocSeeOrLink = /@(?:see|link)/i;
 
 function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     // Bail out quickly if it couldn't possibly be in the map.
@@ -1011,7 +1008,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     var inJSDocType = 0;
 
     var scriptKind = ScriptKind.Unknown;
-    var jsDocParsingMode = JSDocParsingMode.KeepAll;
+    var jsDocParsingMode = JSDocParsingMode.ParseAll;
 
     setText(text, start, length);
 
@@ -2007,13 +2004,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             }
                         }
 
-                        if (isJSDoc) {
-                            const shouldParseJSDoc = jsDocParsingMode === JSDocParsingMode.SkipAll ? false
-                                : jsDocParsingMode === JSDocParsingMode.KeepSemanticOnly ? (scriptKind !== ScriptKind.TS && scriptKind !== ScriptKind.TSX) || semanticJSDocTagRegEx.test(text.slice(fullStartPos, pos))
-                                : true;
-                            if (shouldParseJSDoc) {
-                                tokenFlags |= TokenFlags.PrecedingJSDocComment;
-                            }
+                        if (isJSDoc && shouldParseJSDoc()) {
+                            tokenFlags |= TokenFlags.PrecedingJSDocComment;
                         }
 
                         commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
@@ -2295,6 +2287,28 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     return token = SyntaxKind.Unknown;
             }
         }
+    }
+
+    function shouldParseJSDoc() {
+        switch (jsDocParsingMode) {
+            case JSDocParsingMode.ParseAll:
+                return true;
+            case JSDocParsingMode.ParseNone:
+                return false;
+        }
+
+        if (scriptKind !== ScriptKind.TS && scriptKind !== ScriptKind.TSX) {
+            // If outside of TS, we need JSDoc to get any type info.
+            return true;
+        }
+
+        if (jsDocParsingMode === JSDocParsingMode.ParseForTypeInfo) {
+            // If we're in TS, but we don't need to produce reliable errors,
+            // we don't need to parse to find @see or @link.
+            return false;
+        }
+
+        return jsDocSeeOrLink.test(text.slice(fullStartPos, pos));
     }
 
     function reScanInvalidIdentifier(): SyntaxKind {

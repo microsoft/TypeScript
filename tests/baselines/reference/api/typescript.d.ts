@@ -8610,9 +8610,10 @@ declare namespace ts {
         JSDocComment = 33,
     }
     enum JSDocParsingMode {
-        KeepAll = 0,
-        KeepSemanticOnly = 1,
-        SkipAll = 2,
+        ParseAll = 0,
+        ParseForTypeErrors = 1,
+        ParseForTypeInfo = 2,
+        ParseNone = 3,
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;

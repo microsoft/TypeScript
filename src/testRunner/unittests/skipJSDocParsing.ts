@@ -6,9 +6,10 @@ describe("unittests:: skipJSDocParsing", () => {
     const Diff = require("diff");
 
     const kinds = [
-        ts.JSDocParsingMode.KeepAll,
-        ts.JSDocParsingMode.KeepSemanticOnly,
-        ts.JSDocParsingMode.SkipAll,
+        ts.JSDocParsingMode.ParseAll,
+        ts.JSDocParsingMode.ParseForTypeErrors,
+        ts.JSDocParsingMode.ParseForTypeInfo,
+        ts.JSDocParsingMode.ParseNone,
     ];
     const filenames = [
         "file.ts",

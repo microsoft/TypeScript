@@ -9851,9 +9851,10 @@ export const commentPragmas = {
 } as const;
 
 export const enum JSDocParsingMode {
-    KeepAll = 0,
-    KeepSemanticOnly = 1,
-    SkipAll = 2,
+    ParseAll,
+    ParseForTypeErrors,
+    ParseForTypeInfo,
+    ParseNone,
 }
 
 /** @internal */
