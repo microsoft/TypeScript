@@ -461,6 +461,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
         const parts: InlayHintDisplayPart[] = [];
         visitDisplayPart(typeNode);
+        return parts;
 
         function visitDisplayPart(node: Node) {
             if (!node) {
@@ -736,6 +737,8 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         visitDisplayPart(propertySignature.type);
                     }
                     break;
+                default:
+                    Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -747,8 +750,6 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 visitDisplayPart(node);
             });
         }
-
-        return parts;
     }
 
     function isUndefined(name: __String) {
