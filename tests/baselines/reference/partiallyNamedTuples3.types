@@ -5,12 +5,12 @@ declare const tuple: [number, name: string, boolean, value: number, string];
 >tuple : [number, name: string, boolean, value: number, string]
 
 const output = ((...args) => args)(...tuple);
->output : [number, string, boolean, number, string]
->((...args) => args)(...tuple) : [number, string, boolean, number, string]
->((...args) => args) : (args_0: number, args_1: string, args_2: boolean, args_3: number, args_4: string) => [number, string, boolean, number, string]
->(...args) => args : (args_0: number, args_1: string, args_2: boolean, args_3: number, args_4: string) => [number, string, boolean, number, string]
->args : [number, string, boolean, number, string]
->args : [number, string, boolean, number, string]
+>output : [number, name: string, boolean, value: number, string]
+>((...args) => args)(...tuple) : [number, name: string, boolean, value: number, string]
+>((...args) => args) : (args_0: number, name: string, args_2: boolean, value: number, args_4: string) => [number, name: string, boolean, value: number, string]
+>(...args) => args : (args_0: number, name: string, args_2: boolean, value: number, args_4: string) => [number, name: string, boolean, value: number, string]
+>args : [number, name: string, boolean, value: number, string]
+>args : [number, name: string, boolean, value: number, string]
 >...tuple : string | number | boolean
 >tuple : [number, name: string, boolean, value: number, string]
 
