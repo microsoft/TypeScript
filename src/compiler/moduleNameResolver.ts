@@ -738,8 +738,11 @@ export function getConditions(options: CompilerOptions, esmMode?: boolean) {
             // bundler always uses `import` unless explicitly overridden
             esmMode ??= moduleResolution === ModuleResolutionKind.Bundler;
         }
-        else {
-            Debug.assert(moduleResolution !== ModuleResolutionKind.Node10, "getConditions should not be called for moduleResolution node10 without an explicit esmMode parameter");
+        else if (moduleResolution === ModuleResolutionKind.Node10) {
+            // node10 does not support package.json imports/exports without
+            // an explicit resolution-mode override on a type-only import
+            // (indicated by `esmMode` being set)
+            return [];
         }
     }
     // conditions are only used by the node16/nodenext/bundler resolvers - there's no priority order in the list,
@@ -1795,9 +1798,12 @@ function nodeModuleNameResolverWorker(
     const failedLookupLocations: string[] = [];
     const affectingLocations: string[] = [];
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
-    if (moduleResolution !== ModuleResolutionKind.Node10) {
-        conditions ??= getConditions(compilerOptions, moduleResolution === ModuleResolutionKind.Bundler ? undefined : !!(features & NodeResolutionFeatures.EsmMode));
-    }
+    conditions ??= getConditions(
+        compilerOptions,
+        moduleResolution === ModuleResolutionKind.Bundler || moduleResolution === ModuleResolutionKind.Node10
+            ? undefined
+            : !!(features & NodeResolutionFeatures.EsmMode),
+    );
 
     const diagnostics: Diagnostic[] = [];
     const state: ModuleResolutionState = {
