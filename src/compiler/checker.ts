@@ -34,6 +34,7 @@ import {
     BigIntLiteral,
     BigIntLiteralType,
     BinaryExpression,
+    BinaryOperator,
     BinaryOperatorToken,
     binarySearch,
     BindableObjectDefinePropertyCall,
@@ -44,6 +45,7 @@ import {
     BindingPattern,
     bindSourceFile,
     Block,
+    BooleanLiteral,
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
@@ -27661,6 +27663,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return type;
         }
 
+        function narrowTypeByBooleanComparison(type: Type, expr: Expression, bool: BooleanLiteral, operator: BinaryOperator, assumeTrue: boolean): Type {
+            assumeTrue = (assumeTrue !== (bool.kind === SyntaxKind.TrueKeyword)) !== (operator !== SyntaxKind.ExclamationEqualsEqualsToken && operator !== SyntaxKind.ExclamationEqualsToken);
+            return narrowType(type, expr, assumeTrue);
+        }
+
         function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
             switch (expr.operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
@@ -27708,6 +27715,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     if (isMatchingConstructorReference(right)) {
                         return narrowTypeByConstructor(type, operator, left, assumeTrue);
+                    }
+                    if (isBooleanLiteral(right)) {
+                        return narrowTypeByBooleanComparison(type, left, right, operator, assumeTrue);
+                    }
+                    if (isBooleanLiteral(left)) {
+                        return narrowTypeByBooleanComparison(type, right, left, operator, assumeTrue);
                     }
                     break;
                 case SyntaxKind.InstanceOfKeyword:
