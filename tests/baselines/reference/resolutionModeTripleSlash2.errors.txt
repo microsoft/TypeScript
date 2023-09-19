@@ -18,7 +18,9 @@
     ~~~~~~
 !!! error TS2304: Cannot find name 'MODULE'.
     SCRIPT; // ok
-    
+    function foo() {
+        return SCRIPT;
+    }
 ==== /node_modules/@types/foo/package.json (0 errors) ====
     {
       "name": "@types/foo",
