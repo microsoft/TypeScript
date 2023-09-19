@@ -30635,11 +30635,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         popContextualType();
         if (inDestructuringPattern) {
-            // TODO(jakebailey): names?
             return createTupleType(elementTypes, elementFlags);
         }
         if (forceTuple || inConstContext || inTupleContext) {
-            // TODO(jakebailey): names?
             return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext && !(contextualType && someType(contextualType, isMutableArrayLikeType))));
         }
         return createArrayLiteralType(createArrayType(
@@ -38223,7 +38221,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        return createTupleType(elementTypes, elementFlags, type.target.readonly); // TODO(jakebailey): names?
+        return createTupleType(elementTypes, elementFlags, type.target.readonly);
     }
 
     function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
