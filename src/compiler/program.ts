@@ -328,7 +328,6 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
-    zipToModeAwareCache,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -1514,9 +1513,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let resolvedLibProcessing: Map<string, LibResolution> | undefined;
 
     let resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
-    let resolvedModulesProcessing: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
+    let resolvedModulesProcessing: Map<Path, readonly ResolvedModuleWithFailedLookupLocations[]> | undefined;
     let resolvedTypeReferenceDirectiveNames: Map<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
-    let resolvedTypeReferenceDirectiveNamesProcessing: Map<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
+    let resolvedTypeReferenceDirectiveNamesProcessing: Map<Path, readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[]> | undefined;
 
     let packageMap: Map<string, boolean> | undefined;
 
@@ -2095,23 +2094,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return resolveModuleNamesWorker(moduleNames, file, /*reusedNames*/ undefined);
         }
 
-        const alreadyComputedResolutions = resolvedModulesProcessing?.get(file.path);
-        if (alreadyComputedResolutions) {
-            // `file` was created for the new program.
-            //
-            // We only set `file.resolvedModules` via work from the current function,
-            // so it is defined iff we already called the current function on `file`.
-            // That call happened no later than the creation of the `file` object,
-            // which per above occurred during the current program creation.
-            // Since we assume the filesystem does not change during program creation,
-            // it is safe to reuse resolutions from the earlier call.
-            const result: ResolvedModuleWithFailedLookupLocations[] = [];
-            for (const moduleName of moduleNames) {
-                const resolvedModule = alreadyComputedResolutions.get(moduleName.text, getModeForUsageLocation(file, moduleName))!;
-                result.push(resolvedModule);
-            }
-            return result;
-        }
         // At this point, we know at least one of the following hold:
         // - file has local declarations for ambient modules
         // - old program state is available
@@ -2240,33 +2222,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, /*reusedNames*/ undefined);
         }
 
-        const oldSourceFile = !isString(containingFile) ? oldProgram && oldProgram.getSourceFile(containingFile.fileName) : undefined;
-        if (!isString(containingFile)) {
-            const alreadyComputedResolutions = resolvedTypeReferenceDirectiveNamesProcessing?.get(containingFile.path);
-            if (alreadyComputedResolutions) {
-                // `file` was created for the new program.
-                //
-                // We only set `file.resolvedTypeReferenceDirectiveNames` via work from the current function,
-                // so it is defined iff we already called the current function on `file`.
-                // That call happened no later than the creation of the `file` object,
-                // which per above occurred during the current program creation.
-                // Since we assume the filesystem does not change during program creation,
-                // it is safe to reuse resolutions from the earlier call.
-                const result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] = [];
-                for (const typeDirectiveName of typeDirectiveNames as readonly FileReference[]) {
-                    // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-                    const resolvedTypeReferenceDirective = alreadyComputedResolutions.get(getTypeReferenceResolutionName(typeDirectiveName), getModeForFileReference(typeDirectiveName, containingFile.impliedNodeFormat))!;
-                    result.push(resolvedTypeReferenceDirective);
-                }
-                return result;
-            }
-        }
-
         /** An ordered list of module names for which we cannot recover the resolution. */
         let unknownTypeReferenceDirectiveNames: T[] | undefined;
         let result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] | undefined;
         let reusedNames: T[] | undefined;
         const containingSourceFile = !isString(containingFile) ? containingFile : undefined;
+        const oldSourceFile = !isString(containingFile) ? oldProgram && oldProgram.getSourceFile(containingFile.fileName) : undefined;
         const canReuseResolutions = !isString(containingFile) ?
             containingFile === oldSourceFile && !hasInvalidatedResolutions(containingFile.path) :
             !hasInvalidatedResolutions(toPath(containingFile));
@@ -2516,24 +2477,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         for (const newSourceFile of modifiedSourceFiles) {
             const moduleNames = getModuleNames(newSourceFile);
             const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
+            (resolvedModulesProcessing ??= new Map()).set(newSourceFile.path, resolutions);
             const oldResolutions = oldProgram.resolvedModules?.get(newSourceFile.path);
             // ensure that module resolution results are still correct
             const resolutionsChanged = hasChangesInResolutions(moduleNames, newSourceFile, resolutions, oldResolutions, moduleResolutionIsEqualTo, moduleResolutionNameAndModeGetter);
-            if (resolutionsChanged) {
-                structureIsReused = StructureIsReused.SafeModules;
-                (resolvedModulesProcessing ??= new Map()).set(newSourceFile.path, zipToModeAwareCache(newSourceFile, moduleNames, resolutions, moduleResolutionNameAndModeGetter));
-            }
-            else if (oldResolutions) {
-                (resolvedModulesProcessing ??= new Map()).set(newSourceFile.path, oldResolutions);
-            }
+            if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
             const typesReferenceDirectives = newSourceFile.typeReferenceDirectives;
             const typeReferenceResolutions = resolveTypeReferenceDirectiveNamesReusingOldState(typesReferenceDirectives, newSourceFile);
+            (resolvedTypeReferenceDirectiveNamesProcessing ??= new Map()).set(newSourceFile.path, typeReferenceResolutions);
             // ensure that types resolutions are still correct
             const oldTypeResolutions = oldProgram.resolvedTypeReferenceDirectiveNames?.get(newSourceFile.path);
             const typeReferenceResolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, newSourceFile, typeReferenceResolutions, oldTypeResolutions, typeDirectiveIsEqualTo, typeReferenceResolutionNameAndModeGetter);
             if (typeReferenceResolutionsChanged) {
                 structureIsReused = StructureIsReused.SafeModules;
-                (resolvedTypeReferenceDirectiveNamesProcessing ??= new Map()).set(newSourceFile.path, zipToModeAwareCache(newSourceFile, typesReferenceDirectives, typeReferenceResolutions, typeReferenceResolutionNameAndModeGetter));
             }
             else if (oldTypeResolutions) {
                 (resolvedTypeReferenceDirectiveNamesProcessing ??= new Map()).set(newSourceFile.path, oldTypeResolutions);
@@ -3844,7 +3800,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const typeDirectives = file.typeReferenceDirectives;
         if (!typeDirectives.length) return;
 
-        const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectives, file);
+        const resolutions = resolvedTypeReferenceDirectiveNamesProcessing?.get(file.path) ||
+            resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectives, file);
         const resolutionsInFile = createModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
         (resolvedTypeReferenceDirectiveNames ??= new Map()).set(file.path, resolutionsInFile);
         for (let index = 0; index < typeDirectives.length; index++) {
@@ -4020,7 +3977,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (file.imports.length || file.moduleAugmentations.length) {
             // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
             const moduleNames = getModuleNames(file);
-            const resolutions = resolveModuleNamesReusingOldState(moduleNames, file);
+            const resolutions = resolvedModulesProcessing?.get(file.path) ||
+                resolveModuleNamesReusingOldState(moduleNames, file);
             Debug.assert(resolutions.length === moduleNames.length);
             const optionsForFile = (useSourceOfProjectReferenceRedirect ? getRedirectReferenceForResolution(file)?.commandLine.options : undefined) || options;
             const resolutionsInFile = createModeAwareCache<ResolutionWithFailedLookupLocations>();
