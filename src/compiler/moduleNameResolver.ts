@@ -1778,7 +1778,7 @@ export function nodeModuleNameResolver(moduleName: string, containingFile: strin
 
 /** @internal */
 export function nodeNextJsonConfigResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-    return nodeModuleNameResolverWorker(NodeResolutionFeatures.NodeNextDefault, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, Extensions.Json, /*isConfigLookup*/ true, /*redirectedReference*/ undefined);
+    return nodeModuleNameResolverWorker(NodeResolutionFeatures.NodeNextDefault, moduleName, getDirectoryPath(containingFile), { moduleResolution: ModuleResolutionKind.NodeNext }, host, /*cache*/ undefined, Extensions.Json, /*isConfigLookup*/ true, /*redirectedReference*/ undefined, /*conditions*/ undefined);
 }
 
 function nodeModuleNameResolverWorker(
@@ -1791,7 +1791,7 @@ function nodeModuleNameResolverWorker(
     extensions: Extensions,
     isConfigLookup: boolean,
     redirectedReference: ResolvedProjectReference | undefined,
-    conditions?: readonly string[],
+    conditions: readonly string[] | undefined,
 ): ResolvedModuleWithFailedLookupLocations {
     const traceEnabled = isTraceEnabled(compilerOptions, host);
 
