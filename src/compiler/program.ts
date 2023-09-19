@@ -2377,7 +2377,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         // check if program source files has changed in the way that can affect structure of the program
         const newSourceFiles: SourceFile[] = [];
-        const modifiedSourceFiles: { oldFile: SourceFile; newFile: SourceFile; }[] = [];
+        const modifiedSourceFiles: SourceFile[] = [];
         structureIsReused = StructureIsReused.Completely;
 
         // If the missing file paths are now present, it can change the progam structure,
@@ -2489,14 +2489,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
 
                 // tentatively approve the file
-                modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                modifiedSourceFiles.push(newSourceFile);
             }
             else if (hasInvalidatedResolutions(oldSourceFile.path)) {
                 // 'module/types' references could have changed
                 structureIsReused = StructureIsReused.SafeModules;
 
                 // add file to the modified list so that we will resolve it later
-                modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                modifiedSourceFiles.push(newSourceFile);
+            }
+            else {
+                for (const moduleName of oldSourceFile.ambientModuleNames) {
+                    ambientModuleNameToUnmodifiedFileName.set(moduleName, oldSourceFile.fileName);
+                }
             }
 
             // if file has passed all checks it should be safe to reuse it
@@ -2507,16 +2512,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return structureIsReused;
         }
 
-        const modifiedFiles = modifiedSourceFiles.map(f => f.oldFile);
-        for (const oldFile of oldSourceFiles) {
-            if (!contains(modifiedFiles, oldFile)) {
-                for (const moduleName of oldFile.ambientModuleNames) {
-                    ambientModuleNameToUnmodifiedFileName.set(moduleName, oldFile.fileName);
-                }
-            }
-        }
         // try to verify results of module resolution
-        for (const { newFile: newSourceFile } of modifiedSourceFiles) {
+        for (const newSourceFile of modifiedSourceFiles) {
             const moduleNames = getModuleNames(newSourceFile);
             const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
             const oldResolutions = oldProgram.resolvedModules?.get(newSourceFile.path);
