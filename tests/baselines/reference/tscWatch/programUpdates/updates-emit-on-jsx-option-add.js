@@ -5,7 +5,7 @@ declare var React: any;
 const d = <div />;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"jsx":"preserve"}}
+{"compilerOptions":{}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -26,12 +26,17 @@ Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
+[96mindex.tsx[0m:[93m2[0m:[93m11[0m - [91merror[0m[90m TS17004: [0mCannot use JSX unless the '--jsx' flag is provided.
+
+[7m2[0m const d = <div />;
+[7m [0m [91m          ~~~~~~~[0m
+
+[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/index.tsx"]
-Program options: {"jsx":1,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -65,16 +70,16 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/index.jsx]
+//// [/user/username/projects/myproject/index.js]
 var d = <div />;
 
 
 
-Change:: Update 'jsx' to 'react'
+Change:: Update 'jsx' to 'preserve'
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{ "compilerOptions": { "jsx": "react" } }
+{ "compilerOptions": { "jsx": "preserve" } }
 
 
 Before running Timeout callback:: count: 1
@@ -89,7 +94,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/index.tsx"]
-Program options: {"jsx":2,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"jsx":1,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -103,7 +108,7 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/index.js]
-var d = React.createElement("div", null);
+//// [/user/username/projects/myproject/index.jsx]
+var d = <div />;
 
 

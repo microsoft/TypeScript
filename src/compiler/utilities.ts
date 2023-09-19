@@ -8784,7 +8784,9 @@ export function compilerOptionsAffectDeclarationPath(newOptions: CompilerOptions
 
 /** @internal */
 export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
-    return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
+    return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) :
+        option.allowJsFlag ? getAllowJSCompilerOption(options) :
+        options[option.name];
 }
 
 /** @internal */
