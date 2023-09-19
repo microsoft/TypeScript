@@ -19362,7 +19362,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return instantiateMappedType(mappedType, prependTypeMapping(typeVariable, singleton, mapper));
         });
         const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, getMappedTypeModifiers(mappedType));
-        return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly); // TODO(jakebailey): names?
+        return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly);
     }
 
     function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
