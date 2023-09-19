@@ -121,10 +121,8 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
             languageVersion: getEmitScriptTarget(options),
             impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
             setExternalModuleIndicator: getSetExternalModuleIndicator(options),
+            jsDocParsingMode: JSDocParsingMode.ParseNone,
         },
-        /*setParentNodes*/ undefined,
-        /*scriptKind*/ undefined,
-        JSDocParsingMode.ParseNone,
     );
     if (transpileOptions.moduleName) {
         sourceFile.moduleName = transpileOptions.moduleName;

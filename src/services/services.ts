@@ -1398,7 +1398,8 @@ export function createLanguageServiceSourceFile(
     scriptKind?: ScriptKind,
     jsDocParsingMode?: JSDocParsingMode,
 ): SourceFile {
-    const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind, jsDocParsingMode);
+    scriptTargetOrOptions = typeof scriptTargetOrOptions === "object" ? { jsDocParsingMode, ...scriptTargetOrOptions } : { jsDocParsingMode, languageVersion: scriptTargetOrOptions };
+    const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind);
     setSourceFileFields(sourceFile, scriptSnapshot, version);
     return sourceFile;
 }

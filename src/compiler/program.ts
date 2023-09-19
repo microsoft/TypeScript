@@ -419,7 +419,8 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined, jsDocParsingMode) : undefined;
+        languageVersionOrOptions = typeof languageVersionOrOptions === "object" ? { jsDocParsingMode, ...languageVersionOrOptions } : { jsDocParsingMode, languageVersion: languageVersionOrOptions };
+        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined) : undefined;
     };
 }
 

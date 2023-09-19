@@ -21,9 +21,9 @@ describe("unittests:: skipJSDocParsing", () => {
             for (const filename of filenames) {
                 const testName = `${name}-${kindName}-${filename}`;
                 it(testName, () => {
-                    const sourceFile = ts.createSourceFile(filename, content, ts.ScriptTarget.ESNext, /*setParentNodes*/ undefined, /*scriptKind*/ undefined);
+                    const sourceFile = ts.createSourceFile(filename, content, { languageVersion: ts.ScriptTarget.ESNext }, /*setParentNodes*/ undefined, /*scriptKind*/ undefined);
                     assert.isTrue(sourceFile && sourceFile.parseDiagnostics.length === 0, "no errors issued");
-                    const sourceFileSkipped = ts.createSourceFile(filename, content, ts.ScriptTarget.ESNext, /*setParentNodes*/ undefined, /*scriptKind*/ undefined, jsDocParsingMode);
+                    const sourceFileSkipped = ts.createSourceFile(filename, content, { languageVersion: ts.ScriptTarget.ESNext, jsDocParsingMode }, /*setParentNodes*/ undefined, /*scriptKind*/ undefined);
                     assert.isTrue(sourceFileSkipped && sourceFileSkipped.parseDiagnostics.length === 0, "no errors issued");
 
                     const patch = Diff.createTwoFilesPatch("default", kindName, Utils.sourceFileToJSON(sourceFile), Utils.sourceFileToJSON(sourceFileSkipped));
