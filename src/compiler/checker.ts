@@ -33791,7 +33791,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
     }
 
-    function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessageCallback?: () => DiagnosticMessage | undefined): Signature {
+    function resolveCall(node: CallLikeExpression, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, headMessage?: DiagnosticMessage | undefined): Signature {
         const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
         const isDecorator = node.kind === SyntaxKind.Decorator;
         const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -33895,6 +33895,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
         // skip the checkApplicableSignature check.
         if (reportErrors) {
+            if (!headMessage && isCallExpression(node) && isSyntheticHasInstanceMethodCall(node)) {
+                headMessage = Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method;
+            }
             if (candidatesForArgumentError) {
                 if (candidatesForArgumentError.length === 1 || candidatesForArgumentError.length > 3) {
                     const last = candidatesForArgumentError[candidatesForArgumentError.length - 1];
@@ -33903,7 +33906,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
                         chain = chainDiagnosticMessages(chain, Diagnostics.No_overload_matches_this_call);
                     }
-                    const headMessage = headMessageCallback?.();
                     if (headMessage) {
                         chain = chainDiagnosticMessages(chain, headMessage);
                     }
@@ -33950,7 +33952,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         map(diags, createDiagnosticMessageChainFromDiagnostic),
                         Diagnostics.No_overload_matches_this_call,
                     );
-                    const headMessage = headMessageCallback?.();
                     if (headMessage) {
                         chain = chainDiagnosticMessages(chain, headMessage);
                     }
@@ -33970,18 +33971,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (candidateForArgumentArityError) {
-                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, headMessageCallback?.()));
+                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args, headMessage));
             }
             else if (candidateForTypeArgumentError) {
-                checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, headMessageCallback?.());
+                checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression | JsxOpeningLikeElement).typeArguments!, /*reportErrors*/ true, headMessage);
             }
             else {
                 const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
                 if (signaturesWithCorrectTypeArgumentArity.length === 0) {
-                    diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!, headMessageCallback?.()));
+                    diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!, headMessage));
                 }
                 else {
-                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args, headMessageCallback?.()));
+                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args, headMessage));
                 }
             }
         }
@@ -34334,10 +34335,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // If the call expression is a synthetic call to a `[Symbol.hasInstance]` method then we will produce a head
         // message when reporting diagnostics that explains how we got to `right[Symbol.hasInstance](left)` from
         // `left instanceof right`, as it pertains to "Argument" related messages reported for the call.
-        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags, () =>
-            isSyntheticHasInstanceMethodCall(node) ?
-                Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method :
-                undefined);
+        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags);
     }
 
     function isGenericFunctionReturningFunction(signature: Signature) {
@@ -34718,7 +34716,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return resolveErrorCall(node);
         }
 
-        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None, () => headMessage);
+        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None, headMessage);
     }
 
     function createSignatureForJSXIntrinsic(node: JsxOpeningLikeElement, result: Type): Signature {
@@ -37224,7 +37222,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const message = hasGlobalSymbolHasInstanceProperty ?
-                    Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_either_of_type_any_an_object_type_with_a_Symbol_hasInstance_method_or_a_type_assignable_to_the_Function_interface_type :
+                    Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_either_of_type_any_a_class_function_or_other_type_assignable_to_the_Function_interface_type_or_an_object_type_with_a_Symbol_hasInstance_method :
                     Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type;
                 error(right, message);
             }
@@ -46800,14 +46798,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isBinaryExpression(node.parent)) {
                     const type = getTypeOfExpression(node.parent.right);
                     const hasInstanceMethodType = getSymbolHasInstanceMethodOfObjectType(type);
-                    // const hasInstancePropertyName = getPropertyNameForKnownSymbolName("hasInstance");
-                    // const hasInstanceProperty = getPropertyOfObjectType(type, hasInstancePropertyName);
-                    // if (hasInstanceProperty) {
-                    //     const hasInstancePropertyType = getTypeOfSymbol(hasInstanceProperty);
-                    //     if (hasInstancePropertyType && getSignaturesOfType(hasInstancePropertyType, SignatureKind.Call).length !== 0) {
-                    //         return hasInstanceProperty;
-                    //     }
-                    // }
                     return hasInstanceMethodType?.symbol ?? type.symbol;
                 }
                 return undefined;

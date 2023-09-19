@@ -187,7 +187,7 @@ var obj5: C1 | A;
 >C1 : Symbol(C1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 50, 1))
 >A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
 
-if (obj5 instanceof C) { // narrowed to C1|C2.
+if (obj5 instanceof C) { // narrowed to C1.
 >obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 63, 3))
 >C : Symbol(C, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 61, 11))
 
@@ -331,7 +331,7 @@ var obj9: E1 | A;
 >E1 : Symbol(E1, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 103, 1))
 >A : Symbol(A, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 3, 1), Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 7, 11))
 
-if (obj9 instanceof E) { // narrowed to E1 | E2
+if (obj9 instanceof E) { // narrowed to E1
 >obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 114, 3))
 >E : Symbol(E, Decl(typeGuardsWithInstanceOfBySymbolHasInstance.ts, 112, 11))
 
