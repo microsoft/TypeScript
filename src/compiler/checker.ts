@@ -19362,7 +19362,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return instantiateMappedType(mappedType, prependTypeMapping(typeVariable, singleton, mapper));
         });
         const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, getMappedTypeModifiers(mappedType));
-        return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly);
+        return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly); // TODO(jakebailey): names?
     }
 
     function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
@@ -30635,9 +30635,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         popContextualType();
         if (inDestructuringPattern) {
+            // TODO(jakebailey): names?
             return createTupleType(elementTypes, elementFlags);
         }
         if (forceTuple || inConstContext || inTupleContext) {
+            // TODO(jakebailey): names?
             return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext && !(contextualType && someType(contextualType, isMutableArrayLikeType))));
         }
         return createArrayLiteralType(createArrayType(
@@ -33235,6 +33237,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (arg.kind === SyntaxKind.SyntheticExpression && (arg as SyntheticExpression).tupleNameSource) {
                 names.push((arg as SyntheticExpression).tupleNameSource!);
             }
+            // else {
+            //     names.push(undefined);
+            // }
+            // TODO(jakebailey): names? need test
         }
         return createTupleType(types, flags, inConstContext && !someType(restType, isMutableArrayLikeType), length(names) === length(types) ? names : undefined);
     }
@@ -35571,12 +35577,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 types.push(restType);
                 flags.push(ElementFlags.Variadic);
             }
-            const name = getNameableDeclarationAtPosition(source, i);
-            if (name) {
-                names.push(name);
-            }
+            names.push(getNameableDeclarationAtPosition(source, i));
         }
-        return createTupleType(types, flags, readonly, length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, readonly, names);
     }
 
     // Return the number of parameters in a signature. The rest parameter, if present, counts as one
@@ -38220,7 +38223,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        return createTupleType(elementTypes, elementFlags, type.target.readonly);
+        return createTupleType(elementTypes, elementFlags, type.target.readonly); // TODO(jakebailey): names?
     }
 
     function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
