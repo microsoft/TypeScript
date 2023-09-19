@@ -34334,9 +34334,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // If the call expression is a synthetic call to a `[Symbol.hasInstance]` method then we will produce a head
         // message when reporting diagnostics that explains how we got to `right[Symbol.hasInstance](left)` from
         // `left instanceof right`, as it pertains to "Argument" related messages reported for the call.
-        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags, () => isSyntheticHasInstanceMethodCall(node) ?
-            Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method :
-            undefined);
+        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags, () =>
+            isSyntheticHasInstanceMethodCall(node) ?
+                Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_assignable_to_the_first_argument_of_the_right_hand_side_s_Symbol_hasInstance_method :
+                undefined);
     }
 
     function isGenericFunctionReturningFunction(signature: Signature) {

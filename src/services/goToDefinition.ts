@@ -102,7 +102,7 @@ import {
     TypeChecker,
     TypeFlags,
     TypeReference,
-    unescapeLeadingUnderscores
+    unescapeLeadingUnderscores,
 } from "./_namespaces/ts";
 
 /** @internal */
