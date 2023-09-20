@@ -3295,6 +3295,7 @@ declare namespace ts {
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
             static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
+            readonly jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
             private get typingsCache();
@@ -7752,6 +7753,7 @@ declare namespace ts {
         hasInvalidatedResolutions?(filePath: Path): boolean;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface SourceMapRange extends TextRange {
         source?: SourceMapSource;
@@ -10310,6 +10312,7 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;
@@ -11515,7 +11518,7 @@ declare namespace ts {
     function displayPartsToString(displayParts: SymbolDisplayPart[] | undefined): string;
     function getDefaultCompilerOptions(): CompilerOptions;
     function getSupportedCodeFixes(): readonly string[];
-    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions, version: string, setNodeParents: boolean, scriptKind?: ScriptKind, jsDocParsingMode?: JSDocParsingMode): SourceFile;
+    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTargetOrOptions: ScriptTarget | CreateSourceFileOptions, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile;
     function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode): LanguageService;
     /**

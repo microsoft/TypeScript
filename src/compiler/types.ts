@@ -7783,6 +7783,8 @@ export interface CompilerHost extends ModuleResolutionHost {
     // For testing:
     /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
+
+    jsDocParsingMode?: JSDocParsingMode;
 }
 
 /** true if --out otherwise source file name *

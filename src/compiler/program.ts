@@ -403,7 +403,6 @@ export function createGetSourceFile(
     readFile: ProgramHost<any>["readFile"],
     getCompilerOptions: () => CompilerOptions,
     setParentNodes: boolean | undefined,
-    jsDocParsingMode: JSDocParsingMode | undefined,
 ): CompilerHost["getSourceFile"] {
     return (fileName, languageVersionOrOptions, onError) => {
         let text: string | undefined;
@@ -419,7 +418,6 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        languageVersionOrOptions = typeof languageVersionOrOptions === "object" ? { jsDocParsingMode, ...languageVersionOrOptions } : { jsDocParsingMode, languageVersion: languageVersionOrOptions };
         return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined) : undefined;
     };
 }
@@ -484,7 +482,7 @@ export function createCompilerHostWorker(
     const newLine = getNewLineCharacter(options);
     const realpath = system.realpath && ((path: string) => system.realpath!(path));
     const compilerHost: CompilerHost = {
-        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes, jsDocParsingMode),
+        getSourceFile: createGetSourceFile(fileName => compilerHost.readFile(fileName), () => options, setParentNodes),
         getDefaultLibLocation,
         getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
         writeFile: createWriteFileMeasuringIO(
@@ -506,6 +504,7 @@ export function createCompilerHostWorker(
         readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth),
         createDirectory: d => system.createDirectory(d),
         createHash: maybeBind(system, system.createHash),
+        jsDocParsingMode,
     };
     return compilerHost;
 }
@@ -3553,8 +3552,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const languageVersion = getEmitScriptTarget(options);
         const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
         return typeof result === "object" ?
-            { ...result, languageVersion, setExternalModuleIndicator } :
-            { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator };
+            { ...result, languageVersion, setExternalModuleIndicator, jsDocParsingMode: host.jsDocParsingMode } :
+            { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator, jsDocParsingMode: host.jsDocParsingMode };
     }
 
     function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {

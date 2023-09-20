@@ -1362,8 +1362,10 @@ class SyntaxTreeCache {
                     this.host.getCompilationSettings(),
                 ),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(this.host.getCompilationSettings()),
+                // These files are used to produce syntax-based highlighting, which reads JSDoc, so we must use ParseAll.
+                jsDocParsingMode: JSDocParsingMode.ParseAll,
             };
-            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind, this.host.jsDocParsingMode);
+            sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, scriptKind);
         }
         else if (this.currentFileVersion !== version) {
             // This is the same file, just a newer version. Incrementally parse the file.
@@ -1395,9 +1397,7 @@ export function createLanguageServiceSourceFile(
     version: string,
     setNodeParents: boolean,
     scriptKind?: ScriptKind,
-    jsDocParsingMode?: JSDocParsingMode,
 ): SourceFile {
-    scriptTargetOrOptions = typeof scriptTargetOrOptions === "object" ? { jsDocParsingMode, ...scriptTargetOrOptions } : { jsDocParsingMode, languageVersion: scriptTargetOrOptions };
     const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTargetOrOptions, setNodeParents, scriptKind);
     setSourceFileFields(sourceFile, scriptSnapshot, version);
     return sourceFile;
@@ -1458,9 +1458,10 @@ export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSn
         languageVersion: sourceFile.languageVersion,
         impliedNodeFormat: sourceFile.impliedNodeFormat,
         setExternalModuleIndicator: sourceFile.setExternalModuleIndicator,
+        jsDocParsingMode: sourceFile.jsDocParsingMode,
     };
     // Otherwise, just create a new source file.
-    return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind, sourceFile.jsDocParsingMode);
+    return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind);
 }
 
 const NoopCancellationToken: CancellationToken = {
@@ -1697,6 +1698,7 @@ export function createLanguageService(
             resolveLibrary: maybeBind(host, host.resolveLibrary),
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
+            jsDocParsingMode: host.jsDocParsingMode,
         };
 
         const originalGetSourceFile = compilerHost.getSourceFile;

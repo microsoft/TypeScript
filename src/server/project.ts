@@ -507,7 +507,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
 
-    /** @internal */
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
     /** @internal */

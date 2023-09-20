@@ -271,8 +271,10 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
                 languageVersion: scriptTarget,
                 impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
                 setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
+                jsDocParsingMode,
             };
         sourceFileOptions.languageVersion = scriptTarget;
+        Debug.assertEqual(jsDocParsingMode, sourceFileOptions.jsDocParsingMode);
         const oldBucketCount = buckets.size;
         const keyWithMode = getDocumentRegistryBucketKeyWithMode(key, sourceFileOptions.impliedNodeFormat);
         const bucket = getOrUpdate(buckets, keyWithMode, () => new Map());
@@ -310,7 +312,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
 
         if (!entry) {
             // Have never seen this file with these settings.  Create a new source file for it.
-            const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, sourceFileOptions, version, /*setNodeParents*/ false, scriptKind, jsDocParsingMode);
+            const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, sourceFileOptions, version, /*setNodeParents*/ false, scriptKind);
             if (externalCache) {
                 externalCache.setDocument(keyWithMode, path, sourceFile);
             }
