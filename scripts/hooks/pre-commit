@@ -1,2 +1,2 @@
 #!/bin/sh
-npx dprint fmt
+git diff --name-only --cached --relative | xargs --no-run-if-empty npx dprint fmt
