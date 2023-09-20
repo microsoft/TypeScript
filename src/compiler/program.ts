@@ -209,7 +209,6 @@ import {
     isStringLiteral,
     isStringLiteralLike,
     isTraceEnabled,
-    JSDocParsingMode,
     JsonSourceFile,
     JsxEmit,
     length,
@@ -394,8 +393,8 @@ export function computeCommonSourceDirectoryOfFilenames(fileNames: readonly stri
     return getPathFromPathComponents(commonPathComponents);
 }
 
-export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean, jsDocParsingMode?: JSDocParsingMode): CompilerHost {
-    return createCompilerHostWorker(options, setParentNodes, /*system*/ undefined, jsDocParsingMode);
+export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
+    return createCompilerHostWorker(options, setParentNodes, /*system*/ undefined);
 }
 
 /** @internal */
@@ -460,7 +459,6 @@ export function createCompilerHostWorker(
     options: CompilerOptions,
     setParentNodes?: boolean,
     system: System = sys,
-    jsDocParsingMode?: JSDocParsingMode,
 ): CompilerHost {
     const existingDirectories = new Map<string, boolean>();
     const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
@@ -504,7 +502,6 @@ export function createCompilerHostWorker(
         readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth),
         createDirectory: d => system.createDirectory(d),
         createHash: maybeBind(system, system.createHash),
-        jsDocParsingMode,
     };
     return compilerHost;
 }

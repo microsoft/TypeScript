@@ -119,8 +119,8 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, jsDocParsingMode?: JSDocParsingMode): CompilerHost {
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system, jsDocParsingMode);
+export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);

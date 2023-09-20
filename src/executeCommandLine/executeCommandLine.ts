@@ -896,7 +896,8 @@ function performCompilation(
     config: ParsedCommandLine,
 ) {
     const { fileNames, options, projectReferences } = config;
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys, jsDocParsingMode);
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
+    host.jsDocParsingMode = jsDocParsingMode;
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -929,7 +930,8 @@ function performIncrementalCompilation(
 ) {
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
-    const host = createIncrementalCompilerHost(options, sys, jsDocParsingMode);
+    const host = createIncrementalCompilerHost(options, sys);
+    host.jsDocParsingMode = jsDocParsingMode;
     const exitStatus = ts_performIncrementalCompilation({
         host,
         system: sys,
