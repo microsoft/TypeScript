@@ -394,7 +394,7 @@ export function computeCommonSourceDirectoryOfFilenames(fileNames: readonly stri
 }
 
 export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
-    return createCompilerHostWorker(options, setParentNodes, /*system*/ undefined);
+    return createCompilerHostWorker(options, setParentNodes);
 }
 
 /** @internal */
@@ -417,7 +417,7 @@ export function createGetSourceFile(
             }
             text = "";
         }
-        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes, /*scriptKind*/ undefined) : undefined;
+        return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions, setParentNodes) : undefined;
     };
 }
 
