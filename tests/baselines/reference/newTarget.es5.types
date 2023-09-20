@@ -8,25 +8,25 @@ class A {
         const a = new.target;
 >a : typeof A
 >new.target : typeof A
->target : any
+>target : typeof A
 
         const b = () => new.target;
 >b : () => typeof A
 >() => new.target : () => typeof A
 >new.target : typeof A
->target : any
+>target : typeof A
     }
     static c = function () { return new.target; }
 >c : () => any
 >function () { return new.target; } : () => any
 >new.target : () => any
->target : any
+>target : () => any
 
     d = function () { return new.target; }
 >d : () => any
 >function () { return new.target; } : () => any
 >new.target : () => any
->target : any
+>target : () => any
 }
 
 class B extends A {
@@ -41,13 +41,13 @@ class B extends A {
         const e = new.target;
 >e : typeof B
 >new.target : typeof B
->target : any
+>target : typeof B
 
         const f = () => new.target;
 >f : () => typeof B
 >() => new.target : () => typeof B
 >new.target : typeof B
->target : any
+>target : typeof B
     }
 }
 
@@ -57,13 +57,13 @@ function f1() {
     const g = new.target;
 >g : () => void
 >new.target : () => void
->target : any
+>target : () => void
 
     const h = () => new.target;
 >h : () => () => void
 >() => new.target : () => () => void
 >new.target : () => void
->target : any
+>target : () => void
 }
 
 const f2 = function () {
@@ -73,13 +73,13 @@ const f2 = function () {
     const i = new.target;
 >i : () => void
 >new.target : () => void
->target : any
+>target : () => void
 
     const j = () => new.target;
 >j : () => () => void
 >() => new.target : () => () => void
 >new.target : () => void
->target : any
+>target : () => void
 }
 
 const O = {
@@ -90,7 +90,7 @@ const O = {
 >k : () => any
 >function () { return new.target; } : () => any
 >new.target : () => any
->target : any
+>target : () => any
 
 };
 

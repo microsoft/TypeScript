@@ -106,3 +106,14 @@ var validPlain: string = 'nope';
 >a : true
 >false : false
 
+// @ts-expect-error: additional commenting with no whitespace
+var invalidCommentedFancySingle: number = 'nope';
+>invalidCommentedFancySingle : number
+>'nope' : "nope"
+
+/*
+ @ts-expect-error: additional commenting with no whitespace */
+var invalidCommentedFancyMulti: number = 'nope';
+>invalidCommentedFancyMulti : number
+>'nope' : "nope"
+

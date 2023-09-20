@@ -27,6 +27,17 @@ unionTuple = unionTuple2;
 unionTuple2 = unionTuple;
 numStrTuple = unionTuple3;
 
+// repro from #29311
+type test1 = [...number[]]
+type fixed1 = test1 & { length: 2 }
+let var1: fixed1 = [0, 0]
+
+// #52551
+type EmptyTuple = []
+interface MyEmptyTuple extends EmptyTuple { extraInfo?: any; }
+const withExtra: MyEmptyTuple = []
+
+
 //// [contextualTypeWithTuple.js]
 // no error
 var numStrTuple = [5, "hello"];
@@ -58,3 +69,5 @@ unionTuple = unionTuple1;
 unionTuple = unionTuple2;
 unionTuple2 = unionTuple;
 numStrTuple = unionTuple3;
+var var1 = [0, 0];
+var withExtra = [];

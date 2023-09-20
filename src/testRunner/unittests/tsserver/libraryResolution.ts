@@ -1,9 +1,11 @@
-import { getServerHosForLibResolution } from "../helpers/libraryResolution";
+import {
+    getServerHosForLibResolution,
+} from "../helpers/libraryResolution";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
-    openFilesForSession
+    openFilesForSession,
 } from "../helpers/tsserver";
 
 describe("unittests:: tsserver:: libraryResolution", () => {
@@ -20,23 +22,29 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.runQueuedTimeoutCallbacks();
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts");
         host.runQueuedTimeoutCallbacks();
-        host.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                typeRoots: ["./typeroot1", "./typeroot2"],
-                lib: ["es5", "dom"],
-                traceResolution: true,
-            },
-        }));
+        host.writeFile(
+            "/home/src/projects/project1/tsconfig.json",
+            JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    typeRoots: ["./typeroot1", "./typeroot2"],
+                    lib: ["es5", "dom"],
+                    traceResolution: true,
+                },
+            }),
+        );
         host.runQueuedTimeoutCallbacks();
-        host.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                typeRoots: ["./typeroot1"],
-                lib: ["es5", "dom"],
-                traceResolution: true,
-            },
-        }));
+        host.writeFile(
+            "/home/src/projects/project1/tsconfig.json",
+            JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    typeRoots: ["./typeroot1"],
+                    lib: ["es5", "dom"],
+                    traceResolution: true,
+                },
+            }),
+        );
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
         host.runQueuedTimeoutCallbacks();
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebWorkerInterface { }" });
@@ -59,23 +67,29 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
         host.runQueuedTimeoutCallbacks();
         host.runQueuedTimeoutCallbacks();
-        host.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                typeRoots: ["./typeroot1", "./typeroot2"],
-                lib: ["es5", "dom"],
-                traceResolution: true,
-            },
-        }));
+        host.writeFile(
+            "/home/src/projects/project1/tsconfig.json",
+            JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    typeRoots: ["./typeroot1", "./typeroot2"],
+                    lib: ["es5", "dom"],
+                    traceResolution: true,
+                },
+            }),
+        );
         host.runQueuedTimeoutCallbacks();
-        host.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                typeRoots: ["./typeroot1"],
-                lib: ["es5", "dom"],
-                traceResolution: true,
-            },
-        }));
+        host.writeFile(
+            "/home/src/projects/project1/tsconfig.json",
+            JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    typeRoots: ["./typeroot1"],
+                    lib: ["es5", "dom"],
+                    traceResolution: true,
+                },
+            }),
+        );
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts");
         host.runQueuedTimeoutCallbacks();
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts");
