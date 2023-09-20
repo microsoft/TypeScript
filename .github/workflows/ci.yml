@@ -274,3 +274,26 @@ jobs:
             print_diff D "Unused baselines"
             exit 1
           fi
+
+  diagnostics:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
+
+      - name: Generate diagnostics
+        run: |
+          npx hereby generate-diagnostics
+          git add .
+
+      - name: Check for changes
+        run: |
+          if ! git diff --staged --exit-code --quiet; then
+            echo "The following files differed and need to be committed:"
+            git diff --staged --name-only
+          fi
