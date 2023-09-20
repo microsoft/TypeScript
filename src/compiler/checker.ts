@@ -20377,8 +20377,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const restIndex = sourceRestType || targetRestType ? paramCount - 1 : -1;
 
         for (let i = 0; i < paramCount; i++) {
-            const sourceType = i === restIndex ? getRestTypeAtPosition(source, i) : tryGetTypeAtPosition(source, i);
-            const targetType = i === restIndex ? getRestTypeAtPosition(target, i) : tryGetTypeAtPosition(target, i);
+            const sourceType = i === restIndex ? getMutableArrayOrTupleType(getRestTypeAtPosition(source, i), /*forceVariadic*/ false) : tryGetTypeAtPosition(source, i);
+            const targetType = i === restIndex ? getMutableArrayOrTupleType(getRestTypeAtPosition(target, i), /*forceVariadic*/ false) : tryGetTypeAtPosition(target, i);
             if (sourceType && targetType) {
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
@@ -33195,11 +33195,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getInferredTypes(context);
     }
 
-    function getMutableArrayOrTupleType(type: Type) {
-        return type.flags & TypeFlags.Union ? mapType(type, getMutableArrayOrTupleType) :
+    // TODO(jakebailey): cache?
+    function getMutableArrayOrTupleType(type: Type, forceVariadic: boolean): Type {
+        return type.flags & TypeFlags.Union ? mapType(type, t => getMutableArrayOrTupleType(t, forceVariadic)) :
             type.flags & TypeFlags.Any || isMutableArrayOrTuple(getBaseConstraintOfType(type) || type) ? type :
             isTupleType(type) ? createTupleType(getElementTypes(type), type.target.elementFlags, /*readonly*/ false, type.target.labeledElementDeclarations) :
-            createTupleType([type], [ElementFlags.Variadic]);
+            forceVariadic ? createTupleType([type], [ElementFlags.Variadic]) : type;
     }
 
     function getSpreadArgumentType(args: readonly Expression[], index: number, argCount: number, restType: Type, context: InferenceContext | undefined, checkMode: CheckMode) {
@@ -33214,7 +33215,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkExpressionWithContextualType((arg as SpreadElement).expression, restType, context, checkMode);
 
                 if (isArrayLikeType(spreadType)) {
-                    return getMutableArrayOrTupleType(spreadType);
+                    return getMutableArrayOrTupleType(spreadType, /*forceVariadic*/ true);
                 }
 
                 return createArrayType(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, arg.kind === SyntaxKind.SpreadElement ? (arg as SpreadElement).expression : arg), inConstContext);
