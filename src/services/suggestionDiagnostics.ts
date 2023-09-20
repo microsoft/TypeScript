@@ -24,7 +24,6 @@ import {
     getAssignmentDeclarationKind,
     getFunctionFlags,
     getModeForUsageLocation,
-    getResolvedModule,
     hasInitializer,
     hasPropertyAccessExpressionWithName,
     Identifier,
@@ -89,7 +88,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
             const importNode = importFromModuleSpecifier(moduleSpecifier);
             const name = importNameForConvertToDefaultImport(importNode);
             if (!name) continue;
-            const module = getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
+            const module = program.resolvedModules?.get(sourceFile.path)?.get(moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier))?.resolvedModule;
             const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
             if (resolvedFile && resolvedFile.externalModuleIndicator && resolvedFile.externalModuleIndicator !== true && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                 diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));

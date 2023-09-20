@@ -553,6 +553,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         node16: ModuleKind.Node16,
         nodenext: ModuleKind.NodeNext,
     })),
+    affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
@@ -994,6 +995,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             bundler: ModuleResolutionKind.Bundler,
         })),
         deprecatedKeys: new Set(["node"]),
+        affectsSourceFile: true,
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
@@ -1540,6 +1542,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             legacy: ModuleDetectionKind.Legacy,
             force: ModuleDetectionKind.Force,
         })),
+        affectsSourceFile: true,
         affectsModuleResolution: true,
         description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
         category: Diagnostics.Language_and_Environment,
@@ -1571,7 +1574,7 @@ export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOptio
 export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsModuleResolution);
 
 /** @internal */
-export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
+export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSourceFile || !!option.affectsBindDiagnostics);
 
 /** @internal */
 export const optionsAffectingProgramStructure: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsProgramStructure);
