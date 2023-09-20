@@ -196,24 +196,6 @@ export namespace tracingEnabled {
         performance.measure("Tracing", "beginTracing", "endTracing");
     }
 
-    function getLocation(node: Node | undefined) {
-        const file = getSourceFileOfNode(node);
-        return !file
-            ? undefined
-            : {
-                path: file.path,
-                start: indexFromOne(getLineAndCharacterOfPosition(file, node!.pos)),
-                end: indexFromOne(getLineAndCharacterOfPosition(file, node!.end)),
-            };
-
-        function indexFromOne(lc: LineAndCharacter): LineAndCharacter {
-            return {
-                line: lc.line + 1,
-                character: lc.character + 1,
-            };
-        }
-    }
-
     function dumpTypes(types: readonly Type[]) {
         performance.mark("beginDumpTypes");
 
@@ -227,112 +209,7 @@ export namespace tracingEnabled {
 
         const numTypes = types.length;
         for (let i = 0; i < numTypes; i++) {
-            const type = types[i];
-            const objectFlags = (type as any).objectFlags;
-            const symbol = type.aliasSymbol ?? type.symbol;
-
-            // It's slow to compute the display text, so skip it unless it's really valuable (or cheap)
-            let display: string | undefined;
-            if ((objectFlags & ObjectFlags.Anonymous) | (type.flags & TypeFlags.Literal)) {
-                try {
-                    display = type.checker?.typeToString(type);
-                }
-                catch {
-                    display = undefined;
-                }
-            }
-
-            let indexedAccessProperties: object = {};
-            if (type.flags & TypeFlags.IndexedAccess) {
-                const indexedAccessType = type as IndexedAccessType;
-                indexedAccessProperties = {
-                    indexedAccessObjectType: indexedAccessType.objectType?.id,
-                    indexedAccessIndexType: indexedAccessType.indexType?.id,
-                };
-            }
-
-            let referenceProperties: object = {};
-            if (objectFlags & ObjectFlags.Reference) {
-                const referenceType = type as TypeReference;
-                referenceProperties = {
-                    instantiatedType: referenceType.target?.id,
-                    typeArguments: referenceType.resolvedTypeArguments?.map(t => t.id),
-                    referenceLocation: getLocation(referenceType.node),
-                };
-            }
-
-            let conditionalProperties: object = {};
-            if (type.flags & TypeFlags.Conditional) {
-                const conditionalType = type as ConditionalType;
-                conditionalProperties = {
-                    conditionalCheckType: conditionalType.checkType?.id,
-                    conditionalExtendsType: conditionalType.extendsType?.id,
-                    conditionalTrueType: conditionalType.resolvedTrueType?.id ?? -1,
-                    conditionalFalseType: conditionalType.resolvedFalseType?.id ?? -1,
-                };
-            }
-
-            let substitutionProperties: object = {};
-            if (type.flags & TypeFlags.Substitution) {
-                const substitutionType = type as SubstitutionType;
-                substitutionProperties = {
-                    substitutionBaseType: substitutionType.baseType?.id,
-                    constraintType: substitutionType.constraint?.id,
-                };
-            }
-
-            let reverseMappedProperties: object = {};
-            if (objectFlags & ObjectFlags.ReverseMapped) {
-                const reverseMappedType = type as ReverseMappedType;
-                reverseMappedProperties = {
-                    reverseMappedSourceType: reverseMappedType.source?.id,
-                    reverseMappedMappedType: reverseMappedType.mappedType?.id,
-                    reverseMappedConstraintType: reverseMappedType.constraintType?.id,
-                };
-            }
-
-            let evolvingArrayProperties: object = {};
-            if (objectFlags & ObjectFlags.EvolvingArray) {
-                const evolvingArrayType = type as EvolvingArrayType;
-                evolvingArrayProperties = {
-                    evolvingArrayElementType: evolvingArrayType.elementType.id,
-                    evolvingArrayFinalType: evolvingArrayType.finalArrayType?.id,
-                };
-            }
-
-            // We can't print out an arbitrary object, so just assign each one a unique number.
-            // Don't call it an "id" so people don't treat it as a type id.
-            let recursionToken: number | undefined;
-            const recursionIdentity = type.checker.getRecursionIdentity(type);
-            if (recursionIdentity) {
-                recursionToken = recursionIdentityMap.get(recursionIdentity);
-                if (!recursionToken) {
-                    recursionToken = recursionIdentityMap.size;
-                    recursionIdentityMap.set(recursionIdentity, recursionToken);
-                }
-            }
-
-            const descriptor = {
-                id: type.id,
-                intrinsicName: (type as any).intrinsicName,
-                symbolName: symbol?.escapedName && unescapeLeadingUnderscores(symbol.escapedName),
-                recursionId: recursionToken,
-                isTuple: objectFlags & ObjectFlags.Tuple ? true : undefined,
-                unionTypes: (type.flags & TypeFlags.Union) ? (type as UnionType).types?.map(t => t.id) : undefined,
-                intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t => t.id) : undefined,
-                aliasTypeArguments: type.aliasTypeArguments?.map(t => t.id),
-                keyofType: (type.flags & TypeFlags.Index) ? (type as IndexType).type?.id : undefined,
-                ...indexedAccessProperties,
-                ...referenceProperties,
-                ...conditionalProperties,
-                ...substitutionProperties,
-                ...reverseMappedProperties,
-                ...evolvingArrayProperties,
-                destructuringPattern: getLocation(type.pattern),
-                firstDeclaration: getLocation(symbol?.declarations?.[0]),
-                flags: Debug.formatTypeFlags(type.flags).split("|"),
-                display,
-            };
+            const descriptor = getTypeDescriptor(types[i], recursionIdentityMap);
 
             fs.writeSync(typesFd, JSON.stringify(descriptor));
             if (i < numTypes - 1) {
@@ -372,4 +249,132 @@ export const dumpTracingLegend = tracingEnabled.dumpLegend;
 /** @internal */
 export interface TracingNode {
     tracingPath?: Path;
+}
+
+export function getTypeDescriptor(type: Type, recursionIdentityMap: Map<object, number>) {
+    const objectFlags = (type as any).objectFlags;
+    const symbol = type.aliasSymbol ?? type.symbol;
+
+    // It's slow to compute the display text, so skip it unless it's really valuable (or cheap)
+    let display: string | undefined;
+    if ((objectFlags & ObjectFlags.Anonymous) | (type.flags & TypeFlags.Literal)) {
+        try {
+            display = type.checker?.typeToString(type);
+        }
+        catch {
+            display = undefined;
+        }
+    }
+
+    let indexedAccessProperties: object = {};
+    if (type.flags & TypeFlags.IndexedAccess) {
+        const indexedAccessType = type as IndexedAccessType;
+        indexedAccessProperties = {
+            indexedAccessObjectType: indexedAccessType.objectType?.id,
+            indexedAccessIndexType: indexedAccessType.indexType?.id,
+        };
+    }
+
+    let referenceProperties: object = {};
+    if (objectFlags & ObjectFlags.Reference) {
+        const referenceType = type as TypeReference;
+        referenceProperties = {
+            instantiatedType: referenceType.target?.id,
+            typeArguments: referenceType.resolvedTypeArguments?.map(t => t.id),
+            referenceLocation: getLocation(referenceType.node),
+        };
+    }
+
+    let conditionalProperties: object = {};
+    if (type.flags & TypeFlags.Conditional) {
+        const conditionalType = type as ConditionalType;
+        conditionalProperties = {
+            conditionalCheckType: conditionalType.checkType?.id,
+            conditionalExtendsType: conditionalType.extendsType?.id,
+            conditionalTrueType: conditionalType.resolvedTrueType?.id ?? -1,
+            conditionalFalseType: conditionalType.resolvedFalseType?.id ?? -1,
+        };
+    }
+
+    let substitutionProperties: object = {};
+    if (type.flags & TypeFlags.Substitution) {
+        const substitutionType = type as SubstitutionType;
+        substitutionProperties = {
+            substitutionBaseType: substitutionType.baseType?.id,
+            constraintType: substitutionType.constraint?.id,
+        };
+    }
+
+    let reverseMappedProperties: object = {};
+    if (objectFlags & ObjectFlags.ReverseMapped) {
+        const reverseMappedType = type as ReverseMappedType;
+        reverseMappedProperties = {
+            reverseMappedSourceType: reverseMappedType.source?.id,
+            reverseMappedMappedType: reverseMappedType.mappedType?.id,
+            reverseMappedConstraintType: reverseMappedType.constraintType?.id,
+        };
+    }
+
+    let evolvingArrayProperties: object = {};
+    if (objectFlags & ObjectFlags.EvolvingArray) {
+        const evolvingArrayType = type as EvolvingArrayType;
+        evolvingArrayProperties = {
+            evolvingArrayElementType: evolvingArrayType.elementType.id,
+            evolvingArrayFinalType: evolvingArrayType.finalArrayType?.id,
+        };
+    }
+
+    // We can't print out an arbitrary object, so just assign each one a unique number.
+    // Don't call it an "id" so people don't treat it as a type id.
+    let recursionToken: number | undefined;
+    const recursionIdentity = type.checker?.getRecursionIdentity(type);
+    if (recursionIdentity) {
+        recursionToken = recursionIdentityMap.get(recursionIdentity);
+        if (!recursionToken) {
+            recursionToken = recursionIdentityMap.size;
+            recursionIdentityMap.set(recursionIdentity, recursionToken);
+        }
+    }
+
+    const descriptor = {
+        id: type.id,
+        intrinsicName: (type as any).intrinsicName,
+        symbolName: symbol?.escapedName && unescapeLeadingUnderscores(symbol.escapedName),
+        recursionId: recursionToken,
+        isTuple: objectFlags & ObjectFlags.Tuple ? true : undefined,
+        unionTypes: (type.flags & TypeFlags.Union) ? (type as UnionType).types?.map(t => t.id) : undefined,
+        intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t => t.id) : undefined,
+        aliasTypeArguments: type.aliasTypeArguments?.map(t => t.id),
+        keyofType: (type.flags & TypeFlags.Index) ? (type as IndexType).type?.id : undefined,
+        ...indexedAccessProperties,
+        ...referenceProperties,
+        ...conditionalProperties,
+        ...substitutionProperties,
+        ...reverseMappedProperties,
+        ...evolvingArrayProperties,
+        destructuringPattern: getLocation(type.pattern),
+        firstDeclaration: getLocation(symbol?.declarations?.[0]),
+        flags: Debug.formatTypeFlags(type.flags).split("|"),
+        display,
+    };
+
+    return descriptor;
+}
+
+function getLocation(node: Node | undefined) {
+    const file = getSourceFileOfNode(node);
+    return !file
+        ? undefined
+        : {
+            path: file.path,
+            start: indexFromOne(getLineAndCharacterOfPosition(file, node!.pos)),
+            end: indexFromOne(getLineAndCharacterOfPosition(file, node!.end)),
+        };
+
+    function indexFromOne(lc: LineAndCharacter): LineAndCharacter {
+        return {
+            line: lc.line + 1,
+            character: lc.character + 1,
+        };
+    }
 }

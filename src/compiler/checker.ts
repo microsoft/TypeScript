@@ -364,6 +364,7 @@ import {
     getThisContainer,
     getThisParameter,
     getTrailingSemicolonDeferringWriter,
+    getTypeDescriptor,
     getTypeParameterFromJsDoc,
     getUseDefineForClassFields,
     group,
@@ -21070,6 +21071,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return isRelatedTo(source, target, RecursionFlags.Both, reportErrors);
         }
 
+        function tryGetIntersection(type: Type): IntersectionType | undefined {
+            if (type.flags & TypeFlags.Intersection) {
+                return type as IntersectionType;
+            }
+            if (type.flags & TypeFlags.Union && (type as UnionType).origin && (type as UnionType).origin!.flags & TypeFlags.Intersection) {
+                return (type as UnionType).origin as IntersectionType;
+            }
+        }
+
         /**
          * Compare two types and return
          * * Ternary.True if they are related with no assumptions,
@@ -21079,6 +21089,45 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
             if (originalSource === originalTarget) return Ternary.True;
 
+            const sourceIntersection = tryGetIntersection(originalSource);
+            const targetIntersection = tryGetIntersection(originalTarget);
+            if (sourceIntersection) {
+                // Set 1 for elements occuring in the source, then 2 for elements occuring in both source and target
+                const combinedTypeSet = new Map<number, number>();
+                const sourceTypes = sourceIntersection.types;
+                const targetTypes = targetIntersection ? targetIntersection.types : [originalTarget];
+                forEach(sourceTypes, t => combinedTypeSet.set(getTypeId(t), 1));
+                let hasOverlap = false;
+                forEach(targetTypes, t => {
+                    const id = getTypeId(t);
+                    if (combinedTypeSet.has(id)) {
+                        combinedTypeSet.set(getTypeId(t), 2);
+                        hasOverlap = true;
+                    }
+                });
+                if (hasOverlap) {
+                    const filteredSource = filter(sourceTypes, t => combinedTypeSet.get(getTypeId(t)) !== 2);
+                    const filteredTarget = filter(targetTypes, t => combinedTypeSet.get(getTypeId(t)) !== 2);
+                    if (!length(filteredTarget)) {
+                        console.log("Optimization: true");
+                        console.log(`Source: ${JSON.stringify(getTypeDescriptor(originalSource, new Map()))})}`);
+                        console.log(`Target: ${JSON.stringify(getTypeDescriptor(originalTarget, new Map()))})}`);
+                        return Ternary.True; // Source has all parts of target
+                    }
+                    if (length(filteredSource)) {
+                        let result: Ternary;
+                        if (result = isRelatedTo(getIntersectionType(filteredSource), getIntersectionType(filteredTarget), recursionFlags, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                            console.log("Optimization: non-false");
+                            console.log(`Source: ${JSON.stringify(getTypeDescriptor(originalSource, new Map()))})}`);
+                            console.log(`Target: ${JSON.stringify(getTypeDescriptor(originalTarget, new Map()))})}`);
+                            return result;
+                        }
+                        // In the false case, we may still be assignable at the structural level, rather than the algebraic level
+                    }
+                    // Even if every member of the source is in the target but the target still has members left, the source may still be assignable
+                    // to the target, either if some member of the original source is assignable to the other members of the target, or if there is structural assignability
+                }
+            }
             // Before normalization: if `source` is type an object type, and `target` is primitive,
             // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
             if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
@@ -21601,6 +21650,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
         // and issue an error. Otherwise, actually compare the structure of the two types.
         function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, recursionFlags: RecursionFlags): Ternary {
+            // if (source.id === 24614 && target.id === 10224) {
+            //     debugger;
+            // }
             if (overflow) {
                 return Ternary.False;
             }
@@ -21721,8 +21773,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
-                relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
-                resetMaybeStack(/*markAllAsSucceeded*/ false);
+                try {
+                    relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
+                    resetMaybeStack(/*markAllAsSucceeded*/ false);
+                }
+                catch (e) {
+                    tracing?.stopTracing();
+                    throw e;
+                }
             }
             return result;
 
@@ -22796,6 +22854,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const properties = getPropertiesOfType(target);
             const numericNamesOnly = isTupleType(source) && isTupleType(target);
             for (const targetProp of excludeProperties(properties, excludedProperties)) {
+                // console.log(`Target prop: ${targetProp.escapedName} relations size: ${relation.size}`);
+                // if (targetProp.escapedName === "icon") {
+                //     debugger;
+                // }
                 const name = targetProp.escapedName;
                 if (!(targetProp.flags & SymbolFlags.Prototype) && (!numericNamesOnly || isNumericLiteralName(name) || name === "length") && (!optionalsOnly || targetProp.flags & SymbolFlags.Optional)) {
                     const sourceProp = getPropertyOfType(source, name);
