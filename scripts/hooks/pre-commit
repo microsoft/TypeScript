@@ -1,2 +1,3 @@
 #!/bin/sh
 git diff --name-only --cached --relative | xargs --no-run-if-empty npx dprint fmt
+git diff --name-only --cached --relative | xargs --no-run-if-empty git add
