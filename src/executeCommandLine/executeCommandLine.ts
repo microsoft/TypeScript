@@ -791,7 +791,7 @@ function reportWatchModeWithoutSysSupport(sys: System, reportDiagnostic: Diagnos
 }
 
 // This could be inlined everywhere, but this is convenient for debugging and patching.
-const jsDocParsingMode = JSDocParsingMode.ParseForTypeErrors;
+const defaultJSDocParsingMode = JSDocParsingMode.ParseForTypeErrors;
 
 function performBuild(
     sys: System,
@@ -843,7 +843,7 @@ function performBuild(
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createWatchStatusReporter(sys, buildOptions),
         );
-        buildHost.jsDocParsingMode = jsDocParsingMode;
+        buildHost.jsDocParsingMode = defaultJSDocParsingMode;
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
         const onWatchStatusChange = buildHost.onWatchStatusChange;
@@ -873,7 +873,7 @@ function performBuild(
         createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
         createReportErrorSummary(sys, buildOptions),
     );
-    buildHost.jsDocParsingMode = jsDocParsingMode;
+    buildHost.jsDocParsingMode = defaultJSDocParsingMode;
     const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
     updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
     const builder = createSolutionBuilder(buildHost, projects, buildOptions);
@@ -897,7 +897,7 @@ function performCompilation(
 ) {
     const { fileNames, options, projectReferences } = config;
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
-    host.jsDocParsingMode = jsDocParsingMode;
+    host.jsDocParsingMode = defaultJSDocParsingMode;
     const currentDirectory = host.getCurrentDirectory();
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -931,7 +931,7 @@ function performIncrementalCompilation(
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
     const host = createIncrementalCompilerHost(options, sys);
-    host.jsDocParsingMode = jsDocParsingMode;
+    host.jsDocParsingMode = defaultJSDocParsingMode;
     const exitStatus = ts_performIncrementalCompilation({
         host,
         system: sys,
@@ -983,7 +983,7 @@ function updateWatchCompilationHost(
     cb: ExecuteCommandLineCallbacks,
     watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
 ) {
-    watchCompilerHost.jsDocParsingMode = jsDocParsingMode;
+    watchCompilerHost.jsDocParsingMode = defaultJSDocParsingMode;
     updateCreateProgram(sys, watchCompilerHost, /*isBuildMode*/ false);
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
     watchCompilerHost.afterProgramCreate = builderProgram => {
