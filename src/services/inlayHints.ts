@@ -460,10 +460,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         Debug.assertIsDefined(typeNode, "should always get typenode");
 
         const parts: InlayHintDisplayPart[] = [];
-        visitDisplayPart(typeNode);
+        visitForDisplayParts(typeNode);
         return parts;
 
-        function visitDisplayPart(node: Node) {
+        function visitForDisplayParts(node: Node) {
             if (!node) {
                 return;
             }
@@ -494,24 +494,24 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     break;
                 case SyntaxKind.QualifiedName:
                     const qualifiedName = node as QualifiedName;
-                    visitDisplayPart(qualifiedName.left);
+                    visitForDisplayParts(qualifiedName.left);
                     parts.push({ text: "." });
-                    visitDisplayPart(qualifiedName.right);
+                    visitForDisplayParts(qualifiedName.right);
                     break;
                 case SyntaxKind.TypePredicate:
                     const predicate = node as TypePredicateNode;
                     if (predicate.assertsModifier) {
                         parts.push({ text: "asserts " });
                     }
-                    visitDisplayPart(predicate.parameterName);
+                    visitForDisplayParts(predicate.parameterName);
                     if (predicate.type) {
                         parts.push({ text: " is " });
-                        visitDisplayPart(predicate.type);
+                        visitForDisplayParts(predicate.type);
                     }
                     break;
                 case SyntaxKind.TypeReference:
                     const typeReference = node as TypeReferenceNode;
-                    visitDisplayPart(typeReference.typeName);
+                    visitForDisplayParts(typeReference.typeName);
                     if (typeReference.typeArguments) {
                         parts.push({ text: "<" });
                         visitDisplayPartList(typeReference.typeArguments, ", ");
@@ -523,14 +523,14 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     if (typeParameter.modifiers) {
                         visitDisplayPartList(typeParameter.modifiers, " ");
                     }
-                    visitDisplayPart(typeParameter.name);
+                    visitForDisplayParts(typeParameter.name);
                     if (typeParameter.constraint) {
                         parts.push({ text: " extends " });
-                        visitDisplayPart(typeParameter.constraint);
+                        visitForDisplayParts(typeParameter.constraint);
                     }
                     if (typeParameter.default) {
                         parts.push({ text: " = " });
-                        visitDisplayPart(typeParameter.default);
+                        visitForDisplayParts(typeParameter.default);
                     }
                     break;
                 case SyntaxKind.Parameter:
@@ -541,13 +541,13 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     if (parameter.dotDotDotToken) {
                         parts.push({ text: "..." });
                     }
-                    visitDisplayPart(parameter.name);
+                    visitForDisplayParts(parameter.name);
                     if (parameter.questionToken) {
                         parts.push({ text: "?" });
                     }
                     if (parameter.type) {
                         parts.push({ text: ": " });
-                        visitDisplayPart(parameter.type);
+                        visitForDisplayParts(parameter.type);
                     }
                     break;
                 case SyntaxKind.ConstructorType:
@@ -562,12 +562,12 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     visitDisplayPartList(constructorType.parameters, ", ");
                     parts.push({ text: ")" });
                     parts.push({ text: " => " });
-                    visitDisplayPart(constructorType.type);
+                    visitForDisplayParts(constructorType.type);
                     break;
                 case SyntaxKind.TypeQuery:
                     const typeQuery = node as TypeQueryNode;
                     parts.push({ text: "typeof " });
-                    visitDisplayPart(typeQuery.exprName);
+                    visitForDisplayParts(typeQuery.exprName);
                     if (typeQuery.typeArguments) {
                         parts.push({ text: "<" });
                         visitDisplayPartList(typeQuery.typeArguments, ", ");
@@ -585,7 +585,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     parts.push({ text: "}" });
                     break;
                 case SyntaxKind.ArrayType:
-                    visitDisplayPart((node as ArrayTypeNode).elementType);
+                    visitForDisplayParts((node as ArrayTypeNode).elementType);
                     parts.push({ text: "[]" });
                     break;
                 case SyntaxKind.TupleType:
@@ -598,20 +598,20 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     if (member.dotDotDotToken) {
                         parts.push({ text: "..." });
                     }
-                    visitDisplayPart(member.name);
+                    visitForDisplayParts(member.name);
                     if (member.questionToken) {
                         parts.push({ text: "?" });
                     }
                     parts.push({ text: ": " });
-                    visitDisplayPart(member.type);
+                    visitForDisplayParts(member.type);
                     break;
                 case SyntaxKind.OptionalType:
-                    visitDisplayPart((node as OptionalTypeNode).type);
+                    visitForDisplayParts((node as OptionalTypeNode).type);
                     parts.push({ text: "?" });
                     break;
                 case SyntaxKind.RestType:
                     parts.push({ text: "..." });
-                    visitDisplayPart((node as RestTypeNode).type);
+                    visitForDisplayParts((node as RestTypeNode).type);
                     break;
                 case SyntaxKind.UnionType:
                     visitDisplayPartList((node as UnionTypeNode).types, " | ");
@@ -621,33 +621,33 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     break;
                 case SyntaxKind.ConditionalType:
                     const conditionalType = node as ConditionalTypeNode;
-                    visitDisplayPart(conditionalType.checkType);
+                    visitForDisplayParts(conditionalType.checkType);
                     parts.push({ text: " extends " });
-                    visitDisplayPart(conditionalType.extendsType);
+                    visitForDisplayParts(conditionalType.extendsType);
                     parts.push({ text: " ? " });
-                    visitDisplayPart(conditionalType.trueType);
+                    visitForDisplayParts(conditionalType.trueType);
                     parts.push({ text: " : " });
-                    visitDisplayPart(conditionalType.falseType);
+                    visitForDisplayParts(conditionalType.falseType);
                     break;
                 case SyntaxKind.InferType:
                     parts.push({ text: "infer " });
-                    visitDisplayPart((node as InferTypeNode).typeParameter);
+                    visitForDisplayParts((node as InferTypeNode).typeParameter);
                     break;
                 case SyntaxKind.ParenthesizedType:
                     parts.push({ text: "(" });
-                    visitDisplayPart((node as ParenthesizedTypeNode).type);
+                    visitForDisplayParts((node as ParenthesizedTypeNode).type);
                     parts.push({ text: ")" });
                     break;
                 case SyntaxKind.TypeOperator:
                     const typeOperator = node as TypeOperatorNode;
                     parts.push({ text: `${tokenToString(typeOperator.operator)} ` });
-                    visitDisplayPart(typeOperator.type);
+                    visitForDisplayParts(typeOperator.type);
                     break;
                 case SyntaxKind.IndexedAccessType:
                     const indexedAccess = node as IndexedAccessTypeNode;
-                    visitDisplayPart(indexedAccess.objectType);
+                    visitForDisplayParts(indexedAccess.objectType);
                     parts.push({ text: "[" });
-                    visitDisplayPart(indexedAccess.indexType);
+                    visitForDisplayParts(indexedAccess.indexType);
                     parts.push({ text: "]" });
                     break;
                 case SyntaxKind.MappedType:
@@ -663,10 +663,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         parts.push({ text: "readonly " });
                     }
                     parts.push({ text: "[" });
-                    visitDisplayPart(mappedType.typeParameter);
+                    visitForDisplayParts(mappedType.typeParameter);
                     if (mappedType.nameType) {
                         parts.push({ text: " as " });
-                        visitDisplayPart(mappedType.nameType);
+                        visitForDisplayParts(mappedType.nameType);
                     }
                     parts.push({ text: "]" });
                     if (mappedType.questionToken) {
@@ -680,12 +680,12 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     }
                     parts.push({ text: ": " });
                     if (mappedType.type) {
-                        visitDisplayPart(mappedType.type);
+                        visitForDisplayParts(mappedType.type);
                     }
                     parts.push({ text: "; }" });
                     break;
                 case SyntaxKind.LiteralType:
-                    visitDisplayPart((node as LiteralTypeNode).literal);
+                    visitForDisplayParts((node as LiteralTypeNode).literal);
                     break;
                 case SyntaxKind.FunctionType:
                     const functionType = node as FunctionTypeNode;
@@ -698,7 +698,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     visitDisplayPartList(functionType.parameters, ", ");
                     parts.push({ text: ")" });
                     parts.push({ text: " => " });
-                    visitDisplayPart(functionType.type);
+                    visitForDisplayParts(functionType.type);
                     break;
                 case SyntaxKind.ImportType:
                     const importType = node as ImportTypeNode;
@@ -706,7 +706,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                         parts.push({ text: "typeof " });
                     }
                     parts.push({ text: "import(" });
-                    visitDisplayPart(importType.argument);
+                    visitForDisplayParts(importType.argument);
                     if (importType.assertions) {
                         parts.push({ text: ", { assert: " });
                         visitDisplayPartList(importType.assertions.assertClause.elements, ", ");
@@ -715,7 +715,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     parts.push({ text: ")" });
                     if (importType.qualifier) {
                         parts.push({ text: "." });
-                        visitDisplayPart(importType.qualifier);
+                        visitForDisplayParts(importType.qualifier);
                     }
                     if (importType.typeArguments) {
                         parts.push({ text: "<" });
@@ -728,13 +728,13 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                     if (propertySignature.modifiers) {
                         visitDisplayPartList(propertySignature.modifiers, " ");
                     }
-                    visitDisplayPart(propertySignature.name);
+                    visitForDisplayParts(propertySignature.name);
                     if (propertySignature.questionToken) {
                         parts.push({ text: "?" });
                     }
                     if (propertySignature.type) {
                         parts.push({ text: ": " });
-                        visitDisplayPart(propertySignature.type);
+                        visitForDisplayParts(propertySignature.type);
                     }
                     break;
                 default:
@@ -747,7 +747,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 if (index > 0) {
                     parts.push({ text: separator });
                 }
-                visitDisplayPart(node);
+                visitForDisplayParts(node);
             });
         }
     }
