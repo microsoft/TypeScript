@@ -114,13 +114,13 @@ function fn3<T>(n: T): string;
 >n : T
 
 function fn3<T, U>(s: string, t: T, u: U): U;
->fn3 : { <T_1>(n: T_1): string; <T_2, U>(s: string, t: T, u: U): U; <T_3, U_1, V>(v: V, u: U_1, t: T_3): number; }
+>fn3 : { <T_1>(n: T_1): string; <T, U>(s: string, t: T, u: U): U; <T_2, U_1, V>(v: V, u: U_1, t: T_2): number; }
 >s : string
 >t : T
 >u : U
 
 function fn3<T, U, V>(v: V, u: U, t: T): number;
->fn3 : { <T_1>(n: T_1): string; <T_2, U_1>(s: string, t: T_2, u: U_1): U_1; <T_3, U_2, V>(v: V, u: U, t: T): number; }
+>fn3 : { <T_1>(n: T_1): string; <T_2, U_1>(s: string, t: T_2, u: U_1): U_1; <T, U, V>(v: V, u: U, t: T): number; }
 >v : V
 >u : U
 >t : T
@@ -188,7 +188,7 @@ function fn4<T extends string, U extends number>(n: T, m: U);
 >m : U
 
 function fn4<T extends number, U extends string>(n: T, m: U);
->fn4 : { <T_1 extends string, U_1 extends number>(n: T_1, m: U_1): any; <T_2 extends number, U_2 extends string>(n: T, m: U): any; }
+>fn4 : { <T_1 extends string, U_1 extends number>(n: T_1, m: U_1): any; <T extends number, U extends string>(n: T, m: U): any; }
 >n : T
 >m : U
 

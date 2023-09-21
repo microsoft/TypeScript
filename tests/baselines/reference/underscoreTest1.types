@@ -3229,11 +3229,11 @@ module Underscore {
 >list : T[]
 
         chain<T>(list: Dictionary<T>): ChainedDictionary<T>;
->chain : { <T_1>(list: T_1[]): ChainedArray<T_1>; <T_2>(list: Dictionary<T>): ChainedDictionary<T>; <T_3>(obj: T_3): ChainedObject<T_3>; }
+>chain : { <T_1>(list: T_1[]): ChainedArray<T_1>; <T>(list: Dictionary<T>): ChainedDictionary<T>; <T_2>(obj: T_2): ChainedObject<T_2>; }
 >list : Dictionary<T>
 
         chain<T>(obj: T): ChainedObject<T>;
->chain : { <T_1>(list: T_1[]): ChainedArray<T_1>; <T_2>(list: Dictionary<T_2>): ChainedDictionary<T_2>; <T_3>(obj: T): ChainedObject<T>; }
+>chain : { <T_1>(list: T_1[]): ChainedArray<T_1>; <T_2>(list: Dictionary<T_2>): ChainedDictionary<T_2>; <T>(obj: T): ChainedObject<T>; }
 >obj : T
 
         each<T>(list: T[], iterator: Iterator_<T, void>, context?: any): void;
@@ -3243,7 +3243,7 @@ module Underscore {
 >context : any
 
         each<T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void;
->each : { <T_1>(list: T_1[], iterator: Iterator_<T_1, void>, context?: any): void; <T_2>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>each : { <T_1>(list: T_1[], iterator: Iterator_<T_1, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, void>
 >context : any
@@ -3255,7 +3255,7 @@ module Underscore {
 >context : any
 
         forEach<T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void;
->forEach : { <T_1>(list: T_1[], iterator: Iterator_<T_1, void>, context?: any): void; <T_2>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>forEach : { <T_1>(list: T_1[], iterator: Iterator_<T_1, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, void>
 >context : any
@@ -3267,7 +3267,7 @@ module Underscore {
 >context : any
 
         map<T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[];
->map : { <T_1, U_1>(list: T_1[], iterator: Iterator_<T_1, U_1>, context?: any): U_1[]; <T_2, U_2>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>map : { <T_1, U_1>(list: T_1[], iterator: Iterator_<T_1, U_1>, context?: any): U_1[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, U>
 >context : any
@@ -3279,7 +3279,7 @@ module Underscore {
 >context : any
 
         collect<T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[];
->collect : { <T_1, U_1>(list: T_1[], iterator: Iterator_<T_1, U_1>, context?: any): U_1[]; <T_2, U_2>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>collect : { <T_1, U_1>(list: T_1[], iterator: Iterator_<T_1, U_1>, context?: any): U_1[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, U>
 >context : any
@@ -3292,21 +3292,21 @@ module Underscore {
 >context : any
 
         reduce<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->reduce : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>reduce : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_2>(list: Dictionary<T_2>, iterator: Reducer<T_2, T_2>, initialValue?: T_2, context?: any): T_2; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : T[]
 >iterator : Reducer<T, U>
 >initialValue : U
 >context : any
 
         reduce<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
->reduce : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>reduce : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : Dictionary<T>
 >iterator : Reducer<T, T>
 >initialValue : T
 >context : any
 
         reduce<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->reduce : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_2>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>reduce : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
 >list : Dictionary<T>
 >iterator : Reducer<T, U>
 >initialValue : U
@@ -3320,21 +3320,21 @@ module Underscore {
 >context : any
 
         foldl<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->foldl : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>foldl : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_2>(list: Dictionary<T_2>, iterator: Reducer<T_2, T_2>, initialValue?: T_2, context?: any): T_2; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : T[]
 >iterator : Reducer<T, U>
 >initialValue : U
 >context : any
 
         foldl<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
->foldl : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>foldl : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : Dictionary<T>
 >iterator : Reducer<T, T>
 >initialValue : T
 >context : any
 
         foldl<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->foldl : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_2>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>foldl : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
 >list : Dictionary<T>
 >iterator : Reducer<T, U>
 >initialValue : U
@@ -3348,21 +3348,21 @@ module Underscore {
 >context : any
 
         inject<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->inject : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>inject : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_2>(list: Dictionary<T_2>, iterator: Reducer<T_2, T_2>, initialValue?: T_2, context?: any): T_2; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : T[]
 >iterator : Reducer<T, U>
 >initialValue : U
 >context : any
 
         inject<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
->inject : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>inject : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : Dictionary<T>
 >iterator : Reducer<T, T>
 >initialValue : T
 >context : any
 
         inject<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->inject : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_2>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>inject : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
 >list : Dictionary<T>
 >iterator : Reducer<T, U>
 >initialValue : U
@@ -3376,21 +3376,21 @@ module Underscore {
 >context : any
 
         reduceRight<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->reduceRight : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>reduceRight : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_2>(list: Dictionary<T_2>, iterator: Reducer<T_2, T_2>, initialValue?: T_2, context?: any): T_2; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : T[]
 >iterator : Reducer<T, U>
 >initialValue : U
 >context : any
 
         reduceRight<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
->reduceRight : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>reduceRight : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : Dictionary<T>
 >iterator : Reducer<T, T>
 >initialValue : T
 >context : any
 
         reduceRight<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->reduceRight : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_2>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>reduceRight : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
 >list : Dictionary<T>
 >iterator : Reducer<T, U>
 >initialValue : U
@@ -3404,21 +3404,21 @@ module Underscore {
 >context : any
 
         foldr<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->foldr : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>foldr : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T_2>(list: Dictionary<T_2>, iterator: Reducer<T_2, T_2>, initialValue?: T_2, context?: any): T_2; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : T[]
 >iterator : Reducer<T, U>
 >initialValue : U
 >context : any
 
         foldr<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
->foldr : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T_3>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_4, U_1>(list: Dictionary<T_4>, iterator: Reducer<T_4, U_1>, initialValue: U_1, context?: any): U_1; }
+>foldr : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U>(list: T_2[], iterator: Reducer<T_2, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T_3, U_1>(list: Dictionary<T_3>, iterator: Reducer<T_3, U_1>, initialValue: U_1, context?: any): U_1; }
 >list : Dictionary<T>
 >iterator : Reducer<T, T>
 >initialValue : T
 >context : any
 
         foldr<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
->foldr : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T_4, U_2>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>foldr : { <T_1>(list: T_1[], iterator: Reducer<T_1, T_1>, initialValue?: T_1, context?: any): T_1; <T_2, U_1>(list: T_2[], iterator: Reducer<T_2, U_1>, initialValue: U_1, context?: any): U_1; <T_3>(list: Dictionary<T_3>, iterator: Reducer<T_3, T_3>, initialValue?: T_3, context?: any): T_3; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
 >list : Dictionary<T>
 >iterator : Reducer<T, U>
 >initialValue : U
@@ -3431,7 +3431,7 @@ module Underscore {
 >context : any
 
         find<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T;
->find : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1; <T_2>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
+>find : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, boolean>
 >context : any
@@ -3443,7 +3443,7 @@ module Underscore {
 >context : any
 
         detect<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T;
->detect : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1; <T_2>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
+>detect : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, boolean>
 >context : any
@@ -3455,7 +3455,7 @@ module Underscore {
 >context : any
 
         filter<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[];
->filter : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1[]; <T_2>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>filter : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, boolean>
 >context : any
@@ -3467,7 +3467,7 @@ module Underscore {
 >context : any
 
         select<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[];
->select : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1[]; <T_2>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>select : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, boolean>
 >context : any
@@ -3478,7 +3478,7 @@ module Underscore {
 >properties : Object
 
         where<T>(list: Dictionary<T>, properties: Object): T[];
->where : { <T_1>(list: T_1[], properties: Object): T_1[]; <T_2>(list: Dictionary<T>, properties: Object): T[]; }
+>where : { <T_1>(list: T_1[], properties: Object): T_1[]; <T>(list: Dictionary<T>, properties: Object): T[]; }
 >list : Dictionary<T>
 >properties : Object
 
@@ -3488,7 +3488,7 @@ module Underscore {
 >properties : Object
 
         findWhere<T>(list: Dictionary<T>, properties: Object): T;
->findWhere : { <T_1>(list: T_1[], properties: Object): T_1; <T_2>(list: Dictionary<T>, properties: Object): T; }
+>findWhere : { <T_1>(list: T_1[], properties: Object): T_1; <T>(list: Dictionary<T>, properties: Object): T; }
 >list : Dictionary<T>
 >properties : Object
 
@@ -3499,7 +3499,7 @@ module Underscore {
 >context : any
 
         reject<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[];
->reject : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1[]; <T_2>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>reject : { <T_1>(list: T_1[], iterator: Iterator_<T_1, boolean>, context?: any): T_1[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, boolean>
 >context : any
@@ -3511,7 +3511,7 @@ module Underscore {
 >context : any
 
         every<T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean;
->every : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, boolean>, context?: any): boolean; <T_2>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>every : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, boolean>
 >context : any
@@ -3523,7 +3523,7 @@ module Underscore {
 >context : any
 
         all<T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean;
->all : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, boolean>, context?: any): boolean; <T_2>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>all : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, boolean>
 >context : any
@@ -3535,7 +3535,7 @@ module Underscore {
 >context : any
 
         some<T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean;
->some : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, boolean>, context?: any): boolean; <T_2>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>some : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, boolean>
 >context : any
@@ -3547,7 +3547,7 @@ module Underscore {
 >context : any
 
         any<T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean;
->any : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, boolean>, context?: any): boolean; <T_2>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>any : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, boolean>
 >context : any
@@ -3558,7 +3558,7 @@ module Underscore {
 >value : T
 
         contains<T>(list: Dictionary<T>, value: T): boolean;
->contains : { <T_1>(list: T_1[], value: T_1): boolean; <T_2>(list: Dictionary<T>, value: T): boolean; }
+>contains : { <T_1>(list: T_1[], value: T_1): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
 >list : Dictionary<T>
 >value : T
 
@@ -3568,7 +3568,7 @@ module Underscore {
 >value : T
 
         include<T>(list: Dictionary<T>, value: T): boolean;
->include : { <T_1>(list: T_1[], value: T_1): boolean; <T_2>(list: Dictionary<T>, value: T): boolean; }
+>include : { <T_1>(list: T_1[], value: T_1): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
 >list : Dictionary<T>
 >value : T
 
@@ -3601,7 +3601,7 @@ module Underscore {
 >context : any
 
         max<T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T;
->max : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): T_1; <T_2>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>max : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): T_1; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, any>
 >context : any
@@ -3613,7 +3613,7 @@ module Underscore {
 >context : any
 
         min<T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T;
->min : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): T_1; <T_2>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>min : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): T_1; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, any>
 >context : any
@@ -3625,18 +3625,18 @@ module Underscore {
 >context : any
 
         sortBy<T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[];
->sortBy : { <T_1>(list: T_1[], iterator: Iterator_<T_1, any>, context?: any): T_1[]; <T_2>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T_3>(list: T_3[], propertyName: string): T_3[]; <T_4>(list: Dictionary<T_4>, propertyName: string): T_4[]; }
+>sortBy : { <T_1>(list: T_1[], iterator: Iterator_<T_1, any>, context?: any): T_1[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T_2>(list: T_2[], propertyName: string): T_2[]; <T_3>(list: Dictionary<T_3>, propertyName: string): T_3[]; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, any>
 >context : any
 
         sortBy<T>(list: T[], propertyName: string): T[];
->sortBy : { <T_1>(list: T_1[], iterator: Iterator_<T_1, any>, context?: any): T_1[]; <T_2>(list: Dictionary<T_2>, iterator: Iterator_<T_2, any>, context?: any): T_2[]; <T_3>(list: T[], propertyName: string): T[]; <T_4>(list: Dictionary<T_4>, propertyName: string): T_4[]; }
+>sortBy : { <T_1>(list: T_1[], iterator: Iterator_<T_1, any>, context?: any): T_1[]; <T_2>(list: Dictionary<T_2>, iterator: Iterator_<T_2, any>, context?: any): T_2[]; <T>(list: T[], propertyName: string): T[]; <T_3>(list: Dictionary<T_3>, propertyName: string): T_3[]; }
 >list : T[]
 >propertyName : string
 
         sortBy<T>(list: Dictionary<T>, propertyName: string): T[];
->sortBy : { <T_1>(list: T_1[], iterator: Iterator_<T_1, any>, context?: any): T_1[]; <T_2>(list: Dictionary<T_2>, iterator: Iterator_<T_2, any>, context?: any): T_2[]; <T_3>(list: T_3[], propertyName: string): T_3[]; <T_4>(list: Dictionary<T>, propertyName: string): T[]; }
+>sortBy : { <T_1>(list: T_1[], iterator: Iterator_<T_1, any>, context?: any): T_1[]; <T_2>(list: Dictionary<T_2>, iterator: Iterator_<T_2, any>, context?: any): T_2[]; <T_3>(list: T_3[], propertyName: string): T_3[]; <T>(list: Dictionary<T>, propertyName: string): T[]; }
 >list : Dictionary<T>
 >propertyName : string
 
@@ -3647,18 +3647,18 @@ module Underscore {
 >context : any
 
         groupBy<T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>;
->groupBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<T_1[]>; <T_2>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T_3>(list: T_3[], propertyName: string): Dictionary<T_3[]>; <T_4>(list: Dictionary<T_4>, propertyName: string): Dictionary<T_4[]>; }
+>groupBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<T_1[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T_2>(list: T_2[], propertyName: string): Dictionary<T_2[]>; <T_3>(list: Dictionary<T_3>, propertyName: string): Dictionary<T_3[]>; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, any>
 >context : any
 
         groupBy<T>(list: T[], propertyName: string): Dictionary<T[]>;
->groupBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<T_1[]>; <T_2>(list: Dictionary<T_2>, iterator?: Iterator_<T_2, any>, context?: any): Dictionary<T_2[]>; <T_3>(list: T[], propertyName: string): Dictionary<T[]>; <T_4>(list: Dictionary<T_4>, propertyName: string): Dictionary<T_4[]>; }
+>groupBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<T_1[]>; <T_2>(list: Dictionary<T_2>, iterator?: Iterator_<T_2, any>, context?: any): Dictionary<T_2[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T_3>(list: Dictionary<T_3>, propertyName: string): Dictionary<T_3[]>; }
 >list : T[]
 >propertyName : string
 
         groupBy<T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>;
->groupBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<T_1[]>; <T_2>(list: Dictionary<T_2>, iterator?: Iterator_<T_2, any>, context?: any): Dictionary<T_2[]>; <T_3>(list: T_3[], propertyName: string): Dictionary<T_3[]>; <T_4>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
+>groupBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<T_1[]>; <T_2>(list: Dictionary<T_2>, iterator?: Iterator_<T_2, any>, context?: any): Dictionary<T_2[]>; <T_3>(list: T_3[], propertyName: string): Dictionary<T_3[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
 >list : Dictionary<T>
 >propertyName : string
 
@@ -3669,18 +3669,18 @@ module Underscore {
 >context : any
 
         countBy<T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>;
->countBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<number>; <T_2>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T_3>(list: T_3[], propertyName: string): Dictionary<number>; <T_4>(list: Dictionary<T_4>, propertyName: string): Dictionary<number>; }
+>countBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<number>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T_2>(list: T_2[], propertyName: string): Dictionary<number>; <T_3>(list: Dictionary<T_3>, propertyName: string): Dictionary<number>; }
 >list : Dictionary<T>
 >iterator : Iterator_<T, any>
 >context : any
 
         countBy<T>(list: T[], propertyName: string): Dictionary<number>;
->countBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<number>; <T_2>(list: Dictionary<T_2>, iterator?: Iterator_<T_2, any>, context?: any): Dictionary<number>; <T_3>(list: T[], propertyName: string): Dictionary<number>; <T_4>(list: Dictionary<T_4>, propertyName: string): Dictionary<number>; }
+>countBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<number>; <T_2>(list: Dictionary<T_2>, iterator?: Iterator_<T_2, any>, context?: any): Dictionary<number>; <T>(list: T[], propertyName: string): Dictionary<number>; <T_3>(list: Dictionary<T_3>, propertyName: string): Dictionary<number>; }
 >list : T[]
 >propertyName : string
 
         countBy<T>(list: Dictionary<T>, propertyName: string): Dictionary<number>;
->countBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<number>; <T_2>(list: Dictionary<T_2>, iterator?: Iterator_<T_2, any>, context?: any): Dictionary<number>; <T_3>(list: T_3[], propertyName: string): Dictionary<number>; <T_4>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
+>countBy : { <T_1>(list: T_1[], iterator?: Iterator_<T_1, any>, context?: any): Dictionary<number>; <T_2>(list: Dictionary<T_2>, iterator?: Iterator_<T_2, any>, context?: any): Dictionary<number>; <T_3>(list: T_3[], propertyName: string): Dictionary<number>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
 >list : Dictionary<T>
 >propertyName : string
 
@@ -3689,7 +3689,7 @@ module Underscore {
 >list : T[]
 
         shuffle<T>(list: Dictionary<T>): T[];
->shuffle : { <T_1>(list: T_1[]): T_1[]; <T_2>(list: Dictionary<T>): T[]; }
+>shuffle : { <T_1>(list: T_1[]): T_1[]; <T>(list: Dictionary<T>): T[]; }
 >list : Dictionary<T>
 
         toArray<T>(list: T[]): T[];
@@ -3697,7 +3697,7 @@ module Underscore {
 >list : T[]
 
         toArray<T>(list: Dictionary<T>): T[];
->toArray : { <T_1>(list: T_1[]): T_1[]; <T_2>(list: Dictionary<T>): T[]; }
+>toArray : { <T_1>(list: T_1[]): T_1[]; <T>(list: Dictionary<T>): T[]; }
 >list : Dictionary<T>
 
         size<T>(list: T[]): number;
@@ -3705,7 +3705,7 @@ module Underscore {
 >list : T[]
 
         size<T>(list: Dictionary<T>): number;
->size : { <T_1>(list: T_1[]): number; <T_2>(list: Dictionary<T>): number; }
+>size : { <T_1>(list: T_1[]): number; <T>(list: Dictionary<T>): number; }
 >list : Dictionary<T>
 
         first<T>(list: T[]): T;
@@ -3713,7 +3713,7 @@ module Underscore {
 >list : T[]
 
         first<T>(list: T[], count: number): T[];
->first : { <T_1>(list: T_1[]): T_1; <T_2>(list: T[], count: number): T[]; }
+>first : { <T_1>(list: T_1[]): T_1; <T>(list: T[], count: number): T[]; }
 >list : T[]
 >count : number
 
@@ -3722,7 +3722,7 @@ module Underscore {
 >list : T[]
 
         head<T>(list: T[], count: number): T[];
->head : { <T_1>(list: T_1[]): T_1; <T_2>(list: T[], count: number): T[]; }
+>head : { <T_1>(list: T_1[]): T_1; <T>(list: T[], count: number): T[]; }
 >list : T[]
 >count : number
 
@@ -3731,7 +3731,7 @@ module Underscore {
 >list : T[]
 
         take<T>(list: T[], count: number): T[];
->take : { <T_1>(list: T_1[]): T_1; <T_2>(list: T[], count: number): T[]; }
+>take : { <T_1>(list: T_1[]): T_1; <T>(list: T[], count: number): T[]; }
 >list : T[]
 >count : number
 
@@ -3740,7 +3740,7 @@ module Underscore {
 >list : T[]
 
         initial<T>(list: T[], count: number): T[];
->initial : { <T_1>(list: T_1[]): T_1; <T_2>(list: T[], count: number): T[]; }
+>initial : { <T_1>(list: T_1[]): T_1; <T>(list: T[], count: number): T[]; }
 >list : T[]
 >count : number
 
@@ -3749,7 +3749,7 @@ module Underscore {
 >list : T[]
 
         last<T>(list: T[], count: number): T[];
->last : { <T_1>(list: T_1[]): T_1; <T_2>(list: T[], count: number): T[]; }
+>last : { <T_1>(list: T_1[]): T_1; <T>(list: T[], count: number): T[]; }
 >list : T[]
 >count : number
 
@@ -3767,7 +3767,7 @@ module Underscore {
 >list : T[][]
 
         flatten<T>(array: any[], shallow?: boolean): T[];
->flatten : { <T_1>(list: T_1[][]): T_1[]; <T_2>(array: any[], shallow?: boolean): T[]; }
+>flatten : { <T_1>(list: T_1[][]): T_1[]; <T>(array: any[], shallow?: boolean): T[]; }
 >array : any[]
 >shallow : boolean
 
@@ -3795,7 +3795,7 @@ module Underscore {
 >isSorted : boolean
 
         uniq<T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[];
->uniq : { <T_1>(list: T_1[], isSorted?: boolean): T_1[]; <T_2, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>uniq : { <T_1>(list: T_1[], isSorted?: boolean): T_1[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
 >list : T[]
 >isSorted : boolean
 >iterator : Iterator_<T, U>
@@ -3807,7 +3807,7 @@ module Underscore {
 >isSorted : boolean
 
         unique<T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[];
->unique : { <T_1>(list: T_1[], isSorted?: boolean): T_1[]; <T_2, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>unique : { <T_1>(list: T_1[], isSorted?: boolean): T_1[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
 >list : T[]
 >isSorted : boolean
 >iterator : Iterator_<T, U>
@@ -3819,13 +3819,13 @@ module Underscore {
 >a1 : T1[]
 
         zip<T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[];
->zip : { <T0_1, T1_1>(a0: T0_1[], a1: T1_1[]): Tuple2<T0_1, T1_1>[]; <T0_2, T1_2, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0_3, T1_3, T2_1, T3>(a0: T0_3[], a1: T1_3[], a2: T2_1[], a3: T3[]): Tuple4<T0_3, T1_3, T2_1, T3>[]; (...arrays: any[][]): any[][]; }
+>zip : { <T0_1, T1_1>(a0: T0_1[], a1: T1_1[]): Tuple2<T0_1, T1_1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0_2, T1_2, T2_1, T3>(a0: T0_2[], a1: T1_2[], a2: T2_1[], a3: T3[]): Tuple4<T0_2, T1_2, T2_1, T3>[]; (...arrays: any[][]): any[][]; }
 >a0 : T0[]
 >a1 : T1[]
 >a2 : T2[]
 
         zip<T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[];
->zip : { <T0_1, T1_1>(a0: T0_1[], a1: T1_1[]): Tuple2<T0_1, T1_1>[]; <T0_2, T1_2, T2_1>(a0: T0_2[], a1: T1_2[], a2: T2_1[]): Tuple3<T0_2, T1_2, T2_1>[]; <T0_3, T1_3, T2_2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
+>zip : { <T0_1, T1_1>(a0: T0_1[], a1: T1_1[]): Tuple2<T0_1, T1_1>[]; <T0_2, T1_2, T2_1>(a0: T0_2[], a1: T1_2[], a2: T2_1[]): Tuple3<T0_2, T1_2, T2_1>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
 >a0 : T0[]
 >a1 : T1[]
 >a2 : T2[]
@@ -3863,7 +3863,7 @@ module Underscore {
 >propertyName : string
 
         sortedIndex<T>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number;
->sortedIndex : { <T_1>(list: T_1[], obj: T_1, propertyName: string): number; <T_2>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
+>sortedIndex : { <T_1>(list: T_1[], obj: T_1, propertyName: string): number; <T>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
 >list : T[]
 >obj : T
 >iterator : Iterator_<T, any>

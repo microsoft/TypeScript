@@ -9,7 +9,7 @@ static B<S>(v: A1<S>): A1<S>; // 1
 >v : A1<S>
 
 static B<S>(v: S): A1<S>; // 2 : Error Duplicate signature
->B : { <S_1>(v: A1<S_1>): A1<S_1>; <S_2>(v: S): A1<S>; }
+>B : { <S_1>(v: A1<S_1>): A1<S_1>; <S>(v: S): A1<S>; }
 >v : S
 
 static B<S>(v: any): A1<S> {

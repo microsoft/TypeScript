@@ -9,7 +9,7 @@ class A<T> {
 >v : A<S>
 
     static B<S>(v: S): A<S>;
->B : { <S_1>(v: A<S_1>): A<S_1>; <S_2>(v: S): A<S>; }
+>B : { <S_1>(v: A<S_1>): A<S_1>; <S>(v: S): A<S>; }
 >v : S
 
     static B<S>(v: any): A<S> {

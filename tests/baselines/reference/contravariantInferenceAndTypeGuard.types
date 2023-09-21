@@ -34,11 +34,11 @@ declare class List<TData> {
 >context : TContext
 
     filter<TResult extends TData>(fn: FilterFn<TData, TResult>): List<TResult>;
->filter : { <TContext, TResult_1 extends TData>(fn: FilterFn<TData, TResult_1, TContext>, context: TContext): List<TResult_1>; <TResult_2 extends TData>(fn: FilterFn<TData, TResult>): List<TResult>; <TContext_1>(fn: IteratorFn<TData, boolean, TContext_1>, context: TContext_1): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
+>filter : { <TContext, TResult_1 extends TData>(fn: FilterFn<TData, TResult_1, TContext>, context: TContext): List<TResult_1>; <TResult extends TData>(fn: FilterFn<TData, TResult>): List<TResult>; <TContext_1>(fn: IteratorFn<TData, boolean, TContext_1>, context: TContext_1): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
 >fn : FilterFn<TData, TResult, List<TData>>
 
     filter<TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>;
->filter : { <TContext_1, TResult extends TData>(fn: FilterFn<TData, TResult, TContext_1>, context: TContext_1): List<TResult>; <TResult_1 extends TData>(fn: FilterFn<TData, TResult_1, List<TData>>): List<TResult_1>; <TContext_2>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
+>filter : { <TContext_1, TResult extends TData>(fn: FilterFn<TData, TResult, TContext_1>, context: TContext_1): List<TResult>; <TResult_1 extends TData>(fn: FilterFn<TData, TResult_1, List<TData>>): List<TResult_1>; <TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
 >fn : IteratorFn<TData, boolean, TContext>
 >context : TContext
 

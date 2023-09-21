@@ -240,7 +240,7 @@ function f12<T>(x: 'a');
 >x : "a"
 
 function f12<T>(x: T);
->f12 : { <T_1>(x: "a"): any; <T_2>(x: T): any; }
+>f12 : { <T_1>(x: "a"): any; <T>(x: T): any; }
 >x : T
 
 function f12<T>(x: any) { }
@@ -252,7 +252,7 @@ function f13<T extends String>(x: 'a');
 >x : "a"
 
 function f13<T extends String>(x: T);
->f13 : { <T_1 extends String>(x: "a"): any; <T_2 extends String>(x: T): any; }
+>f13 : { <T_1 extends String>(x: "a"): any; <T extends String>(x: T): any; }
 >x : T
 
 function f13<T extends String>(x: any) { }
@@ -280,7 +280,7 @@ function f15<T, U extends T>(x: 'a');
 >x : "a"
 
 function f15<T, U extends T>(x: U);
->f15 : { <T_1, U_1 extends T_1>(x: "a"): any; <T_2, U_2 extends T>(x: U): any; }
+>f15 : { <T_1, U_1 extends T_1>(x: "a"): any; <T, U extends T>(x: U): any; }
 >x : U
 
 function f15<T, U extends T>(x: any) { }
@@ -292,7 +292,7 @@ function f16<T extends String, U extends T>(x: 'a');
 >x : "a"
 
 function f16<T extends String, U extends T>(x: U);
->f16 : { <T_1 extends String, U_1 extends T_1>(x: "a"): any; <T_2 extends String, U_2 extends T>(x: U): any; }
+>f16 : { <T_1 extends String, U_1 extends T_1>(x: "a"): any; <T extends String, U extends T>(x: U): any; }
 >x : U
 
 function f16<T extends String, U extends T>(x: any) { }

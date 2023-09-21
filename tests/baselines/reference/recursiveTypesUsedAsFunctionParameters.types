@@ -76,11 +76,11 @@ function other<T extends List<U>, U>() {
 >x : T
 
     function foo5<V>(x: List<V>): number;
->foo5 : { <V_1>(x: T): string; <V_2>(x: List<V>): number; <V_3>(x: MyList<V_3>): boolean; }
+>foo5 : { <V_1>(x: T): string; <V>(x: List<V>): number; <V_2>(x: MyList<V_2>): boolean; }
 >x : List<V>
 
     function foo5<V>(x: MyList<V>): boolean;
->foo5 : { <V_1>(x: T): string; <V_2>(x: List<V_2>): number; <V_3>(x: MyList<V>): boolean; }
+>foo5 : { <V_1>(x: T): string; <V_2>(x: List<V_2>): number; <V>(x: MyList<V>): boolean; }
 >x : MyList<V>
 
     function foo5<V>(x: any): any { return null; }

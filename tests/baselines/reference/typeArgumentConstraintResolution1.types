@@ -6,7 +6,7 @@ function foo1<T extends Date>(test: T);
 >test : T
 
 function foo1<T extends Number>(test: string);
->foo1 : { <T_1 extends Date>(test: T_1): any; <T_2 extends Number>(test: string): any; }
+>foo1 : { <T_1 extends Date>(test: T_1): any; <T extends Number>(test: string): any; }
 >test : string
 
 function foo1<T extends String>(test: any) { }
@@ -25,7 +25,7 @@ function foo2<T extends Date>(test: T): T;
 >test : T
 
 function foo2<T extends Number>(test: string): T; 
->foo2 : { <T_1 extends Date>(test: T_1): T_1; <T_2 extends Number>(test: string): T; }
+>foo2 : { <T_1 extends Date>(test: T_1): T_1; <T extends Number>(test: string): T; }
 >test : string
 
 function foo2<T extends String>(test: any): any { return null; }

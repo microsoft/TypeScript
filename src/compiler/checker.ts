@@ -6623,8 +6623,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (
                     context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
-                    type.flags & TypeFlags.TypeParameter &&
-                    !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)
+                    type.flags & TypeFlags.TypeParameter
                 ) {
                     const name = typeParameterToName(type, context);
                     context.approximateLength += idText(name).length;
@@ -7527,7 +7526,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 && signature.declaration
                 && signature.declaration !== context.enclosingDeclaration
                 && !isInJSFile(signature.declaration)
-                && some(expandedParams)
+                && (some(expandedParams) || some(signature.typeParameters))
             ) {
                 // As a performance optimization, reuse the same fake scope within this chain.
                 // This is especially needed when we are working on an excessively deep type;
@@ -7545,32 +7544,64 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Note that we only check the most immediate enclosingDeclaration; the only place we
                 // could potentially add another fake scope into the chain is right here, so we don't
                 // traverse all ancestors.
-                const existingFakeScope = getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration ? context.enclosingDeclaration : undefined;
-                Debug.assertOptionalNode(existingFakeScope, isBlock);
+                pushFakeScope(
+                    "params",
+                    add => {
+                        for (const param of expandedParams) {
+                            add(param.escapedName, param);
+                        }
+                    },
+                );
 
-                const locals = existingFakeScope?.locals ?? createSymbolTable();
-
-                let newLocals: __String[] | undefined;
-                for (const param of expandedParams) {
-                    if (!locals.has(param.escapedName)) {
-                        newLocals = append(newLocals, param.escapedName);
-                        locals.set(param.escapedName, param);
-                    }
+                if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
+                    // TODO(jakebailey): should this instead be done before walking type parameters?
+                    pushFakeScope(
+                        "typeParams",
+                        add => {
+                            for (const typeParam of signature.typeParameters ?? emptyArray) {
+                                const typeParamName = typeParameterToName(typeParam, context).escapedText;
+                                add(typeParamName, typeParam.symbol);
+                            }
+                        },
+                    );
                 }
 
-                if (newLocals) {
-                    function removeNewLocals() {
+                function pushFakeScope(kind: "params" | "typeParams", addAll: (addSymbol: (name: __String, symbol: Symbol) => void) => void) {
+                    // We only ever need to look two declarations upward.
+                    Debug.assert(context.enclosingDeclaration);
+                    let existingFakeScope: Node | undefined;
+                    if (getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration === kind) {
+                        existingFakeScope = context.enclosingDeclaration;
+                    }
+                    else if (context.enclosingDeclaration.parent && getNodeLinks(context.enclosingDeclaration.parent).fakeScopeForSignatureDeclaration === kind) {
+                        existingFakeScope = context.enclosingDeclaration.parent;
+                    }
+                    Debug.assertOptionalNode(existingFakeScope, isBlock);
+
+                    const locals = existingFakeScope?.locals ?? createSymbolTable();
+                    let newLocals: __String[] | undefined;
+                    addAll((name, symbol) => {
+                        if (!locals.has(name)) {
+                            newLocals = append(newLocals, name);
+                            locals.set(name, symbol);
+                        }
+                    });
+                    if (!newLocals) return;
+
+                    const oldCleanup = cleanup;
+                    function undo() {
                         forEach(newLocals, s => locals.delete(s));
+                        oldCleanup?.();
                     }
 
                     if (existingFakeScope) {
-                        cleanup = removeNewLocals;
+                        cleanup = undo;
                     }
                     else {
                         // Use a Block for this; the type of the node doesn't matter so long as it
                         // has locals, and this is cheaper/easier than using a function-ish Node.
                         const fakeScope = parseNodeFactory.createBlock(emptyArray);
-                        getNodeLinks(fakeScope).fakeScopeForSignatureDeclaration = true;
+                        getNodeLinks(fakeScope).fakeScopeForSignatureDeclaration = kind;
                         fakeScope.locals = locals;
 
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
@@ -7579,7 +7610,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                         cleanup = () => {
                             context.enclosingDeclaration = saveEnclosingDeclaration;
-                            removeNewLocals();
+                            undo();
                         };
                     }
                 }
@@ -8127,13 +8158,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function typeParameterShadowsNameInScope(escapedName: __String, context: NodeBuilderContext, type: TypeParameter) {
+        function typeParameterShadowsOtherTypeParameterInScope(escapedName: __String, context: NodeBuilderContext, type: TypeParameter) {
             const result = resolveName(context.enclosingDeclaration, escapedName, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, escapedName, /*isUse*/ false);
-            if (result) {
-                if (result.flags & SymbolFlags.TypeParameter && result === type.symbol) {
-                    return false;
-                }
-                return true;
+            if (result && result.flags & SymbolFlags.TypeParameter) {
+                return result !== type.symbol;
             }
             return false;
         }
@@ -8153,7 +8181,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const rawtext = result.escapedText as string;
                 let i = context.typeParameterNamesByTextNextNameCount?.get(rawtext) || 0;
                 let text = rawtext;
-                while (context.typeParameterNamesByText?.has(text) || typeParameterShadowsNameInScope(text as __String, context, type)) {
+                while (context.typeParameterNamesByText?.has(text) || typeParameterShadowsOtherTypeParameterInScope(text as __String, context, type)) {
                     i++;
                     text = `${rawtext}_${i}`;
                 }
@@ -8166,7 +8194,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // `i` we've used thus far, to save work later
                 (context.typeParameterNamesByTextNextNameCount ||= new Map()).set(rawtext, i);
                 (context.typeParameterNames ||= new Map()).set(getTypeId(type), result);
-                (context.typeParameterNamesByText ||= new Set()).add(rawtext);
+                (context.typeParameterNamesByText ||= new Set()).add(text);
             }
             return result;
         }
@@ -8345,7 +8373,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getEnclosingDeclarationIgnoringFakeScope(enclosingDeclaration: Node) {
-            return getNodeLinks(enclosingDeclaration).fakeScopeForSignatureDeclaration ? enclosingDeclaration.parent : enclosingDeclaration;
+            while (getNodeLinks(enclosingDeclaration).fakeScopeForSignatureDeclaration) {
+                enclosingDeclaration = enclosingDeclaration.parent;
+            }
+            return enclosingDeclaration;
         }
 
         /**
@@ -8425,7 +8456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (isIdentifier(node)) {
                     const type = getDeclaredTypeOfSymbol(sym);
-                    const name = sym.flags & SymbolFlags.TypeParameter && !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration) ? typeParameterToName(type, context) : factory.cloneNode(node);
+                    const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(type, context) : factory.cloneNode(node);
                     name.symbol = sym; // for quickinfo, which uses identifier symbol information
                     return { introducesError, node: setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping) };
                 }

@@ -94,14 +94,14 @@ function fn3<T>(strs: TemplateStringsArray, n: T): string;
 >n : T
 
 function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
->fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T_2, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T_3, U_1, V>(strs: TemplateStringsArray, v: V, u: U_1, t: T_3): number; }
+>fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T_2, U_1, V>(strs: TemplateStringsArray, v: V, u: U_1, t: T_2): number; }
 >strs : TemplateStringsArray
 >s : string
 >t : T
 >u : U
 
 function fn3<T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number;
->fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T_2, U_1>(strs: TemplateStringsArray, s: string, t: T_2, u: U_1): U_1; <T_3, U_2, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
+>fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T_2, U_1>(strs: TemplateStringsArray, s: string, t: T_2, u: U_1): U_1; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
 >strs : TemplateStringsArray
 >v : V
 >u : U
@@ -178,7 +178,7 @@ function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: 
 >m : U
 
 function fn4<T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U);
->fn4 : { <T_1 extends string, U_1 extends number>(strs: TemplateStringsArray, n: T_1, m: U_1): any; <T_2 extends number, U_2 extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
+>fn4 : { <T_1 extends string, U_1 extends number>(strs: TemplateStringsArray, n: T_1, m: U_1): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
 >strs : TemplateStringsArray
 >n : T
 >m : U

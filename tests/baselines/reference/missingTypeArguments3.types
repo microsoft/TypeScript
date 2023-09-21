@@ -14,7 +14,7 @@ declare module linq {
 >element : T
 
         GroupBy<TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>;
->GroupBy : { <TKey_1>(keySelector: (element: T) => TKey_1): Enumerable<Grouping<TKey_1, T>>; <TKey_2, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>; }
+>GroupBy : { <TKey_1>(keySelector: (element: T) => TKey_1): Enumerable<Grouping<TKey_1, T>>; <TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>; }
 >keySelector : (element: T) => TKey
 >element : T
 >elementSelector : (element: T) => TElement

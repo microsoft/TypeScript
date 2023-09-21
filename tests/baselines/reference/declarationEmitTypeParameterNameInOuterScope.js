@@ -33,11 +33,11 @@ function b2(x) { return x; }
 //// [declarationEmitTypeParameterNameInOuterScope.d.ts]
 declare class A {
 }
-declare var a: <A_1>(x: A_1) => A_1;
+declare var a: <A>(x: A) => A;
 declare function a2<A>(x: A): A;
-declare var a3: <A_1>(x: A_1) => A;
+declare var a3: <A>(x: A) => globalThis.A;
 declare function a4<A>(x: A): globalThis.A;
 interface B {
 }
-declare var b: <B_1>(x: B_1) => B_1;
+declare var b: <B>(x: B) => B;
 declare function b2<B>(x: B): B;

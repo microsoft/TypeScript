@@ -130,7 +130,7 @@ function fn12<T extends List<List<any>>>();
 >fn12 : { <T extends List<List<any>>>(): any; <T_1 extends List<any>>(): any; }
 
 function fn12<T extends List<any>>();
->fn12 : { <T_1 extends List<List<any>>>(): any; <T_2 extends List<any>>(): any; }
+>fn12 : { <T_1 extends List<List<any>>>(): any; <T extends List<any>>(): any; }
 
 function fn12() { }
 >fn12 : { <T extends List<List<any>>>(): any; <T_1 extends List<any>>(): any; }
@@ -241,7 +241,7 @@ function fn15<T extends List<List<any>>>(): T;
 >fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
 
 function fn15<T extends List<any>>(): T;
->fn15 : { <T_1 extends List<List<any>>>(): T_1; <T_2 extends List<any>>(): T; }
+>fn15 : { <T_1 extends List<List<any>>>(): T_1; <T extends List<any>>(): T; }
 
 function fn15() {
 >fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }

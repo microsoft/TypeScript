@@ -765,8 +765,8 @@ function f60<T>(source: T, target: T) {
 }
 
 function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
->f70 : (func: <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void) => void
->func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
+>f70 : (func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) => void
+>func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
 >k1 : keyof T & keyof U
 >k2 : keyof T | keyof U
 
@@ -1406,13 +1406,13 @@ function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
 >key1 : K1
 
 function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
->path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T_2, K1_2 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T_3, K1_3 extends keyof T_3, K2_1 extends keyof T_3[K1_3], K3 extends keyof T_3[K1_3][K2_1]>(obj: T_3, key1: K1_3, key2: K2_1, key3: K3): T_3[K1_3][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2], K3 extends keyof T_2[K1_2][K2_1]>(obj: T_2, key1: K1_2, key2: K2_1, key3: K3): T_2[K1_2][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
 >obj : T
 >key1 : K1
 >key2 : K2
 
 function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
->path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2]>(obj: T_2, key1: K1_2, key2: K2_1): T_2[K1_2][K2_1]; <T_3, K1_3 extends keyof T, K2_2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2]>(obj: T_2, key1: K1_2, key2: K2_1): T_2[K1_2][K2_1]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
 >obj : T
 >key1 : K1
 >key2 : K2

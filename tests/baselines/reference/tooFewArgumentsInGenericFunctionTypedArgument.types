@@ -24,7 +24,7 @@ interface Combinators {
 >y : U
 
     map<T, U>(c: Collection<T,U>, f: (x: T, y: U) => any): Collection<any, any>;
->map : { <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; <T_2, U_2>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
+>map : { <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
 >c : Collection<T, U>
 >f : (x: T, y: U) => any
 >x : T

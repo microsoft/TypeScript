@@ -744,7 +744,7 @@ const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
 const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
 >BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
 >makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
->makeCompleteLookupMapping : <T extends readonly any[], Attr_1 extends keyof T[number]>(ops: T, attr: Attr_1) => { [Item in T[number] as Item[Attr_1]]: Item; }
+>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
 >ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
 >'name' : "name"
 
@@ -797,8 +797,8 @@ type MappedFromOriginal = SameKeys<Original>;
 >MappedFromOriginal : SameKeys<Original>
 
 const getStringAndNumberFromOriginalAndMapped = <
->getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
-><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
+>getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
+><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
 
   K extends KeyOfOriginal,
   N extends NestedKeyOfOriginalFor<K>

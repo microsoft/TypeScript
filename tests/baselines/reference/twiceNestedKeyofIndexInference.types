@@ -22,7 +22,7 @@ declare function set<T, K1 extends keyof T>(source: T, path: [K1], value: T[K1])
 >value : T[K1]
 
 declare function set<T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>;
->set : { <T_1, K1_1 extends keyof T_1>(source: T_1, path: [K1_1], value: T_1[K1_1]): Set1<T_1, K1_1>; <T_2, K1_2 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
+>set : { <T_1, K1_1 extends keyof T_1>(source: T_1, path: [K1_1], value: T_1[K1_1]): Set1<T_1, K1_1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
 >source : T
 >path : [K1, K2]
 >value : T[K1][K2]
