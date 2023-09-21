@@ -19,13 +19,13 @@ import {
 } from "./helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: Reuse program structure:: General", () => {
-    function baselineCache<T>(
+    function baselineCache<File, T>(
         baselines: string[],
         cacheType: string,
-        file: ts.SourceFile,
+        file: File,
         forEach: (
             callback: (resolvedModule: T, moduleName: string, mode: ts.ResolutionMode) => void,
-            file: ts.SourceFile | undefined,
+            file: File,
         ) => void,
     ) {
         let addedHeader = false;
@@ -47,6 +47,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             baselineCache(baselines, "resolvedTypeReferenceDirectiveNames", f, program.forEachResolvedTypeReferenceDirective);
             baselines.push("");
         });
+        baselineCache(baselines, "automaticTypeDirectiveResolutions", /*file*/ undefined, cb => program.getAutomaticTypeDirectiveResolutions().forEach(cb));
         host ??= (program as ProgramWithSourceTexts).host;
         host.getTrace().forEach(trace => baselines.push(Utils.sanitizeTraceResolutionLogEntry(trace)));
         host.clearTrace();
