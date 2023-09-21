@@ -46,7 +46,6 @@ const checked = checkType<{x: number, y: string}>()({
 });
 
 checked;
-  // ^?
 
 // -----------------------------------------------------------------------------------------
 
@@ -114,7 +113,6 @@ interface WithNestedProp {
 declare function withNestedProp<T extends WithNestedProp>(props: {[K in keyof T & keyof WithNestedProp]: T[K]}): T;
 
 const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
-//    ^?
 
 // -----------------------------------------------------------------------------------------
 
@@ -156,7 +154,6 @@ declare function createXMachine<
 const child = () => Promise.resolve("foo");
 
 const config = createXMachine({
-   // ^?
   types: {} as {
     actors: {
       src: "str";
@@ -167,7 +164,7 @@ const config = createXMachine({
     src: "str",
   },
   extra: 10
-} as const);
+});
 
 const config2 = createXMachine({
   invoke: {
@@ -175,6 +172,3 @@ const config2 = createXMachine({
   },
   extra: 10
 });
-
-config2
-// ^?

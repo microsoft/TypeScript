@@ -21,17 +21,17 @@ type StateSchema = {
 };
 
 declare function createMachine<
->createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<TAction>]: TConfig[K]; }) => [TAction, TConfig]
+>createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
 
   TConfig extends StateConfig<TAction>,
   TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string,
->(config: { [K in keyof TConfig & keyof StateConfig<TAction>]: TConfig[K] }): [TAction, TConfig];
->config : { [K in keyof TConfig & keyof StateConfig<TAction>]: TConfig[K]; }
+>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K] }): [TAction, TConfig];
+>config : { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }
 
 const inferredParams1 = createMachine({
 >inferredParams1 : ["foo", StateConfig<"foo">]
 >createMachine({  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,}) : ["foo", StateConfig<"foo">]
->createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<TAction>]: TConfig[K]; }) => [TAction, TConfig]
+>createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
 >{  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "bar"; }; }; extra: number; }
 
   entry: "foo",
@@ -59,9 +59,9 @@ const inferredParams1 = createMachine({
 });
 
 const inferredParams2 = createMachine({
->inferredParams2 : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }]
->createMachine({  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,}) : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }]
->createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<TAction>]: TConfig[K]; }) => [TAction, TConfig]
+>inferredParams2 : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; }]
+>createMachine({  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,}) : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; }]
+>createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
 >{  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }
 
   entry: "foo",
@@ -125,8 +125,6 @@ const checked = checkType<{x: number, y: string}>()({
 checked;
 >checked : { x: number; y: "y"; }
 
-  // ^?
-
 // -----------------------------------------------------------------------------------------
 
 interface Stuff {
@@ -160,7 +158,7 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
 }
 
 doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
->doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 }) : { field: 1; anotherField: "a"; extra: number; }
+>doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 }) : { field: 1; anotherField: "a"; }
 >doStuffWithStuff : <T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K]; }) => T
 >{ field: 1, anotherField: 'a', extra: 123 } : { field: 1; anotherField: "a"; extra: number; }
 >field : 1
@@ -193,7 +191,7 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
 }
 
 doStuffWithStuffArr([
->doStuffWithStuffArr([    { field: 1, anotherField: 'a', extra: 123 },]) : { field: 1; anotherField: "a"; extra: number; }[]
+>doStuffWithStuffArr([    { field: 1, anotherField: 'a', extra: 123 },]) : { field: 1; anotherField: "a"; }[]
 >doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K]; }[]) => T[]
 >[    { field: 1, anotherField: 'a', extra: 123 },] : { field: 1; anotherField: "a"; extra: number; }[]
 
@@ -328,8 +326,6 @@ const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 >extra : number
 >10 : 10
 
-//    ^?
-
 // -----------------------------------------------------------------------------------------
 
 type IsLiteralString<T extends string> = string extends T ? false : true;
@@ -346,16 +342,6 @@ interface ProvidedActor {
 
   logic: () => Promise<unknown>;
 >logic : () => Promise<unknown>
-}
-
-interface InferenceSource<TActor extends ProvidedActor> {
-  types?: {
->types : { actors?: TActor | undefined; } | undefined
-
-    actors?: TActor;
->actors : TActor | undefined
-
-  };
 }
 
 type DistributeActors<TActor> = TActor extends { src: infer TSrc }
@@ -394,10 +380,10 @@ type NoExtra<T> = {
   [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
 }
 
-declare function createMachine2<
->createMachine2 : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: {    actors: ProvidedActor;}; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
+declare function createXMachine<
+>createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: {    actors: ProvidedActor;}; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
 
-  TConfig extends MachineConfig<TActor>,
+  const TConfig extends MachineConfig<TActor>,
   TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor} } ? TConfig["types"]["actors"] : ProvidedActor,
 >types : { actors: ProvidedActor; }
 >actors : ProvidedActor
@@ -414,13 +400,12 @@ const child = () => Promise.resolve("foo");
 >resolve : any
 >"foo" : "foo"
 
-const config = createMachine2({
->config : MachineConfig<{ src: "str"; logic: typeof child; }>
->createMachine2({   // ^?  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : MachineConfig<{ src: "str"; logic: typeof child; }>
->createMachine2 : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
->{   // ^?  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: {    src: "str";    logic: typeof child;}; }; invoke: { src: "str"; }; extra: number; }
+const config = createXMachine({
+>config : { types: { actors: {    src: "str";    logic: typeof child;}; }; invoke: { readonly src: "str"; }; }
+>createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: {    src: "str";    logic: typeof child;}; }; invoke: { readonly src: "str"; }; }
+>createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
+>{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: {    src: "str";    logic: typeof child;}; }; invoke: { src: "str"; }; extra: number; }
 
-   // ^?
   types: {} as {
 >types : { actors: {    src: "str";    logic: typeof child;}; }
 >{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: {    src: "str";    logic: typeof child;}; }
@@ -453,21 +438,18 @@ const config = createMachine2({
 
 });
 
-
-
-const config2 = createMachine2({
->config2 : { invoke: { src: "whatever"; }; }
->createMachine2({  invoke: {    src: "whatever" as const,  },  extra: 10}) : { invoke: { src: "whatever"; }; }
->createMachine2 : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
->{  invoke: {    src: "whatever" as const,  },  extra: 10} : { invoke: { src: "whatever"; }; extra: number; }
+const config2 = createXMachine({
+>config2 : { invoke: { readonly src: "whatever"; }; }
+>createXMachine({  invoke: {    src: "whatever",  },  extra: 10}) : { invoke: { readonly src: "whatever"; }; }
+>createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
+>{  invoke: {    src: "whatever",  },  extra: 10} : { invoke: { src: "whatever"; }; extra: number; }
 
   invoke: {
 >invoke : { src: "whatever"; }
->{    src: "whatever" as const,  } : { src: "whatever"; }
+>{    src: "whatever",  } : { src: "whatever"; }
 
-    src: "whatever" as const,
+    src: "whatever",
 >src : "whatever"
->"whatever" as const : "whatever"
 >"whatever" : "whatever"
 
   },
@@ -476,9 +458,4 @@ const config2 = createMachine2({
 >10 : 10
 
 });
-
-config2
->config2 : { invoke: { src: "whatever"; }; }
-
-// ^?
 

@@ -13,7 +13,7 @@ type StateSchema = {
 declare function createMachine<
   TConfig extends StateConfig<TAction>,
   TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string,
->(config: { [K in keyof TConfig & keyof StateConfig<TAction>]: TConfig[K] }): [TAction, TConfig];
+>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K] }): [TAction, TConfig];
 
 const inferredParams1 = createMachine({
   entry: "foo",
@@ -47,7 +47,6 @@ const checked = checkType<{x: number, y: string}>()({
 });
 
 checked;
-  // ^?
 
 // -----------------------------------------------------------------------------------------
 
@@ -115,7 +114,6 @@ interface WithNestedProp {
 declare function withNestedProp<T extends WithNestedProp>(props: {[K in keyof T & keyof WithNestedProp]: T[K]}): T;
 
 const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
-//    ^?
 
 // -----------------------------------------------------------------------------------------
 
@@ -126,12 +124,6 @@ type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: Deep
 interface ProvidedActor {
   src: string;
   logic: () => Promise<unknown>;
-}
-
-interface InferenceSource<TActor extends ProvidedActor> {
-  types?: {
-    actors?: TActor;
-  };
 }
 
 type DistributeActors<TActor> = TActor extends { src: infer TSrc }
@@ -155,15 +147,14 @@ type NoExtra<T> = {
   [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
 }
 
-declare function createMachine2<
-  TConfig extends MachineConfig<TActor>,
+declare function createXMachine<
+  const TConfig extends MachineConfig<TActor>,
   TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor} } ? TConfig["types"]["actors"] : ProvidedActor,
 >(config: {[K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K] }): TConfig;
 
 const child = () => Promise.resolve("foo");
 
-const config = createMachine2({
-   // ^?
+const config = createXMachine({
   types: {} as {
     actors: {
       src: "str";
@@ -176,17 +167,12 @@ const config = createMachine2({
   extra: 10
 });
 
-
-
-const config2 = createMachine2({
+const config2 = createXMachine({
   invoke: {
-    src: "whatever" as const,
+    src: "whatever",
   },
   extra: 10
 });
-
-config2
-// ^?
 
 
 //// [reverseMappedTypeIntersectionConstraint.js]
@@ -259,19 +245,16 @@ baz({ x: 1, y: 'foo' });
 baz({ x: 1, y: 'foo', z: 123 });
 var wnp = withNestedProp({ prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 var child = function () { return Promise.resolve("foo"); };
-var config = createMachine2({
-    // ^?
+var config = createXMachine({
     types: {},
     invoke: {
         src: "str",
     },
     extra: 10
 });
-var config2 = createMachine2({
+var config2 = createXMachine({
     invoke: {
         src: "whatever",
     },
     extra: 10
 });
-config2;
-// ^?
