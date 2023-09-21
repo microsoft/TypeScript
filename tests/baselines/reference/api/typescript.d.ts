@@ -7966,9 +7966,7 @@ declare namespace ts {
         updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
         createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
         updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-        /** @deprecated */ createImportTypeNode(argument: TypeNode, attributes?: ImportTypeAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
         createImportTypeNode(argument: TypeNode, attributes?: ImportTypeAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
-        /** @deprecated */ updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, attributes: ImportTypeAttributes | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
         updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;

@@ -29,11 +29,23 @@ export const b = (null as any as import("pkg", { with: {1234, "resolution-mode":
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
+1234, "resolution-mode";
+"require";
+RequireInterface
+    & import("pkg", { with: { 1234: , "resolution-mode": "import" } }).ImportInterface;
 exports.a = null;
+1234, "resolution-mode";
+"require";
+RequireInterface;
+;
 exports.b = null;
+1234, "resolution-mode";
+"import";
+ImportInterface;
+;
 
 
 //// [index.d.ts]
-export type LocalInterface = import("pkg", { with: { 1234: , "resolution-mode": "require" } }).RequireInterface & import("pkg", { with: { 1234: , "resolution-mode": "import" } }).ImportInterface;
-export declare const a: import("pkg").RequireInterface;
+export type LocalInterface = import("pkg", { with: {} });
+export declare const a: any;
 export declare const b: any;
