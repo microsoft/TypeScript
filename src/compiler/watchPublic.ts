@@ -53,6 +53,7 @@ import {
     isArray,
     isIgnoredFileFromWildCardWatching,
     isProgramUptoDate,
+    JSDocParsingMode,
     MapLike,
     maybeBind,
     ModuleResolutionCache,
@@ -118,11 +119,8 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
-/** @internal */
-export function createIncrementalCompilerHost(options: CompilerOptions, system?: System, skipNonSemanticJSDocParsing?: boolean): CompilerHost;
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys, skipNonSemanticJSDocParsing?: boolean): CompilerHost {
-    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, skipNonSemanticJSDocParsing, system);
+export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
+    const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
     setGetSourceFileAsHashVersioned(host);
@@ -258,12 +256,7 @@ export interface ProgramHost<T extends BuilderProgram> {
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
-    /**
-     * True if it's safe for the parser to skip parsing non-semantic JSDoc tags.
-     *
-     * @internal
-     */
-    skipNonSemanticJSDocParsing?: boolean;
+    jsDocParsingMode?: JSDocParsingMode;
 }
 /**
  * Internal interface used to wire emit through same host

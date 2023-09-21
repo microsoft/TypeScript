@@ -1,6 +1,6 @@
 ===================================================================
---- withJSDoc	With JSDoc
-+++ withoutJSDoc	Without JSDoc
+--- default
++++ ParseNone
 @@ -8,9 +8,8 @@
          "0": {
              "kind": "FunctionDeclaration",
@@ -56,12 +56,69 @@
          "1": {
              "kind": "ExpressionStatement",
              "pos": 46,
-@@ -237,6 +202,6 @@
+@@ -109,9 +74,8 @@
+         "2": {
+             "kind": "FunctionDeclaration",
+             "pos": 61,
+             "end": 135,
+-            "flags": "Deprecated",
+             "modifierFlagsCache": 0,
+             "transformFlags": 4194304,
+             "name": {
+                 "kind": "Identifier",
+@@ -141,44 +105,9 @@
+                     "hasTrailingComma": false,
+                     "transformFlags": 0
+                 },
+                 "multiLine": false
+-            },
+-            "jsDoc": [
+-                {
+-                    "kind": "JSDoc",
+-                    "pos": 62,
+-                    "end": 107,
+-                    "flags": "JSDoc",
+-                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
+-                    "comment": "{@see imDeprecated}",
+-                    "tags": {
+-                        "0": {
+-                            "kind": "JSDocDeprecatedTag",
+-                            "pos": 92,
+-                            "end": 105,
+-                            "flags": "JSDoc",
+-                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
+-                            "tagName": {
+-                                "kind": "Identifier",
+-                                "pos": 93,
+-                                "end": 103,
+-                                "flags": "JSDoc",
+-                                "modifierFlagsCache": 0,
+-                                "transformFlags": 0,
+-                                "escapedText": "deprecated"
+-                            }
+-                        },
+-                        "length": 1,
+-                        "pos": 92,
+-                        "end": 105,
+-                        "hasTrailingComma": false,
+-                        "transformFlags": 0
+-                    }
+-                }
+-            ]
++            }
+         },
+         "3": {
+             "kind": "ExpressionStatement",
+             "pos": 135,
+@@ -237,7 +166,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],
      "identifiers": {},
--    "skipNonSemanticJSDoc": false
-+    "skipNonSemanticJSDoc": true
+-    "jsDocParsingMode": 0,
+-    "jsDocDiagnostics": []
++    "jsDocParsingMode": 1
  }
 \ No newline at end of file

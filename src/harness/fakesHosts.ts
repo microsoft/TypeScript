@@ -248,13 +248,14 @@ export class CompilerHost implements ts.CompilerHost {
     private readonly _outputsMap: collections.SortedMap<string, number>;
     public readonly traces: string[] = [];
     public readonly shouldAssertInvariants = !Harness.lightMode;
+    public readonly jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
     private _setParentNodes: boolean;
     private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
     private _parseConfigHost: ParseConfigHost | undefined;
     private _newLine: string;
 
-    constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false) {
+    constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false, jsDocParsingMode?: ts.JSDocParsingMode) {
         if (sys instanceof vfs.FileSystem) sys = new System(sys);
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
@@ -262,6 +263,7 @@ export class CompilerHost implements ts.CompilerHost {
         this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
         this._setParentNodes = setParentNodes;
         this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
+        this.jsDocParsingMode = jsDocParsingMode;
     }
 
     public get vfs() {
@@ -561,13 +563,13 @@ export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version:
 export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
     createProgram: ts.CreateProgram<ts.BuilderProgram>;
 
-    private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
-        super(sys, options, setParentNodes);
+    private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>, jsDocParsingMode?: ts.JSDocParsingMode) {
+        super(sys, options, setParentNodes, jsDocParsingMode);
         this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram as unknown as ts.CreateProgram<ts.BuilderProgram>;
     }
 
-    static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
-        const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram);
+    static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>, jsDocParsingMode?: ts.JSDocParsingMode) {
+        const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram, jsDocParsingMode);
         patchHostForBuildInfoReadWrite(host.sys);
         return host;
     }

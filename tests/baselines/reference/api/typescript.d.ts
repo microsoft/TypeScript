@@ -3295,6 +3295,7 @@ declare namespace ts {
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
             static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
+            readonly jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
             private get typingsCache();
@@ -3616,6 +3617,7 @@ declare namespace ts {
             typesMapLocation?: string;
             serverMode?: LanguageServiceMode;
             session: Session<unknown> | undefined;
+            jsDocParsingMode?: JSDocParsingMode;
         }
         interface WatchOptionsAndErrors {
             watchOptions: WatchOptions;
@@ -3690,6 +3692,7 @@ declare namespace ts {
             private performanceEventHandler?;
             private pendingPluginEnablements?;
             private currentPluginEnablementPromise?;
+            readonly jsDocParsingMode: JSDocParsingMode | undefined;
             constructor(opts: ProjectServiceOptions);
             toPath(fileName: string): Path;
             private loadTypesMap;
@@ -7750,6 +7753,7 @@ declare namespace ts {
         hasInvalidatedResolutions?(filePath: Path): boolean;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface SourceMapRange extends TextRange {
         source?: SourceMapSource;
@@ -8607,6 +8611,33 @@ declare namespace ts {
         IndexSignatureParameters = 8848,
         JSDocComment = 33,
     }
+    enum JSDocParsingMode {
+        /**
+         * Always parse JSDoc comments and include them in the AST.
+         *
+         * This is the default if no mode is provided.
+         */
+        ParseAll = 0,
+        /**
+         * Never parse JSDoc comments, mo matter the file type.
+         */
+        ParseNone = 1,
+        /**
+         * Parse only JSDoc comments which are needed to provide correct type errors.
+         *
+         * This will always parse JSDoc in non-TS files, but only parse JSDoc comments
+         * containing `@see` and `@link` in TS files.
+         */
+        ParseForTypeErrors = 2,
+        /**
+         * Parse only JSDoc comments which are needed to provide correct type info.
+         *
+         * This will always parse JSDoc in non-TS files, but never in TS files.
+         *
+         * Note: Do not use this mode if you require accurate type errors; use {@link ParseForTypeErrors} instead.
+         */
+        ParseForTypeInfo = 3,
+    }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
@@ -8768,6 +8799,8 @@ declare namespace ts {
         setOnError(onError: ErrorCallback | undefined): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
+        setScriptKind(scriptKind: ScriptKind): void;
+        setJSDocParsingMode(kind: JSDocParsingMode): void;
         /** @deprecated use {@link resetTokenState} */
         setTextPos(textPos: number): void;
         resetTokenState(pos: number): void;
@@ -9437,6 +9470,7 @@ declare namespace ts {
          * check specified by `isFileProbablyExternalModule` will be used to set the field.
          */
         setExternalModuleIndicator?: (file: SourceFile) => void;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine;
     /**
@@ -10027,6 +10061,7 @@ declare namespace ts {
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
         getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** Instead of using output d.ts file from project reference, use its source file */
@@ -10277,6 +10312,7 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;
@@ -11374,7 +11410,7 @@ declare namespace ts {
         fileName: string;
         highlightSpans: HighlightSpan[];
     }
-    function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry;
+    function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string, jsDocParsingMode?: JSDocParsingMode): DocumentRegistry;
     /**
      * The document registry represents a store of SourceFile objects that can be shared between
      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)

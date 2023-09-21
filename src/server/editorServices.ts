@@ -71,6 +71,7 @@ import {
     isNodeModulesDirectory,
     isRootedDiskPath,
     isString,
+    JSDocParsingMode,
     LanguageServiceMode,
     length,
     map,
@@ -591,6 +592,7 @@ export interface ProjectServiceOptions {
     serverMode?: LanguageServiceMode;
     session: Session<unknown> | undefined;
     /** @internal */ incrementalVerifier?: (service: ProjectService) => void;
+    jsDocParsingMode?: JSDocParsingMode;
 }
 
 interface OriginalFileInfo {
@@ -998,6 +1000,8 @@ export class ProjectService {
 
     /** @internal */ verifyDocumentRegistry = noop;
 
+    readonly jsDocParsingMode: JSDocParsingMode | undefined;
+
     constructor(opts: ProjectServiceOptions) {
         this.host = opts.host;
         this.logger = opts.logger;
@@ -1013,6 +1017,7 @@ export class ProjectService {
         this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
         this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
         this.session = opts.session;
+        this.jsDocParsingMode = opts.jsDocParsingMode;
 
         if (opts.serverMode !== undefined) {
             this.serverMode = opts.serverMode;
@@ -1049,7 +1054,7 @@ export class ProjectService {
             extraFileExtensions: [],
         };
 
-        this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this);
+        this.documentRegistry = createDocumentRegistryInternal(this.host.useCaseSensitiveFileNames, this.currentDirectory, this.jsDocParsingMode, this);
         const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
             this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
         const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
