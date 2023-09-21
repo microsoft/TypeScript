@@ -2653,7 +2653,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createImportTypeNode(
         argument: TypeNode,
-        attributes?: ImportTypeAssertionContainer | ImportTypeAttributes,
+        attributes?: ImportTypeAttributes,
         qualifier?: EntityName,
         typeArguments?: readonly TypeNode[],
         isTypeOf = false,
@@ -2672,7 +2672,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function updateImportTypeNode(
         node: ImportTypeNode,
         argument: TypeNode,
-        attributes: ImportTypeAssertionContainer | ImportTypeAttributes | undefined,
+        attributes: ImportTypeAttributes | undefined,
         qualifier: EntityName | undefined,
         typeArguments: readonly TypeNode[] | undefined,
         isTypeOf: boolean = node.isTypeOf,
@@ -4706,7 +4706,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         modifiers: readonly ModifierLike[] | undefined,
         importClause: ImportClause | undefined,
         moduleSpecifier: Expression,
-        attributes: ImportAttributes | AssertClause | undefined,
+        attributes: ImportAttributes | undefined,
     ): ImportDeclaration {
         const node = createBaseNode<ImportDeclaration>(SyntaxKind.ImportDeclaration);
         node.modifiers = asNodeArray(modifiers);
@@ -4727,7 +4727,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         modifiers: readonly ModifierLike[] | undefined,
         importClause: ImportClause | undefined,
         moduleSpecifier: Expression,
-        attributes: ImportAttributes | AssertClause | undefined,
+        attributes: ImportAttributes | undefined,
     ) {
         return node.modifiers !== modifiers
                 || node.importClause !== importClause
@@ -4972,7 +4972,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         isTypeOnly: boolean,
         exportClause: NamedExportBindings | undefined,
         moduleSpecifier?: Expression,
-        attributes?: AssertClause | ImportAttributes,
+        attributes?: ImportAttributes,
     ) {
         const node = createBaseDeclaration<ExportDeclaration>(SyntaxKind.ExportDeclaration);
         node.modifiers = asNodeArray(modifiers);
@@ -4996,7 +4996,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         isTypeOnly: boolean,
         exportClause: NamedExportBindings | undefined,
         moduleSpecifier: Expression | undefined,
-        attributes: AssertClause | ImportAttributes | undefined,
+        attributes: ImportAttributes | undefined,
     ) {
         return node.modifiers !== modifiers
                 || node.isTypeOnly !== isTypeOnly
