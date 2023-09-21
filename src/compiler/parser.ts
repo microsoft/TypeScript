@@ -688,7 +688,6 @@ const forEachChildTable: ForEachChildTable = {
     },
     [SyntaxKind.ImportType]: function forEachChildInImportType<T>(node: ImportTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.argument) ||
-            visitNode(cbNode, node.assertions) ||
             visitNode(cbNode, node.attributes) ||
             visitNode(cbNode, node.qualifier) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
@@ -4520,7 +4519,9 @@ namespace Parser {
         if (currentToken !== SyntaxKind.WithKeyword && currentToken !== SyntaxKind.AssertKeyword) {
             parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.WithKeyword));
         }
-        nextToken();
+        else {
+            nextToken();
+        }
         parseExpected(SyntaxKind.ColonToken);
         const attributes = parseImportAttributes(currentToken as SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword, /*shouldAdvance*/ false);
         if (!parseExpected(SyntaxKind.CloseBraceToken)) {
@@ -8363,7 +8364,7 @@ namespace Parser {
         const moduleSpecifier = parseModuleSpecifier();
         const currentToken = token();
         let attributes: ImportAttributes | undefined;
-        if (currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) {
+        if ((currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) && !scanner.hasPrecedingLineBreak()) {
             attributes = parseImportAttributes(currentToken);
         }
         parseSemicolon();
@@ -8625,7 +8626,7 @@ namespace Parser {
             }
         }
         const currentToken = token();
-        if (moduleSpecifier && (currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword)) {
+        if (moduleSpecifier && (currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) && !scanner.hasPrecedingLineBreak()) {
             attributes = parseImportAttributes(currentToken);
         }
         parseSemicolon();

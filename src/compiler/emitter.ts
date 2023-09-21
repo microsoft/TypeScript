@@ -2951,7 +2951,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
             writePunctuation("{");
             writeSpace();
-            emitTokenWithComment(node.attributes.attributes.token, node.pos, writeKeyword, node);
+            writeKeyword(node.attributes.attributes.token === SyntaxKind.AssertKeyword ? "assert" : "with");
             writePunctuation(":");
             writeSpace();
             const elements = node.attributes.attributes.elements;

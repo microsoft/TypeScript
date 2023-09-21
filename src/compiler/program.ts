@@ -190,7 +190,6 @@ import {
     isExternalModule,
     isExternalModuleNameRelative,
     isIdentifierText,
-    isImportAttributes,
     isImportCall,
     isImportDeclaration,
     isImportEqualsDeclaration,
@@ -930,7 +929,7 @@ export function getResolutionModeOverride(node: AssertClause | ImportAttributes 
     if (length(node.elements) !== 1) {
         grammarErrorOnNode?.(
             node,
-            isImportAttributes(node)
+            node.token === SyntaxKind.WithKeyword
                 ? Diagnostics.Type_import_attributes_should_have_exactly_one_key_resolution_mode_with_value_import_or_require
                 : Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require,
         );
@@ -941,7 +940,7 @@ export function getResolutionModeOverride(node: AssertClause | ImportAttributes 
     if (elem.name.text !== "resolution-mode") {
         grammarErrorOnNode?.(
             elem.name,
-            isImportAttributes(node)
+            node.token === SyntaxKind.WithKeyword
                 ? Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_attributes
                 : Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_assertions,
         );

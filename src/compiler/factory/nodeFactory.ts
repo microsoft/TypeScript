@@ -2651,8 +2651,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
-    function createImportTypeNode(argument: TypeNode, attributes?: ImportTypeAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
     function createImportTypeNode(
         argument: TypeNode,
         attributes?: ImportTypeAssertionContainer | ImportTypeAttributes,
@@ -2671,8 +2669,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
-    function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, attributes: ImportTypeAttributes | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
     function updateImportTypeNode(
         node: ImportTypeNode,
         argument: TypeNode,
@@ -2682,7 +2678,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         isTypeOf: boolean = node.isTypeOf,
     ): ImportTypeNode {
         return node.argument !== argument
-                || node.assertions !== attributes
                 || node.attributes !== attributes
                 || node.qualifier !== qualifier
                 || node.typeArguments !== typeArguments
