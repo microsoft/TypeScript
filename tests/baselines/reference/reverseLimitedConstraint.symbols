@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/reverseLimitedConstraint.ts] ////
+
+=== reverseLimitedConstraint.ts ===
+type XNumber_ = { x: number }
+>XNumber_ : Symbol(XNumber_, Decl(reverseLimitedConstraint.ts, 0, 0))
+>x : Symbol(x, Decl(reverseLimitedConstraint.ts, 0, 17))
+
+declare function foo_<T extends XNumber_>(props: {[K in keyof T & keyof XNumber_]: T[K]}): T;
+>foo_ : Symbol(foo_, Decl(reverseLimitedConstraint.ts, 0, 29))
+>T : Symbol(T, Decl(reverseLimitedConstraint.ts, 2, 22))
+>XNumber_ : Symbol(XNumber_, Decl(reverseLimitedConstraint.ts, 0, 0))
+>props : Symbol(props, Decl(reverseLimitedConstraint.ts, 2, 42))
+>K : Symbol(K, Decl(reverseLimitedConstraint.ts, 2, 51))
+>T : Symbol(T, Decl(reverseLimitedConstraint.ts, 2, 22))
+>XNumber_ : Symbol(XNumber_, Decl(reverseLimitedConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(reverseLimitedConstraint.ts, 2, 22))
+>K : Symbol(K, Decl(reverseLimitedConstraint.ts, 2, 51))
+>T : Symbol(T, Decl(reverseLimitedConstraint.ts, 2, 22))
+
+foo_({x: 1, y: 'foo'});
+>foo_ : Symbol(foo_, Decl(reverseLimitedConstraint.ts, 0, 29))
+>x : Symbol(x, Decl(reverseLimitedConstraint.ts, 4, 6))
+>y : Symbol(y, Decl(reverseLimitedConstraint.ts, 4, 11))
+
+// -----------------------------------------------------------------------------------------
+
+const checkType_ = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
+>checkType_ : Symbol(checkType_, Decl(reverseLimitedConstraint.ts, 8, 5))
+>T : Symbol(T, Decl(reverseLimitedConstraint.ts, 8, 20))
+>U : Symbol(U, Decl(reverseLimitedConstraint.ts, 8, 29))
+>T : Symbol(T, Decl(reverseLimitedConstraint.ts, 8, 20))
+>value : Symbol(value, Decl(reverseLimitedConstraint.ts, 8, 42))
+>K : Symbol(K, Decl(reverseLimitedConstraint.ts, 8, 52))
+>U : Symbol(U, Decl(reverseLimitedConstraint.ts, 8, 29))
+>T : Symbol(T, Decl(reverseLimitedConstraint.ts, 8, 20))
+>U : Symbol(U, Decl(reverseLimitedConstraint.ts, 8, 29))
+>K : Symbol(K, Decl(reverseLimitedConstraint.ts, 8, 52))
+>value : Symbol(value, Decl(reverseLimitedConstraint.ts, 8, 42))
+
+const checked_ = checkType_<{x: number, y: string}>()({
+>checked_ : Symbol(checked_, Decl(reverseLimitedConstraint.ts, 10, 5))
+>checkType_ : Symbol(checkType_, Decl(reverseLimitedConstraint.ts, 8, 5))
+>x : Symbol(x, Decl(reverseLimitedConstraint.ts, 10, 29))
+>y : Symbol(y, Decl(reverseLimitedConstraint.ts, 10, 39))
+
+  x: 1 as number,
+>x : Symbol(x, Decl(reverseLimitedConstraint.ts, 10, 55))
+
+  y: "y",
+>y : Symbol(y, Decl(reverseLimitedConstraint.ts, 11, 17))
+
+  z: "z",
+>z : Symbol(z, Decl(reverseLimitedConstraint.ts, 12, 9))
+
+});

@@ -13486,10 +13486,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getLimitedConstraint(type: ReverseMappedType) {
         const constraint = getConstraintTypeFromMappedType(type.mappedType);
-        if (!(constraint.flags & TypeFlags.Union)) {
+        if (!(constraint.flags & TypeFlags.Union || constraint.flags & TypeFlags.Intersection)) {
             return;
         }
-        const origin = (constraint as UnionType).origin;
+        const origin = (constraint.flags & TypeFlags.Union) ? (constraint as UnionType).origin : (constraint as IntersectionType);
         if (!origin || !(origin.flags & TypeFlags.Intersection)) {
             return;
         }
