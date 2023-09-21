@@ -2212,7 +2212,11 @@ function loadEntrypointsFromExportMap(
                     scope.packageDirectory,
                     extensionsToExtensionsArray(extensions),
                     /*excludes*/ undefined,
-                    [changeAnyExtension(target.replace("*", "**/*"), getDeclarationEmitExtensionForPath(target))],
+                    [
+                        isDeclarationFileName(target)
+                            ? target.replace("*", "**/*")
+                            : changeAnyExtension(target.replace("*", "**/*"), getDeclarationEmitExtensionForPath(target)),
+                    ],
                 ).forEach(entry => {
                     entrypoints = appendIfUnique(entrypoints, {
                         path: entry,
