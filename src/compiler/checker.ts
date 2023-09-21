@@ -12822,7 +12822,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            links[resolutionKind] = combineSymbolTables(earlySymbols, lateSymbols) || emptySymbols;
+            let resolved = combineSymbolTables(earlySymbols, lateSymbols);
+            if (symbol.flags & SymbolFlags.Transient && links.cjsExportMerged && symbol.declarations) {
+                for (const decl of symbol.declarations) {
+                    const original = getSymbolLinks(decl.symbol)[resolutionKind];
+                    if (!resolved) {
+                        resolved = original;
+                        continue;
+                    }
+                    if (!original) continue;
+                    original.forEach((s, name) => {
+                        const existing = resolved!.get(name);
+                        if (!existing) resolved!.set(name, s);
+                        else if (existing === s) return;
+                        else resolved!.set(name, mergeSymbol(existing, s));
+                    });
+                }
+            }
+            links[resolutionKind] = resolved || emptySymbols;
         }
 
         return links[resolutionKind]!;
