@@ -1,0 +1,124 @@
+revertedIntersection.ts(19,7): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+revertedIntersection.ts(32,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: "foo"; states: { a: { entry: "foo"; }; }; }'.
+revertedIntersection.ts(43,3): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
+revertedIntersection.ts(60,7): error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
+  '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+revertedIntersection.ts(64,49): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
+revertedIntersection.ts(70,7): error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }[]' is not assignable to type 'T[]'.
+  Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
+    '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+revertedIntersection.ts(75,36): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
+revertedIntersection.ts(88,12): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
+
+
+==== revertedIntersection.ts (8 errors) ====
+    type StateConfig<TAction extends string> = {
+      entry?: TAction
+      states?: Record<string, StateConfig<TAction>>;
+    };
+    
+    type StateSchema = {
+      states?: Record<string, StateSchema>;
+    };
+    
+    declare function createMachine<
+      TConfig extends StateConfig<TAction>,
+      TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string,
+    >(config: { [K in keyof TConfig & keyof StateConfig<TAction>]: TConfig[K] }): [TAction, TConfig];
+    
+    const inferredParams1 = createMachine({
+      entry: "foo",
+      states: {
+        a: {
+          entry: "bar",
+          ~~~~~
+!!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+!!! related TS6500 revertedIntersection.ts:2:3: The expected type comes from property 'entry' which is declared here on type 'StateConfig<"foo">'
+        },
+      },
+      extra: 12,
+    });
+    
+    const inferredParams2 = createMachine({
+      entry: "foo",
+      states: {
+        a: {
+          entry: "foo",
+        },
+      },
+      extra: 12,
+      ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: "foo"; states: { a: { entry: "foo"; }; }; }'.
+    });
+    
+    
+    // -----------------------------------------------------------------------------------------
+    
+    const checkType = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
+    
+    const checked = checkType<{x: number, y: string}>()({
+      x: 1 as number,
+      y: "y",
+      z: "z", // undesirable property z is *not* allowed
+      ~
+!!! error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
+    });
+    
+    checked;
+      // ^?
+    
+    // -----------------------------------------------------------------------------------------
+    
+    interface Stuff {
+        field: number;
+        anotherField: string;
+    }
+    
+    function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K] } ): T {
+        if(Math.random() > 0.5) {
+          return s as T
+        } else {
+          return s
+          ~~~~~~
+!!! error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
+!!! error TS2322:   '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+        }
+    }
+    
+    doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
+                                                    ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
+    
+    function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K] }[]): T[] {
+        if(Math.random() > 0.5) {
+          return arr as T[]
+        } else {
+          return arr
+          ~~~~~~
+!!! error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }[]' is not assignable to type 'T[]'.
+!!! error TS2322:   Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
+!!! error TS2322:     '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
+        }
+    }
+    
+    doStuffWithStuffArr([
+        { field: 1, anotherField: 'a', extra: 123 },
+                                       ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
+    ])
+    
+    // -----------------------------------------------------------------------------------------
+    
+    type XNumber = { x: number }
+    
+    declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): void;
+    
+    function bar(props: {x: number, y: string}) {
+      return foo(props); // no error because lack of excess property check by design
+    }
+    
+    foo({x: 1, y: 'foo'});
+               ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
+    
+    foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
