@@ -3,7 +3,7 @@ File: file1.ts
 
 import * as a from "a";
 const myX: number = a.x;
-resolvedModules: 
+resolvedModules:
 a: {
   "failedLookupLocations": [
     "node_modules/a/package.json",
@@ -68,7 +68,7 @@ File: file1.ts
 
 import * as a from "a";
 const myX: number = a.x;
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "node_modules/a/index.d.ts",

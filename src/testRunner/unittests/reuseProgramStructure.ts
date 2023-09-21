@@ -34,7 +34,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         function baselineResolution(resolved: T, key: string, mode: ts.ResolutionMode) {
             if (!addedHeader) {
                 addedHeader = true;
-                baselines.push(`${cacheType}: `);
+                baselines.push(`${cacheType}:`);
             }
             baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(resolved, /*replacer*/ undefined, 2)}`);
         }

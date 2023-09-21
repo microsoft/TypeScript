@@ -36,7 +36,7 @@ File: f1.ts
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -45,7 +45,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs1: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -63,7 +63,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -80,7 +80,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -161,7 +161,7 @@ File: f1.ts
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -170,7 +170,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs1: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -188,7 +188,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -205,7 +205,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -275,7 +275,7 @@ File: f1.ts
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -291,7 +291,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -308,7 +308,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -373,7 +373,7 @@ File: f1.ts
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -389,7 +389,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -406,7 +406,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -470,7 +470,7 @@ File: f1.ts
 
 import { B } from './b1';
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -486,7 +486,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -503,7 +503,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -565,7 +565,7 @@ File: f1.ts
 
 import { B } from './b1';
 
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -581,7 +581,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -598,7 +598,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -670,7 +670,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -687,7 +687,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,

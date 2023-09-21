@@ -3,7 +3,7 @@ File: /a/b/app.ts
 
 import * as fs from 'fs'
 
-resolvedModules: 
+resolvedModules:
 fs: {
   "failedLookupLocations": [
     "/a/b/fs.ts",
@@ -77,7 +77,7 @@ File: /a/b/app.ts
 
 import * as fs from 'fs'
 var x = 1;
-resolvedModules: 
+resolvedModules:
 fs: {
   "failedLookupLocations": [
     "/a/b/fs.ts",
@@ -124,7 +124,7 @@ File: /a/b/app.ts
 
 import * as fs from 'fs'
 var y = 1;
-resolvedModules: 
+resolvedModules:
 fs: {
   "failedLookupLocations": [
     "/a/b/fs.ts",

@@ -8,7 +8,7 @@ File: /node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
@@ -42,7 +42,7 @@ File: /node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
@@ -71,7 +71,7 @@ File: /a.ts
 
 import { a } from "a"; import { b } from "b";
 a(b)
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",
@@ -121,7 +121,7 @@ File: /node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
@@ -155,7 +155,7 @@ File: /node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
@@ -184,7 +184,7 @@ File: /a.ts
 
 import { a } from "a"; import { b } from "b";
 const x = 1;
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",

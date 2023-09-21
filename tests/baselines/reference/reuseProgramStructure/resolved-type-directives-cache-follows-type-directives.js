@@ -8,7 +8,7 @@ File: /a.ts
 /// <reference types='typedefs'/>
 
 var x = $
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -37,7 +37,7 @@ File: /a.ts
 /// <reference types='typedefs'/>
 
 var x = 2
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -80,7 +80,7 @@ File: /a.ts
                 
 
 var x = 2
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typedefs: {
   "resolvedTypeReferenceDirective": {
     "primary": true,

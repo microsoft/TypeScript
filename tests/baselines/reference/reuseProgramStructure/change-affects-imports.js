@@ -17,7 +17,7 @@ File: a.ts
 
 
 var x = 1
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
     "node_modules/@types/typerefs/package.json",
@@ -44,7 +44,7 @@ File: c.ts
 
 import x from 'b'
 var z = 1;
-resolvedModules: 
+resolvedModules:
 b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
@@ -67,7 +67,7 @@ File: a.ts
 
 
 var x = 1
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
     "node_modules/@types/typerefs/package.json",

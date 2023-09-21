@@ -8,7 +8,7 @@ File: /node_modules/b/index.d.ts
 
 export * from './internal';
 
-resolvedModules: 
+resolvedModules:
 ./internal: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/internal.d.ts",
@@ -34,7 +34,7 @@ File: /a.ts
 
 import {b} from 'b'
 var a = b;
-resolvedModules: 
+resolvedModules:
 b: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
@@ -75,7 +75,7 @@ File: /node_modules/b/index.d.ts
 
 export * from './internal';
 
-resolvedModules: 
+resolvedModules:
 ./internal: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/internal.d.ts",
@@ -101,7 +101,7 @@ File: /a.ts
 
 import {b} from 'b'
 var a = b;
-resolvedModules: 
+resolvedModules:
 b: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",

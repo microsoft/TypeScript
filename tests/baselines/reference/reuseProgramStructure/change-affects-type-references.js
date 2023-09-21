@@ -17,7 +17,7 @@ File: a.ts
 
 
 var x = 1
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
     "node_modules/@types/typerefs/package.json",
@@ -31,7 +31,7 @@ typerefs: {
   ]
 }
 
-automaticTypeDirectiveResolutions: 
+automaticTypeDirectiveResolutions:
 a: {
   "failedLookupLocations": [
     "node_modules/@types/a/package.json",
@@ -71,7 +71,7 @@ File: a.ts
 
 
 var x = 1
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
     "node_modules/@types/typerefs/package.json",
@@ -85,7 +85,7 @@ typerefs: {
   ]
 }
 
-automaticTypeDirectiveResolutions: 
+automaticTypeDirectiveResolutions:
 b: {
   "failedLookupLocations": [
     "node_modules/@types/b/package.json",

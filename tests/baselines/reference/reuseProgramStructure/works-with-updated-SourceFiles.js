@@ -3,7 +3,7 @@ File: /a.ts
 
 
 import * as a from "a";a;
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",
@@ -25,7 +25,7 @@ File: /a.ts
 'use strict';
 
 import * as a from "a";a;
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",

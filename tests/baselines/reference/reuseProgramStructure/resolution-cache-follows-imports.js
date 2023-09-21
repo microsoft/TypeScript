@@ -8,7 +8,7 @@ File: a.ts
 
 import {_} from 'b'
 var x = 1
-resolvedModules: 
+resolvedModules:
 b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
@@ -35,7 +35,7 @@ File: a.ts
 
 import {_} from 'b'
 var x = 2
-resolvedModules: 
+resolvedModules:
 b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
@@ -76,7 +76,7 @@ import x from 'b'
                 import y from 'c'
                 
 var x = 2
-resolvedModules: 
+resolvedModules:
 b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
