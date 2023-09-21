@@ -13,7 +13,7 @@ import {
 
 const packageJson: File = {
     path: "/package.json",
-    content: `{ "dependencies": { "mobx": "*" } }`
+    content: `{ "dependencies": { "mobx": "*" } }`,
 };
 const aTs: File = {
     path: "/src/a.ts",
@@ -37,15 +37,15 @@ const tsconfig: File = {
 };
 const ambientDeclaration: File = {
     path: "/src/ambient.d.ts",
-    content: "declare module 'ambient' {}"
+    content: "declare module 'ambient' {}",
 };
 const mobxPackageJson: File = {
     path: "/node_modules/mobx/package.json",
-    content: `{ "name": "mobx", "version": "1.0.0" }`
+    content: `{ "name": "mobx", "version": "1.0.0" }`,
 };
 const mobxDts: File = {
     path: "/node_modules/mobx/index.d.ts",
-    content: "export declare function observable(): unknown;"
+    content: "export declare function observable(): unknown;",
 };
 
 describe("unittests:: tsserver:: moduleSpecifierCache", () => {
@@ -112,7 +112,7 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         getWithPreferences({});
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { preferences }
+            arguments: { preferences },
         });
         // Nothing changes yet
         getWithPreferences({});
@@ -125,7 +125,7 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         // Test other affecting preference
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { preferences: { importModuleSpecifierEnding: "js" } }
+            arguments: { preferences: { importModuleSpecifierEnding: "js" } },
         });
         triggerCompletions({ file: bTs.path, line: 1, offset: 3 });
         getWithPreferences(preferences);
@@ -152,7 +152,7 @@ function setup() {
                 includeCompletionsWithInsertText: true,
                 includeCompletionsWithSnippetText: true,
             },
-        }
+        },
     });
     triggerCompletions({ file: bTs.path, line: 1, offset: 3 });
 

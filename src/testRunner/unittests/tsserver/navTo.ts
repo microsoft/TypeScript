@@ -15,11 +15,11 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
     it("should not include type symbols", () => {
         const file1: File = {
             path: "/a/b/file1.js",
-            content: "function foo() {}"
+            content: "function foo() {}",
         };
         const configFile: File = {
             path: "/a/b/jsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([file1, configFile, libFile]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -28,12 +28,12 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
         // Try to find some interface type defined in lib.d.ts
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
-            arguments: { searchValue: "Document", file: file1.path, projectFileName: configFile.path }
+            arguments: { searchValue: "Document", file: file1.path, projectFileName: configFile.path },
         }).response as ts.server.protocol.NavtoItem[];
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
-            arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path }
+            arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path },
         }).response as ts.server.protocol.NavtoItem[];
         baselineTsserverLogs("navTo", "should not include type symbols", session);
     });
@@ -45,11 +45,11 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
     "compilerOptions": {
         "composite": true
     }
-}`
+}`,
         };
         const file1: File = {
             path: "/a/index.ts",
-            content: "export const abcdef = 1;"
+            content: "export const abcdef = 1;",
         };
         const configFile2: File = {
             path: "/b/tsconfig.json",
@@ -60,12 +60,12 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
     "references": [
         { "path": "../a" }
     ]
-}`
+}`,
         };
         const file2: File = {
             path: "/b/index.ts",
             content: `import a = require("../a");
-export const ghijkl = a.abcdef;`
+export const ghijkl = a.abcdef;`,
         };
         const host = createServerHost([configFile1, file1, configFile2, file2]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -73,7 +73,7 @@ export const ghijkl = a.abcdef;`
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
-            arguments: { searchValue: "abcdef", file: file1.path }
+            arguments: { searchValue: "abcdef", file: file1.path },
         });
 
         baselineTsserverLogs("navTo", "should de-duplicate symbols", session);
@@ -85,7 +85,7 @@ export const ghijkl = a.abcdef;`
             content: JSON.stringify({
                 references: [{ path: "./a" }, { path: "./b" }],
                 files: [],
-            })
+            }),
         };
         const configFile1: File = {
             path: "/a/tsconfig.json",
@@ -93,11 +93,11 @@ export const ghijkl = a.abcdef;`
     "compilerOptions": {
         "composite": true
     }
-}`
+}`,
         };
         const file1: File = {
             path: "/a/index.ts",
-            content: "export const abcdef = 1;"
+            content: "export const abcdef = 1;",
         };
         const configFile2: File = {
             path: "/b/tsconfig.json",
@@ -108,12 +108,12 @@ export const ghijkl = a.abcdef;`
     "references": [
         { "path": "../a" }
     ]
-}`
+}`,
         };
         const file2: File = {
             path: "/b/index.ts",
             content: `import a = require("../a");
-export const ghijkl = a.abcdef;`
+export const ghijkl = a.abcdef;`,
         };
         const host = createServerHost([configFile1, file1, configFile2, file2, solutionConfig]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -121,7 +121,7 @@ export const ghijkl = a.abcdef;`
 
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
-            arguments: { searchValue: "abcdef" }
+            arguments: { searchValue: "abcdef" },
         });
         baselineTsserverLogs("navTo", "should de-duplicate symbols when searching all projects", session);
     });
@@ -129,11 +129,11 @@ export const ghijkl = a.abcdef;`
     it("should work with Deprecated", () => {
         const file1: File = {
             path: "/a/b/file1.js",
-            content: "/** @deprecated */\nfunction foo () {}"
+            content: "/** @deprecated */\nfunction foo () {}",
         };
         const configFile: File = {
             path: "/a/b/jsconfig.json",
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([file1, configFile, libFile]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -142,7 +142,7 @@ export const ghijkl = a.abcdef;`
         // Try to find some interface type defined in lib.d.ts
         session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
             command: ts.server.protocol.CommandTypes.Navto,
-            arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path }
+            arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path },
         });
         baselineTsserverLogs("navTo", "should work with Deprecated", session);
     });
