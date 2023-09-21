@@ -104,7 +104,7 @@ interface A { // T
 
     };
     a20: {
->a20 : { new (x: { new <T extends Derived>(a: T): T; new <U extends Base>(a: U): U; }): any[]; new (x: { new <T extends Base>(a: T): T; new <U extends Derived2>(a: U): U; }): any[]; }
+>a20 : { new (x: { new <T extends Derived>(a: T): T; new <U extends Base>(a: U): U; }): any[]; new (x: { new <T_1 extends Base>(a: T_1): T_1; new <U_1 extends Derived2>(a: U_1): U_1; }): any[]; }
 
         new (x: {
 >x : { new <T extends Derived>(a: T): T; new <U extends Base>(a: U): U; }

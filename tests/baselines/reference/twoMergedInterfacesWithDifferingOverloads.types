@@ -98,7 +98,7 @@ interface D<T, U> {
 
 interface D<T, U> {
     foo<W>(x: W, y: W): T;
->foo : { <A>(x: A, y: A): U; <W>(x: W, y: W): T; }
+>foo : { <A_1>(x: A_1, y: A_1): U; <W>(x: W, y: W): T; }
 >x : W
 >y : W
 }
@@ -109,9 +109,9 @@ var d: D<boolean, Date>;
 var r3 = d.foo(1, 1); // boolean, last definition wins
 >r3 : boolean
 >d.foo(1, 1) : boolean
->d.foo : { <A>(x: A, y: A): Date; <W>(x: W, y: W): boolean; }
+>d.foo : { <A_1>(x: A_1, y: A_1): Date; <W>(x: W, y: W): boolean; }
 >d : D<boolean, Date>
->foo : { <A>(x: A, y: A): Date; <W>(x: W, y: W): boolean; }
+>foo : { <A_1>(x: A_1, y: A_1): Date; <W>(x: W, y: W): boolean; }
 >1 : 1
 >1 : 1
 

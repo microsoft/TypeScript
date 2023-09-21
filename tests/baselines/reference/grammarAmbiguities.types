@@ -19,14 +19,14 @@ f(g<A, B>(7));
 >f(g<A, B>(7)) : any
 >f : (n: any) => any
 >g<A, B>(7) : any
->g : <A, B>(x: any) => any
+>g : <A_1, B_1>(x: any) => any
 >7 : 7
 
 f(g < A, B > 7); // Should error
 >f(g < A, B > 7) : any
 >f : (n: any) => any
 >g < A : boolean
->g : <A, B>(x: any) => any
+>g : <A_1, B_1>(x: any) => any
 >A : any
 >B > 7 : boolean
 >B : any
@@ -36,7 +36,7 @@ f(g < A, B > +(7)); // Should error
 >f(g < A, B > +(7)) : any
 >f : (n: any) => any
 >g < A : boolean
->g : <A, B>(x: any) => any
+>g : <A_1, B_1>(x: any) => any
 >A : any
 >B > +(7) : boolean
 >B : any

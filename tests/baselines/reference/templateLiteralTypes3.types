@@ -395,7 +395,7 @@ declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
 
 chain("a");
 >chain("a") : void
->chain : <F extends "a">(field: F | `${F}.${F}`) => void
+>chain : <F_1 extends "a">(field: F_1 | `${F_1}.${F_1}`) => void
 >"a" : "a"
 
 // Repro from #46125
