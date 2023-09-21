@@ -8398,11 +8398,11 @@ namespace Parser {
                     );
                 }
             }
-            return finishNode(factory.createImportAttributes(token, elements, multiLine), pos);
+            return finishNode(factory.createImportAttributes(elements, multiLine, token), pos);
         }
         else {
             const elements = createNodeArray([], getNodePos(), /*end*/ undefined, /*hasTrailingComma*/ false);
-            return finishNode(factory.createImportAttributes(token, elements, /*multiLine*/ false), pos);
+            return finishNode(factory.createImportAttributes(elements, /*multiLine*/ false, token), pos);
         }
     }
 

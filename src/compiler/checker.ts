@@ -7919,7 +7919,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (targetFile?.impliedNodeFormat === ModuleKind.ESNext && targetFile.impliedNodeFormat !== contextFile?.impliedNodeFormat) {
                         specifier = getSpecifierForModuleSymbol(chain[0], context, ModuleKind.ESNext);
                         attributes = factory.createImportTypeAttributes(factory.createImportAttributes(
-                            SyntaxKind.WithKeyword,
                             factory.createNodeArray([
                                 factory.createImportAttribute(
                                     factory.createStringLiteral("resolution-mode"),
@@ -7945,7 +7944,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         else {
                             attributes = factory.createImportTypeAttributes(factory.createImportAttributes(
-                                SyntaxKind.WithKeyword,
                                 factory.createNodeArray([
                                     factory.createImportAttribute(
                                         factory.createStringLiteral("resolution-mode"),

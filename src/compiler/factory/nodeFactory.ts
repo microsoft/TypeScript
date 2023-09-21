@@ -4829,9 +4829,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createImportAttributes(token: ImportAttributes["token"], elements: readonly ImportAttribute[], multiLine?: boolean): ImportAttributes {
+    function createImportAttributes(elements: readonly ImportAttribute[], multiLine?: boolean): ImportAttributes;
+    function createImportAttributes(elements: readonly ImportAttribute[], multiLine?: boolean, token?: ImportAttributes["token"]): ImportAttributes;
+    function createImportAttributes(elements: readonly ImportAttribute[], multiLine?: boolean, token?: ImportAttributes["token"]): ImportAttributes {
         const node = createBaseNode<ImportAttributes>(SyntaxKind.ImportAttributes);
-        node.token = token;
+        node.token = token ?? SyntaxKind.WithKeyword;
         node.elements = createNodeArray(elements);
         node.multiLine = multiLine;
         node.transformFlags |= TransformFlags.ContainsESNext;
@@ -4842,7 +4844,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function updateImportAttributes(node: ImportAttributes, elements: readonly ImportAttribute[], multiLine?: boolean): ImportAttributes {
         return node.elements !== elements
                 || node.multiLine !== multiLine
-            ? update(createImportAttributes(node.token, elements, multiLine), node)
+            ? update(createImportAttributes(elements, multiLine, node.token), node)
             : node;
     }
 
