@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/reverseLimitedConstraint.ts] ////
+//// [tests/cases/compiler/reverseMappedTypeLimitedConstraint.ts] ////
 
-=== reverseLimitedConstraint.ts ===
+=== reverseMappedTypeLimitedConstraint.ts ===
 type XNumber_ = { x: number }
 >XNumber_ : { x: number; }
 >x : number

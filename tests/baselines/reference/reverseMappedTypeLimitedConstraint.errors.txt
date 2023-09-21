@@ -1,8 +1,8 @@
-reverseLimitedConstraint.ts(5,13): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
-reverseLimitedConstraint.ts(14,3): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
+reverseMappedTypeLimitedConstraint.ts(5,13): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
+reverseMappedTypeLimitedConstraint.ts(14,3): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
 
 
-==== reverseLimitedConstraint.ts (2 errors) ====
+==== reverseMappedTypeLimitedConstraint.ts (2 errors) ====
     type XNumber_ = { x: number }
     
     declare function foo_<T extends XNumber_>(props: {[K in keyof T & keyof XNumber_]: T[K]}): T;

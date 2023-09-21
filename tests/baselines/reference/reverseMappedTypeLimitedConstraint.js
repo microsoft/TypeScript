@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/reverseLimitedConstraint.ts] ////
+//// [tests/cases/compiler/reverseMappedTypeLimitedConstraint.ts] ////
 
-//// [reverseLimitedConstraint.ts]
+//// [reverseMappedTypeLimitedConstraint.ts]
 type XNumber_ = { x: number }
 
 declare function foo_<T extends XNumber_>(props: {[K in keyof T & keyof XNumber_]: T[K]}): T;
@@ -17,7 +17,7 @@ const checked_ = checkType_<{x: number, y: string}>()({
   z: "z",
 });
 
-//// [reverseLimitedConstraint.js]
+//// [reverseMappedTypeLimitedConstraint.js]
 foo_({ x: 1, y: 'foo' });
 // -----------------------------------------------------------------------------------------
 var checkType_ = function () { return function (value) { return value; }; };

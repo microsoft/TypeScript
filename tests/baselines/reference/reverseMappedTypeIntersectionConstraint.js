@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/revertedIntersection.ts] ////
+//// [tests/cases/compiler/reverseMappedTypeIntersectionConstraint.ts] ////
 
-//// [revertedIntersection.ts]
+//// [reverseMappedTypeIntersectionConstraint.ts]
 type StateConfig<TAction extends string> = {
   entry?: TAction
   states?: Record<string, StateConfig<TAction>>;
@@ -92,7 +92,104 @@ foo({x: 1, y: 'foo'});
 
 foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
 
-//// [revertedIntersection.js]
+// -----------------------------------------------------------------------------------------
+
+type NoErrWithOptProps = { x: number, y?: string }
+
+declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): void;
+
+baz({x: 1});
+baz({x: 1, z: 123});
+baz({x: 1, y: 'foo'});
+baz({x: 1, y: 'foo', z: 123});
+
+// -----------------------------------------------------------------------------------------
+
+interface WithNestedProp {
+  prop: string;
+  nested: {
+    prop: string;
+  }
+}
+
+declare function withNestedProp<T extends WithNestedProp>(props: {[K in keyof T & keyof WithNestedProp]: T[K]}): T;
+
+const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
+//    ^?
+
+// -----------------------------------------------------------------------------------------
+
+type IsLiteralString<T extends string> = string extends T ? false : true;
+
+type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: DeepWritable<T[K]> }
+
+interface ProvidedActor {
+  src: string;
+  logic: () => Promise<unknown>;
+}
+
+interface InferenceSource<TActor extends ProvidedActor> {
+  types?: {
+    actors?: TActor;
+  };
+}
+
+type DistributeActors<TActor> = TActor extends { src: infer TSrc }
+  ? {
+      src: TSrc;
+    }
+  : never;
+
+interface MachineConfig<TActor extends ProvidedActor> {
+  types?: {
+    actors?: TActor;
+  };
+  invoke: IsLiteralString<TActor["src"]> extends true
+    ? DistributeActors<TActor>
+    : {
+        src: string;
+      };
+}
+
+type NoExtra<T> = {
+  [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
+}
+
+declare function createMachine2<
+  TConfig extends MachineConfig<TActor>,
+  TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor} } ? TConfig["types"]["actors"] : ProvidedActor,
+>(config: {[K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K] }): TConfig;
+
+const child = () => Promise.resolve("foo");
+
+const config = createMachine2({
+   // ^?
+  types: {} as {
+    actors: {
+      src: "str";
+      logic: typeof child;
+    };
+  },
+  invoke: {
+    src: "str",
+  },
+  extra: 10
+});
+
+
+
+const config2 = createMachine2({
+  invoke: {
+    src: "whatever" as const,
+  },
+  extra: 10
+});
+
+config2
+// ^?
+
+
+//// [reverseMappedTypeIntersectionConstraint.js]
 "use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
@@ -156,3 +253,25 @@ function bar(props) {
 }
 foo({ x: 1, y: 'foo' });
 foo(__assign({ x: 1, y: 'foo' })); // no error because lack of excess property check by design
+baz({ x: 1 });
+baz({ x: 1, z: 123 });
+baz({ x: 1, y: 'foo' });
+baz({ x: 1, y: 'foo', z: 123 });
+var wnp = withNestedProp({ prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
+var child = function () { return Promise.resolve("foo"); };
+var config = createMachine2({
+    // ^?
+    types: {},
+    invoke: {
+        src: "str",
+    },
+    extra: 10
+});
+var config2 = createMachine2({
+    invoke: {
+        src: "whatever",
+    },
+    extra: 10
+});
+config2;
+// ^?

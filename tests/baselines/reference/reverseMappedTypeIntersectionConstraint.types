@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/revertedIntersection.ts] ////
+//// [tests/cases/compiler/reverseMappedTypeIntersectionConstraint.ts] ////
 
-=== revertedIntersection.ts ===
+=== reverseMappedTypeIntersectionConstraint.ts ===
 type StateConfig<TAction extends string> = {
 >StateConfig : StateConfig<TAction>
 
@@ -248,4 +248,237 @@ foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by
 >1 : 1
 >y : string
 >'foo' : "foo"
+
+// -----------------------------------------------------------------------------------------
+
+type NoErrWithOptProps = { x: number, y?: string }
+>NoErrWithOptProps : { x: number; y?: string | undefined; }
+>x : number
+>y : string | undefined
+
+declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): void;
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+>props : { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }
+
+baz({x: 1});
+>baz({x: 1}) : void
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+>{x: 1} : { x: 1; }
+>x : 1
+>1 : 1
+
+baz({x: 1, z: 123});
+>baz({x: 1, z: 123}) : void
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+>{x: 1, z: 123} : { x: 1; z: number; }
+>x : 1
+>1 : 1
+>z : number
+>123 : 123
+
+baz({x: 1, y: 'foo'});
+>baz({x: 1, y: 'foo'}) : void
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+>{x: 1, y: 'foo'} : { x: 1; y: "foo"; }
+>x : 1
+>1 : 1
+>y : "foo"
+>'foo' : "foo"
+
+baz({x: 1, y: 'foo', z: 123});
+>baz({x: 1, y: 'foo', z: 123}) : void
+>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
+>{x: 1, y: 'foo', z: 123} : { x: 1; y: "foo"; z: number; }
+>x : 1
+>1 : 1
+>y : "foo"
+>'foo' : "foo"
+>z : number
+>123 : 123
+
+// -----------------------------------------------------------------------------------------
+
+interface WithNestedProp {
+  prop: string;
+>prop : string
+
+  nested: {
+>nested : { prop: string; }
+
+    prop: string;
+>prop : string
+  }
+}
+
+declare function withNestedProp<T extends WithNestedProp>(props: {[K in keyof T & keyof WithNestedProp]: T[K]}): T;
+>withNestedProp : <T extends WithNestedProp>(props: { [K in keyof T & keyof WithNestedProp]: T[K]; }) => T
+>props : { [K in keyof T & keyof WithNestedProp]: T[K]; }
+
+const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
+>wnp : { prop: "foo"; nested: { prop: string; }; }
+>withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 }) : { prop: "foo"; nested: { prop: string; }; }
+>withNestedProp : <T extends WithNestedProp>(props: { [K in keyof T & keyof WithNestedProp]: T[K]; }) => T
+>{prop: 'foo', nested: { prop: 'bar' }, extra: 10 } : { prop: "foo"; nested: { prop: string; }; extra: number; }
+>prop : "foo"
+>'foo' : "foo"
+>nested : { prop: string; }
+>{ prop: 'bar' } : { prop: string; }
+>prop : string
+>'bar' : "bar"
+>extra : number
+>10 : 10
+
+//    ^?
+
+// -----------------------------------------------------------------------------------------
+
+type IsLiteralString<T extends string> = string extends T ? false : true;
+>IsLiteralString : IsLiteralString<T>
+>false : false
+>true : true
+
+type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: DeepWritable<T[K]> }
+>DeepWritable : DeepWritable<T>
+
+interface ProvidedActor {
+  src: string;
+>src : string
+
+  logic: () => Promise<unknown>;
+>logic : () => Promise<unknown>
+}
+
+interface InferenceSource<TActor extends ProvidedActor> {
+  types?: {
+>types : { actors?: TActor | undefined; } | undefined
+
+    actors?: TActor;
+>actors : TActor | undefined
+
+  };
+}
+
+type DistributeActors<TActor> = TActor extends { src: infer TSrc }
+>DistributeActors : DistributeActors<TActor>
+>src : TSrc
+
+  ? {
+      src: TSrc;
+>src : TSrc
+    }
+  : never;
+
+interface MachineConfig<TActor extends ProvidedActor> {
+  types?: {
+>types : { actors?: TActor | undefined; } | undefined
+
+    actors?: TActor;
+>actors : TActor | undefined
+
+  };
+  invoke: IsLiteralString<TActor["src"]> extends true
+>invoke : IsLiteralString<TActor["src"]> extends true ? DistributeActors<TActor> : { src: string; }
+>true : true
+
+    ? DistributeActors<TActor>
+    : {
+        src: string;
+>src : string
+
+      };
+}
+
+type NoExtra<T> = {
+>NoExtra : NoExtra<T>
+
+  [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
+}
+
+declare function createMachine2<
+>createMachine2 : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: {    actors: ProvidedActor;}; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
+
+  TConfig extends MachineConfig<TActor>,
+  TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor} } ? TConfig["types"]["actors"] : ProvidedActor,
+>types : { actors: ProvidedActor; }
+>actors : ProvidedActor
+
+>(config: {[K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K] }): TConfig;
+>config : { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }
+
+const child = () => Promise.resolve("foo");
+>child : () => any
+>() => Promise.resolve("foo") : () => any
+>Promise.resolve("foo") : any
+>Promise.resolve : any
+>Promise : any
+>resolve : any
+>"foo" : "foo"
+
+const config = createMachine2({
+>config : MachineConfig<{ src: "str"; logic: typeof child; }>
+>createMachine2({   // ^?  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : MachineConfig<{ src: "str"; logic: typeof child; }>
+>createMachine2 : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
+>{   // ^?  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: {    src: "str";    logic: typeof child;}; }; invoke: { src: "str"; }; extra: number; }
+
+   // ^?
+  types: {} as {
+>types : { actors: {    src: "str";    logic: typeof child;}; }
+>{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: {    src: "str";    logic: typeof child;}; }
+>{} : {}
+
+    actors: {
+>actors : { src: "str"; logic: typeof child; }
+
+      src: "str";
+>src : "str"
+
+      logic: typeof child;
+>logic : () => any
+>child : () => any
+
+    };
+  },
+  invoke: {
+>invoke : { src: "str"; }
+>{    src: "str",  } : { src: "str"; }
+
+    src: "str",
+>src : "str"
+>"str" : "str"
+
+  },
+  extra: 10
+>extra : number
+>10 : 10
+
+});
+
+
+
+const config2 = createMachine2({
+>config2 : { invoke: { src: "whatever"; }; }
+>createMachine2({  invoke: {    src: "whatever" as const,  },  extra: 10}) : { invoke: { src: "whatever"; }; }
+>createMachine2 : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
+>{  invoke: {    src: "whatever" as const,  },  extra: 10} : { invoke: { src: "whatever"; }; extra: number; }
+
+  invoke: {
+>invoke : { src: "whatever"; }
+>{    src: "whatever" as const,  } : { src: "whatever"; }
+
+    src: "whatever" as const,
+>src : "whatever"
+>"whatever" as const : "whatever"
+>"whatever" : "whatever"
+
+  },
+  extra: 10
+>extra : number
+>10 : 10
+
+});
+
+config2
+>config2 : { invoke: { src: "whatever"; }; }
+
+// ^?
 
