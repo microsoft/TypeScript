@@ -7918,12 +7918,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // An `import` type directed at an esm format file is only going to resolve in esm mode - set the esm mode assertion
                     if (targetFile?.impliedNodeFormat === ModuleKind.ESNext && targetFile.impliedNodeFormat !== contextFile?.impliedNodeFormat) {
                         specifier = getSpecifierForModuleSymbol(chain[0], context, ModuleKind.ESNext);
-                        attributes = factory.createImportTypeAttributes(factory.createImportAttributes(SyntaxKind.WithKeyword, factory.createNodeArray([
-                            factory.createImportAttribute(
-                                factory.createStringLiteral("resolution-mode"),
-                                factory.createStringLiteral("import"),
-                            ),
-                        ])));
+                        attributes = factory.createImportTypeAttributes(factory.createImportAttributes(
+                            SyntaxKind.WithKeyword,
+                            factory.createNodeArray([
+                                factory.createImportAttribute(
+                                    factory.createStringLiteral("resolution-mode"),
+                                    factory.createStringLiteral("import"),
+                                ),
+                            ]),
+                        ));
                     }
                 }
                 if (!specifier) {
@@ -7941,12 +7944,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             specifier = oldSpecifier;
                         }
                         else {
-                            attributes = factory.createImportTypeAttributes(factory.createImportAttributes(SyntaxKind.WithKeyword, factory.createNodeArray([
-                                factory.createImportAttribute(
-                                    factory.createStringLiteral("resolution-mode"),
-                                    factory.createStringLiteral(swappedMode === ModuleKind.ESNext ? "import" : "require"),
-                                ),
-                            ])));
+                            attributes = factory.createImportTypeAttributes(factory.createImportAttributes(
+                                SyntaxKind.WithKeyword,
+                                factory.createNodeArray([
+                                    factory.createImportAttribute(
+                                        factory.createStringLiteral("resolution-mode"),
+                                        factory.createStringLiteral(swappedMode === ModuleKind.ESNext ? "import" : "require"),
+                                    ),
+                                ]),
+                            ));
                         }
                     }
 
@@ -39697,7 +39703,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     errorNode,
                     node.attributes.attributes.token === SyntaxKind.WithKeyword
                         ? Diagnostics.resolution_mode_attribute_are_only_supported_when_moduleResolution_is_node16_or_nodenext
-                        : Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext
+                        : Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
                 );
             }
         }
