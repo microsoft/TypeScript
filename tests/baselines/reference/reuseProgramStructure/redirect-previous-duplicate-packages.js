@@ -3,8 +3,6 @@ File: /node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/a/index.d.ts
 
@@ -34,14 +32,11 @@ x: {
     "/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/node_modules/x/index.d.ts
 
 
 export = class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
@@ -71,7 +66,6 @@ x: {
     "/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
@@ -110,7 +104,6 @@ b: {
     "/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]
@@ -125,8 +118,6 @@ File: /node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/a/index.d.ts
 
@@ -156,14 +147,11 @@ x: {
     "/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
@@ -193,7 +181,6 @@ x: {
     "/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
@@ -232,7 +219,6 @@ b: {
     "/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]

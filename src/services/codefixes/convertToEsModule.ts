@@ -107,7 +107,7 @@ function fixImportOfModuleExports(
     quotePreference: QuotePreference,
 ) {
     for (const moduleSpecifier of importingFile.imports) {
-        const imported = program.resolvedModules?.get(importingFile.path)?.get(moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier))?.resolvedModule;
+        const imported = program.getResolvedModule(importingFile, moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier))?.resolvedModule;
         if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
             continue;
         }

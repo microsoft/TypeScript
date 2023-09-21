@@ -238,18 +238,15 @@ export namespace BuilderState {
         }
 
         // Handle type reference directives
-        const resolvedTypeReferenceDirectiveNames = program.resolvedTypeReferenceDirectiveNames?.get(sourceFile.path);
-        if (resolvedTypeReferenceDirectiveNames) {
-            resolvedTypeReferenceDirectiveNames.forEach(({ resolvedTypeReferenceDirective }) => {
-                if (!resolvedTypeReferenceDirective) {
-                    return;
-                }
+        program.forEachResolvedTypeReferenceDirective(({ resolvedTypeReferenceDirective }) => {
+            if (!resolvedTypeReferenceDirective) {
+                return;
+            }
 
-                const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
-                const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory, getCanonicalFileName);
-                addReferencedFile(typeFilePath);
-            });
-        }
+            const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
+            const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory, getCanonicalFileName);
+            addReferencedFile(typeFilePath);
+        }, sourceFile);
 
         // Add module augmentation as references
         if (sourceFile.moduleAugmentations.length) {

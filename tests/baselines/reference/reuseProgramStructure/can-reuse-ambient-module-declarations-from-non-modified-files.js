@@ -32,14 +32,11 @@ fs: {
     "/fs.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
 
 
 declare module 'fs' {}
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'fs' from '/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
@@ -109,14 +106,11 @@ fs: {
     "/fs.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
 
 
 declare module 'fs' {}
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 Module 'fs' was resolved as ambient module declared in '/a/b/node.d.ts' since this file was not modified.
 
@@ -159,14 +153,11 @@ fs: {
     "/fs.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
 
 
 declare var process: any
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'fs' from '/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.

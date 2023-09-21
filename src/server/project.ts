@@ -603,8 +603,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
         if (this.program && !this.symlinks.hasProcessedResolutions()) {
             this.symlinks.setSymlinksFromResolutions(
-                this.program.resolvedModules,
-                this.program.resolvedTypeReferenceDirectiveNames,
+                this.program.forEachResolvedModule,
+                this.program.forEachResolvedTypeReferenceDirective,
                 this.program.getAutomaticTypeDirectiveResolutions(),
             );
         }
@@ -2250,10 +2250,8 @@ function extractUnresolvedImportsFromSourceFile(
     cachedUnresolvedImportsPerFile: Map<Path, readonly string[]>,
 ): readonly string[] {
     return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
-        const resolvedModules = program.resolvedModules?.get(file.path);
-        if (!resolvedModules) return emptyArray;
         let unresolvedImports: string[] | undefined;
-        resolvedModules.forEach(({ resolvedModule }, name) => {
+        program.forEachResolvedModule(({ resolvedModule }, name) => {
             // pick unresolved non-relative names
             if (
                 (!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
@@ -2262,7 +2260,7 @@ function extractUnresolvedImportsFromSourceFile(
             ) {
                 unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
             }
-        });
+        }, file);
         return unresolvedImports || emptyArray;
     });
 }

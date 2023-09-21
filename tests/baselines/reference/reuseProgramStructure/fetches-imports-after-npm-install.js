@@ -23,14 +23,11 @@ a: {
     "node_modules/a/index.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: file2.ts
 
 
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'a' from 'file1.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -66,8 +63,6 @@ File: node_modules/a/index.d.ts
 
 export declare let x: number;
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: file1.ts
 
@@ -90,14 +85,11 @@ a: {
     "node_modules/a/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: file2.ts
 /// <reference no-default-lib="true"/>
 
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'a' from 'file1.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.

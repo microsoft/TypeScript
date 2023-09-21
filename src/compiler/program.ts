@@ -1177,7 +1177,7 @@ export function getReferencedFileLocation(program: Program, ref: ReferencedFile)
     switch (kind) {
         case FileIncludeKind.Import:
             const importLiteral = getModuleNameStringLiteralAt(file, index);
-            packageId = program.resolvedModules?.get(file.path)?.get(importLiteral.text, getModeForResolutionAtIndex(file, index))?.resolvedModule?.packageId;
+            packageId = program.getResolvedModule(file, importLiteral.text, getModeForResolutionAtIndex(file, index))?.resolvedModule?.packageId;
             if (importLiteral.pos === -1) return { file, packageId, text: importLiteral.text };
             pos = skipTrivia(file.text, importLiteral.pos);
             end = importLiteral.end;
@@ -1187,7 +1187,7 @@ export function getReferencedFileLocation(program: Program, ref: ReferencedFile)
             break;
         case FileIncludeKind.TypeReferenceDirective:
             ({ pos, end, resolutionMode } = file.typeReferenceDirectives[index]);
-            packageId = program.resolvedTypeReferenceDirectiveNames?.get(file.path)?.get(toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)?.resolvedTypeReferenceDirective?.packageId;
+            packageId = program.getResolvedTypeReferenceDirective(file, toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)?.resolvedTypeReferenceDirective?.packageId;
             break;
         case FileIncludeKind.LibReferenceDirective:
             ({ pos, end } = file.libReferenceDirectives[index]);
@@ -1888,6 +1888,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         resolvedModules,
         resolvedTypeReferenceDirectiveNames,
         resolvedLibReferences,
+        getResolvedModule,
+        getResolvedTypeReferenceDirective,
+        forEachResolvedModule,
+        forEachResolvedTypeReferenceDirective,
         getCurrentPackagesMap: () => packageMap,
         typesPackageExists,
         packageBundlesTypes,
@@ -1937,6 +1941,37 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     return program;
 
+    function getResolvedModule(file: SourceFile, moduleName: string, mode: ResolutionMode) {
+        return resolvedModules?.get(file.path)?.get(moduleName, mode);
+    }
+
+    function getResolvedTypeReferenceDirective(file: SourceFile, typeDirectiveName: string, mode: ResolutionMode) {
+        return resolvedTypeReferenceDirectiveNames?.get(file.path)?.get(typeDirectiveName, mode);
+    }
+
+    function forEachResolvedModule(
+        callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ) {
+        forEachResolution(resolvedModules, callback, file);
+    }
+
+    function forEachResolvedTypeReferenceDirective(
+        callback: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file?: SourceFile,
+    ): void {
+        forEachResolution(resolvedTypeReferenceDirectiveNames, callback, file);
+    }
+
+    function forEachResolution<T>(
+        resolutionCache: Map<Path, ModeAwareCache<T>> | undefined,
+        callback: (resolution: T, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
+        file: SourceFile | undefined,
+    ) {
+        if (file) resolutionCache?.get(file.path)?.forEach((resolution, name, mode) => callback(resolution, name, mode, file.path));
+        else resolutionCache?.forEach((resolutions, filePath) => resolutions.forEach((resolution, name, mode) => callback(resolution, name, mode, filePath)));
+    }
+
     function getPackagesMap() {
         if (packageMap) return packageMap;
         packageMap = new Map();
@@ -1944,11 +1979,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // This is useful as an approximation of whether a package bundles its own types.
         // Note: we only look at files already found by module resolution,
         // so there may be files we did not consider.
-        files.forEach(sf =>
-            resolvedModules?.get(sf.path)?.forEach(({ resolvedModule }) => {
-                if (resolvedModule?.packageId) packageMap!.set(resolvedModule.packageId.name, resolvedModule.extension === Extension.Dts || !!packageMap!.get(resolvedModule.packageId.name));
-            })
-        );
+        forEachResolvedModule(({ resolvedModule }) => {
+            if (resolvedModule?.packageId) packageMap!.set(resolvedModule.packageId.name, resolvedModule.extension === Extension.Dts || !!packageMap!.get(resolvedModule.packageId.name));
+        });
         return packageMap;
     }
 
@@ -2121,7 +2154,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
             if (file === oldSourceFile && !hasInvalidatedResolutions(file.path)) {
                 const mode = getModeForUsageLocation(file, moduleName);
-                const oldResolution = oldProgram?.resolvedModules?.get(file.path)?.get(moduleName.text, mode);
+                const oldResolution = oldProgram?.getResolvedModule(file, moduleName.text, mode);
                 if (oldResolution?.resolvedModule) {
                     if (isTraceEnabled(options, host)) {
                         trace(
@@ -2189,7 +2222,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // If we change our policy of rechecking failed lookups on each program create,
         // we should adjust the value returned here.
         function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: StringLiteralLike): boolean {
-            const resolutionToFile = oldProgram?.resolvedModules?.get(file.path)?.get(moduleName.text, getModeForUsageLocation(file, moduleName))?.resolvedModule;
+            const resolutionToFile = oldProgram?.getResolvedModule(file, moduleName.text, getModeForUsageLocation(file, moduleName))?.resolvedModule;
             const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
             if (resolutionToFile && resolvedFile) {
                 // In the old program, we resolved to an ambient module that was in the same
@@ -2236,7 +2269,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (canReuseResolutions) {
                 const typeDirectiveName = getTypeReferenceResolutionName(entry);
                 const mode = getModeForFileReference(entry, containingSourceFile?.impliedNodeFormat);
-                const oldResolution = (!isString(containingFile) ? oldProgram?.resolvedTypeReferenceDirectiveNames?.get(containingFile.path) : oldProgram?.getAutomaticTypeDirectiveResolutions())?.get(typeDirectiveName, mode);
+                const oldResolution = !isString(containingFile) ?
+                    oldProgram?.getResolvedTypeReferenceDirective(containingFile, typeDirectiveName, mode) :
+                    oldProgram?.getAutomaticTypeDirectiveResolutions()?.get(typeDirectiveName, mode);
                 if (oldResolution?.resolvedTypeReferenceDirective) {
                     if (isTraceEnabled(options, host)) {
                         trace(
@@ -2478,22 +2513,29 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const moduleNames = getModuleNames(newSourceFile);
             const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
             (resolvedModulesProcessing ??= new Map()).set(newSourceFile.path, resolutions);
-            const oldResolutions = oldProgram.resolvedModules?.get(newSourceFile.path);
             // ensure that module resolution results are still correct
-            const resolutionsChanged = hasChangesInResolutions(moduleNames, newSourceFile, resolutions, oldResolutions, moduleResolutionIsEqualTo, moduleResolutionNameAndModeGetter);
+            const resolutionsChanged = hasChangesInResolutions(
+                moduleNames,
+                newSourceFile,
+                resolutions,
+                (name, mode) => oldProgram!.getResolvedModule(newSourceFile, name, mode),
+                moduleResolutionIsEqualTo,
+                moduleResolutionNameAndModeGetter,
+            );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
             const typesReferenceDirectives = newSourceFile.typeReferenceDirectives;
             const typeReferenceResolutions = resolveTypeReferenceDirectiveNamesReusingOldState(typesReferenceDirectives, newSourceFile);
             (resolvedTypeReferenceDirectiveNamesProcessing ??= new Map()).set(newSourceFile.path, typeReferenceResolutions);
             // ensure that types resolutions are still correct
-            const oldTypeResolutions = oldProgram.resolvedTypeReferenceDirectiveNames?.get(newSourceFile.path);
-            const typeReferenceResolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, newSourceFile, typeReferenceResolutions, oldTypeResolutions, typeDirectiveIsEqualTo, typeReferenceResolutionNameAndModeGetter);
-            if (typeReferenceResolutionsChanged) {
-                structureIsReused = StructureIsReused.SafeModules;
-            }
-            else if (oldTypeResolutions) {
-                (resolvedTypeReferenceDirectiveNamesProcessing ??= new Map()).set(newSourceFile.path, oldTypeResolutions);
-            }
+            const typeReferenceResolutionsChanged = hasChangesInResolutions(
+                typesReferenceDirectives,
+                newSourceFile,
+                typeReferenceResolutions,
+                (name, mode) => oldProgram?.getResolvedTypeReferenceDirective(newSourceFile, name, mode),
+                typeDirectiveIsEqualTo,
+                typeReferenceResolutionNameAndModeGetter,
+            );
+            if (typeReferenceResolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
         }
 
         if (structureIsReused !== StructureIsReused.Completely) {
@@ -4933,7 +4975,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             symlinks = createSymlinkCache(currentDirectory, getCanonicalFileName);
         }
         if (files && !symlinks.hasProcessedResolutions()) {
-            symlinks.setSymlinksFromResolutions(resolvedModules, resolvedTypeReferenceDirectiveNames, automaticTypeDirectiveResolutions);
+            symlinks.setSymlinksFromResolutions(forEachResolvedModule, forEachResolvedTypeReferenceDirective, automaticTypeDirectiveResolutions);
         }
         return symlinks;
     }

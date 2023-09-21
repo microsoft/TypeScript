@@ -3,8 +3,6 @@ File: /node_modules/b/internal.d.ts
 
 
 export const b = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
@@ -31,7 +29,6 @@ resolvedModules:
     "/node_modules/b/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
@@ -61,7 +58,6 @@ b: {
     "/node_modules/b/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]
@@ -74,8 +70,6 @@ File: /node_modules/b/internal.d.ts
 
 
 export const b = 2;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
@@ -102,7 +96,6 @@ resolvedModules:
     "/node_modules/b/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
@@ -132,7 +125,6 @@ b: {
     "/node_modules/b/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
 MissingPaths:: ["lib.d.ts"]
