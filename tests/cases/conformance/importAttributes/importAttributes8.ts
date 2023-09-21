@@ -5,9 +5,7 @@
 export default {
     a: "a",
     b: "b",
-    1: "1",
 }
 
 // @filename: /b.ts
-import a from "./a"
-with { a: "a", "b": "b", 1: "1" }; // ok
+import a from "./a" with { a: "a", "b": "b" }; // ok

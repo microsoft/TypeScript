@@ -8,11 +8,11 @@ export default {
 }
 
 //// [b.ts]
-import a from "./a" with { a: "a", "b": "b", 1: "1" };
+import a from "./a" with { a: "a", "b": "b" };
 
 export async function f() {
     const a = import("./a", {
-        with: { a: "a", "b": "b", 1: "1" },
+        with: { a: "a", "b": "b" },
     });
     a;
 }
@@ -66,7 +66,7 @@ export function f() {
         var a;
         return __generator(this, function (_a) {
             a = import("./a", {
-                with: { a: "a", "b": "b", 1: "1" },
+                with: { a: "a", "b": "b" },
             });
             a;
             return [2 /*return*/];

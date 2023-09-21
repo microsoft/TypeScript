@@ -6,7 +6,6 @@ import {
     append,
     ArrayBindingElement,
     arrayFrom,
-    AssertClause,
     BindingElement,
     BindingName,
     BindingPattern,
@@ -978,7 +977,6 @@ export function transformDeclarations(context: TransformationContext) {
                 decl.modifiers,
                 decl.importClause,
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                tryGetResolutionModeOverride(decl.assertClause),
                 tryGetResolutionModeOverride(decl.attributes),
             );
         }
@@ -996,7 +994,6 @@ export function transformDeclarations(context: TransformationContext) {
                     /*namedBindings*/ undefined,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                tryGetResolutionModeOverride(decl.assertClause),
                 tryGetResolutionModeOverride(decl.attributes),
             );
         }
@@ -1013,7 +1010,6 @@ export function transformDeclarations(context: TransformationContext) {
                     namedBindings,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                tryGetResolutionModeOverride(decl.assertClause),
                 tryGetResolutionModeOverride(decl.attributes),
             ) : undefined;
         }
@@ -1030,7 +1026,6 @@ export function transformDeclarations(context: TransformationContext) {
                     bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                 ),
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                tryGetResolutionModeOverride(decl.assertClause),
                 tryGetResolutionModeOverride(decl.attributes),
             );
         }
@@ -1041,14 +1036,13 @@ export function transformDeclarations(context: TransformationContext) {
                 decl.modifiers,
                 /*importClause*/ undefined,
                 rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                tryGetResolutionModeOverride(decl.assertClause),
                 tryGetResolutionModeOverride(decl.attributes),
             );
         }
         // Nothing visible
     }
 
-    function tryGetResolutionModeOverride<T extends AssertClause | ImportAttributes>(node: T | undefined) {
+    function tryGetResolutionModeOverride(node: ImportAttributes | undefined) {
         const mode = getResolutionModeOverride(node);
         return node && mode !== undefined ? node : undefined;
     }
@@ -1321,7 +1315,6 @@ export function transformDeclarations(context: TransformationContext) {
                     return cleanup(factory.updateImportTypeNode(
                         input,
                         factory.updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
-                        input.assertions,
                         input.attributes,
                         input.qualifier,
                         visitNodes(input.typeArguments, visitDeclarationSubtree, isTypeNode),
@@ -1384,7 +1377,6 @@ export function transformDeclarations(context: TransformationContext) {
                     input.isTypeOnly,
                     input.exportClause,
                     rewriteModuleSpecifier(input, input.moduleSpecifier),
-                    tryGetResolutionModeOverride(input.assertClause),
                     tryGetResolutionModeOverride(input.attributes),
                 );
             }

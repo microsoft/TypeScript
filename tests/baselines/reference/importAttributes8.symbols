@@ -7,14 +7,9 @@ export default {
 
     b: "b",
 >b : Symbol(b, Decl(a.ts, 1, 11))
-
-    1: "1",
->1 : Symbol(1, Decl(a.ts, 2, 11))
 }
 
 === /b.ts ===
-import a from "./a"
+import a from "./a" with { a: "a", "b": "b" }; // ok
 >a : Symbol(a, Decl(b.ts, 0, 6))
-
-with { a: "a", "b": "b", 1: "1" }; // ok
 

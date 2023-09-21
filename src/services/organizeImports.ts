@@ -269,7 +269,6 @@ function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFil
                     importDecl.modifiers,
                     /*importClause*/ undefined,
                     moduleSpecifier,
-                    /*assertClause*/ undefined,
                     /*attributes*/ undefined,
                 ));
             }
@@ -531,7 +530,6 @@ function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], compar
                         factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                 ),
                 exportDecl.moduleSpecifier,
-                exportDecl.assertClause,
                 exportDecl.attributes,
             ),
         );
@@ -581,7 +579,6 @@ function updateImportDeclarationAndClause(
         importDeclaration.modifiers,
         factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
         importDeclaration.moduleSpecifier,
-        importDeclaration.assertClause,
         importDeclaration.attributes,
     );
 }

@@ -25,7 +25,6 @@ import {
     ArrayTypeNode,
     ArrowFunction,
     AsExpression,
-    AssertClause,
     AssertionExpression,
     AssignmentDeclarationKind,
     AssignmentKind,
@@ -406,7 +405,6 @@ import {
     IdentifierTypePredicate,
     idText,
     IfStatement,
-    ImportAttributes,
     ImportCall,
     ImportClause,
     ImportDeclaration,
@@ -7127,7 +7125,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return factory.updateImportTypeNode(
                         root,
                         root.argument,
-                        root.assertions,
                         root.attributes,
                         qualifier,
                         typeArguments,
@@ -7921,7 +7918,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // An `import` type directed at an esm format file is only going to resolve in esm mode - set the esm mode assertion
                     if (targetFile?.impliedNodeFormat === ModuleKind.ESNext && targetFile.impliedNodeFormat !== contextFile?.impliedNodeFormat) {
                         specifier = getSpecifierForModuleSymbol(chain[0], context, ModuleKind.ESNext);
-                        attributes = factory.createImportTypeAttributes(factory.createImportAttributes(factory.createNodeArray([
+                        attributes = factory.createImportTypeAttributes(factory.createImportAttributes(SyntaxKind.WithKeyword, factory.createNodeArray([
                             factory.createImportAttribute(
                                 factory.createStringLiteral("resolution-mode"),
                                 factory.createStringLiteral("import"),
@@ -7944,7 +7941,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             specifier = oldSpecifier;
                         }
                         else {
-                            attributes = factory.createImportTypeAttributes(factory.createImportAttributes(factory.createNodeArray([
+                            attributes = factory.createImportTypeAttributes(factory.createImportAttributes(SyntaxKind.WithKeyword, factory.createNodeArray([
                                 factory.createImportAttribute(
                                     factory.createStringLiteral("resolution-mode"),
                                     factory.createStringLiteral(swappedMode === ModuleKind.ESNext ? "import" : "require"),
@@ -7970,12 +7967,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
                         setIdentifierTypeArguments(lastId, /*typeArguments*/ undefined);
                     }
-                    return factory.createImportTypeNode(lit, /*assertions*/ undefined, attributes, nonRootParts as EntityName, typeParameterNodes as readonly TypeNode[], isTypeOf);
+                    return factory.createImportTypeNode(lit, attributes, nonRootParts as EntityName, typeParameterNodes as readonly TypeNode[], isTypeOf);
                 }
                 else {
                     const splitNode = getTopmostIndexedAccessType(nonRootParts);
                     const qualifier = (splitNode.objectType as TypeReferenceNode).typeName;
-                    return factory.createIndexedAccessTypeNode(factory.createImportTypeNode(lit, /*assertions*/ undefined, attributes, qualifier, typeParameterNodes as readonly TypeNode[], isTypeOf), splitNode.indexType);
+                    return factory.createIndexedAccessTypeNode(factory.createImportTypeNode(lit, attributes, qualifier, typeParameterNodes as readonly TypeNode[], isTypeOf), splitNode.indexType);
                 }
             }
 
@@ -8482,7 +8479,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return factory.updateImportTypeNode(
                         node,
                         factory.updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
-                        node.assertions,
                         node.attributes,
                         node.qualifier,
                         visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
@@ -8708,7 +8704,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function inlineExportModifiers(statements: Statement[]) {
                 // Pass 3: Move all `export {}`'s to `export` modifiers where possible
-                const index = findIndex(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !(d.assertClause || d.attributes) && !!d.exportClause && isNamedExports(d.exportClause));
+                const index = findIndex(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !d.attributes && !!d.exportClause && isNamedExports(d.exportClause));
                 if (index >= 0) {
                     const exportDecl = statements[index] as ExportDeclaration & { readonly exportClause: NamedExports; };
                     const replacements = mapDefined(exportDecl.exportClause.elements, e => {
@@ -8740,7 +8736,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 replacements,
                             ),
                             exportDecl.moduleSpecifier,
-                            exportDecl.assertClause,
                             exportDecl.attributes,
                         );
                     }
@@ -9463,7 +9458,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         )]),
                                     ),
                                     factory.createStringLiteral(specifier),
-                                    /*assertClause*/ undefined,
                                     /*attributes*/ undefined,
                                 ),
                                 ModifierFlags.None,
@@ -9548,7 +9542,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(/*isTypeOnly*/ false, factory.createIdentifier(localName), /*namedBindings*/ undefined),
                                 specifier,
-                                (node as ImportClause).parent.assertClause,
                                 (node as ImportClause).parent.attributes,
                             ),
                             ModifierFlags.None,
@@ -9563,7 +9556,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
                                 specifier,
-                                (node as NamespaceImport).parent.parent.assertClause,
                                 (node as ImportClause).parent.attributes,
                             ),
                             ModifierFlags.None,
@@ -9599,7 +9591,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     ]),
                                 ),
                                 specifier,
-                                (node as ImportSpecifier).parent.parent.parent.assertClause,
                                 (node as ImportSpecifier).parent.parent.parent.attributes,
                             ),
                             ModifierFlags.None,
@@ -39698,15 +39689,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkImportType(node: ImportTypeNode) {
         checkSourceElement(node.argument);
 
-        if (node.assertions || node.attributes) {
-            const override = getResolutionModeOverride(node.assertions?.assertClause || node.attributes?.attributes, grammarErrorOnNode);
-            const errorNode = node.assertions?.assertClause || node.attributes?.attributes;
+        if (node.attributes) {
+            const override = getResolutionModeOverride(node.attributes?.attributes, grammarErrorOnNode);
+            const errorNode = node.attributes?.attributes;
             if (override && errorNode && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
                 grammarErrorOnNode(
                     errorNode,
-                    node.assertions?.assertClause
-                        ? Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext
-                        : Diagnostics.resolution_mode_attribute_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
+                    node.attributes.attributes.token === SyntaxKind.WithKeyword
+                        ? Diagnostics.resolution_mode_attribute_are_only_supported_when_moduleResolution_is_node16_or_nodenext
+                        : Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext
                 );
             }
         }
@@ -44948,26 +44939,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return false;
             }
         }
-        if (!isImportEqualsDeclaration(node)) {
-            if (node.attributes) {
-                return checkImportAttributeValue(node.attributes, Diagnostics.Import_attribute_values_must_be_string_literal_expressions);
+        if (!isImportEqualsDeclaration(node) && node.attributes) {
+            const diagnostic = node.attributes.token === SyntaxKind.WithKeyword ? Diagnostics.Import_attribute_values_must_be_string_literal_expressions : Diagnostics.Import_assertion_values_must_be_string_literal_expressions;
+            let hasError = false;
+            for (const attr of node.attributes.elements) {
+                if (!isStringLiteral(attr.value)) {
+                    hasError = true;
+                    error(attr.value, diagnostic);
+                }
             }
-            if (node.assertClause) {
-                return checkImportAttributeValue(node.assertClause, Diagnostics.Import_assertion_values_must_be_string_literal_expressions);
-            }
+            return !hasError;
         }
         return true;
-    }
-
-    function checkImportAttributeValue(node: AssertClause | ImportAttributes, message: DiagnosticMessage) {
-        let hasError = false;
-        for (const clause of node.elements) {
-            if (!isStringLiteral(clause.value)) {
-                hasError = true;
-                error(clause.value, message);
-            }
-        }
-        return !hasError;
     }
 
     function checkAliasSymbol(node: AliasDeclarationNode) {
@@ -45147,18 +45130,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkImportAttributes(declaration: ImportDeclaration | ExportDeclaration) {
-        if (declaration.assertClause) {
-            grammarErrorOnFirstToken(declaration.assertClause, Diagnostics.The_assert_keyword_in_import_attributes_is_deprecated_and_has_been_replaced_by_the_with_keyword);
+        if (declaration.attributes && declaration.attributes.token === SyntaxKind.AssertKeyword) {
+            grammarErrorOnFirstToken(declaration.attributes, Diagnostics.The_assert_keyword_in_import_attributes_is_deprecated_and_has_been_replaced_by_the_with_keyword);
         }
-        const node = declaration.attributes || declaration.assertClause;
+        const node = declaration.attributes;
         if (node) {
             const validForTypeAttributes = isExclusivelyTypeOnlyImportOrExport(declaration);
             const override = getResolutionModeOverride(node, validForTypeAttributes ? grammarErrorOnNode : undefined);
+            const isImportAttributes = declaration.attributes.token === SyntaxKind.WithKeyword;
             if (validForTypeAttributes && override) {
                 if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
                     return grammarErrorOnNode(
                         node,
-                        declaration.attributes
+                        isImportAttributes
                             ? Diagnostics.resolution_mode_attribute_are_only_supported_when_moduleResolution_is_node16_or_nodenext
                             : Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
                     );
@@ -45168,7 +45152,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const mode = (moduleKind === ModuleKind.NodeNext) && declaration.moduleSpecifier && getUsageModeForExpression(declaration.moduleSpecifier);
             if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext) {
-                const message = declaration.attributes
+                const message = isImportAttributes
                     ? moduleKind === ModuleKind.NodeNext
                         ? Diagnostics.Import_attributes_are_not_allowed_on_statements_that_transpile_to_CommonJS_require_calls
                         : Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext
@@ -45179,7 +45163,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly) {
-                return grammarErrorOnNode(node, declaration.attributes ? Diagnostics.Import_attributes_cannot_be_used_with_type_only_imports_or_exports : Diagnostics.Import_assertions_cannot_be_used_with_type_only_imports_or_exports);
+                return grammarErrorOnNode(node, isImportAttributes ? Diagnostics.Import_attributes_cannot_be_used_with_type_only_imports_or_exports : Diagnostics.Import_assertions_cannot_be_used_with_type_only_imports_or_exports);
             }
 
             if (override) {

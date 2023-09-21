@@ -7,8 +7,6 @@ import {
     ArrayTypeNode,
     ArrowFunction,
     AsExpression,
-    AssertClause,
-    AssertEntry,
     AwaitExpression,
     base64encode,
     BigIntLiteral,
@@ -2055,10 +2053,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitNamedExports(node as NamedExports);
                 case SyntaxKind.ExportSpecifier:
                     return emitExportSpecifier(node as ExportSpecifier);
-                case SyntaxKind.AssertClause:
-                    return emitAssertClause(node as AssertClause);
-                case SyntaxKind.AssertEntry:
-                    return emitAssertEntry(node as AssertEntry);
                 case SyntaxKind.ImportAttributes:
                     return emitImportAttributes(node as ImportAttributes);
                 case SyntaxKind.ImportAttribute:
@@ -2952,25 +2946,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeKeyword("import");
         writePunctuation("(");
         emit(node.argument);
-        if (node.assertions) {
-            writePunctuation(",");
-            writeSpace();
-            writePunctuation("{");
-            writeSpace();
-            writeKeyword("assert");
-            writePunctuation(":");
-            writeSpace();
-            const elements = node.assertions.assertClause.elements;
-            emitList(node.assertions.assertClause, elements, ListFormat.ImportClauseEntries);
-            writeSpace();
-            writePunctuation("}");
-        }
         if (node.attributes) {
             writePunctuation(",");
             writeSpace();
             writePunctuation("{");
             writeSpace();
-            writeKeyword("with");
+            emitTokenWithComment(node.attributes.attributes.token, node.pos, writeKeyword, node);
             writePunctuation(":");
             writeSpace();
             const elements = node.attributes.attributes.elements;
@@ -4009,8 +3990,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
         }
         emitExpression(node.moduleSpecifier);
-        if (node.attributes || node.assertClause) {
-            emitWithLeadingSpace(node.attributes || node.assertClause);
+        if (node.attributes) {
+            emitWithLeadingSpace(node.attributes);
         }
         writeTrailingSemicolon();
     }
@@ -4084,35 +4065,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
             emitExpression(node.moduleSpecifier);
         }
-        if (node.attributes || node.assertClause) {
-            emitWithLeadingSpace(node.attributes || node.assertClause);
+        if (node.attributes) {
+            emitWithLeadingSpace(node.attributes);
         }
         writeTrailingSemicolon();
     }
 
-    function emitAssertClause(node: AssertClause) {
-        emitTokenWithComment(SyntaxKind.AssertKeyword, node.pos, writeKeyword, node);
-        writeSpace();
-        const elements = node.elements;
-        emitList(node, elements, ListFormat.ImportClauseEntries);
-    }
-
-    function emitAssertEntry(node: AssertEntry) {
-        emit(node.name);
-        writePunctuation(":");
-        writeSpace();
-
-        const value = node.value;
-        /** @see {emitPropertyAssignment} */
-        if ((getEmitFlags(value) & EmitFlags.NoLeadingComments) === 0) {
-            const commentRange = getCommentRange(value);
-            emitTrailingCommentsOfPosition(commentRange.pos);
-        }
-        emit(value);
-    }
-
     function emitImportAttributes(node: ImportAttributes) {
-        emitTokenWithComment(SyntaxKind.WithKeyword, node.pos, writeKeyword, node);
+        emitTokenWithComment(node.token, node.pos, writeKeyword, node);
         writeSpace();
         const elements = node.elements;
         emitList(node, elements, ListFormat.ImportAttributes);

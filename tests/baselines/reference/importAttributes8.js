@@ -4,19 +4,16 @@
 export default {
     a: "a",
     b: "b",
-    1: "1",
 }
 
 //// [b.ts]
-import a from "./a"
-with { a: "a", "b": "b", 1: "1" }; // ok
+import a from "./a" with { a: "a", "b": "b" }; // ok
 
 
 //// [a.js]
 export default {
     a: "a",
     b: "b",
-    1: "1",
 };
 //// [b.js]
 export {};

@@ -754,7 +754,6 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
                 /*modifiers*/ undefined,
                 nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
                 nodeFactory.createStringLiteral(externalHelpersModuleNameText),
-                /*assertClause*/ undefined,
                 /*attributes*/ undefined,
             );
             addInternalEmitFlags(externalHelpersImportDeclaration, InternalEmitFlags.NeverApplyImportHelper);

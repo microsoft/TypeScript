@@ -11,9 +11,6 @@ import {
     Identifier,
     isArray,
     isArrayBindingElement,
-    isAssertClause,
-    isAssertEntry,
-    isAssertionKey,
     isAssertsKeyword,
     isAsteriskToken,
     isAwaitKeyword,
@@ -47,7 +44,6 @@ import {
     isImportAttributes,
     isImportClause,
     isImportSpecifier,
-    isImportTypeAssertionContainer,
     isImportTypeAttributes,
     isJsxAttributeLike,
     isJsxAttributeName,
@@ -898,7 +894,6 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateImportTypeNode(
             node,
             Debug.checkDefined(nodeVisitor(node.argument, visitor, isTypeNode)),
-            nodeVisitor(node.assertions, visitor, isImportTypeAssertionContainer),
             nodeVisitor(node.attributes, visitor, isImportTypeAttributes),
             nodeVisitor(node.qualifier, visitor, isEntityName),
             nodesVisitor(node.typeArguments, visitor, isTypeNode),
@@ -910,14 +905,6 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateImportTypeAttributes(
             node,
             Debug.checkDefined(nodeVisitor(node.attributes, visitor, isImportAttributes)),
-            node.multiLine,
-        );
-    },
-
-    [SyntaxKind.ImportTypeAssertionContainer]: function visitEachChildOfImportTypeAssertionContainer(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
-        return context.factory.updateImportTypeAssertionContainer(
-            node,
-            Debug.checkDefined(nodeVisitor(node.assertClause, visitor, isAssertClause)),
             node.multiLine,
         );
     },
@@ -1537,24 +1524,7 @@ const visitEachChildTable: VisitEachChildTable = {
             nodesVisitor(node.modifiers, visitor, isModifierLike),
             nodeVisitor(node.importClause, visitor, isImportClause),
             Debug.checkDefined(nodeVisitor(node.moduleSpecifier, visitor, isExpression)),
-            nodeVisitor(node.assertClause, visitor, isAssertClause),
             nodeVisitor(node.attributes, visitor, isImportAttributes),
-        );
-    },
-
-    [SyntaxKind.AssertClause]: function visitEachChildOfAssertClause(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
-        return context.factory.updateAssertClause(
-            node,
-            nodesVisitor(node.elements, visitor, isAssertEntry),
-            node.multiLine,
-        );
-    },
-
-    [SyntaxKind.AssertEntry]: function visitEachChildOfAssertEntry(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
-        return context.factory.updateAssertEntry(
-            node,
-            Debug.checkDefined(nodeVisitor(node.name, visitor, isAssertionKey)),
-            Debug.checkDefined(nodeVisitor(node.value, visitor, isExpression)),
         );
     },
 
@@ -1628,7 +1598,6 @@ const visitEachChildTable: VisitEachChildTable = {
             node.isTypeOnly,
             nodeVisitor(node.exportClause, visitor, isNamedExportBindings),
             nodeVisitor(node.moduleSpecifier, visitor, isExpression),
-            nodeVisitor(node.assertClause, visitor, isAssertClause),
             nodeVisitor(node.attributes, visitor, isImportAttributes),
         );
     },

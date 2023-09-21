@@ -9,11 +9,11 @@ export default {
 }
 
 // @filename: /b.ts
-import a from "./a" with { a: "a", "b": "b", 1: "1" };
+import a from "./a" with { a: "a", "b": "b" };
 
 export async function f() {
     const a = import("./a", {
-        with: { a: "a", "b": "b", 1: "1" },
+        with: { a: "a", "b": "b" },
     });
     a;
 }

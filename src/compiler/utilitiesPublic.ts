@@ -6,7 +6,6 @@ import {
     ArrayBindingOrAssignmentElement,
     ArrayBindingOrAssignmentPattern,
     AssertionExpression,
-    AssertionKey,
     AssignmentDeclarationKind,
     AssignmentPattern,
     AutoAccessorPropertyDeclaration,
@@ -147,7 +146,6 @@ import {
     isModuleBlock,
     isNonNullExpression,
     isNotEmittedStatement,
-    isNumericLiteral,
     isOmittedExpression,
     isParameter,
     isPartiallyEmittedExpression,
@@ -1520,16 +1518,12 @@ export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnl
     return isTypeOnlyImportDeclaration(node) || isTypeOnlyExportDeclaration(node);
 }
 
-export function isAssertionKey(node: Node): node is AssertionKey {
-    return isStringLiteral(node) || isIdentifier(node);
-}
-
 export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
     return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
 }
 
 export function isImportAttributeName(node: Node): node is ImportAttributeName {
-    return isStringLiteral(node) || isIdentifier(node) || isNumericLiteral(node);
+    return isStringLiteral(node) || isIdentifier(node);
 }
 
 // Identifiers

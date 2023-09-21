@@ -18,7 +18,7 @@ export default {
 }
 
 === /b.ts ===
-import a from "./a" with { a: "a", "b": "b", 1: "1" };
+import a from "./a" with { a: "a", "b": "b" };
 >a : { a: string; b: string; 1: string; }
 >a : error
 
@@ -27,19 +27,17 @@ export async function f() {
 
     const a = import("./a", {
 >a : Promise<typeof import("/a")>
->import("./a", {        with: { a: "a", "b": "b", 1: "1" },    }) : Promise<typeof import("/a")>
+>import("./a", {        with: { a: "a", "b": "b" },    }) : Promise<typeof import("/a")>
 >"./a" : "./a"
->{        with: { a: "a", "b": "b", 1: "1" },    } : { with: { a: string; b: string; 1: string; }; }
+>{        with: { a: "a", "b": "b" },    } : { with: { a: string; b: string; }; }
 
-        with: { a: "a", "b": "b", 1: "1" },
->with : { a: string; b: string; 1: string; }
->{ a: "a", "b": "b", 1: "1" } : { a: string; b: string; 1: string; }
+        with: { a: "a", "b": "b" },
+>with : { a: string; b: string; }
+>{ a: "a", "b": "b" } : { a: string; b: string; }
 >a : string
 >"a" : "a"
 >"b" : string
 >"b" : "b"
->1 : string
->"1" : "1"
 
     });
     a;
