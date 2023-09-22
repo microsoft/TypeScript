@@ -11,6 +11,7 @@ import {
     Identifier,
     isArray,
     isArrayBindingElement,
+    isAssertClause,
     isAssertsKeyword,
     isAsteriskToken,
     isAwaitKeyword,
@@ -44,7 +45,6 @@ import {
     isImportAttributes,
     isImportClause,
     isImportSpecifier,
-    isImportTypeAttributes,
     isJsxAttributeLike,
     isJsxAttributeName,
     isJsxAttributes,
@@ -894,17 +894,17 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateImportTypeNode(
             node,
             Debug.checkDefined(nodeVisitor(node.argument, visitor, isTypeNode)),
-            nodeVisitor(node.attributes, visitor, isImportTypeAttributes),
+            nodeVisitor(node.attributes, visitor, isImportAttributes),
             nodeVisitor(node.qualifier, visitor, isEntityName),
             nodesVisitor(node.typeArguments, visitor, isTypeNode),
             node.isTypeOf,
         );
     },
 
-    [SyntaxKind.ImportTypeAttributes]: function visitEachChildOfImportTypeAttributes(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
-        return context.factory.updateImportTypeAttributes(
+    [SyntaxKind.ImportTypeAssertionContainer]: function visitEachChildOfImportTypeAssertionContainer(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+        return context.factory.updateImportTypeAssertionContainer(
             node,
-            Debug.checkDefined(nodeVisitor(node.attributes, visitor, isImportAttributes)),
+            Debug.checkDefined(nodeVisitor(node.assertClause, visitor, isAssertClause)),
             node.multiLine,
         );
     },

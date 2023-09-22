@@ -122,7 +122,7 @@ import {
     ImportEqualsDeclaration,
     ImportOrExportSpecifier,
     ImportSpecifier,
-    ImportTypeAttributes,
+    ImportTypeAssertionContainer,
     ImportTypeNode,
     IndexedAccessTypeNode,
     IndexSignatureDeclaration,
@@ -692,8 +692,8 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.qualifier) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
     },
-    [SyntaxKind.ImportTypeAttributes]: function forEachChildInImportTypeAttributes<T>(node: ImportTypeAttributes, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, node.attributes);
+    [SyntaxKind.ImportTypeAssertionContainer]: function forEachChildInImportTypeAssertionContainer<T>(node: ImportTypeAssertionContainer, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.assertClause);
     },
     [SyntaxKind.ParenthesizedType]: forEachChildInParenthesizedTypeOrTypeOperator,
     [SyntaxKind.TypeOperator]: forEachChildInParenthesizedTypeOrTypeOperator,
@@ -4510,32 +4510,6 @@ namespace Parser {
         return token() === SyntaxKind.ImportKeyword;
     }
 
-    function parseImportTypeAttributes(): ImportTypeAttributes {
-        const pos = getNodePos();
-        const openBracePosition = scanner.getTokenStart();
-        parseExpected(SyntaxKind.OpenBraceToken);
-        const multiLine = scanner.hasPrecedingLineBreak();
-        const currentToken = token();
-        if (currentToken !== SyntaxKind.WithKeyword && currentToken !== SyntaxKind.AssertKeyword) {
-            parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.WithKeyword));
-        }
-        else {
-            nextToken();
-        }
-        parseExpected(SyntaxKind.ColonToken);
-        const attributes = parseImportAttributes(currentToken as SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword, /*shouldAdvance*/ false);
-        if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-            const lastError = lastOrUndefined(parseDiagnostics);
-            if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                addRelatedInfo(
-                    lastError,
-                    createDetachedDiagnostic(fileName, sourceText, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, "{", "}"),
-                );
-            }
-        }
-        return finishNode(factory.createImportTypeAttributes(attributes, multiLine), pos);
-    }
-
     function parseImportType(): ImportTypeNode {
         sourceFlags |= NodeFlags.PossiblyContainsDynamicImport;
         const pos = getNodePos();
@@ -4543,9 +4517,28 @@ namespace Parser {
         parseExpected(SyntaxKind.ImportKeyword);
         parseExpected(SyntaxKind.OpenParenToken);
         const type = parseType();
-        let attributes: ImportTypeAttributes | undefined;
+        let attributes: ImportAttributes | undefined;
         if (parseOptional(SyntaxKind.CommaToken)) {
-            attributes = parseImportTypeAttributes();
+            const openBracePosition = scanner.getTokenStart();
+            parseExpected(SyntaxKind.OpenBraceToken);
+            const currentToken = token();
+            if (currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) {
+                nextToken();
+            }
+            else {
+                parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.WithKeyword));
+            }
+            parseExpected(SyntaxKind.ColonToken);
+            attributes = parseImportAttributes(currentToken as SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword, /*skipKeyword*/ true);
+            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, sourceText, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, "{", "}"),
+                    );
+                }
+            }
         }
         parseExpected(SyntaxKind.CloseParenToken);
         const qualifier = parseOptional(SyntaxKind.DotToken) ? parseEntityNameOfTypeReference() : undefined;
@@ -8380,10 +8373,10 @@ namespace Parser {
         return finishNode(factory.createImportAttribute(name, value), pos);
     }
 
-    function parseImportAttributes(token: SyntaxKind.AssertKeyword | SyntaxKind.WithKeyword, shouldAdvance = true) {
+    function parseImportAttributes(token: SyntaxKind.AssertKeyword | SyntaxKind.WithKeyword, skipKeyword?: true) {
         const pos = getNodePos();
-        if (shouldAdvance) {
-            nextToken();
+        if (!skipKeyword) {
+            parseExpected(token);
         }
         const openBracePosition = scanner.getTokenStart();
         if (parseExpected(SyntaxKind.OpenBraceToken)) {

@@ -405,6 +405,7 @@ import {
     IdentifierTypePredicate,
     idText,
     IfStatement,
+    ImportAttributes,
     ImportCall,
     ImportClause,
     ImportDeclaration,
@@ -412,7 +413,6 @@ import {
     ImportOrExportSpecifier,
     ImportsNotUsedAsValues,
     ImportSpecifier,
-    ImportTypeAttributes,
     ImportTypeNode,
     IndexedAccessType,
     IndexedAccessTypeNode,
@@ -7913,19 +7913,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
                 const targetFile = getSourceFileOfModule(chain[0]);
                 let specifier: string | undefined;
-                let attributes: ImportTypeAttributes | undefined;
+                let attributes: ImportAttributes | undefined;
                 if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
                     // An `import` type directed at an esm format file is only going to resolve in esm mode - set the esm mode assertion
                     if (targetFile?.impliedNodeFormat === ModuleKind.ESNext && targetFile.impliedNodeFormat !== contextFile?.impliedNodeFormat) {
                         specifier = getSpecifierForModuleSymbol(chain[0], context, ModuleKind.ESNext);
-                        attributes = factory.createImportTypeAttributes(factory.createImportAttributes(
+                        attributes = factory.createImportAttributes(
                             factory.createNodeArray([
                                 factory.createImportAttribute(
                                     factory.createStringLiteral("resolution-mode"),
                                     factory.createStringLiteral("import"),
                                 ),
                             ]),
-                        ));
+                        );
                     }
                 }
                 if (!specifier) {
@@ -7943,14 +7943,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             specifier = oldSpecifier;
                         }
                         else {
-                            attributes = factory.createImportTypeAttributes(factory.createImportAttributes(
+                            attributes = factory.createImportAttributes(
                                 factory.createNodeArray([
                                     factory.createImportAttribute(
                                         factory.createStringLiteral("resolution-mode"),
                                         factory.createStringLiteral(swappedMode === ModuleKind.ESNext ? "import" : "require"),
                                     ),
                                 ]),
-                            ));
+                            );
                         }
                     }
 
@@ -39694,12 +39694,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.argument);
 
         if (node.attributes) {
-            const override = getResolutionModeOverride(node.attributes?.attributes, grammarErrorOnNode);
-            const errorNode = node.attributes?.attributes;
+            const override = getResolutionModeOverride(node.attributes, grammarErrorOnNode);
+            const errorNode = node.attributes;
             if (override && errorNode && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
                 grammarErrorOnNode(
                     errorNode,
-                    node.attributes.attributes.token === SyntaxKind.WithKeyword
+                    node.attributes.token === SyntaxKind.WithKeyword
                         ? Diagnostics.The_resolution_mode_attribute_is_only_supported_when_moduleResolution_is_node16_or_nodenext
                         : Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext,
                 );

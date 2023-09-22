@@ -908,7 +908,7 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
         }
     }
     if (usage.parent.parent && isImportTypeNode(usage.parent.parent)) {
-        const override = getResolutionModeOverride(usage.parent.parent.attributes?.attributes);
+        const override = getResolutionModeOverride(usage.parent.parent.attributes);
         if (override) {
             return override;
         }

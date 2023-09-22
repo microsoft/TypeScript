@@ -379,10 +379,9 @@ export const enum SyntaxKind {
 
     ImportAttributes,
     ImportAttribute,
-    ImportTypeAttributes,
     /** @deprecated */ AssertClause = ImportAttributes,
     /** @deprecated */ AssertEntry = ImportAttribute,
-    /** @deprecated */ ImportTypeAssertionContainer = ImportTypeAttributes,
+    /** @deprecated */ ImportTypeAssertionContainer,
 
     // Property assignments
     PropertyAssignment,
@@ -1061,7 +1060,6 @@ export type HasChildren =
     | InferTypeNode
     | ImportTypeNode
     | ImportTypeAssertionContainer
-    | ImportTypeAttributes
     | NamedTupleMember
     | ParenthesizedTypeNode
     | TypeOperatorNode
@@ -2149,13 +2147,10 @@ export interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTy
 }
 
 /** @deprecated */
-export type ImportTypeAssertionContainer = ImportTypeAttributes;
-
-export interface ImportTypeAttributes extends Node {
-    readonly kind: SyntaxKind.ImportTypeAttributes;
+export interface ImportTypeAssertionContainer extends Node {
+    readonly kind: SyntaxKind.ImportTypeAssertionContainer;
     readonly parent: ImportTypeNode;
     /** @deprecated */ readonly assertClause: AssertClause;
-    readonly attributes: ImportAttributes;
     readonly multiLine?: boolean;
 }
 
@@ -2164,7 +2159,7 @@ export interface ImportTypeNode extends NodeWithTypeArguments {
     readonly isTypeOf: boolean;
     readonly argument: TypeNode;
     /** @deprecated */ readonly assertions?: ImportTypeAssertionContainer;
-    readonly attributes?: ImportTypeAttributes;
+    readonly attributes?: ImportAttributes;
     readonly qualifier?: EntityName;
 }
 
@@ -8425,8 +8420,8 @@ export interface NodeFactory {
     updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
     createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
     updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-    createImportTypeNode(argument: TypeNode, attributes?: ImportTypeAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
-    updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, attributes: ImportTypeAttributes | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
+    createImportTypeNode(argument: TypeNode, attributes?: ImportAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+    updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, attributes: ImportAttributes | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
     createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
     updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
     createThisTypeNode(): ThisTypeNode;
@@ -8621,8 +8616,6 @@ export interface NodeFactory {
     updateImportAttributes(node: ImportAttributes, elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
     createImportAttribute(name: ImportAttributeName, value: Expression): ImportAttribute;
     updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute;
-    createImportTypeAttributes(attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes;
-    updateImportTypeAttributes(node: ImportTypeAttributes, attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes;
     createNamespaceImport(name: Identifier): NamespaceImport;
     updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
     createNamespaceExport(name: Identifier): NamespaceExport;

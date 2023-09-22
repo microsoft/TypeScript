@@ -75,7 +75,6 @@ import {
     ImportExpression,
     ImportSpecifier,
     ImportTypeAssertionContainer,
-    ImportTypeAttributes,
     ImportTypeNode,
     IndexedAccessTypeNode,
     IndexSignatureDeclaration,
@@ -848,10 +847,6 @@ export function isImportClause(node: Node): node is ImportClause {
 
 export function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer {
     return node.kind === SyntaxKind.ImportTypeAssertionContainer;
-}
-
-export function isImportTypeAttributes(node: Node): node is ImportTypeAttributes {
-    return node.kind === SyntaxKind.ImportTypeAttributes;
 }
 
 /** @deprecated */

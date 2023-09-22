@@ -2951,11 +2951,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
             writePunctuation("{");
             writeSpace();
-            writeKeyword(node.attributes.attributes.token === SyntaxKind.AssertKeyword ? "assert" : "with");
+            writeKeyword(node.attributes.token === SyntaxKind.AssertKeyword ? "assert" : "with");
             writePunctuation(":");
             writeSpace();
-            const elements = node.attributes.attributes.elements;
-            emitList(node.attributes.attributes, elements, ListFormat.ImportAttributes);
+            const elements = node.attributes.elements;
+            emitList(node.attributes, elements, ListFormat.ImportAttributes);
             writeSpace();
             writePunctuation("}");
         }

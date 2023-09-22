@@ -10458,5 +10458,5 @@ export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclarati
     if (node === undefined) {
         return false;
     }
-    return !!getResolutionModeOverride(isImportTypeNode(node) ? node.attributes?.attributes : node.attributes);
+    return !!getResolutionModeOverride(node.attributes);
 }

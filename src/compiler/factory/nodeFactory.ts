@@ -145,7 +145,6 @@ import {
     ImportEqualsDeclaration,
     ImportSpecifier,
     ImportTypeAssertionContainer,
-    ImportTypeAttributes,
     ImportTypeNode,
     IndexedAccessTypeNode,
     IndexSignatureDeclaration,
@@ -795,8 +794,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateAssertEntry,
         createImportTypeAssertionContainer,
         updateImportTypeAssertionContainer,
-        createImportTypeAttributes,
-        updateImportTypeAttributes,
         createImportAttributes,
         updateImportAttributes,
         createImportAttribute,
@@ -2653,14 +2650,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createImportTypeNode(
         argument: TypeNode,
-        attributes?: ImportTypeAttributes,
+        attributes?: ImportAttributes,
         qualifier?: EntityName,
         typeArguments?: readonly TypeNode[],
         isTypeOf = false,
     ): ImportTypeNode {
         const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
         node.argument = argument;
-        node.attributes = node.assertions = attributes;
+        node.attributes = attributes;
+        if (node.assertions && node.assertions.assertClause && node.attributes) {
+            (node.assertions as Mutable<ImportTypeAssertionContainer>).assertClause = node.attributes;
+        }
         node.qualifier = qualifier;
         node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
         node.isTypeOf = isTypeOf;
@@ -2672,7 +2672,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function updateImportTypeNode(
         node: ImportTypeNode,
         argument: TypeNode,
-        attributes: ImportTypeAttributes | undefined,
+        attributes: ImportAttributes | undefined,
         qualifier: EntityName | undefined,
         typeArguments: readonly TypeNode[] | undefined,
         isTypeOf: boolean = node.isTypeOf,
@@ -4809,22 +4809,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node.assertClause !== clause
                 || node.multiLine !== multiLine
             ? update(createImportTypeAssertionContainer(clause, multiLine), node)
-            : node;
-    }
-
-    // @api
-    function createImportTypeAttributes(attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes {
-        const node = createBaseNode<ImportTypeAttributes>(SyntaxKind.ImportTypeAttributes);
-        node.attributes = node.assertClause = attributes;
-        node.multiLine = multiLine;
-        return node;
-    }
-
-    // @api
-    function updateImportTypeAttributes(node: ImportTypeAttributes, attributes: ImportAttributes, multiLine?: boolean): ImportTypeAttributes {
-        return node.attributes !== attributes
-                || node.multiLine !== multiLine
-            ? update(createImportTypeAttributes(attributes, multiLine), node)
             : node;
     }
 
