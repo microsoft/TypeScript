@@ -567,7 +567,7 @@ export function createSession(host: TestServerHost, opts: Partial<TestSessionOpt
     return new TestSession({ ...sessionOptions, ...opts });
 }
 
-export function createSessionWithCustomEventHandler(host: TestServerHost, opts?: Partial<TestSessionOptions>) {
+export function createSessionWithCustomEventHandler(host: TestServerHost, opts?: Partial<TestSessionOptions>, customAction?: (event: ts.server.ProjectServiceEvent) => void) {
     const session = createSession(host, { eventHandler, logger: createLoggerWithInMemoryLogs(host), ...opts });
     return session;
     function eventHandler(event: ts.server.ProjectServiceEvent) {
@@ -578,6 +578,9 @@ export function createSessionWithCustomEventHandler(host: TestServerHost, opts?:
             case ts.server.LargeFileReferencedEvent:
             case ts.server.ProjectInfoTelemetryEvent:
             case ts.server.OpenFileInfoTelemetryEvent:
+            case ts.server.CreateFileWatcherEvent:
+            case ts.server.CreateDirectoryWatcherEvent:
+            case ts.server.CloseFileWatcherEvent:
                 break;
             // Convert project to project name
             case ts.server.ProjectLoadingStartEvent:
@@ -593,6 +596,7 @@ export function createSessionWithCustomEventHandler(host: TestServerHost, opts?:
                 ts.Debug.assertNever(event);
         }
         session.event(data, `CustomHandler::${event.eventName}`);
+        customAction?.(event);
     }
 }
 
