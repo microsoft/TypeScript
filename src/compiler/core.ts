@@ -2744,6 +2744,5 @@ export function isNodeLikeSystem(): boolean {
     // and definitely exist.
     return typeof process !== "undefined"
         && !!process.nextTick
-        && !(process as any).browser
-        && typeof module === "object";
+        && !(process as any).browser; // TODO(jakebailey): figure out a better "is node" check
 }
