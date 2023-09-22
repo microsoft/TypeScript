@@ -23,3 +23,11 @@ invoke({
         return +a;
     }
 });
+
+const kind = "a"
+invoke({
+    kind,
+    method(a) {
+        return +a;
+    }
+})

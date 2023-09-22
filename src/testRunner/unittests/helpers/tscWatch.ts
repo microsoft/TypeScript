@@ -1,5 +1,13 @@
-import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
-import { Baseline } from "../../_namespaces/Harness";
+import {
+    verifyProgramStructure,
+    verifyResolutionCache,
+} from "../../../harness/incrementalUtils";
+import {
+    patchHostForBuildInfoReadWrite,
+} from "../../_namespaces/fakes";
+import {
+    Baseline,
+} from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
     baselinePrograms,
@@ -18,11 +26,11 @@ import {
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",
-    content: "let x = 1"
+    content: "let x = 1",
 };
 export const commonFile2: File = {
     path: "/a/b/commonFile2.ts",
-    content: "let y = 1"
+    content: "let y = 1",
 };
 
 export type WatchOrSolution<T extends ts.BuilderProgram> = void | ts.SolutionBuilder<T> | ts.WatchOfConfigFile<T> | ts.WatchOfFilesAndCompilerOptions<T>;
@@ -32,8 +40,11 @@ export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndS
     timeouts: (
         sys: TscWatchSystem,
         programs: readonly CommandLineProgram[],
-        watchOrSolution: WatchOrSolution<T>
+        watchOrSolution: WatchOrSolution<T>,
     ) => void;
+    // TODO:: sheetal: Needing these fields are technically issues that need to be fixed later
+    symlinksNotReflected?: readonly string[];
+    skipStructureCheck?: true;
 }
 export interface TscWatchCheckOptions {
     baselineSourceMap?: boolean;
@@ -60,9 +71,12 @@ function tscWatchCompile(input: TscWatchCompile) {
     it("tsc-watch:: Generates files matching the baseline", () => {
         const { sys, baseline, oldSnap } = createBaseline(input.sys());
         const {
-            scenario, subScenario,
-            commandLineArgs, edits,
-            baselineSourceMap, baselineDependencies
+            scenario,
+            subScenario,
+            commandLineArgs,
+            edits,
+            baselineSourceMap,
+            baselineDependencies,
         } = input;
 
         if (!isWatch(commandLineArgs)) sys.exit = exitCode => sys.exitCode = exitCode;
@@ -83,7 +97,7 @@ function tscWatchCompile(input: TscWatchCompile) {
             baselineSourceMap,
             baselineDependencies,
             edits,
-            watchOrSolution
+            watchOrSolution,
         });
     });
 }
@@ -145,24 +159,19 @@ export function createBaseline(system: TestServerHost, modifySystem?: (sys: Test
 }
 
 export function createSolutionBuilderWithWatchHostForBaseline(sys: TestServerHost, cb: ts.ExecuteCommandLineCallbacks) {
-    const host = ts.createSolutionBuilderWithWatchHost(sys,
-        /*createProgram*/ undefined,
-        ts.createDiagnosticReporter(sys, /*pretty*/ true),
-        ts.createBuilderStatusReporter(sys, /*pretty*/ true),
-        ts.createWatchStatusReporter(sys, /*pretty*/ true)
-    );
+    const host = ts.createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true), ts.createWatchStatusReporter(sys, /*pretty*/ true));
     host.afterProgramEmitAndDiagnostics = cb;
     host.afterEmitBundle = cb;
     return host;
 }
 
 interface CreateWatchCompilerHostOfConfigFileForBaseline<T extends ts.BuilderProgram> extends ts.CreateWatchCompilerHostOfConfigFileInput<T> {
-    system: TestServerHost,
+    system: TestServerHost;
     cb: ts.ExecuteCommandLineCallbacks;
 }
 
 export function createWatchCompilerHostOfConfigFileForBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram>(
-    input: CreateWatchCompilerHostOfConfigFileForBaseline<T>
+    input: CreateWatchCompilerHostOfConfigFileForBaseline<T>,
 ) {
     const host = ts.createWatchCompilerHostOfConfigFile({
         ...input,
@@ -174,11 +183,11 @@ export function createWatchCompilerHostOfConfigFileForBaseline<T extends ts.Buil
 }
 
 interface CreateWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T extends ts.BuilderProgram> extends ts.CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T> {
-    system: TestServerHost,
+    system: TestServerHost;
     cb: ts.ExecuteCommandLineCallbacks;
 }
 export function createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram>(
-    input: CreateWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T>
+    input: CreateWatchCompilerHostOfFilesAndCompilerOptionsForBaseline<T>,
 ) {
     const host = ts.createWatchCompilerHostOfFilesAndCompilerOptions({
         ...input,
@@ -212,12 +221,21 @@ export interface RunWatchBaseline<T extends ts.BuilderProgram> extends BaselineB
     sys: TscWatchSystem;
     getPrograms: () => readonly CommandLineProgram[];
     watchOrSolution: WatchOrSolution<T>;
+    useSourceOfProjectReferenceRedirect?: () => boolean;
 }
 export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram>({
-    scenario, subScenario, commandLineArgs,
-    getPrograms, sys, baseline, oldSnap,
-    baselineSourceMap, baselineDependencies,
-    edits, watchOrSolution
+    scenario,
+    subScenario,
+    commandLineArgs,
+    getPrograms,
+    sys,
+    baseline,
+    oldSnap,
+    baselineSourceMap,
+    baselineDependencies,
+    edits,
+    watchOrSolution,
+    useSourceOfProjectReferenceRedirect,
 }: RunWatchBaseline<T>) {
     baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
     let programs = watchBaseline({
@@ -231,7 +249,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     });
 
     if (edits) {
-        for (const { caption, edit, timeouts } of edits) {
+        for (const { caption, edit, timeouts, symlinksNotReflected, skipStructureCheck } of edits) {
             oldSnap = applyEdit(sys, baseline, edit, caption);
             timeouts(sys, programs, watchOrSolution);
             programs = watchBaseline({
@@ -242,6 +260,10 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
                 oldSnap,
                 baselineSourceMap,
                 baselineDependencies,
+                caption,
+                resolutionCache: !skipStructureCheck ? (watchOrSolution as ts.WatchOfConfigFile<T> | undefined)?.getResolutionCache?.() : undefined,
+                useSourceOfProjectReferenceRedirect,
+                symlinksNotReflected,
             });
         }
     }
@@ -259,19 +281,93 @@ export function isWatch(commandLineArgs: readonly string[]) {
 export interface WatchBaseline extends BaselineBase, TscWatchCheckOptions {
     oldPrograms: readonly (CommandLineProgram | undefined)[];
     getPrograms: () => readonly CommandLineProgram[];
+    caption?: string;
+    resolutionCache?: ts.ResolutionCache;
+    useSourceOfProjectReferenceRedirect?: () => boolean;
+    symlinksNotReflected?: readonly string[];
 }
-export function watchBaseline({ baseline, getPrograms, oldPrograms, sys, oldSnap, baselineSourceMap, baselineDependencies }: WatchBaseline) {
+export function watchBaseline({
+    baseline,
+    getPrograms,
+    oldPrograms,
+    sys,
+    oldSnap,
+    baselineSourceMap,
+    baselineDependencies,
+    caption,
+    resolutionCache,
+    useSourceOfProjectReferenceRedirect,
+    symlinksNotReflected,
+}: WatchBaseline) {
     if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
     sys.serializeOutput(baseline);
-    const programs = baselinePrograms(baseline, getPrograms, oldPrograms, baselineDependencies);
+    const programs = getPrograms();
+    baselinePrograms(baseline, programs, oldPrograms, baselineDependencies);
     sys.serializeWatches(baseline);
     baseline.push(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}`, "");
     sys.diff(baseline, oldSnap);
     sys.writtenFiles.forEach((value, key) => {
         assert.equal(value, 1, `Expected to write file ${key} only once`);
     });
+    // Verify program structure and resolution cache when incremental edit with tsc --watch (without build mode)
+    if (resolutionCache && programs.length) {
+        ts.Debug.assert(programs.length === 1);
+        verifyProgramStructureAndResolutionCache(caption!, sys, programs[0][0], resolutionCache, useSourceOfProjectReferenceRedirect, symlinksNotReflected);
+    }
     sys.writtenFiles.clear();
     return programs;
+}
+function verifyProgramStructureAndResolutionCache(
+    caption: string,
+    sys: TscWatchSystem,
+    program: ts.Program,
+    resolutionCache: ts.ResolutionCache,
+    useSourceOfProjectReferenceRedirect?: () => boolean,
+    symlinksNotReflected?: readonly string[],
+) {
+    const options = program.getCompilerOptions();
+    const compilerHost = ts.createCompilerHostWorker(options, /*setParentNodes*/ undefined, sys);
+    compilerHost.trace = ts.noop;
+    compilerHost.writeFile = ts.notImplemented;
+    compilerHost.useSourceOfProjectReferenceRedirect = useSourceOfProjectReferenceRedirect;
+    const readFile = compilerHost.readFile;
+    compilerHost.readFile = fileName => {
+        const text = readFile.call(compilerHost, fileName);
+        if (!ts.contains(symlinksNotReflected, fileName)) return text;
+        // Handle symlinks that dont reflect the watch change
+        ts.Debug.assert(sys.toPath(sys.realpath(fileName)) !== sys.toPath(fileName));
+        const file = program.getSourceFile(fileName)!;
+        ts.Debug.assert(file.text !== text);
+        return file.text;
+    };
+    verifyProgramStructure(
+        ts.createProgram({
+            rootNames: program.getRootFileNames(),
+            options,
+            projectReferences: program.getProjectReferences(),
+            host: compilerHost,
+        }),
+        program,
+        caption,
+    );
+    verifyResolutionCache(resolutionCache, program, {
+        ...compilerHost,
+
+        getCompilerHost: () => compilerHost,
+        toPath: fileName => sys.toPath(fileName),
+        getCompilationSettings: () => options,
+        fileIsOpen: ts.returnFalse,
+        getCurrentProgram: () => program,
+
+        watchDirectoryOfFailedLookupLocation: ts.returnNoopFileWatcher,
+        watchAffectingFileLocation: ts.returnNoopFileWatcher,
+        onInvalidatedResolution: ts.noop,
+        watchTypeRootsDirectory: ts.returnNoopFileWatcher,
+        onChangedAutomaticTypeDirectiveNames: ts.noop,
+        scheduleInvalidateResolutionsOfFailedLookupLocations: ts.noop,
+        getCachedDirectoryStructureHost: ts.returnUndefined,
+        writeLog: ts.noop,
+    }, caption);
 }
 export interface VerifyTscWatch extends TscWatchCompile {
     baselineIncremental?: boolean;

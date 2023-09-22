@@ -135,3 +135,18 @@ function foo17() {
 
     const foo = 1;
 }
+
+// #30907
+function wrapI1() {
+    const iter = (function* foo() {
+        iter;
+        yield 1;
+    })();
+}
+
+function wrapI2() {
+    const iter = (async function* foo() {
+        iter;
+        yield 1;
+    })();
+}
