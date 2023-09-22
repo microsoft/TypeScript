@@ -26,8 +26,7 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_super_call, fixId, Diagnostics.Add_all_missing_super_calls)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-        doChange(changes, context.sourceFile, getNode(diag.file, diag.start))),
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, context.sourceFile, getNode(diag.file, diag.start))),
 });
 
 function getNode(sourceFile: SourceFile, pos: number): ConstructorDeclaration {

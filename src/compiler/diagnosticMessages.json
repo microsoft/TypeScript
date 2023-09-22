@@ -3583,15 +3583,15 @@
         "category": "Error",
         "code": 2833
     },
-    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.": {
+    "Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.": {
         "category": "Error",
         "code": 2834
     },
-    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?": {
+    "Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?": {
         "category": "Error",
         "code": 2835
     },
-    "Import assertions are not allowed on statements that transpile to commonjs 'require' calls.": {
+    "Import assertions are not allowed on statements that transpile to CommonJS 'require' calls.": {
         "category": "Error",
         "code": 2836
     },
@@ -5294,7 +5294,7 @@
         "category": "Error",
         "code": 6258
     },
-      "Found 1 error in {0}": {
+    "Found 1 error in {0}": {
         "category": "Message",
         "code": 6259
     },
@@ -6276,9 +6276,9 @@
         "category": "Message",
         "code": 6930
     },
-    "List of file name suffixes to search when resolving a module." : {
-      "category": "Error",
-      "code": 6931
+    "List of file name suffixes to search when resolving a module.": {
+        "category": "Error",
+        "code": 6931
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -6736,6 +6736,10 @@
     "'{0}' at the start of a type is not valid TypeScript syntax. Did you mean to write '{1}'?": {
         "category": "Error",
         "code": 17020
+    },
+    "Unicode escape sequence cannot appear here.": {
+        "category": "Error",
+        "code": 17021
     },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
@@ -7560,7 +7564,7 @@
         "category": "Message",
         "code": 95153
     },
-    "Can only convert string concatenation": {
+    "Can only convert string concatenations and string literals": {
         "category": "Message",
         "code": 95154
     },

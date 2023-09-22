@@ -1,5 +1,4 @@
-nestedFreshLiteral.ts(12,21): error TS2322: Type '{ colour: string; }' is not assignable to type 'CSSProps'.
-  Object literal may only specify known properties, but 'colour' does not exist in type 'CSSProps'. Did you mean to write 'color'?
+nestedFreshLiteral.ts(12,21): error TS2561: Object literal may only specify known properties, but 'colour' does not exist in type 'CSSProps'. Did you mean to write 'color'?
 
 
 ==== nestedFreshLiteral.ts (1 errors) ====
@@ -16,6 +15,5 @@ nestedFreshLiteral.ts(12,21): error TS2322: Type '{ colour: string; }' is not as
     let stylen: NestedCSSProps = {
       nested: { prop: { colour: 'red' } }
                         ~~~~~~
-!!! error TS2322: Type '{ colour: string; }' is not assignable to type 'CSSProps'.
-!!! error TS2322:   Object literal may only specify known properties, but 'colour' does not exist in type 'CSSProps'. Did you mean to write 'color'?
+!!! error TS2561: Object literal may only specify known properties, but 'colour' does not exist in type 'CSSProps'. Did you mean to write 'color'?
     }

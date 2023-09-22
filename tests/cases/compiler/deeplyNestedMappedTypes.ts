@@ -1,0 +1,48 @@
+// @strict: true
+// @noEmit: true
+
+// Simplified repro from #55535
+
+type Id<T> = { [K in keyof T]: Id<T[K]> };
+
+type Foo1 = Id<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
+type Foo2 = Id<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
+
+declare const foo1: Foo1;
+const foo2: Foo2 = foo1;  // Error expected
+
+type Id2<T> = { [K in keyof T]: Id2<Id2<T[K]>> };
+
+type Foo3 = Id2<{ x: { y: { z: { a: { b: { c: number } } } } } }>;
+type Foo4 = Id2<{ x: { y: { z: { a: { b: { c: string } } } } } }>;
+
+declare const foo3: Foo3;
+const foo4: Foo4 = foo3;  // Error expected
+
+// Repro from issue linked in #55535
+
+type RequiredDeep<T> = { [K in keyof T]-?: RequiredDeep<T[K]> };
+
+type A = { a?: { b: { c: 1 | { d: 2000 } }}}
+type B = { a?: { b: { c: { d: { e: { f: { g: 2 }}}}, x: 1000 }}}
+
+type C = RequiredDeep<A>;
+type D = RequiredDeep<B>;
+
+type Test1 = [C, D] extends [D, C] ? true : false;  // false
+type Test2 = C extends D ? true : false;  // false
+type Test3 = D extends C ? true : false;  // false
+
+// Simplified repro from #54246
+
+// Except for the final non-recursive Record<K, V>, object types produced by NestedRecord all have the same symbol
+// and thus are considered deeply nested after three levels of nesting. Ideally we'd detect that recursion in this
+// type always terminates, but we're unaware of a general algorithm that accomplishes this.
+
+type NestedRecord<K extends string, V> = K extends `${infer K0}.${infer KR}` ? { [P in K0]: NestedRecord<KR, V> } : Record<K, V>;
+
+type Bar1 = NestedRecord<"x.y.z.a.b.c", number>;
+type Bar2 = NestedRecord<"x.y.z.a.b.c", string>;
+
+declare const bar1: Bar1;
+const bar2: Bar2 = bar1;  // Error expected

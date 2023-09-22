@@ -172,7 +172,8 @@ export const enum CommandTypes {
     PrepareCallHierarchy = "prepareCallHierarchy",
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-    ProvideInlayHints = "provideInlayHints"
+    ProvideInlayHints = "provideInlayHints",
+    WatchChange = "watchChange",
 }
 
 /**
@@ -295,8 +296,8 @@ export interface FileRequestArgs {
     file: string;
 
     /*
-    * Optional name of project that contains file
-    */
+     * Optional name of project that contains file
+     */
     projectFileName?: string;
 }
 
@@ -707,7 +708,6 @@ export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
     interactiveRefactorArguments?: InteractiveRefactorArguments;
 };
 
-
 export interface GetEditsForRefactorResponse extends Response {
     body?: RefactorEditInfo;
 }
@@ -792,7 +792,7 @@ export interface ApplyCodeActionCommandRequest extends Request {
 }
 
 // All we need is the `success` and `message` fields of Response.
-export interface ApplyCodeActionCommandResponse extends Response { }
+export interface ApplyCodeActionCommandResponse extends Response {}
 
 export interface FileRangeRequestArgs extends FileRequestArgs {
     /**
@@ -935,12 +935,12 @@ export interface EncodedSemanticClassificationsRequestArgs extends FileRequestAr
      * Optional parameter for the semantic highlighting response, if absent it
      * defaults to "original".
      */
-    format?: "original" | "2020"
+    format?: "original" | "2020";
 }
 
 /** The response for a EncodedSemanticClassificationsRequest */
 export interface EncodedSemanticClassificationsResponse extends Response {
-    body?: EncodedSemanticClassificationsResponseBody
+    body?: EncodedSemanticClassificationsResponseBody;
 }
 
 /**
@@ -1136,7 +1136,7 @@ export interface JsxClosingTagRequest extends FileLocationRequest {
     readonly arguments: JsxClosingTagRequestArgs;
 }
 
-export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs { }
+export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
 
 export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
@@ -1578,12 +1578,10 @@ export interface ChangedOpenFile {
     changes: TextChange[];
 }
 
-
 /**
  * Information found in a configure request.
  */
 export interface ConfigureRequestArguments {
-
     /**
      * Information about the host, for example 'Emacs 24.4' or
      * 'Sublime Text version 3075'
@@ -1957,6 +1955,17 @@ export interface ExitRequest extends Request {
  */
 export interface CloseRequest extends FileRequest {
     command: CommandTypes.Close;
+}
+
+export interface WatchChangeRequest extends Request {
+    command: CommandTypes.WatchChange;
+    arguments: WatchChangeRequestArgs;
+}
+
+export interface WatchChangeRequestArgs {
+    id: number;
+    path: string;
+    eventType: "create" | "delete" | "update";
 }
 
 /**
@@ -2491,7 +2500,6 @@ export interface CompletionDetailsResponse extends Response {
  * Signature help information for a single parameter
  */
 export interface SignatureHelpParameter {
-
     /**
      * The parameter's name
      */
@@ -2517,7 +2525,6 @@ export interface SignatureHelpParameter {
  * Represents a single signature to show in signature help.
  */
 export interface SignatureHelpItem {
-
     /**
      * Whether the signature accepts a variable number of arguments.
      */
@@ -2558,7 +2565,6 @@ export interface SignatureHelpItem {
  * Signature help items found in the response of a signature help request.
  */
 export interface SignatureHelpItems {
-
     /**
      * The signature help items.
      */
@@ -2675,11 +2681,13 @@ export interface InlayHintsRequest extends Request {
 }
 
 export interface InlayHintItem {
-    text: string | InlayHintItemDisplayPart[];
+    /** This property will be the empty string when displayParts is set. */
+    text: string;
     position: Location;
     kind: InlayHintKind;
     whitespaceBefore?: boolean;
     whitespaceAfter?: boolean;
+    displayParts?: InlayHintItemDisplayPart[];
 }
 
 export interface InlayHintItemDisplayPart {
@@ -3022,9 +3030,42 @@ export interface LargeFileReferencedEventBody {
     maxFileSize: number;
 }
 
+export type CreateFileWatcherEventName = "createFileWatcher";
+export interface CreateFileWatcherEvent extends Event {
+    readonly event: CreateFileWatcherEventName;
+    readonly body: CreateFileWatcherEventBody;
+}
+
+export interface CreateFileWatcherEventBody {
+    readonly id: number;
+    readonly path: string;
+}
+
+export type CreateDirectoryWatcherEventName = "createDirectoryWatcher";
+export interface CreateDirectoryWatcherEvent extends Event {
+    readonly event: CreateDirectoryWatcherEventName;
+    readonly body: CreateDirectoryWatcherEventBody;
+}
+
+export interface CreateDirectoryWatcherEventBody {
+    readonly id: number;
+    readonly path: string;
+    readonly recursive: boolean;
+}
+
+export type CloseFileWatcherEventName = "closeFileWatcher";
+export interface CloseFileWatcherEvent extends Event {
+    readonly event: CloseFileWatcherEventName;
+    readonly body: CloseFileWatcherEventBody;
+}
+
+export interface CloseFileWatcherEventBody {
+    readonly id: number;
+}
+
 /** @internal */
 export type AnyEvent =
-    RequestCompletedEvent
+    | RequestCompletedEvent
     | DiagnosticEvent
     | ConfigFileDiagnosticEvent
     | ProjectLanguageServiceStateEvent
@@ -3033,7 +3074,10 @@ export type AnyEvent =
     | ProjectLoadingStartEvent
     | ProjectLoadingFinishEvent
     | SurveyReadyEvent
-    | LargeFileReferencedEvent;
+    | LargeFileReferencedEvent
+    | CreateFileWatcherEvent
+    | CreateDirectoryWatcherEvent
+    | CloseFileWatcherEvent;
 
 /**
  * Arguments for reload request.
@@ -3386,7 +3430,7 @@ export interface NavTreeResponse extends Response {
 export interface CallHierarchyItem {
     name: string;
     kind: ScriptElementKind;
-    kindModifiers?: string
+    kindModifiers?: string;
     file: string;
     span: TextSpan;
     selectionSpan: TextSpan;
@@ -3535,7 +3579,7 @@ export interface UserPreferences {
 
     readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
     readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-    readonly includeInlayFunctionParameterTypeHints?: boolean,
+    readonly includeInlayFunctionParameterTypeHints?: boolean;
     readonly includeInlayVariableTypeHints?: boolean;
     readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
     readonly includeInlayPropertyDeclarationTypeHints?: boolean;
@@ -3603,6 +3647,11 @@ export interface UserPreferences {
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
      */
     readonly disableLineTextInReferences?: boolean;
+
+    /**
+     * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
+     */
+    readonly excludeLibrarySymbolsInNavTo?: boolean;
 }
 
 export interface CompilerOptions {
@@ -3693,7 +3742,7 @@ export const enum ModuleKind {
     System = "System",
     ES6 = "ES6",
     ES2015 = "ES2015",
-    ESNext = "ESNext"
+    ESNext = "ESNext",
 }
 
 export const enum ModuleResolutionKind {
@@ -3718,7 +3767,7 @@ export const enum ScriptTarget {
     ES2020 = "ES2020",
     ES2021 = "ES2021",
     ES2022 = "ES2022",
-    ESNext = "ESNext"
+    ESNext = "ESNext",
 }
 
 export const enum ClassificationType {

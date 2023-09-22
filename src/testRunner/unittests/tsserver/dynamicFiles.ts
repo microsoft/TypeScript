@@ -21,7 +21,7 @@ function verifyPathRecognizedAsDynamic(subscenario: string, path: string) {
             path,
             content: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />
 /// <reference path="../../../../../../typings/@epic/Shell.d.ts" />
-var x = 10;`
+var x = 10;`,
         };
         const host = createServerHost([libFile]);
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -61,7 +61,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
                 endLine: 3,
                 endOffset: 5,
                 errorCodes: [ts.Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
-            }
+            },
         });
         baselineTsserverLogs("dynamicFiles", "untitled can convert positions to locations", session);
     });
@@ -69,7 +69,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
     it("opening untitled files", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true, currentDirectory: "/user/username/projects/myproject" });
         const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -78,7 +78,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
 
         const untitled: File = {
             path: `/user/username/projects/myproject/Untitled-1.ts`,
-            content: "const x = 10;"
+            content: "const x = 10;",
         };
         host.writeFile(untitled.path, untitled.content);
         service.testhost.logTimeoutQueueLength();
@@ -94,11 +94,11 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
     it("opening and closing untitled files when projectRootPath is different from currentDirectory", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const file: File = {
             path: `/user/username/projects/myproject/file.ts`,
-            content: "const y = 10"
+            content: "const y = 10",
         };
         const host = createServerHost([config, file, libFile], { useCaseSensitiveFileNames: true });
         const service = createProjectService(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
@@ -137,7 +137,7 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
     it("dynamic file without external project", () => {
         const file: File = {
             path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
-            content: "var x = 10;"
+            content: "var x = 10;",
         };
         const host = createServerHost([libFile], { useCaseSensitiveFileNames: true });
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -145,7 +145,7 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
             module: ts.ModuleKind.CommonJS,
             allowJs: true,
             allowSyntheticDefaultImports: true,
-            allowNonTsExtensions: true
+            allowNonTsExtensions: true,
         }, session);
         openFilesForSession([{ file: file.path, content: "var x = 10;" }], session);
 
@@ -153,7 +153,7 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
 
         session.executeCommandSeq<ts.server.protocol.QuickInfoRequest>({
             command: ts.server.protocol.CommandTypes.Quickinfo,
-            arguments: protocolFileLocationFromSubstring(file, "x")
+            arguments: protocolFileLocationFromSubstring(file, "x"),
         });
         baselineTsserverLogs("dynamicFiles", "dynamic file without external project", session);
     });
@@ -163,15 +163,15 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
     describe("dynamic file with projectRootPath", () => {
         const file: File = {
             path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
-            content: "var x = 10;"
+            content: "var x = 10;",
         };
         const configFile: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const configProjectFile: File = {
             path: `/user/username/projects/myproject/a.ts`,
-            content: "let y = 10;"
+            content: "let y = 10;",
         };
         it("with useInferredProjectPerProjectRoot", () => {
             const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
@@ -184,8 +184,8 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
             session.executeCommandSeq<ts.server.protocol.OutliningSpansRequest>({
                 command: ts.server.protocol.CommandTypes.GetOutliningSpans,
                 arguments: {
-                    file: file.path
-                }
+                    file: file.path,
+                },
             });
 
             // Without project root
@@ -203,7 +203,7 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
             catch (e) {
                 assert.strictEqual(
                     e.message.replace(/\r?\n/, "\n"),
-                    `Debug Failure. False expression.\nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`
+                    `Debug Failure. False expression.\nVerbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`,
                 );
             }
             const file2Path = file.path.replace("#1", "#2");

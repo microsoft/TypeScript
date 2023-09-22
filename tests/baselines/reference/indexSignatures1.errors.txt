@@ -5,8 +5,7 @@ indexSignatures1.ts(21,5): error TS2322: Type 'IY' is not assignable to type 'IX
   Index signature for type '`a${string}`' is missing in type 'IY'.
 indexSignatures1.ts(42,12): error TS7053: Element implicitly has an 'any' type because expression of type '"axxxbbbyc"' can't be used to index type '{ [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }'.
   Property 'axxxbbbyc' does not exist on type '{ [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }'.
-indexSignatures1.ts(53,9): error TS2322: Type '{ date123: string; }' is not assignable to type '{ [x: `data${string}`]: string; }'.
-  Object literal may only specify known properties, and 'date123' does not exist in type '{ [x: `data${string}`]: string; }'.
+indexSignatures1.ts(53,9): error TS2353: Object literal may only specify known properties, and 'date123' does not exist in type '{ [x: `data${string}`]: string; }'.
 indexSignatures1.ts(70,5): error TS2374: Duplicate index signature for type 'number'.
 indexSignatures1.ts(71,5): error TS2374: Duplicate index signature for type 'number'.
 indexSignatures1.ts(71,5): error TS2374: Duplicate index signature for type 'symbol'.
@@ -64,12 +63,10 @@ indexSignatures1.ts(181,1): error TS7053: Element implicitly has an 'any' type b
 indexSignatures1.ts(182,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString2' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
 indexSignatures1.ts(183,1): error TS7053: Element implicitly has an 'any' type because expression of type 'TaggedString1 | TaggedString2' can't be used to index type '{ [key: string & Tag1 & Tag2]: string; }'.
 indexSignatures1.ts(277,7): error TS2322: Type '"&"' is not assignable to type '`&:${string}`'.
-indexSignatures1.ts(281,35): error TS2322: Type '{ someKey: string; }' is not assignable to type 'PseudoDeclaration'.
-  Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
+indexSignatures1.ts(281,35): error TS2353: Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
 indexSignatures1.ts(286,7): error TS2322: Type '"two"' is not assignable to type '`/${string}`'.
 indexSignatures1.ts(289,7): error TS2322: Type 'number' is not assignable to type 'PathsObject'.
-indexSignatures1.ts(312,43): error TS2322: Type '{ [sym]: string; }' is not assignable to type '{ [key: number]: string; }'.
-  Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
+indexSignatures1.ts(312,43): error TS2353: Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
 
 
 ==== indexSignatures1.ts (50 errors) ====
@@ -137,8 +134,7 @@ indexSignatures1.ts(312,43): error TS2322: Type '{ [sym]: string; }' is not assi
     dom = { data123: 'hello' };
     dom = { date123: 'hello' };  // Error
             ~~~~~~~
-!!! error TS2322: Type '{ date123: string; }' is not assignable to type '{ [x: `data${string}`]: string; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'date123' does not exist in type '{ [x: `data${string}`]: string; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'date123' does not exist in type '{ [x: `data${string}`]: string; }'.
     
     // Contextual typing by index signature with template literal pattern
     
@@ -467,8 +463,7 @@ indexSignatures1.ts(312,43): error TS2322: Type '{ [sym]: string; }' is not assi
     
     const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
                                       ~~~~~~~~~
-!!! error TS2322: Type '{ someKey: string; }' is not assignable to type 'PseudoDeclaration'.
-!!! error TS2322:   Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
+!!! error TS2353: Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
     
     type FieldPattern = `/${string}`;
     
@@ -505,8 +500,7 @@ indexSignatures1.ts(312,43): error TS2322: Type '{ [sym]: string; }' is not assi
     const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
     const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
                                               ~~~~~
-!!! error TS2322: Type '{ [sym]: string; }' is not assignable to type '{ [key: number]: string; }'.
-!!! error TS2322:   Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
+!!! error TS2353: Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
     
     // Repro from #45772
     
